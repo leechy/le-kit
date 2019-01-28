@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+  <html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
+    >
+    <title>Le Kit: Unusual Web Components</title>
+    <script src="/build/le-kit.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Monoton" rel="stylesheet">
+    <style type="text/css">
+
+      h1 {
+        margin: 30px;
+        font: 48px/52px 'Monoton', cursive;
+      }
+
+      .square {
+        display: inline-block;
+        width: 300px;
+        height: 300px;
+        margin: 30px;
+        padding: 10px;
+        text-align: center;
+        line-height: 300px;
+        background: #b41d80;
+      }
+      le-turntable.square {
+        background: rgb(255, 174, 0);
+      }
+
+      h2, h3 {
+        margin: 0;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+    <h1>Le Kit</h1>
+
+    <le-turntable class="square" value="-20">
+      <h2>&lt;le-turntable&gt;</h2>
+    </le-turntable>
+
+    <le-round-progress value="32" class="square" style="
+      --progress-width: 40px;
+      --progress-color: #fff;
+      --progress-shadow: 0 2px 3px rgba(0, 0, 0, .3);
+
+      --progress-path-color: rgba(255, 255, 255, 0.2);
+
+      --progress-path2-width: 10px;
+      --progress-path2-color: rgba(255, 255, 255, 0.2);
+      --progress-path2-dasharray: 0, 30;
+    ">
+      <h2>&lt;le-round-progress&gt;</h2>
+    </le-round-progress>
+
+    <le-turntable value="45" class="square" style="
+      border-radius: 50%;
+    ">
+      <h3>Turn me if you can!</h3>
+    </le-turntable>
+
+  </body>
+</html>

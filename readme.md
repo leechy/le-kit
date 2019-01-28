@@ -47,9 +47,11 @@ With this component you can create almost the same look and feel as Apples rings
 Turntable component let's you turn the element initially, set the center point for the rotation and, most importantly, let's you... turn the element using mouse or fingers (on touch devices). And returns the new angle value.
 
 Usage:
-```<le-turntable value="90" center="0 50%">
+```
+<le-turntable value="90" center="0 50%">
   Contents...
-</le-turntable>```
+</le-turntable>
+```
 
 **Value** — `value`: `number` (0–360) initial degree to turn the component.
 

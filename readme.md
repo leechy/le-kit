@@ -47,9 +47,11 @@ With this component you can create almost the same look and feel as Apples rings
 Turntable component let's you turn the element initially, set the center point for the rotation and, most importantly, let's you... turn the element using mouse or fingers (on touch devices). And returns the new angle value.
 
 Usage:
-```<le-turntable value="90" center="0 50%">
+```
+<le-turntable value="90" center="0 50%">
   Contents...
-</le-turntable>```
+</le-turntable>
+```
 
 **Value** — `value`: `number` (0–360) initial degree to turn the component.
 
@@ -60,7 +62,6 @@ The component is a Work In Progress yet.
 
 # Usage
 
-- [Publish to NPM](https://docs.npmjs.com/getting-started/publishing-npm-packages)
 - Put a script tag similar to this `<script src='https://unpkg.com/le-kit@0.0.1/dist/le-kit.js'></script>` in the head of your index.html
 - Then you can use the element anywhere in your template, JSX, html etc
 

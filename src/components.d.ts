@@ -13,9 +13,13 @@ import '@stencil/core';
 export namespace Components {
 
   interface LeRoundProgress {
+    'padding': number;
+    'paths': string;
     'value': number;
   }
   interface LeRoundProgressAttributes extends StencilHTMLAttributes {
+    'padding'?: number;
+    'paths'?: string;
     'value'?: number;
   }
 

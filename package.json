@@ -1,7 +1,7 @@
 {
   "author": "Andrey Lechev <leechy@leechy.ru> (https://www.leechy.ru)",
   "name": "le-kit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Le Kit: Unusual Web Components",
   "module": "dist/esm/index.js",
   "main": "dist/index.js",
@@ -18,8 +18,8 @@
     "test.watch": "stencil test --spec --e2e --watchAll"
   },
   "devDependencies": {
-    "@stencil/core": "~0.16.2",
-    "@types/jasmine": "^3.3.8"
+    "@stencil/core": "^0.18.1",
+    "@types/jasmine": "^3.3.12"
   },
   "license": "MIT"
 }

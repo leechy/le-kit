@@ -44,17 +44,23 @@
       <h2>&lt;le-turntable&gt;</h2>
     </le-turntable>
 
-    <le-round-progress value="32" class="square" style="
-      --progress-width: 40px;
-      --progress-color: #fff;
-      --progress-shadow: 0 2px 3px rgba(0, 0, 0, .3);
-
-      --progress-path-color: rgba(255, 255, 255, 0.2);
-
-      --progress-path2-width: 10px;
-      --progress-path2-color: rgba(255, 255, 255, 0.2);
-      --progress-path2-dasharray: 0, 30;
-    ">
+    <le-round-progress value="32"
+      padding="40"
+      paths='[{
+        "width": "40px",
+        "color": "rgba(255, 255, 255, 0.2)"
+      }, {
+        "width": "10px",
+        "color": "rgba(255, 255, 255, 0.2)",
+        "dasharray": "0, 30"
+      }]'
+      class="square"
+      style="
+        --progress-width: 40px;
+        --progress-color: #fff;
+        --progress-shadow: 0 2px 3px rgba(0, 0, 0, .3);
+      "
+    >
       <h2>&lt;le-round-progress&gt;</h2>
     </le-round-progress>
 

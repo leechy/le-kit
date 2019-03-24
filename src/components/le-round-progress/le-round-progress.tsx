@@ -11,11 +11,27 @@ export class LeRoundProgress {
 
   // progress value coming from an attribute
   @Prop() value: number = 0;
-
   @Watch('value')
   updateValue(newValue: string) {
     this.value = parseFloat(newValue);
   }
+
+  // padding value coming from an attribute
+  @Prop() padding: number = 0;
+  @Watch('padding')
+  updatePadding(newValue: string) {
+    this.padding = parseFloat(newValue);
+    this.calcParams();
+  }
+
+  // the progress backgrounds can be as many as needed
+  // but it should be JSON format: double quotes and strict commas
+  @Prop() paths: string;
+  @Watch('paths')
+  updateProgressBackgrounds(newValue: string) {
+    this.progressPaths = JSON.parse(newValue);
+  }
+  progressPaths: any[];
 
   @State() params: {
     width: number;
@@ -31,52 +47,20 @@ export class LeRoundProgress {
    * and progress width (max of )
    */
   componentWillLoad() {
+    if (typeof this.paths === 'string') {
+      this.updateProgressBackgrounds(this.paths);
+    }
+    this.calcParams();
+  }
+
+  calcParams() {
     // get element width
     const width = this.el.getBoundingClientRect().width;
-    // find the thickest stroke and calc diameter of the circle based on it
-
-    const strokeWidth: any = this.valToPx(this.getCSSVar('--progress-width') || '0');
-    const pathWidth: any = this.valToPx(this.getCSSVar('--progress-path-width') || '0');
-    const path2Width: any = this.valToPx(this.getCSSVar('--progress-path2-width') || '0');
-    const diameter = width - Math.max(strokeWidth, pathWidth, path2Width);
+    const diameter = width - this.padding;
     // calc circumference — we'll need it later to calc the stroke paths
     const circumference = Math.PI * diameter;
 
-    this.params = {
-      width,
-      diameter,
-      circumference
-    }
-  }
-
-  /**
-   * Returns the value of the css variable if it exists
-   *
-   * @param {string} valName  name of the css variable (with double dash in front)
-   */
-  getCSSVar(valName: string) {
-    return this.el.style.getPropertyValue(valName);
-  }
-
-  /**
-   * Converts different css value units to pixels
-   *
-   * @param {string} val  css value
-   */
-  valToPx(val: string) {
-    const parsedVal = val.match(/(\d*\.*\d+)([a-z]+|%)?/i);
-    const value = parseFloat(parsedVal[1]) || 4;
-    switch (parsedVal[2]) {
-      case '%':
-        return value / 100 * this.params.width;
-      case 'em':
-        return value * parseFloat(getComputedStyle(this.el).fontSize);
-      case 'rem':
-        return value * parseFloat(getComputedStyle(document.documentElement).fontSize);
-      case 'px':
-      default:
-        return value;
-    }
+    this.params = { width, diameter, circumference };
   }
 
   /**
@@ -104,13 +88,20 @@ export class LeRoundProgress {
   }
 
   getPaths() {
+    if (!this.progressPaths || !this.progressPaths.length) {
+      return null;
+    }
     let paths = [];
-    if (this.el.style.getPropertyValue('--progress-path-color')) {
-      paths.push(<path class="round-progress--path" d={ this.getPath() }/>);
-    }
-    if (this.el.style.getPropertyValue('--progress-path2-color')) {
-      paths.push(<path class="round-progress--path2" d={ this.getPath() }/>);
-    }
+    this.progressPaths.forEach(bg => {
+      paths.push(<path
+        class="round-progress--path"
+        d={ this.getPath() }
+        stroke={ bg.color }
+        stroke-width={ bg.width }
+        stroke-dasharray={ bg.dasharray }
+        stroke-linecap={ bg.linecap }
+      />);
+    });
     return (
       <svg viewBox={ this.getViewBox() } class="round-progress">
         { paths }

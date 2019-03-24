@@ -31,16 +31,5 @@
 
 .round-progress--path {
   fill: none;
-  stroke: var(--progress-path-color);
-  stroke-width: var(--progress-path-width, var(--progress-width));
-  stroke-dasharray: var(--progress-path-dasharray);
-  stroke-linecap: var(--progress-path-linecap, round);;
-}
-
-.round-progress--path2 {
-  fill: none;
-  stroke: var(--progress-path2-color);
-  stroke-width: var(--progress-path2-width, var(--progress-width));
-  stroke-dasharray: var(--progress-path2-dasharray);
-  stroke-linecap: var(--progress-path2-linecap, round);
+  stroke-linecap: round;
 }

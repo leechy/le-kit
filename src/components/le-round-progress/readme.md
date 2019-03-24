@@ -7,9 +7,11 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type     | Default |
-| -------- | --------- | ----------- | -------- | ------- |
-| `value`  | `value`   |             | `number` | `0`     |
+| Property  | Attribute | Description | Type     | Default     |
+| --------- | --------- | ----------- | -------- | ----------- |
+| `padding` | `padding` |             | `number` | `0`         |
+| `paths`   | `paths`   |             | `string` | `undefined` |
+| `value`   | `value`   |             | `number` | `0`         |
 
 
 ----------------------------------------------

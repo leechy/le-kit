@@ -118,9 +118,7 @@ export class LeRoundProgress {
           d={ this.getPath() }
         />
       </svg>
-      <div class="round-progress--contents">
-        <slot />
-      </div>
+      <slot />
     </div>;
   }
 }

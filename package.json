@@ -1,7 +1,7 @@
 {
   "author": "Andrey Lechev <leechy@leechy.ru> (https://www.leechy.ru)",
   "name": "le-kit",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Le Kit: Unusual Web Components",
   "module": "dist/esm/index.js",
   "main": "dist/index.js",

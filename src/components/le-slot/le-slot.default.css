@@ -1,0 +1,18 @@
+/**
+ * Default mode styles for le-slot
+ * In default mode, the slot placeholder is invisible
+ * and acts as a simple passthrough
+ */
+:host {
+  display: contents;
+}
+
+.le-slot-container,
+.le-slot-header,
+.le-slot-description {
+  display: none;
+}
+
+.le-slot-dropzone {
+  display: contents;
+}

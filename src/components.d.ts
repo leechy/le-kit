@@ -6,56 +6,219 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface MyComponent {
+    /**
+     * A flexible card component with header, content, and footer slots.
+     * The card adapts its appearance based on the current mode:
+     * - `default`: Normal card display
+     * - `admin`: Shows slot placeholders for CMS editing
+     * @cssprop --le-card-bg - Card background color
+     * @cssprop --le-card-border-radius - Card border radius
+     * @cssprop --le-card-shadow - Card box shadow
+     * @cssprop --le-card-padding - Card content padding
+     * @csspart card - The main card container
+     * @csspart header - The card header section
+     * @csspart content - The card content section
+     * @csspart footer - The card footer section
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeCard {
         /**
-          * The first name
+          * Whether the card is interactive (clickable)
+          * @default false
          */
-        "first": string;
+        "interactive": boolean;
         /**
-          * The last name
+          * Card variant style
+          * @allowedValues default | outlined | elevated
+          * @default 'default'
          */
-        "last": string;
+        "variant": 'default' | 'outlined' | 'elevated';
+    }
+    /**
+     * Slot placeholder component for admin/CMS mode.
+     * This component renders a visual placeholder for slots when in admin mode,
+     * allowing CMS systems to show available drop zones for content.
+     * In non-admin mode, this component renders nothing and acts as a passthrough.
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LeSlot {
         /**
-          * The middle name
+          * Comma-separated list of allowed component tags for this slot. Used by CMS to filter available components.
+          * @example "le-card,le-button,le-text"
          */
-        "middle": string;
+        "allowedComponents"?: string;
+        /**
+          * Description of what content this slot accepts. Shown in admin mode to guide content editors.
+         */
+        "description"?: string;
+        /**
+          * Label to display in admin mode. If not provided, the slot name will be used.
+         */
+        "label"?: string;
+        /**
+          * Whether multiple components can be dropped in this slot.
+          * @default true
+         */
+        "multiple": boolean;
+        /**
+          * The name of the slot this placeholder represents. Should match the slot name in the parent component.
+          * @default ''
+         */
+        "name": string;
+        /**
+          * Whether this slot is required to have content.
+          * @default false
+         */
+        "required": boolean;
     }
 }
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
+    /**
+     * A flexible card component with header, content, and footer slots.
+     * The card adapts its appearance based on the current mode:
+     * - `default`: Normal card display
+     * - `admin`: Shows slot placeholders for CMS editing
+     * @cssprop --le-card-bg - Card background color
+     * @cssprop --le-card-border-radius - Card border radius
+     * @cssprop --le-card-shadow - Card box shadow
+     * @cssprop --le-card-padding - Card content padding
+     * @csspart card - The main card container
+     * @csspart header - The card header section
+     * @csspart content - The card content section
+     * @csspart footer - The card footer section
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeCardElement extends Components.LeCard, HTMLStencilElement {
     }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
+    var HTMLLeCardElement: {
+        prototype: HTMLLeCardElement;
+        new (): HTMLLeCardElement;
+    };
+    /**
+     * Slot placeholder component for admin/CMS mode.
+     * This component renders a visual placeholder for slots when in admin mode,
+     * allowing CMS systems to show available drop zones for content.
+     * In non-admin mode, this component renders nothing and acts as a passthrough.
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface HTMLLeSlotElement extends Components.LeSlot, HTMLStencilElement {
+    }
+    var HTMLLeSlotElement: {
+        prototype: HTMLLeSlotElement;
+        new (): HTMLLeSlotElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
+        "le-card": HTMLLeCardElement;
+        "le-slot": HTMLLeSlotElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
+    /**
+     * A flexible card component with header, content, and footer slots.
+     * The card adapts its appearance based on the current mode:
+     * - `default`: Normal card display
+     * - `admin`: Shows slot placeholders for CMS editing
+     * @cssprop --le-card-bg - Card background color
+     * @cssprop --le-card-border-radius - Card border radius
+     * @cssprop --le-card-shadow - Card box shadow
+     * @cssprop --le-card-padding - Card content padding
+     * @csspart card - The main card container
+     * @csspart header - The card header section
+     * @csspart content - The card content section
+     * @csspart footer - The card footer section
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeCard {
         /**
-          * The first name
+          * Whether the card is interactive (clickable)
+          * @default false
          */
-        "first"?: string;
+        "interactive"?: boolean;
         /**
-          * The last name
+          * Card variant style
+          * @allowedValues default | outlined | elevated
+          * @default 'default'
          */
-        "last"?: string;
+        "variant"?: 'default' | 'outlined' | 'elevated';
+    }
+    /**
+     * Slot placeholder component for admin/CMS mode.
+     * This component renders a visual placeholder for slots when in admin mode,
+     * allowing CMS systems to show available drop zones for content.
+     * In non-admin mode, this component renders nothing and acts as a passthrough.
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LeSlot {
         /**
-          * The middle name
+          * Comma-separated list of allowed component tags for this slot. Used by CMS to filter available components.
+          * @example "le-card,le-button,le-text"
          */
-        "middle"?: string;
+        "allowedComponents"?: string;
+        /**
+          * Description of what content this slot accepts. Shown in admin mode to guide content editors.
+         */
+        "description"?: string;
+        /**
+          * Label to display in admin mode. If not provided, the slot name will be used.
+         */
+        "label"?: string;
+        /**
+          * Whether multiple components can be dropped in this slot.
+          * @default true
+         */
+        "multiple"?: boolean;
+        /**
+          * The name of the slot this placeholder represents. Should match the slot name in the parent component.
+          * @default ''
+         */
+        "name"?: string;
+        /**
+          * Whether this slot is required to have content.
+          * @default false
+         */
+        "required"?: boolean;
     }
     interface IntrinsicElements {
-        "my-component": MyComponent;
+        "le-card": LeCard;
+        "le-slot": LeSlot;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            /**
+             * A flexible card component with header, content, and footer slots.
+             * The card adapts its appearance based on the current mode:
+             * - `default`: Normal card display
+             * - `admin`: Shows slot placeholders for CMS editing
+             * @cssprop --le-card-bg - Card background color
+             * @cssprop --le-card-border-radius - Card border radius
+             * @cssprop --le-card-shadow - Card box shadow
+             * @cssprop --le-card-padding - Card content padding
+             * @csspart card - The main card container
+             * @csspart header - The card header section
+             * @csspart content - The card content section
+             * @csspart footer - The card footer section
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-card": LocalJSX.LeCard & JSXBase.HTMLAttributes<HTMLLeCardElement>;
+            /**
+             * Slot placeholder component for admin/CMS mode.
+             * This component renders a visual placeholder for slots when in admin mode,
+             * allowing CMS systems to show available drop zones for content.
+             * In non-admin mode, this component renders nothing and acts as a passthrough.
+             * @cmsInternal true
+             * @cmsCategory System
+             */
+            "le-slot": LocalJSX.LeSlot & JSXBase.HTMLAttributes<HTMLLeSlotElement>;
         }
     }
 }

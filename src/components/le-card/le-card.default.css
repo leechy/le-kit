@@ -1,0 +1,65 @@
+/**
+ * Default mode styles for le-card
+ */
+:host {
+  display: block;
+  --le-card-bg: #ffffff;
+  --le-card-border-radius: 8px;
+  --le-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --le-card-padding: 16px;
+  --le-card-border-color: #e0e0e0;
+}
+
+.card {
+  background: var(--le-card-bg);
+  border-radius: var(--le-card-border-radius);
+  overflow: hidden;
+}
+
+/* Variants */
+:host(.variant-default) .card {
+  box-shadow: var(--le-card-shadow);
+}
+
+:host(.variant-outlined) .card {
+  border: 1px solid var(--le-card-border-color);
+  box-shadow: none;
+}
+
+:host(.variant-elevated) .card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Interactive state */
+:host(.interactive) .card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+:host(.interactive) .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Sections */
+.card-header {
+  padding: var(--le-card-padding);
+  padding-bottom: 0;
+}
+
+.card-header:empty {
+  display: none;
+}
+
+.card-content {
+  padding: var(--le-card-padding);
+}
+
+.card-footer {
+  padding: var(--le-card-padding);
+  padding-top: 0;
+}
+
+.card-footer:empty {
+  display: none;
+}

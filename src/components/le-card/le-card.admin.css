@@ -1,0 +1,26 @@
+/**
+ * Admin mode styles for le-card
+ * Inherits default styles and adds admin-specific overrides
+ */
+@import './le-card.default.css';
+
+:host {
+  --le-card-admin-outline: 2px solid rgba(0, 136, 255, 0.3);
+}
+
+.card {
+  outline: var(--le-card-admin-outline);
+  outline-offset: 2px;
+}
+
+/* Always show sections in admin mode so slots are visible */
+.card-header,
+.card-footer {
+  display: block;
+}
+
+.card-header:empty,
+.card-footer:empty {
+  display: block;
+  min-height: 20px;
+}

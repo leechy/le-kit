@@ -1,0 +1,304 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card adapts its appearance based on the current mode:\n- `default`: Normal card display\n- `admin`: Shows slot placeholders for CMS editing",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "isAdminMode",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-slot/le-slot.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Slot placeholder component for admin/CMS mode.\n\nThis component renders a visual placeholder for slots when in admin mode,\nallowing CMS systems to show available drop zones for content.\n\nIn non-admin mode, this component renders nothing and acts as a passthrough.",
+          "name": "LeSlot",
+          "slots": [
+            {
+              "description": "Default slot for placeholder content or drop zone UI",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "The name of the slot this placeholder represents.\nShould match the slot name in the parent component."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Label to display in admin mode.\nIf not provided, the slot name will be used."
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Description of what content this slot accepts.\nShown in admin mode to guide content editors."
+            },
+            {
+              "kind": "field",
+              "name": "allowedComponents",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Comma-separated list of allowed component tags for this slot.\nUsed by CMS to filter available components."
+            },
+            {
+              "kind": "field",
+              "name": "multiple",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether multiple components can be dropped in this slot."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this slot is required to have content."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "fieldName": "name",
+              "default": "''",
+              "description": "The name of the slot this placeholder represents.\nShould match the slot name in the parent component.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "Label to display in admin mode.\nIf not provided, the slot name will be used.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "description",
+              "fieldName": "description",
+              "description": "Description of what content this slot accepts.\nShown in admin mode to guide content editors.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "allowed-components",
+              "fieldName": "allowedComponents",
+              "description": "Comma-separated list of allowed component tags for this slot.\nUsed by CMS to filter available components.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "multiple",
+              "fieldName": "multiple",
+              "default": "true",
+              "description": "Whether multiple components can be dropped in this slot.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether this slot is required to have content.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-slot",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeSlot",
+          "declaration": {
+            "name": "LeSlot",
+            "module": "src/components/le-slot/le-slot.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-slot",
+          "declaration": {
+            "name": "LeSlot",
+            "module": "src/components/le-slot/le-slot.tsx"
+          }
+        }
+      ]
+    }
+  ]
+}

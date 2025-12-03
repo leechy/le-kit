@@ -1,12 +1,18 @@
 /**
- * @fileoverview entry point for your component library
+ * @fileoverview Entry point for le-kit component library
  *
- * This is the entry point for your component library. Use this file to export utilities,
- * constants or data structure that accompany your components.
+ * This file exports utilities, types, and helper functions.
+ * Components are auto-registered and available as custom elements.
  *
- * DO NOT use this file to export your components. Instead, use the recommended approaches
- * to consume components of this package as outlined in the `README.md`.
+ * @see README.md for usage instructions
  */
 
-export { format } from './utils/utils';
+// Utility exports
+export { generateId, parseCommaSeparated, slotHasContent } from './utils/utils';
+
+// Global mode helpers
+export { getMode, setGlobalMode } from './global/app';
+export type { LeKitMode } from './global/app';
+
+// Type exports
 export type * from './components.d.ts';

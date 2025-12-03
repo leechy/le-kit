@@ -2,6 +2,7 @@ import { Config } from '@stencil/core';
 
 export const config: Config = {
   namespace: 'le-kit',
+  globalScript: 'src/global/app.ts',
   outputTargets: [
     {
       type: 'dist',
@@ -16,11 +17,16 @@ export const config: Config = {
       type: 'docs-readme',
     },
     {
+      type: 'docs-json',
+      file: 'dist/docs.json',
+    },
+    {
       type: 'www',
       serviceWorker: null, // disable service workers
+      copy: [{ src: 'global' }],
     },
   ],
   testing: {
-    browserHeadless: "shell",
+    browserHeadless: 'shell',
   },
 };

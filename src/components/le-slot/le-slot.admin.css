@@ -1,0 +1,87 @@
+/**
+ * Admin mode styles for le-slot
+ * Shows the slot placeholder with visual indicators
+ */
+:host {
+  display: block;
+  --le-slot-border-color: #0088ff;
+  --le-slot-bg-color: rgba(0, 136, 255, 0.05);
+  --le-slot-header-bg: rgba(0, 136, 255, 0.1);
+  --le-slot-label-color: #0066cc;
+  --le-slot-description-color: #666;
+  --le-slot-required-color: #e53935;
+  --le-slot-dropzone-min-height: 60px;
+  --le-slot-dropzone-border-color: #ccc;
+}
+
+.le-slot-container {
+  display: flex;
+  flex-direction: column;
+  border: 2px dashed var(--le-slot-border-color);
+  border-radius: 4px;
+  background: var(--le-slot-bg-color);
+  margin: 4px 0;
+}
+
+.le-slot-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--le-slot-header-bg);
+  border-bottom: 1px solid var(--le-slot-border-color);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.le-slot-label {
+  color: var(--le-slot-label-color);
+}
+
+.le-slot-required {
+  color: var(--le-slot-required-color);
+  font-weight: bold;
+}
+
+.le-slot-description {
+  display: block;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--le-slot-description-color);
+  font-style: italic;
+}
+
+.le-slot-dropzone {
+  display: block;
+  min-height: var(--le-slot-dropzone-min-height);
+  padding: 8px;
+  position: relative;
+}
+
+.le-slot-dropzone:empty::before {
+  content: 'Drop content here';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 8px;
+  border: 2px dashed var(--le-slot-dropzone-border-color);
+  border-radius: 4px;
+  color: #999;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+/* Highlight when dragging over */
+:host(.drag-over) .le-slot-container {
+  border-color: #00cc66;
+  background: rgba(0, 204, 102, 0.1);
+}
+
+:host(.drag-over) .le-slot-dropzone:empty::before {
+  border-color: #00cc66;
+  color: #00cc66;
+  content: 'Release to drop';
+}

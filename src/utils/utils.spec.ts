@@ -1,19 +1,38 @@
-import { format } from './utils';
+import { generateId, parseCommaSeparated } from './utils';
 
-describe('format', () => {
-  it('returns empty string for no names defined', () => {
-    expect(format(undefined, undefined, undefined)).toEqual('');
+describe('generateId', () => {
+  it('generates unique IDs with default prefix', () => {
+    const id1 = generateId();
+    const id2 = generateId();
+    expect(id1).toMatch(/^le-[a-z0-9]+$/);
+    expect(id2).toMatch(/^le-[a-z0-9]+$/);
+    expect(id1).not.toEqual(id2);
   });
 
-  it('formats just first names', () => {
-    expect(format('Joseph', undefined, undefined)).toEqual('Joseph');
+  it('uses custom prefix', () => {
+    const id = generateId('custom');
+    expect(id).toMatch(/^custom-[a-z0-9]+$/);
+  });
+});
+
+describe('parseCommaSeparated', () => {
+  it('returns empty array for undefined', () => {
+    expect(parseCommaSeparated(undefined)).toEqual([]);
   });
 
-  it('formats first and last names', () => {
-    expect(format('Joseph', undefined, 'Publique')).toEqual('Joseph Publique');
+  it('returns empty array for empty string', () => {
+    expect(parseCommaSeparated('')).toEqual([]);
   });
 
-  it('formats first, middle and last names', () => {
-    expect(format('Joseph', 'Quincy', 'Publique')).toEqual('Joseph Quincy Publique');
+  it('parses single value', () => {
+    expect(parseCommaSeparated('one')).toEqual(['one']);
+  });
+
+  it('parses multiple values and trims whitespace', () => {
+    expect(parseCommaSeparated('one, two , three')).toEqual(['one', 'two', 'three']);
+  });
+
+  it('filters empty values', () => {
+    expect(parseCommaSeparated('one,,two')).toEqual(['one', 'two']);
   });
 });

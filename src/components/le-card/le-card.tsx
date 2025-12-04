@@ -49,13 +49,13 @@ export class LeCard {
       <le-component component="le-card" hostClass={classnames(`variant-${this.variant}`, { 'interactive': this.interactive })}>
         <div class="card" part="card">
           <div class="card-header" part="header">
-            <le-slot name="header" label="Header" description="Card title and header actions" allowed-components="le-text,le-heading,le-button">
+            <le-slot name="header" label="Header" description="Card title" type="text" tag="h3">
               <slot name="header"></slot>
             </le-slot>
           </div>
 
           <div class="card-content" part="content">
-            <le-slot name="" label="Content" description="Main card content" required>
+            <le-slot name="" label="Content" description="Card content" type="textarea" tag="p" required>
               <slot></slot>
             </le-slot>
           </div>

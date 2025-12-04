@@ -26,6 +26,11 @@
   display: none;
 }
 
+/* Hidden slot wrapper - keeps slot in DOM but invisible */
+.hidden-slot {
+  display: none;
+}
+
 /* ============================================
    ADMIN MODE - Visible placeholder UI
    ============================================ */

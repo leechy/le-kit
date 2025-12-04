@@ -84,14 +84,15 @@ export class LeComponent {
 
     this.disconnectModeObserver = observeModeChanges(this.el, (mode) => {
       this.adminMode = mode === 'admin';
-      // Refresh property values when entering admin mode
+      // Load metadata and refresh property values only when entering admin mode
       if (this.adminMode) {
-        this.readPropertyValues();
+        if (!this.componentMeta) {
+          this.loadComponentMetadata();
+        } else {
+          this.readPropertyValues();
+        }
       }
     });
-
-    // Load component metadata
-    this.loadComponentMetadata();
   }
 
   /**

@@ -162,7 +162,7 @@
         <div class="demo-grid">
           <!-- Card with content -->
           <le-card variant="default">
-            <h3 slot="header">Card Title</h3>
+            <h2 slot="header">Card Title</h2>
             <p>This is the main content of the card. It can contain any elements.</p>
             <button slot="footer">Action</button>
           </le-card>
@@ -260,19 +260,9 @@
       contentContainer.addEventListener('leSlotChange', (event) => {
         const { name, value, isValid } = event.detail;
         
-        // Only update and save if HTML is valid
+        // le-slot already updates the slotted element directly,
+        // we just need to save the updated DOM to localStorage
         if (isValid) {
-          // Update the innerHTML of the le-slot element to preserve HTML tags
-          const slot = event.target;
-          slot.innerHTML = value;
-          
-          // Save the entire content
-          saveContent();
-        } else {
-          // in case the html is invalid, serialize textValue to innerHTML to escape tags
-          const slot = event.target;
-          slot.innerHTML = slot.textValue;
-
           saveContent();
         }
       });

@@ -75,7 +75,7 @@
                 "text": "'default' | 'outlined' | 'elevated'"
               },
               "default": "'default'",
-              "description": "Card variant style 2!"
+              "description": "Card variant style"
             },
             {
               "kind": "field",
@@ -96,7 +96,7 @@
               "name": "variant",
               "fieldName": "variant",
               "default": "'default'",
-              "description": "Card variant style 2!",
+              "description": "Card variant style",
               "type": {
                 "text": "'default' | 'outlined' | 'elevated'"
               }

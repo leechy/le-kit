@@ -72,6 +72,15 @@ export class LeSlot {
   @Prop() placeholder?: string;
 
   /**
+   * The HTML tag to create when there's no slotted element.
+   * Used with type="text" or type="textarea" to auto-create elements.
+   * 
+   * @example "h3" - creates <h3 slot="header">content</h3>
+   * @example "p" - creates <p slot="content">content</p>
+   */
+  @Prop() tag?: string;
+
+  /**
    * Internal state to track admin mode
    */
   @State() private adminMode: boolean = false;
@@ -87,6 +96,16 @@ export class LeSlot {
   @State() private isValidHtml: boolean = true;
 
   /**
+   * Reference to the slot element to access assignedNodes
+   */
+  private slotRef?: HTMLSlotElement;
+
+  /**
+   * The original slotted element (e.g., <h3 slot="header">)
+   */
+  private slottedElement?: Element;
+
+  /**
    * Emitted when text content changes in admin mode.
    * The event detail contains the new text value and validity.
    */
@@ -96,17 +115,68 @@ export class LeSlot {
 
   connectedCallback() {
     this.disconnectModeObserver = observeModeChanges(this.el, (mode) => {
+      const wasAdmin = this.adminMode;
       this.adminMode = mode === 'admin';
+      
+      // When entering admin mode, read content from slotted elements
+      if (this.adminMode && !wasAdmin) {
+        // Need to wait for render to access slot ref
+        requestAnimationFrame(() => this.readSlottedContent());
+      }
     });
-
-    // Initialize text value from innerHTML to preserve HTML tags
-    if (this.type === 'text' || this.type === 'textarea') {
-      this.textValue = this.el.innerHTML?.trim() || '';
-    }
   }
 
   disconnectedCallback() {
     this.disconnectModeObserver?.();
+  }
+
+  /**
+   * Flag to prevent re-reading content right after we updated it
+   */
+  private isUpdating: boolean = false;
+
+  /**
+   * Read content from slotted elements via assignedNodes()
+   */
+  private readSlottedContent() {
+    if (!this.slotRef) return;
+    
+    // Skip if we just updated the content ourselves
+    if (this.isUpdating) {
+      this.isUpdating = false;
+      return;
+    }
+
+    const assignedNodes = this.slotRef.assignedNodes({ flatten: true });
+    
+    // For text/textarea types, we want to edit the innerHTML of slotted elements
+    if (this.type === 'text' || this.type === 'textarea') {
+      // Find the first element node (skip text nodes that are just whitespace)
+      const elementNode = assignedNodes.find(
+        node => node.nodeType === Node.ELEMENT_NODE
+      ) as Element | undefined;
+
+      if (elementNode) {
+        // Only update textValue if slotted element changed or we don't have one yet
+        if (this.slottedElement !== elementNode) {
+          this.slottedElement = elementNode;
+          this.textValue = elementNode.innerHTML?.trim() || '';
+          console.log(`[le-slot "${this.name}"] Read slotted content:`, this.textValue);
+        }
+      } else {
+        // No element, check for direct text content
+        const textContent = assignedNodes
+          .filter(node => node.nodeType === Node.TEXT_NODE)
+          .map(node => node.textContent)
+          .join('')
+          .trim();
+        
+        if (textContent && !this.textValue) {
+          this.textValue = textContent;
+          console.log(`[le-slot "${this.name}"] Read text content:`, this.textValue);
+        }
+      }
+    }
   }
 
   /**
@@ -144,6 +214,20 @@ export class LeSlot {
     const target = event.target as HTMLInputElement | HTMLTextAreaElement;
     this.textValue = target.value;
     this.isValidHtml = this.validateHtml(this.textValue);
+    
+    if (this.isValidHtml) {
+      // Set flag to prevent slotchange from re-reading what we just wrote
+      this.isUpdating = true;
+      
+      if (this.slottedElement) {
+        // Update existing slotted element's innerHTML
+        this.slottedElement.innerHTML = this.textValue;
+      } else if (this.tag && this.textValue) {
+        // No slotted element exists - create one using the specified tag
+        this.createSlottedElement();
+      }
+    }
+    
     this.leSlotChange.emit({ 
       name: this.name, 
       value: this.textValue,
@@ -151,9 +235,48 @@ export class LeSlot {
     });
   };
 
+  /**
+   * Create a new slotted element when none exists.
+   * The element is appended to the host component's light DOM.
+   */
+  private createSlottedElement() {
+    if (!this.tag) return;
+    
+    // Find the host component (le-card, etc.) by traversing up through shadow DOM
+    // le-slot is inside le-card's shadow DOM, so we need to find le-card's host
+    const rootNode = this.el.getRootNode();
+    if (!(rootNode instanceof ShadowRoot)) return;
+    
+    const hostComponent = rootNode.host;
+    if (!hostComponent) return;
+    
+    // Create the new element
+    const newElement = document.createElement(this.tag);
+    newElement.innerHTML = this.textValue;
+    
+    // Set the slot attribute if this is a named slot
+    if (this.name) {
+      newElement.setAttribute('slot', this.name);
+    }
+    
+    // Append to the host component's light DOM
+    hostComponent.appendChild(newElement);
+    
+    // Store reference to the new element
+    this.slottedElement = newElement;
+    
+    console.log(`[le-slot "${this.name}"] Created new <${this.tag}> element`);
+  }
+
+  /**
+   * Handle slot change event to re-read content when nodes are assigned
+   */
+  private handleSlotChange = () => {
+    this.readSlottedContent();
+  };
+
   render() {
     const displayLabel = this.label || this.name || 'default';
-    const isTextType = this.type === 'text' || this.type === 'textarea';
 
     // Always render the same structure, CSS handles visibility via .admin-mode class
     return (
@@ -181,18 +304,32 @@ export class LeSlot {
             {this.renderContent()}
           </div>
         ) : (
-          // In default mode, render HTML content for text types
-          isTextType && this.textValue ? (
-            <span innerHTML={this.textValue}></span>
-          ) : (
-            <slot></slot>
-          )
+          // In default mode, just pass through the slot - slotted content renders naturally
+          // Note: We use unnamed slot here because named slots from parent component
+          // are passed as le-slot's light DOM children
+          <slot 
+            ref={(el) => this.slotRef = el as HTMLSlotElement}
+            onSlotchange={this.handleSlotChange}
+          ></slot>
         )}
       </Host>
     );
   }
 
   private renderContent() {
+    // Create the slot element with ref for reading assignedNodes
+    // Wrap in a hidden div since slot elements can't have style prop in Stencil
+    // Note: We use unnamed slot here because named slots from parent component
+    // are passed as le-slot's light DOM children
+    const slotElement = (
+      <div class="hidden-slot">
+        <slot 
+          ref={(el) => this.slotRef = el as HTMLSlotElement}
+          onSlotchange={this.handleSlotChange}
+        ></slot>
+      </div>
+    );
+
     switch (this.type) {
       case 'text':
         return (
@@ -204,7 +341,7 @@ export class LeSlot {
               onInput={this.handleTextInput}
               required={this.required}
             />
-            <slot></slot>
+            {slotElement}
           </div>
         );
 
@@ -218,7 +355,7 @@ export class LeSlot {
               required={this.required}
               rows={3}
             ></textarea>
-            <slot></slot>
+            {slotElement}
           </div>
         );
 
@@ -226,7 +363,10 @@ export class LeSlot {
       default:
         return (
           <div class="le-slot-dropzone">
-            <slot></slot>
+            <slot 
+              ref={(el) => this.slotRef = el as HTMLSlotElement}
+              onSlotchange={this.handleSlotChange}
+            ></slot>
           </div>
         );
     }

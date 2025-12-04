@@ -173,6 +173,12 @@ export namespace Components {
          */
         "required": boolean;
         /**
+          * The HTML tag to create when there's no slotted element. Used with type="text" or type="textarea" to auto-create elements.
+          * @example "h3" - creates <h3 slot="header">content</h3>
+          * @example "p" - creates <p slot="content">content</p>
+         */
+        "tag"?: string;
+        /**
           * The type of slot content. - `slot`: Default, shows a dropzone for components (default) - `text`: Shows a single-line text input - `textarea`: Shows a multi-line text area
           * @default 'slot'
          */
@@ -462,6 +468,12 @@ declare namespace LocalJSX {
           * @default false
          */
         "required"?: boolean;
+        /**
+          * The HTML tag to create when there's no slotted element. Used with type="text" or type="textarea" to auto-create elements.
+          * @example "h3" - creates <h3 slot="header">content</h3>
+          * @example "p" - creates <p slot="content">content</p>
+         */
+        "tag"?: string;
         /**
           * The type of slot content. - `slot`: Default, shows a dropzone for components (default) - `text`: Shows a single-line text input - `textarea`: Shows a multi-line text area
           * @default 'slot'

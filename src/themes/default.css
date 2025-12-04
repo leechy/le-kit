@@ -1,0 +1,104 @@
+/**
+ * Le-Kit Default Theme
+ * 
+ * Clean, professional light theme with blue primary color.
+ * 
+ * Usage:
+ * 1. As default: import alongside base.css
+ * 2. For switching: set theme="default" on any element
+ * 
+ * To create a custom theme:
+ * 1. Copy this file
+ * 2. Change selector to :root or [theme="your-theme"]
+ * 3. Modify the variables you need
+ */
+
+:root,
+[theme="default"] {
+  /* Primary brand color */
+  --le-color-primary: #0088ff;
+  --le-color-primary-light: #4da6ff;
+  --le-color-primary-dark: #0066cc;
+  --le-color-primary-contrast: #ffffff;
+  
+  /* Secondary accent color */
+  --le-color-secondary: #6c757d;
+  --le-color-secondary-light: #868e96;
+  --le-color-secondary-dark: #545b62;
+  --le-color-secondary-contrast: #ffffff;
+  
+  /* Semantic colors */
+  --le-color-success: #28a745;
+  --le-color-success-light: #48c764;
+  --le-color-success-dark: #1e7e34;
+  --le-color-success-contrast: #ffffff;
+  
+  --le-color-warning: #ffc107;
+  --le-color-warning-light: #ffcd39;
+  --le-color-warning-dark: #d39e00;
+  --le-color-warning-contrast: #212529;
+  
+  --le-color-danger: #dc3545;
+  --le-color-danger-light: #e4606d;
+  --le-color-danger-dark: #bd2130;
+  --le-color-danger-contrast: #ffffff;
+  
+  --le-color-info: #17a2b8;
+  --le-color-info-light: #3ab0c3;
+  --le-color-info-dark: #117a8b;
+  --le-color-info-contrast: #ffffff;
+  
+  /* Neutral colors */
+  --le-color-white: #ffffff;
+  --le-color-black: #000000;
+  --le-color-gray-50: #fafafa;
+  --le-color-gray-100: #f5f5f5;
+  --le-color-gray-200: #eeeeee;
+  --le-color-gray-300: #e0e0e0;
+  --le-color-gray-400: #bdbdbd;
+  --le-color-gray-500: #9e9e9e;
+  --le-color-gray-600: #757575;
+  --le-color-gray-700: #616161;
+  --le-color-gray-800: #424242;
+  --le-color-gray-900: #212121;
+  
+  /* Background colors */
+  --le-color-background: #ffffff;
+  --le-color-background-secondary: #f5f5f5;
+  --le-color-background-tertiary: #eeeeee;
+  
+  /* Surface colors (cards, modals, etc.) */
+  --le-color-surface: #ffffff;
+  --le-color-surface-elevated: #ffffff;
+  
+  /* Text colors */
+  --le-color-text-primary: #212121;
+  --le-color-text-secondary: #757575;
+  --le-color-text-disabled: #9e9e9e;
+  --le-color-text-inverse: #ffffff;
+  
+  /* Border colors */
+  --le-color-border: #e0e0e0;
+  --le-color-border-light: #eeeeee;
+  --le-color-border-dark: #bdbdbd;
+  
+  /* Focus ring */
+  --le-color-focus: rgba(0, 136, 255, 0.5);
+  
+  /* Border radius */
+  --le-radius-none: 0;
+  --le-radius-sm: 0.125rem;   /* 2px */
+  --le-radius-md: 0.25rem;    /* 4px */
+  --le-radius-lg: 0.5rem;     /* 8px */
+  --le-radius-xl: 0.75rem;    /* 12px */
+  --le-radius-2xl: 1rem;      /* 16px */
+  --le-radius-full: 9999px;
+  
+  /* Shadows */
+  --le-shadow-none: none;
+  --le-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --le-shadow-md: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --le-shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --le-shadow-xl: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --le-shadow-2xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+}

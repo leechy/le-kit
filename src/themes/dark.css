@@ -1,0 +1,96 @@
+/**
+ * Le-Kit Dark Theme
+ * 
+ * Dark mode with light text on dark backgrounds.
+ * 
+ * Usage: set theme="dark" on any element, or import as your default.
+ */
+
+[theme="dark"] {
+  /* Primary brand color - lighter for dark backgrounds */
+  --le-color-primary: #4da6ff;
+  --le-color-primary-light: #80c1ff;
+  --le-color-primary-dark: #0088ff;
+  --le-color-primary-contrast: #000000;
+  
+  /* Secondary accent color */
+  --le-color-secondary: #868e96;
+  --le-color-secondary-light: #adb5bd;
+  --le-color-secondary-dark: #6c757d;
+  --le-color-secondary-contrast: #000000;
+  
+  /* Semantic colors - adjusted for dark mode */
+  --le-color-success: #48c764;
+  --le-color-success-light: #6dd587;
+  --le-color-success-dark: #28a745;
+  --le-color-success-contrast: #000000;
+  
+  --le-color-warning: #ffcd39;
+  --le-color-warning-light: #ffda6a;
+  --le-color-warning-dark: #ffc107;
+  --le-color-warning-contrast: #000000;
+  
+  --le-color-danger: #e4606d;
+  --le-color-danger-light: #ea868f;
+  --le-color-danger-dark: #dc3545;
+  --le-color-danger-contrast: #000000;
+  
+  --le-color-info: #3ab0c3;
+  --le-color-info-light: #6dc4d3;
+  --le-color-info-dark: #17a2b8;
+  --le-color-info-contrast: #000000;
+  
+  /* Neutral colors - inverted */
+  --le-color-white: #ffffff;
+  --le-color-black: #000000;
+  --le-color-gray-50: #212121;
+  --le-color-gray-100: #424242;
+  --le-color-gray-200: #616161;
+  --le-color-gray-300: #757575;
+  --le-color-gray-400: #9e9e9e;
+  --le-color-gray-500: #bdbdbd;
+  --le-color-gray-600: #e0e0e0;
+  --le-color-gray-700: #eeeeee;
+  --le-color-gray-800: #f5f5f5;
+  --le-color-gray-900: #fafafa;
+  
+  /* Background colors */
+  --le-color-background: #121212;
+  --le-color-background-secondary: #1e1e1e;
+  --le-color-background-tertiary: #2d2d2d;
+  
+  /* Surface colors */
+  --le-color-surface: #1e1e1e;
+  --le-color-surface-elevated: #2d2d2d;
+  
+  /* Text colors */
+  --le-color-text-primary: #ffffff;
+  --le-color-text-secondary: #b3b3b3;
+  --le-color-text-disabled: #666666;
+  --le-color-text-inverse: #121212;
+  
+  /* Border colors */
+  --le-color-border: #333333;
+  --le-color-border-light: #2d2d2d;
+  --le-color-border-dark: #444444;
+  
+  /* Focus ring */
+  --le-color-focus: rgba(77, 166, 255, 0.5);
+  
+  /* Border radius - same as default */
+  --le-radius-none: 0;
+  --le-radius-sm: 0.125rem;
+  --le-radius-md: 0.25rem;
+  --le-radius-lg: 0.5rem;
+  --le-radius-xl: 0.75rem;
+  --le-radius-2xl: 1rem;
+  --le-radius-full: 9999px;
+  
+  /* Shadows - darker for dark mode */
+  --le-shadow-none: none;
+  --le-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --le-shadow-md: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --le-shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --le-shadow-xl: 0 10px 15px rgba(0, 0, 0, 0.4), 0 4px 6px rgba(0, 0, 0, 0.3);
+  --le-shadow-2xl: 0 20px 25px rgba(0, 0, 0, 0.4), 0 10px 10px rgba(0, 0, 0, 0.3);
+}

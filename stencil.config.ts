@@ -3,7 +3,7 @@ import { Config } from '@stencil/core';
 export const config: Config = {
   namespace: 'le-kit',
   globalScript: 'src/global/app.ts',
-  globalStyle: 'src/global/theme.css',
+  globalStyle: 'src/themes/index.css',
   outputTargets: [
     {
       type: 'dist',
@@ -24,7 +24,10 @@ export const config: Config = {
     {
       type: 'www',
       serviceWorker: null, // disable service workers
-      copy: [{ src: 'global' }],
+      copy: [
+        { src: 'global' },
+        { src: 'themes', dest: 'build/themes' },
+      ],
     },
   ],
   testing: {

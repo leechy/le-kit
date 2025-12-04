@@ -1,0 +1,74 @@
+/**
+ * Le-Kit Base Design Tokens
+ * 
+ * Structural tokens that rarely change between themes:
+ * - Spacing scale
+ * - Typography (font families, sizes, weights, line heights)
+ * - Transitions
+ * - Z-index layers
+ * 
+ * Import this file along with a theme file (default.css, dark.css, etc.)
+ */
+
+:root {
+  /* ============================================
+   * SPACING SCALE
+   * ============================================ */
+  --le-spacing-0: 0;
+  --le-spacing-1: 0.25rem;    /* 4px */
+  --le-spacing-2: 0.5rem;     /* 8px */
+  --le-spacing-3: 0.75rem;    /* 12px */
+  --le-spacing-4: 1rem;       /* 16px */
+  --le-spacing-5: 1.25rem;    /* 20px */
+  --le-spacing-6: 1.5rem;     /* 24px */
+  --le-spacing-8: 2rem;       /* 32px */
+  --le-spacing-10: 2.5rem;    /* 40px */
+  --le-spacing-12: 3rem;      /* 48px */
+  --le-spacing-16: 4rem;      /* 64px */
+
+  /* ============================================
+   * TYPOGRAPHY
+   * ============================================ */
+  --le-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --le-font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+  
+  /* Font sizes */
+  --le-font-size-xs: 0.75rem;     /* 12px */
+  --le-font-size-sm: 0.875rem;    /* 14px */
+  --le-font-size-md: 1rem;        /* 16px */
+  --le-font-size-lg: 1.125rem;    /* 18px */
+  --le-font-size-xl: 1.25rem;     /* 20px */
+  --le-font-size-2xl: 1.5rem;     /* 24px */
+  --le-font-size-3xl: 1.875rem;   /* 30px */
+  --le-font-size-4xl: 2.25rem;    /* 36px */
+  
+  /* Font weights */
+  --le-font-weight-normal: 400;
+  --le-font-weight-medium: 500;
+  --le-font-weight-semibold: 600;
+  --le-font-weight-bold: 700;
+  
+  /* Line heights */
+  --le-line-height-tight: 1.25;
+  --le-line-height-normal: 1.5;
+  --le-line-height-relaxed: 1.75;
+
+  /* ============================================
+   * TRANSITIONS
+   * ============================================ */
+  --le-transition-fast: 100ms;
+  --le-transition-normal: 200ms;
+  --le-transition-slow: 300ms;
+  --le-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ============================================
+   * Z-INDEX LAYERS
+   * ============================================ */
+  --le-z-dropdown: 1000;
+  --le-z-sticky: 1020;
+  --le-z-fixed: 1030;
+  --le-z-modal-backdrop: 1040;
+  --le-z-modal: 1050;
+  --le-z-popover: 1060;
+  --le-z-tooltip: 1070;
+}

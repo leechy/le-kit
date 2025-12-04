@@ -1,0 +1,96 @@
+/**
+ * Le-Kit Gradient Theme
+ * 
+ * Modern gradient style with purple accents and rounded corners.
+ * 
+ * Usage: set theme="gradient" on any element, or import as your default.
+ */
+
+[theme="gradient"] {
+  /* Primary brand color - purple */
+  --le-color-primary: #8b5cf6;
+  --le-color-primary-light: #a78bfa;
+  --le-color-primary-dark: #7c3aed;
+  --le-color-primary-contrast: #ffffff;
+  
+  /* Secondary accent color - pink */
+  --le-color-secondary: #ec4899;
+  --le-color-secondary-light: #f472b6;
+  --le-color-secondary-dark: #db2777;
+  --le-color-secondary-contrast: #ffffff;
+  
+  /* Semantic colors */
+  --le-color-success: #10b981;
+  --le-color-success-light: #34d399;
+  --le-color-success-dark: #059669;
+  --le-color-success-contrast: #ffffff;
+  
+  --le-color-warning: #f59e0b;
+  --le-color-warning-light: #fbbf24;
+  --le-color-warning-dark: #d97706;
+  --le-color-warning-contrast: #000000;
+  
+  --le-color-danger: #ef4444;
+  --le-color-danger-light: #f87171;
+  --le-color-danger-dark: #dc2626;
+  --le-color-danger-contrast: #ffffff;
+  
+  --le-color-info: #06b6d4;
+  --le-color-info-light: #22d3ee;
+  --le-color-info-dark: #0891b2;
+  --le-color-info-contrast: #ffffff;
+  
+  /* Neutral colors */
+  --le-color-white: #ffffff;
+  --le-color-black: #000000;
+  --le-color-gray-50: #faf5ff;
+  --le-color-gray-100: #f3e8ff;
+  --le-color-gray-200: #e9d5ff;
+  --le-color-gray-300: #d8b4fe;
+  --le-color-gray-400: #c084fc;
+  --le-color-gray-500: #a855f7;
+  --le-color-gray-600: #9333ea;
+  --le-color-gray-700: #7e22ce;
+  --le-color-gray-800: #6b21a8;
+  --le-color-gray-900: #581c87;
+  
+  /* Background colors */
+  --le-color-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --le-color-background-secondary: rgba(255, 255, 255, 0.1);
+  --le-color-background-tertiary: rgba(255, 255, 255, 0.05);
+  
+  /* Surface colors */
+  --le-color-surface: rgba(255, 255, 255, 0.95);
+  --le-color-surface-elevated: #ffffff;
+  
+  /* Text colors */
+  --le-color-text-primary: #1f2937;
+  --le-color-text-secondary: #6b7280;
+  --le-color-text-disabled: #9ca3af;
+  --le-color-text-inverse: #ffffff;
+  
+  /* Border colors */
+  --le-color-border: rgba(139, 92, 246, 0.3);
+  --le-color-border-light: rgba(139, 92, 246, 0.1);
+  --le-color-border-dark: rgba(139, 92, 246, 0.5);
+  
+  /* Focus ring */
+  --le-color-focus: rgba(139, 92, 246, 0.5);
+  
+  /* Border radius - more rounded */
+  --le-radius-none: 0;
+  --le-radius-sm: 0.25rem;
+  --le-radius-md: 0.5rem;
+  --le-radius-lg: 1rem;
+  --le-radius-xl: 1.5rem;
+  --le-radius-2xl: 2rem;
+  --le-radius-full: 9999px;
+  
+  /* Shadows - purple tinted */
+  --le-shadow-none: none;
+  --le-shadow-sm: 0 1px 2px rgba(139, 92, 246, 0.1);
+  --le-shadow-md: 0 4px 6px rgba(139, 92, 246, 0.15), 0 2px 4px rgba(139, 92, 246, 0.1);
+  --le-shadow-lg: 0 10px 20px rgba(139, 92, 246, 0.2), 0 4px 8px rgba(139, 92, 246, 0.1);
+  --le-shadow-xl: 0 20px 40px rgba(139, 92, 246, 0.25), 0 8px 16px rgba(139, 92, 246, 0.15);
+  --le-shadow-2xl: 0 30px 60px rgba(139, 92, 246, 0.3), 0 15px 30px rgba(139, 92, 246, 0.2);
+}

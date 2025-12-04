@@ -1,0 +1,96 @@
+/**
+ * Le-Kit Minimal Theme
+ * 
+ * Clean, subtle design with sharp edges and minimal shadows.
+ * 
+ * Usage: set theme="minimal" on any element, or import as your default.
+ */
+
+[theme="minimal"] {
+  /* Primary brand color - dark gray */
+  --le-color-primary: #111827;
+  --le-color-primary-light: #374151;
+  --le-color-primary-dark: #030712;
+  --le-color-primary-contrast: #ffffff;
+  
+  /* Secondary accent color */
+  --le-color-secondary: #6b7280;
+  --le-color-secondary-light: #9ca3af;
+  --le-color-secondary-dark: #4b5563;
+  --le-color-secondary-contrast: #ffffff;
+  
+  /* Semantic colors - muted */
+  --le-color-success: #059669;
+  --le-color-success-light: #10b981;
+  --le-color-success-dark: #047857;
+  --le-color-success-contrast: #ffffff;
+  
+  --le-color-warning: #d97706;
+  --le-color-warning-light: #f59e0b;
+  --le-color-warning-dark: #b45309;
+  --le-color-warning-contrast: #ffffff;
+  
+  --le-color-danger: #dc2626;
+  --le-color-danger-light: #ef4444;
+  --le-color-danger-dark: #b91c1c;
+  --le-color-danger-contrast: #ffffff;
+  
+  --le-color-info: #0284c7;
+  --le-color-info-light: #0ea5e9;
+  --le-color-info-dark: #0369a1;
+  --le-color-info-contrast: #ffffff;
+  
+  /* Neutral colors */
+  --le-color-white: #ffffff;
+  --le-color-black: #000000;
+  --le-color-gray-50: #f9fafb;
+  --le-color-gray-100: #f3f4f6;
+  --le-color-gray-200: #e5e7eb;
+  --le-color-gray-300: #d1d5db;
+  --le-color-gray-400: #9ca3af;
+  --le-color-gray-500: #6b7280;
+  --le-color-gray-600: #4b5563;
+  --le-color-gray-700: #374151;
+  --le-color-gray-800: #1f2937;
+  --le-color-gray-900: #111827;
+  
+  /* Background colors */
+  --le-color-background: #ffffff;
+  --le-color-background-secondary: #fafafa;
+  --le-color-background-tertiary: #f5f5f5;
+  
+  /* Surface colors */
+  --le-color-surface: #ffffff;
+  --le-color-surface-elevated: #ffffff;
+  
+  /* Text colors */
+  --le-color-text-primary: #111827;
+  --le-color-text-secondary: #6b7280;
+  --le-color-text-disabled: #9ca3af;
+  --le-color-text-inverse: #ffffff;
+  
+  /* Border colors */
+  --le-color-border: #e5e7eb;
+  --le-color-border-light: #f3f4f6;
+  --le-color-border-dark: #d1d5db;
+  
+  /* Focus ring */
+  --le-color-focus: rgba(17, 24, 39, 0.3);
+  
+  /* Border radius - sharp/minimal */
+  --le-radius-none: 0;
+  --le-radius-sm: 0;
+  --le-radius-md: 2px;
+  --le-radius-lg: 4px;
+  --le-radius-xl: 6px;
+  --le-radius-2xl: 8px;
+  --le-radius-full: 9999px;
+  
+  /* Shadows - very subtle */
+  --le-shadow-none: none;
+  --le-shadow-sm: none;
+  --le-shadow-md: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --le-shadow-lg: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --le-shadow-xl: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --le-shadow-2xl: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

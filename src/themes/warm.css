@@ -1,0 +1,96 @@
+/**
+ * Le-Kit Warm Theme
+ * 
+ * Cozy, warm colors with orange/amber tones.
+ * 
+ * Usage: set theme="warm" on any element, or import as your default.
+ */
+
+[theme="warm"] {
+  /* Primary brand color - orange */
+  --le-color-primary: #ea580c;
+  --le-color-primary-light: #fb923c;
+  --le-color-primary-dark: #c2410c;
+  --le-color-primary-contrast: #ffffff;
+  
+  /* Secondary accent color - amber */
+  --le-color-secondary: #b45309;
+  --le-color-secondary-light: #d97706;
+  --le-color-secondary-dark: #92400e;
+  --le-color-secondary-contrast: #ffffff;
+  
+  /* Semantic colors */
+  --le-color-success: #16a34a;
+  --le-color-success-light: #22c55e;
+  --le-color-success-dark: #15803d;
+  --le-color-success-contrast: #ffffff;
+  
+  --le-color-warning: #ca8a04;
+  --le-color-warning-light: #eab308;
+  --le-color-warning-dark: #a16207;
+  --le-color-warning-contrast: #000000;
+  
+  --le-color-danger: #dc2626;
+  --le-color-danger-light: #ef4444;
+  --le-color-danger-dark: #b91c1c;
+  --le-color-danger-contrast: #ffffff;
+  
+  --le-color-info: #0891b2;
+  --le-color-info-light: #06b6d4;
+  --le-color-info-dark: #0e7490;
+  --le-color-info-contrast: #ffffff;
+  
+  /* Neutral colors - warm tinted */
+  --le-color-white: #ffffff;
+  --le-color-black: #000000;
+  --le-color-gray-50: #fffbeb;
+  --le-color-gray-100: #fef3c7;
+  --le-color-gray-200: #fde68a;
+  --le-color-gray-300: #fcd34d;
+  --le-color-gray-400: #fbbf24;
+  --le-color-gray-500: #f59e0b;
+  --le-color-gray-600: #d97706;
+  --le-color-gray-700: #b45309;
+  --le-color-gray-800: #92400e;
+  --le-color-gray-900: #78350f;
+  
+  /* Background colors */
+  --le-color-background: #fffbeb;
+  --le-color-background-secondary: #fef3c7;
+  --le-color-background-tertiary: #fde68a;
+  
+  /* Surface colors */
+  --le-color-surface: #ffffff;
+  --le-color-surface-elevated: #ffffff;
+  
+  /* Text colors */
+  --le-color-text-primary: #78350f;
+  --le-color-text-secondary: #92400e;
+  --le-color-text-disabled: #d97706;
+  --le-color-text-inverse: #ffffff;
+  
+  /* Border colors */
+  --le-color-border: #fcd34d;
+  --le-color-border-light: #fde68a;
+  --le-color-border-dark: #fbbf24;
+  
+  /* Focus ring */
+  --le-color-focus: rgba(234, 88, 12, 0.5);
+  
+  /* Border radius - slightly rounded */
+  --le-radius-none: 0;
+  --le-radius-sm: 0.125rem;
+  --le-radius-md: 0.375rem;
+  --le-radius-lg: 0.625rem;
+  --le-radius-xl: 0.875rem;
+  --le-radius-2xl: 1.125rem;
+  --le-radius-full: 9999px;
+  
+  /* Shadows - warm tinted */
+  --le-shadow-none: none;
+  --le-shadow-sm: 0 1px 2px rgba(234, 88, 12, 0.05);
+  --le-shadow-md: 0 4px 6px rgba(234, 88, 12, 0.1), 0 2px 4px rgba(234, 88, 12, 0.06);
+  --le-shadow-lg: 0 10px 15px rgba(234, 88, 12, 0.15), 0 4px 6px rgba(234, 88, 12, 0.08);
+  --le-shadow-xl: 0 20px 25px rgba(234, 88, 12, 0.15), 0 10px 10px rgba(234, 88, 12, 0.1);
+  --le-shadow-2xl: 0 25px 50px rgba(234, 88, 12, 0.2), 0 12px 24px rgba(234, 88, 12, 0.12);
+}

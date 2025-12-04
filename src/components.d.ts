@@ -36,6 +36,67 @@ export namespace Components {
         "variant": 'default' | 'outlined' | 'elevated';
     }
     /**
+     * A popover component for displaying floating content.
+     * This component is used internally by le-slot for property editing
+     * and component selection. It always renders in default mode regardless
+     * of the global mode setting.
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LePopover {
+        /**
+          * Alignment of the popover
+          * @default 'start'
+         */
+        "align": 'start' | 'center' | 'end';
+        /**
+          * Whether clicking outside closes the popover
+          * @default true
+         */
+        "closeOnClickOutside": boolean;
+        /**
+          * Whether pressing Escape closes the popover
+          * @default true
+         */
+        "closeOnEscape": boolean;
+        /**
+          * Closes the popover
+         */
+        "hide": () => Promise<void>;
+        /**
+          * Offset from the trigger element (in pixels)
+          * @default 8
+         */
+        "offset": number;
+        /**
+          * Whether the popover is currently open
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Optional title for the popover header
+         */
+        "popoverTitle"?: string;
+        /**
+          * Position of the popover relative to its trigger
+          * @default 'bottom'
+         */
+        "position": 'top' | 'bottom' | 'left' | 'right' | 'auto';
+        /**
+          * Opens the popover
+         */
+        "show": () => Promise<void>;
+        /**
+          * Whether to show a close button in the header
+          * @default true
+         */
+        "showClose": boolean;
+        /**
+          * Toggles the popover
+         */
+        "toggle": () => Promise<void>;
+    }
+    /**
      * Slot placeholder component for admin/CMS mode.
      * This component renders a visual placeholder for slots when in admin mode,
      * allowing CMS systems to show available drop zones for content or inline editing.
@@ -83,6 +144,10 @@ export namespace Components {
         "type": 'slot' | 'text' | 'textarea';
     }
 }
+export interface LePopoverCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLePopoverElement;
+}
 export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeSlotElement;
@@ -109,6 +174,32 @@ declare global {
     var HTMLLeCardElement: {
         prototype: HTMLLeCardElement;
         new (): HTMLLeCardElement;
+    };
+    interface HTMLLePopoverElementEventMap {
+        "lePopoverOpen": void;
+        "lePopoverClose": void;
+    }
+    /**
+     * A popover component for displaying floating content.
+     * This component is used internally by le-slot for property editing
+     * and component selection. It always renders in default mode regardless
+     * of the global mode setting.
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface HTMLLePopoverElement extends Components.LePopover, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLePopoverElementEventMap>(type: K, listener: (this: HTMLLePopoverElement, ev: LePopoverCustomEvent<HTMLLePopoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLePopoverElementEventMap>(type: K, listener: (this: HTMLLePopoverElement, ev: LePopoverCustomEvent<HTMLLePopoverElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLePopoverElement: {
+        prototype: HTMLLePopoverElement;
+        new (): HTMLLePopoverElement;
     };
     interface HTMLLeSlotElementEventMap {
         "leSlotChange": { name: string; value: string; isValid: boolean };
@@ -137,6 +228,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "le-card": HTMLLeCardElement;
+        "le-popover": HTMLLePopoverElement;
         "le-slot": HTMLLeSlotElement;
     }
 }
@@ -169,6 +261,63 @@ declare namespace LocalJSX {
           * @default 'default'
          */
         "variant"?: 'default' | 'outlined' | 'elevated';
+    }
+    /**
+     * A popover component for displaying floating content.
+     * This component is used internally by le-slot for property editing
+     * and component selection. It always renders in default mode regardless
+     * of the global mode setting.
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LePopover {
+        /**
+          * Alignment of the popover
+          * @default 'start'
+         */
+        "align"?: 'start' | 'center' | 'end';
+        /**
+          * Whether clicking outside closes the popover
+          * @default true
+         */
+        "closeOnClickOutside"?: boolean;
+        /**
+          * Whether pressing Escape closes the popover
+          * @default true
+         */
+        "closeOnEscape"?: boolean;
+        /**
+          * Offset from the trigger element (in pixels)
+          * @default 8
+         */
+        "offset"?: number;
+        /**
+          * Emitted when the popover closes
+         */
+        "onLePopoverClose"?: (event: LePopoverCustomEvent<void>) => void;
+        /**
+          * Emitted when the popover opens
+         */
+        "onLePopoverOpen"?: (event: LePopoverCustomEvent<void>) => void;
+        /**
+          * Whether the popover is currently open
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Optional title for the popover header
+         */
+        "popoverTitle"?: string;
+        /**
+          * Position of the popover relative to its trigger
+          * @default 'bottom'
+         */
+        "position"?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
+        /**
+          * Whether to show a close button in the header
+          * @default true
+         */
+        "showClose"?: boolean;
     }
     /**
      * Slot placeholder component for admin/CMS mode.
@@ -223,6 +372,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "le-card": LeCard;
+        "le-popover": LePopover;
         "le-slot": LeSlot;
     }
 }
@@ -247,6 +397,15 @@ declare module "@stencil/core" {
              * @cmsCategory Layout
              */
             "le-card": LocalJSX.LeCard & JSXBase.HTMLAttributes<HTMLLeCardElement>;
+            /**
+             * A popover component for displaying floating content.
+             * This component is used internally by le-slot for property editing
+             * and component selection. It always renders in default mode regardless
+             * of the global mode setting.
+             * @cmsInternal true
+             * @cmsCategory System
+             */
+            "le-popover": LocalJSX.LePopover & JSXBase.HTMLAttributes<HTMLLePopoverElement>;
             /**
              * Slot placeholder component for admin/CMS mode.
              * This component renders a visual placeholder for slots when in admin mode,

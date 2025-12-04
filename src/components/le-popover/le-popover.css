@@ -1,0 +1,132 @@
+/**
+ * Styles for le-popover component
+ * Always renders in default mode (no admin mode styles)
+ */
+
+:host {
+  display: inline-block;
+  position: relative;
+  
+  /* Popover design tokens */
+  --le-popover-bg: #ffffff;
+  --le-popover-border: 1px solid #e0e0e0;
+  --le-popover-border-radius: 8px;
+  --le-popover-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --le-popover-min-width: 200px;
+  --le-popover-max-width: 320px;
+  --le-popover-z-index: 1000;
+  
+  --le-popover-header-bg: #f5f5f5;
+  --le-popover-header-border: 1px solid #e0e0e0;
+  --le-popover-title-color: #333;
+  --le-popover-title-size: 13px;
+  
+  --le-popover-body-padding: 12px;
+}
+
+/* Trigger wrapper */
+.le-popover-trigger {
+  display: inline-flex;
+  cursor: pointer;
+}
+
+/* Default trigger button */
+.le-popover-default-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.le-popover-default-trigger:hover {
+  border-color: #0088ff;
+  background: #f0f7ff;
+}
+
+:host(.is-open) .le-popover-default-trigger {
+  border-color: #0088ff;
+  background: #e3f2fd;
+}
+
+/* Popover content container */
+.le-popover-content {
+  position: absolute;
+  z-index: var(--le-popover-z-index);
+  min-width: var(--le-popover-min-width);
+  max-width: var(--le-popover-max-width);
+  background: var(--le-popover-bg);
+  border: var(--le-popover-border);
+  border-radius: var(--le-popover-border-radius);
+  box-shadow: var(--le-popover-shadow);
+  overflow: hidden;
+  animation: popover-fade-in 0.15s ease-out;
+}
+
+@keyframes popover-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.le-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--le-popover-header-bg);
+  border-bottom: var(--le-popover-header-border);
+  gap: 8px;
+}
+
+.le-popover-title {
+  font-size: var(--le-popover-title-size);
+  font-weight: 600;
+  color: var(--le-popover-title-color);
+  flex: 1;
+}
+
+.le-popover-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #666;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.le-popover-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+/* Body */
+.le-popover-body {
+  padding: var(--le-popover-body-padding);
+}
+
+/* Utility: hide when not open (fallback) */
+:host(:not(.is-open)) .le-popover-content {
+  display: none;
+}

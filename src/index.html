@@ -124,6 +124,39 @@
     <!-- Default content template (used when localStorage is empty) -->
     <template id="default-content">
       <div class="demo-section">
+        <h2>Popover Component</h2>
+        <p>A reusable popover for floating content, settings panels, and menus.</p>
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>Default trigger (gear icon):</label>
+            <le-popover popover-title="Settings">
+              <p style="margin: 0;">This is the popover content.</p>
+            </le-popover>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Custom trigger:</label>
+            <le-popover popover-title="Options" position="bottom" align="center">
+              <button slot="trigger" style="padding: 8px 16px; cursor: pointer;">Click me</button>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button style="padding: 8px; text-align: left; border: none; background: none; cursor: pointer;">Option 1</button>
+                <button style="padding: 8px; text-align: left; border: none; background: none; cursor: pointer;">Option 2</button>
+                <button style="padding: 8px; text-align: left; border: none; background: none; cursor: pointer;">Option 3</button>
+              </div>
+            </le-popover>
+          </div>
+          
+          <div class="text-slot-demo" style="text-align: end;">
+            <label>Auto-positioning:</label>
+            <le-popover popover-title="Auto Position" position="auto">
+              <span slot="trigger" style="padding: 4px 8px; background: #e3f2fd; border-radius: 4px; cursor: pointer;">Hover info ℹ️</span>
+              <p style="margin: 0; font-size: 13px;">Position automatically adjusts based on available viewport space.</p>
+            </le-popover>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-section">
         <h2>Card Component</h2>
         <div class="demo-grid">
           <!-- Card with content -->
@@ -225,7 +258,6 @@
       // Listen for changes from le-slot components
       contentContainer.addEventListener('leSlotChange', (event) => {
         const { name, value, isValid } = event.detail;
-        console.log(`Slot "${name}" changed:`, value, isValid ? '✓' : '✗ invalid HTML');
         
         // Only update and save if HTML is valid
         if (isValid) {
@@ -237,7 +269,6 @@
           saveContent();
         } else {
           // in case the html is invalid, serialize textValue to innerHTML to escape tags
-          console.log(`Invalid HTML in slot "${name}", reverting to textValue.`);
           const slot = event.target;
           slot.innerHTML = slot.textValue;
 

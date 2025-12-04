@@ -34,6 +34,10 @@ export function slotHasContent(el: HTMLElement, slotName: string = ''): boolean 
  * Sets up a MutationObserver to track mode changes on ancestor elements.
  * Returns a cleanup function to disconnect the observer.
  * 
+ * If the element or any ancestor has an explicit `mode` attribute, that creates
+ * a "mode boundary" - the mode is determined from that point, not from further up.
+ * This allows components like le-popover to force default mode for their children.
+ * 
  * @param el - The component's host element
  * @param callback - Function to call when mode changes, receives the new mode
  * @returns Cleanup function to disconnect the observer
@@ -69,19 +73,30 @@ export function observeModeChanges(
     callback(getMode(el));
   });
 
+  // Observe the element itself (for mode boundary changes)
+  observer.observe(el, {
+    attributes: true,
+    attributeFilter: ['mode'],
+  });
+
   // Observe document root
   observer.observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['mode'],
   });
 
-  // Observe all parent elements
+  // Observe all parent elements up to (but stop at) a mode boundary
   let parent = el.parentElement;
   while (parent) {
     observer.observe(parent, {
       attributes: true,
       attributeFilter: ['mode'],
     });
+    // If this parent has an explicit mode, it's a boundary - stop traversing
+    // (we still need to observe it for changes, but not beyond)
+    if (parent.hasAttribute('mode')) {
+      break;
+    }
     parent = parent.parentElement;
   }
 

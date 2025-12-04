@@ -1,0 +1,14 @@
+/**
+ * Admin mode styles for le-button
+ * Inherits default styles and adds admin-specific overrides
+ */
+@import './le-button.default.css';
+
+:host {
+  --le-button-admin-outline: 2px solid rgba(0, 136, 255, 0.3);
+}
+
+.button {
+  outline: var(--le-button-admin-outline);
+  outline-offset: 2px;
+}

@@ -4,6 +4,288 @@
   "modules": [
     {
       "kind": "javascript-module",
+      "path": "src/components/le-button/le-button.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible button component with multiple variants and states.",
+          "name": "LeButton",
+          "cssProperties": [
+            {
+              "description": "Button background color",
+              "name": "--le-button-bg"
+            },
+            {
+              "description": "Button text color",
+              "name": "--le-button-color"
+            },
+            {
+              "description": "Button border radius",
+              "name": "--le-button-border-radius"
+            },
+            {
+              "description": "Button horizontal padding",
+              "name": "--le-button-padding-x"
+            },
+            {
+              "description": "Button vertical padding",
+              "name": "--le-button-padding-y"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The native button element",
+              "name": "button"
+            },
+            {
+              "description": "The button content wrapper",
+              "name": "content"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Button text content",
+              "name": ""
+            },
+            {
+              "description": "Icon before the text",
+              "name": "icon-start"
+            },
+            {
+              "description": "Icon after the text",
+              "name": "icon-end"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'solid' | 'outlined' | 'clear'"
+              },
+              "default": "'solid'",
+              "description": "Button variant style"
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
+              },
+              "default": "'primary'",
+              "description": "Button color theme (uses theme semantic colors)"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Button size"
+            },
+            {
+              "kind": "field",
+              "name": "selected",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is in a selected/active state"
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button takes full width of its container"
+            },
+            {
+              "kind": "field",
+              "name": "iconOnly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button displays only an icon (square aspect ratio)"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              },
+              "default": "'button'",
+              "description": "The button type attribute"
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional href to make the button act as a link"
+            },
+            {
+              "kind": "field",
+              "name": "target",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Link target when href is set"
+            },
+            {
+              "kind": "field",
+              "name": "handleClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'solid'",
+              "description": "Button variant style",
+              "type": {
+                "text": "'solid' | 'outlined' | 'clear'"
+              }
+            },
+            {
+              "name": "color",
+              "fieldName": "color",
+              "default": "'primary'",
+              "description": "Button color theme (uses theme semantic colors)",
+              "type": {
+                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Button size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "selected",
+              "fieldName": "selected",
+              "default": "false",
+              "description": "Whether the button is in a selected/active state",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the button takes full width of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "icon-only",
+              "fieldName": "iconOnly",
+              "default": "false",
+              "description": "Whether the button displays only an icon (square aspect ratio)",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the button is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "type",
+              "fieldName": "type",
+              "default": "'button'",
+              "description": "The button type attribute",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              }
+            },
+            {
+              "name": "href",
+              "fieldName": "href",
+              "description": "Optional href to make the button act as a link",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "target",
+              "fieldName": "target",
+              "description": "Link target when href is set",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-button",
+          "events": [
+            {
+              "name": "leClick",
+              "type": {
+                "text": "EventEmitter<MouseEvent>"
+              },
+              "description": "Emitted when the button is clicked"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeButton",
+          "declaration": {
+            "name": "LeButton",
+            "module": "src/components/le-button/le-button.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-button",
+          "declaration": {
+            "name": "LeButton",
+            "module": "src/components/le-button/le-button.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-card/le-card.tsx",
       "declarations": [
         {
@@ -769,6 +1051,14 @@
             },
             {
               "kind": "field",
+              "name": "tag",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The HTML tag to create when there's no slotted element.\nUsed with type=\"text\" or type=\"textarea\" to auto-create elements."
+            },
+            {
+              "kind": "field",
               "name": "adminMode",
               "type": {
                 "text": "boolean"
@@ -799,11 +1089,45 @@
             },
             {
               "kind": "field",
+              "name": "slotRef",
+              "type": {
+                "text": "HTMLSlotElement | undefined"
+              },
+              "privacy": "private",
+              "description": "Reference to the slot element to access assignedNodes"
+            },
+            {
+              "kind": "field",
+              "name": "slottedElement",
+              "type": {
+                "text": "Element | undefined"
+              },
+              "privacy": "private",
+              "description": "The original slotted element (e.g., <h3 slot=\"header\">)"
+            },
+            {
+              "kind": "field",
               "name": "disconnectModeObserver",
               "type": {
                 "text": "() => void | undefined"
               },
               "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "isUpdating",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Flag to prevent re-reading content right after we updated it"
+            },
+            {
+              "kind": "method",
+              "name": "readSlottedContent",
+              "privacy": "private",
+              "description": "Read content from slotted elements via assignedNodes()"
             },
             {
               "kind": "method",
@@ -828,6 +1152,18 @@
               "kind": "field",
               "name": "handleTextInput",
               "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createSlottedElement",
+              "privacy": "private",
+              "description": "Create a new slotted element when none exists.\nThe element is appended to the host component's light DOM."
+            },
+            {
+              "kind": "field",
+              "name": "handleSlotChange",
+              "privacy": "private",
+              "description": "Handle slot change event to re-read content when nodes are assigned"
             },
             {
               "kind": "method",
@@ -904,6 +1240,14 @@
               "name": "placeholder",
               "fieldName": "placeholder",
               "description": "Placeholder text for text/textarea inputs in admin mode.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "tag",
+              "fieldName": "tag",
+              "description": "The HTML tag to create when there's no slotted element.\nUsed with type=\"text\" or type=\"textarea\" to auto-create elements.",
               "type": {
                 "text": "string"
               }

@@ -1,0 +1,252 @@
+/**
+ * Default mode styles for le-button
+ * Uses global design tokens with component-specific overrides
+ */
+:host {
+  display: inline-block;
+  
+  /* Component-specific tokens */
+  --le-button-border-radius: var(--le-radius-md);
+  --le-button-padding-x: 1rem;
+  --le-button-padding-y: 0.40rem;
+  --le-button-font-size: var(--le-font-size-md);
+  --le-button-font-weight: var(--le-font-weight-medium);
+  --le-button-transition: var(--le-transition-fast);
+  
+  /* Internal state variables - set by color classes */
+  --_btn-bg: var(--le-color-primary);
+  --_btn-bg-hover: var(--le-color-primary-dark);
+  --_btn-color: var(--le-color-primary-contrast);
+  --_btn-border-color: var(--le-color-primary);
+}
+
+:host([full-width]) {
+  display: block;
+  width: 100%;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--le-spacing-3);
+  width: 100%;
+  padding: var(--le-button-padding-y) var(--le-button-padding-x);
+  border: 1px solid var(--_btn-border-color);
+  border-radius: var(--le-button-border-radius);
+  background: var(--_btn-bg);
+  color: var(--_btn-color);
+  font-family: var(--le-font-family-base);
+  font-size: var(--le-button-font-size);
+  font-weight: var(--le-button-font-weight);
+  line-height: var(--le-line-height-tight);
+  text-decoration: none;
+  cursor: pointer;
+  transition: 
+    background-color var(--le-button-transition) var(--le-transition-easing),
+    border-color var(--le-button-transition) var(--le-transition-easing),
+    box-shadow var(--le-button-transition) var(--le-transition-easing),
+    transform var(--le-button-transition) var(--le-transition-easing);
+}
+
+.button:hover:not(:disabled) {
+  background: var(--_btn-bg-hover);
+  border-color: var(--_btn-bg-hover);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===========================================
+ * COLOR VARIANTS - Use theme semantic colors
+ * =========================================== */
+
+/* Primary (default) */
+:host > le-component.color-primary {
+  --_btn-bg: var(--le-color-primary);
+  --_btn-bg-hover: var(--le-color-primary-dark);
+  --_btn-color: var(--le-color-primary-contrast);
+  --_btn-border-color: var(--le-color-primary);
+}
+
+/* Secondary */
+:host > le-component.color-secondary {
+  --_btn-bg: var(--le-color-secondary);
+  --_btn-bg-hover: var(--le-color-secondary-dark);
+  --_btn-color: var(--le-color-secondary-contrast);
+  --_btn-border-color: var(--le-color-secondary);
+}
+
+/* Success */
+:host > le-component.color-success {
+  --_btn-bg: var(--le-color-success);
+  --_btn-bg-hover: var(--le-color-success-dark);
+  --_btn-color: var(--le-color-success-contrast);
+  --_btn-border-color: var(--le-color-success);
+}
+
+/* Warning */
+:host > le-component.color-warning {
+  --_btn-bg: var(--le-color-warning);
+  --_btn-bg-hover: var(--le-color-warning-dark);
+  --_btn-color: var(--le-color-warning-contrast);
+  --_btn-border-color: var(--le-color-warning);
+}
+
+/* Danger */
+:host > le-component.color-danger {
+  --_btn-bg: var(--le-color-danger);
+  --_btn-bg-hover: var(--le-color-danger-dark);
+  --_btn-color: var(--le-color-danger-contrast);
+  --_btn-border-color: var(--le-color-danger);
+}
+
+/* Info */
+:host > le-component.color-info {
+  --_btn-bg: var(--le-color-info);
+  --_btn-bg-hover: var(--le-color-info-dark);
+  --_btn-color: var(--le-color-info-contrast);
+  --_btn-border-color: var(--le-color-info);
+}
+
+/* ===========================================
+ * STYLE VARIANTS
+ * =========================================== */
+
+/* Solid (default) - already styled by color classes */
+:host > le-component.variant-solid .button {
+  box-shadow: var(--le-shadow-sm);
+}
+
+:host > le-component.variant-solid .button:hover:not(:disabled) {
+  box-shadow: var(--le-shadow-md);
+}
+
+/* Outlined */
+:host > le-component.variant-outlined .button {
+  background: transparent;
+  color: var(--_btn-bg);
+  border-color: var(--_btn-border-color);
+}
+
+:host > le-component.variant-outlined .button:hover:not(:disabled) {
+  background: var(--_btn-bg);
+  color: var(--_btn-color);
+}
+
+/* Clear (ghost) */
+:host > le-component.variant-clear .button {
+  background: transparent;
+  color: var(--_btn-bg);
+  border-color: transparent;
+}
+
+:host > le-component.variant-clear .button:hover:not(:disabled) {
+  background: var(--le-color-gray-100);
+  border-color: transparent;
+}
+
+/* ===========================================
+ * SIZES
+ * =========================================== */
+:host > le-component.size-small .button {
+  --le-button-padding-x: 0.75rem;
+  --le-button-padding-y: 0.30rem;
+  --le-button-padding-top: 0.35rem;
+  --le-button-font-size: var(--le-font-size-xs);
+}
+
+:host > le-component.size-large .button {
+  --le-button-padding-x: 1.5rem;
+  --le-button-padding-y: 0.6rem;
+  --le-button-font-size: var(--le-font-size-xl);
+}
+
+/* ===========================================
+ * STATES & MODIFIERS
+ * =========================================== */
+
+/* Full width */
+:host > le-component.full-width {
+  display: block;
+  width: 100%;
+}
+
+/* Selected state */
+:host > le-component.selected .button {
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+:host > le-component.variant-outlined.selected .button,
+:host > le-component.variant-clear.selected .button {
+  background: var(--_btn-bg);
+  color: var(--_btn-color);
+}
+
+/* Icon only */
+:host > le-component.icon-only .button {
+  padding: 0.5rem;
+  aspect-ratio: 1;
+}
+
+:host > le-component.icon-only.size-small .button {
+  padding: 0.25rem;
+}
+
+:host > le-component.icon-only.size-large .button {
+  padding: 0.75rem;
+}
+
+/* Hide content in icon-only mode */
+:host > le-component.icon-only .content {
+  display: none;
+}
+
+/* ===========================================
+ * CONTENT (le-slot wrapper)
+ * =========================================== */
+.content {
+  display: inline;
+}
+
+.content:empty {
+  display: none;
+}
+
+/* ===========================================
+ * ICON WRAPPERS & SLOTS
+ * =========================================== */
+.icon-start,
+.icon-only,
+.icon-end {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-start:empty,
+.icon-only:empty,
+.icon-end:empty {
+  display: none;
+}
+
+::slotted([slot="icon-start"]),
+::slotted([slot="icon-only"]),
+::slotted([slot="icon-end"]) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.125em;
+  height: 1.125em;
+}

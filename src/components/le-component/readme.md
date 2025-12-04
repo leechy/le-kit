@@ -49,6 +49,7 @@ render() {
 
 ### Used by
 
+ - [le-button](../le-button)
  - [le-card](../le-card)
 
 ### Depends on
@@ -60,6 +61,7 @@ render() {
 graph TD;
   le-component --> le-popover
   le-popover --> le-slot
+  le-button --> le-component
   le-card --> le-component
   style le-component fill:#f9f,stroke:#333,stroke-width:4px
 ```

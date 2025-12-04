@@ -25,6 +25,7 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
 | `name`              | `name`               | The name of the slot this placeholder represents. Should match the slot name in the parent component.                                                                      | `string`                         | `''`        |
 | `placeholder`       | `placeholder`        | Placeholder text for text/textarea inputs in admin mode.                                                                                                                   | `string`                         | `undefined` |
 | `required`          | `required`           | Whether this slot is required to have content.                                                                                                                             | `boolean`                        | `false`     |
+| `tag`               | `tag`                | The HTML tag to create when there's no slotted element. Used with type="text" or type="textarea" to auto-create elements.                                                  | `string`                         | `undefined` |
 | `type`              | `type`               | The type of slot content. - `slot`: Default, shows a dropzone for components (default) - `text`: Shows a single-line text input - `textarea`: Shows a multi-line text area | `"slot" \| "text" \| "textarea"` | `'slot'`    |
 
 
@@ -46,12 +47,14 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
 
 ### Used by
 
+ - [le-button](../le-button)
  - [le-card](../le-card)
  - [le-popover](../le-popover)
 
 ### Graph
 ```mermaid
 graph TD;
+  le-button --> le-slot
   le-card --> le-slot
   le-popover --> le-slot
   style le-slot fill:#f9f,stroke:#333,stroke-width:4px

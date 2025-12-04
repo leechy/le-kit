@@ -7,6 +7,72 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     /**
+     * A flexible button component with multiple variants and states.
+     * @cssprop --le-button-bg - Button background color
+     * @cssprop --le-button-color - Button text color
+     * @cssprop --le-button-border-radius - Button border radius
+     * @cssprop --le-button-padding-x - Button horizontal padding
+     * @cssprop --le-button-padding-y - Button vertical padding
+     * @csspart button - The native button element
+     * @csspart content - The button content wrapper
+     * @cmsEditable true
+     * @cmsCategory Actions
+     */
+    interface LeButton {
+        /**
+          * Button color theme (uses theme semantic colors)
+          * @allowedValues primary | secondary | success | warning | danger | info
+          * @default 'primary'
+         */
+        "color": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
+        /**
+          * Whether the button is disabled
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Whether the button takes full width of its container
+          * @default false
+         */
+        "fullWidth": boolean;
+        /**
+          * Optional href to make the button act as a link
+         */
+        "href"?: string;
+        /**
+          * Whether the button displays only an icon (square aspect ratio)
+          * @default false
+         */
+        "iconOnly": boolean;
+        /**
+          * Whether the button is in a selected/active state
+          * @default false
+         */
+        "selected": boolean;
+        /**
+          * Button size
+          * @allowedValues small | medium | large
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * Link target when href is set
+         */
+        "target"?: string;
+        /**
+          * The button type attribute
+          * @allowedValues button | submit | reset
+          * @default 'button'
+         */
+        "type": 'button' | 'submit' | 'reset';
+        /**
+          * Button variant style
+          * @allowedValues solid | outlined | clear
+          * @default 'solid'
+         */
+        "variant": 'solid' | 'outlined' | 'clear';
+    }
+    /**
      * A flexible card component with header, content, and footer slots.
      * The card uses le-slot wrappers for each slot area. In admin mode,
      * le-slot shows placeholders for CMS editing. In default mode,
@@ -185,6 +251,10 @@ export namespace Components {
         "type": 'slot' | 'text' | 'textarea';
     }
 }
+export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeButtonElement;
+}
 export interface LePopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLePopoverElement;
@@ -194,6 +264,35 @@ export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
     target: HTMLLeSlotElement;
 }
 declare global {
+    interface HTMLLeButtonElementEventMap {
+        "leClick": MouseEvent;
+    }
+    /**
+     * A flexible button component with multiple variants and states.
+     * @cssprop --le-button-bg - Button background color
+     * @cssprop --le-button-color - Button text color
+     * @cssprop --le-button-border-radius - Button border radius
+     * @cssprop --le-button-padding-x - Button horizontal padding
+     * @cssprop --le-button-padding-y - Button vertical padding
+     * @csspart button - The native button element
+     * @csspart content - The button content wrapper
+     * @cmsEditable true
+     * @cmsCategory Actions
+     */
+    interface HTMLLeButtonElement extends Components.LeButton, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeButtonElementEventMap>(type: K, listener: (this: HTMLLeButtonElement, ev: LeButtonCustomEvent<HTMLLeButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeButtonElementEventMap>(type: K, listener: (this: HTMLLeButtonElement, ev: LeButtonCustomEvent<HTMLLeButtonElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeButtonElement: {
+        prototype: HTMLLeButtonElement;
+        new (): HTMLLeButtonElement;
+    };
     /**
      * A flexible card component with header, content, and footer slots.
      * The card uses le-slot wrappers for each slot area. In admin mode,
@@ -295,6 +394,7 @@ declare global {
         new (): HTMLLeSlotElement;
     };
     interface HTMLElementTagNameMap {
+        "le-button": HTMLLeButtonElement;
         "le-card": HTMLLeCardElement;
         "le-component": HTMLLeComponentElement;
         "le-popover": HTMLLePopoverElement;
@@ -302,6 +402,76 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    /**
+     * A flexible button component with multiple variants and states.
+     * @cssprop --le-button-bg - Button background color
+     * @cssprop --le-button-color - Button text color
+     * @cssprop --le-button-border-radius - Button border radius
+     * @cssprop --le-button-padding-x - Button horizontal padding
+     * @cssprop --le-button-padding-y - Button vertical padding
+     * @csspart button - The native button element
+     * @csspart content - The button content wrapper
+     * @cmsEditable true
+     * @cmsCategory Actions
+     */
+    interface LeButton {
+        /**
+          * Button color theme (uses theme semantic colors)
+          * @allowedValues primary | secondary | success | warning | danger | info
+          * @default 'primary'
+         */
+        "color"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
+        /**
+          * Whether the button is disabled
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Whether the button takes full width of its container
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Optional href to make the button act as a link
+         */
+        "href"?: string;
+        /**
+          * Whether the button displays only an icon (square aspect ratio)
+          * @default false
+         */
+        "iconOnly"?: boolean;
+        /**
+          * Emitted when the button is clicked
+         */
+        "onLeClick"?: (event: LeButtonCustomEvent<MouseEvent>) => void;
+        /**
+          * Whether the button is in a selected/active state
+          * @default false
+         */
+        "selected"?: boolean;
+        /**
+          * Button size
+          * @allowedValues small | medium | large
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * Link target when href is set
+         */
+        "target"?: string;
+        /**
+          * The button type attribute
+          * @allowedValues button | submit | reset
+          * @default 'button'
+         */
+        "type"?: 'button' | 'submit' | 'reset';
+        /**
+          * Button variant style
+          * @allowedValues solid | outlined | clear
+          * @default 'solid'
+         */
+        "variant"?: 'solid' | 'outlined' | 'clear';
+    }
     /**
      * A flexible card component with header, content, and footer slots.
      * The card uses le-slot wrappers for each slot area. In admin mode,
@@ -481,6 +651,7 @@ declare namespace LocalJSX {
         "type"?: 'slot' | 'text' | 'textarea';
     }
     interface IntrinsicElements {
+        "le-button": LeButton;
         "le-card": LeCard;
         "le-component": LeComponent;
         "le-popover": LePopover;
@@ -491,6 +662,19 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * A flexible button component with multiple variants and states.
+             * @cssprop --le-button-bg - Button background color
+             * @cssprop --le-button-color - Button text color
+             * @cssprop --le-button-border-radius - Button border radius
+             * @cssprop --le-button-padding-x - Button horizontal padding
+             * @cssprop --le-button-padding-y - Button vertical padding
+             * @csspart button - The native button element
+             * @csspart content - The button content wrapper
+             * @cmsEditable true
+             * @cmsCategory Actions
+             */
+            "le-button": LocalJSX.LeButton & JSXBase.HTMLAttributes<HTMLLeButtonElement>;
             /**
              * A flexible card component with header, content, and footer slots.
              * The card uses le-slot wrappers for each slot area. In admin mode,

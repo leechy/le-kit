@@ -9,6 +9,13 @@
  * @import 'le-kit/themes/dark.css';
  */
 
+@import './base.css';
+@import './default.css';
+@import './dark.css';
+@import './gradient.css';
+@import './minimal.css';
+@import './warm.css';
+
 /* ============================================
    BASE TOKENS
    Structural design tokens that apply to all themes
@@ -120,7 +127,7 @@
   /* Border Radius */
   --le-radius-none: 0;
   --le-radius-sm: 4px;
-  --le-radius-md: 8px;
+  --le-radius-md:7px;
   --le-radius-lg: 12px;
   --le-radius-xl: 16px;
   --le-radius-2xl: 24px;

@@ -1,6 +1,7 @@
 import { setMode } from '@stencil/core';
 
 export type LeKitMode = 'default' | 'admin' | string;
+export type LeKitTheme = 'default' | 'dark' | string;
 
 /**
  * Global mode initialization for le-kit components.
@@ -78,9 +79,47 @@ export function getMode(el: HTMLElement): LeKitMode {
 }
 
 /**
+ * Helper function to get the current theme for an element.
+ * Theme inheritance works the same as mode - cascades through DOM.
+ */
+export function getTheme(el: HTMLElement): LeKitTheme {
+  // Check element's own theme
+  const ownTheme = el.getAttribute('theme');
+  if (ownTheme) {
+    return ownTheme as LeKitTheme;
+  }
+
+  // Traverse up DOM
+  let parent = el.parentElement;
+  while (parent) {
+    const parentTheme = parent.getAttribute('theme');
+    if (parentTheme) {
+      return parentTheme as LeKitTheme;
+    }
+    parent = parent.parentElement;
+  }
+
+  // Check root
+  const rootTheme = document.documentElement.getAttribute('theme');
+  if (rootTheme) {
+    return rootTheme as LeKitTheme;
+  }
+
+  return 'default';
+}
+
+/**
  * Helper function to set mode on the document root.
  * Useful for switching all components to admin mode.
  */
 export function setGlobalMode(mode: LeKitMode): void {
   document.documentElement.setAttribute('mode', mode);
+}
+
+/**
+ * Helper function to set theme on the document root.
+ * Useful for switching all components to a different theme.
+ */
+export function setGlobalTheme(theme: LeKitTheme): void {
+  document.documentElement.setAttribute('theme', theme);
 }

@@ -10,9 +10,9 @@
 // Utility exports
 export { generateId, parseCommaSeparated, slotHasContent } from './utils/utils';
 
-// Global mode helpers
-export { getMode, setGlobalMode } from './global/app';
-export type { LeKitMode } from './global/app';
+// Global mode and theme helpers
+export { getMode, setGlobalMode, getTheme, setGlobalTheme } from './global/app';
+export type { LeKitMode, LeKitTheme } from './global/app';
 
 // Type exports
 export type * from './components.d.ts';

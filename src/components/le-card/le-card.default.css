@@ -1,19 +1,26 @@
 /**
  * Default mode styles for le-card
+ * Uses global design tokens with component-specific overrides
  */
 :host {
   display: block;
-  --le-card-bg: #ffffff;
-  --le-card-border-radius: 8px;
-  --le-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --le-card-padding: 16px;
-  --le-card-border-color: #e0e0e0;
+  
+  /* Component-specific tokens that map to global tokens */
+  --le-card-bg: var(--le-color-surface, #ffffff);
+  --le-card-border-radius: var(--le-radius-lg, 8px);
+  --le-card-shadow: var(--le-shadow-md, 0 1px 3px rgba(0, 0, 0, 0.1));
+  --le-card-shadow-elevated: var(--le-shadow-xl, 0 4px 12px rgba(0, 0, 0, 0.15));
+  --le-card-shadow-hover: var(--le-shadow-2xl, 0 6px 16px rgba(0, 0, 0, 0.2));
+  --le-card-padding: var(--le-spacing-4, 16px);
+  --le-card-border-color: var(--le-color-border, #e0e0e0);
+  --le-card-transition: var(--le-transition-normal, 200ms) var(--le-transition-easing, ease);
 }
 
 .card {
   background: var(--le-card-bg);
   border-radius: var(--le-card-border-radius);
   overflow: hidden;
+  color: var(--le-color-text-primary, #212121);
 }
 
 /* Variants */
@@ -27,18 +34,23 @@
 }
 
 :host(.variant-elevated) .card {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--le-card-shadow-elevated);
 }
 
 /* Interactive state */
 :host(.interactive) .card {
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform var(--le-card-transition), box-shadow var(--le-card-transition);
 }
 
 :host(.interactive) .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--le-card-shadow-hover);
+}
+
+:host(.interactive) .card:focus-visible {
+  outline: 2px solid var(--le-color-focus, rgba(0, 136, 255, 0.5));
+  outline-offset: 2px;
 }
 
 /* Sections */

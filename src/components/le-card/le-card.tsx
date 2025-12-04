@@ -1,5 +1,5 @@
-import { Component, Prop, h, Host, Element } from '@stencil/core';
-import { getMode } from '../../global/app';
+import { Component, Prop, State, h, Host, Element } from '@stencil/core';
+import { observeModeChanges } from '../../utils/utils';
 
 /**
  * A flexible card component with header, content, and footer slots.
@@ -47,13 +47,24 @@ export class LeCard {
    */
   @Prop() interactive: boolean = false;
 
-  private isAdminMode(): boolean {
-    return getMode(this.el) === 'admin';
+  /**
+   * Internal state to track admin mode
+   */
+  @State() private adminMode: boolean = false;
+
+  private disconnectModeObserver?: () => void;
+
+  connectedCallback() {
+    this.disconnectModeObserver = observeModeChanges(this.el, (mode) => {
+      this.adminMode = mode === 'admin';
+    });
+  }
+
+  disconnectedCallback() {
+    this.disconnectModeObserver?.();
   }
 
   render() {
-    const adminMode = this.isAdminMode();
-
     return (
       <Host
         class={{
@@ -63,7 +74,7 @@ export class LeCard {
       >
         <div class="card" part="card">
           <div class="card-header" part="header">
-            {adminMode ? (
+            {this.adminMode ? (
               <le-slot name="header" label="Header" description="Card title and header actions" allowed-components="le-text,le-heading,le-button">
                 <slot name="header"></slot>
               </le-slot>
@@ -73,7 +84,7 @@ export class LeCard {
           </div>
 
           <div class="card-content" part="content">
-            {adminMode ? (
+            {this.adminMode ? (
               <le-slot name="" label="Content" description="Main card content" required>
                 <slot></slot>
               </le-slot>
@@ -83,7 +94,7 @@ export class LeCard {
           </div>
 
           <div class="card-footer" part="footer">
-            {adminMode ? (
+            {this.adminMode ? (
               <le-slot name="footer" label="Footer" description="Card footer with actions" allowed-components="le-button,le-link">
                 <slot name="footer"></slot>
               </le-slot>

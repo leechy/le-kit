@@ -2,6 +2,8 @@
  * Utility functions for le-kit components
  */
 
+import { getMode } from '../global/app';
+
 /**
  * Generates a unique ID for component instances
  */
@@ -26,4 +28,63 @@ export function parseCommaSeparated(value: string | undefined): string[] {
 export function slotHasContent(el: HTMLElement, slotName: string = ''): boolean {
   const selector = slotName ? `[slot="${slotName}"]` : ':not([slot])';
   return el.querySelector(selector) !== null;
+}
+
+/**
+ * Sets up a MutationObserver to track mode changes on ancestor elements.
+ * Returns a cleanup function to disconnect the observer.
+ * 
+ * @param el - The component's host element
+ * @param callback - Function to call when mode changes, receives the new mode
+ * @returns Cleanup function to disconnect the observer
+ * 
+ * @example
+ * ```tsx
+ * export class MyComponent {
+ *   @Element() el: HTMLElement;
+ *   @State() adminMode: boolean = false;
+ *   private disconnectModeObserver?: () => void;
+ * 
+ *   connectedCallback() {
+ *     this.disconnectModeObserver = observeModeChanges(this.el, (mode) => {
+ *       this.adminMode = mode === 'admin';
+ *     });
+ *   }
+ * 
+ *   disconnectedCallback() {
+ *     this.disconnectModeObserver?.();
+ *   }
+ * }
+ * ```
+ */
+export function observeModeChanges(
+  el: HTMLElement,
+  callback: (mode: string) => void
+): () => void {
+  // Call immediately with current mode
+  callback(getMode(el));
+
+  // Set up observer for mode attribute changes
+  const observer = new MutationObserver(() => {
+    callback(getMode(el));
+  });
+
+  // Observe document root
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['mode'],
+  });
+
+  // Observe all parent elements
+  let parent = el.parentElement;
+  while (parent) {
+    observer.observe(parent, {
+      attributes: true,
+      attributeFilter: ['mode'],
+    });
+    parent = parent.parentElement;
+  }
+
+  // Return cleanup function
+  return () => observer.disconnect();
 }

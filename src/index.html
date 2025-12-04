@@ -146,10 +146,9 @@
           btn.classList.toggle('active', btn.id === `btn-mode-${mode}`);
         });
         
-        // Force re-render of components by triggering a mode change
-        document.querySelectorAll('le-card').forEach(card => {
-          card.setAttribute('mode', mode);
-        });
+        // With componentWillRender, components should now automatically
+        // detect mode changes and re-render accordingly
+        console.log('Mode changed to:', mode);
       }
       
       function setTheme(theme) {
@@ -159,6 +158,8 @@
         document.querySelectorAll('[id^="btn-theme-"]').forEach(btn => {
           btn.classList.toggle('active', btn.id === `btn-theme-${theme}`);
         });
+        
+        console.log('Theme changed to:', theme);
       }
     </script>
   </body>

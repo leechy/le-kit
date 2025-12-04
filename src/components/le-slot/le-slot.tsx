@@ -1,4 +1,5 @@
-import { Component, Prop, h, Host, Element } from '@stencil/core';
+import { Component, Prop, State, h, Host, Element } from '@stencil/core';
+import { observeModeChanges } from '../../utils/utils';
 
 /**
  * Slot placeholder component for admin/CMS mode.
@@ -60,9 +61,36 @@ export class LeSlot {
    */
   @Prop() required: boolean = false;
 
+  /**
+   * Internal state to track admin mode
+   */
+  @State() private adminMode: boolean = false;
+
+  private disconnectModeObserver?: () => void;
+
+  connectedCallback() {
+    this.disconnectModeObserver = observeModeChanges(this.el, (mode) => {
+      this.adminMode = mode === 'admin';
+    });
+  }
+
+  disconnectedCallback() {
+    this.disconnectModeObserver?.();
+  }
+
   render() {
     const displayLabel = this.label || this.name || 'default';
 
+    // In non-admin mode, just render the slot passthrough
+    if (!this.adminMode) {
+      return (
+        <Host>
+          <slot></slot>
+        </Host>
+      );
+    }
+
+    // In admin mode, render the full placeholder UI
     return (
       <Host
         role="region"

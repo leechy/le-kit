@@ -8,9 +8,9 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     /**
      * A flexible card component with header, content, and footer slots.
-     * The card adapts its appearance based on the current mode:
-     * - `default`: Normal card display
-     * - `admin`: Shows slot placeholders for CMS editing
+     * The card uses le-slot wrappers for each slot area. In admin mode,
+     * le-slot shows placeholders for CMS editing. In default mode,
+     * le-slot acts as a transparent passthrough.
      * @cssprop --le-card-bg - Card background color
      * @cssprop --le-card-border-radius - Card border radius
      * @cssprop --le-card-shadow - Card box shadow
@@ -38,7 +38,7 @@ export namespace Components {
     /**
      * Slot placeholder component for admin/CMS mode.
      * This component renders a visual placeholder for slots when in admin mode,
-     * allowing CMS systems to show available drop zones for content.
+     * allowing CMS systems to show available drop zones for content or inline editing.
      * In non-admin mode, this component renders nothing and acts as a passthrough.
      * @cmsInternal true
      * @cmsCategory System
@@ -68,18 +68,31 @@ export namespace Components {
          */
         "name": string;
         /**
+          * Placeholder text for text/textarea inputs in admin mode.
+         */
+        "placeholder"?: string;
+        /**
           * Whether this slot is required to have content.
           * @default false
          */
         "required": boolean;
+        /**
+          * The type of slot content. - `slot`: Default, shows a dropzone for components (default) - `text`: Shows a single-line text input - `textarea`: Shows a multi-line text area
+          * @default 'slot'
+         */
+        "type": 'slot' | 'text' | 'textarea';
     }
+}
+export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeSlotElement;
 }
 declare global {
     /**
      * A flexible card component with header, content, and footer slots.
-     * The card adapts its appearance based on the current mode:
-     * - `default`: Normal card display
-     * - `admin`: Shows slot placeholders for CMS editing
+     * The card uses le-slot wrappers for each slot area. In admin mode,
+     * le-slot shows placeholders for CMS editing. In default mode,
+     * le-slot acts as a transparent passthrough.
      * @cssprop --le-card-bg - Card background color
      * @cssprop --le-card-border-radius - Card border radius
      * @cssprop --le-card-shadow - Card box shadow
@@ -97,15 +110,26 @@ declare global {
         prototype: HTMLLeCardElement;
         new (): HTMLLeCardElement;
     };
+    interface HTMLLeSlotElementEventMap {
+        "leSlotChange": { name: string; value: string };
+    }
     /**
      * Slot placeholder component for admin/CMS mode.
      * This component renders a visual placeholder for slots when in admin mode,
-     * allowing CMS systems to show available drop zones for content.
+     * allowing CMS systems to show available drop zones for content or inline editing.
      * In non-admin mode, this component renders nothing and acts as a passthrough.
      * @cmsInternal true
      * @cmsCategory System
      */
     interface HTMLLeSlotElement extends Components.LeSlot, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeSlotElementEventMap>(type: K, listener: (this: HTMLLeSlotElement, ev: LeSlotCustomEvent<HTMLLeSlotElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeSlotElementEventMap>(type: K, listener: (this: HTMLLeSlotElement, ev: LeSlotCustomEvent<HTMLLeSlotElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLLeSlotElement: {
         prototype: HTMLLeSlotElement;
@@ -119,9 +143,9 @@ declare global {
 declare namespace LocalJSX {
     /**
      * A flexible card component with header, content, and footer slots.
-     * The card adapts its appearance based on the current mode:
-     * - `default`: Normal card display
-     * - `admin`: Shows slot placeholders for CMS editing
+     * The card uses le-slot wrappers for each slot area. In admin mode,
+     * le-slot shows placeholders for CMS editing. In default mode,
+     * le-slot acts as a transparent passthrough.
      * @cssprop --le-card-bg - Card background color
      * @cssprop --le-card-border-radius - Card border radius
      * @cssprop --le-card-shadow - Card box shadow
@@ -149,7 +173,7 @@ declare namespace LocalJSX {
     /**
      * Slot placeholder component for admin/CMS mode.
      * This component renders a visual placeholder for slots when in admin mode,
-     * allowing CMS systems to show available drop zones for content.
+     * allowing CMS systems to show available drop zones for content or inline editing.
      * In non-admin mode, this component renders nothing and acts as a passthrough.
      * @cmsInternal true
      * @cmsCategory System
@@ -179,10 +203,23 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
+          * Emitted when text content changes in admin mode. The event detail contains the new text value.
+         */
+        "onLeSlotChange"?: (event: LeSlotCustomEvent<{ name: string; value: string }>) => void;
+        /**
+          * Placeholder text for text/textarea inputs in admin mode.
+         */
+        "placeholder"?: string;
+        /**
           * Whether this slot is required to have content.
           * @default false
          */
         "required"?: boolean;
+        /**
+          * The type of slot content. - `slot`: Default, shows a dropzone for components (default) - `text`: Shows a single-line text input - `textarea`: Shows a multi-line text area
+          * @default 'slot'
+         */
+        "type"?: 'slot' | 'text' | 'textarea';
     }
     interface IntrinsicElements {
         "le-card": LeCard;
@@ -195,9 +232,9 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             /**
              * A flexible card component with header, content, and footer slots.
-             * The card adapts its appearance based on the current mode:
-             * - `default`: Normal card display
-             * - `admin`: Shows slot placeholders for CMS editing
+             * The card uses le-slot wrappers for each slot area. In admin mode,
+             * le-slot shows placeholders for CMS editing. In default mode,
+             * le-slot acts as a transparent passthrough.
              * @cssprop --le-card-bg - Card background color
              * @cssprop --le-card-border-radius - Card border radius
              * @cssprop --le-card-shadow - Card box shadow
@@ -213,7 +250,7 @@ declare module "@stencil/core" {
             /**
              * Slot placeholder component for admin/CMS mode.
              * This component renders a visual placeholder for slots when in admin mode,
-             * allowing CMS systems to show available drop zones for content.
+             * allowing CMS systems to show available drop zones for content or inline editing.
              * In non-admin mode, this component renders nothing and acts as a passthrough.
              * @cmsInternal true
              * @cmsCategory System

@@ -71,6 +71,19 @@
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: var(--le-space-lg);
       }
+      .text-slot-demo {
+        padding: var(--le-space-md);
+        background: var(--le-color-surface);
+        border-radius: var(--le-radius-md);
+        box-shadow: var(--le-shadow-sm);
+      }
+      .text-slot-demo label {
+        display: block;
+        margin-bottom: var(--le-space-sm);
+        font-weight: var(--le-font-weight-medium);
+        color: var(--le-color-text-secondary);
+        font-size: var(--le-font-size-sm);
+      }
     </style>
   </head>
   <body>
@@ -113,6 +126,27 @@
           <h3 slot="header">Interactive Card</h3>
           <p>This card is clickable and has elevation.</p>
         </le-card>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>Text Slot Types (switch to Admin mode to see)</h2>
+      <p>Demonstrating le-slot with type="text" and type="textarea" for inline text editing.</p>
+      <div class="demo-grid">
+        <div class="text-slot-demo">
+          <label>Single line text input:</label>
+          <le-slot type="text" label="Title" name="title" placeholder="Enter a title...">Default title text</le-slot>
+        </div>
+        
+        <div class="text-slot-demo">
+          <label>Multi-line textarea:</label>
+          <le-slot type="textarea" label="Description" name="description" placeholder="Enter a description...">This is some default description text that spans multiple lines.</le-slot>
+        </div>
+        
+        <div class="text-slot-demo">
+          <label>Required text field:</label>
+          <le-slot type="text" label="Email" name="email" required placeholder="Enter email address..."></le-slot>
+        </div>
       </div>
     </div>
     

@@ -85,3 +85,47 @@
   color: #00cc66;
   content: 'Release to drop';
 }
+
+/* Text input styles */
+.le-slot-input {
+  display: block;
+  padding: 8px;
+}
+
+.le-slot-input input,
+.le-slot-input textarea {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--le-slot-dropzone-border-color);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  background: #fff;
+  color: #333;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.le-slot-input input:focus,
+.le-slot-input textarea:focus {
+  outline: none;
+  border-color: var(--le-slot-border-color);
+  box-shadow: 0 0 0 3px rgba(0, 136, 255, 0.15);
+}
+
+.le-slot-input input::placeholder,
+.le-slot-input textarea::placeholder {
+  color: #999;
+}
+
+.le-slot-input textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+/* Hide the slot content in text/textarea mode - it's just for default value */
+.le-slot-input slot {
+  display: none;
+}

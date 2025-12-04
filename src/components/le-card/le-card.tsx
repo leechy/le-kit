@@ -1,12 +1,11 @@
-import { Component, Prop, State, h, Host, Element } from '@stencil/core';
-import { observeModeChanges } from '../../utils/utils';
+import { Component, Prop, h, Host, Element } from '@stencil/core';
 
 /**
  * A flexible card component with header, content, and footer slots.
  *
- * The card adapts its appearance based on the current mode:
- * - `default`: Normal card display
- * - `admin`: Shows slot placeholders for CMS editing
+ * The card uses le-slot wrappers for each slot area. In admin mode,
+ * le-slot shows placeholders for CMS editing. In default mode,
+ * le-slot acts as a transparent passthrough.
  *
  * @slot header - Card header content (title, actions)
  * @slot - Default slot for main card content
@@ -47,23 +46,6 @@ export class LeCard {
    */
   @Prop() interactive: boolean = false;
 
-  /**
-   * Internal state to track admin mode
-   */
-  @State() private adminMode: boolean = false;
-
-  private disconnectModeObserver?: () => void;
-
-  connectedCallback() {
-    this.disconnectModeObserver = observeModeChanges(this.el, (mode) => {
-      this.adminMode = mode === 'admin';
-    });
-  }
-
-  disconnectedCallback() {
-    this.disconnectModeObserver?.();
-  }
-
   render() {
     return (
       <Host
@@ -74,33 +56,21 @@ export class LeCard {
       >
         <div class="card" part="card">
           <div class="card-header" part="header">
-            {this.adminMode ? (
-              <le-slot name="header" label="Header" description="Card title and header actions" allowed-components="le-text,le-heading,le-button">
-                <slot name="header"></slot>
-              </le-slot>
-            ) : (
+            <le-slot name="header" label="Header" description="Card title and header actions" allowed-components="le-text,le-heading,le-button">
               <slot name="header"></slot>
-            )}
+            </le-slot>
           </div>
 
           <div class="card-content" part="content">
-            {this.adminMode ? (
-              <le-slot name="" label="Content" description="Main card content" required>
-                <slot></slot>
-              </le-slot>
-            ) : (
+            <le-slot name="" label="Content" description="Main card content" required>
               <slot></slot>
-            )}
+            </le-slot>
           </div>
 
           <div class="card-footer" part="footer">
-            {this.adminMode ? (
-              <le-slot name="footer" label="Footer" description="Card footer with actions" allowed-components="le-button,le-link">
-                <slot name="footer"></slot>
-              </le-slot>
-            ) : (
+            <le-slot name="footer" label="Footer" description="Card footer with actions" allowed-components="le-button,le-link">
               <slot name="footer"></slot>
-            )}
+            </le-slot>
           </div>
         </div>
       </Host>

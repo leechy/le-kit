@@ -1,4 +1,5 @@
-import { Component, Prop, h, Host, Element } from '@stencil/core';
+import { Component, Prop, h, Element } from '@stencil/core';
+import { classnames } from '../../utils/utils';
 
 /**
  * A flexible card component with header, content, and footer slots.
@@ -45,12 +46,7 @@ export class LeCard {
 
   render() {
     return (
-      <Host
-        class={{
-          [`variant-${this.variant}`]: true,
-          interactive: this.interactive,
-        }}
-      >
+      <le-component component="le-card" hostClass={classnames(`variant-${this.variant}`, { 'interactive': this.interactive })}>
         <div class="card" part="card">
           <div class="card-header" part="header">
             <le-slot name="header" label="Header" description="Card title and header actions" allowed-components="le-text,le-heading,le-button">
@@ -70,7 +66,7 @@ export class LeCard {
             </le-slot>
           </div>
         </div>
-      </Host>
+      </le-component>
     );
   }
 }

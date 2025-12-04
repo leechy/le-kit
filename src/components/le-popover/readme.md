@@ -1,58 +1,99 @@
 # le-popover
 
-A popover component for displaying floating content. Used internally by `le-slot` for property editing and component selection.
 
-**Note:** This component always renders in default mode, regardless of the global mode setting. This prevents recursive admin UI when used inside `le-slot`.
 
-## Usage
+<!-- Auto Generated Below -->
 
-```html
-<!-- Basic popover with default trigger -->
-<le-popover popover-title="Settings">
-  <p>Popover content goes here</p>
-</le-popover>
 
-<!-- With custom trigger -->
-<le-popover popover-title="Options" position="bottom" align="end">
-  <button slot="trigger">Open Menu</button>
-  <ul>
-    <li>Option 1</li>
-    <li>Option 2</li>
-  </ul>
-</le-popover>
-```
+## Overview
+
+A popover component for displaying floating content.
+
+This component is used internally by le-slot for property editing
+and component selection. It always renders in default mode regardless
+of the global mode setting.
 
 ## Properties
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `open` | `boolean` | `false` | Whether the popover is open |
-| `position` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'auto'` | `'bottom'` | Position relative to trigger |
-| `align` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment of the popover |
-| `popover-title` | `string` | - | Optional title in header |
-| `show-close` | `boolean` | `true` | Show close button |
-| `close-on-click-outside` | `boolean` | `true` | Close when clicking outside |
-| `close-on-escape` | `boolean` | `true` | Close on Escape key |
-| `offset` | `number` | `8` | Offset from trigger (px) |
+| Property              | Attribute                | Description                                     | Type                                               | Default     |
+| --------------------- | ------------------------ | ----------------------------------------------- | -------------------------------------------------- | ----------- |
+| `align`               | `align`                  | Alignment of the popover                        | `"center" \| "end" \| "start"`                     | `'start'`   |
+| `closeOnClickOutside` | `close-on-click-outside` | Whether clicking outside closes the popover     | `boolean`                                          | `true`      |
+| `closeOnEscape`       | `close-on-escape`        | Whether pressing Escape closes the popover      | `boolean`                                          | `true`      |
+| `offset`              | `offset`                 | Offset from the trigger element (in pixels)     | `number`                                           | `8`         |
+| `open`                | `open`                   | Whether the popover is currently open           | `boolean`                                          | `false`     |
+| `popoverTitle`        | `popover-title`          | Optional title for the popover header           | `string`                                           | `undefined` |
+| `position`            | `position`               | Position of the popover relative to its trigger | `"auto" \| "bottom" \| "left" \| "right" \| "top"` | `'bottom'`  |
+| `showClose`           | `show-close`             | Whether to show a close button in the header    | `boolean`                                          | `true`      |
 
-## Methods
-
-| Method | Description |
-|--------|-------------|
-| `show()` | Opens the popover |
-| `hide()` | Closes the popover |
-| `toggle()` | Toggles the popover |
 
 ## Events
 
-| Event | Description |
-|-------|-------------|
-| `lePopoverOpen` | Emitted when popover opens |
-| `lePopoverClose` | Emitted when popover closes |
+| Event            | Description                     | Type                |
+| ---------------- | ------------------------------- | ------------------- |
+| `lePopoverClose` | Emitted when the popover closes | `CustomEvent<void>` |
+| `lePopoverOpen`  | Emitted when the popover opens  | `CustomEvent<void>` |
+
+
+## Methods
+
+### `hide() => Promise<void>`
+
+Closes the popover
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `show() => Promise<void>`
+
+Opens the popover
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `toggle() => Promise<void>`
+
+Toggles the popover
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 
 ## Slots
 
-| Slot | Description |
-|------|-------------|
-| (default) | Content inside the popover body |
-| `trigger` | Custom trigger element |
+| Slot        | Description                                  |
+| ----------- | -------------------------------------------- |
+|             | Content to display inside the popover        |
+| `"trigger"` | Element that triggers the popover (optional) |
+
+
+## Dependencies
+
+### Used by
+
+ - [le-component](../le-component)
+
+### Depends on
+
+- [le-slot](../le-slot)
+
+### Graph
+```mermaid
+graph TD;
+  le-popover --> le-slot
+  le-component --> le-popover
+  style le-popover fill:#f9f,stroke:#333,stroke-width:4px
+```
+
+----------------------------------------------
+
+*Built with [StencilJS](https://stenciljs.com/)*

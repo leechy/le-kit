@@ -51,6 +51,9 @@ export default initializeMode;
 /**
  * Helper function to get the current mode for an element.
  * Can be used programmatically in components.
+ * 
+ * This function traverses both regular DOM and shadow DOM boundaries
+ * to find the nearest mode attribute.
  */
 export function getMode(el: HTMLElement): LeKitMode {
   // Check element's own mode
@@ -59,17 +62,34 @@ export function getMode(el: HTMLElement): LeKitMode {
     return ownMode as LeKitMode;
   }
 
-  // Traverse up DOM
-  let parent = el.parentElement;
-  while (parent) {
-    const parentMode = parent.getAttribute('mode');
-    if (parentMode) {
-      return parentMode as LeKitMode;
+  // Traverse up DOM, crossing shadow boundaries
+  let current: Node | null = el;
+  while (current) {
+    // Try parent element first
+    if (current instanceof Element && current.parentElement) {
+      current = current.parentElement;
+      const mode = (current as HTMLElement).getAttribute?.('mode');
+      if (mode) {
+        return mode as LeKitMode;
+      }
+    } else {
+      // No parent element - check if we're in a shadow root
+      const root = current.getRootNode();
+      if (root instanceof ShadowRoot) {
+        // Cross the shadow boundary to the host element
+        current = root.host;
+        const mode = (current as HTMLElement).getAttribute?.('mode');
+        if (mode) {
+          return mode as LeKitMode;
+        }
+      } else {
+        // We've reached the document root
+        break;
+      }
     }
-    parent = parent.parentElement;
   }
 
-  // Check root
+  // Check document root
   const rootMode = document.documentElement.getAttribute('mode');
   if (rootMode) {
     return rootMode as LeKitMode;

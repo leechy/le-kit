@@ -41,6 +41,7 @@
   "scripts": {
     "build": "stencil build",
     "postbuild": "cp -r src/themes dist/themes && cem analyze --stencil",
+    "prestart": "cem analyze --stencil",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",

@@ -85,21 +85,67 @@ export function observeModeChanges(
     attributeFilter: ['mode'],
   });
 
-  // Observe all parent elements up to (but stop at) a mode boundary
-  let parent = el.parentElement;
-  while (parent) {
-    observer.observe(parent, {
-      attributes: true,
-      attributeFilter: ['mode'],
-    });
-    // If this parent has an explicit mode, it's a boundary - stop traversing
-    // (we still need to observe it for changes, but not beyond)
-    if (parent.hasAttribute('mode')) {
-      break;
+  // Traverse up, crossing shadow boundaries, and observe each element
+  let current: Node | null = el;
+  while (current) {
+    if (current instanceof Element && current.parentElement) {
+      current = current.parentElement;
+      observer.observe(current, {
+        attributes: true,
+        attributeFilter: ['mode'],
+      });
+      // If this element has an explicit mode, it's a boundary
+      if ((current as Element).hasAttribute('mode')) {
+        break;
+      }
+    } else {
+      // Check if we're in a shadow root
+      const root = current.getRootNode();
+      if (root instanceof ShadowRoot) {
+        // Cross the shadow boundary and observe the host
+        current = root.host;
+        observer.observe(current, {
+          attributes: true,
+          attributeFilter: ['mode'],
+        });
+        // If the host has an explicit mode, it's a boundary
+        if ((current as Element).hasAttribute('mode')) {
+          break;
+        }
+      } else {
+        break;
+      }
     }
-    parent = parent.parentElement;
   }
 
   // Return cleanup function
   return () => observer.disconnect();
+}
+
+/**
+ * Combines multiple class names into a single string, filtering out falsy values.
+ * 
+ * @param classes - arguments of class names, undefined, arrays, objects with boolean values and nested combinations of these
+ * @returns Combined class names string
+ */
+export function classnames(...classes: any[]): string {
+  const result: string[] = [];
+
+  classes.forEach(cls => {
+    if (!cls) return;
+
+    if (typeof cls === 'string') {
+      result.push(cls);
+    } else if (Array.isArray(cls)) {
+      result.push(classnames(...cls));
+    } else if (typeof cls === 'object') {
+      Object.entries(cls).forEach(([key, value]) => {
+        if (value) {
+          result.push(key);
+        }
+      });
+    }
+  });
+
+  return result.join(' ');
 }

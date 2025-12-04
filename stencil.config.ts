@@ -27,6 +27,7 @@ export const config: Config = {
       copy: [
         { src: 'global' },
         { src: 'themes', dest: 'build/themes' },
+        { src: '../custom-elements.json', dest: 'custom-elements.json' },
       ],
     },
   ],

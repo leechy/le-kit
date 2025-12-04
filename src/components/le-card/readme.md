@@ -9,9 +9,9 @@
 
 A flexible card component with header, content, and footer slots.
 
-The card adapts its appearance based on the current mode:
-- `default`: Normal card display
-- `admin`: Shows slot placeholders for CMS editing
+The card uses le-slot wrappers for each slot area. In admin mode,
+le-slot shows placeholders for CMS editing. In default mode,
+le-slot acts as a transparent passthrough.
 
 ## Properties
 
@@ -44,12 +44,16 @@ The card adapts its appearance based on the current mode:
 
 ### Depends on
 
+- [le-component](../le-component)
 - [le-slot](../le-slot)
 
 ### Graph
 ```mermaid
 graph TD;
+  le-card --> le-component
   le-card --> le-slot
+  le-component --> le-popover
+  le-popover --> le-slot
   style le-card fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

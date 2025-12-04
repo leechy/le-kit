@@ -1,0 +1,156 @@
+/**
+ * le-component styles
+ * 
+ * In default mode, the component is invisible (passthrough).
+ * In admin mode, it shows a wrapper with header and settings.
+ */
+
+:host {
+  display: contents;
+}
+
+:host(.admin-mode) {
+  display: block;
+}
+
+/* Admin mode wrapper */
+.le-component-wrapper {
+  position: relative;
+  border: 2px dashed var(--le-admin-border-color, #90caf9);
+  border-radius: var(--le-radius-md, 8px);
+  background: var(--le-admin-bg, rgba(144, 202, 249, 0.05));
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.le-component-wrapper:hover {
+  border-color: var(--le-admin-border-hover, #42a5f5);
+  box-shadow: 0 0 0 2px var(--le-admin-glow, rgba(66, 165, 245, 0.2));
+}
+
+/* Component header */
+.le-component-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--le-space-xs, 4px) var(--le-space-sm, 8px);
+  background: var(--le-admin-header-bg, rgba(144, 202, 249, 0.15));
+  border-bottom: 1px solid var(--le-admin-border-color, #90caf9);
+  border-radius: var(--le-radius-md, 8px) var(--le-radius-md, 8px) 0 0;
+  font-size: var(--le-font-size-xs, 11px);
+}
+
+.le-component-name {
+  font-weight: var(--le-font-weight-medium, 500);
+  color: var(--le-admin-text, #1976d2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.le-component-settings-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: var(--le-radius-sm, 4px);
+  background: transparent;
+  color: var(--le-admin-text, #1976d2);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.15s ease;
+}
+
+.le-component-settings-btn:hover {
+  background: var(--le-admin-btn-hover, rgba(25, 118, 210, 0.15));
+}
+
+/* Component content area */
+.le-component-content {
+  padding: var(--le-space-xs, 4px);
+}
+
+/* Property editor styles */
+.property-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--le-space-sm, 8px);
+  min-width: 220px;
+  max-width: 300px;
+}
+
+.property-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--le-space-xs, 4px);
+}
+
+.property-field label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--le-font-size-sm, 13px);
+  font-weight: var(--le-font-weight-medium, 500);
+  color: var(--le-color-text, #333);
+}
+
+.property-hint {
+  font-size: var(--le-font-size-xs, 11px);
+  font-weight: normal;
+  color: var(--le-color-text-secondary, #666);
+  line-height: 1.3;
+}
+
+.property-field input[type="text"],
+.property-field input[type="number"],
+.property-field select {
+  padding: var(--le-space-xs, 4px) var(--le-space-sm, 8px);
+  border: 1px solid var(--le-color-border, #ddd);
+  border-radius: var(--le-radius-sm, 4px);
+  font-size: var(--le-font-size-sm, 13px);
+  font-family: inherit;
+  background: var(--le-color-surface, #fff);
+  color: var(--le-color-text, #333);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.property-field input:focus,
+.property-field select:focus {
+  outline: none;
+  border-color: var(--le-color-primary, #1976d2);
+  box-shadow: 0 0 0 2px var(--le-color-primary-light, rgba(25, 118, 210, 0.2));
+}
+
+/* Checkbox field */
+.property-field--checkbox {
+  flex-direction: column;
+}
+
+.property-field--checkbox label {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--le-space-sm, 8px);
+  cursor: pointer;
+}
+
+.property-field--checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--le-color-primary, #1976d2);
+}
+
+.property-field--checkbox .property-hint {
+  margin-left: 24px;
+}
+
+/* No properties message */
+.no-properties {
+  margin: 0;
+  padding: var(--le-space-sm, 8px);
+  font-size: var(--le-font-size-sm, 13px);
+  color: var(--le-color-text-secondary, #666);
+  text-align: center;
+}

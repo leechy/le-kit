@@ -36,6 +36,41 @@ export namespace Components {
         "variant": 'default' | 'outlined' | 'elevated';
     }
     /**
+     * Component wrapper for admin mode editing.
+     * This component is used internally by other components to provide admin-mode 
+     * editing capabilities. It wraps the component's rendered output and shows
+     * a settings popover for editing properties.
+     * In default mode, it acts as a simple passthrough (display: contents).
+     * In admin mode, it shows a border, component name header, and settings popover.
+     * The host element is found automatically by traversing up through the shadow DOM.
+     * Usage inside a component's render method:
+     * ```tsx
+     * render() {
+     *   return (
+     *     <le-component component="le-card">
+     *       <Host>...</Host>
+     *     </le-component>
+     *   );
+     * }
+     * ```
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LeComponent {
+        /**
+          * The tag name of the component (e.g., 'le-card'). Used to look up property metadata and display the component name.
+         */
+        "component": string;
+        /**
+          * Optional display name for the component. If not provided, the tag name will be formatted as the display name.
+         */
+        "displayName"?: string;
+        /**
+          * Classes to apply to the host element. Allows parent components to pass their styling classes.
+         */
+        "hostClass"?: string;
+    }
+    /**
      * A popover component for displaying floating content.
      * This component is used internally by le-slot for property editing
      * and component selection. It always renders in default mode regardless
@@ -175,6 +210,33 @@ declare global {
         prototype: HTMLLeCardElement;
         new (): HTMLLeCardElement;
     };
+    /**
+     * Component wrapper for admin mode editing.
+     * This component is used internally by other components to provide admin-mode 
+     * editing capabilities. It wraps the component's rendered output and shows
+     * a settings popover for editing properties.
+     * In default mode, it acts as a simple passthrough (display: contents).
+     * In admin mode, it shows a border, component name header, and settings popover.
+     * The host element is found automatically by traversing up through the shadow DOM.
+     * Usage inside a component's render method:
+     * ```tsx
+     * render() {
+     *   return (
+     *     <le-component component="le-card">
+     *       <Host>...</Host>
+     *     </le-component>
+     *   );
+     * }
+     * ```
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface HTMLLeComponentElement extends Components.LeComponent, HTMLStencilElement {
+    }
+    var HTMLLeComponentElement: {
+        prototype: HTMLLeComponentElement;
+        new (): HTMLLeComponentElement;
+    };
     interface HTMLLePopoverElementEventMap {
         "lePopoverOpen": void;
         "lePopoverClose": void;
@@ -228,6 +290,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "le-card": HTMLLeCardElement;
+        "le-component": HTMLLeComponentElement;
         "le-popover": HTMLLePopoverElement;
         "le-slot": HTMLLeSlotElement;
     }
@@ -261,6 +324,41 @@ declare namespace LocalJSX {
           * @default 'default'
          */
         "variant"?: 'default' | 'outlined' | 'elevated';
+    }
+    /**
+     * Component wrapper for admin mode editing.
+     * This component is used internally by other components to provide admin-mode 
+     * editing capabilities. It wraps the component's rendered output and shows
+     * a settings popover for editing properties.
+     * In default mode, it acts as a simple passthrough (display: contents).
+     * In admin mode, it shows a border, component name header, and settings popover.
+     * The host element is found automatically by traversing up through the shadow DOM.
+     * Usage inside a component's render method:
+     * ```tsx
+     * render() {
+     *   return (
+     *     <le-component component="le-card">
+     *       <Host>...</Host>
+     *     </le-component>
+     *   );
+     * }
+     * ```
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LeComponent {
+        /**
+          * The tag name of the component (e.g., 'le-card'). Used to look up property metadata and display the component name.
+         */
+        "component": string;
+        /**
+          * Optional display name for the component. If not provided, the tag name will be formatted as the display name.
+         */
+        "displayName"?: string;
+        /**
+          * Classes to apply to the host element. Allows parent components to pass their styling classes.
+         */
+        "hostClass"?: string;
     }
     /**
      * A popover component for displaying floating content.
@@ -372,6 +470,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "le-card": LeCard;
+        "le-component": LeComponent;
         "le-popover": LePopover;
         "le-slot": LeSlot;
     }
@@ -397,6 +496,28 @@ declare module "@stencil/core" {
              * @cmsCategory Layout
              */
             "le-card": LocalJSX.LeCard & JSXBase.HTMLAttributes<HTMLLeCardElement>;
+            /**
+             * Component wrapper for admin mode editing.
+             * This component is used internally by other components to provide admin-mode 
+             * editing capabilities. It wraps the component's rendered output and shows
+             * a settings popover for editing properties.
+             * In default mode, it acts as a simple passthrough (display: contents).
+             * In admin mode, it shows a border, component name header, and settings popover.
+             * The host element is found automatically by traversing up through the shadow DOM.
+             * Usage inside a component's render method:
+             * ```tsx
+             * render() {
+             *   return (
+             *     <le-component component="le-card">
+             *       <Host>...</Host>
+             *     </le-component>
+             *   );
+             * }
+             * ```
+             * @cmsInternal true
+             * @cmsCategory System
+             */
+            "le-component": LocalJSX.LeComponent & JSXBase.HTMLAttributes<HTMLLeComponentElement>;
             /**
              * A popover component for displaying floating content.
              * This component is used internally by le-slot for property editing

@@ -21,34 +21,31 @@
   border-radius: var(--le-card-border-radius);
   overflow: hidden;
   color: var(--le-color-text);
-}
-
-/* Variants */
-:host(.variant-default) .card {
   box-shadow: var(--le-card-shadow);
 }
 
-:host(.variant-outlined) .card {
+/* Variants - le-component gets the hostClass, so we use :host > le-component */
+:host > le-component.variant-outlined .card {
   border: 1px solid var(--le-card-border-color);
   box-shadow: none;
 }
 
-:host(.variant-elevated) .card {
+:host > le-component.variant-elevated .card {
   box-shadow: var(--le-card-shadow-elevated);
 }
 
 /* Interactive state */
-:host(.interactive) .card {
+:host > le-component.interactive .card {
   cursor: pointer;
   transition: transform var(--le-card-transition), box-shadow var(--le-card-transition);
 }
 
-:host(.interactive) .card:hover {
+:host > le-component.interactive .card:hover {
   transform: translateY(-2px);
   box-shadow: var(--le-card-shadow-hover);
 }
 
-:host(.interactive) .card:focus-visible {
+:host > le-component.interactive .card:focus-visible {
   outline: 2px solid var(--le-color-border-focus);
   outline-offset: 2px;
 }

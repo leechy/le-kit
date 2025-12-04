@@ -66,6 +66,14 @@
         color: var(--le-color-on-primary);
         border-color: var(--le-color-primary);
       }
+      .controls button.danger {
+        border-color: #e53935;
+        color: #e53935;
+      }
+      .controls button.danger:hover {
+        background: #e53935;
+        color: white;
+      }
       .demo-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -104,74 +112,139 @@
         <button id="btn-theme-minimal" onclick="setTheme('minimal')">Minimal</button>
         <button id="btn-theme-warm" onclick="setTheme('warm')">Warm</button>
       </div>
-    </div>
 
-    <div class="demo-section">
-      <h2>Card Component</h2>
-      <div class="demo-grid">
-        <!-- Card with content -->
-        <le-card variant="default">
-          <h3 slot="header">Card Title</h3>
-          <p>This is the main content of the card. It can contain any elements.</p>
-          <button slot="footer">Action</button>
-        </le-card>
-        
-        <!-- Empty card - slots visible in admin mode -->
-        <le-card variant="outlined">
-          <!-- Empty slots will show placeholders in admin mode -->
-        </le-card>
-        
-        <!-- Elevated card -->
-        <le-card variant="elevated" interactive>
-          <h3 slot="header">Interactive Card</h3>
-          <p>This card is clickable and has elevation.</p>
-        </le-card>
+      <div class="control-group">
+        <button class="danger" onclick="resetContent()">Reset to Default</button>
       </div>
     </div>
 
-    <div class="demo-section">
-      <h2>Text Slot Types (switch to Admin mode to see)</h2>
-      <p>Demonstrating le-slot with type="text" and type="textarea" for inline text editing.</p>
-      <div class="demo-grid">
-        <div class="text-slot-demo">
-          <label>Single line text input:</label>
-          <le-slot type="text" label="Title" name="title" placeholder="Enter a title...">Default title text</le-slot>
-        </div>
-        
-        <div class="text-slot-demo">
-          <label>Multi-line textarea:</label>
-          <le-slot type="textarea" label="Description" name="description" placeholder="Enter a description...">This is some default description text that spans multiple lines.</le-slot>
-        </div>
-        
-        <div class="text-slot-demo">
-          <label>Required text field:</label>
-          <le-slot type="text" label="Email" name="email" required placeholder="Enter email address..."></le-slot>
+    <!-- Editable content container - contents stored in localStorage -->
+    <div id="editable-content"></div>
+
+    <!-- Default content template (used when localStorage is empty) -->
+    <template id="default-content">
+      <div class="demo-section">
+        <h2>Card Component</h2>
+        <div class="demo-grid">
+          <!-- Card with content -->
+          <le-card variant="default">
+            <h3 slot="header">Card Title</h3>
+            <p>This is the main content of the card. It can contain any elements.</p>
+            <button slot="footer">Action</button>
+          </le-card>
+          
+          <!-- Empty card - slots visible in admin mode -->
+          <le-card variant="outlined">
+            <!-- Empty slots will show placeholders in admin mode -->
+          </le-card>
+          
+          <!-- Elevated card -->
+          <le-card variant="elevated" interactive>
+            <h3 slot="header">Interactive Card</h3>
+            <p>This card is clickable and has elevation.</p>
+          </le-card>
         </div>
       </div>
-    </div>
-    
-    <div class="demo-section">
-      <h2>Mixed Themes (theme attribute on individual components)</h2>
-      <p>Each card below has a different theme, demonstrating per-component theming.</p>
-      <div class="demo-grid">
-        <le-card variant="elevated" theme="dark">
-          <h3 slot="header">Dark Theme Card</h3>
-          <p>This card uses theme="dark" regardless of the global theme.</p>
-        </le-card>
-        
-        <le-card variant="elevated" theme="gradient">
-          <h3 slot="header">Gradient Theme Card</h3>
-          <p>This card uses theme="gradient" with purple accents.</p>
-        </le-card>
-        
-        <le-card variant="elevated" theme="warm">
-          <h3 slot="header">Warm Theme Card</h3>
-          <p>This card uses theme="warm" with orange tones.</p>
-        </le-card>
+
+      <div class="demo-section">
+        <h2>Text Slot Types (switch to Admin mode to see)</h2>
+        <p>Demonstrating le-slot with type="text" and type="textarea" for inline text editing.</p>
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>Single line text input:</label>
+            <le-slot type="text" label="Title" name="title" placeholder="Enter a title...">Default title text</le-slot>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Multi-line textarea:</label>
+            <le-slot type="textarea" label="Description" name="description" placeholder="Enter a description...">This is some default description text that spans multiple lines.</le-slot>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Required text field:</label>
+            <le-slot type="text" label="Email" name="email" required placeholder="Enter email address..."></le-slot>
+          </div>
+        </div>
       </div>
-    </div>
+      
+      <div class="demo-section">
+        <h2>Mixed Themes (theme attribute on individual components)</h2>
+        <p>Each card below has a different theme, demonstrating per-component theming.</p>
+        <div class="demo-grid">
+          <le-card variant="elevated" theme="dark">
+            <h3 slot="header">Dark Theme Card</h3>
+            <p>This card uses theme="dark" regardless of the global theme.</p>
+          </le-card>
+          
+          <le-card variant="elevated" theme="gradient">
+            <h3 slot="header">Gradient Theme Card</h3>
+            <p>This card uses theme="gradient" with purple accents.</p>
+          </le-card>
+          
+          <le-card variant="elevated" theme="warm">
+            <h3 slot="header">Warm Theme Card</h3>
+            <p>This card uses theme="warm" with orange tones.</p>
+          </le-card>
+        </div>
+      </div>
+    </template>
 
     <script>
+      const STORAGE_KEY = 'le-kit-demo-content';
+      const contentContainer = document.getElementById('editable-content');
+      const defaultTemplate = document.getElementById('default-content');
+
+      // Initialize content from localStorage or default template
+      function initContent() {
+        const savedContent = localStorage.getItem(STORAGE_KEY);
+        if (savedContent) {
+          contentContainer.innerHTML = savedContent;
+          console.log('Loaded content from localStorage');
+        } else {
+          contentContainer.innerHTML = defaultTemplate.innerHTML;
+          console.log('Using default content');
+        }
+      }
+
+      // Save current content to localStorage
+      function saveContent() {
+        const html = contentContainer.innerHTML;
+        localStorage.setItem(STORAGE_KEY, html);
+        console.log('Content saved to localStorage');
+      }
+
+      // Reset content to default
+      function resetContent() {
+        if (confirm('Reset all content to default? This will discard all your changes.')) {
+          localStorage.removeItem(STORAGE_KEY);
+          contentContainer.innerHTML = defaultTemplate.innerHTML;
+          console.log('Content reset to default');
+        }
+      }
+
+      // Listen for changes from le-slot components
+      contentContainer.addEventListener('leSlotChange', (event) => {
+        const { name, value, isValid } = event.detail;
+        console.log(`Slot "${name}" changed:`, value, isValid ? '✓' : '✗ invalid HTML');
+        
+        // Only update and save if HTML is valid
+        if (isValid) {
+          // Update the innerHTML of the le-slot element to preserve HTML tags
+          const slot = event.target;
+          slot.innerHTML = value;
+          
+          // Save the entire content
+          saveContent();
+        } else {
+          // in case the html is invalid, serialize textValue to innerHTML to escape tags
+          console.log(`Invalid HTML in slot "${name}", reverting to textValue.`);
+          const slot = event.target;
+          slot.innerHTML = slot.textValue;
+
+          saveContent();
+        }
+      });
+
       function setMode(mode) {
         document.documentElement.setAttribute('mode', mode);
         
@@ -180,8 +253,6 @@
           btn.classList.toggle('active', btn.id === `btn-mode-${mode}`);
         });
         
-        // With componentWillRender, components should now automatically
-        // detect mode changes and re-render accordingly
         console.log('Mode changed to:', mode);
       }
       
@@ -195,6 +266,9 @@
         
         console.log('Theme changed to:', theme);
       }
+
+      // Initialize on page load
+      initContent();
     </script>
   </body>
 </html>

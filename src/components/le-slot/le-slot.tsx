@@ -16,10 +16,7 @@ import { observeModeChanges } from '../../utils/utils';
  */
 @Component({
   tag: 'le-slot',
-  styleUrls: {
-    default: 'le-slot.default.css',
-    admin: 'le-slot.admin.css',
-  },
+  styleUrl: 'le-slot.default.css',
   shadow: true,
 })
 export class LeSlot {
@@ -85,10 +82,15 @@ export class LeSlot {
   @State() private textValue: string = '';
 
   /**
-   * Emitted when text content changes in admin mode.
-   * The event detail contains the new text value.
+   * Whether the current textValue contains valid HTML
    */
-  @Event() leSlotChange: EventEmitter<{ name: string; value: string }>;
+  @State() private isValidHtml: boolean = true;
+
+  /**
+   * Emitted when text content changes in admin mode.
+   * The event detail contains the new text value and validity.
+   */
+  @Event() leSlotChange: EventEmitter<{ name: string; value: string; isValid: boolean }>;
 
   private disconnectModeObserver?: () => void;
 
@@ -97,9 +99,9 @@ export class LeSlot {
       this.adminMode = mode === 'admin';
     });
 
-    // Initialize text value from slot content
+    // Initialize text value from innerHTML to preserve HTML tags
     if (this.type === 'text' || this.type === 'textarea') {
-      this.textValue = this.el.textContent?.trim() || '';
+      this.textValue = this.el.innerHTML?.trim() || '';
     }
   }
 
@@ -107,43 +109,85 @@ export class LeSlot {
     this.disconnectModeObserver?.();
   }
 
+  /**
+   * Validates if a string contains valid HTML
+   */
+  private validateHtml(html: string): boolean {
+    // Empty string is valid
+    if (!html.trim()) return true;
+    
+    // Create a template element to parse the HTML
+    const template = document.createElement('template');
+    template.innerHTML = html;
+    
+    // Check that we don't have obviously broken HTML
+    // Count opening and closing tags for common elements
+    const openTags = (html.match(/<[a-z][^>]*(?<!\/)>/gi) || []).length;
+    const closeTags = (html.match(/<\/[a-z][^>]*>/gi) || []).length;
+    const selfClosing = (html.match(/<[a-z][^>]*\/>/gi) || []).length;
+    
+    // Simple validation: opening tags (minus self-closing) should roughly match closing tags
+    // Allow some tolerance for void elements like <br>, <img>, etc.
+    const voidElements = (html.match(/<(br|hr|img|input|meta|link|area|base|col|embed|param|source|track|wbr)[^>]*>/gi) || []).length;
+    
+    const effectiveOpenTags = openTags - selfClosing - voidElements;
+    
+    // If difference is too large, HTML is likely broken
+    if (Math.abs(effectiveOpenTags - closeTags) > 1) {
+      return false;
+    }
+    
+    return true;
+  }
+
   private handleTextInput = (event: Event) => {
     const target = event.target as HTMLInputElement | HTMLTextAreaElement;
     this.textValue = target.value;
-    this.leSlotChange.emit({ name: this.name, value: this.textValue });
+    this.isValidHtml = this.validateHtml(this.textValue);
+    this.leSlotChange.emit({ 
+      name: this.name, 
+      value: this.textValue,
+      isValid: this.isValidHtml 
+    });
   };
 
   render() {
     const displayLabel = this.label || this.name || 'default';
+    const isTextType = this.type === 'text' || this.type === 'textarea';
 
-    // In non-admin mode, just render the slot passthrough
-    if (!this.adminMode) {
-      return (
-        <Host>
-          <slot></slot>
-        </Host>
-      );
-    }
-
-    // In admin mode, render based on type
+    // Always render the same structure, CSS handles visibility via .admin-mode class
     return (
       <Host
-        role="region"
-        aria-label={`Slot: ${displayLabel}`}
+        class={{ 
+          'admin-mode': this.adminMode,
+          'invalid-html': !this.isValidHtml 
+        }}
+        role={this.adminMode ? 'region' : undefined}
+        aria-label={this.adminMode ? `Slot: ${displayLabel}` : undefined}
         data-slot-name={this.name}
         data-slot-type={this.type}
         data-allowed={this.allowedComponents}
         data-multiple={this.multiple}
         data-required={this.required}
       >
-        <div class="le-slot-container">
-          <div class="le-slot-header">
-            <span class="le-slot-label">{displayLabel}</span>
-            {this.required && <span class="le-slot-required">*</span>}
+        {this.adminMode ? (
+          <div class="le-slot-container">
+            <div class="le-slot-header">
+              <span class="le-slot-label">{displayLabel}</span>
+              {this.required && <span class="le-slot-required">*</span>}
+              {!this.isValidHtml && <span class="le-slot-invalid">⚠ Invalid HTML</span>}
+            </div>
+            {this.description && <div class="le-slot-description">{this.description}</div>}
+            {this.renderContent()}
           </div>
-          {this.description && <div class="le-slot-description">{this.description}</div>}
-          {this.renderContent()}
-        </div>
+        ) : (
+          // In default mode, render HTML content for text types
+          isTextType && this.textValue ? (
+            <span innerHTML={this.textValue}></span>
+          ) : (
+            <slot></slot>
+          )
+        )}
       </Host>
     );
   }
@@ -152,7 +196,7 @@ export class LeSlot {
     switch (this.type) {
       case 'text':
         return (
-          <div class="le-slot-input">
+          <div class={{ 'le-slot-input': true, 'has-error': !this.isValidHtml }}>
             <input
               type="text"
               value={this.textValue}
@@ -166,7 +210,7 @@ export class LeSlot {
 
       case 'textarea':
         return (
-          <div class="le-slot-input">
+          <div class={{ 'le-slot-input': true, 'has-error': !this.isValidHtml }}>
             <textarea
               value={this.textValue}
               placeholder={this.placeholder || `Enter ${this.label || this.name || 'text'}...`}

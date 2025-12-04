@@ -111,7 +111,7 @@ declare global {
         new (): HTMLLeCardElement;
     };
     interface HTMLLeSlotElementEventMap {
-        "leSlotChange": { name: string; value: string };
+        "leSlotChange": { name: string; value: string; isValid: boolean };
     }
     /**
      * Slot placeholder component for admin/CMS mode.
@@ -203,9 +203,9 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emitted when text content changes in admin mode. The event detail contains the new text value.
+          * Emitted when text content changes in admin mode. The event detail contains the new text value and validity.
          */
-        "onLeSlotChange"?: (event: LeSlotCustomEvent<{ name: string; value: string }>) => void;
+        "onLeSlotChange"?: (event: LeSlotCustomEvent<{ name: string; value: string; isValid: boolean }>) => void;
         /**
           * Placeholder text for text/textarea inputs in admin mode.
          */

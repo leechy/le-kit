@@ -26,10 +26,7 @@ import { Component, Prop, h, Host, Element } from '@stencil/core';
  */
 @Component({
   tag: 'le-card',
-  styleUrls: {
-    default: 'le-card.default.css',
-    admin: 'le-card.admin.css',
-  },
+  styleUrl: 'le-card.default.css',
   shadow: true,
 })
 export class LeCard {

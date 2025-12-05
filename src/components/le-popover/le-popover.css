@@ -1,27 +1,31 @@
 /**
  * Styles for le-popover component
  * Always renders in default mode (no admin mode styles)
+ * Uses global theme tokens for consistent theming
  */
 
 :host {
   display: inline-block;
   position: relative;
   
-  /* Popover design tokens */
-  --le-popover-bg: #ffffff;
-  --le-popover-border: 1px solid #e0e0e0;
-  --le-popover-border-radius: 8px;
-  --le-popover-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  /* Popover design tokens - mapped to global theme */
+  --le-popover-bg: var(--le-color-surface, #ffffff);
+  --le-popover-border-color: var(--le-color-border, #e0e0e0);
+  --le-popover-border-radius: var(--le-radius-lg, 8px);
+  --le-popover-shadow: var(--le-shadow-xl, 0 10px 15px rgba(0, 0, 0, 0.1));
   --le-popover-min-width: 200px;
   --le-popover-max-width: 320px;
-  --le-popover-z-index: 1000;
+  --le-popover-z-index: var(--le-z-popover, 1060);
   
-  --le-popover-header-bg: #f5f5f5;
-  --le-popover-header-border: 1px solid #e0e0e0;
-  --le-popover-title-color: #333;
-  --le-popover-title-size: 13px;
+  --le-popover-header-bg: var(--le-color-background-secondary, #f5f5f5);
+  --le-popover-header-border-color: var(--le-color-border, #e0e0e0);
+  --le-popover-title-color: var(--le-color-text-primary, #212121);
+  --le-popover-title-size: var(--le-font-size-sm, 14px);
   
-  --le-popover-body-padding: 12px;
+  --le-popover-body-padding: var(--le-spacing-3, 12px);
+  --le-popover-close-color: var(--le-color-text-secondary, #757575);
+  --le-popover-close-hover-bg: var(--le-color-background-tertiary, #eeeeee);
+  --le-popover-close-hover-color: var(--le-color-text-primary, #212121);
 }
 
 /* Trigger wrapper */
@@ -38,22 +42,26 @@
   width: 28px;
   height: 28px;
   padding: 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: #fff;
+  border: 1px solid var(--le-color-border, #ccc);
+  border-radius: var(--le-radius-md, 4px);
+  background: var(--le-color-surface, #fff);
+  color: var(--le-color-text-secondary, #757575);
   cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s ease;
+  font-size: var(--le-font-size-sm, 14px);
+  transition: all var(--le-transition-fast, 100ms) var(--le-transition-easing, ease);
 }
 
 .le-popover-default-trigger:hover {
-  border-color: #0088ff;
-  background: #f0f7ff;
+  border-color: var(--le-color-primary, #0088ff);
+  background: var(--le-color-primary-light, #4da6ff);
+  background: color-mix(in srgb, var(--le-color-primary, #0088ff) 10%, var(--le-color-surface, #fff));
+  color: var(--le-color-primary, #0088ff);
 }
 
-:host(.is-open) .le-popover-default-trigger {
-  border-color: #0088ff;
-  background: #e3f2fd;
+:host([open]) .le-popover-default-trigger {
+  border-color: var(--le-color-primary, #0088ff);
+  background: color-mix(in srgb, var(--le-color-primary, #0088ff) 15%, var(--le-color-surface, #fff));
+  color: var(--le-color-primary, #0088ff);
 }
 
 /* Popover content container */
@@ -63,11 +71,12 @@
   min-width: var(--le-popover-min-width);
   max-width: var(--le-popover-max-width);
   background: var(--le-popover-bg);
-  border: var(--le-popover-border);
+  border: 1px solid var(--le-popover-border-color);
   border-radius: var(--le-popover-border-radius);
   box-shadow: var(--le-popover-shadow);
   overflow: hidden;
-  animation: popover-fade-in 0.15s ease-out;
+  animation: popover-fade-in var(--le-transition-fast, 150ms) var(--le-transition-easing, ease-out);
+  text-align: start;
 }
 
 @keyframes popover-fade-in {
@@ -86,15 +95,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
+  padding: var(--le-spacing-2, 8px) var(--le-spacing-3, 12px);
   background: var(--le-popover-header-bg);
-  border-bottom: var(--le-popover-header-border);
-  gap: 8px;
+  border-bottom: 1px solid var(--le-popover-header-border-color);
+  gap: var(--le-spacing-2, 8px);
 }
 
 .le-popover-title {
   font-size: var(--le-popover-title-size);
-  font-weight: 600;
+  font-weight: var(--le-font-weight-semibold, 600);
   color: var(--le-popover-title-color);
   flex: 1;
 }
@@ -107,18 +116,18 @@
   height: 24px;
   padding: 0;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--le-radius-md, 4px);
   background: transparent;
-  color: #666;
+  color: var(--le-popover-close-color);
   font-size: 18px;
   line-height: 1;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--le-transition-fast, 150ms) var(--le-transition-easing, ease);
 }
 
 .le-popover-close:hover {
-  background: rgba(0, 0, 0, 0.1);
-  color: #333;
+  background: var(--le-popover-close-hover-bg);
+  color: var(--le-popover-close-hover-color);
 }
 
 /* Body */
@@ -127,6 +136,6 @@
 }
 
 /* Utility: hide when not open (fallback) */
-:host(:not(.is-open)) .le-popover-content {
+:host(:not([open])) .le-popover-content {
   display: none;
 }

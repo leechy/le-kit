@@ -123,74 +123,6 @@
 
     <!-- Default content template (used when localStorage is empty) -->
     <template id="default-content">
-      <div class="demo-section">
-        <h2>Button Component</h2>
-        <p>Buttons with theme-based colors, style variants, and sizes.</p>
-        
-        <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
-          <label>Colors (solid):</label>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
-            <le-button color="primary">Primary</le-button>
-            <le-button color="secondary">Secondary</le-button>
-            <le-button color="success">Success</le-button>
-            <le-button color="warning">Warning</le-button>
-            <le-button color="danger">Danger</le-button>
-            <le-button color="info">Info</le-button>
-          </div>
-        </div>
-        
-        <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
-          <label>Variants:</label>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
-            <le-button variant="solid" color="primary">Solid</le-button>
-            <le-button variant="outlined" color="primary">Outlined</le-button>
-            <le-button variant="clear" color="primary">Clear</le-button>
-            <le-button variant="solid" color="danger">Solid</le-button>
-            <le-button variant="outlined" color="danger">Outlined</le-button>
-            <le-button variant="clear" color="danger">Clear</le-button>
-          </div>
-        </div>
-        
-        <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
-          <label>Sizes:</label>
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px;">
-            <le-button size="small">Small</le-button>
-            <le-button size="medium">Medium</le-button>
-            <le-button size="large">Large</le-button>
-          </div>
-        </div>
-        
-        <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
-          <label>States:</label>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
-            <le-button selected>Selected</le-button>
-            <le-button disabled>Disabled</le-button>
-            <le-button variant="outlined" selected>Outlined Selected</le-button>
-          </div>
-        </div>
-        
-        <div class="text-slot-demo">
-          <label>Full width & Icons:</label>
-          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-            <le-button full-width color="primary">Full Width Button</le-button>
-            <div style="display: flex; gap: 8px;">
-              <le-button icon-only color="primary" size="small">
-                <svg slot="icon-only" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-              </le-button>
-              <le-button icon-only variant="clear" size="small">
-                <div slot="icon-only">⚙️</div>
-              </le-button>
-              <le-button icon-only variant="outlined" color="secondary">
-                <svg slot="icon-only" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-              </le-button>
-              <le-button color="success">
-                <svg slot="icon-start" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                <div>With Icon</div>
-              </le-button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div class="demo-section">
         <h2>Popover Component</h2>
@@ -290,6 +222,76 @@
           </le-card>
         </div>
       </div>
+
+      <div class="demo-section">
+        <h2>Button Component</h2>
+        <p>Buttons with theme-based colors, style variants, and sizes.</p>
+        
+        <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
+          <label>Colors (solid):</label>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+            <le-button color="primary">Primary</le-button>
+            <le-button color="secondary">Secondary</le-button>
+            <le-button color="success">Success</le-button>
+            <le-button color="warning">Warning</le-button>
+            <le-button color="danger">Danger</le-button>
+            <le-button color="info">Info</le-button>
+          </div>
+        </div>
+        
+        <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
+          <label>Variants:</label>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+            <le-button variant="solid" color="primary">Solid</le-button>
+            <le-button variant="outlined" color="primary">Outlined</le-button>
+            <le-button variant="clear" color="primary">Clear</le-button>
+            <le-button variant="solid" color="danger">Solid</le-button>
+            <le-button variant="outlined" color="danger">Outlined</le-button>
+            <le-button variant="clear" color="danger">Clear</le-button>
+          </div>
+        </div>
+        
+        <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
+          <label>Sizes:</label>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px;">
+            <le-button size="small">Small</le-button>
+            <le-button size="medium">Medium</le-button>
+            <le-button size="large">Large</le-button>
+          </div>
+        </div>
+        
+        <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
+          <label>States:</label>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+            <le-button selected>Selected</le-button>
+            <le-button disabled>Disabled</le-button>
+            <le-button variant="outlined" selected>Outlined Selected</le-button>
+          </div>
+        </div>
+        
+        <div class="text-slot-demo">
+          <label>Full width & Icons:</label>
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+            <le-button full-width color="primary">Full Width Button</le-button>
+            <div style="display: flex; gap: 8px;">
+              <le-button icon-only color="primary" size="small">
+                <svg slot="icon-only" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+              </le-button>
+              <le-button icon-only variant="clear" size="small">
+                <div slot="icon-only">⚙️</div>
+              </le-button>
+              <le-button icon-only variant="outlined" color="secondary">
+                <svg slot="icon-only" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              </le-button>
+              <le-button color="success">
+                <svg slot="icon-start" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <div>With Icon</div>
+              </le-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </template>
 
     <script>

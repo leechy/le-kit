@@ -1,4 +1,5 @@
-import { Component, Prop, Method, Event, EventEmitter, h, Host, Element } from '@stencil/core';
+import { Component, Prop, Method, Event, EventEmitter, h, Element } from '@stencil/core';
+import { classnames } from '../../utils/utils';
 
 /**
  * A popover component for displaying floating content.
@@ -20,6 +21,11 @@ import { Component, Prop, Method, Event, EventEmitter, h, Host, Element } from '
 })
 export class LePopover {
   @Element() el: HTMLElement;
+
+  /**
+   * Mode of the popover should be 'default' for internal use
+   */
+  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin';
 
   /**
    * Whether the popover is currently open
@@ -73,11 +79,6 @@ export class LePopover {
 
   private triggerEl?: HTMLElement;
   private popoverEl?: HTMLElement;
-
-  connectedCallback() {
-    // Force default mode on this component - never switch to admin styles
-    this.el.setAttribute('mode', 'default');
-  }
 
   componentDidLoad() {
     if (this.closeOnClickOutside) {
@@ -286,7 +287,7 @@ export class LePopover {
 
   render() {
     return (
-      <Host class={{ 'is-open': this.open }}>
+      <le-component component="le-popover" hostClass={classnames({ 'is-open': this.open })}>
         <div 
           class="le-popover-trigger" 
           ref={(el) => (this.triggerEl = el)}
@@ -331,7 +332,7 @@ export class LePopover {
             </div>
           </div>
         )}
-      </Host>
+      </le-component>
     );
   }
 }

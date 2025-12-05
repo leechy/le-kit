@@ -165,6 +165,10 @@ export namespace Components {
          */
         "hide": () => Promise<void>;
         /**
+          * Mode of the popover should be 'default' for internal use
+         */
+        "mode": 'default' | 'admin';
+        /**
           * Offset from the trigger element (in pixels)
           * @default 8
          */
@@ -560,6 +564,10 @@ declare namespace LocalJSX {
           * @default true
          */
         "closeOnEscape"?: boolean;
+        /**
+          * Mode of the popover should be 'default' for internal use
+         */
+        "mode"?: 'default' | 'admin';
         /**
           * Offset from the trigger element (in pixels)
           * @default 8

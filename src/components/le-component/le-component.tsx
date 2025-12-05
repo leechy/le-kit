@@ -149,16 +149,16 @@ export class LeComponent {
               description: declaration.description,
               attributes,
             };
-            console.log(`[le-component] Loaded metadata for ${this.component}:`, this.componentMeta);
+            // console.log(`[le-component] Loaded metadata for ${this.component}:`, this.componentMeta);
             // Read property values after metadata is loaded
             this.readPropertyValues();
             return;
           }
         }
       }
-      console.warn(`[le-component] No metadata found for component: ${this.component}`);
+      // console.warn(`[le-component] No metadata found for component: ${this.component}`);
     } catch (error) {
-      console.warn(`[le-component] Failed to load metadata for component: ${this.component}`, error);
+      // console.warn(`[le-component] Failed to load metadata for component: ${this.component}`, error);
     }
   }
 
@@ -343,6 +343,7 @@ export class LeComponent {
               popoverTitle={`${name} Settings`}
               position="bottom"
               align="end"
+              mode="default"
             >
               {this.renderPropertyEditor()}
             </le-popover>

@@ -56,6 +56,12 @@ export class LeComponent {
   @Prop() hostClass?: string;
 
   /**
+   * Inline styles to apply to the host element.
+   * Allows parent components to pass dynamic styles (e.g., flex properties).
+   */
+  @Prop() hostStyle?: { [key: string]: string };
+
+  /**
    * Reference to the host element (found automatically from parent)
    */
   private hostElement?: HTMLElement;
@@ -357,7 +363,7 @@ export class LeComponent {
     // In default mode, just pass through content with host classes
     if (!this.adminMode) {
       return (
-        <Host class={classnames(this.component, this.hostClass)}>
+        <Host class={classnames(this.component, this.hostClass)} style={this.hostStyle}>
           <slot></slot>
         </Host>
       );
@@ -365,7 +371,7 @@ export class LeComponent {
 
     // In admin mode, show wrapper with header and settings
     return (
-      <Host class={classnames(this.component, this.hostClass, 'admin-mode')}>
+      <Host class={classnames(this.component, this.hostClass, 'admin-mode')} style={this.hostStyle}>
         <div class="le-component-wrapper">
           <div class="le-component-header">
             <span class="le-component-name">{name}</span>

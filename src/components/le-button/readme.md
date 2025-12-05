@@ -92,7 +92,7 @@ A flexible button component with multiple variants and states.
 | `size`      | `size`       | Button size                                                    | `"large" \| "medium" \| "small"`                                           | `'medium'`  |
 | `target`    | `target`     | Link target when href is set                                   | `string`                                                                   | `undefined` |
 | `type`      | `type`       | The button type attribute                                      | `"button" \| "reset" \| "submit"`                                          | `'button'`  |
-| `variant`   | `variant`    | Button variant style                                           | `"clear" \| "outlined" \| "solid"`                                         | `'solid'`   |
+| `variant`   | `variant`    | Button variant style                                           | `"clear" \| "outlined" \| "solid" \| "system"`                             | `'solid'`   |
 
 
 ## Events
@@ -125,6 +125,7 @@ A flexible button component with multiple variants and states.
 
  - [le-component](../le-component)
  - [le-popover](../le-popover)
+ - [le-slot](../le-slot)
 
 ### Depends on
 
@@ -138,7 +139,7 @@ graph TD;
   le-button --> le-slot
   le-component --> le-button
   le-popover --> le-button
-  le-slot --> le-popover
+  le-slot --> le-button
   style le-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

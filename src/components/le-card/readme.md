@@ -54,12 +54,13 @@ graph TD;
   le-card --> le-slot
   le-component --> le-popover
   le-component --> le-button
+  le-popover --> le-button
   le-popover --> le-component
   le-popover --> le-slot
-  le-popover --> le-button
-  le-slot --> le-popover
   le-button --> le-component
   le-button --> le-slot
+  le-slot --> le-popover
+  le-slot --> le-button
   style le-card fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

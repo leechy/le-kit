@@ -4,288 +4,6 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "src/components/le-button/le-button.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible button component with multiple variants and states.",
-          "name": "LeButton",
-          "cssProperties": [
-            {
-              "description": "Button background color",
-              "name": "--le-button-bg"
-            },
-            {
-              "description": "Button text color",
-              "name": "--le-button-color"
-            },
-            {
-              "description": "Button border radius",
-              "name": "--le-button-border-radius"
-            },
-            {
-              "description": "Button horizontal padding",
-              "name": "--le-button-padding-x"
-            },
-            {
-              "description": "Button vertical padding",
-              "name": "--le-button-padding-y"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The native button element",
-              "name": "button"
-            },
-            {
-              "description": "The button content wrapper",
-              "name": "content"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Button text content",
-              "name": ""
-            },
-            {
-              "description": "Icon before the text",
-              "name": "icon-start"
-            },
-            {
-              "description": "Icon after the text",
-              "name": "icon-end"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'solid' | 'outlined' | 'clear'"
-              },
-              "default": "'solid'",
-              "description": "Button variant style"
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
-              },
-              "default": "'primary'",
-              "description": "Button color theme (uses theme semantic colors)"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Button size"
-            },
-            {
-              "kind": "field",
-              "name": "selected",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is in a selected/active state"
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button takes full width of its container"
-            },
-            {
-              "kind": "field",
-              "name": "iconOnly",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button displays only an icon (square aspect ratio)"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is disabled"
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "'button' | 'submit' | 'reset'"
-              },
-              "default": "'button'",
-              "description": "The button type attribute"
-            },
-            {
-              "kind": "field",
-              "name": "href",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional href to make the button act as a link"
-            },
-            {
-              "kind": "field",
-              "name": "target",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Link target when href is set"
-            },
-            {
-              "kind": "field",
-              "name": "handleClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'solid'",
-              "description": "Button variant style",
-              "type": {
-                "text": "'solid' | 'outlined' | 'clear'"
-              }
-            },
-            {
-              "name": "color",
-              "fieldName": "color",
-              "default": "'primary'",
-              "description": "Button color theme (uses theme semantic colors)",
-              "type": {
-                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Button size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "selected",
-              "fieldName": "selected",
-              "default": "false",
-              "description": "Whether the button is in a selected/active state",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the button takes full width of its container",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "icon-only",
-              "fieldName": "iconOnly",
-              "default": "false",
-              "description": "Whether the button displays only an icon (square aspect ratio)",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the button is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "type",
-              "fieldName": "type",
-              "default": "'button'",
-              "description": "The button type attribute",
-              "type": {
-                "text": "'button' | 'submit' | 'reset'"
-              }
-            },
-            {
-              "name": "href",
-              "fieldName": "href",
-              "description": "Optional href to make the button act as a link",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "target",
-              "fieldName": "target",
-              "description": "Link target when href is set",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-button",
-          "events": [
-            {
-              "name": "leClick",
-              "type": {
-                "text": "EventEmitter<MouseEvent>"
-              },
-              "description": "Emitted when the button is clicked"
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeButton",
-          "declaration": {
-            "name": "LeButton",
-            "module": "src/components/le-button/le-button.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-button",
-          "declaration": {
-            "name": "LeButton",
-            "module": "src/components/le-button/le-button.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-card/le-card.tsx",
       "declarations": [
         {
@@ -419,20 +137,40 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-popover/le-popover.tsx",
+      "path": "src/components/le-box/le-box.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A popover component for displaying floating content.\n\nThis component is used internally by le-slot for property editing\nand component selection. It always renders in default mode regardless\nof the global mode setting.",
-          "name": "LePopover",
-          "slots": [
+          "description": "A flexible box component for use as a flex item within le-stack.\n\n`le-box` wraps content and provides flex item properties like grow, shrink,\nbasis, and self-alignment. It can also control its internal content alignment.",
+          "name": "LeBox",
+          "cssProperties": [
             {
-              "description": "Content to display inside the popover",
-              "name": ""
+              "description": "Background color",
+              "name": "--le-box-bg"
             },
             {
-              "description": "Element that triggers the popover (optional)",
-              "name": "trigger"
+              "description": "Padding inside the box",
+              "name": "--le-box-padding"
+            },
+            {
+              "description": "Border radius",
+              "name": "--le-box-border-radius"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main box container",
+              "name": "box"
+            },
+            {
+              "description": "The inner content wrapper",
+              "name": "content"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Default slot for box content",
+              "name": ""
             }
           ],
           "members": [
@@ -445,82 +183,30 @@
             },
             {
               "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "'default' | 'admin'"
-              },
-              "description": "Mode of the popover should be 'default' for internal use"
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the popover is currently open"
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
-              },
-              "default": "'bottom'",
-              "description": "Position of the popover relative to its trigger"
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'start' | 'center' | 'end'"
-              },
-              "default": "'start'",
-              "description": "Alignment of the popover"
-            },
-            {
-              "kind": "field",
-              "name": "popoverTitle",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional title for the popover header"
-            },
-            {
-              "kind": "field",
-              "name": "showClose",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether to show a close button in the header"
-            },
-            {
-              "kind": "field",
-              "name": "closeOnClickOutside",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether clicking outside closes the popover"
-            },
-            {
-              "kind": "field",
-              "name": "closeOnEscape",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether pressing Escape closes the popover"
-            },
-            {
-              "kind": "field",
-              "name": "offset",
+              "name": "grow",
               "type": {
                 "text": "number"
               },
-              "default": "8",
-              "description": "Offset from the trigger element (in pixels)"
+              "default": "0",
+              "description": "Flex grow factor - how much the item should grow relative to siblings"
+            },
+            {
+              "kind": "field",
+              "name": "shrink",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Flex shrink factor - how much the item should shrink relative to siblings"
+            },
+            {
+              "kind": "field",
+              "name": "basis",
+              "type": {
+                "text": "string"
+              },
+              "default": "'auto'",
+              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')"
             },
             {
               "kind": "field",
@@ -528,7 +214,15 @@
               "type": {
                 "text": "string | undefined"
               },
-              "description": "Fixed width for the popover (e.g., '300px', '20rem')\nIf set, overrides minWidth and maxWidth"
+              "description": "Width of the box (CSS value like '100px', '50%', 'auto')"
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Height of the box (CSS value)"
             },
             {
               "kind": "field",
@@ -536,7 +230,7 @@
               "type": {
                 "text": "string | undefined"
               },
-              "description": "Minimum width for the popover (e.g., '200px', '15rem')"
+              "description": "Minimum width constraint"
             },
             {
               "kind": "field",
@@ -544,101 +238,122 @@
               "type": {
                 "text": "string | undefined"
               },
-              "description": "Maximum width for the popover (e.g., '400px', '25rem')"
+              "description": "Maximum width constraint"
             },
             {
               "kind": "field",
-              "name": "triggerEl",
+              "name": "minHeight",
               "type": {
-                "text": "HTMLElement | undefined"
+                "text": "string | undefined"
               },
-              "privacy": "private"
+              "description": "Minimum height constraint"
             },
             {
               "kind": "field",
-              "name": "popoverEl",
+              "name": "maxHeight",
               "type": {
-                "text": "HTMLElement | undefined"
+                "text": "string | undefined"
               },
-              "privacy": "private"
+              "description": "Maximum height constraint"
             },
             {
               "kind": "field",
-              "name": "portalEl",
+              "name": "alignSelf",
               "type": {
-                "text": "HTMLElement | undefined"
+                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
               },
-              "privacy": "private"
+              "default": "'auto'",
+              "description": "Self-alignment override for this item on the cross axis"
             },
             {
               "kind": "field",
-              "name": "bodyEl",
+              "name": "alignContent",
               "type": {
-                "text": "HTMLElement | undefined"
+                "text": "'start' | 'center' | 'end' | 'stretch'"
               },
-              "privacy": "private"
+              "default": "'stretch'",
+              "description": "Internal horizontal alignment of content"
             },
             {
               "kind": "field",
-              "name": "movedNodes",
+              "name": "justifyContent",
               "type": {
-                "text": "{ node: Node; originalParent: Node; originalNextSibling: Node | null }[]"
+                "text": "'start' | 'center' | 'end' | 'stretch'"
               },
+              "default": "'start'",
+              "description": "Internal vertical alignment of content"
+            },
+            {
+              "kind": "field",
+              "name": "padding",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Padding inside the box (CSS value like '8px', '1rem')"
+            },
+            {
+              "kind": "field",
+              "name": "order",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Order in the flex container (lower values come first)"
+            },
+            {
+              "kind": "field",
+              "name": "displayFlex",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to display box content as flex (for internal alignment)"
+            },
+            {
+              "kind": "field",
+              "name": "innerDirection",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'vertical'",
+              "description": "Direction of internal flex layout when displayFlex is true"
+            },
+            {
+              "kind": "field",
+              "name": "innerGap",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Gap between internal flex items when displayFlex is true"
+            },
+            {
+              "kind": "method",
+              "name": "getAlignSelf",
               "privacy": "private",
-              "default": "[]"
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
             },
             {
-              "kind": "field",
-              "name": "handleOtherPopoverOpen",
+              "kind": "method",
+              "name": "getContentAlign",
               "privacy": "private",
-              "description": "Handle when another popover is about to open - close this one"
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
             },
             {
               "kind": "method",
-              "name": "show",
-              "description": "Opens the popover"
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "description": "Closes the popover"
-            },
-            {
-              "kind": "method",
-              "name": "createPortal",
+              "name": "getContentJustify",
               "privacy": "private",
-              "description": "Create the portal element and render popover content into it"
-            },
-            {
-              "kind": "method",
-              "name": "destroyPortal",
-              "privacy": "private",
-              "description": "Destroy the portal element and move content back to original locations"
-            },
-            {
-              "kind": "method",
-              "name": "toggle",
-              "description": "Toggles the popover"
-            },
-            {
-              "kind": "field",
-              "name": "handleDocumentClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "updatePosition",
-              "privacy": "private"
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
             },
             {
               "kind": "method",
@@ -647,88 +362,44 @@
           ],
           "attributes": [
             {
-              "name": "mode",
-              "fieldName": "mode",
-              "description": "Mode of the popover should be 'default' for internal use",
-              "type": {
-                "text": "'default' | 'admin'"
-              }
-            },
-            {
-              "name": "open",
-              "fieldName": "open",
-              "default": "false",
-              "description": "Whether the popover is currently open",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "position",
-              "fieldName": "position",
-              "default": "'bottom'",
-              "description": "Position of the popover relative to its trigger",
-              "type": {
-                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'start'",
-              "description": "Alignment of the popover",
-              "type": {
-                "text": "'start' | 'center' | 'end'"
-              }
-            },
-            {
-              "name": "popover-title",
-              "fieldName": "popoverTitle",
-              "description": "Optional title for the popover header",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "show-close",
-              "fieldName": "showClose",
-              "default": "true",
-              "description": "Whether to show a close button in the header",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "close-on-click-outside",
-              "fieldName": "closeOnClickOutside",
-              "default": "true",
-              "description": "Whether clicking outside closes the popover",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "close-on-escape",
-              "fieldName": "closeOnEscape",
-              "default": "true",
-              "description": "Whether pressing Escape closes the popover",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "offset",
-              "fieldName": "offset",
-              "default": "8",
-              "description": "Offset from the trigger element (in pixels)",
+              "name": "grow",
+              "fieldName": "grow",
+              "default": "0",
+              "description": "Flex grow factor - how much the item should grow relative to siblings",
               "type": {
                 "text": "number"
               }
             },
             {
+              "name": "shrink",
+              "fieldName": "shrink",
+              "default": "1",
+              "description": "Flex shrink factor - how much the item should shrink relative to siblings",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "basis",
+              "fieldName": "basis",
+              "default": "'auto'",
+              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
               "name": "width",
               "fieldName": "width",
-              "description": "Fixed width for the popover (e.g., '300px', '20rem')\nIf set, overrides minWidth and maxWidth",
+              "description": "Width of the box (CSS value like '100px', '50%', 'auto')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "height",
+              "fieldName": "height",
+              "description": "Height of the box (CSS value)",
               "type": {
                 "text": "string"
               }
@@ -736,7 +407,7 @@
             {
               "name": "min-width",
               "fieldName": "minWidth",
-              "description": "Minimum width for the popover (e.g., '200px', '15rem')",
+              "description": "Minimum width constraint",
               "type": {
                 "text": "string"
               }
@@ -744,47 +415,117 @@
             {
               "name": "max-width",
               "fieldName": "maxWidth",
-              "description": "Maximum width for the popover (e.g., '400px', '25rem')",
+              "description": "Maximum width constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min-height",
+              "fieldName": "minHeight",
+              "description": "Minimum height constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-height",
+              "fieldName": "maxHeight",
+              "description": "Maximum height constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align-self",
+              "fieldName": "alignSelf",
+              "default": "'auto'",
+              "description": "Self-alignment override for this item on the cross axis",
+              "type": {
+                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              }
+            },
+            {
+              "name": "align-content",
+              "fieldName": "alignContent",
+              "default": "'stretch'",
+              "description": "Internal horizontal alignment of content",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              }
+            },
+            {
+              "name": "justify-content",
+              "fieldName": "justifyContent",
+              "default": "'start'",
+              "description": "Internal vertical alignment of content",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              }
+            },
+            {
+              "name": "padding",
+              "fieldName": "padding",
+              "description": "Padding inside the box (CSS value like '8px', '1rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "order",
+              "fieldName": "order",
+              "description": "Order in the flex container (lower values come first)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "display-flex",
+              "fieldName": "displayFlex",
+              "default": "false",
+              "description": "Whether to display box content as flex (for internal alignment)",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "inner-direction",
+              "fieldName": "innerDirection",
+              "default": "'vertical'",
+              "description": "Direction of internal flex layout when displayFlex is true",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              }
+            },
+            {
+              "name": "inner-gap",
+              "fieldName": "innerGap",
+              "description": "Gap between internal flex items when displayFlex is true",
               "type": {
                 "text": "string"
               }
             }
           ],
-          "tagName": "le-popover",
-          "events": [
-            {
-              "name": "lePopoverOpen",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the popover opens"
-            },
-            {
-              "name": "lePopoverClose",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the popover closes"
-            }
-          ],
+          "tagName": "le-box",
+          "events": [],
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "LePopover",
+          "name": "LeBox",
           "declaration": {
-            "name": "LePopover",
-            "module": "src/components/le-popover/le-popover.tsx"
+            "name": "LeBox",
+            "module": "src/components/le-box/le-box.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-popover",
+          "name": "le-box",
           "declaration": {
-            "name": "LePopover",
-            "module": "src/components/le-popover/le-popover.tsx"
+            "name": "LeBox",
+            "module": "src/components/le-box/le-box.tsx"
           }
         }
       ]
@@ -834,6 +575,14 @@
                 "text": "string | undefined"
               },
               "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes."
+            },
+            {
+              "kind": "field",
+              "name": "hostStyle",
+              "type": {
+                "text": "{ [key: string]: string } | undefined"
+              },
+              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties)."
             },
             {
               "kind": "field",
@@ -1046,6 +795,14 @@
               "type": {
                 "text": "string"
               }
+            },
+            {
+              "name": "host-style",
+              "fieldName": "hostStyle",
+              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties).",
+              "type": {
+                "text": "{ [key: string]: string }"
+              }
             }
           ],
           "tagName": "le-component",
@@ -1068,6 +825,288 @@
           "declaration": {
             "name": "LeComponent",
             "module": "src/components/le-component/le-component.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-button/le-button.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible button component with multiple variants and states.",
+          "name": "LeButton",
+          "cssProperties": [
+            {
+              "description": "Button background color",
+              "name": "--le-button-bg"
+            },
+            {
+              "description": "Button text color",
+              "name": "--le-button-color"
+            },
+            {
+              "description": "Button border radius",
+              "name": "--le-button-border-radius"
+            },
+            {
+              "description": "Button horizontal padding",
+              "name": "--le-button-padding-x"
+            },
+            {
+              "description": "Button vertical padding",
+              "name": "--le-button-padding-y"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The native button element",
+              "name": "button"
+            },
+            {
+              "description": "The button content wrapper",
+              "name": "content"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Button text content",
+              "name": ""
+            },
+            {
+              "description": "Icon before the text",
+              "name": "icon-start"
+            },
+            {
+              "description": "Icon after the text",
+              "name": "icon-end"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'solid' | 'outlined' | 'clear' | 'system'"
+              },
+              "default": "'solid'",
+              "description": "Button variant style"
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
+              },
+              "default": "'primary'",
+              "description": "Button color theme (uses theme semantic colors)"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Button size"
+            },
+            {
+              "kind": "field",
+              "name": "selected",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is in a selected/active state"
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button takes full width of its container"
+            },
+            {
+              "kind": "field",
+              "name": "iconOnly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button displays only an icon (square aspect ratio)"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              },
+              "default": "'button'",
+              "description": "The button type attribute"
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional href to make the button act as a link"
+            },
+            {
+              "kind": "field",
+              "name": "target",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Link target when href is set"
+            },
+            {
+              "kind": "field",
+              "name": "handleClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'solid'",
+              "description": "Button variant style",
+              "type": {
+                "text": "'solid' | 'outlined' | 'clear' | 'system'"
+              }
+            },
+            {
+              "name": "color",
+              "fieldName": "color",
+              "default": "'primary'",
+              "description": "Button color theme (uses theme semantic colors)",
+              "type": {
+                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Button size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "selected",
+              "fieldName": "selected",
+              "default": "false",
+              "description": "Whether the button is in a selected/active state",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the button takes full width of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "icon-only",
+              "fieldName": "iconOnly",
+              "default": "false",
+              "description": "Whether the button displays only an icon (square aspect ratio)",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the button is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "type",
+              "fieldName": "type",
+              "default": "'button'",
+              "description": "The button type attribute",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              }
+            },
+            {
+              "name": "href",
+              "fieldName": "href",
+              "description": "Optional href to make the button act as a link",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "target",
+              "fieldName": "target",
+              "description": "Link target when href is set",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-button",
+          "events": [
+            {
+              "name": "leClick",
+              "type": {
+                "text": "EventEmitter<MouseEvent>"
+              },
+              "description": "Emitted when the button is clicked"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeButton",
+          "declaration": {
+            "name": "LeButton",
+            "module": "src/components/le-button/le-button.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-button",
+          "declaration": {
+            "name": "LeButton",
+            "module": "src/components/le-button/le-button.tsx"
           }
         }
       ]
@@ -1453,6 +1492,677 @@
           "declaration": {
             "name": "LeSlot",
             "module": "src/components/le-slot/le-slot.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-stack/le-stack.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible stack layout component using CSS flexbox.\n\n`le-stack` arranges its children in a row (horizontal) or column (vertical)\nwith configurable spacing, alignment, and wrapping behavior. Perfect for\ncreating responsive layouts.",
+          "name": "LeStack",
+          "cssProperties": [
+            {
+              "description": "Gap between items (defaults to var(--le-space-md))",
+              "name": "--le-stack-gap"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main stack container",
+              "name": "stack"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Default slot for stack items (le-box components recommended)",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "direction",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'horizontal'",
+              "description": "Direction of the stack layout"
+            },
+            {
+              "kind": "field",
+              "name": "gap",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              },
+              "default": "'stretch'",
+              "description": "Alignment of items on the cross axis"
+            },
+            {
+              "kind": "field",
+              "name": "justify",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
+              },
+              "default": "'start'",
+              "description": "Distribution of items on the main axis"
+            },
+            {
+              "kind": "field",
+              "name": "wrap",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether items should wrap to multiple lines"
+            },
+            {
+              "kind": "field",
+              "name": "alignContent",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
+              },
+              "default": "'stretch'",
+              "description": "Alignment of wrapped lines (only applies when wrap is true)"
+            },
+            {
+              "kind": "field",
+              "name": "reverse",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to reverse the order of items"
+            },
+            {
+              "kind": "field",
+              "name": "maxItems",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of items allowed in the stack (for CMS validation)"
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the stack should take full width of its container"
+            },
+            {
+              "kind": "field",
+              "name": "fullHeight",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the stack should take full height of its container"
+            },
+            {
+              "kind": "field",
+              "name": "padding",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Padding inside the stack container (CSS value)"
+            },
+            {
+              "kind": "method",
+              "name": "getFlexDirection",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getAlignItems",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getJustifyContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getAlignContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "direction",
+              "fieldName": "direction",
+              "default": "'horizontal'",
+              "description": "Direction of the stack layout",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              }
+            },
+            {
+              "name": "gap",
+              "fieldName": "gap",
+              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'stretch'",
+              "description": "Alignment of items on the cross axis",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              }
+            },
+            {
+              "name": "justify",
+              "fieldName": "justify",
+              "default": "'start'",
+              "description": "Distribution of items on the main axis",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
+              }
+            },
+            {
+              "name": "wrap",
+              "fieldName": "wrap",
+              "default": "false",
+              "description": "Whether items should wrap to multiple lines",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "align-content",
+              "fieldName": "alignContent",
+              "default": "'stretch'",
+              "description": "Alignment of wrapped lines (only applies when wrap is true)",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
+              }
+            },
+            {
+              "name": "reverse",
+              "fieldName": "reverse",
+              "default": "false",
+              "description": "Whether to reverse the order of items",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "max-items",
+              "fieldName": "maxItems",
+              "description": "Maximum number of items allowed in the stack (for CMS validation)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the stack should take full width of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "full-height",
+              "fieldName": "fullHeight",
+              "default": "false",
+              "description": "Whether the stack should take full height of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "padding",
+              "fieldName": "padding",
+              "description": "Padding inside the stack container (CSS value)",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-stack",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeStack",
+          "declaration": {
+            "name": "LeStack",
+            "module": "src/components/le-stack/le-stack.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-stack",
+          "declaration": {
+            "name": "LeStack",
+            "module": "src/components/le-stack/le-stack.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-popover/le-popover.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A popover component for displaying floating content.\n\nThis component is used internally by le-slot for property editing\nand component selection. It always renders in default mode regardless\nof the global mode setting.",
+          "name": "LePopover",
+          "slots": [
+            {
+              "description": "Content to display inside the popover",
+              "name": ""
+            },
+            {
+              "description": "Element that triggers the popover (optional)",
+              "name": "trigger"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin'"
+              },
+              "description": "Mode of the popover should be 'default' for internal use"
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the popover is currently open"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
+              },
+              "default": "'bottom'",
+              "description": "Position of the popover relative to its trigger"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'end'"
+              },
+              "default": "'start'",
+              "description": "Alignment of the popover"
+            },
+            {
+              "kind": "field",
+              "name": "popoverTitle",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional title for the popover header"
+            },
+            {
+              "kind": "field",
+              "name": "showClose",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether to show a close button in the header"
+            },
+            {
+              "kind": "field",
+              "name": "closeOnClickOutside",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether clicking outside closes the popover"
+            },
+            {
+              "kind": "field",
+              "name": "closeOnEscape",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether pressing Escape closes the popover"
+            },
+            {
+              "kind": "field",
+              "name": "offset",
+              "type": {
+                "text": "number"
+              },
+              "default": "8",
+              "description": "Offset from the trigger element (in pixels)"
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Fixed width for the popover (e.g., '300px', '20rem')\nIf set, overrides minWidth and maxWidth"
+            },
+            {
+              "kind": "field",
+              "name": "minWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "'200px'",
+              "description": "Minimum width for the popover (e.g., '200px', '15rem')"
+            },
+            {
+              "kind": "field",
+              "name": "maxWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Maximum width for the popover (e.g., '400px', '25rem')"
+            },
+            {
+              "kind": "field",
+              "name": "triggerEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "popoverEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "portalEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "bodyEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "movedNodes",
+              "type": {
+                "text": "{ node: Node; originalParent: Node; originalNextSibling: Node | null }[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "handleOtherPopoverOpen",
+              "privacy": "private",
+              "description": "Handle when another popover is about to open - close this one"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "description": "Opens the popover"
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "description": "Closes the popover"
+            },
+            {
+              "kind": "method",
+              "name": "createPortal",
+              "privacy": "private",
+              "description": "Create the portal element and render popover content into it"
+            },
+            {
+              "kind": "method",
+              "name": "destroyPortal",
+              "privacy": "private",
+              "description": "Destroy the portal element and move content back to original locations"
+            },
+            {
+              "kind": "method",
+              "name": "toggle",
+              "description": "Toggles the popover"
+            },
+            {
+              "kind": "field",
+              "name": "handleDocumentClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updatePosition",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "mode",
+              "fieldName": "mode",
+              "description": "Mode of the popover should be 'default' for internal use",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the popover is currently open",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "position",
+              "fieldName": "position",
+              "default": "'bottom'",
+              "description": "Position of the popover relative to its trigger",
+              "type": {
+                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'start'",
+              "description": "Alignment of the popover",
+              "type": {
+                "text": "'start' | 'center' | 'end'"
+              }
+            },
+            {
+              "name": "popover-title",
+              "fieldName": "popoverTitle",
+              "description": "Optional title for the popover header",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "show-close",
+              "fieldName": "showClose",
+              "default": "true",
+              "description": "Whether to show a close button in the header",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "close-on-click-outside",
+              "fieldName": "closeOnClickOutside",
+              "default": "true",
+              "description": "Whether clicking outside closes the popover",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "close-on-escape",
+              "fieldName": "closeOnEscape",
+              "default": "true",
+              "description": "Whether pressing Escape closes the popover",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "offset",
+              "fieldName": "offset",
+              "default": "8",
+              "description": "Offset from the trigger element (in pixels)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "width",
+              "fieldName": "width",
+              "description": "Fixed width for the popover (e.g., '300px', '20rem')\nIf set, overrides minWidth and maxWidth",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min-width",
+              "fieldName": "minWidth",
+              "default": "'200px'",
+              "description": "Minimum width for the popover (e.g., '200px', '15rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-width",
+              "fieldName": "maxWidth",
+              "description": "Maximum width for the popover (e.g., '400px', '25rem')",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-popover",
+          "events": [
+            {
+              "name": "lePopoverOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the popover opens"
+            },
+            {
+              "name": "lePopoverClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the popover closes"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LePopover",
+          "declaration": {
+            "name": "LePopover",
+            "module": "src/components/le-popover/le-popover.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-popover",
+          "declaration": {
+            "name": "LePopover",
+            "module": "src/components/le-popover/le-popover.tsx"
           }
         }
       ]

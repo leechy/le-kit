@@ -7,6 +7,102 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     /**
+     * A flexible box component for use as a flex item within le-stack.
+     * `le-box` wraps content and provides flex item properties like grow, shrink,
+     * basis, and self-alignment. It can also control its internal content alignment.
+     * @cssprop --le-box-bg - Background color
+     * @cssprop --le-box-padding - Padding inside the box
+     * @cssprop --le-box-border-radius - Border radius
+     * @csspart box - The main box container
+     * @csspart content - The inner content wrapper
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeBox {
+        /**
+          * Internal horizontal alignment of content
+          * @allowedValues start | center | end | stretch
+          * @default 'stretch'
+         */
+        "alignContent": 'start' | 'center' | 'end' | 'stretch';
+        /**
+          * Self-alignment override for this item on the cross axis
+          * @allowedValues auto | start | center | end | stretch | baseline
+          * @default 'auto'
+         */
+        "alignSelf": 'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline';
+        /**
+          * Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')
+          * @default 'auto'
+         */
+        "basis": string;
+        /**
+          * Whether to display box content as flex (for internal alignment)
+          * @default false
+         */
+        "displayFlex": boolean;
+        /**
+          * Flex grow factor - how much the item should grow relative to siblings
+          * @min 0
+          * @default 0
+         */
+        "grow": number;
+        /**
+          * Height of the box (CSS value)
+         */
+        "height"?: string;
+        /**
+          * Direction of internal flex layout when displayFlex is true
+          * @allowedValues horizontal | vertical
+          * @default 'vertical'
+         */
+        "innerDirection": 'horizontal' | 'vertical';
+        /**
+          * Gap between internal flex items when displayFlex is true
+         */
+        "innerGap"?: string;
+        /**
+          * Internal vertical alignment of content
+          * @allowedValues start | center | end | stretch
+          * @default 'start'
+         */
+        "justifyContent": 'start' | 'center' | 'end' | 'stretch';
+        /**
+          * Maximum height constraint
+         */
+        "maxHeight"?: string;
+        /**
+          * Maximum width constraint
+         */
+        "maxWidth"?: string;
+        /**
+          * Minimum height constraint
+         */
+        "minHeight"?: string;
+        /**
+          * Minimum width constraint
+         */
+        "minWidth"?: string;
+        /**
+          * Order in the flex container (lower values come first)
+         */
+        "order"?: number;
+        /**
+          * Padding inside the box (CSS value like '8px', '1rem')
+         */
+        "padding"?: string;
+        /**
+          * Flex shrink factor - how much the item should shrink relative to siblings
+          * @min 0
+          * @default 1
+         */
+        "shrink": number;
+        /**
+          * Width of the box (CSS value like '100px', '50%', 'auto')
+         */
+        "width"?: string;
+    }
+    /**
      * A flexible button component with multiple variants and states.
      * @cssprop --le-button-bg - Button background color
      * @cssprop --le-button-color - Button text color
@@ -135,6 +231,10 @@ export namespace Components {
           * Classes to apply to the host element. Allows parent components to pass their styling classes.
          */
         "hostClass"?: string;
+        /**
+          * Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties).
+         */
+        "hostStyle"?: { [key: string]: string };
     }
     /**
      * A popover component for displaying floating content.
@@ -267,6 +367,75 @@ export namespace Components {
          */
         "type": 'slot' | 'text' | 'textarea';
     }
+    /**
+     * A flexible stack layout component using CSS flexbox.
+     * `le-stack` arranges its children in a row (horizontal) or column (vertical)
+     * with configurable spacing, alignment, and wrapping behavior. Perfect for
+     * creating responsive layouts.
+     * @cssprop --le-stack-gap - Gap between items (defaults to var(--le-space-md))
+     * @csspart stack - The main stack container
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeStack {
+        /**
+          * Alignment of items on the cross axis
+          * @allowedValues start | center | end | stretch | baseline
+          * @default 'stretch'
+         */
+        "align": 'start' | 'center' | 'end' | 'stretch' | 'baseline';
+        /**
+          * Alignment of wrapped lines (only applies when wrap is true)
+          * @allowedValues start | center | end | stretch | space-between | space-around
+          * @default 'stretch'
+         */
+        "alignContent": 'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around';
+        /**
+          * Direction of the stack layout
+          * @allowedValues horizontal | vertical
+          * @default 'horizontal'
+         */
+        "direction": 'horizontal' | 'vertical';
+        /**
+          * Whether the stack should take full height of its container
+          * @default false
+         */
+        "fullHeight": boolean;
+        /**
+          * Whether the stack should take full width of its container
+          * @default false
+         */
+        "fullWidth": boolean;
+        /**
+          * Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')
+         */
+        "gap"?: string;
+        /**
+          * Distribution of items on the main axis
+          * @allowedValues start | center | end | space-between | space-around | space-evenly
+          * @default 'start'
+         */
+        "justify": 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * Maximum number of items allowed in the stack (for CMS validation)
+          * @min 1
+         */
+        "maxItems"?: number;
+        /**
+          * Padding inside the stack container (CSS value)
+         */
+        "padding"?: string;
+        /**
+          * Whether to reverse the order of items
+          * @default false
+         */
+        "reverse": boolean;
+        /**
+          * Whether items should wrap to multiple lines
+          * @default false
+         */
+        "wrap": boolean;
+    }
 }
 export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -281,6 +450,24 @@ export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
     target: HTMLLeSlotElement;
 }
 declare global {
+    /**
+     * A flexible box component for use as a flex item within le-stack.
+     * `le-box` wraps content and provides flex item properties like grow, shrink,
+     * basis, and self-alignment. It can also control its internal content alignment.
+     * @cssprop --le-box-bg - Background color
+     * @cssprop --le-box-padding - Padding inside the box
+     * @cssprop --le-box-border-radius - Border radius
+     * @csspart box - The main box container
+     * @csspart content - The inner content wrapper
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeBoxElement extends Components.LeBox, HTMLStencilElement {
+    }
+    var HTMLLeBoxElement: {
+        prototype: HTMLLeBoxElement;
+        new (): HTMLLeBoxElement;
+    };
     interface HTMLLeButtonElementEventMap {
         "leClick": MouseEvent;
     }
@@ -410,15 +597,129 @@ declare global {
         prototype: HTMLLeSlotElement;
         new (): HTMLLeSlotElement;
     };
+    /**
+     * A flexible stack layout component using CSS flexbox.
+     * `le-stack` arranges its children in a row (horizontal) or column (vertical)
+     * with configurable spacing, alignment, and wrapping behavior. Perfect for
+     * creating responsive layouts.
+     * @cssprop --le-stack-gap - Gap between items (defaults to var(--le-space-md))
+     * @csspart stack - The main stack container
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeStackElement extends Components.LeStack, HTMLStencilElement {
+    }
+    var HTMLLeStackElement: {
+        prototype: HTMLLeStackElement;
+        new (): HTMLLeStackElement;
+    };
     interface HTMLElementTagNameMap {
+        "le-box": HTMLLeBoxElement;
         "le-button": HTMLLeButtonElement;
         "le-card": HTMLLeCardElement;
         "le-component": HTMLLeComponentElement;
         "le-popover": HTMLLePopoverElement;
         "le-slot": HTMLLeSlotElement;
+        "le-stack": HTMLLeStackElement;
     }
 }
 declare namespace LocalJSX {
+    /**
+     * A flexible box component for use as a flex item within le-stack.
+     * `le-box` wraps content and provides flex item properties like grow, shrink,
+     * basis, and self-alignment. It can also control its internal content alignment.
+     * @cssprop --le-box-bg - Background color
+     * @cssprop --le-box-padding - Padding inside the box
+     * @cssprop --le-box-border-radius - Border radius
+     * @csspart box - The main box container
+     * @csspart content - The inner content wrapper
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeBox {
+        /**
+          * Internal horizontal alignment of content
+          * @allowedValues start | center | end | stretch
+          * @default 'stretch'
+         */
+        "alignContent"?: 'start' | 'center' | 'end' | 'stretch';
+        /**
+          * Self-alignment override for this item on the cross axis
+          * @allowedValues auto | start | center | end | stretch | baseline
+          * @default 'auto'
+         */
+        "alignSelf"?: 'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline';
+        /**
+          * Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')
+          * @default 'auto'
+         */
+        "basis"?: string;
+        /**
+          * Whether to display box content as flex (for internal alignment)
+          * @default false
+         */
+        "displayFlex"?: boolean;
+        /**
+          * Flex grow factor - how much the item should grow relative to siblings
+          * @min 0
+          * @default 0
+         */
+        "grow"?: number;
+        /**
+          * Height of the box (CSS value)
+         */
+        "height"?: string;
+        /**
+          * Direction of internal flex layout when displayFlex is true
+          * @allowedValues horizontal | vertical
+          * @default 'vertical'
+         */
+        "innerDirection"?: 'horizontal' | 'vertical';
+        /**
+          * Gap between internal flex items when displayFlex is true
+         */
+        "innerGap"?: string;
+        /**
+          * Internal vertical alignment of content
+          * @allowedValues start | center | end | stretch
+          * @default 'start'
+         */
+        "justifyContent"?: 'start' | 'center' | 'end' | 'stretch';
+        /**
+          * Maximum height constraint
+         */
+        "maxHeight"?: string;
+        /**
+          * Maximum width constraint
+         */
+        "maxWidth"?: string;
+        /**
+          * Minimum height constraint
+         */
+        "minHeight"?: string;
+        /**
+          * Minimum width constraint
+         */
+        "minWidth"?: string;
+        /**
+          * Order in the flex container (lower values come first)
+         */
+        "order"?: number;
+        /**
+          * Padding inside the box (CSS value like '8px', '1rem')
+         */
+        "padding"?: string;
+        /**
+          * Flex shrink factor - how much the item should shrink relative to siblings
+          * @min 0
+          * @default 1
+         */
+        "shrink"?: number;
+        /**
+          * Width of the box (CSS value like '100px', '50%', 'auto')
+         */
+        "width"?: string;
+    }
     /**
      * A flexible button component with multiple variants and states.
      * @cssprop --le-button-bg - Button background color
@@ -552,6 +853,10 @@ declare namespace LocalJSX {
           * Classes to apply to the host element. Allows parent components to pass their styling classes.
          */
         "hostClass"?: string;
+        /**
+          * Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties).
+         */
+        "hostStyle"?: { [key: string]: string };
     }
     /**
      * A popover component for displaying floating content.
@@ -684,18 +989,102 @@ declare namespace LocalJSX {
          */
         "type"?: 'slot' | 'text' | 'textarea';
     }
+    /**
+     * A flexible stack layout component using CSS flexbox.
+     * `le-stack` arranges its children in a row (horizontal) or column (vertical)
+     * with configurable spacing, alignment, and wrapping behavior. Perfect for
+     * creating responsive layouts.
+     * @cssprop --le-stack-gap - Gap between items (defaults to var(--le-space-md))
+     * @csspart stack - The main stack container
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeStack {
+        /**
+          * Alignment of items on the cross axis
+          * @allowedValues start | center | end | stretch | baseline
+          * @default 'stretch'
+         */
+        "align"?: 'start' | 'center' | 'end' | 'stretch' | 'baseline';
+        /**
+          * Alignment of wrapped lines (only applies when wrap is true)
+          * @allowedValues start | center | end | stretch | space-between | space-around
+          * @default 'stretch'
+         */
+        "alignContent"?: 'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around';
+        /**
+          * Direction of the stack layout
+          * @allowedValues horizontal | vertical
+          * @default 'horizontal'
+         */
+        "direction"?: 'horizontal' | 'vertical';
+        /**
+          * Whether the stack should take full height of its container
+          * @default false
+         */
+        "fullHeight"?: boolean;
+        /**
+          * Whether the stack should take full width of its container
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')
+         */
+        "gap"?: string;
+        /**
+          * Distribution of items on the main axis
+          * @allowedValues start | center | end | space-between | space-around | space-evenly
+          * @default 'start'
+         */
+        "justify"?: 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly';
+        /**
+          * Maximum number of items allowed in the stack (for CMS validation)
+          * @min 1
+         */
+        "maxItems"?: number;
+        /**
+          * Padding inside the stack container (CSS value)
+         */
+        "padding"?: string;
+        /**
+          * Whether to reverse the order of items
+          * @default false
+         */
+        "reverse"?: boolean;
+        /**
+          * Whether items should wrap to multiple lines
+          * @default false
+         */
+        "wrap"?: boolean;
+    }
     interface IntrinsicElements {
+        "le-box": LeBox;
         "le-button": LeButton;
         "le-card": LeCard;
         "le-component": LeComponent;
         "le-popover": LePopover;
         "le-slot": LeSlot;
+        "le-stack": LeStack;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * A flexible box component for use as a flex item within le-stack.
+             * `le-box` wraps content and provides flex item properties like grow, shrink,
+             * basis, and self-alignment. It can also control its internal content alignment.
+             * @cssprop --le-box-bg - Background color
+             * @cssprop --le-box-padding - Padding inside the box
+             * @cssprop --le-box-border-radius - Border radius
+             * @csspart box - The main box container
+             * @csspart content - The inner content wrapper
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-box": LocalJSX.LeBox & JSXBase.HTMLAttributes<HTMLLeBoxElement>;
             /**
              * A flexible button component with multiple variants and states.
              * @cssprop --le-button-bg - Button background color
@@ -766,6 +1155,17 @@ declare module "@stencil/core" {
              * @cmsCategory System
              */
             "le-slot": LocalJSX.LeSlot & JSXBase.HTMLAttributes<HTMLLeSlotElement>;
+            /**
+             * A flexible stack layout component using CSS flexbox.
+             * `le-stack` arranges its children in a row (horizontal) or column (vertical)
+             * with configurable spacing, alignment, and wrapping behavior. Perfect for
+             * creating responsive layouts.
+             * @cssprop --le-stack-gap - Gap between items (defaults to var(--le-space-md))
+             * @csspart stack - The main stack container
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-stack": LocalJSX.LeStack & JSXBase.HTMLAttributes<HTMLLeStackElement>;
         }
     }
 }

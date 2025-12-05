@@ -47,23 +47,29 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
 
 ### Used by
 
+ - [le-box](../le-box)
  - [le-button](../le-button)
  - [le-card](../le-card)
  - [le-popover](../le-popover)
+ - [le-stack](../le-stack)
 
 ### Depends on
 
 - [le-popover](../le-popover)
+- [le-button](../le-button)
 
 ### Graph
 ```mermaid
 graph TD;
   le-slot --> le-popover
+  le-slot --> le-button
   le-popover --> le-slot
+  le-button --> le-slot
   le-component --> le-popover
   le-component --> le-button
-  le-button --> le-slot
+  le-box --> le-slot
   le-card --> le-slot
+  le-stack --> le-slot
   style le-slot fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

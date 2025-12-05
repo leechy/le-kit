@@ -1,0 +1,32 @@
+/**
+ * le-stack admin mode styles
+ */
+
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.stack {
+  gap: var(--le-stack-gap, var(--le-space-md));
+  min-height: 60px;
+}
+
+:host(.full-width) {
+  width: 100%;
+}
+
+:host(.full-height) {
+  height: 100%;
+}
+
+:host(.direction-horizontal) .stack {
+  min-height: 60px;
+}
+
+:host(.direction-vertical) .stack {
+  min-width: 60px;
+}

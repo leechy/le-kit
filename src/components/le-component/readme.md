@@ -31,11 +31,12 @@ render() {
 
 ## Properties
 
-| Property                 | Attribute      | Description                                                                                                        | Type     | Default     |
-| ------------------------ | -------------- | ------------------------------------------------------------------------------------------------------------------ | -------- | ----------- |
-| `component` _(required)_ | `component`    | The tag name of the component (e.g., 'le-card'). Used to look up property metadata and display the component name. | `string` | `undefined` |
-| `displayName`            | `display-name` | Optional display name for the component. If not provided, the tag name will be formatted as the display name.      | `string` | `undefined` |
-| `hostClass`              | `host-class`   | Classes to apply to the host element. Allows parent components to pass their styling classes.                      | `string` | `undefined` |
+| Property                 | Attribute      | Description                                                                                                          | Type                         | Default     |
+| ------------------------ | -------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------------- | ----------- |
+| `component` _(required)_ | `component`    | The tag name of the component (e.g., 'le-card'). Used to look up property metadata and display the component name.   | `string`                     | `undefined` |
+| `displayName`            | `display-name` | Optional display name for the component. If not provided, the tag name will be formatted as the display name.        | `string`                     | `undefined` |
+| `hostClass`              | `host-class`   | Classes to apply to the host element. Allows parent components to pass their styling classes.                        | `string`                     | `undefined` |
+| `hostStyle`              | --             | Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties). | `{ [key: string]: string; }` | `undefined` |
 
 
 ## Slots
@@ -49,9 +50,11 @@ render() {
 
 ### Used by
 
+ - [le-box](../le-box)
  - [le-button](../le-button)
  - [le-card](../le-card)
  - [le-popover](../le-popover)
+ - [le-stack](../le-stack)
 
 ### Depends on
 
@@ -64,9 +67,12 @@ graph TD;
   le-component --> le-popover
   le-component --> le-button
   le-popover --> le-component
-  le-slot --> le-popover
   le-button --> le-component
+  le-slot --> le-popover
+  le-slot --> le-button
+  le-box --> le-component
   le-card --> le-component
+  le-stack --> le-component
   style le-component fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

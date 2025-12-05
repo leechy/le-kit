@@ -119,7 +119,7 @@ export class LeButton {
               <span class="icon-start">
                 <slot name="icon-start"></slot>
               </span>
-              <le-slot name="" label="Label" description="Button text" type="text" class="content" part="content">
+              <le-slot name="" description="Button text" type="text" class="content" part="content">
                 <slot></slot>
               </le-slot>
               <span class="icon-end">

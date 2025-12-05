@@ -164,6 +164,9 @@ export class LeStack {
       }
     );
 
+    // Slot style for admin mode - make items display in the same direction
+    const slotStyle = `display: flex; flex-direction: ${this.getFlexDirection()}; gap: ${this.gap || 'var(--le-space-md)'}; flex-wrap: ${this.wrap ? 'wrap' : 'nowrap'}`;
+
     return (
       <le-component component="le-stack" hostClass={hostClass}>
         <div class="stack" part="stack" style={style}>
@@ -173,6 +176,7 @@ export class LeStack {
             description={`Items arranged ${this.direction}ly${this.maxItems ? ` (max ${this.maxItems})` : ''}`}
             type="slot"
             allowed-components="le-box,le-card,le-button,le-stack"
+            slotStyle={slotStyle}
           >
             <slot></slot>
           </le-slot>

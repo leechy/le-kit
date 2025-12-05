@@ -81,6 +81,13 @@ export class LeSlot {
   @Prop() tag?: string;
 
   /**
+   * CSS styles for the slot dropzone container.
+   * Useful for layouts - e.g., "flex-direction: row" for horizontal stacks.
+   * Only applies in admin mode for type="slot".
+   */
+  @Prop() slotStyle?: string;
+
+  /**
    * Internal state to track admin mode
    */
   @State() private adminMode: boolean = false;
@@ -516,8 +523,20 @@ export class LeSlot {
 
       case 'slot':
       default:
+        // Parse slotStyle string into style object if provided
+        const dropzoneStyle: { [key: string]: string } = {};
+        if (this.slotStyle) {
+          this.slotStyle.split(';').forEach(rule => {
+            const [prop, value] = rule.split(':').map(s => s.trim());
+            if (prop && value) {
+              // Convert kebab-case to camelCase for style object
+              const camelProp = prop.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+              dropzoneStyle[camelProp] = value;
+            }
+          });
+        }
         return (
-          <div class="le-slot-dropzone">
+          <div class="le-slot-dropzone" style={dropzoneStyle}>
             <slot 
               ref={(el) => this.slotRef = el as HTMLSlotElement}
               onSlotchange={this.handleSlotChange}

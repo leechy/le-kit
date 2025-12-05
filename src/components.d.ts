@@ -32,10 +32,22 @@ export namespace Components {
          */
         "alignSelf": 'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline';
         /**
+          * Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')
+         */
+        "background"?: string;
+        /**
           * Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')
           * @default 'auto'
          */
         "basis": string;
+        /**
+          * Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')
+         */
+        "border"?: string;
+        /**
+          * Border radius (e.g., '8px', 'var(--le-radius-md)')
+         */
+        "borderRadius"?: string;
         /**
           * Whether to display box content as flex (for internal alignment)
           * @default false
@@ -356,6 +368,10 @@ export namespace Components {
          */
         "required": boolean;
         /**
+          * CSS styles for the slot dropzone container. Useful for layouts - e.g., "flex-direction: row" for horizontal stacks. Only applies in admin mode for type="slot".
+         */
+        "slotStyle"?: string;
+        /**
           * The HTML tag to create when there's no slotted element. Used with type="text" or type="textarea" to auto-create elements.
           * @example "h3" - creates <h3 slot="header">content</h3>
           * @example "p" - creates <p slot="content">content</p>
@@ -650,10 +666,22 @@ declare namespace LocalJSX {
          */
         "alignSelf"?: 'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline';
         /**
+          * Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')
+         */
+        "background"?: string;
+        /**
           * Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')
           * @default 'auto'
          */
         "basis"?: string;
+        /**
+          * Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')
+         */
+        "border"?: string;
+        /**
+          * Border radius (e.g., '8px', 'var(--le-radius-md)')
+         */
+        "borderRadius"?: string;
         /**
           * Whether to display box content as flex (for internal alignment)
           * @default false
@@ -977,6 +1005,10 @@ declare namespace LocalJSX {
           * @default false
          */
         "required"?: boolean;
+        /**
+          * CSS styles for the slot dropzone container. Useful for layouts - e.g., "flex-direction: row" for horizontal stacks. Only applies in admin mode for type="slot".
+         */
+        "slotStyle"?: string;
         /**
           * The HTML tag to create when there's no slotted element. Used with type="text" or type="textarea" to auto-create elements.
           * @example "h3" - creates <h3 slot="header">content</h3>

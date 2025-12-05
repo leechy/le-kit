@@ -4,139 +4,6 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
-          "cssProperties": [
-            {
-              "description": "Card background color",
-              "name": "--le-card-bg"
-            },
-            {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
-            },
-            {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
-              "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              }
-            },
-            {
-              "name": "interactive",
-              "fieldName": "interactive",
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-card",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCard",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-card",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-box/le-box.tsx",
       "declarations": [
         {
@@ -255,6 +122,30 @@
                 "text": "string | undefined"
               },
               "description": "Maximum height constraint"
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')"
+            },
+            {
+              "kind": "field",
+              "name": "borderRadius",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')"
+            },
+            {
+              "kind": "field",
+              "name": "border",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')"
             },
             {
               "kind": "field",
@@ -437,6 +328,30 @@
               }
             },
             {
+              "name": "background",
+              "fieldName": "background",
+              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "border-radius",
+              "fieldName": "borderRadius",
+              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "border",
+              "fieldName": "border",
+              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
               "name": "align-self",
               "fieldName": "alignSelf",
               "default": "'auto'",
@@ -526,305 +441,6 @@
           "declaration": {
             "name": "LeBox",
             "module": "src/components/le-box/le-box.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-component/le-component.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Component wrapper for admin mode editing.\n\nThis component is used internally by other components to provide admin-mode \nediting capabilities. It wraps the component's rendered output and shows\na settings popover for editing properties.\n\nIn default mode, it acts as a simple passthrough (display: contents).\nIn admin mode, it shows a border, component name header, and settings popover.\n\nThe host element is found automatically by traversing up through the shadow DOM.\n\nUsage inside a component's render method:\n```tsx\nrender() {\n  return (\n    <le-component component=\"le-card\">\n      <Host>...</Host>\n    </le-component>\n  );\n}\n```",
-          "name": "LeComponent",
-          "slots": [
-            {
-              "description": "The component's rendered content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "component",
-              "type": {
-                "text": "string"
-              },
-              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name."
-            },
-            {
-              "kind": "field",
-              "name": "displayName",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name."
-            },
-            {
-              "kind": "field",
-              "name": "hostClass",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes."
-            },
-            {
-              "kind": "field",
-              "name": "hostStyle",
-              "type": {
-                "text": "{ [key: string]: string } | undefined"
-              },
-              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties)."
-            },
-            {
-              "kind": "field",
-              "name": "hostElement",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private",
-              "description": "Reference to the host element (found automatically from parent)"
-            },
-            {
-              "kind": "field",
-              "name": "adminMode",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Internal state to track admin mode"
-            },
-            {
-              "kind": "field",
-              "name": "componentMeta",
-              "type": {
-                "text": "ComponentMetadata | null"
-              },
-              "privacy": "private",
-              "default": "null",
-              "description": "Component metadata loaded from Custom Elements Manifest"
-            },
-            {
-              "kind": "field",
-              "name": "propertyValues",
-              "type": {
-                "text": "Record<string, any>"
-              },
-              "privacy": "private",
-              "default": "{}",
-              "description": "Current property values of the host component"
-            },
-            {
-              "kind": "field",
-              "name": "disconnectModeObserver",
-              "type": {
-                "text": "() => void | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "findHostElement",
-              "privacy": "private",
-              "description": "Find the host element by traversing up through shadow DOM"
-            },
-            {
-              "kind": "method",
-              "name": "formatDisplayName",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "tagName",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Formats a tag name into a display name\ne.g., 'le-card' -> 'Card'"
-            },
-            {
-              "kind": "method",
-              "name": "loadComponentMetadata",
-              "privacy": "private",
-              "description": "Load component metadata from the Custom Elements Manifest"
-            },
-            {
-              "kind": "method",
-              "name": "isInternalAttribute",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "name",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Check if an attribute is internal (should not be shown in editor)"
-            },
-            {
-              "kind": "method",
-              "name": "readPropertyValues",
-              "privacy": "private",
-              "description": "Read current property values from the host element"
-            },
-            {
-              "kind": "method",
-              "name": "parseAttributeValue",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "any"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "string | null"
-                  }
-                },
-                {
-                  "name": "type",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Parse an attribute value based on its type"
-            },
-            {
-              "kind": "method",
-              "name": "handlePropertyChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "attrName",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "type",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Handle property value changes from the editor"
-            },
-            {
-              "kind": "method",
-              "name": "deleteComponent",
-              "privacy": "private",
-              "description": "Delete this component from the DOM"
-            },
-            {
-              "kind": "method",
-              "name": "renderPropertyEditor",
-              "privacy": "private",
-              "description": "Render the property editor form"
-            },
-            {
-              "kind": "method",
-              "name": "renderPropertyField",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "attr",
-                  "type": {
-                    "text": "AttributeMetadata"
-                  }
-                }
-              ],
-              "description": "Render a single property field based on its type"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "component",
-              "fieldName": "component",
-              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "display-name",
-              "fieldName": "displayName",
-              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "host-class",
-              "fieldName": "hostClass",
-              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "host-style",
-              "fieldName": "hostStyle",
-              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties).",
-              "type": {
-                "text": "{ [key: string]: string }"
-              }
-            }
-          ],
-          "tagName": "le-component",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeComponent",
-          "declaration": {
-            "name": "LeComponent",
-            "module": "src/components/le-component/le-component.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-component",
-          "declaration": {
-            "name": "LeComponent",
-            "module": "src/components/le-component/le-component.tsx"
           }
         }
       ]
@@ -1113,413 +729,60 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-slot/le-slot.tsx",
+      "path": "src/components/le-card/le-card.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "Slot placeholder component for admin/CMS mode.\n\nThis component renders a visual placeholder for slots when in admin mode,\nallowing CMS systems to show available drop zones for content or inline editing.\n\nIn non-admin mode, this component renders nothing and acts as a passthrough.",
-          "name": "LeSlot",
-          "slots": [
-            {
-              "description": "Default slot for placeholder content or drop zone UI",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "'slot' | 'text' | 'textarea'"
-              },
-              "default": "'slot'",
-              "description": "The type of slot content.\n- `slot`: Default, shows a dropzone for components (default)\n- `text`: Shows a single-line text input\n- `textarea`: Shows a multi-line text area"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "The name of the slot this placeholder represents.\nShould match the slot name in the parent component."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Label to display in admin mode.\nIf not provided, the slot name will be used."
-            },
-            {
-              "kind": "field",
-              "name": "description",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Description of what content this slot accepts.\nShown in admin mode to guide content editors."
-            },
-            {
-              "kind": "field",
-              "name": "allowedComponents",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Comma-separated list of allowed component tags for this slot.\nUsed by CMS to filter available components."
-            },
-            {
-              "kind": "field",
-              "name": "multiple",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether multiple components can be dropped in this slot."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether this slot is required to have content."
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Placeholder text for text/textarea inputs in admin mode."
-            },
-            {
-              "kind": "field",
-              "name": "tag",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "The HTML tag to create when there's no slotted element.\nUsed with type=\"text\" or type=\"textarea\" to auto-create elements."
-            },
-            {
-              "kind": "field",
-              "name": "adminMode",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Internal state to track admin mode"
-            },
-            {
-              "kind": "field",
-              "name": "textValue",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''",
-              "description": "Internal state for text input value (synced from slot content)"
-            },
-            {
-              "kind": "field",
-              "name": "isValidHtml",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "true",
-              "description": "Whether the current textValue contains valid HTML"
-            },
-            {
-              "kind": "field",
-              "name": "availableComponents",
-              "type": {
-                "text": "ComponentInfo[]"
-              },
-              "privacy": "private",
-              "default": "[]",
-              "description": "Available components loaded from Custom Elements Manifest"
-            },
-            {
-              "kind": "field",
-              "name": "pickerOpen",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Whether the component picker popover is open"
-            },
-            {
-              "kind": "field",
-              "name": "slotRef",
-              "type": {
-                "text": "HTMLSlotElement | undefined"
-              },
-              "privacy": "private",
-              "description": "Reference to the slot element to access assignedNodes"
-            },
-            {
-              "kind": "field",
-              "name": "slottedElement",
-              "type": {
-                "text": "Element | undefined"
-              },
-              "privacy": "private",
-              "description": "The original slotted element (e.g., <h3 slot=\"header\">)"
-            },
-            {
-              "kind": "field",
-              "name": "disconnectModeObserver",
-              "type": {
-                "text": "() => void | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "isUpdating",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Flag to prevent re-reading content right after we updated it"
-            },
-            {
-              "kind": "method",
-              "name": "readSlottedContent",
-              "privacy": "private",
-              "description": "Read content from slotted elements via assignedNodes()"
-            },
-            {
-              "kind": "method",
-              "name": "validateHtml",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "html",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Validates if a string contains valid HTML"
-            },
-            {
-              "kind": "field",
-              "name": "handleTextInput",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createSlottedElement",
-              "privacy": "private",
-              "description": "Create a new slotted element when none exists.\nThe element is appended to the host component's light DOM."
-            },
-            {
-              "kind": "method",
-              "name": "loadAvailableComponents",
-              "privacy": "private",
-              "description": "Load available components from Custom Elements Manifest"
-            },
-            {
-              "kind": "method",
-              "name": "formatComponentName",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "tagName",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Format a tag name into a display name\ne.g., 'le-card' -> 'Card'"
-            },
-            {
-              "kind": "method",
-              "name": "addComponent",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "tagName",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Add a new component to the slot"
-            },
-            {
-              "kind": "field",
-              "name": "handleSlotChange",
-              "privacy": "private",
-              "description": "Handle slot change event to re-read content when nodes are assigned"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            },
-            {
-              "kind": "method",
-              "name": "renderContent",
-              "privacy": "private"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "type",
-              "fieldName": "type",
-              "default": "'slot'",
-              "description": "The type of slot content.\n- `slot`: Default, shows a dropzone for components (default)\n- `text`: Shows a single-line text input\n- `textarea`: Shows a multi-line text area",
-              "type": {
-                "text": "'slot' | 'text' | 'textarea'"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "default": "''",
-              "description": "The name of the slot this placeholder represents.\nShould match the slot name in the parent component.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "Label to display in admin mode.\nIf not provided, the slot name will be used.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "description",
-              "fieldName": "description",
-              "description": "Description of what content this slot accepts.\nShown in admin mode to guide content editors.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "allowed-components",
-              "fieldName": "allowedComponents",
-              "description": "Comma-separated list of allowed component tags for this slot.\nUsed by CMS to filter available components.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "multiple",
-              "fieldName": "multiple",
-              "default": "true",
-              "description": "Whether multiple components can be dropped in this slot.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "required",
-              "fieldName": "required",
-              "default": "false",
-              "description": "Whether this slot is required to have content.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "placeholder",
-              "fieldName": "placeholder",
-              "description": "Placeholder text for text/textarea inputs in admin mode.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "tag",
-              "fieldName": "tag",
-              "description": "The HTML tag to create when there's no slotted element.\nUsed with type=\"text\" or type=\"textarea\" to auto-create elements.",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-slot",
-          "events": [
-            {
-              "name": "leSlotChange",
-              "type": {
-                "text": "EventEmitter<{ name: string; value: string; isValid: boolean }>"
-              },
-              "description": "Emitted when text content changes in admin mode.\nThe event detail contains the new text value and validity."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeSlot",
-          "declaration": {
-            "name": "LeSlot",
-            "module": "src/components/le-slot/le-slot.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-slot",
-          "declaration": {
-            "name": "LeSlot",
-            "module": "src/components/le-slot/le-slot.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-stack/le-stack.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible stack layout component using CSS flexbox.\n\n`le-stack` arranges its children in a row (horizontal) or column (vertical)\nwith configurable spacing, alignment, and wrapping behavior. Perfect for\ncreating responsive layouts.",
-          "name": "LeStack",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
           "cssProperties": [
             {
-              "description": "Gap between items (defaults to var(--le-space-md))",
-              "name": "--le-stack-gap"
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
             }
           ],
           "cssParts": [
             {
-              "description": "The main stack container",
-              "name": "stack"
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
             }
           ],
           "slots": [
             {
-              "description": "Default slot for stack items (le-box components recommended)",
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
               "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
             }
           ],
           "members": [
@@ -1532,139 +795,21 @@
             },
             {
               "kind": "field",
-              "name": "direction",
+              "name": "variant",
               "type": {
-                "text": "'horizontal' | 'vertical'"
+                "text": "'default' | 'outlined' | 'elevated'"
               },
-              "default": "'horizontal'",
-              "description": "Direction of the stack layout"
+              "default": "'default'",
+              "description": "Card variant style"
             },
             {
               "kind": "field",
-              "name": "gap",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')"
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
-              },
-              "default": "'stretch'",
-              "description": "Alignment of items on the cross axis"
-            },
-            {
-              "kind": "field",
-              "name": "justify",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
-              },
-              "default": "'start'",
-              "description": "Distribution of items on the main axis"
-            },
-            {
-              "kind": "field",
-              "name": "wrap",
+              "name": "interactive",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether items should wrap to multiple lines"
-            },
-            {
-              "kind": "field",
-              "name": "alignContent",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
-              },
-              "default": "'stretch'",
-              "description": "Alignment of wrapped lines (only applies when wrap is true)"
-            },
-            {
-              "kind": "field",
-              "name": "reverse",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to reverse the order of items"
-            },
-            {
-              "kind": "field",
-              "name": "maxItems",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum number of items allowed in the stack (for CMS validation)"
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the stack should take full width of its container"
-            },
-            {
-              "kind": "field",
-              "name": "fullHeight",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the stack should take full height of its container"
-            },
-            {
-              "kind": "field",
-              "name": "padding",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Padding inside the stack container (CSS value)"
-            },
-            {
-              "kind": "method",
-              "name": "getFlexDirection",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getAlignItems",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getJustifyContent",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getAlignContent",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
+              "description": "Whether the card is interactive (clickable)"
             },
             {
               "kind": "method",
@@ -1673,103 +818,25 @@
           ],
           "attributes": [
             {
-              "name": "direction",
-              "fieldName": "direction",
-              "default": "'horizontal'",
-              "description": "Direction of the stack layout",
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
               "type": {
-                "text": "'horizontal' | 'vertical'"
+                "text": "'default' | 'outlined' | 'elevated'"
               }
             },
             {
-              "name": "gap",
-              "fieldName": "gap",
-              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'stretch'",
-              "description": "Alignment of items on the cross axis",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
-              }
-            },
-            {
-              "name": "justify",
-              "fieldName": "justify",
-              "default": "'start'",
-              "description": "Distribution of items on the main axis",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
-              }
-            },
-            {
-              "name": "wrap",
-              "fieldName": "wrap",
+              "name": "interactive",
+              "fieldName": "interactive",
               "default": "false",
-              "description": "Whether items should wrap to multiple lines",
+              "description": "Whether the card is interactive (clickable)",
               "type": {
                 "text": "boolean"
-              }
-            },
-            {
-              "name": "align-content",
-              "fieldName": "alignContent",
-              "default": "'stretch'",
-              "description": "Alignment of wrapped lines (only applies when wrap is true)",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
-              }
-            },
-            {
-              "name": "reverse",
-              "fieldName": "reverse",
-              "default": "false",
-              "description": "Whether to reverse the order of items",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "max-items",
-              "fieldName": "maxItems",
-              "description": "Maximum number of items allowed in the stack (for CMS validation)",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the stack should take full width of its container",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "full-height",
-              "fieldName": "fullHeight",
-              "default": "false",
-              "description": "Whether the stack should take full height of its container",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "padding",
-              "fieldName": "padding",
-              "description": "Padding inside the stack container (CSS value)",
-              "type": {
-                "text": "string"
               }
             }
           ],
-          "tagName": "le-stack",
+          "tagName": "le-card",
           "events": [],
           "customElement": true
         }
@@ -1777,18 +844,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LeStack",
+          "name": "LeCard",
           "declaration": {
-            "name": "LeStack",
-            "module": "src/components/le-stack/le-stack.tsx"
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-stack",
+          "name": "le-card",
           "declaration": {
-            "name": "LeStack",
-            "module": "src/components/le-stack/le-stack.tsx"
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
           }
         }
       ]
@@ -2163,6 +1230,1003 @@
           "declaration": {
             "name": "LePopover",
             "module": "src/components/le-popover/le-popover.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-component/le-component.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component wrapper for admin mode editing.\n\nThis component is used internally by other components to provide admin-mode \nediting capabilities. It wraps the component's rendered output and shows\na settings popover for editing properties.\n\nIn default mode, it acts as a simple passthrough (display: contents).\nIn admin mode, it shows a border, component name header, and settings popover.\n\nThe host element is found automatically by traversing up through the shadow DOM.\n\nUsage inside a component's render method:\n```tsx\nrender() {\n  return (\n    <le-component component=\"le-card\">\n      <Host>...</Host>\n    </le-component>\n  );\n}\n```",
+          "name": "LeComponent",
+          "slots": [
+            {
+              "description": "The component's rendered content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "component",
+              "type": {
+                "text": "string"
+              },
+              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name."
+            },
+            {
+              "kind": "field",
+              "name": "displayName",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name."
+            },
+            {
+              "kind": "field",
+              "name": "hostClass",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes."
+            },
+            {
+              "kind": "field",
+              "name": "hostStyle",
+              "type": {
+                "text": "{ [key: string]: string } | undefined"
+              },
+              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties)."
+            },
+            {
+              "kind": "field",
+              "name": "hostElement",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private",
+              "description": "Reference to the host element (found automatically from parent)"
+            },
+            {
+              "kind": "field",
+              "name": "adminMode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Internal state to track admin mode"
+            },
+            {
+              "kind": "field",
+              "name": "componentMeta",
+              "type": {
+                "text": "ComponentMetadata | null"
+              },
+              "privacy": "private",
+              "default": "null",
+              "description": "Component metadata loaded from Custom Elements Manifest"
+            },
+            {
+              "kind": "field",
+              "name": "propertyValues",
+              "type": {
+                "text": "Record<string, any>"
+              },
+              "privacy": "private",
+              "default": "{}",
+              "description": "Current property values of the host component"
+            },
+            {
+              "kind": "field",
+              "name": "disconnectModeObserver",
+              "type": {
+                "text": "() => void | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "findHostElement",
+              "privacy": "private",
+              "description": "Find the host element by traversing up through shadow DOM"
+            },
+            {
+              "kind": "method",
+              "name": "formatDisplayName",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "tagName",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Formats a tag name into a display name\ne.g., 'le-card' -> 'Card'"
+            },
+            {
+              "kind": "method",
+              "name": "loadComponentMetadata",
+              "privacy": "private",
+              "description": "Load component metadata from the Custom Elements Manifest"
+            },
+            {
+              "kind": "method",
+              "name": "isInternalAttribute",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Check if an attribute is internal (should not be shown in editor)"
+            },
+            {
+              "kind": "method",
+              "name": "readPropertyValues",
+              "privacy": "private",
+              "description": "Read current property values from the host element"
+            },
+            {
+              "kind": "method",
+              "name": "parseAttributeValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "any"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string | null"
+                  }
+                },
+                {
+                  "name": "type",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Parse an attribute value based on its type"
+            },
+            {
+              "kind": "method",
+              "name": "handlePropertyChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "attrName",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "type",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Handle property value changes from the editor"
+            },
+            {
+              "kind": "method",
+              "name": "deleteComponent",
+              "privacy": "private",
+              "description": "Delete this component from the DOM"
+            },
+            {
+              "kind": "method",
+              "name": "renderPropertyEditor",
+              "privacy": "private",
+              "description": "Render the property editor form"
+            },
+            {
+              "kind": "method",
+              "name": "renderPropertyField",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "attr",
+                  "type": {
+                    "text": "AttributeMetadata"
+                  }
+                }
+              ],
+              "description": "Render a single property field based on its type"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "component",
+              "fieldName": "component",
+              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "display-name",
+              "fieldName": "displayName",
+              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "host-class",
+              "fieldName": "hostClass",
+              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "host-style",
+              "fieldName": "hostStyle",
+              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties).",
+              "type": {
+                "text": "{ [key: string]: string }"
+              }
+            }
+          ],
+          "tagName": "le-component",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeComponent",
+          "declaration": {
+            "name": "LeComponent",
+            "module": "src/components/le-component/le-component.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-component",
+          "declaration": {
+            "name": "LeComponent",
+            "module": "src/components/le-component/le-component.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-slot/le-slot.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Slot placeholder component for admin/CMS mode.\n\nThis component renders a visual placeholder for slots when in admin mode,\nallowing CMS systems to show available drop zones for content or inline editing.\n\nIn non-admin mode, this component renders nothing and acts as a passthrough.",
+          "name": "LeSlot",
+          "slots": [
+            {
+              "description": "Default slot for placeholder content or drop zone UI",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'slot' | 'text' | 'textarea'"
+              },
+              "default": "'slot'",
+              "description": "The type of slot content.\n- `slot`: Default, shows a dropzone for components (default)\n- `text`: Shows a single-line text input\n- `textarea`: Shows a multi-line text area"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "The name of the slot this placeholder represents.\nShould match the slot name in the parent component."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Label to display in admin mode.\nIf not provided, the slot name will be used."
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Description of what content this slot accepts.\nShown in admin mode to guide content editors."
+            },
+            {
+              "kind": "field",
+              "name": "allowedComponents",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Comma-separated list of allowed component tags for this slot.\nUsed by CMS to filter available components."
+            },
+            {
+              "kind": "field",
+              "name": "multiple",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether multiple components can be dropped in this slot."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this slot is required to have content."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Placeholder text for text/textarea inputs in admin mode."
+            },
+            {
+              "kind": "field",
+              "name": "tag",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The HTML tag to create when there's no slotted element.\nUsed with type=\"text\" or type=\"textarea\" to auto-create elements."
+            },
+            {
+              "kind": "field",
+              "name": "slotStyle",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "CSS styles for the slot dropzone container.\nUseful for layouts - e.g., \"flex-direction: row\" for horizontal stacks.\nOnly applies in admin mode for type=\"slot\"."
+            },
+            {
+              "kind": "field",
+              "name": "adminMode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Internal state to track admin mode"
+            },
+            {
+              "kind": "field",
+              "name": "textValue",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''",
+              "description": "Internal state for text input value (synced from slot content)"
+            },
+            {
+              "kind": "field",
+              "name": "isValidHtml",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "true",
+              "description": "Whether the current textValue contains valid HTML"
+            },
+            {
+              "kind": "field",
+              "name": "availableComponents",
+              "type": {
+                "text": "ComponentInfo[]"
+              },
+              "privacy": "private",
+              "default": "[]",
+              "description": "Available components loaded from Custom Elements Manifest"
+            },
+            {
+              "kind": "field",
+              "name": "pickerOpen",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Whether the component picker popover is open"
+            },
+            {
+              "kind": "field",
+              "name": "slotRef",
+              "type": {
+                "text": "HTMLSlotElement | undefined"
+              },
+              "privacy": "private",
+              "description": "Reference to the slot element to access assignedNodes"
+            },
+            {
+              "kind": "field",
+              "name": "slottedElement",
+              "type": {
+                "text": "Element | undefined"
+              },
+              "privacy": "private",
+              "description": "The original slotted element (e.g., <h3 slot=\"header\">)"
+            },
+            {
+              "kind": "field",
+              "name": "disconnectModeObserver",
+              "type": {
+                "text": "() => void | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "isUpdating",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Flag to prevent re-reading content right after we updated it"
+            },
+            {
+              "kind": "method",
+              "name": "readSlottedContent",
+              "privacy": "private",
+              "description": "Read content from slotted elements via assignedNodes()"
+            },
+            {
+              "kind": "method",
+              "name": "validateHtml",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "html",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Validates if a string contains valid HTML"
+            },
+            {
+              "kind": "field",
+              "name": "handleTextInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createSlottedElement",
+              "privacy": "private",
+              "description": "Create a new slotted element when none exists.\nThe element is appended to the host component's light DOM."
+            },
+            {
+              "kind": "method",
+              "name": "loadAvailableComponents",
+              "privacy": "private",
+              "description": "Load available components from Custom Elements Manifest"
+            },
+            {
+              "kind": "method",
+              "name": "formatComponentName",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "tagName",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Format a tag name into a display name\ne.g., 'le-card' -> 'Card'"
+            },
+            {
+              "kind": "method",
+              "name": "addComponent",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "tagName",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Add a new component to the slot"
+            },
+            {
+              "kind": "field",
+              "name": "handleSlotChange",
+              "privacy": "private",
+              "description": "Handle slot change event to re-read content when nodes are assigned"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "renderContent",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "type",
+              "fieldName": "type",
+              "default": "'slot'",
+              "description": "The type of slot content.\n- `slot`: Default, shows a dropzone for components (default)\n- `text`: Shows a single-line text input\n- `textarea`: Shows a multi-line text area",
+              "type": {
+                "text": "'slot' | 'text' | 'textarea'"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "default": "''",
+              "description": "The name of the slot this placeholder represents.\nShould match the slot name in the parent component.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "Label to display in admin mode.\nIf not provided, the slot name will be used.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "description",
+              "fieldName": "description",
+              "description": "Description of what content this slot accepts.\nShown in admin mode to guide content editors.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "allowed-components",
+              "fieldName": "allowedComponents",
+              "description": "Comma-separated list of allowed component tags for this slot.\nUsed by CMS to filter available components.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "multiple",
+              "fieldName": "multiple",
+              "default": "true",
+              "description": "Whether multiple components can be dropped in this slot.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether this slot is required to have content.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "description": "Placeholder text for text/textarea inputs in admin mode.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "tag",
+              "fieldName": "tag",
+              "description": "The HTML tag to create when there's no slotted element.\nUsed with type=\"text\" or type=\"textarea\" to auto-create elements.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "slot-style",
+              "fieldName": "slotStyle",
+              "description": "CSS styles for the slot dropzone container.\nUseful for layouts - e.g., \"flex-direction: row\" for horizontal stacks.\nOnly applies in admin mode for type=\"slot\".",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-slot",
+          "events": [
+            {
+              "name": "leSlotChange",
+              "type": {
+                "text": "EventEmitter<{ name: string; value: string; isValid: boolean }>"
+              },
+              "description": "Emitted when text content changes in admin mode.\nThe event detail contains the new text value and validity."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeSlot",
+          "declaration": {
+            "name": "LeSlot",
+            "module": "src/components/le-slot/le-slot.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-slot",
+          "declaration": {
+            "name": "LeSlot",
+            "module": "src/components/le-slot/le-slot.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-stack/le-stack.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible stack layout component using CSS flexbox.\n\n`le-stack` arranges its children in a row (horizontal) or column (vertical)\nwith configurable spacing, alignment, and wrapping behavior. Perfect for\ncreating responsive layouts.",
+          "name": "LeStack",
+          "cssProperties": [
+            {
+              "description": "Gap between items (defaults to var(--le-space-md))",
+              "name": "--le-stack-gap"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main stack container",
+              "name": "stack"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Default slot for stack items (le-box components recommended)",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "direction",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'horizontal'",
+              "description": "Direction of the stack layout"
+            },
+            {
+              "kind": "field",
+              "name": "gap",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              },
+              "default": "'stretch'",
+              "description": "Alignment of items on the cross axis"
+            },
+            {
+              "kind": "field",
+              "name": "justify",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
+              },
+              "default": "'start'",
+              "description": "Distribution of items on the main axis"
+            },
+            {
+              "kind": "field",
+              "name": "wrap",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether items should wrap to multiple lines"
+            },
+            {
+              "kind": "field",
+              "name": "alignContent",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
+              },
+              "default": "'stretch'",
+              "description": "Alignment of wrapped lines (only applies when wrap is true)"
+            },
+            {
+              "kind": "field",
+              "name": "reverse",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to reverse the order of items"
+            },
+            {
+              "kind": "field",
+              "name": "maxItems",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of items allowed in the stack (for CMS validation)"
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the stack should take full width of its container"
+            },
+            {
+              "kind": "field",
+              "name": "fullHeight",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the stack should take full height of its container"
+            },
+            {
+              "kind": "field",
+              "name": "padding",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Padding inside the stack container (CSS value)"
+            },
+            {
+              "kind": "method",
+              "name": "getFlexDirection",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getAlignItems",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getJustifyContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getAlignContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "direction",
+              "fieldName": "direction",
+              "default": "'horizontal'",
+              "description": "Direction of the stack layout",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              }
+            },
+            {
+              "name": "gap",
+              "fieldName": "gap",
+              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'stretch'",
+              "description": "Alignment of items on the cross axis",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              }
+            },
+            {
+              "name": "justify",
+              "fieldName": "justify",
+              "default": "'start'",
+              "description": "Distribution of items on the main axis",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
+              }
+            },
+            {
+              "name": "wrap",
+              "fieldName": "wrap",
+              "default": "false",
+              "description": "Whether items should wrap to multiple lines",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "align-content",
+              "fieldName": "alignContent",
+              "default": "'stretch'",
+              "description": "Alignment of wrapped lines (only applies when wrap is true)",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
+              }
+            },
+            {
+              "name": "reverse",
+              "fieldName": "reverse",
+              "default": "false",
+              "description": "Whether to reverse the order of items",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "max-items",
+              "fieldName": "maxItems",
+              "description": "Maximum number of items allowed in the stack (for CMS validation)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the stack should take full width of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "full-height",
+              "fieldName": "fullHeight",
+              "default": "false",
+              "description": "Whether the stack should take full height of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "padding",
+              "fieldName": "padding",
+              "description": "Padding inside the stack container (CSS value)",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-stack",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeStack",
+          "declaration": {
+            "name": "LeStack",
+            "module": "src/components/le-stack/le-stack.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-stack",
+          "declaration": {
+            "name": "LeStack",
+            "module": "src/components/le-stack/le-stack.tsx"
           }
         }
       ]

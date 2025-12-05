@@ -1,4 +1,4 @@
-import { Component, Prop, h, Element } from '@stencil/core';
+import { Component, Prop, h, Element, Host } from '@stencil/core';
 import { classnames } from '../../utils/utils';
 
 /**
@@ -73,6 +73,21 @@ export class LeBox {
    * Maximum height constraint
    */
   @Prop() maxHeight?: string;
+
+  /**
+   * Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')
+   */
+  @Prop() background?: string;
+
+  /**
+   * Border radius (e.g., '8px', 'var(--le-radius-md)')
+   */
+  @Prop() borderRadius?: string;
+
+  /**
+   * Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')
+   */
+  @Prop() border?: string;
 
   /**
    * Self-alignment override for this item on the cross axis
@@ -173,6 +188,15 @@ export class LeBox {
     if (this.padding) {
       contentStyle.padding = this.padding;
     }
+    if (this.background) {
+      contentStyle.background = this.background;
+    }
+    if (this.borderRadius) {
+      contentStyle.borderRadius = this.borderRadius;
+    }
+    if (this.border) {
+      contentStyle.border = this.border;
+    }
 
     if (this.displayFlex) {
       contentStyle.display = 'flex';
@@ -191,21 +215,23 @@ export class LeBox {
     });
 
     return (
-      <le-component component="le-box" hostClass={hostClass} hostStyle={hostStyle}>
-        <div class="box" part="box">
-          <div class="content" part="content" style={contentStyle}>
-            <le-slot
-              name=""
-              label="Box Content"
-              description="Content inside this flex item"
-              type="slot"
-              allowed-components="le-card,le-button,le-stack,le-box"
-            >
-              <slot></slot>
-            </le-slot>
+      <Host style={hostStyle} class={hostClass}>
+        <le-component component="le-box">
+          <div class="box" part="box">
+            <div class="content" part="content" style={contentStyle}>
+              <le-slot
+                name=""
+                label="Box Content"
+                description="Content inside this flex item"
+                type="slot"
+                allowed-components="le-card,le-button,le-stack,le-box"
+              >
+                <slot></slot>
+              </le-slot>
+            </div>
           </div>
-        </div>
-      </le-component>
+        </le-component>
+      </Host>
     );
   }
 }

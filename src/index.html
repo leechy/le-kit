@@ -303,13 +303,13 @@
         <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
           <label>Horizontal Stack (default):</label>
           <le-stack gap="var(--le-space-md)" style="margin-top: 8px;">
-            <le-box padding="var(--le-space-md)" style="background: var(--le-color-primary-light); border-radius: var(--le-radius-md);">
+            <le-box padding="var(--le-space-md)" background="var(--le-color-primary-light)" border-radius="var(--le-radius-md)">
               <span>Box 1</span>
             </le-box>
-            <le-box padding="var(--le-space-md)" style="background: var(--le-color-primary-light); border-radius: var(--le-radius-md);">
+            <le-box padding="var(--le-space-md)" background="var(--le-color-primary-light)" border-radius="var(--le-radius-md)">
               <span>Box 2</span>
             </le-box>
-            <le-box padding="var(--le-space-md)" style="background: var(--le-color-primary-light); border-radius: var(--le-radius-md);">
+            <le-box padding="var(--le-space-md)" background="var(--le-color-primary-light)" border-radius="var(--le-radius-md)">
               <span>Box 3</span>
             </le-box>
           </le-stack>
@@ -318,13 +318,13 @@
         <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
           <label>Vertical Stack:</label>
           <le-stack direction="vertical" gap="var(--le-space-sm)" style="margin-top: 8px;">
-            <le-box padding="var(--le-space-sm) var(--le-space-md)" style="background: var(--le-color-success-light); border-radius: var(--le-radius-md);">
+            <le-box padding="var(--le-space-sm) var(--le-space-md)" background="var(--le-color-success-light)" border-radius="var(--le-radius-md)">
               <span>Item 1</span>
             </le-box>
-            <le-box padding="var(--le-space-sm) var(--le-space-md)" style="background: var(--le-color-success-light); border-radius: var(--le-radius-md);">
+            <le-box padding="var(--le-space-sm) var(--le-space-md)" background="var(--le-color-success-light)" border-radius="var(--le-radius-md)">
               <span>Item 2</span>
             </le-box>
-            <le-box padding="var(--le-space-sm) var(--le-space-md)" style="background: var(--le-color-success-light); border-radius: var(--le-radius-md);">
+            <le-box padding="var(--le-space-sm) var(--le-space-md)" background="var(--le-color-success-light)" border-radius="var(--le-radius-md)">
               <span>Item 3</span>
             </le-box>
           </le-stack>
@@ -333,13 +333,13 @@
         <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
           <label>Flex grow/shrink (middle box grows):</label>
           <le-stack gap="var(--le-space-md)" full-width style="margin-top: 8px;">
-            <le-box padding="var(--le-space-md)" style="background: var(--le-color-warning-light); border-radius: var(--le-radius-md);">
+            <le-box padding="var(--le-space-md)" background="var(--le-color-warning-light)" border-radius="var(--le-radius-md)">
               <span>Fixed</span>
             </le-box>
-            <le-box grow="1" padding="var(--le-space-md)" style="background: var(--le-color-warning-light); border-radius: var(--le-radius-md);">
+            <le-box grow="1" padding="var(--le-space-md)" background="var(--le-color-warning-light)" border-radius="var(--le-radius-md)">
               <span>Grows to fill space</span>
             </le-box>
-            <le-box padding="var(--le-space-md)" style="background: var(--le-color-warning-light); border-radius: var(--le-radius-md);">
+            <le-box padding="var(--le-space-md)" background="var(--le-color-warning-light)" border-radius="var(--le-radius-md)">
               <span>Fixed</span>
             </le-box>
           </le-stack>
@@ -347,14 +347,21 @@
         
         <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
           <label>Alignment & Justification:</label>
-          <le-stack gap="var(--le-space-md)" justify="space-between" align="center" full-width style="margin-top: 8px; padding: var(--le-space-md); background: var(--le-color-surface-alt); border-radius: var(--le-radius-lg);">
-            <le-box padding="var(--le-space-md)" height="60px" style="background: var(--le-color-info-light); border-radius: var(--le-radius-md);">
+          <le-stack
+            gap="var(--le-space-md)"
+            justify="space-between"
+            align="end"
+            full-width
+            padding="var(--le-space-md)"
+            style="margin-top: 8px; background: var(--le-color-surface-alt); border-radius: var(--le-radius-lg);"
+          >
+            <le-box padding="var(--le-space-md)" height="60px" background="var(--le-color-info-light)" border-radius="var(--le-radius-md)">
               <span>Tall</span>
             </le-box>
-            <le-box padding="var(--le-space-md)" height="40px" style="background: var(--le-color-info-light); border-radius: var(--le-radius-md);">
+            <le-box padding="var(--le-space-md)" height="40px" background="var(--le-color-info-light)" border-radius="var(--le-radius-md)">
               <span>Medium</span>
             </le-box>
-            <le-box padding="var(--le-space-md)" height="80px" style="background: var(--le-color-info-light); border-radius: var(--le-radius-md);">
+            <le-box padding="var(--le-space-md)" height="80px" background="var(--le-color-info-light)" border-radius="var(--le-radius-md)">
               <span>Taller</span>
             </le-box>
           </le-stack>
@@ -363,19 +370,19 @@
         <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
           <label>Wrapping Stack:</label>
           <le-stack gap="var(--le-space-md)" wrap="true" style="margin-top: 8px;">
-            <le-box basis="150px" padding="var(--le-space-md)" style="background: var(--le-color-danger-light); border-radius: var(--le-radius-md);">
+            <le-box basis="150px" padding="var(--le-space-md)" background="var(--le-color-danger-light)" border-radius="var(--le-radius-md)">
               <span>150px basis</span>
             </le-box>
-            <le-box basis="150px" padding="var(--le-space-md)" style="background: var(--le-color-danger-light); border-radius: var(--le-radius-md);">
+            <le-box basis="150px" padding="var(--le-space-md)" background="var(--le-color-danger-light)" border-radius="var(--le-radius-md)">
               <span>150px basis</span>
             </le-box>
-            <le-box basis="150px" padding="var(--le-space-md)" style="background: var(--le-color-danger-light); border-radius: var(--le-radius-md);">
+            <le-box basis="150px" padding="var(--le-space-md)" background="var(--le-color-danger-light)" border-radius="var(--le-radius-md)">
               <span>150px basis</span>
             </le-box>
-            <le-box basis="150px" padding="var(--le-space-md)" style="background: var(--le-color-danger-light); border-radius: var(--le-radius-md);">
+            <le-box basis="150px" padding="var(--le-space-md)" background="var(--le-color-danger-light)" border-radius="var(--le-radius-md)">
               <span>150px basis</span>
             </le-box>
-            <le-box basis="150px" padding="var(--le-space-md)" style="background: var(--le-color-danger-light); border-radius: var(--le-radius-md);">
+            <le-box basis="150px" padding="var(--le-space-md)" background="var(--le-color-danger-light)" border-radius="var(--le-radius-md)">
               <span>150px basis</span>
             </le-box>
           </le-stack>
@@ -385,24 +392,24 @@
           <label>Nested Layout (Holy Grail):</label>
           <le-stack direction="vertical" gap="var(--le-space-md)" full-width style="margin-top: 8px; min-height: 200px;">
             <!-- Header -->
-            <le-box padding="var(--le-space-md)" style="background: var(--le-color-primary); color: var(--le-color-on-primary); border-radius: var(--le-radius-md);">
-              <span>Header</span>
+            <le-box padding="var(--le-space-md)" background="var(--le-color-primary)" border-radius="var(--le-radius-md)">
+              <span style="color: var(--le-color-on-primary);">Header</span>
             </le-box>
             <!-- Main content area -->
             <le-stack gap="var(--le-space-md)" grow="1" full-width>
-              <le-box basis="120px" padding="var(--le-space-md)" style="background: var(--le-color-surface-alt); border-radius: var(--le-radius-md);">
+              <le-box basis="120px" padding="var(--le-space-md)" background="var(--le-color-surface-alt)" border-radius="var(--le-radius-md)">
                 <span>Sidebar</span>
               </le-box>
-              <le-box grow="1" padding="var(--le-space-md)" style="background: var(--le-color-surface); border: 1px solid var(--le-color-border); border-radius: var(--le-radius-md);">
+              <le-box grow="1" padding="var(--le-space-md)" background="var(--le-color-surface)" border="1px solid var(--le-color-border)" border-radius="var(--le-radius-md)">
                 <span>Main Content Area</span>
               </le-box>
-              <le-box basis="120px" padding="var(--le-space-md)" style="background: var(--le-color-surface-alt); border-radius: var(--le-radius-md);">
+              <le-box basis="120px" padding="var(--le-space-md)" background="var(--le-color-surface-alt)" border-radius="var(--le-radius-md)">
                 <span>Aside</span>
               </le-box>
             </le-stack>
             <!-- Footer -->
-            <le-box padding="var(--le-space-md)" style="background: var(--le-color-primary); color: var(--le-color-on-primary); border-radius: var(--le-radius-md);">
-              <span>Footer</span>
+            <le-box padding="var(--le-space-md)" background="var(--le-color-primary)" border-radius="var(--le-radius-md)">
+              <span style="color: var(--le-color-on-primary);">Footer</span>
             </le-box>
           </le-stack>
         </div>

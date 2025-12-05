@@ -32,7 +32,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--le-space-xs, 4px) var(--le-space-sm, 8px);
+  gap: var(--le-spacing-1, 4px);
+  padding: 0 0 0 var(--le-spacing-1, 4px);
   background: var(--le-admin-header-bg, rgba(144, 202, 249, 0.15));
   border-bottom: 1px solid var(--le-admin-border-color, #90caf9);
   border-radius: var(--le-radius-md, 8px) var(--le-radius-md, 8px) 0 0;
@@ -42,8 +43,11 @@
 .le-component-name {
   font-weight: var(--le-font-weight-medium, 500);
   color: var(--le-admin-text, #1976d2);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: capitalize;
+  text-align: start;
+  overflow: hidden;
+  width: 0;
+  flex: 1 1 0%;
 }
 
 .le-component-settings-btn {

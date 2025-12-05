@@ -42,9 +42,7 @@
   width: 28px;
   height: 28px;
   padding: 0;
-  border: 1px solid var(--le-color-border, #ccc);
   border-radius: var(--le-radius-md, 4px);
-  background: var(--le-color-surface, #fff);
   color: var(--le-color-text-secondary, #757575);
   cursor: pointer;
   font-size: var(--le-font-size-sm, 14px);

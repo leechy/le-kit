@@ -295,9 +295,9 @@ export class LePopover {
         >
           <le-slot name="trigger" label="Trigger">
             <slot name="trigger">
-              <button type="button" class="le-popover-default-trigger">
-                ⚙️
-              </button>
+              <le-button type="button" slot="trigger" class="le-popover-default-trigger" variant="clear" icon-only>
+                <span slot="icon-only">⊕</span>
+              </le-button>
             </slot>
           </le-slot>
         </div>

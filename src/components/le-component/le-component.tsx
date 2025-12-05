@@ -341,10 +341,13 @@ export class LeComponent {
             <span class="le-component-name">{name}</span>
             <le-popover 
               popoverTitle={`${name} Settings`}
-              position="bottom"
-              align="end"
+              position="right"
+              align="start"
               mode="default"
             >
+              <le-button type="button" slot="trigger" class="le-popover-default-trigger" variant="clear" size="small" aria-label="Edit component properties" icon-only>
+                <span slot="icon-only">⚙️</span>
+              </le-button>
               {this.renderPropertyEditor()}
             </le-popover>
           </div>

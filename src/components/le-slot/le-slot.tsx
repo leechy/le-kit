@@ -303,11 +303,16 @@ export class LeSlot {
         {this.adminMode ? (
           <div class="le-slot-container">
             <div class="le-slot-header">
-              <span class="le-slot-label">{displayLabel}</span>
-              {this.required && <span class="le-slot-required">*</span>}
+              <span class="le-slot-label">
+                {displayLabel}
+                {this.required && <span class="le-slot-required">*</span>}
+              </span>
+              {/* {this.description && <le-popover mode="default" showClose={false} align="end" position="bottom">
+                <span slot="trigger" class="le-slot-description-icon">ℹ️</span>
+                {this.description}
+              </le-popover>} */}
               {!this.isValidHtml && <span class="le-slot-invalid">⚠ Invalid HTML</span>}
             </div>
-            {this.description && <div class="le-slot-description">{this.description}</div>}
             {this.renderContent()}
           </div>
         ) : (
@@ -315,8 +320,8 @@ export class LeSlot {
           // Note: We use unnamed slot here because named slots from parent component
           // are passed as le-slot's light DOM children
           <slot 
-            ref={(el) => this.slotRef = el as HTMLSlotElement}
-            onSlotchange={this.handleSlotChange}
+            // ref={(el) => this.slotRef = el as HTMLSlotElement}
+            // onSlotchange={this.handleSlotChange}
           ></slot>
         )}
       </Host>

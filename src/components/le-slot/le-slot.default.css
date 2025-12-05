@@ -10,7 +10,7 @@
   display: contents;
   --le-slot-border-color: #0088ff;
   --le-slot-bg-color: rgba(0, 136, 255, 0.05);
-  --le-slot-header-bg: rgba(0, 136, 255, 0.1);
+  --le-slot-header-bg: rgb(218, 238, 255);
   --le-slot-label-color: #0066cc;
   --le-slot-description-color: #666;
   --le-slot-required-color: #e53935;
@@ -51,17 +51,20 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
+  padding: 0 0 0 var(--le-spacing-1, 4px);
   background: var(--le-slot-header-bg);
   border-bottom: 1px solid var(--le-slot-border-color);
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: var(--le-font-size-xs, 11px);
+  font-weight: 400;
+  text-transform: capitalize;
 }
 
 .le-slot-label {
   color: var(--le-slot-label-color);
+  text-align: start;
+  overflow: hidden;
+  width: 0;
+  flex: 1 1 0%;
 }
 
 .le-slot-required {
@@ -76,11 +79,18 @@
   color: var(--le-slot-description-color);
   font-style: italic;
 }
+:host(.admin-mode) .le-slot-description-icon {
+  display: inline-block;
+  font-size: 9px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--le-slot-description-color);
+}
 
 :host(.admin-mode) .le-slot-dropzone {
   display: block;
   min-height: var(--le-slot-dropzone-min-height);
-  padding: 8px;
+  padding: var(--le-spacing-1, 4px);
   position: relative;
 }
 
@@ -115,7 +125,7 @@
    ============================================ */
 :host(.admin-mode) .le-slot-input {
   display: block;
-  padding: 8px;
+  padding: var(--le-spacing-1, 4px);
 }
 
 :host(.admin-mode) .le-slot-input input,

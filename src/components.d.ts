@@ -327,6 +327,59 @@ export namespace Components {
         "width"?: string;
     }
     /**
+     * A rich text editor with block-level editing and Notion-style "/" commands.
+     * Features:
+     * - Block-level editing (paragraphs, headings, quotes, code)
+     * - Notion-style "/" command menu for changing block types
+     * - Enter creates new paragraphs
+     * - Inline formatting (bold, italic, underline, strikethrough, links)
+     * - Automatic text node wrapping in paragraphs
+     * @fires leInput - Emitted on every content change
+     * @fires leChange - Emitted when editor loses focus with changed content
+     * @fires leFocus - Emitted when editor receives focus
+     * @fires leBlur - Emitted when editor loses focus
+     */
+    interface LeRichTextEditor {
+        /**
+          * @default false
+         */
+        "autofocus": boolean;
+        /**
+          * @default false
+         */
+        "disabled": boolean;
+        "editorId"?: string;
+        "name"?: string;
+        /**
+          * @default 'Type "/" for commands...'
+         */
+        "placeholder": string;
+        /**
+          * @default false
+         */
+        "readonly": boolean;
+        /**
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * @default true
+         */
+        "showToolbar": boolean;
+        /**
+          * @default 'focus'
+         */
+        "toolbarMode": 'always' | 'focus' | 'selection';
+        /**
+          * @default ''
+         */
+        "value": string;
+        /**
+          * @default 'full'
+         */
+        "variant": 'minimal' | 'standard' | 'full';
+    }
+    /**
      * Slot placeholder component for admin/CMS mode.
      * This component renders a visual placeholder for slots when in admin mode,
      * allowing CMS systems to show available drop zones for content or inline editing.
@@ -344,6 +397,11 @@ export namespace Components {
           * Description of what content this slot accepts. Shown in admin mode to guide content editors.
          */
         "description"?: string;
+        /**
+          * Variant for rich-text editor. - `minimal`: No toolbar, just contenteditable - `standard`: Basic formatting (bold, italic, underline) - `full`: All formatting options including links
+          * @default 'standard'
+         */
+        "editorVariant": 'minimal' | 'standard' | 'full';
         /**
           * Label to display in admin mode. If not provided, the slot name will be used.
          */
@@ -378,10 +436,10 @@ export namespace Components {
          */
         "tag"?: string;
         /**
-          * The type of slot content. - `slot`: Default, shows a dropzone for components (default) - `text`: Shows a single-line text input - `textarea`: Shows a multi-line text area
+          * The type of slot content. - `slot`: Default, shows a dropzone for components (default) - `text`: Shows a single-line text input - `textarea`: Shows a multi-line text area - `rich-text`: Shows a rich text editor with formatting toolbar
           * @default 'slot'
          */
-        "type": 'slot' | 'text' | 'textarea';
+        "type": 'slot' | 'text' | 'textarea' | 'rich-text';
     }
     /**
      * A flexible stack layout component using CSS flexbox.
@@ -453,44 +511,27 @@ export namespace Components {
         "wrap": boolean;
     }
     /**
-     * A text component with rich text editing capabilities in admin mode.
-     * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)
-     * and provides a Notion-like rich text editor in admin mode with formatting
-     * toolbar for bold, italic, links, and paragraph type selection.
-     * @cssprop --le-text-color - Text color
-     * @cssprop --le-text-font-size - Font size
-     * @cssprop --le-text-line-height - Line height
-     * @cssprop --le-text-font-weight - Font weight
-     * @csspart text - The text container element
+     * A minimal text container component with rich text editing in admin mode.
+     * `le-text` is a transparent wrapper that passes through its content without
+     * applying any styles. All styling comes from the theme and CSS classes on
+     * the element itself.
+     * In admin mode, it provides a block-level rich text editor with:
+     * - Notion-style "/" command for block type selection (p, h1-h6, blockquote, code)
+     * - Enter creates new paragraphs
+     * - Inline formatting (bold, italic, underline, strikethrough, links)
      * @cmsEditable true
      * @cmsCategory Content
      */
     interface LeText {
         /**
-          * Text alignment
-          * @allowedValues left | center | right | justify
-          * @default 'left'
+          * Rich text editor variant (only applies in admin mode) - `minimal`: No toolbar, just contenteditable with / commands - `standard`: Basic formatting (bold, italic, underline) + / commands - `full`: All formatting options including links + / commands
+          * @default 'full'
          */
-        "align": 'left' | 'center' | 'right' | 'justify';
+        "editorVariant": 'minimal' | 'standard' | 'full';
         /**
-          * Text color (CSS value or theme token)
+          * Placeholder text shown when the editor is empty (admin mode only)
          */
-        "color"?: string;
-        /**
-          * Maximum number of lines before truncating (requires truncate=true)
-         */
-        "maxLines"?: number;
-        /**
-          * Whether the text should truncate with ellipsis
-          * @default false
-         */
-        "truncate": boolean;
-        /**
-          * The semantic variant/type of text element
-          * @allowedValues p | h1 | h2 | h3 | h4 | h5 | h6 | code | quote | label | small
-          * @default 'p'
-         */
-        "variant": 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small';
+        "placeholder"?: string;
     }
 }
 export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
@@ -500,6 +541,10 @@ export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
 export interface LePopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLePopoverElement;
+}
+export interface LeRichTextEditorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeRichTextEditorElement;
 }
 export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -628,6 +673,39 @@ declare global {
         prototype: HTMLLePopoverElement;
         new (): HTMLLePopoverElement;
     };
+    interface HTMLLeRichTextEditorElementEventMap {
+        "leInput": { value: string; textContent: string };
+        "leChange": { value: string; textContent: string };
+        "leFocus": void;
+        "leBlur": void;
+    }
+    /**
+     * A rich text editor with block-level editing and Notion-style "/" commands.
+     * Features:
+     * - Block-level editing (paragraphs, headings, quotes, code)
+     * - Notion-style "/" command menu for changing block types
+     * - Enter creates new paragraphs
+     * - Inline formatting (bold, italic, underline, strikethrough, links)
+     * - Automatic text node wrapping in paragraphs
+     * @fires leInput - Emitted on every content change
+     * @fires leChange - Emitted when editor loses focus with changed content
+     * @fires leFocus - Emitted when editor receives focus
+     * @fires leBlur - Emitted when editor loses focus
+     */
+    interface HTMLLeRichTextEditorElement extends Components.LeRichTextEditor, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeRichTextEditorElementEventMap>(type: K, listener: (this: HTMLLeRichTextEditorElement, ev: LeRichTextEditorCustomEvent<HTMLLeRichTextEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeRichTextEditorElementEventMap>(type: K, listener: (this: HTMLLeRichTextEditorElement, ev: LeRichTextEditorCustomEvent<HTMLLeRichTextEditorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeRichTextEditorElement: {
+        prototype: HTMLLeRichTextEditorElement;
+        new (): HTMLLeRichTextEditorElement;
+    };
     interface HTMLLeSlotElementEventMap {
         "leSlotChange": { name: string; value: string; isValid: boolean };
     }
@@ -670,15 +748,14 @@ declare global {
         new (): HTMLLeStackElement;
     };
     /**
-     * A text component with rich text editing capabilities in admin mode.
-     * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)
-     * and provides a Notion-like rich text editor in admin mode with formatting
-     * toolbar for bold, italic, links, and paragraph type selection.
-     * @cssprop --le-text-color - Text color
-     * @cssprop --le-text-font-size - Font size
-     * @cssprop --le-text-line-height - Line height
-     * @cssprop --le-text-font-weight - Font weight
-     * @csspart text - The text container element
+     * A minimal text container component with rich text editing in admin mode.
+     * `le-text` is a transparent wrapper that passes through its content without
+     * applying any styles. All styling comes from the theme and CSS classes on
+     * the element itself.
+     * In admin mode, it provides a block-level rich text editor with:
+     * - Notion-style "/" command for block type selection (p, h1-h6, blockquote, code)
+     * - Enter creates new paragraphs
+     * - Inline formatting (bold, italic, underline, strikethrough, links)
      * @cmsEditable true
      * @cmsCategory Content
      */
@@ -694,6 +771,7 @@ declare global {
         "le-card": HTMLLeCardElement;
         "le-component": HTMLLeComponentElement;
         "le-popover": HTMLLePopoverElement;
+        "le-rich-text-editor": HTMLLeRichTextEditorElement;
         "le-slot": HTMLLeSlotElement;
         "le-stack": HTMLLeStackElement;
         "le-text": HTMLLeTextElement;
@@ -1021,6 +1099,63 @@ declare namespace LocalJSX {
         "width"?: string;
     }
     /**
+     * A rich text editor with block-level editing and Notion-style "/" commands.
+     * Features:
+     * - Block-level editing (paragraphs, headings, quotes, code)
+     * - Notion-style "/" command menu for changing block types
+     * - Enter creates new paragraphs
+     * - Inline formatting (bold, italic, underline, strikethrough, links)
+     * - Automatic text node wrapping in paragraphs
+     * @fires leInput - Emitted on every content change
+     * @fires leChange - Emitted when editor loses focus with changed content
+     * @fires leFocus - Emitted when editor receives focus
+     * @fires leBlur - Emitted when editor loses focus
+     */
+    interface LeRichTextEditor {
+        /**
+          * @default false
+         */
+        "autofocus"?: boolean;
+        /**
+          * @default false
+         */
+        "disabled"?: boolean;
+        "editorId"?: string;
+        "name"?: string;
+        "onLeBlur"?: (event: LeRichTextEditorCustomEvent<void>) => void;
+        "onLeChange"?: (event: LeRichTextEditorCustomEvent<{ value: string; textContent: string }>) => void;
+        "onLeFocus"?: (event: LeRichTextEditorCustomEvent<void>) => void;
+        "onLeInput"?: (event: LeRichTextEditorCustomEvent<{ value: string; textContent: string }>) => void;
+        /**
+          * @default 'Type "/" for commands...'
+         */
+        "placeholder"?: string;
+        /**
+          * @default false
+         */
+        "readonly"?: boolean;
+        /**
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * @default true
+         */
+        "showToolbar"?: boolean;
+        /**
+          * @default 'focus'
+         */
+        "toolbarMode"?: 'always' | 'focus' | 'selection';
+        /**
+          * @default ''
+         */
+        "value"?: string;
+        /**
+          * @default 'full'
+         */
+        "variant"?: 'minimal' | 'standard' | 'full';
+    }
+    /**
      * Slot placeholder component for admin/CMS mode.
      * This component renders a visual placeholder for slots when in admin mode,
      * allowing CMS systems to show available drop zones for content or inline editing.
@@ -1038,6 +1173,11 @@ declare namespace LocalJSX {
           * Description of what content this slot accepts. Shown in admin mode to guide content editors.
          */
         "description"?: string;
+        /**
+          * Variant for rich-text editor. - `minimal`: No toolbar, just contenteditable - `standard`: Basic formatting (bold, italic, underline) - `full`: All formatting options including links
+          * @default 'standard'
+         */
+        "editorVariant"?: 'minimal' | 'standard' | 'full';
         /**
           * Label to display in admin mode. If not provided, the slot name will be used.
          */
@@ -1076,10 +1216,10 @@ declare namespace LocalJSX {
          */
         "tag"?: string;
         /**
-          * The type of slot content. - `slot`: Default, shows a dropzone for components (default) - `text`: Shows a single-line text input - `textarea`: Shows a multi-line text area
+          * The type of slot content. - `slot`: Default, shows a dropzone for components (default) - `text`: Shows a single-line text input - `textarea`: Shows a multi-line text area - `rich-text`: Shows a rich text editor with formatting toolbar
           * @default 'slot'
          */
-        "type"?: 'slot' | 'text' | 'textarea';
+        "type"?: 'slot' | 'text' | 'textarea' | 'rich-text';
     }
     /**
      * A flexible stack layout component using CSS flexbox.
@@ -1151,44 +1291,27 @@ declare namespace LocalJSX {
         "wrap"?: boolean;
     }
     /**
-     * A text component with rich text editing capabilities in admin mode.
-     * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)
-     * and provides a Notion-like rich text editor in admin mode with formatting
-     * toolbar for bold, italic, links, and paragraph type selection.
-     * @cssprop --le-text-color - Text color
-     * @cssprop --le-text-font-size - Font size
-     * @cssprop --le-text-line-height - Line height
-     * @cssprop --le-text-font-weight - Font weight
-     * @csspart text - The text container element
+     * A minimal text container component with rich text editing in admin mode.
+     * `le-text` is a transparent wrapper that passes through its content without
+     * applying any styles. All styling comes from the theme and CSS classes on
+     * the element itself.
+     * In admin mode, it provides a block-level rich text editor with:
+     * - Notion-style "/" command for block type selection (p, h1-h6, blockquote, code)
+     * - Enter creates new paragraphs
+     * - Inline formatting (bold, italic, underline, strikethrough, links)
      * @cmsEditable true
      * @cmsCategory Content
      */
     interface LeText {
         /**
-          * Text alignment
-          * @allowedValues left | center | right | justify
-          * @default 'left'
+          * Rich text editor variant (only applies in admin mode) - `minimal`: No toolbar, just contenteditable with / commands - `standard`: Basic formatting (bold, italic, underline) + / commands - `full`: All formatting options including links + / commands
+          * @default 'full'
          */
-        "align"?: 'left' | 'center' | 'right' | 'justify';
+        "editorVariant"?: 'minimal' | 'standard' | 'full';
         /**
-          * Text color (CSS value or theme token)
+          * Placeholder text shown when the editor is empty (admin mode only)
          */
-        "color"?: string;
-        /**
-          * Maximum number of lines before truncating (requires truncate=true)
-         */
-        "maxLines"?: number;
-        /**
-          * Whether the text should truncate with ellipsis
-          * @default false
-         */
-        "truncate"?: boolean;
-        /**
-          * The semantic variant/type of text element
-          * @allowedValues p | h1 | h2 | h3 | h4 | h5 | h6 | code | quote | label | small
-          * @default 'p'
-         */
-        "variant"?: 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small';
+        "placeholder"?: string;
     }
     interface IntrinsicElements {
         "le-box": LeBox;
@@ -1196,6 +1319,7 @@ declare namespace LocalJSX {
         "le-card": LeCard;
         "le-component": LeComponent;
         "le-popover": LePopover;
+        "le-rich-text-editor": LeRichTextEditor;
         "le-slot": LeSlot;
         "le-stack": LeStack;
         "le-text": LeText;
@@ -1280,6 +1404,20 @@ declare module "@stencil/core" {
              */
             "le-popover": LocalJSX.LePopover & JSXBase.HTMLAttributes<HTMLLePopoverElement>;
             /**
+             * A rich text editor with block-level editing and Notion-style "/" commands.
+             * Features:
+             * - Block-level editing (paragraphs, headings, quotes, code)
+             * - Notion-style "/" command menu for changing block types
+             * - Enter creates new paragraphs
+             * - Inline formatting (bold, italic, underline, strikethrough, links)
+             * - Automatic text node wrapping in paragraphs
+             * @fires leInput - Emitted on every content change
+             * @fires leChange - Emitted when editor loses focus with changed content
+             * @fires leFocus - Emitted when editor receives focus
+             * @fires leBlur - Emitted when editor loses focus
+             */
+            "le-rich-text-editor": LocalJSX.LeRichTextEditor & JSXBase.HTMLAttributes<HTMLLeRichTextEditorElement>;
+            /**
              * Slot placeholder component for admin/CMS mode.
              * This component renders a visual placeholder for slots when in admin mode,
              * allowing CMS systems to show available drop zones for content or inline editing.
@@ -1300,15 +1438,14 @@ declare module "@stencil/core" {
              */
             "le-stack": LocalJSX.LeStack & JSXBase.HTMLAttributes<HTMLLeStackElement>;
             /**
-             * A text component with rich text editing capabilities in admin mode.
-             * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)
-             * and provides a Notion-like rich text editor in admin mode with formatting
-             * toolbar for bold, italic, links, and paragraph type selection.
-             * @cssprop --le-text-color - Text color
-             * @cssprop --le-text-font-size - Font size
-             * @cssprop --le-text-line-height - Line height
-             * @cssprop --le-text-font-weight - Font weight
-             * @csspart text - The text container element
+             * A minimal text container component with rich text editing in admin mode.
+             * `le-text` is a transparent wrapper that passes through its content without
+             * applying any styles. All styling comes from the theme and CSS classes on
+             * the element itself.
+             * In admin mode, it provides a block-level rich text editor with:
+             * - Notion-style "/" command for block type selection (p, h1-h6, blockquote, code)
+             * - Enter creates new paragraphs
+             * - Inline formatting (bold, italic, underline, strikethrough, links)
              * @cmsEditable true
              * @cmsCategory Content
              */

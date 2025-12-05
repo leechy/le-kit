@@ -74,6 +74,7 @@ graph TD;
   le-button --> le-slot
   le-slot --> le-popover
   le-slot --> le-button
+  le-slot --> le-rich-text-editor
   style le-box fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

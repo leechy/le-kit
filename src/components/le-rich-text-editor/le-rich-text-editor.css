@@ -1,0 +1,299 @@
+/**
+ * le-rich-text-editor styles
+ *
+ * A standalone rich text editor with formatting toolbar
+ */
+
+:host {
+  display: block;
+  font-family: var(--le-font-family);
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+/* Wrapper */
+.le-rte-wrapper {
+  position: relative;
+}
+
+/* Hidden slot for initial content */
+.le-rte-hidden-slot {
+  display: none;
+}
+
+/* Editor area */
+.le-rte-editor {
+  min-height: 1.5em;
+  padding: var(--le-space-sm) var(--le-space-md);
+  border: 1px solid var(--le-color-border, #ddd);
+  border-radius: var(--le-radius-md, 4px);
+  background: var(--le-color-background, #fff);
+  color: var(--le-color-text, #333);
+  font-size: var(--le-font-size-base, 1rem);
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.le-rte-editor:focus {
+  border-color: var(--le-color-primary, #0066cc);
+  box-shadow: 0 0 0 3px var(--le-color-primary-light, rgba(0, 102, 204, 0.15));
+}
+
+/* Placeholder */
+.le-rte-editor:empty::before {
+  content: attr(data-placeholder);
+  color: var(--le-color-text-tertiary, #999);
+  font-style: italic;
+  pointer-events: none;
+}
+
+/* Disabled state */
+:host(.disabled) .le-rte-editor {
+  background: var(--le-color-surface-alt, #f5f5f5);
+  color: var(--le-color-text-tertiary, #999);
+  cursor: not-allowed;
+}
+
+/* Readonly state */
+:host(.readonly) .le-rte-editor {
+  background: var(--le-color-surface-alt, #f5f5f5);
+  cursor: default;
+}
+
+/* Toolbar */
+.le-rte-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  margin-bottom: 6px;
+  background: var(--le-color-surface, #fff);
+  border: 1px solid var(--le-color-border, #ddd);
+  border-radius: var(--le-radius-md, 4px);
+  box-shadow: var(--le-shadow-sm, 0 1px 3px rgba(0,0,0,0.1));
+}
+
+/* Toolbar buttons */
+.le-rte-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--le-radius-sm, 3px);
+  background: transparent;
+  color: var(--le-color-text, #333);
+  font-size: 14px;
+  font-family: var(--le-font-family);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.le-rte-btn:hover {
+  background: var(--le-color-surface-alt, #f5f5f5);
+  border-color: var(--le-color-border, #ddd);
+}
+
+.le-rte-btn.active {
+  background: var(--le-color-primary, #0066cc);
+  color: var(--le-color-on-primary, #fff);
+  border-color: var(--le-color-primary, #0066cc);
+}
+
+.le-rte-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--le-color-primary-light, rgba(0, 102, 204, 0.3));
+}
+
+.le-rte-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Content formatting */
+.le-rte-editor a {
+  color: var(--le-color-primary, #0066cc);
+  text-decoration: underline;
+}
+
+.le-rte-editor a:hover {
+  color: var(--le-color-primary-dark, #004c99);
+}
+
+.le-rte-editor strong,
+.le-rte-editor b {
+  font-weight: var(--le-font-weight-bold, 700);
+}
+
+.le-rte-editor em,
+.le-rte-editor i {
+  font-style: italic;
+}
+
+.le-rte-editor u {
+  text-decoration: underline;
+}
+
+.le-rte-editor s,
+.le-rte-editor strike {
+  text-decoration: line-through;
+}
+
+/* Selection highlight when focused */
+:host(.focused) .le-rte-editor::selection {
+  background: var(--le-color-primary-light, rgba(0, 102, 204, 0.2));
+}
+
+/* ============================================
+   Block-level element styling
+   ============================================ */
+
+.le-rte-editor p,
+.le-rte-editor h1,
+.le-rte-editor h2,
+.le-rte-editor h3,
+.le-rte-editor h4,
+.le-rte-editor h5,
+.le-rte-editor h6,
+.le-rte-editor blockquote,
+.le-rte-editor pre {
+  margin: 0 0 0.5em 0;
+}
+
+.le-rte-editor p:last-child,
+.le-rte-editor h1:last-child,
+.le-rte-editor h2:last-child,
+.le-rte-editor h3:last-child,
+.le-rte-editor h4:last-child,
+.le-rte-editor h5:last-child,
+.le-rte-editor h6:last-child,
+.le-rte-editor blockquote:last-child,
+.le-rte-editor pre:last-child {
+  margin-bottom: 0;
+}
+
+.le-rte-editor h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.le-rte-editor h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.le-rte-editor h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.le-rte-editor h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.le-rte-editor h5 {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.le-rte-editor h6 {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.45;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.le-rte-editor blockquote {
+  font-size: 1.125rem;
+  font-style: italic;
+  color: var(--le-color-text-secondary, #666);
+  border-left: 4px solid var(--le-color-primary, #0066cc);
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.le-rte-editor pre {
+  font-family: var(--le-font-family-mono, 'SF Mono', 'Consolas', monospace);
+  font-size: 0.875rem;
+  background: var(--le-color-surface-alt, #f5f5f5);
+  padding: 0.75rem 1rem;
+  border-radius: var(--le-radius-md, 4px);
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+/* ============================================
+   Notion-style Command Menu
+   ============================================ */
+
+.le-rte-command-menu {
+  position: absolute;
+  z-index: 1000;
+  min-width: 200px;
+  max-width: 280px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: var(--le-color-surface, #fff);
+  border: 1px solid var(--le-color-border, #ddd);
+  border-radius: var(--le-radius-md, 4px);
+  box-shadow: var(--le-shadow-lg, 0 4px 12px rgba(0,0,0,0.15));
+}
+
+.le-rte-command-menu-header {
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--le-color-text-tertiary, #999);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--le-color-border, #eee);
+}
+
+.le-rte-command-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+}
+
+.le-rte-command-item:hover,
+.le-rte-command-item.selected {
+  background: var(--le-color-surface-hover, rgba(0, 102, 204, 0.08));
+}
+
+.le-rte-command-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--le-color-text-secondary, #666);
+  background: var(--le-color-surface-alt, #f5f5f5);
+  border-radius: var(--le-radius-sm, 3px);
+}
+
+.le-rte-command-label {
+  font-size: 14px;
+  color: var(--le-color-text, #333);
+}

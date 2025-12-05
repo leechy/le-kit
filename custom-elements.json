@@ -1559,10 +1559,10 @@
               "kind": "field",
               "name": "type",
               "type": {
-                "text": "'slot' | 'text' | 'textarea'"
+                "text": "'slot' | 'text' | 'textarea' | 'rich-text'"
               },
               "default": "'slot'",
-              "description": "The type of slot content.\n- `slot`: Default, shows a dropzone for components (default)\n- `text`: Shows a single-line text input\n- `textarea`: Shows a multi-line text area"
+              "description": "The type of slot content.\n- `slot`: Default, shows a dropzone for components (default)\n- `text`: Shows a single-line text input\n- `textarea`: Shows a multi-line text area\n- `rich-text`: Shows a rich text editor with formatting toolbar"
             },
             {
               "kind": "field",
@@ -1638,6 +1638,15 @@
                 "text": "string | undefined"
               },
               "description": "CSS styles for the slot dropzone container.\nUseful for layouts - e.g., \"flex-direction: row\" for horizontal stacks.\nOnly applies in admin mode for type=\"slot\"."
+            },
+            {
+              "kind": "field",
+              "name": "editorVariant",
+              "type": {
+                "text": "'minimal' | 'standard' | 'full'"
+              },
+              "default": "'standard'",
+              "description": "Variant for rich-text editor.\n- `minimal`: No toolbar, just contenteditable\n- `standard`: Basic formatting (bold, italic, underline)\n- `full`: All formatting options including links"
             },
             {
               "kind": "field",
@@ -1756,6 +1765,12 @@
               "privacy": "private"
             },
             {
+              "kind": "field",
+              "name": "handleRichTextInput",
+              "privacy": "private",
+              "description": "Handle rich text editor input"
+            },
+            {
               "kind": "method",
               "name": "createSlottedElement",
               "privacy": "private",
@@ -1821,9 +1836,9 @@
               "name": "type",
               "fieldName": "type",
               "default": "'slot'",
-              "description": "The type of slot content.\n- `slot`: Default, shows a dropzone for components (default)\n- `text`: Shows a single-line text input\n- `textarea`: Shows a multi-line text area",
+              "description": "The type of slot content.\n- `slot`: Default, shows a dropzone for components (default)\n- `text`: Shows a single-line text input\n- `textarea`: Shows a multi-line text area\n- `rich-text`: Shows a rich text editor with formatting toolbar",
               "type": {
-                "text": "'slot' | 'text' | 'textarea'"
+                "text": "'slot' | 'text' | 'textarea' | 'rich-text'"
               }
             },
             {
@@ -1899,6 +1914,15 @@
               "description": "CSS styles for the slot dropzone container.\nUseful for layouts - e.g., \"flex-direction: row\" for horizontal stacks.\nOnly applies in admin mode for type=\"slot\".",
               "type": {
                 "text": "string"
+              }
+            },
+            {
+              "name": "editor-variant",
+              "fieldName": "editorVariant",
+              "default": "'standard'",
+              "description": "Variant for rich-text editor.\n- `minimal`: No toolbar, just contenteditable\n- `standard`: Basic formatting (bold, italic, underline)\n- `full`: All formatting options including links",
+              "type": {
+                "text": "'minimal' | 'standard' | 'full'"
               }
             }
           ],
@@ -2237,35 +2261,11 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A text component with rich text editing capabilities in admin mode.\n\n`le-text` renders semantic text elements (headings, paragraphs, code, quotes)\nand provides a Notion-like rich text editor in admin mode with formatting\ntoolbar for bold, italic, links, and paragraph type selection.",
+          "description": "A minimal text container component with rich text editing in admin mode.\n\n`le-text` is a transparent wrapper that passes through its content without\napplying any styles. All styling comes from the theme and CSS classes on\nthe element itself.\n\nIn admin mode, it provides a block-level rich text editor with:\n- Notion-style \"/\" command for block type selection (p, h1-h6, blockquote, code)\n- Enter creates new paragraphs\n- Inline formatting (bold, italic, underline, strikethrough, links)",
           "name": "LeText",
-          "cssProperties": [
-            {
-              "description": "Text color",
-              "name": "--le-text-color"
-            },
-            {
-              "description": "Font size",
-              "name": "--le-text-font-size"
-            },
-            {
-              "description": "Line height",
-              "name": "--le-text-line-height"
-            },
-            {
-              "description": "Font weight",
-              "name": "--le-text-font-weight"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The text container element",
-              "name": "text"
-            }
-          ],
           "slots": [
             {
-              "description": "Default slot for text content",
+              "description": "Default slot for text content (can be text nodes, paragraphs, headings, etc.)",
               "name": ""
             }
           ],
@@ -2279,46 +2279,20 @@
             },
             {
               "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small'"
-              },
-              "default": "'p'",
-              "description": "The semantic variant/type of text element"
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'left' | 'center' | 'right' | 'justify'"
-              },
-              "default": "'left'",
-              "description": "Text alignment"
-            },
-            {
-              "kind": "field",
-              "name": "color",
+              "name": "placeholder",
               "type": {
                 "text": "string | undefined"
               },
-              "description": "Text color (CSS value or theme token)"
+              "description": "Placeholder text shown when the editor is empty (admin mode only)"
             },
             {
               "kind": "field",
-              "name": "truncate",
+              "name": "editorVariant",
               "type": {
-                "text": "boolean"
+                "text": "'minimal' | 'standard' | 'full'"
               },
-              "default": "false",
-              "description": "Whether the text should truncate with ellipsis"
-            },
-            {
-              "kind": "field",
-              "name": "maxLines",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum number of lines before truncating (requires truncate=true)"
+              "default": "'full'",
+              "description": "Rich text editor variant (only applies in admin mode)\n- `minimal`: No toolbar, just contenteditable with / commands\n- `standard`: Basic formatting (bold, italic, underline) + / commands\n- `full`: All formatting options including links + / commands"
             },
             {
               "kind": "field",
@@ -2332,54 +2306,6 @@
             },
             {
               "kind": "field",
-              "name": "content",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''",
-              "description": "The HTML content being edited"
-            },
-            {
-              "kind": "field",
-              "name": "isFocused",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Whether the editor is focused (shows toolbar)"
-            },
-            {
-              "kind": "field",
-              "name": "selectionState",
-              "type": {
-                "text": "SelectionState"
-              },
-              "privacy": "private",
-              "default": "{ isBold: false, isItalic: false, isUnderline: false, isStrikethrough: false, isLink: false, blockType: 'p', }",
-              "description": "Current selection state for toolbar button highlighting"
-            },
-            {
-              "kind": "field",
-              "name": "editorRef",
-              "type": {
-                "text": "HTMLDivElement | undefined"
-              },
-              "privacy": "private",
-              "description": "Reference to the contenteditable element"
-            },
-            {
-              "kind": "field",
-              "name": "slotRef",
-              "type": {
-                "text": "HTMLSlotElement | undefined"
-              },
-              "privacy": "private",
-              "description": "Reference to the slot element"
-            },
-            {
-              "kind": "field",
               "name": "disconnectModeObserver",
               "type": {
                 "text": "() => void | undefined"
@@ -2388,190 +2314,25 @@
             },
             {
               "kind": "method",
-              "name": "onVariantChange"
-            },
-            {
-              "kind": "method",
-              "name": "readSlottedContent",
-              "privacy": "private",
-              "description": "Read content from slotted elements"
-            },
-            {
-              "kind": "method",
-              "name": "syncContentToSlot",
-              "privacy": "private",
-              "description": "Sync edited content back to the slot"
-            },
-            {
-              "kind": "field",
-              "name": "handleInput",
-              "privacy": "private",
-              "description": "Handle input in the contenteditable"
-            },
-            {
-              "kind": "field",
-              "name": "handleFocus",
-              "privacy": "private",
-              "description": "Handle focus on the editor"
-            },
-            {
-              "kind": "field",
-              "name": "handleBlur",
-              "privacy": "private",
-              "description": "Handle blur on the editor"
-            },
-            {
-              "kind": "field",
-              "name": "handleSelectionChange",
-              "privacy": "private",
-              "description": "Handle selection change to update toolbar state"
-            },
-            {
-              "kind": "method",
-              "name": "updateSelectionState",
-              "privacy": "private",
-              "description": "Update the selection state for toolbar highlighting"
-            },
-            {
-              "kind": "method",
-              "name": "isSelectionInLink",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "selection",
-                  "type": {
-                    "text": "Selection"
-                  }
-                }
-              ],
-              "description": "Check if current selection is within a link"
-            },
-            {
-              "kind": "method",
-              "name": "execCommand",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "command",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "value",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Execute a formatting command"
-            },
-            {
-              "kind": "field",
-              "name": "toggleBold",
-              "privacy": "private",
-              "description": "Toggle bold formatting"
-            },
-            {
-              "kind": "field",
-              "name": "toggleItalic",
-              "privacy": "private",
-              "description": "Toggle italic formatting"
-            },
-            {
-              "kind": "field",
-              "name": "toggleUnderline",
-              "privacy": "private",
-              "description": "Toggle underline formatting"
-            },
-            {
-              "kind": "field",
-              "name": "toggleStrikethrough",
-              "privacy": "private",
-              "description": "Toggle strikethrough formatting"
-            },
-            {
-              "kind": "field",
-              "name": "toggleLink",
-              "privacy": "private",
-              "description": "Add or edit a link"
-            },
-            {
-              "kind": "field",
-              "name": "changeVariant",
-              "privacy": "private",
-              "description": "Change the block type/variant"
-            },
-            {
-              "kind": "method",
-              "name": "renderToolbar",
-              "privacy": "private",
-              "description": "Render the formatting toolbar"
-            },
-            {
-              "kind": "method",
-              "name": "getTag",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "description": "Get the semantic tag for the current variant"
-            },
-            {
-              "kind": "method",
               "name": "render"
             }
           ],
           "attributes": [
             {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'p'",
-              "description": "The semantic variant/type of text element",
-              "type": {
-                "text": "'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small'"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'left'",
-              "description": "Text alignment",
-              "type": {
-                "text": "'left' | 'center' | 'right' | 'justify'"
-              }
-            },
-            {
-              "name": "color",
-              "fieldName": "color",
-              "description": "Text color (CSS value or theme token)",
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "description": "Placeholder text shown when the editor is empty (admin mode only)",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "truncate",
-              "fieldName": "truncate",
-              "default": "false",
-              "description": "Whether the text should truncate with ellipsis",
+              "name": "editor-variant",
+              "fieldName": "editorVariant",
+              "default": "'full'",
+              "description": "Rich text editor variant (only applies in admin mode)\n- `minimal`: No toolbar, just contenteditable with / commands\n- `standard`: Basic formatting (bold, italic, underline) + / commands\n- `full`: All formatting options including links + / commands",
               "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "max-lines",
-              "fieldName": "maxLines",
-              "description": "Maximum number of lines before truncating (requires truncate=true)",
-              "type": {
-                "text": "number"
+                "text": "'minimal' | 'standard' | 'full'"
               }
             }
           ],
@@ -2595,6 +2356,641 @@
           "declaration": {
             "name": "LeText",
             "module": "src/components/le-text/le-text.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-rich-text-editor/le-rich-text-editor.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A rich text editor with block-level editing and Notion-style \"/\" commands.\n\nFeatures:\n- Block-level editing (paragraphs, headings, quotes, code)\n- Notion-style \"/\" command menu for changing block types\n- Enter creates new paragraphs\n- Inline formatting (bold, italic, underline, strikethrough, links)\n- Automatic text node wrapping in paragraphs",
+          "name": "LeRichTextEditor",
+          "slots": [
+            {
+              "description": "Default slot for initial content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "editorId",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Type \"/\" for commands...'"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "readonly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "showToolbar",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "toolbarMode",
+              "type": {
+                "text": "'always' | 'focus' | 'selection'"
+              },
+              "default": "'focus'"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'minimal' | 'standard' | 'full'"
+              },
+              "default": "'full'"
+            },
+            {
+              "kind": "field",
+              "name": "autofocus",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "isFocused",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "hasSelection",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "selectionState",
+              "type": {
+                "text": "SelectionState"
+              },
+              "privacy": "private",
+              "default": "{ isBold: false, isItalic: false, isUnderline: false, isStrikethrough: false, isLink: false, }"
+            },
+            {
+              "kind": "field",
+              "name": "commandMenuOpen",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Whether the command menu is open"
+            },
+            {
+              "kind": "field",
+              "name": "commandFilter",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''",
+              "description": "Filter text for command menu (text after \"/\")"
+            },
+            {
+              "kind": "field",
+              "name": "commandMenuIndex",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0",
+              "description": "Selected index in command menu"
+            },
+            {
+              "kind": "field",
+              "name": "commandMenuPosition",
+              "type": {
+                "text": "{ top: number; left: number }"
+              },
+              "privacy": "private",
+              "default": "{ top: 0, left: 0 }",
+              "description": "Position of the command menu"
+            },
+            {
+              "kind": "field",
+              "name": "editorRef",
+              "type": {
+                "text": "HTMLDivElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "slotRef",
+              "type": {
+                "text": "HTMLSlotElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "valueOnFocus",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "isUpdating",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "wasSimpleText",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Track if we started with a simple text node"
+            },
+            {
+              "kind": "method",
+              "name": "onValueChange",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "readSlottedContent",
+              "privacy": "private",
+              "description": "Read and normalize content from slotted elements"
+            },
+            {
+              "kind": "method",
+              "name": "isInlineElement",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "el",
+                  "type": {
+                    "text": "Element"
+                  }
+                }
+              ],
+              "description": "Check if element is inline (not a block element)"
+            },
+            {
+              "kind": "method",
+              "name": "normalizeContent",
+              "privacy": "private",
+              "description": "Ensure all content is wrapped in block elements\nText nodes and inline elements should be wrapped in <p>"
+            },
+            {
+              "kind": "method",
+              "name": "fragmentToHtml",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "fragment",
+                  "type": {
+                    "text": "DocumentFragment"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isBlockElement",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "el",
+                  "type": {
+                    "text": "Element"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "moveCursorToEnd",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getFinalValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "description": "Get the final value, potentially unwrapping simple content"
+            },
+            {
+              "kind": "method",
+              "name": "getTextContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "handleInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlur",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSelectionChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSlotChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "checkForSlashCommand",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updateCommandMenuPosition",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getFilteredBlockTypes",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "closeCommandMenu",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "applyBlockType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectionState",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "isSelectionInLink",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "execCommand",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "command",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "value",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "toggleBold",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "toggleItalic",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "toggleUnderline",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "toggleStrikethrough",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "toggleLink",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "shouldShowToolbar",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getToolbarOptions",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderToolbar",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderCommandMenu",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "description": "Emitted on every content change",
+              "name": "leInput"
+            },
+            {
+              "description": "Emitted when editor loses focus with changed content",
+              "name": "leChange"
+            },
+            {
+              "description": "Emitted when editor receives focus",
+              "name": "leFocus"
+            },
+            {
+              "description": "Emitted when editor loses focus",
+              "name": "leBlur"
+            },
+            {
+              "name": "leInput",
+              "type": {
+                "text": "EventEmitter<{ value: string; textContent: string }>"
+              }
+            },
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<{ value: string; textContent: string }>"
+              }
+            },
+            {
+              "name": "leFocus",
+              "type": {
+                "text": "EventEmitter<void>"
+              }
+            },
+            {
+              "name": "leBlur",
+              "type": {
+                "text": "EventEmitter<void>"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "editor-id",
+              "fieldName": "editorId",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "default": "''",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "'Type \"/\" for commands...'",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "readonly",
+              "fieldName": "readonly",
+              "default": "false",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "show-toolbar",
+              "fieldName": "showToolbar",
+              "default": "true",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "toolbar-mode",
+              "fieldName": "toolbarMode",
+              "default": "'focus'",
+              "type": {
+                "text": "'always' | 'focus' | 'selection'"
+              }
+            },
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'full'",
+              "type": {
+                "text": "'minimal' | 'standard' | 'full'"
+              }
+            },
+            {
+              "name": "autofocus",
+              "fieldName": "autofocus",
+              "default": "false",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-rich-text-editor",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeRichTextEditor",
+          "declaration": {
+            "name": "LeRichTextEditor",
+            "module": "src/components/le-rich-text-editor/le-rich-text-editor.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-rich-text-editor",
+          "declaration": {
+            "name": "LeRichTextEditor",
+            "module": "src/components/le-rich-text-editor/le-rich-text-editor.tsx"
           }
         }
       ]

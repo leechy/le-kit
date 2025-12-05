@@ -183,51 +183,45 @@
 
       <div class="demo-section">
         <h2>Text Component (Rich Text Editor in Admin Mode)</h2>
-        <p>Semantic text elements with Notion-like rich text editing. Switch to Admin mode and click on any text to edit!</p>
+        <p>Switch to Admin mode and click on any text to edit! Use "/" to change block type (paragraph, heading, quote, code).</p>
         
         <div class="demo-grid">
           <div class="text-slot-demo">
-            <label>Headings:</label>
-            <le-text variant="h1">Heading 1</le-text>
-            <le-text variant="h2">Heading 2</le-text>
-            <le-text variant="h3">Heading 3</le-text>
-            <le-text variant="h4">Heading 4</le-text>
+            <label>Simple text (passthrough):</label>
+            <le-text>This is simple text content. In admin mode, type "/" to see block type options.</le-text>
           </div>
           
           <div class="text-slot-demo">
-            <label>Paragraph with formatting:</label>
-            <le-text variant="p">This is a paragraph with <strong>bold text</strong>, <em>italic text</em>, and a <a href="https://example.com">link</a>. You can edit this in admin mode with the formatting toolbar.</le-text>
+            <label>With block elements:</label>
+            <le-text>
+              <h2>A Heading</h2>
+              <p>A paragraph with <strong>bold</strong> and <em>italic</em> text.</p>
+              <blockquote>A quote block</blockquote>
+            </le-text>
           </div>
           
           <div class="text-slot-demo">
-            <label>Quote:</label>
-            <le-text variant="quote">The only way to do great work is to love what you do. — Steve Jobs</le-text>
+            <label>Multiple paragraphs:</label>
+            <le-text>
+              <p>First paragraph of text.</p>
+              <p>Second paragraph with more content.</p>
+              <p>Third paragraph — press Enter to create new blocks!</p>
+            </le-text>
           </div>
           
           <div class="text-slot-demo">
-            <label>Code:</label>
-            <le-text variant="code">const greeting = "Hello, World!";
-console.log(greeting);</le-text>
-          </div>
-          
-          <div class="text-slot-demo">
-            <label>Label & Small:</label>
-            <le-text variant="label">Form Label</le-text>
-            <le-text variant="small">This is small helper text, useful for captions or notes.</le-text>
-          </div>
-          
-          <div class="text-slot-demo">
-            <label>Alignment:</label>
-            <le-text variant="p" align="left">Left aligned text</le-text>
-            <le-text variant="p" align="center">Center aligned text</le-text>
-            <le-text variant="p" align="right">Right aligned text</le-text>
+            <label>Code example:</label>
+            <le-text>
+              <pre>const greeting = "Hello, World!";
+console.log(greeting);</pre>
+            </le-text>
           </div>
         </div>
       </div>
 
       <div class="demo-section">
         <h2>Text Slot Types (switch to Admin mode to see)</h2>
-        <p>Demonstrating le-slot with type="text" and type="textarea" for inline text editing.</p>
+        <p>Demonstrating le-slot with type="text", type="textarea", and type="rich-text" for inline text editing.</p>
         <div class="demo-grid">
           <div class="text-slot-demo">
             <label>Single line text input:</label>
@@ -240,8 +234,72 @@ console.log(greeting);</le-text>
           </div>
           
           <div class="text-slot-demo">
+            <label>Rich text editor (Standard variant):</label>
+            <le-slot type="rich-text" label="Content" name="content" placeholder="Enter formatted content...">
+              <p>This is <strong>rich text</strong> with <em>formatting</em>!</p>
+            </le-slot>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Rich text editor (Full variant):</label>
+            <le-slot type="rich-text" editor-variant="full" label="Article" name="article" placeholder="Write your article...">
+              <p>A full-featured editor with <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <s>strikethrough</s>, and <a href="#">links</a>.</p>
+            </le-slot>
+          </div>
+          
+          <div class="text-slot-demo">
             <label>Required text field:</label>
             <le-slot type="text" label="Email" name="email" required placeholder="Enter email address..."></le-slot>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-section">
+        <h2>Standalone Rich Text Editor</h2>
+        <p>The le-rich-text-editor component can also be used directly for form fields.</p>
+        
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>Standard variant (Bold, Italic, Underline):</label>
+            <le-rich-text-editor
+              placeholder="Enter formatted text..."
+              variant="standard"
+            ></le-rich-text-editor>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Full variant (with Strikethrough & Links):</label>
+            <le-rich-text-editor
+              placeholder="Write something..."
+              variant="full"
+              value="<p>Try out all the <strong>formatting</strong> options!</p>"
+            ></le-rich-text-editor>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Minimal variant (no toolbar):</label>
+            <le-rich-text-editor
+              placeholder="Just type..."
+              variant="minimal"
+            ></le-rich-text-editor>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Disabled state:</label>
+            <le-rich-text-editor
+              value="<p>This editor is <strong>disabled</strong>.</p>"
+              variant="standard"
+              disabled
+            ></le-rich-text-editor>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Read-only state:</label>
+            <le-rich-text-editor
+              value="<p>This editor is <em>read-only</em>.</p>"
+              variant="standard"
+              readonly
+            ></le-rich-text-editor>
           </div>
         </div>
       </div>

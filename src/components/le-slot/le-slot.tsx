@@ -27,8 +27,9 @@ export class LeSlot {
    * - `slot`: Default, shows a dropzone for components (default)
    * - `text`: Shows a single-line text input
    * - `textarea`: Shows a multi-line text area
+   * - `rich-text`: Shows a rich text editor with formatting toolbar
    */
-  @Prop() type: 'slot' | 'text' | 'textarea' = 'slot';
+  @Prop() type: 'slot' | 'text' | 'textarea' | 'rich-text' = 'slot';
 
   /**
    * The name of the slot this placeholder represents.
@@ -86,6 +87,14 @@ export class LeSlot {
    * Only applies in admin mode for type="slot".
    */
   @Prop() slotStyle?: string;
+
+  /**
+   * Variant for rich-text editor.
+   * - `minimal`: No toolbar, just contenteditable
+   * - `standard`: Basic formatting (bold, italic, underline)
+   * - `full`: All formatting options including links
+   */
+  @Prop() editorVariant: 'minimal' | 'standard' | 'full' = 'standard';
 
   /**
    * Internal state to track admin mode
@@ -171,8 +180,8 @@ export class LeSlot {
 
     const assignedNodes = this.slotRef.assignedNodes({ flatten: true });
     
-    // For text/textarea types, we want to edit the innerHTML of slotted elements
-    if (this.type === 'text' || this.type === 'textarea') {
+    // For text/textarea/rich-text types, we want to edit the innerHTML of slotted elements
+    if (this.type === 'text' || this.type === 'textarea' || this.type === 'rich-text') {
       // Find the first element node (skip text nodes that are just whitespace)
       const elementNode = assignedNodes.find(
         node => node.nodeType === Node.ELEMENT_NODE
@@ -261,6 +270,38 @@ export class LeSlot {
       name: this.name, 
       value: this.textValue,
       isValid: this.isValidHtml 
+    });
+  };
+
+  /**
+   * Handle rich text editor input
+   */
+  private handleRichTextInput = (event: CustomEvent<{ value: string; textContent: string }>) => {
+    this.textValue = event.detail.value;
+    this.isValidHtml = true; // Rich text editor always produces valid HTML
+    
+    // Set flag to prevent slotchange from re-reading what we just wrote
+    this.isUpdating = true;
+    
+    if (this.slottedElement) {
+      // Update existing slotted element's innerHTML
+      this.slottedElement.innerHTML = this.textValue;
+    } else if (this.tag && this.textValue) {
+      // No slotted element exists - create one using the specified tag
+      this.createSlottedElement();
+    } else if (this.textValue) {
+      // no tag specified - just replace everything in the host component
+      const rootNode = this.el.getRootNode();
+      if (rootNode instanceof ShadowRoot) {
+        const hostComponent = rootNode.host;
+        hostComponent.innerHTML = this.textValue;
+      }
+    }
+    
+    this.leSlotChange.emit({ 
+      name: this.name, 
+      value: this.textValue,
+      isValid: true 
     });
   };
 
@@ -523,6 +564,19 @@ export class LeSlot {
               required={this.required}
               rows={3}
             ></textarea>
+            {slotElement}
+          </div>
+        );
+
+      case 'rich-text':
+        return (
+          <div class="le-slot-rich-text">
+            <le-rich-text-editor
+              value={this.textValue}
+              placeholder={this.placeholder || `Enter ${this.label || this.name || 'content'}...`}
+              variant={this.editorVariant}
+              onLeInput={this.handleRichTextInput}
+            ></le-rich-text-editor>
             {slotElement}
           </div>
         );

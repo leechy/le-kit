@@ -7,35 +7,30 @@
 
 ## Overview
 
-A text component with rich text editing capabilities in admin mode.
+A minimal text container component with rich text editing in admin mode.
 
-`le-text` renders semantic text elements (headings, paragraphs, code, quotes)
-and provides a Notion-like rich text editor in admin mode with formatting
-toolbar for bold, italic, links, and paragraph type selection.
+`le-text` is a transparent wrapper that passes through its content without
+applying any styles. All styling comes from the theme and CSS classes on
+the element itself.
+
+In admin mode, it provides a block-level rich text editor with:
+- Notion-style "/" command for block type selection (p, h1-h6, blockquote, code)
+- Enter creates new paragraphs
+- Inline formatting (bold, italic, underline, strikethrough, links)
 
 ## Properties
 
-| Property   | Attribute   | Description                                                        | Type                                                                                             | Default     |
-| ---------- | ----------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ----------- |
-| `align`    | `align`     | Text alignment                                                     | `"center" \| "justify" \| "left" \| "right"`                                                     | `'left'`    |
-| `color`    | `color`     | Text color (CSS value or theme token)                              | `string`                                                                                         | `undefined` |
-| `maxLines` | `max-lines` | Maximum number of lines before truncating (requires truncate=true) | `number`                                                                                         | `undefined` |
-| `truncate` | `truncate`  | Whether the text should truncate with ellipsis                     | `boolean`                                                                                        | `false`     |
-| `variant`  | `variant`   | The semantic variant/type of text element                          | `"code" \| "h1" \| "h2" \| "h3" \| "h4" \| "h5" \| "h6" \| "label" \| "p" \| "quote" \| "small"` | `'p'`       |
+| Property        | Attribute        | Description                                                                                                                                                                                                                                             | Type                                | Default     |
+| --------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ----------- |
+| `editorVariant` | `editor-variant` | Rich text editor variant (only applies in admin mode) - `minimal`: No toolbar, just contenteditable with / commands - `standard`: Basic formatting (bold, italic, underline) + / commands - `full`: All formatting options including links + / commands | `"full" \| "minimal" \| "standard"` | `'full'`    |
+| `placeholder`   | `placeholder`    | Placeholder text shown when the editor is empty (admin mode only)                                                                                                                                                                                       | `string`                            | `undefined` |
 
 
 ## Slots
 
-| Slot | Description                   |
-| ---- | ----------------------------- |
-|      | Default slot for text content |
-
-
-## Shadow Parts
-
-| Part     | Description |
-| -------- | ----------- |
-| `"text"` |             |
+| Slot | Description                                                                   |
+| ---- | ----------------------------------------------------------------------------- |
+|      | Default slot for text content (can be text nodes, paragraphs, headings, etc.) |
 
 
 ## Dependencies
@@ -43,11 +38,13 @@ toolbar for bold, italic, links, and paragraph type selection.
 ### Depends on
 
 - [le-component](../le-component)
+- [le-slot](../le-slot)
 
 ### Graph
 ```mermaid
 graph TD;
   le-text --> le-component
+  le-text --> le-slot
   le-component --> le-popover
   le-component --> le-button
   le-popover --> le-button
@@ -57,6 +54,7 @@ graph TD;
   le-button --> le-slot
   le-slot --> le-popover
   le-slot --> le-button
+  le-slot --> le-rich-text-editor
   style le-text fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -226,3 +226,21 @@
   font-size: 13px;
   font-style: italic;
 }
+
+/* ========================================
+   Rich Text Editor Styles
+   ======================================== */
+
+.le-slot-rich-text {
+  display: block;
+  padding: 8px;
+}
+
+.le-slot-rich-text le-rich-text-editor {
+  width: 100%;
+}
+
+/* Hide the slot content in rich-text mode - it's just for default value */
+.le-slot-rich-text .hidden-slot {
+  display: none;
+}

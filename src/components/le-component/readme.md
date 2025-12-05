@@ -71,6 +71,7 @@ graph TD;
   le-button --> le-component
   le-slot --> le-popover
   le-slot --> le-button
+  le-slot --> le-rich-text-editor
   le-box --> le-component
   le-card --> le-component
   le-stack --> le-component

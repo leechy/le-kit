@@ -51,16 +51,20 @@ render() {
 
  - [le-button](../le-button)
  - [le-card](../le-card)
+ - [le-popover](../le-popover)
 
 ### Depends on
 
 - [le-popover](../le-popover)
+- [le-button](../le-button)
 
 ### Graph
 ```mermaid
 graph TD;
   le-component --> le-popover
-  le-popover --> le-slot
+  le-component --> le-button
+  le-popover --> le-component
+  le-slot --> le-popover
   le-button --> le-component
   le-card --> le-component
   style le-component fill:#f9f,stroke:#333,stroke-width:4px

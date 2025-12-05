@@ -96,6 +96,16 @@ export class LeSlot {
   @State() private isValidHtml: boolean = true;
 
   /**
+   * Available components loaded from Custom Elements Manifest
+   */
+  @State() private availableComponents: ComponentInfo[] = [];
+
+  /**
+   * Whether the component picker popover is open
+   */
+  @State() private pickerOpen: boolean = false;
+
+  /**
    * Reference to the slot element to access assignedNodes
    */
   private slotRef?: HTMLSlotElement;
@@ -122,6 +132,11 @@ export class LeSlot {
       if (this.adminMode && !wasAdmin) {
         // Need to wait for render to access slot ref
         requestAnimationFrame(() => this.readSlottedContent());
+        
+        // Load available components for the component picker
+        if (this.type === 'slot') {
+          this.loadAvailableComponents();
+        }
       }
     });
   }
@@ -276,6 +291,86 @@ export class LeSlot {
   }
 
   /**
+   * Load available components from Custom Elements Manifest
+   */
+  private async loadAvailableComponents() {
+    try {
+      const response = await fetch('/custom-elements.json');
+      const manifest = await response.json();
+      
+      const components: ComponentInfo[] = [];
+      const allowedList = this.allowedComponents?.split(',').map(s => s.trim()) || [];
+      
+      for (const module of manifest.modules) {
+        for (const declaration of module.declarations || []) {
+          if (declaration.tagName && declaration.customElement) {
+            // Skip internal components (le-slot, le-component, le-popover)
+            const isInternal = ['le-slot', 'le-component', 'le-popover'].includes(declaration.tagName);
+            if (isInternal) continue;
+            
+            // If allowedComponents is specified, filter by it
+            if (allowedList.length > 0 && !allowedList.includes(declaration.tagName)) {
+              continue;
+            }
+            
+            components.push({
+              tagName: declaration.tagName,
+              name: this.formatComponentName(declaration.tagName),
+              description: declaration.description || '',
+            });
+          }
+        }
+      }
+      
+      this.availableComponents = components;
+    } catch (error) {
+      console.warn('[le-slot] Failed to load component manifest:', error);
+    }
+  }
+
+  /**
+   * Format a tag name into a display name
+   * e.g., 'le-card' -> 'Card'
+   */
+  private formatComponentName(tagName: string): string {
+    return tagName
+      .replace(/^le-/, '')
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
+  /**
+   * Add a new component to the slot
+   */
+  private addComponent(tagName: string) {
+    // Find the host component by traversing up through shadow DOM
+    const rootNode = this.el.getRootNode();
+    if (!(rootNode instanceof ShadowRoot)) return;
+    
+    const hostComponent = rootNode.host;
+    if (!hostComponent) return;
+    
+    // Create the new component element
+    const newElement = document.createElement(tagName);
+    
+    // Set the slot attribute if this is a named slot
+    if (this.name) {
+      newElement.setAttribute('slot', this.name);
+    }
+    
+    // Append to the host component's light DOM
+    hostComponent.appendChild(newElement);
+    
+    // Emit change event so the page can save
+    this.leSlotChange.emit({
+      name: this.name,
+      value: hostComponent.innerHTML,
+      isValid: true,
+    });
+  }
+
+  /**
    * Handle slot change event to re-read content when nodes are assigned
    */
   private handleSlotChange = () => {
@@ -312,6 +407,51 @@ export class LeSlot {
                 {this.description}
               </le-popover>} */}
               {!this.isValidHtml && <span class="le-slot-invalid">⚠ Invalid HTML</span>}
+              {this.type === 'slot' && this.adminMode && (
+                <le-popover 
+                  mode="default" 
+                  showClose={false} 
+                  align="end" 
+                  position="bottom"
+                  open={this.pickerOpen}
+                  onLePopoverOpen={() => this.pickerOpen = true}
+                  onLePopoverClose={() => this.pickerOpen = false}
+                >
+                  <button 
+                    slot="trigger" 
+                    class="le-slot-add-btn"
+                    aria-label="Add component"
+                    title="Add component"
+                  >
+                    +
+                  </button>
+                  <div class="le-slot-picker">
+                    <div class="le-slot-picker-title">Add Component</div>
+                    {this.availableComponents.length > 0 ? (
+                      <ul class="le-slot-picker-list">
+                        {this.availableComponents.map(component => (
+                          <li key={component.tagName}>
+                            <button
+                              class="le-slot-picker-item"
+                              onClick={() => {
+                                this.addComponent(component.tagName);
+                                this.pickerOpen = false;
+                              }}
+                            >
+                              <span class="le-slot-picker-name">{component.name}</span>
+                              {component.description && (
+                                <span class="le-slot-picker-desc">{component.description}</span>
+                              )}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div class="le-slot-picker-empty">No components available</div>
+                    )}
+                  </div>
+                </le-popover>
+              )}
             </div>
             {this.renderContent()}
           </div>
@@ -383,4 +523,13 @@ export class LeSlot {
         );
     }
   }
+}
+
+/**
+ * Component info from the manifest
+ */
+interface ComponentInfo {
+  tagName: string;
+  name: string;
+  description: string;
 }

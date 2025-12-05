@@ -158,3 +158,43 @@
   color: var(--le-color-text-secondary, #666);
   text-align: center;
 }
+
+/* Property editor container */
+.property-editor-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--le-space-md, 12px);
+}
+
+/* Actions section at bottom of editor */
+.property-editor-actions {
+  padding-top: var(--le-space-sm, 8px);
+  border-top: 1px solid var(--le-color-border, #e5e5e5);
+}
+
+/* Delete component button */
+.delete-component-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--le-space-xs, 4px);
+  width: 100%;
+  padding: var(--le-space-sm, 8px) var(--le-space-md, 12px);
+  border: 1px solid var(--le-color-danger, #e53935);
+  border-radius: var(--le-radius-md, 6px);
+  background: transparent;
+  color: var(--le-color-danger, #e53935);
+  font-size: var(--le-font-size-sm, 13px);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.delete-component-btn:hover {
+  background: var(--le-color-danger, #e53935);
+  color: white;
+}
+
+.delete-component-btn:active {
+  opacity: 0.9;
+}

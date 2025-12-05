@@ -129,3 +129,100 @@
 .le-slot-input slot {
   display: none;
 }
+
+/* ========================================
+   Component Picker (Add Button & Popover)
+   ======================================== */
+
+.le-slot-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+  padding: 0;
+  border: 1px solid var(--le-slot-border-color);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--le-slot-label-color);
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.le-slot-add-btn:hover {
+  background: var(--le-slot-header-bg);
+  border-color: var(--le-slot-label-color);
+  transform: scale(1.05);
+}
+
+.le-slot-add-btn:active {
+  transform: scale(0.95);
+}
+
+/* Component picker popover content */
+.le-slot-picker {
+  min-width: 200px;
+  max-width: 280px;
+}
+
+.le-slot-picker-title {
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--le-color-border, #e5e5e5);
+}
+
+.le-slot-picker-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+}
+
+.le-slot-picker-list li {
+  margin: 0;
+}
+
+.le-slot-picker-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.le-slot-picker-item:hover {
+  background: var(--le-color-surface-hover, rgba(0, 136, 255, 0.08));
+}
+
+.le-slot-picker-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--le-color-text-primary, #333);
+}
+
+.le-slot-picker-desc {
+  font-size: 11px;
+  color: var(--le-color-text-secondary, #666);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.le-slot-picker-empty {
+  padding: 16px;
+  text-align: center;
+  color: #999;
+  font-size: 13px;
+  font-style: italic;
+}

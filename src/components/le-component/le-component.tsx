@@ -223,17 +223,47 @@ export class LeComponent {
   }
 
   /**
+   * Delete this component from the DOM
+   */
+  private deleteComponent() {
+    if (!this.hostElement) return;
+
+    // Confirm deletion
+    const name = this.displayName || this.formatDisplayName(this.component);
+    if (!confirm(`Delete this ${name}?`)) return;
+
+    // Remove the host element from its parent
+    const parent = this.hostElement.parentElement;
+    if (parent) {
+      this.hostElement.remove();
+    }
+  }
+
+  /**
    * Render the property editor form
    */
   private renderPropertyEditor() {
-    if (!this.componentMeta || this.componentMeta.attributes.length === 0) {
-      return <p class="no-properties">No editable properties</p>;
-    }
+    const hasProperties = this.componentMeta && this.componentMeta.attributes.length > 0;
 
     return (
-      <form class="property-editor" onSubmit={(e) => e.preventDefault()}>
-        {this.componentMeta.attributes.map(attr => this.renderPropertyField(attr))}
-      </form>
+      <div class="property-editor-container">
+        {hasProperties ? (
+          <form class="property-editor" onSubmit={(e) => e.preventDefault()}>
+            {this.componentMeta!.attributes.map(attr => this.renderPropertyField(attr))}
+          </form>
+        ) : (
+          <p class="no-properties">No editable properties</p>
+        )}
+        <div class="property-editor-actions">
+          <button
+            type="button"
+            class="delete-component-btn"
+            onClick={() => this.deleteComponent()}
+          >
+            🗑️ Delete Component
+          </button>
+        </div>
+      </div>
     );
   }
 

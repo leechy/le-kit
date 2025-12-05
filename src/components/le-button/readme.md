@@ -121,6 +121,11 @@ A flexible button component with multiple variants and states.
 
 ## Dependencies
 
+### Used by
+
+ - [le-component](../le-component)
+ - [le-popover](../le-popover)
+
 ### Depends on
 
 - [le-component](../le-component)
@@ -131,8 +136,9 @@ A flexible button component with multiple variants and states.
 graph TD;
   le-button --> le-component
   le-button --> le-slot
-  le-component --> le-popover
-  le-popover --> le-slot
+  le-component --> le-button
+  le-popover --> le-button
+  le-slot --> le-popover
   style le-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

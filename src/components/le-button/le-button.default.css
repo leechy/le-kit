@@ -16,6 +16,7 @@
   /* Internal state variables - set by color classes */
   --_btn-bg: var(--le-color-primary);
   --_btn-bg-hover: var(--le-color-primary-dark);
+  --_btn-bg-system: var(--le-color-black);
   --_btn-color: var(--le-color-primary-contrast);
   --_btn-border-color: var(--le-color-primary);
 }
@@ -157,6 +158,13 @@
   border-color: transparent;
 }
 
+/* System (controls without access) */
+:host > le-component.variant-system .button {
+  background: transparent;
+  color: var(--_btn-bg-system);
+  border-color: transparent;
+}
+
 /* ===========================================
  * SIZES
  * =========================================== */
@@ -197,6 +205,7 @@
 /* Icon only */
 :host > le-component.icon-only .button {
   padding: 0.5rem;
+  padding-bottom: 0.6rem;
   aspect-ratio: 1;
 }
 

@@ -138,7 +138,7 @@
           <div class="text-slot-demo">
             <label>Custom trigger:</label>
             <le-popover popover-title="Options" position="bottom" align="center">
-              <button slot="trigger" style="padding: 8px 16px; cursor: pointer;">Click me</button>
+              <le-button slot="trigger">Click me</le-button>
               <div style="display: flex; flex-direction: column; gap: 8px;">
                 <button style="padding: 8px; text-align: left; border: none; background: none; cursor: pointer;">Option 1</button>
                 <button style="padding: 8px; text-align: left; border: none; background: none; cursor: pointer;">Option 2</button>
@@ -286,6 +286,10 @@
               <le-button color="success">
                 <svg slot="icon-start" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                 <div>With Icon</div>
+              </le-button>
+              <le-button>
+                <div>Next</div>
+                <div slot="icon-end">→</div>
               </le-button>
             </div>
           </div>

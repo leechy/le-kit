@@ -1,0 +1,245 @@
+/**
+ * Le-Popover Portal Styles
+ * 
+ * These styles are applied to the portal container which is rendered
+ * outside the shadow DOM at the document body level.
+ * 
+ * This file is imported in the global styles (themes/index.css) so it's
+ * available globally without needing to inject styles via JavaScript.
+ */
+
+/* Portal container */
+#le-popover-portal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Individual popover wrapper */
+.le-popover-portal {
+  position: absolute;
+  z-index: 10000;
+  pointer-events: auto;
+}
+
+/* Popover content box */
+.le-popover-portal-content {
+  background: var(--le-color-surface, #ffffff);
+  border: 1px solid var(--le-color-border, #e5e5e5);
+  border-radius: var(--le-radius-lg, 8px);
+  box-shadow: var(--le-shadow-lg, 0 4px 12px rgba(0, 0, 0, 0.15));
+  overflow: hidden;
+  font-family: var(--le-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  font-size: var(--le-font-size-sm, 13px);
+  color: var(--le-color-text-primary, #333);
+}
+
+/* Header */
+.le-popover-portal .le-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--le-spacing-1, 4px) var(--le-spacing-1, 4px) var(--le-spacing-1, 4px) var(--le-spacing-2, 8px);
+  border-bottom: 1px solid var(--le-color-border, #e5e5e5);
+  background: var(--le-color-surface-secondary, #f9f9f9);
+}
+
+.le-popover-portal .le-popover-title {
+  font-weight: var(--le-font-weight-semibold, 600);
+  font-size: var(--le-font-size-sm, 13px);
+  color: var(--le-color-text-primary, #333);
+}
+
+.le-popover-portal .le-popover-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--le-color-text-secondary, #666);
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: var(--le-radius-md, 7px);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.le-popover-portal .le-popover-close:hover {
+  background: var(--le-color-surface-hover, rgba(0, 0, 0, 0.05));
+  color: var(--le-color-text-primary, #333);
+}
+
+/* Body */
+.le-popover-portal .le-popover-body {
+  padding: var(--le-space-md, 12px);
+}
+
+/* ============================================
+   Property Editor Styles (le-component popover)
+   ============================================ */
+
+.le-popover-portal .property-editor-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--le-space-md, 12px);
+}
+
+.le-popover-portal .property-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--le-space-md, 12px);
+}
+
+.le-popover-portal .property-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--le-space-xs, 4px);
+}
+
+.le-popover-portal .property-field label {
+  font-size: var(--le-font-size-sm, 13px);
+  font-weight: var(--le-font-weight-medium, 500);
+  color: var(--le-color-text-primary, #333);
+}
+
+.le-popover-portal .property-field input,
+.le-popover-portal .property-field select {
+  padding: var(--le-space-sm, 8px);
+  border: 1px solid var(--le-color-border, #e5e5e5);
+  border-radius: var(--le-radius-md, 6px);
+  font-size: var(--le-font-size-sm, 13px);
+  background: var(--le-color-surface, #fff);
+  color: var(--le-color-text-primary, #333);
+}
+
+.le-popover-portal .property-field input:focus,
+.le-popover-portal .property-field select:focus {
+  outline: none;
+  border-color: var(--le-color-primary, #0088ff);
+  box-shadow: 0 0 0 2px rgba(0, 136, 255, 0.15);
+}
+
+.le-popover-portal .property-field--checkbox label {
+  display: flex;
+  align-items: center;
+  gap: var(--le-space-sm, 8px);
+  cursor: pointer;
+}
+
+.le-popover-portal .property-field--checkbox input {
+  width: 16px;
+  height: 16px;
+}
+
+.le-popover-portal .property-hint {
+  display: block;
+  font-size: 11px;
+  color: var(--le-color-text-secondary, #666);
+  font-weight: normal;
+  margin-top: 2px;
+}
+
+.le-popover-portal .property-editor-actions {
+  padding-top: var(--le-space-sm, 8px);
+  border-top: 1px solid var(--le-color-border, #e5e5e5);
+}
+
+.le-popover-portal .delete-component-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--le-space-xs, 4px);
+  width: 100%;
+  padding: var(--le-space-sm, 8px) var(--le-space-md, 12px);
+  border: 1px solid var(--le-color-danger, #e53935);
+  border-radius: var(--le-radius-md, 6px);
+  background: transparent;
+  color: var(--le-color-danger, #e53935);
+  font-size: var(--le-font-size-sm, 13px);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.le-popover-portal .delete-component-btn:hover {
+  background: var(--le-color-danger, #e53935);
+  color: white;
+}
+
+.le-popover-portal .no-properties {
+  margin: 0;
+  padding: var(--le-space-sm, 8px);
+  font-size: var(--le-font-size-sm, 13px);
+  color: var(--le-color-text-secondary, #666);
+  text-align: center;
+}
+
+/* ============================================
+   Component Picker Styles (le-slot popover)
+   ============================================ */
+
+.le-popover-portal .le-slot-picker {
+  min-width: 200px;
+  max-width: 280px;
+}
+
+.le-popover-portal .le-slot-picker-title {
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--le-color-border, #e5e5e5);
+}
+
+.le-popover-portal .le-slot-picker-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+}
+
+.le-popover-portal .le-slot-picker-list li {
+  margin: 0;
+}
+
+.le-popover-portal .le-slot-picker-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.le-popover-portal .le-slot-picker-item:hover {
+  background: var(--le-color-surface-hover, rgba(0, 136, 255, 0.08));
+}
+
+.le-popover-portal .le-slot-picker-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--le-color-text-primary, #333);
+}
+
+.le-popover-portal .le-slot-picker-desc {
+  font-size: 11px;
+  color: var(--le-color-text-secondary, #666);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.le-popover-portal .le-slot-picker-empty {
+  padding: 16px;
+  text-align: center;
+  color: #999;
+  font-size: 13px;
+  font-style: italic;
+}

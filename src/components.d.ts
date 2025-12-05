@@ -70,7 +70,7 @@ export namespace Components {
           * @allowedValues solid | outlined | clear
           * @default 'solid'
          */
-        "variant": 'solid' | 'outlined' | 'clear';
+        "variant": 'solid' | 'outlined' | 'clear' | 'system';
     }
     /**
      * A flexible card component with header, content, and footer slots.
@@ -165,6 +165,15 @@ export namespace Components {
          */
         "hide": () => Promise<void>;
         /**
+          * Maximum width for the popover (e.g., '400px', '25rem')
+         */
+        "maxWidth"?: string;
+        /**
+          * Minimum width for the popover (e.g., '200px', '15rem')
+          * @default '200px'
+         */
+        "minWidth"?: string;
+        /**
           * Mode of the popover should be 'default' for internal use
          */
         "mode": 'default' | 'admin';
@@ -200,6 +209,10 @@ export namespace Components {
           * Toggles the popover
          */
         "toggle": () => Promise<void>;
+        /**
+          * Fixed width for the popover (e.g., '300px', '20rem') If set, overrides minWidth and maxWidth
+         */
+        "width"?: string;
     }
     /**
      * Slot placeholder component for admin/CMS mode.
@@ -474,7 +487,7 @@ declare namespace LocalJSX {
           * @allowedValues solid | outlined | clear
           * @default 'solid'
          */
-        "variant"?: 'solid' | 'outlined' | 'clear';
+        "variant"?: 'solid' | 'outlined' | 'clear' | 'system';
     }
     /**
      * A flexible card component with header, content, and footer slots.
@@ -565,6 +578,15 @@ declare namespace LocalJSX {
          */
         "closeOnEscape"?: boolean;
         /**
+          * Maximum width for the popover (e.g., '400px', '25rem')
+         */
+        "maxWidth"?: string;
+        /**
+          * Minimum width for the popover (e.g., '200px', '15rem')
+          * @default '200px'
+         */
+        "minWidth"?: string;
+        /**
           * Mode of the popover should be 'default' for internal use
          */
         "mode"?: 'default' | 'admin';
@@ -600,6 +622,10 @@ declare namespace LocalJSX {
           * @default true
          */
         "showClose"?: boolean;
+        /**
+          * Fixed width for the popover (e.g., '300px', '20rem') If set, overrides minWidth and maxWidth
+         */
+        "width"?: string;
     }
     /**
      * Slot placeholder component for admin/CMS mode.

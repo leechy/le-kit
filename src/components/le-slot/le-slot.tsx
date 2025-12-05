@@ -409,24 +409,27 @@ export class LeSlot {
               {!this.isValidHtml && <span class="le-slot-invalid">⚠ Invalid HTML</span>}
               {this.type === 'slot' && this.adminMode && (
                 <le-popover 
-                  mode="default" 
-                  showClose={false} 
-                  align="end" 
-                  position="bottom"
+                  mode="default"
+                  showClose={true}
+                  align="start"
+                  position="right"
+                  popoverTitle="Add Component"
                   open={this.pickerOpen}
                   onLePopoverOpen={() => this.pickerOpen = true}
                   onLePopoverClose={() => this.pickerOpen = false}
                 >
-                  <button 
-                    slot="trigger" 
-                    class="le-slot-add-btn"
+                  <le-button
+                    type="button"
+                    class="le-slot-button"
+                    slot="trigger"
+                    variant="clear"
+                    size="small"
                     aria-label="Add component"
-                    title="Add component"
+                    icon-only
                   >
-                    +
-                  </button>
+                    <span class="le-slot-add-btn" slot="icon-only">+</span>
+                  </le-button>
                   <div class="le-slot-picker">
-                    <div class="le-slot-picker-title">Add Component</div>
                     {this.availableComponents.length > 0 ? (
                       <ul class="le-slot-picker-list">
                         {this.availableComponents.map(component => (

@@ -16,6 +16,9 @@
 @import './minimal.css';
 @import './warm.css';
 
+/* Portal styles for le-popover (rendered outside shadow DOM) */
+@import '../components/le-popover/le-popover.portal.css';
+
 /* ============================================
    BASE TOKENS
    Structural design tokens that apply to all themes
@@ -127,7 +130,7 @@
   /* Border Radius */
   --le-radius-none: 0;
   --le-radius-sm: 4px;
-  --le-radius-md:7px;
+  --le-radius-md: 7px;
   --le-radius-lg: 12px;
   --le-radius-xl: 16px;
   --le-radius-2xl: 24px;

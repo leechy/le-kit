@@ -32,7 +32,7 @@ export class LeButton {
    * Button variant style
    * @allowedValues solid | outlined | clear
    */
-  @Prop() variant: 'solid' | 'outlined' | 'clear' = 'solid';
+  @Prop() variant: 'solid' | 'outlined' | 'clear' | 'system' = 'solid';
 
   /**
    * Button color theme (uses theme semantic colors)

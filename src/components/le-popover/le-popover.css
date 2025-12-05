@@ -13,8 +13,8 @@
   --le-popover-border-color: var(--le-color-border, #e0e0e0);
   --le-popover-border-radius: var(--le-radius-lg, 8px);
   --le-popover-shadow: var(--le-shadow-xl, 0 10px 15px rgba(0, 0, 0, 0.1));
-  --le-popover-min-width: 200px;
-  --le-popover-max-width: 320px;
+  --le-popover-min-width: 300px;
+  --le-popover-max-width: 380px;
   --le-popover-z-index: var(--le-z-popover, 1060);
   
   --le-popover-header-bg: var(--le-color-background-secondary, #f5f5f5);

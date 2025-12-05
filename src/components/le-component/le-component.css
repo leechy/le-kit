@@ -50,29 +50,19 @@
   flex: 1 1 0%;
 }
 
-.le-component-settings-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  border-radius: var(--le-radius-sm, 4px);
-  background: transparent;
-  color: var(--le-admin-text, #1976d2);
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.15s ease;
-}
-
-.le-component-settings-btn:hover {
-  background: var(--le-admin-btn-hover, rgba(25, 118, 210, 0.15));
-}
-
 /* Component content area */
 .le-component-content {
   padding: var(--le-space-xs, 4px);
+}
+
+.le-component-trigger {
+  font-size: 24px;
+  line-height: 0px;
+  width: 12px;
+  height: 12px;
+}
+.le-component-button {
+  width: 20px;
 }
 
 /* Property editor styles */
@@ -80,8 +70,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--le-space-sm, 8px);
-  min-width: 220px;
-  max-width: 300px;
+  max-width: 380px;
 }
 
 .property-field {
@@ -111,7 +100,7 @@
 .property-field select {
   padding: var(--le-space-xs, 4px) var(--le-space-sm, 8px);
   border: 1px solid var(--le-color-border, #ddd);
-  border-radius: var(--le-radius-sm, 4px);
+  border-radius: var(--le-radius-md, 7px);
   font-size: var(--le-font-size-sm, 13px);
   font-family: inherit;
   background: var(--le-color-surface, #fff);

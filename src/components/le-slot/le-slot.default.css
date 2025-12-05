@@ -188,3 +188,17 @@
   border-color: var(--le-slot-required-color);
   box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.15);
 }
+
+
+/* ========================================
+   Component Picker (Add Button & Popover)
+   ======================================== */
+.le-slot-add-btn {
+  font-size: 24px;
+  line-height: 0px;
+  width: 12px;
+  height: 12px;
+}
+.le-slot-button {
+  width: 20px;
+}

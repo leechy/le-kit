@@ -161,7 +161,7 @@ export class LeSlot {
         if (this.slottedElement !== elementNode) {
           this.slottedElement = elementNode;
           this.textValue = elementNode.innerHTML?.trim() || '';
-          console.log(`[le-slot "${this.name}"] Read slotted content:`, this.textValue);
+          // console.log(`[le-slot "${this.name}"] Read slotted content:`, this.textValue);
         }
       } else {
         // No element, check for direct text content
@@ -173,7 +173,7 @@ export class LeSlot {
         
         if (textContent && !this.textValue) {
           this.textValue = textContent;
-          console.log(`[le-slot "${this.name}"] Read text content:`, this.textValue);
+          // console.log(`[le-slot "${this.name}"] Read text content:`, this.textValue);
         }
       }
     }
@@ -225,6 +225,13 @@ export class LeSlot {
       } else if (this.tag && this.textValue) {
         // No slotted element exists - create one using the specified tag
         this.createSlottedElement();
+      } else if (this.textValue) {
+        // no tag specified - just replace everything in the host component
+        const rootNode = this.el.getRootNode();
+        if (rootNode instanceof ShadowRoot) {
+          const hostComponent = rootNode.host;
+          hostComponent.innerHTML = this.textValue;
+        }
       }
     }
     
@@ -265,7 +272,7 @@ export class LeSlot {
     // Store reference to the new element
     this.slottedElement = newElement;
     
-    console.log(`[le-slot "${this.name}"] Created new <${this.tag}> element`);
+    // console.log(`[le-slot "${this.name}"] Created new <${this.tag}> element`);
   }
 
   /**

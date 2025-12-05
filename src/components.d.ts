@@ -452,6 +452,46 @@ export namespace Components {
          */
         "wrap": boolean;
     }
+    /**
+     * A text component with rich text editing capabilities in admin mode.
+     * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)
+     * and provides a Notion-like rich text editor in admin mode with formatting
+     * toolbar for bold, italic, links, and paragraph type selection.
+     * @cssprop --le-text-color - Text color
+     * @cssprop --le-text-font-size - Font size
+     * @cssprop --le-text-line-height - Line height
+     * @cssprop --le-text-font-weight - Font weight
+     * @csspart text - The text container element
+     * @cmsEditable true
+     * @cmsCategory Content
+     */
+    interface LeText {
+        /**
+          * Text alignment
+          * @allowedValues left | center | right | justify
+          * @default 'left'
+         */
+        "align": 'left' | 'center' | 'right' | 'justify';
+        /**
+          * Text color (CSS value or theme token)
+         */
+        "color"?: string;
+        /**
+          * Maximum number of lines before truncating (requires truncate=true)
+         */
+        "maxLines"?: number;
+        /**
+          * Whether the text should truncate with ellipsis
+          * @default false
+         */
+        "truncate": boolean;
+        /**
+          * The semantic variant/type of text element
+          * @allowedValues p | h1 | h2 | h3 | h4 | h5 | h6 | code | quote | label | small
+          * @default 'p'
+         */
+        "variant": 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small';
+    }
 }
 export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -629,6 +669,25 @@ declare global {
         prototype: HTMLLeStackElement;
         new (): HTMLLeStackElement;
     };
+    /**
+     * A text component with rich text editing capabilities in admin mode.
+     * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)
+     * and provides a Notion-like rich text editor in admin mode with formatting
+     * toolbar for bold, italic, links, and paragraph type selection.
+     * @cssprop --le-text-color - Text color
+     * @cssprop --le-text-font-size - Font size
+     * @cssprop --le-text-line-height - Line height
+     * @cssprop --le-text-font-weight - Font weight
+     * @csspart text - The text container element
+     * @cmsEditable true
+     * @cmsCategory Content
+     */
+    interface HTMLLeTextElement extends Components.LeText, HTMLStencilElement {
+    }
+    var HTMLLeTextElement: {
+        prototype: HTMLLeTextElement;
+        new (): HTMLLeTextElement;
+    };
     interface HTMLElementTagNameMap {
         "le-box": HTMLLeBoxElement;
         "le-button": HTMLLeButtonElement;
@@ -637,6 +696,7 @@ declare global {
         "le-popover": HTMLLePopoverElement;
         "le-slot": HTMLLeSlotElement;
         "le-stack": HTMLLeStackElement;
+        "le-text": HTMLLeTextElement;
     }
 }
 declare namespace LocalJSX {
@@ -1090,6 +1150,46 @@ declare namespace LocalJSX {
          */
         "wrap"?: boolean;
     }
+    /**
+     * A text component with rich text editing capabilities in admin mode.
+     * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)
+     * and provides a Notion-like rich text editor in admin mode with formatting
+     * toolbar for bold, italic, links, and paragraph type selection.
+     * @cssprop --le-text-color - Text color
+     * @cssprop --le-text-font-size - Font size
+     * @cssprop --le-text-line-height - Line height
+     * @cssprop --le-text-font-weight - Font weight
+     * @csspart text - The text container element
+     * @cmsEditable true
+     * @cmsCategory Content
+     */
+    interface LeText {
+        /**
+          * Text alignment
+          * @allowedValues left | center | right | justify
+          * @default 'left'
+         */
+        "align"?: 'left' | 'center' | 'right' | 'justify';
+        /**
+          * Text color (CSS value or theme token)
+         */
+        "color"?: string;
+        /**
+          * Maximum number of lines before truncating (requires truncate=true)
+         */
+        "maxLines"?: number;
+        /**
+          * Whether the text should truncate with ellipsis
+          * @default false
+         */
+        "truncate"?: boolean;
+        /**
+          * The semantic variant/type of text element
+          * @allowedValues p | h1 | h2 | h3 | h4 | h5 | h6 | code | quote | label | small
+          * @default 'p'
+         */
+        "variant"?: 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small';
+    }
     interface IntrinsicElements {
         "le-box": LeBox;
         "le-button": LeButton;
@@ -1098,6 +1198,7 @@ declare namespace LocalJSX {
         "le-popover": LePopover;
         "le-slot": LeSlot;
         "le-stack": LeStack;
+        "le-text": LeText;
     }
 }
 export { LocalJSX as JSX };
@@ -1198,6 +1299,20 @@ declare module "@stencil/core" {
              * @cmsCategory Layout
              */
             "le-stack": LocalJSX.LeStack & JSXBase.HTMLAttributes<HTMLLeStackElement>;
+            /**
+             * A text component with rich text editing capabilities in admin mode.
+             * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)
+             * and provides a Notion-like rich text editor in admin mode with formatting
+             * toolbar for bold, italic, links, and paragraph type selection.
+             * @cssprop --le-text-color - Text color
+             * @cssprop --le-text-font-size - Font size
+             * @cssprop --le-text-line-height - Line height
+             * @cssprop --le-text-font-weight - Font weight
+             * @csspart text - The text container element
+             * @cmsEditable true
+             * @cmsCategory Content
+             */
+            "le-text": LocalJSX.LeText & JSXBase.HTMLAttributes<HTMLLeTextElement>;
         }
     }
 }

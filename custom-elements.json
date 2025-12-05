@@ -2230,6 +2230,374 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-text/le-text.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A text component with rich text editing capabilities in admin mode.\n\n`le-text` renders semantic text elements (headings, paragraphs, code, quotes)\nand provides a Notion-like rich text editor in admin mode with formatting\ntoolbar for bold, italic, links, and paragraph type selection.",
+          "name": "LeText",
+          "cssProperties": [
+            {
+              "description": "Text color",
+              "name": "--le-text-color"
+            },
+            {
+              "description": "Font size",
+              "name": "--le-text-font-size"
+            },
+            {
+              "description": "Line height",
+              "name": "--le-text-line-height"
+            },
+            {
+              "description": "Font weight",
+              "name": "--le-text-font-weight"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The text container element",
+              "name": "text"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Default slot for text content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small'"
+              },
+              "default": "'p'",
+              "description": "The semantic variant/type of text element"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'left' | 'center' | 'right' | 'justify'"
+              },
+              "default": "'left'",
+              "description": "Text alignment"
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Text color (CSS value or theme token)"
+            },
+            {
+              "kind": "field",
+              "name": "truncate",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the text should truncate with ellipsis"
+            },
+            {
+              "kind": "field",
+              "name": "maxLines",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of lines before truncating (requires truncate=true)"
+            },
+            {
+              "kind": "field",
+              "name": "adminMode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Internal state to track admin mode"
+            },
+            {
+              "kind": "field",
+              "name": "content",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''",
+              "description": "The HTML content being edited"
+            },
+            {
+              "kind": "field",
+              "name": "isFocused",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Whether the editor is focused (shows toolbar)"
+            },
+            {
+              "kind": "field",
+              "name": "selectionState",
+              "type": {
+                "text": "SelectionState"
+              },
+              "privacy": "private",
+              "default": "{ isBold: false, isItalic: false, isUnderline: false, isStrikethrough: false, isLink: false, blockType: 'p', }",
+              "description": "Current selection state for toolbar button highlighting"
+            },
+            {
+              "kind": "field",
+              "name": "editorRef",
+              "type": {
+                "text": "HTMLDivElement | undefined"
+              },
+              "privacy": "private",
+              "description": "Reference to the contenteditable element"
+            },
+            {
+              "kind": "field",
+              "name": "slotRef",
+              "type": {
+                "text": "HTMLSlotElement | undefined"
+              },
+              "privacy": "private",
+              "description": "Reference to the slot element"
+            },
+            {
+              "kind": "field",
+              "name": "disconnectModeObserver",
+              "type": {
+                "text": "() => void | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "onVariantChange"
+            },
+            {
+              "kind": "method",
+              "name": "readSlottedContent",
+              "privacy": "private",
+              "description": "Read content from slotted elements"
+            },
+            {
+              "kind": "method",
+              "name": "syncContentToSlot",
+              "privacy": "private",
+              "description": "Sync edited content back to the slot"
+            },
+            {
+              "kind": "field",
+              "name": "handleInput",
+              "privacy": "private",
+              "description": "Handle input in the contenteditable"
+            },
+            {
+              "kind": "field",
+              "name": "handleFocus",
+              "privacy": "private",
+              "description": "Handle focus on the editor"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlur",
+              "privacy": "private",
+              "description": "Handle blur on the editor"
+            },
+            {
+              "kind": "field",
+              "name": "handleSelectionChange",
+              "privacy": "private",
+              "description": "Handle selection change to update toolbar state"
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectionState",
+              "privacy": "private",
+              "description": "Update the selection state for toolbar highlighting"
+            },
+            {
+              "kind": "method",
+              "name": "isSelectionInLink",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "selection",
+                  "type": {
+                    "text": "Selection"
+                  }
+                }
+              ],
+              "description": "Check if current selection is within a link"
+            },
+            {
+              "kind": "method",
+              "name": "execCommand",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "command",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "value",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Execute a formatting command"
+            },
+            {
+              "kind": "field",
+              "name": "toggleBold",
+              "privacy": "private",
+              "description": "Toggle bold formatting"
+            },
+            {
+              "kind": "field",
+              "name": "toggleItalic",
+              "privacy": "private",
+              "description": "Toggle italic formatting"
+            },
+            {
+              "kind": "field",
+              "name": "toggleUnderline",
+              "privacy": "private",
+              "description": "Toggle underline formatting"
+            },
+            {
+              "kind": "field",
+              "name": "toggleStrikethrough",
+              "privacy": "private",
+              "description": "Toggle strikethrough formatting"
+            },
+            {
+              "kind": "field",
+              "name": "toggleLink",
+              "privacy": "private",
+              "description": "Add or edit a link"
+            },
+            {
+              "kind": "field",
+              "name": "changeVariant",
+              "privacy": "private",
+              "description": "Change the block type/variant"
+            },
+            {
+              "kind": "method",
+              "name": "renderToolbar",
+              "privacy": "private",
+              "description": "Render the formatting toolbar"
+            },
+            {
+              "kind": "method",
+              "name": "getTag",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "description": "Get the semantic tag for the current variant"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'p'",
+              "description": "The semantic variant/type of text element",
+              "type": {
+                "text": "'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small'"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'left'",
+              "description": "Text alignment",
+              "type": {
+                "text": "'left' | 'center' | 'right' | 'justify'"
+              }
+            },
+            {
+              "name": "color",
+              "fieldName": "color",
+              "description": "Text color (CSS value or theme token)",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "truncate",
+              "fieldName": "truncate",
+              "default": "false",
+              "description": "Whether the text should truncate with ellipsis",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "max-lines",
+              "fieldName": "maxLines",
+              "description": "Maximum number of lines before truncating (requires truncate=true)",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-text",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeText",
+          "declaration": {
+            "name": "LeText",
+            "module": "src/components/le-text/le-text.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-text",
+          "declaration": {
+            "name": "LeText",
+            "module": "src/components/le-text/le-text.tsx"
+          }
+        }
+      ]
     }
   ]
 }

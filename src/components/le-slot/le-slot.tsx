@@ -1,5 +1,5 @@
 import { Component, Prop, State, h, Host, Element, Event, EventEmitter } from '@stencil/core';
-import { observeModeChanges } from '../../utils/utils';
+import { classnames, observeModeChanges } from '../../utils/utils';
 
 /**
  * Slot placeholder component for admin/CMS mode.
@@ -385,7 +385,7 @@ export class LeSlot {
   };
 
   render() {
-    const displayLabel = this.label || this.name || 'default';
+    const displayLabel = this.label || this.name;
 
     // Always render the same structure, CSS handles visibility via .admin-mode class
     return (
@@ -404,11 +404,17 @@ export class LeSlot {
       >
         {this.adminMode ? (
           <div class="le-slot-container">
-            <div class="le-slot-header">
-              <span class="le-slot-label">
-                {displayLabel}
-                {this.required && <span class="le-slot-required">*</span>}
-              </span>
+            <div class={classnames('le-slot-header', {
+              'le-slot-header-no-label': !displayLabel,
+              'le-slot-header-text': this.type === 'text',
+              'le-slot-header-error': !this.isValidHtml
+            })}>
+              {displayLabel && (
+                <span class="le-slot-label">
+                  {displayLabel}
+                  {this.required && <span class="le-slot-required">*</span>}
+                </span>
+              )}
               {/* {this.description && <le-popover mode="default" showClose={false} align="end" position="bottom">
                 <span slot="trigger" class="le-slot-description-icon">ℹ️</span>
                 {this.description}

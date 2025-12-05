@@ -146,13 +146,13 @@ export class LeStack {
       style.padding = this.padding;
     }
 
-    if (this.fullWidth) {
-      style.width = '100%';
-    }
+    // if (this.fullWidth) {
+    //   style.width = '100%';
+    // }
 
-    if (this.fullHeight) {
-      style.height = '100%';
-    }
+    // if (this.fullHeight) {
+    //   style.height = '100%';
+    // }
 
     const hostClass = classnames(
       `direction-${this.direction}`,
@@ -165,17 +165,16 @@ export class LeStack {
     );
 
     // Slot style for admin mode - make items display in the same direction
-    const slotStyle = `display: flex; flex-direction: ${this.getFlexDirection()}; gap: ${this.gap || 'var(--le-space-md)'}; flex-wrap: ${this.wrap ? 'wrap' : 'nowrap'}`;
+    const slotStyle = `display: flex; flex-direction: ${this.getFlexDirection()}; gap: ${this.gap || 'var(--le-space-md)'}; flex-wrap: ${this.wrap ? 'wrap' : 'nowrap'}; justify-content: ${this.getJustifyContent()}; align-items: ${this.getAlignItems()};`;
 
     return (
       <le-component component="le-stack" hostClass={hostClass}>
         <div class="stack" part="stack" style={style}>
           <le-slot
             name=""
-            label="Stack Items"
             description={`Items arranged ${this.direction}ly${this.maxItems ? ` (max ${this.maxItems})` : ''}`}
             type="slot"
-            allowed-components="le-box,le-card,le-button,le-stack"
+            allowed-components="le-text,le-box,le-card,le-button,le-stack"
             slotStyle={slotStyle}
           >
             <slot></slot>

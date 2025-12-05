@@ -55,6 +55,7 @@ render() {
  - [le-card](../le-card)
  - [le-popover](../le-popover)
  - [le-stack](../le-stack)
+ - [le-text](../le-text)
 
 ### Depends on
 
@@ -73,6 +74,7 @@ graph TD;
   le-box --> le-component
   le-card --> le-component
   le-stack --> le-component
+  le-text --> le-component
   style le-component fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

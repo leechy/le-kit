@@ -221,10 +221,9 @@ export class LeBox {
             <div class="content" part="content" style={contentStyle}>
               <le-slot
                 name=""
-                label="Box Content"
                 description="Content inside this flex item"
                 type="slot"
-                allowed-components="le-card,le-button,le-stack,le-box"
+                allowed-components="le-text,le-card,le-button,le-stack,le-box"
               >
                 <slot></slot>
               </le-slot>

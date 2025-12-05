@@ -182,6 +182,50 @@
       </div>
 
       <div class="demo-section">
+        <h2>Text Component (Rich Text Editor in Admin Mode)</h2>
+        <p>Semantic text elements with Notion-like rich text editing. Switch to Admin mode and click on any text to edit!</p>
+        
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>Headings:</label>
+            <le-text variant="h1">Heading 1</le-text>
+            <le-text variant="h2">Heading 2</le-text>
+            <le-text variant="h3">Heading 3</le-text>
+            <le-text variant="h4">Heading 4</le-text>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Paragraph with formatting:</label>
+            <le-text variant="p">This is a paragraph with <strong>bold text</strong>, <em>italic text</em>, and a <a href="https://example.com">link</a>. You can edit this in admin mode with the formatting toolbar.</le-text>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Quote:</label>
+            <le-text variant="quote">The only way to do great work is to love what you do. — Steve Jobs</le-text>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Code:</label>
+            <le-text variant="code">const greeting = "Hello, World!";
+console.log(greeting);</le-text>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Label & Small:</label>
+            <le-text variant="label">Form Label</le-text>
+            <le-text variant="small">This is small helper text, useful for captions or notes.</le-text>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Alignment:</label>
+            <le-text variant="p" align="left">Left aligned text</le-text>
+            <le-text variant="p" align="center">Center aligned text</le-text>
+            <le-text variant="p" align="right">Right aligned text</le-text>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-section">
         <h2>Text Slot Types (switch to Admin mode to see)</h2>
         <p>Demonstrating le-slot with type="text" and type="textarea" for inline text editing.</p>
         <div class="demo-grid">
@@ -393,23 +437,23 @@
           <le-stack direction="vertical" gap="var(--le-space-md)" full-width style="margin-top: 8px; min-height: 200px;">
             <!-- Header -->
             <le-box padding="var(--le-space-md)" background="var(--le-color-primary)" border-radius="var(--le-radius-md)">
-              <span style="color: var(--le-color-on-primary);">Header</span>
+              <le-text variant="h4" color="var(--le-color-on-primary)">Header</le-text>
             </le-box>
             <!-- Main content area -->
             <le-stack gap="var(--le-space-md)" grow="1" full-width>
               <le-box basis="120px" padding="var(--le-space-md)" background="var(--le-color-surface-alt)" border-radius="var(--le-radius-md)">
-                <span>Sidebar</span>
+                <le-text variant="label">Sidebar</le-text>
               </le-box>
               <le-box grow="1" padding="var(--le-space-md)" background="var(--le-color-surface)" border="1px solid var(--le-color-border)" border-radius="var(--le-radius-md)">
-                <span>Main Content Area</span>
+                <le-text variant="p">Main Content Area - edit this text in admin mode!</le-text>
               </le-box>
               <le-box basis="120px" padding="var(--le-space-md)" background="var(--le-color-surface-alt)" border-radius="var(--le-radius-md)">
-                <span>Aside</span>
+                <le-text variant="label">Aside</le-text>
               </le-box>
             </le-stack>
             <!-- Footer -->
             <le-box padding="var(--le-space-md)" background="var(--le-color-primary)" border-radius="var(--le-radius-md)">
-              <span style="color: var(--le-color-on-primary);">Footer</span>
+              <le-text variant="small" color="var(--le-color-on-primary)">Footer</le-text>
             </le-box>
           </le-stack>
         </div>

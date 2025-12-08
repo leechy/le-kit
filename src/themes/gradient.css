@@ -63,6 +63,9 @@
   --le-color-surface: rgba(255, 255, 255, 0.95);
   --le-color-surface-elevated: #ffffff;
   
+  /* Toolbar background */
+  --le-color-toolbar-background: rgba(139, 92, 246, 0.1);
+
   /* Text colors */
   --le-color-text-primary: #1f2937;
   --le-color-text-secondary: #6b7280;

@@ -65,12 +65,15 @@
 
 /* Toolbar */
 .le-rte-toolbar {
+  position: absolute;
+  top: -42px;
   display: flex;
   align-items: center;
   gap: 2px;
   padding: 4px 6px;
   margin-bottom: 6px;
-  background: var(--le-color-surface, #fff);
+  background: var(--le-color-toolbar-background, #f0f0f0);
+  backdrop-filter: blur(3px);
   border: 1px solid var(--le-color-border, #ddd);
   border-radius: var(--le-radius-md, 4px);
   box-shadow: var(--le-shadow-sm, 0 1px 3px rgba(0,0,0,0.1));
@@ -113,6 +116,34 @@
 .le-rte-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Block type select */
+.le-rte-block-select {
+  height: 28px;
+  padding: 0 24px 0 8px;
+  border: 1px solid transparent;
+  border-radius: var(--le-radius-sm, 3px);
+  background: transparent;
+  color: var(--le-color-text, #333);
+  font-size: 13px;
+  font-family: var(--le-font-family);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M3 4.5L6 8l3-3.5H3z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  transition: all 0.15s ease;
+}
+
+.le-rte-block-select:hover {
+  background-color: var(--le-color-surface-alt, #f5f5f5);
+  border-color: var(--le-color-border, #ddd);
+}
+
+.le-rte-block-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--le-color-primary-light, rgba(0, 102, 204, 0.3));
 }
 
 /* Content formatting */

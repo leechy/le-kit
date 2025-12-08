@@ -70,7 +70,10 @@
   /* Surface colors (cards, modals, etc.) */
   --le-color-surface: #ffffff;
   --le-color-surface-elevated: #ffffff;
-  
+
+  /* Toolbar background */
+  --le-color-toolbar-background: #b6b6b633;
+
   /* Text colors */
   --le-color-text-primary: #212121;
   --le-color-text-secondary: #757575;

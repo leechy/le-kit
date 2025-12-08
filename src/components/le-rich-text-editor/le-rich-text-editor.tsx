@@ -79,12 +79,15 @@ export class LeRichTextEditor {
     isLink: false,
   };
 
+  /** Current block type at cursor position */
+  @State() private currentBlockType: string = 'p';
+
   /** Whether the command menu is open */
   @State() private commandMenuOpen: boolean = false;
-  
+
   /** Filter text for command menu (text after "/") */
   @State() private commandFilter: string = '';
-  
+
   /** Selected index in command menu */
   @State() private commandMenuIndex: number = 0;
 
@@ -99,7 +102,7 @@ export class LeRichTextEditor {
   private slotRef?: HTMLSlotElement;
   private valueOnFocus: string = '';
   private isUpdating: boolean = false;
-  
+
   /** Track if we started with a simple text node */
   private wasSimpleText: boolean = false;
 
@@ -113,7 +116,7 @@ export class LeRichTextEditor {
     } else {
       this.normalizeContent();
     }
-    
+
     if (this.autofocus && this.editorRef) {
       this.editorRef.focus();
     }
@@ -142,17 +145,14 @@ export class LeRichTextEditor {
    */
   private readSlottedContent() {
     if (!this.slotRef) return;
-    
+
     const assignedNodes = this.slotRef.assignedNodes({ flatten: true });
-    
+
     // Check if it's a simple text node (no block elements)
-    const hasOnlyTextNodes = assignedNodes.every(node => 
-      node.nodeType === Node.TEXT_NODE || 
-      (node.nodeType === Node.ELEMENT_NODE && this.isInlineElement(node as Element))
-    );
-    
+    const hasOnlyTextNodes = assignedNodes.every(node => node.nodeType === Node.TEXT_NODE || (node.nodeType === Node.ELEMENT_NODE && this.isInlineElement(node as Element)));
+
     this.wasSimpleText = hasOnlyTextNodes && assignedNodes.length > 0;
-    
+
     let html = '';
     assignedNodes.forEach(node => {
       if (node.nodeType === Node.TEXT_NODE) {
@@ -161,9 +161,9 @@ export class LeRichTextEditor {
         html += (node as Element).outerHTML || node.textContent;
       }
     });
-    
+
     this.value = html.trim();
-    
+
     // Set editor content and normalize
     if (this.editorRef) {
       this.editorRef.innerHTML = this.value;
@@ -185,12 +185,12 @@ export class LeRichTextEditor {
    */
   private normalizeContent() {
     if (!this.editorRef) return;
-    
+
     const fragment = document.createDocumentFragment();
     let currentParagraph: HTMLParagraphElement | null = null;
-    
+
     const childNodes = Array.from(this.editorRef.childNodes);
-    
+
     // If empty, add an empty paragraph
     if (childNodes.length === 0) {
       const p = document.createElement('p');
@@ -198,7 +198,7 @@ export class LeRichTextEditor {
       this.editorRef.appendChild(p);
       return;
     }
-    
+
     childNodes.forEach(node => {
       if (node.nodeType === Node.TEXT_NODE) {
         const text = node.textContent?.trim();
@@ -210,7 +210,7 @@ export class LeRichTextEditor {
         }
       } else if (node.nodeType === Node.ELEMENT_NODE) {
         const el = node as Element;
-        
+
         if (this.isBlockElement(el)) {
           // Block element - close current paragraph and add it
           if (currentParagraph) {
@@ -227,23 +227,22 @@ export class LeRichTextEditor {
         }
       }
     });
-    
+
     // Add any remaining paragraph
     if (currentParagraph) {
       fragment.appendChild(currentParagraph);
     }
-    
+
     // Only update if we actually normalized something
     if (fragment.childNodes.length > 0) {
-      const needsUpdate = fragment.childNodes.length !== this.editorRef.childNodes.length ||
-        this.editorRef.innerHTML !== this.fragmentToHtml(fragment);
-      
+      const needsUpdate = fragment.childNodes.length !== this.editorRef.childNodes.length || this.editorRef.innerHTML !== this.fragmentToHtml(fragment);
+
       if (needsUpdate) {
         const hadFocus = this.editorRef.contains(document.activeElement);
-        
+
         this.editorRef.innerHTML = '';
         this.editorRef.appendChild(fragment);
-        
+
         // Restore focus to end if we had focus
         if (hadFocus) {
           this.moveCursorToEnd();
@@ -265,7 +264,7 @@ export class LeRichTextEditor {
 
   private moveCursorToEnd() {
     if (!this.editorRef) return;
-    
+
     const selection = window.getSelection();
     const range = document.createRange();
     range.selectNodeContents(this.editorRef);
@@ -279,15 +278,15 @@ export class LeRichTextEditor {
    */
   private getFinalValue(): string {
     if (!this.editorRef) return this.value;
-    
+
     const html = this.editorRef.innerHTML;
-    
+
     // If we started with simple text and still have just one plain paragraph,
     // unwrap it back to simple text
     if (this.wasSimpleText) {
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = html;
-      
+
       // Check if it's a single <p> with no special formatting
       if (tempDiv.children.length === 1 && tempDiv.children[0].tagName === 'P') {
         const p = tempDiv.children[0];
@@ -295,7 +294,7 @@ export class LeRichTextEditor {
         return p.innerHTML.replace(/<br\s*\/?>/gi, '').trim() || p.innerHTML;
       }
     }
-    
+
     return html;
   }
 
@@ -309,16 +308,16 @@ export class LeRichTextEditor {
 
   private handleInput = () => {
     if (!this.editorRef) return;
-    
+
     this.isUpdating = true;
     this.value = this.editorRef.innerHTML;
     this.isUpdating = false;
-    
+
     this.leInput.emit({
       value: this.getFinalValue(),
       textContent: this.getTextContent(),
     });
-    
+
     this.updateSelectionState();
     this.checkForSlashCommand();
   };
@@ -328,7 +327,7 @@ export class LeRichTextEditor {
     this.valueOnFocus = this.value;
     this.leFocus.emit();
     this.updateSelectionState();
-    
+
     // Normalize on focus to ensure proper structure
     this.normalizeContent();
   };
@@ -337,22 +336,22 @@ export class LeRichTextEditor {
     const relatedTarget = e.relatedTarget as HTMLElement;
     const toolbar = this.el.shadowRoot?.querySelector('.le-rte-toolbar');
     const commandMenu = this.el.shadowRoot?.querySelector('.le-rte-command-menu');
-    
+
     if (toolbar?.contains(relatedTarget) || commandMenu?.contains(relatedTarget)) {
       return;
     }
-    
+
     setTimeout(() => {
       const activeEl = this.el.shadowRoot?.activeElement;
       const inToolbar = this.el.shadowRoot?.querySelector('.le-rte-toolbar')?.contains(activeEl);
       const inMenu = this.el.shadowRoot?.querySelector('.le-rte-command-menu')?.contains(activeEl);
-      
+
       if (!activeEl || (!inToolbar && !inMenu)) {
         this.isFocused = false;
         this.hasSelection = false;
         this.commandMenuOpen = false;
         this.leBlur.emit();
-        
+
         if (this.getFinalValue() !== this.valueOnFocus) {
           this.leChange.emit({
             value: this.getFinalValue(),
@@ -385,7 +384,7 @@ export class LeRichTextEditor {
       }
       return;
     }
-    
+
     // Handle Enter - create new paragraph
     if (e.key === 'Enter' && !e.shiftKey) {
       // Let default behavior work for normal paragraphs
@@ -394,7 +393,7 @@ export class LeRichTextEditor {
         this.normalizeContent();
       }, 0);
     }
-    
+
     // Keyboard shortcuts
     if (e.ctrlKey || e.metaKey) {
       switch (e.key.toLowerCase()) {
@@ -416,7 +415,7 @@ export class LeRichTextEditor {
 
   private handleSelectionChange = () => {
     if (!this.isFocused) return;
-    
+
     const selection = window.getSelection();
     this.hasSelection = selection ? selection.toString().length > 0 : false;
     this.updateSelectionState();
@@ -435,20 +434,20 @@ export class LeRichTextEditor {
   private checkForSlashCommand() {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
-    
+
     const range = selection.getRangeAt(0);
     const container = range.startContainer;
-    
+
     // Only trigger in text nodes
     if (container.nodeType !== Node.TEXT_NODE) return;
-    
+
     const text = container.textContent || '';
     const cursorPos = range.startOffset;
-    
+
     // Find the last "/" before cursor
     const textBeforeCursor = text.substring(0, cursorPos);
     const slashIndex = textBeforeCursor.lastIndexOf('/');
-    
+
     if (slashIndex !== -1) {
       // Check if slash is at start of line or after whitespace
       const charBefore = slashIndex > 0 ? textBeforeCursor[slashIndex - 1] : '\n';
@@ -460,18 +459,18 @@ export class LeRichTextEditor {
         return;
       }
     }
-    
+
     this.commandMenuOpen = false;
   }
 
   private updateCommandMenuPosition() {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
-    
+
     const range = selection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
     const editorRect = this.editorRef?.getBoundingClientRect();
-    
+
     if (editorRect) {
       this.commandMenuPosition = {
         top: rect.bottom - editorRect.top + 4,
@@ -482,12 +481,8 @@ export class LeRichTextEditor {
 
   private getFilteredBlockTypes() {
     if (!this.commandFilter) return BLOCK_TYPES;
-    
-    return BLOCK_TYPES.filter(bt => 
-      bt.label.toLowerCase().includes(this.commandFilter) ||
-      bt.shortcut.includes(this.commandFilter) ||
-      bt.type.includes(this.commandFilter)
-    );
+
+    return BLOCK_TYPES.filter(bt => bt.label.toLowerCase().includes(this.commandFilter) || bt.shortcut.includes(this.commandFilter) || bt.type.includes(this.commandFilter));
   }
 
   private closeCommandMenu() {
@@ -498,34 +493,37 @@ export class LeRichTextEditor {
 
   private applyBlockType(type: string) {
     const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return;
-    
-    // Find the current block element
+    if (!selection || selection.rangeCount === 0 || !this.editorRef) return;
+
+    // Make sure we're starting from within the editor
+    if (!this.editorRef.contains(selection.anchorNode)) return;
+
+    // Find the current block element within the editor
     let node: Node | null = selection.anchorNode;
-    while (node && node !== this.editorRef) {
+    while (node && node !== this.editorRef && this.editorRef.contains(node)) {
       if (node.nodeType === Node.ELEMENT_NODE && this.isBlockElement(node as Element)) {
         break;
       }
       node = node.parentNode;
     }
-    
-    if (node && node !== this.editorRef && node.nodeType === Node.ELEMENT_NODE) {
+
+    if (node && node !== this.editorRef && this.editorRef.contains(node) && node.nodeType === Node.ELEMENT_NODE) {
       const block = node as Element;
-      
+
       // Remove the "/" and filter text from the content
       const text = block.textContent || '';
       const slashIndex = text.lastIndexOf('/');
       if (slashIndex !== -1) {
         block.textContent = text.substring(0, slashIndex);
       }
-      
+
       // Create new element of the target type
       const newBlock = document.createElement(type);
       newBlock.innerHTML = block.innerHTML || '<br>';
-      
+
       // Replace the old block
       block.parentNode?.replaceChild(newBlock, block);
-      
+
       // Move cursor to end of new block
       const range = document.createRange();
       range.selectNodeContents(newBlock);
@@ -533,7 +531,7 @@ export class LeRichTextEditor {
       selection.removeAllRanges();
       selection.addRange(range);
     }
-    
+
     this.closeCommandMenu();
     this.handleInput();
     this.editorRef?.focus();
@@ -551,14 +549,43 @@ export class LeRichTextEditor {
       isStrikethrough: document.queryCommandState('strikeThrough'),
       isLink: this.isSelectionInLink(),
     };
+    this.currentBlockType = this.getCurrentBlockType();
+  }
+
+  /**
+   * Get the block type of the element at current cursor position
+   */
+  private getCurrentBlockType(): string {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0 || !this.editorRef) return 'p';
+
+    let node: Node | null = selection.anchorNode;
+    
+    // Make sure we're starting from within the editor
+    if (!this.editorRef.contains(node)) return 'p';
+    
+    while (node && node !== this.editorRef && this.editorRef.contains(node)) {
+      if (node.nodeType === Node.ELEMENT_NODE && this.isBlockElement(node as Element)) {
+        const tagName = (node as Element).tagName.toLowerCase();
+        // Check if it's a valid block type
+        if (BLOCK_TYPES.some(bt => bt.type === tagName)) {
+          return tagName;
+        }
+      }
+      node = node.parentNode;
+    }
+    return 'p';
   }
 
   private isSelectionInLink(): boolean {
     const selection = window.getSelection();
-    if (!selection?.anchorNode) return false;
-    
+    if (!selection?.anchorNode || !this.editorRef) return false;
+
+    // Make sure we're within the editor
+    if (!this.editorRef.contains(selection.anchorNode)) return false;
+
     let node: Node | null = selection.anchorNode;
-    while (node && node !== this.editorRef) {
+    while (node && node !== this.editorRef && this.editorRef.contains(node)) {
       if (node.nodeName === 'A') return true;
       node = node.parentNode;
     }
@@ -598,7 +625,7 @@ export class LeRichTextEditor {
 
   private toggleLink = (e: Event) => {
     e.preventDefault();
-    
+
     if (this.selectionState.isLink) {
       this.execCommand('unlink');
     } else {
@@ -609,6 +636,54 @@ export class LeRichTextEditor {
     }
   };
 
+  private handleBlockTypeChange = (e: Event) => {
+    const select = e.target as HTMLSelectElement;
+    const newType = select.value;
+    this.changeCurrentBlockType(newType);
+  };
+
+  /**
+   * Change the block type of the current block at cursor position
+   */
+  private changeCurrentBlockType(newType: string) {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0 || !this.editorRef) return;
+
+    // Make sure we're starting from within the editor
+    if (!this.editorRef.contains(selection.anchorNode)) return;
+
+    // Find the current block element within the editor
+    let node: Node | null = selection.anchorNode;
+    while (node && node !== this.editorRef && this.editorRef.contains(node)) {
+      if (node.nodeType === Node.ELEMENT_NODE && this.isBlockElement(node as Element)) {
+        break;
+      }
+      node = node.parentNode;
+    }
+
+    if (node && node !== this.editorRef && this.editorRef.contains(node) && node.nodeType === Node.ELEMENT_NODE) {
+      const block = node as Element;
+
+      // Create new element of the target type
+      const newBlock = document.createElement(newType);
+      newBlock.innerHTML = block.innerHTML || '<br>';
+
+      // Replace the old block
+      block.parentNode?.replaceChild(newBlock, block);
+
+      // Move cursor to end of new block
+      const range = document.createRange();
+      range.selectNodeContents(newBlock);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      this.currentBlockType = newType;
+      this.handleInput();
+      this.editorRef?.focus();
+    }
+  }
+
   // ============================================
   // Toolbar
   // ============================================
@@ -617,7 +692,7 @@ export class LeRichTextEditor {
     if (this.variant === 'minimal') return false;
     if (!this.showToolbar) return false;
     if (this.disabled || this.readonly) return false;
-    
+
     switch (this.toolbarMode) {
       case 'always':
         return true;
@@ -632,7 +707,7 @@ export class LeRichTextEditor {
   private getToolbarOptions(): string[] {
     if (this.variant === 'minimal') return [];
     if (this.variant === 'standard') return ['bold', 'italic', 'underline'];
-    return ['bold', 'italic', 'underline', 'strike', 'link'];
+    return ['block', 'bold', 'italic', 'underline', 'strike', 'link'];
   }
 
   // ============================================
@@ -641,53 +716,43 @@ export class LeRichTextEditor {
 
   private renderToolbar() {
     const options = this.getToolbarOptions();
-    
+
     return (
       <div class="le-rte-toolbar" role="toolbar" aria-label="Formatting options">
+        {options.includes('block') && (
+          <select class="le-rte-block-select" onChange={this.handleBlockTypeChange} title="Block type">
+            {BLOCK_TYPES.map(bt => (
+              <option value={bt.type} selected={this.currentBlockType === bt.type}>
+                {bt.label}
+              </option>
+            ))}
+          </select>
+        )}
+
         {options.includes('bold') && (
-          <button
-            type="button"
-            class={{ 'le-rte-btn': true, 'active': this.selectionState.isBold }}
-            onMouseDown={this.toggleBold}
-            title="Bold (Ctrl+B)"
-          >
+          <button type="button" class={{ 'le-rte-btn': true, 'active': this.selectionState.isBold }} onMouseDown={this.toggleBold} title="Bold (Ctrl+B)">
             <strong>B</strong>
           </button>
         )}
-        
+
         {options.includes('italic') && (
-          <button
-            type="button"
-            class={{ 'le-rte-btn': true, 'active': this.selectionState.isItalic }}
-            onMouseDown={this.toggleItalic}
-            title="Italic (Ctrl+I)"
-          >
+          <button type="button" class={{ 'le-rte-btn': true, 'active': this.selectionState.isItalic }} onMouseDown={this.toggleItalic} title="Italic (Ctrl+I)">
             <em>I</em>
           </button>
         )}
-        
+
         {options.includes('underline') && (
-          <button
-            type="button"
-            class={{ 'le-rte-btn': true, 'active': this.selectionState.isUnderline }}
-            onMouseDown={this.toggleUnderline}
-            title="Underline (Ctrl+U)"
-          >
+          <button type="button" class={{ 'le-rte-btn': true, 'active': this.selectionState.isUnderline }} onMouseDown={this.toggleUnderline} title="Underline (Ctrl+U)">
             <span style={{ textDecoration: 'underline' }}>U</span>
           </button>
         )}
-        
+
         {options.includes('strike') && (
-          <button
-            type="button"
-            class={{ 'le-rte-btn': true, 'active': this.selectionState.isStrikethrough }}
-            onMouseDown={this.toggleStrikethrough}
-            title="Strikethrough"
-          >
+          <button type="button" class={{ 'le-rte-btn': true, 'active': this.selectionState.isStrikethrough }} onMouseDown={this.toggleStrikethrough} title="Strikethrough">
             <span style={{ textDecoration: 'line-through' }}>S</span>
           </button>
         )}
-        
+
         {options.includes('link') && (
           <button
             type="button"
@@ -704,11 +769,11 @@ export class LeRichTextEditor {
 
   private renderCommandMenu() {
     const filtered = this.getFilteredBlockTypes();
-    
+
     if (filtered.length === 0) return null;
-    
+
     return (
-      <div 
+      <div
         class="le-rte-command-menu"
         style={{
           top: `${this.commandMenuPosition.top}px`,
@@ -720,11 +785,11 @@ export class LeRichTextEditor {
           <button
             type="button"
             class={{ 'le-rte-command-item': true, 'selected': index === this.commandMenuIndex }}
-            onMouseDown={(e) => {
+            onMouseDown={e => {
               e.preventDefault();
               this.applyBlockType(bt.type);
             }}
-            onMouseEnter={() => this.commandMenuIndex = index}
+            onMouseEnter={() => (this.commandMenuIndex = index)}
           >
             <span class="le-rte-command-icon">{bt.icon}</span>
             <span class="le-rte-command-label">{bt.label}</span>
@@ -736,7 +801,7 @@ export class LeRichTextEditor {
 
   render() {
     const showToolbar = this.shouldShowToolbar();
-    
+
     return (
       <Host
         class={{
@@ -749,9 +814,9 @@ export class LeRichTextEditor {
       >
         <div class="le-rte-wrapper">
           {showToolbar && this.renderToolbar()}
-          
+
           <div
-            ref={(el) => this.editorRef = el}
+            ref={el => (this.editorRef = el)}
             class="le-rte-editor"
             contentEditable={!this.disabled && !this.readonly}
             role="textbox"
@@ -765,19 +830,14 @@ export class LeRichTextEditor {
             innerHTML={this.value}
             data-placeholder={this.placeholder}
           ></div>
-          
+
           {this.commandMenuOpen && this.renderCommandMenu()}
-          
+
           <div class="le-rte-hidden-slot">
-            <slot 
-              ref={(el) => this.slotRef = el as HTMLSlotElement}
-              onSlotchange={this.handleSlotChange}
-            ></slot>
+            <slot ref={el => (this.slotRef = el as HTMLSlotElement)} onSlotchange={this.handleSlotChange}></slot>
           </div>
-          
-          {this.name && (
-            <input type="hidden" name={this.name} value={this.getFinalValue()} />
-          )}
+
+          {this.name && <input type="hidden" name={this.name} value={this.getFinalValue()} />}
         </div>
       </Host>
     );

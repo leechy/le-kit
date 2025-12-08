@@ -729,60 +729,16 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
+      "path": "src/components/le-rich-text-editor/le-rich-text-editor.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
-          "cssProperties": [
-            {
-              "description": "Card background color",
-              "name": "--le-card-bg"
-            },
-            {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
-            },
-            {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
-            }
-          ],
+          "description": "A rich text editor with block-level editing and Notion-style \"/\" commands.\n\nFeatures:\n- Block-level editing (paragraphs, headings, quotes, code)\n- Notion-style \"/\" command menu for changing block types\n- Enter creates new paragraphs\n- Inline formatting (bold, italic, underline, strikethrough, links)\n- Automatic text node wrapping in paragraphs",
+          "name": "LeRichTextEditor",
           "slots": [
             {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
+              "description": "Default slot for initial content",
               "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
             }
           ],
           "members": [
@@ -795,21 +751,892 @@
             },
             {
               "kind": "field",
-              "name": "variant",
+              "name": "name",
               "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
+                "text": "string | undefined"
+              }
             },
             {
               "kind": "field",
-              "name": "interactive",
+              "name": "editorId",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Type \"/\" for commands...'"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
               "type": {
                 "text": "boolean"
               },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "readonly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "showToolbar",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "toolbarMode",
+              "type": {
+                "text": "'always' | 'focus' | 'selection'"
+              },
+              "default": "'focus'"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'minimal' | 'standard' | 'full'"
+              },
+              "default": "'full'"
+            },
+            {
+              "kind": "field",
+              "name": "autofocus",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "isFocused",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "hasSelection",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "selectionState",
+              "type": {
+                "text": "SelectionState"
+              },
+              "privacy": "private",
+              "default": "{ isBold: false, isItalic: false, isUnderline: false, isStrikethrough: false, isLink: false, }"
+            },
+            {
+              "kind": "field",
+              "name": "currentBlockType",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "'p'",
+              "description": "Current block type at cursor position"
+            },
+            {
+              "kind": "field",
+              "name": "commandMenuOpen",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
               "default": "false",
-              "description": "Whether the card is interactive (clickable)"
+              "description": "Whether the command menu is open"
+            },
+            {
+              "kind": "field",
+              "name": "commandFilter",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''",
+              "description": "Filter text for command menu (text after \"/\")"
+            },
+            {
+              "kind": "field",
+              "name": "commandMenuIndex",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0",
+              "description": "Selected index in command menu"
+            },
+            {
+              "kind": "field",
+              "name": "commandMenuPosition",
+              "type": {
+                "text": "{ top: number; left: number }"
+              },
+              "privacy": "private",
+              "default": "{ top: 0, left: 0 }",
+              "description": "Position of the command menu"
+            },
+            {
+              "kind": "field",
+              "name": "editorRef",
+              "type": {
+                "text": "HTMLDivElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "slotRef",
+              "type": {
+                "text": "HTMLSlotElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "valueOnFocus",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "isUpdating",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "wasSimpleText",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Track if we started with a simple text node"
+            },
+            {
+              "kind": "method",
+              "name": "onValueChange",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "readSlottedContent",
+              "privacy": "private",
+              "description": "Read and normalize content from slotted elements"
+            },
+            {
+              "kind": "method",
+              "name": "isInlineElement",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "el",
+                  "type": {
+                    "text": "Element"
+                  }
+                }
+              ],
+              "description": "Check if element is inline (not a block element)"
+            },
+            {
+              "kind": "method",
+              "name": "normalizeContent",
+              "privacy": "private",
+              "description": "Ensure all content is wrapped in block elements\nText nodes and inline elements should be wrapped in <p>"
+            },
+            {
+              "kind": "method",
+              "name": "fragmentToHtml",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "fragment",
+                  "type": {
+                    "text": "DocumentFragment"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isBlockElement",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "el",
+                  "type": {
+                    "text": "Element"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "moveCursorToEnd",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getFinalValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "description": "Get the final value, potentially unwrapping simple content"
+            },
+            {
+              "kind": "method",
+              "name": "getTextContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "handleInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlur",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSelectionChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSlotChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "checkForSlashCommand",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updateCommandMenuPosition",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getFilteredBlockTypes",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "closeCommandMenu",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "applyBlockType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectionState",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getCurrentBlockType",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "description": "Get the block type of the element at current cursor position"
+            },
+            {
+              "kind": "method",
+              "name": "isSelectionInLink",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "execCommand",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "command",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "value",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "toggleBold",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "toggleItalic",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "toggleUnderline",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "toggleStrikethrough",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "toggleLink",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockTypeChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "changeCurrentBlockType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "newType",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Change the block type of the current block at cursor position"
+            },
+            {
+              "kind": "method",
+              "name": "shouldShowToolbar",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getToolbarOptions",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderToolbar",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderCommandMenu",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "description": "Emitted on every content change",
+              "name": "leInput"
+            },
+            {
+              "description": "Emitted when editor loses focus with changed content",
+              "name": "leChange"
+            },
+            {
+              "description": "Emitted when editor receives focus",
+              "name": "leFocus"
+            },
+            {
+              "description": "Emitted when editor loses focus",
+              "name": "leBlur"
+            },
+            {
+              "name": "leInput",
+              "type": {
+                "text": "EventEmitter<{ value: string; textContent: string }>"
+              }
+            },
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<{ value: string; textContent: string }>"
+              }
+            },
+            {
+              "name": "leFocus",
+              "type": {
+                "text": "EventEmitter<void>"
+              }
+            },
+            {
+              "name": "leBlur",
+              "type": {
+                "text": "EventEmitter<void>"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "fieldName": "name",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "editor-id",
+              "fieldName": "editorId",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "default": "''",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "'Type \"/\" for commands...'",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "readonly",
+              "fieldName": "readonly",
+              "default": "false",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "show-toolbar",
+              "fieldName": "showToolbar",
+              "default": "true",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "toolbar-mode",
+              "fieldName": "toolbarMode",
+              "default": "'focus'",
+              "type": {
+                "text": "'always' | 'focus' | 'selection'"
+              }
+            },
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'full'",
+              "type": {
+                "text": "'minimal' | 'standard' | 'full'"
+              }
+            },
+            {
+              "name": "autofocus",
+              "fieldName": "autofocus",
+              "default": "false",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-rich-text-editor",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeRichTextEditor",
+          "declaration": {
+            "name": "LeRichTextEditor",
+            "module": "src/components/le-rich-text-editor/le-rich-text-editor.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-rich-text-editor",
+          "declaration": {
+            "name": "LeRichTextEditor",
+            "module": "src/components/le-rich-text-editor/le-rich-text-editor.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-component/le-component.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component wrapper for admin mode editing.\n\nThis component is used internally by other components to provide admin-mode \nediting capabilities. It wraps the component's rendered output and shows\na settings popover for editing properties.\n\nIn default mode, it acts as a simple passthrough (display: contents).\nIn admin mode, it shows a border, component name header, and settings popover.\n\nThe host element is found automatically by traversing up through the shadow DOM.\n\nUsage inside a component's render method:\n```tsx\nrender() {\n  return (\n    <le-component component=\"le-card\">\n      <Host>...</Host>\n    </le-component>\n  );\n}\n```",
+          "name": "LeComponent",
+          "slots": [
+            {
+              "description": "The component's rendered content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "component",
+              "type": {
+                "text": "string"
+              },
+              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name."
+            },
+            {
+              "kind": "field",
+              "name": "displayName",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name."
+            },
+            {
+              "kind": "field",
+              "name": "hostClass",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes."
+            },
+            {
+              "kind": "field",
+              "name": "hostStyle",
+              "type": {
+                "text": "{ [key: string]: string } | undefined"
+              },
+              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties)."
+            },
+            {
+              "kind": "field",
+              "name": "hostElement",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private",
+              "description": "Reference to the host element (found automatically from parent)"
+            },
+            {
+              "kind": "field",
+              "name": "adminMode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Internal state to track admin mode"
+            },
+            {
+              "kind": "field",
+              "name": "componentMeta",
+              "type": {
+                "text": "ComponentMetadata | null"
+              },
+              "privacy": "private",
+              "default": "null",
+              "description": "Component metadata loaded from Custom Elements Manifest"
+            },
+            {
+              "kind": "field",
+              "name": "propertyValues",
+              "type": {
+                "text": "Record<string, any>"
+              },
+              "privacy": "private",
+              "default": "{}",
+              "description": "Current property values of the host component"
+            },
+            {
+              "kind": "field",
+              "name": "disconnectModeObserver",
+              "type": {
+                "text": "() => void | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "findHostElement",
+              "privacy": "private",
+              "description": "Find the host element by traversing up through shadow DOM"
+            },
+            {
+              "kind": "method",
+              "name": "formatDisplayName",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "tagName",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Formats a tag name into a display name\ne.g., 'le-card' -> 'Card'"
+            },
+            {
+              "kind": "method",
+              "name": "loadComponentMetadata",
+              "privacy": "private",
+              "description": "Load component metadata from the Custom Elements Manifest"
+            },
+            {
+              "kind": "method",
+              "name": "isInternalAttribute",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Check if an attribute is internal (should not be shown in editor)"
+            },
+            {
+              "kind": "method",
+              "name": "readPropertyValues",
+              "privacy": "private",
+              "description": "Read current property values from the host element"
+            },
+            {
+              "kind": "method",
+              "name": "parseAttributeValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "any"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string | null"
+                  }
+                },
+                {
+                  "name": "type",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Parse an attribute value based on its type"
+            },
+            {
+              "kind": "method",
+              "name": "handlePropertyChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "attrName",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "type",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Handle property value changes from the editor"
+            },
+            {
+              "kind": "method",
+              "name": "deleteComponent",
+              "privacy": "private",
+              "description": "Delete this component from the DOM"
+            },
+            {
+              "kind": "method",
+              "name": "renderPropertyEditor",
+              "privacy": "private",
+              "description": "Render the property editor form"
+            },
+            {
+              "kind": "method",
+              "name": "renderPropertyField",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "attr",
+                  "type": {
+                    "text": "AttributeMetadata"
+                  }
+                }
+              ],
+              "description": "Render a single property field based on its type"
             },
             {
               "kind": "method",
@@ -818,25 +1645,39 @@
           ],
           "attributes": [
             {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
+              "name": "component",
+              "fieldName": "component",
+              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name.",
               "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
+                "text": "string"
               }
             },
             {
-              "name": "interactive",
-              "fieldName": "interactive",
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)",
+              "name": "display-name",
+              "fieldName": "displayName",
+              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name.",
               "type": {
-                "text": "boolean"
+                "text": "string"
+              }
+            },
+            {
+              "name": "host-class",
+              "fieldName": "hostClass",
+              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "host-style",
+              "fieldName": "hostStyle",
+              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties).",
+              "type": {
+                "text": "{ [key: string]: string }"
               }
             }
           ],
-          "tagName": "le-card",
+          "tagName": "le-component",
           "events": [],
           "customElement": true
         }
@@ -844,18 +1685,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LeCard",
+          "name": "LeComponent",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LeComponent",
+            "module": "src/components/le-component/le-component.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-card",
+          "name": "le-component",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LeComponent",
+            "module": "src/components/le-component/le-component.tsx"
           }
         }
       ]
@@ -1230,305 +2071,6 @@
           "declaration": {
             "name": "LePopover",
             "module": "src/components/le-popover/le-popover.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-component/le-component.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Component wrapper for admin mode editing.\n\nThis component is used internally by other components to provide admin-mode \nediting capabilities. It wraps the component's rendered output and shows\na settings popover for editing properties.\n\nIn default mode, it acts as a simple passthrough (display: contents).\nIn admin mode, it shows a border, component name header, and settings popover.\n\nThe host element is found automatically by traversing up through the shadow DOM.\n\nUsage inside a component's render method:\n```tsx\nrender() {\n  return (\n    <le-component component=\"le-card\">\n      <Host>...</Host>\n    </le-component>\n  );\n}\n```",
-          "name": "LeComponent",
-          "slots": [
-            {
-              "description": "The component's rendered content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "component",
-              "type": {
-                "text": "string"
-              },
-              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name."
-            },
-            {
-              "kind": "field",
-              "name": "displayName",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name."
-            },
-            {
-              "kind": "field",
-              "name": "hostClass",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes."
-            },
-            {
-              "kind": "field",
-              "name": "hostStyle",
-              "type": {
-                "text": "{ [key: string]: string } | undefined"
-              },
-              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties)."
-            },
-            {
-              "kind": "field",
-              "name": "hostElement",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private",
-              "description": "Reference to the host element (found automatically from parent)"
-            },
-            {
-              "kind": "field",
-              "name": "adminMode",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Internal state to track admin mode"
-            },
-            {
-              "kind": "field",
-              "name": "componentMeta",
-              "type": {
-                "text": "ComponentMetadata | null"
-              },
-              "privacy": "private",
-              "default": "null",
-              "description": "Component metadata loaded from Custom Elements Manifest"
-            },
-            {
-              "kind": "field",
-              "name": "propertyValues",
-              "type": {
-                "text": "Record<string, any>"
-              },
-              "privacy": "private",
-              "default": "{}",
-              "description": "Current property values of the host component"
-            },
-            {
-              "kind": "field",
-              "name": "disconnectModeObserver",
-              "type": {
-                "text": "() => void | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "findHostElement",
-              "privacy": "private",
-              "description": "Find the host element by traversing up through shadow DOM"
-            },
-            {
-              "kind": "method",
-              "name": "formatDisplayName",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "tagName",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Formats a tag name into a display name\ne.g., 'le-card' -> 'Card'"
-            },
-            {
-              "kind": "method",
-              "name": "loadComponentMetadata",
-              "privacy": "private",
-              "description": "Load component metadata from the Custom Elements Manifest"
-            },
-            {
-              "kind": "method",
-              "name": "isInternalAttribute",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "name",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Check if an attribute is internal (should not be shown in editor)"
-            },
-            {
-              "kind": "method",
-              "name": "readPropertyValues",
-              "privacy": "private",
-              "description": "Read current property values from the host element"
-            },
-            {
-              "kind": "method",
-              "name": "parseAttributeValue",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "any"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "string | null"
-                  }
-                },
-                {
-                  "name": "type",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Parse an attribute value based on its type"
-            },
-            {
-              "kind": "method",
-              "name": "handlePropertyChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "attrName",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "type",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Handle property value changes from the editor"
-            },
-            {
-              "kind": "method",
-              "name": "deleteComponent",
-              "privacy": "private",
-              "description": "Delete this component from the DOM"
-            },
-            {
-              "kind": "method",
-              "name": "renderPropertyEditor",
-              "privacy": "private",
-              "description": "Render the property editor form"
-            },
-            {
-              "kind": "method",
-              "name": "renderPropertyField",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "attr",
-                  "type": {
-                    "text": "AttributeMetadata"
-                  }
-                }
-              ],
-              "description": "Render a single property field based on its type"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "component",
-              "fieldName": "component",
-              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "display-name",
-              "fieldName": "displayName",
-              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "host-class",
-              "fieldName": "hostClass",
-              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "host-style",
-              "fieldName": "hostStyle",
-              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties).",
-              "type": {
-                "text": "{ [key: string]: string }"
-              }
-            }
-          ],
-          "tagName": "le-component",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeComponent",
-          "declaration": {
-            "name": "LeComponent",
-            "module": "src/components/le-component/le-component.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-component",
-          "declaration": {
-            "name": "LeComponent",
-            "module": "src/components/le-component/le-component.tsx"
           }
         }
       ]
@@ -1960,6 +2502,139 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-stack/le-stack.tsx",
       "declarations": [
         {
@@ -2356,641 +3031,6 @@
           "declaration": {
             "name": "LeText",
             "module": "src/components/le-text/le-text.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-rich-text-editor/le-rich-text-editor.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A rich text editor with block-level editing and Notion-style \"/\" commands.\n\nFeatures:\n- Block-level editing (paragraphs, headings, quotes, code)\n- Notion-style \"/\" command menu for changing block types\n- Enter creates new paragraphs\n- Inline formatting (bold, italic, underline, strikethrough, links)\n- Automatic text node wrapping in paragraphs",
-          "name": "LeRichTextEditor",
-          "slots": [
-            {
-              "description": "Default slot for initial content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "editorId",
-              "type": {
-                "text": "string | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Type \"/\" for commands...'"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "readonly",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "showToolbar",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "toolbarMode",
-              "type": {
-                "text": "'always' | 'focus' | 'selection'"
-              },
-              "default": "'focus'"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'minimal' | 'standard' | 'full'"
-              },
-              "default": "'full'"
-            },
-            {
-              "kind": "field",
-              "name": "autofocus",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "isFocused",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "hasSelection",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "selectionState",
-              "type": {
-                "text": "SelectionState"
-              },
-              "privacy": "private",
-              "default": "{ isBold: false, isItalic: false, isUnderline: false, isStrikethrough: false, isLink: false, }"
-            },
-            {
-              "kind": "field",
-              "name": "commandMenuOpen",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Whether the command menu is open"
-            },
-            {
-              "kind": "field",
-              "name": "commandFilter",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''",
-              "description": "Filter text for command menu (text after \"/\")"
-            },
-            {
-              "kind": "field",
-              "name": "commandMenuIndex",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "0",
-              "description": "Selected index in command menu"
-            },
-            {
-              "kind": "field",
-              "name": "commandMenuPosition",
-              "type": {
-                "text": "{ top: number; left: number }"
-              },
-              "privacy": "private",
-              "default": "{ top: 0, left: 0 }",
-              "description": "Position of the command menu"
-            },
-            {
-              "kind": "field",
-              "name": "editorRef",
-              "type": {
-                "text": "HTMLDivElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "slotRef",
-              "type": {
-                "text": "HTMLSlotElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "valueOnFocus",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "isUpdating",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "wasSimpleText",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Track if we started with a simple text node"
-            },
-            {
-              "kind": "method",
-              "name": "onValueChange",
-              "parameters": [
-                {
-                  "name": "newValue",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "readSlottedContent",
-              "privacy": "private",
-              "description": "Read and normalize content from slotted elements"
-            },
-            {
-              "kind": "method",
-              "name": "isInlineElement",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "el",
-                  "type": {
-                    "text": "Element"
-                  }
-                }
-              ],
-              "description": "Check if element is inline (not a block element)"
-            },
-            {
-              "kind": "method",
-              "name": "normalizeContent",
-              "privacy": "private",
-              "description": "Ensure all content is wrapped in block elements\nText nodes and inline elements should be wrapped in <p>"
-            },
-            {
-              "kind": "method",
-              "name": "fragmentToHtml",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "fragment",
-                  "type": {
-                    "text": "DocumentFragment"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "isBlockElement",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "el",
-                  "type": {
-                    "text": "Element"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "moveCursorToEnd",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "getFinalValue",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "description": "Get the final value, potentially unwrapping simple content"
-            },
-            {
-              "kind": "method",
-              "name": "getTextContent",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "field",
-              "name": "handleInput",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleFocus",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleBlur",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleSelectionChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleSlotChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "checkForSlashCommand",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "updateCommandMenuPosition",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "getFilteredBlockTypes",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "closeCommandMenu",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "applyBlockType",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "type",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "updateSelectionState",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "isSelectionInLink",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "execCommand",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "command",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "value",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "toggleBold",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "toggleItalic",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "toggleUnderline",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "toggleStrikethrough",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "toggleLink",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "shouldShowToolbar",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getToolbarOptions",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string[]"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "renderToolbar",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "renderCommandMenu",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "description": "Emitted on every content change",
-              "name": "leInput"
-            },
-            {
-              "description": "Emitted when editor loses focus with changed content",
-              "name": "leChange"
-            },
-            {
-              "description": "Emitted when editor receives focus",
-              "name": "leFocus"
-            },
-            {
-              "description": "Emitted when editor loses focus",
-              "name": "leBlur"
-            },
-            {
-              "name": "leInput",
-              "type": {
-                "text": "EventEmitter<{ value: string; textContent: string }>"
-              }
-            },
-            {
-              "name": "leChange",
-              "type": {
-                "text": "EventEmitter<{ value: string; textContent: string }>"
-              }
-            },
-            {
-              "name": "leFocus",
-              "type": {
-                "text": "EventEmitter<void>"
-              }
-            },
-            {
-              "name": "leBlur",
-              "type": {
-                "text": "EventEmitter<void>"
-              }
-            }
-          ],
-          "attributes": [
-            {
-              "name": "name",
-              "fieldName": "name",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "editor-id",
-              "fieldName": "editorId",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "default": "''",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "placeholder",
-              "fieldName": "placeholder",
-              "default": "'Type \"/\" for commands...'",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "readonly",
-              "fieldName": "readonly",
-              "default": "false",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "required",
-              "fieldName": "required",
-              "default": "false",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "show-toolbar",
-              "fieldName": "showToolbar",
-              "default": "true",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "toolbar-mode",
-              "fieldName": "toolbarMode",
-              "default": "'focus'",
-              "type": {
-                "text": "'always' | 'focus' | 'selection'"
-              }
-            },
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'full'",
-              "type": {
-                "text": "'minimal' | 'standard' | 'full'"
-              }
-            },
-            {
-              "name": "autofocus",
-              "fieldName": "autofocus",
-              "default": "false",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-rich-text-editor",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeRichTextEditor",
-          "declaration": {
-            "name": "LeRichTextEditor",
-            "module": "src/components/le-rich-text-editor/le-rich-text-editor.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-rich-text-editor",
-          "declaration": {
-            "name": "LeRichTextEditor",
-            "module": "src/components/le-rich-text-editor/le-rich-text-editor.tsx"
           }
         }
       ]

@@ -1,0 +1,257 @@
+/* ============================================
+   le-popup.css
+   Popup/Dialog component using native <dialog>
+   Uses CSS variables for easy theming
+   ============================================ */
+
+:host {
+  display: contents;
+}
+
+/* ============================================
+   Native Dialog Element
+   ============================================ */
+
+.le-popup-dialog {
+  /* Reset default dialog styles */
+  padding: 0;
+  border: none;
+  background: transparent;
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+  
+  /* Sizing variables */
+  --_popup-min-width: var(--le-popup-min-width, 320px);
+  --_popup-max-width: var(--le-popup-max-width, min(500px, 90vw));
+  --_popup-min-height: var(--le-popup-min-height, auto);
+}
+
+/* Backdrop styling (native ::backdrop pseudo-element) */
+.le-popup-dialog::backdrop {
+  background: var(--le-popup-backdrop-color, rgba(0, 0, 0, 0.5));
+  animation: le-popup-backdrop-fade 0.2s ease-out;
+}
+
+@keyframes le-popup-backdrop-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================
+   Position Variants
+   Using margin to position within viewport
+   ============================================ */
+
+/* Center (default) */
+.le-popup-position-center {
+  margin: auto;
+}
+
+/* Top positions */
+.le-popup-position-top {
+  margin: var(--le-space-2xl, 48px) auto auto auto;
+}
+
+.le-popup-position-top-left {
+  margin: var(--le-space-lg, 24px) auto auto var(--le-space-lg, 24px);
+}
+
+.le-popup-position-top-right {
+  margin: var(--le-space-lg, 24px) var(--le-space-lg, 24px) auto auto;
+}
+
+/* Bottom positions */
+.le-popup-position-bottom {
+  margin: auto auto var(--le-space-2xl, 48px) auto;
+}
+
+.le-popup-position-bottom-left {
+  margin: auto auto var(--le-space-lg, 24px) var(--le-space-lg, 24px);
+}
+
+.le-popup-position-bottom-right {
+  margin: auto var(--le-space-lg, 24px) var(--le-space-lg, 24px) auto;
+}
+
+/* ============================================
+   Container (the visible dialog box)
+   ============================================ */
+
+.le-popup-container {
+  display: flex;
+  flex-direction: column;
+  min-width: var(--_popup-min-width);
+  max-width: var(--_popup-max-width);
+  min-height: var(--_popup-min-height);
+  max-height: calc(100vh - var(--le-space-2xl, 48px) * 2);
+  background: var(--le-color-surface, #ffffff);
+  border: 1px solid var(--le-color-border, #e0e0e0);
+  border-radius: var(--le-radius-lg, 12px);
+  box-shadow: var(--le-shadow-xl, 0 8px 32px rgba(0, 0, 0, 0.15));
+  overflow: hidden;
+  font-family: var(--le-font-family, system-ui, -apple-system, sans-serif);
+  color: var(--le-color-text, #333);
+  
+  /* Animation */
+  animation: le-popup-appear 0.2s ease-out;
+}
+
+@keyframes le-popup-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ============================================
+   Header
+   ============================================ */
+
+.le-popup-header {
+  flex-shrink: 0;
+  padding: var(--le-space-md, 16px) var(--le-space-lg, 24px);
+  border-bottom: 1px solid var(--le-color-border, #e0e0e0);
+  background: var(--le-color-surface-alt, #f9f9f9);
+  font-size: var(--le-font-size-lg, 1.125rem);
+  font-weight: var(--le-font-weight-semibold, 600);
+  color: var(--le-color-text, #333);
+}
+
+/* ============================================
+   Body
+   ============================================ */
+
+.le-popup-body {
+  flex: 1;
+  padding: var(--le-space-lg, 24px);
+  overflow-y: auto;
+}
+
+.le-popup-message {
+  margin: 0;
+  font-size: var(--le-font-size-md, 1rem);
+  line-height: var(--le-line-height-relaxed, 1.6);
+  color: var(--le-color-text, #333);
+}
+
+/* When there's both message and slot content */
+.le-popup-message + ::slotted(*) {
+  margin-top: var(--le-space-md, 16px);
+}
+
+/* ============================================
+   Input (for prompt type)
+   ============================================ */
+
+.le-popup-input {
+  display: block;
+  width: 100%;
+  margin-top: var(--le-space-md, 16px);
+  padding: var(--le-space-sm, 8px) var(--le-space-md, 16px);
+  font-family: inherit;
+  font-size: var(--le-font-size-md, 1rem);
+  color: var(--le-color-text, #333);
+  background: var(--le-color-background, #fff);
+  border: 1px solid var(--le-color-border, #e0e0e0);
+  border-radius: var(--le-radius-md, 8px);
+  outline: none;
+  transition: border-color var(--le-transition-fast, 0.15s ease),
+              box-shadow var(--le-transition-fast, 0.15s ease);
+  box-sizing: border-box;
+}
+
+.le-popup-input:focus {
+  border-color: var(--le-color-primary, #2196f3);
+  box-shadow: 0 0 0 3px var(--le-color-primary-light, rgba(33, 150, 243, 0.2));
+}
+
+.le-popup-input::placeholder {
+  color: var(--le-color-text-muted, #999);
+}
+
+/* ============================================
+   Footer (buttons)
+   ============================================ */
+
+.le-popup-footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--le-space-sm, 8px);
+  padding: var(--le-space-md, 16px) var(--le-space-lg, 24px);
+  border-top: 1px solid var(--le-color-border, #e0e0e0);
+  background: var(--le-color-surface-alt, #f9f9f9);
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+
+.le-popup-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--le-space-sm, 8px) var(--le-space-lg, 24px);
+  min-width: 80px;
+  font-family: inherit;
+  font-size: var(--le-font-size-sm, 0.875rem);
+  font-weight: var(--le-font-weight-medium, 500);
+  line-height: 1.4;
+  border-radius: var(--le-radius-md, 8px);
+  cursor: pointer;
+  transition: all var(--le-transition-fast, 0.15s ease);
+  border: 1px solid transparent;
+}
+
+.le-popup-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--le-color-primary-light, rgba(33, 150, 243, 0.2));
+}
+
+/* Cancel button (secondary style) */
+.le-popup-btn-cancel {
+  background: var(--le-color-surface, #ffffff);
+  border-color: var(--le-color-border, #e0e0e0);
+  color: var(--le-color-text, #333);
+}
+
+.le-popup-btn-cancel:hover {
+  background: var(--le-color-surface-alt, #f5f5f5);
+  border-color: var(--le-color-border-hover, #ccc);
+}
+
+/* Confirm button (primary style) */
+.le-popup-btn-confirm {
+  background: var(--le-color-primary, #2196f3);
+  border-color: var(--le-color-primary, #2196f3);
+  color: var(--le-color-on-primary, #ffffff);
+}
+
+.le-popup-btn-confirm:hover {
+  background: var(--le-color-primary-dark, #1976d2);
+  border-color: var(--le-color-primary-dark, #1976d2);
+}
+
+/* ============================================
+   Responsive adjustments
+   ============================================ */
+
+@media (max-width: 480px) {
+  .le-popup-container {
+    min-width: calc(100vw - var(--le-space-md, 16px) * 2);
+    max-width: calc(100vw - var(--le-space-md, 16px) * 2);
+  }
+  
+  .le-popup-footer {
+    flex-direction: column-reverse;
+  }
+  
+  .le-popup-btn {
+    width: 100%;
+  }
+}

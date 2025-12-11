@@ -14,5 +14,10 @@ export { generateId, parseCommaSeparated, slotHasContent } from './utils/utils';
 export { getMode, setGlobalMode, getTheme, setGlobalTheme } from './global/app';
 export type { LeKitMode, LeKitTheme } from './global/app';
 
+// Popup/dialog programmatic API
+export { leAlert, leConfirm, lePrompt } from './components/le-popup/le-popup.api';
+export type { PopupOptions } from './components/le-popup/le-popup.api';
+export type { PopupResult, PopupType, PopupPosition } from './components/le-popup/le-popup';
+
 // Type exports
 export type * from './components.d.ts';

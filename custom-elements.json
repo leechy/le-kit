@@ -447,6 +447,139 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-button/le-button.tsx",
       "declarations": [
         {
@@ -723,513 +856,6 @@
           "declaration": {
             "name": "LeButton",
             "module": "src/components/le-button/le-button.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
-          "cssProperties": [
-            {
-              "description": "Card background color",
-              "name": "--le-card-bg"
-            },
-            {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
-            },
-            {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
-              "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              }
-            },
-            {
-              "name": "interactive",
-              "fieldName": "interactive",
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-card",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCard",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-card",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-popover/le-popover.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A popover component for displaying floating content.\n\nThis component is used internally by le-slot for property editing\nand component selection. It always renders in default mode regardless\nof the global mode setting.",
-          "name": "LePopover",
-          "slots": [
-            {
-              "description": "Content to display inside the popover",
-              "name": ""
-            },
-            {
-              "description": "Element that triggers the popover (optional)",
-              "name": "trigger"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "'default' | 'admin'"
-              },
-              "description": "Mode of the popover should be 'default' for internal use"
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the popover is currently open"
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
-              },
-              "default": "'bottom'",
-              "description": "Position of the popover relative to its trigger"
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'start' | 'center' | 'end'"
-              },
-              "default": "'start'",
-              "description": "Alignment of the popover"
-            },
-            {
-              "kind": "field",
-              "name": "popoverTitle",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional title for the popover header"
-            },
-            {
-              "kind": "field",
-              "name": "showClose",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether to show a close button in the header"
-            },
-            {
-              "kind": "field",
-              "name": "closeOnClickOutside",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether clicking outside closes the popover"
-            },
-            {
-              "kind": "field",
-              "name": "closeOnEscape",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether pressing Escape closes the popover"
-            },
-            {
-              "kind": "field",
-              "name": "offset",
-              "type": {
-                "text": "number"
-              },
-              "default": "8",
-              "description": "Offset from the trigger element (in pixels)"
-            },
-            {
-              "kind": "field",
-              "name": "width",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Fixed width for the popover (e.g., '300px', '20rem')\nIf set, overrides minWidth and maxWidth"
-            },
-            {
-              "kind": "field",
-              "name": "minWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "default": "'200px'",
-              "description": "Minimum width for the popover (e.g., '200px', '15rem')"
-            },
-            {
-              "kind": "field",
-              "name": "maxWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Maximum width for the popover (e.g., '400px', '25rem')"
-            },
-            {
-              "kind": "field",
-              "name": "triggerEl",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "popoverEl",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "portalEl",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "bodyEl",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "movedNodes",
-              "type": {
-                "text": "{ node: Node; originalParent: Node; originalNextSibling: Node | null }[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "handleOtherPopoverOpen",
-              "privacy": "private",
-              "description": "Handle when another popover is about to open - close this one"
-            },
-            {
-              "kind": "method",
-              "name": "show",
-              "description": "Opens the popover"
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "description": "Closes the popover"
-            },
-            {
-              "kind": "method",
-              "name": "createPortal",
-              "privacy": "private",
-              "description": "Create the portal element and render popover content into it"
-            },
-            {
-              "kind": "method",
-              "name": "destroyPortal",
-              "privacy": "private",
-              "description": "Destroy the portal element and move content back to original locations"
-            },
-            {
-              "kind": "method",
-              "name": "toggle",
-              "description": "Toggles the popover"
-            },
-            {
-              "kind": "field",
-              "name": "handleDocumentClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "updatePosition",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "mode",
-              "fieldName": "mode",
-              "description": "Mode of the popover should be 'default' for internal use",
-              "type": {
-                "text": "'default' | 'admin'"
-              }
-            },
-            {
-              "name": "open",
-              "fieldName": "open",
-              "default": "false",
-              "description": "Whether the popover is currently open",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "position",
-              "fieldName": "position",
-              "default": "'bottom'",
-              "description": "Position of the popover relative to its trigger",
-              "type": {
-                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'start'",
-              "description": "Alignment of the popover",
-              "type": {
-                "text": "'start' | 'center' | 'end'"
-              }
-            },
-            {
-              "name": "popover-title",
-              "fieldName": "popoverTitle",
-              "description": "Optional title for the popover header",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "show-close",
-              "fieldName": "showClose",
-              "default": "true",
-              "description": "Whether to show a close button in the header",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "close-on-click-outside",
-              "fieldName": "closeOnClickOutside",
-              "default": "true",
-              "description": "Whether clicking outside closes the popover",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "close-on-escape",
-              "fieldName": "closeOnEscape",
-              "default": "true",
-              "description": "Whether pressing Escape closes the popover",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "offset",
-              "fieldName": "offset",
-              "default": "8",
-              "description": "Offset from the trigger element (in pixels)",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "width",
-              "fieldName": "width",
-              "description": "Fixed width for the popover (e.g., '300px', '20rem')\nIf set, overrides minWidth and maxWidth",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "min-width",
-              "fieldName": "minWidth",
-              "default": "'200px'",
-              "description": "Minimum width for the popover (e.g., '200px', '15rem')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "max-width",
-              "fieldName": "maxWidth",
-              "description": "Maximum width for the popover (e.g., '400px', '25rem')",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-popover",
-          "events": [
-            {
-              "name": "lePopoverOpen",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the popover opens"
-            },
-            {
-              "name": "lePopoverClose",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the popover closes"
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LePopover",
-          "declaration": {
-            "name": "LePopover",
-            "module": "src/components/le-popover/le-popover.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-popover",
-          "declaration": {
-            "name": "LePopover",
-            "module": "src/components/le-popover/le-popover.tsx"
           }
         }
       ]
@@ -1529,6 +1155,410 @@
           "declaration": {
             "name": "LeComponent",
             "module": "src/components/le-component/le-component.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-popup/le-popup.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible popup/dialog component for alerts, confirms, prompts, and custom content.\n\nUses the native HTML <dialog> element for proper modal behavior, accessibility,\nand focus management. Can be used declaratively in HTML or programmatically \nvia leAlert(), leConfirm(), lePrompt().",
+          "name": "LePopup",
+          "slots": [
+            {
+              "description": "Default slot for custom body content",
+              "name": ""
+            },
+            {
+              "description": "Custom header content (replaces title)",
+              "name": "header"
+            },
+            {
+              "description": "Custom footer content (replaces default buttons)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the popup is currently visible"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "PopupType"
+              },
+              "default": "'alert'",
+              "description": "Type of popup: alert (OK only), confirm (OK/Cancel), prompt (input + OK/Cancel), custom"
+            },
+            {
+              "kind": "field",
+              "name": "popupTitle",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional title for the popup header"
+            },
+            {
+              "kind": "field",
+              "name": "message",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Message text to display (for alert/confirm/prompt types)"
+            },
+            {
+              "kind": "field",
+              "name": "modal",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether the popup is modal (blocks interaction with page behind)"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "PopupPosition"
+              },
+              "default": "'center'",
+              "description": "Position of the popup on screen"
+            },
+            {
+              "kind": "field",
+              "name": "confirmText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'OK'",
+              "description": "Text for the confirm/OK button"
+            },
+            {
+              "kind": "field",
+              "name": "cancelText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Cancel'",
+              "description": "Text for the cancel button"
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Placeholder text for prompt input"
+            },
+            {
+              "kind": "field",
+              "name": "defaultValue",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Default value for prompt input"
+            },
+            {
+              "kind": "field",
+              "name": "closeOnBackdrop",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether clicking the backdrop closes the popup (modal only)"
+            },
+            {
+              "kind": "field",
+              "name": "inputValue",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Internal state for prompt input value"
+            },
+            {
+              "kind": "field",
+              "name": "dialogEl",
+              "type": {
+                "text": "HTMLDialogElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "inputEl",
+              "type": {
+                "text": "HTMLInputElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "resolvePromise",
+              "type": {
+                "text": "(result: PopupResult) => void | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDialogCancel",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "return": {
+                "type": {
+                  "text": "Promise<PopupResult>"
+                }
+              },
+              "description": "Opens the popup and returns a promise that resolves when closed"
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "parameters": [
+                {
+                  "name": "confirmed",
+                  "default": "false",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "Closes the popup with a result"
+            },
+            {
+              "kind": "field",
+              "name": "handleConfirm",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleCancel",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBackdropClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleInputChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "hasSlot",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderHeader",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderBody",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderFooter",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the popup is currently visible",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "type",
+              "fieldName": "type",
+              "default": "'alert'",
+              "description": "Type of popup: alert (OK only), confirm (OK/Cancel), prompt (input + OK/Cancel), custom",
+              "type": {
+                "text": "PopupType"
+              }
+            },
+            {
+              "name": "popup-title",
+              "fieldName": "popupTitle",
+              "description": "Optional title for the popup header",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "message",
+              "fieldName": "message",
+              "description": "Message text to display (for alert/confirm/prompt types)",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "modal",
+              "fieldName": "modal",
+              "default": "true",
+              "description": "Whether the popup is modal (blocks interaction with page behind)",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "position",
+              "fieldName": "position",
+              "default": "'center'",
+              "description": "Position of the popup on screen",
+              "type": {
+                "text": "PopupPosition"
+              }
+            },
+            {
+              "name": "confirm-text",
+              "fieldName": "confirmText",
+              "default": "'OK'",
+              "description": "Text for the confirm/OK button",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "cancel-text",
+              "fieldName": "cancelText",
+              "default": "'Cancel'",
+              "description": "Text for the cancel button",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "''",
+              "description": "Placeholder text for prompt input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "default-value",
+              "fieldName": "defaultValue",
+              "default": "''",
+              "description": "Default value for prompt input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "close-on-backdrop",
+              "fieldName": "closeOnBackdrop",
+              "default": "true",
+              "description": "Whether clicking the backdrop closes the popup (modal only)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-popup",
+          "events": [
+            {
+              "name": "leConfirm",
+              "type": {
+                "text": "EventEmitter<PopupResult>"
+              },
+              "description": "Emitted when the popup is confirmed (OK clicked)"
+            },
+            {
+              "name": "leCancel",
+              "type": {
+                "text": "EventEmitter<PopupResult>"
+              },
+              "description": "Emitted when the popup is cancelled (Cancel clicked or dismissed)"
+            },
+            {
+              "name": "leOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the popup opens"
+            },
+            {
+              "name": "leClose",
+              "type": {
+                "text": "EventEmitter<PopupResult>"
+              },
+              "description": "Emitted when the popup closes"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LePopup",
+          "declaration": {
+            "name": "LePopup",
+            "module": "src/components/le-popup/le-popup.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-popup",
+          "declaration": {
+            "name": "LePopup",
+            "module": "src/components/le-popup/le-popup.tsx"
           }
         }
       ]
@@ -1936,303 +1966,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-stack/le-stack.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible stack layout component using CSS flexbox.\n\n`le-stack` arranges its children in a row (horizontal) or column (vertical)\nwith configurable spacing, alignment, and wrapping behavior. Perfect for\ncreating responsive layouts.",
-          "name": "LeStack",
-          "cssProperties": [
-            {
-              "description": "Gap between items (defaults to var(--le-space-md))",
-              "name": "--le-stack-gap"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main stack container",
-              "name": "stack"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Default slot for stack items (le-box components recommended)",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "direction",
-              "type": {
-                "text": "'horizontal' | 'vertical'"
-              },
-              "default": "'horizontal'",
-              "description": "Direction of the stack layout"
-            },
-            {
-              "kind": "field",
-              "name": "gap",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')"
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
-              },
-              "default": "'stretch'",
-              "description": "Alignment of items on the cross axis"
-            },
-            {
-              "kind": "field",
-              "name": "justify",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
-              },
-              "default": "'start'",
-              "description": "Distribution of items on the main axis"
-            },
-            {
-              "kind": "field",
-              "name": "wrap",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether items should wrap to multiple lines"
-            },
-            {
-              "kind": "field",
-              "name": "alignContent",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
-              },
-              "default": "'stretch'",
-              "description": "Alignment of wrapped lines (only applies when wrap is true)"
-            },
-            {
-              "kind": "field",
-              "name": "reverse",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to reverse the order of items"
-            },
-            {
-              "kind": "field",
-              "name": "maxItems",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum number of items allowed in the stack (for CMS validation)"
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the stack should take full width of its container"
-            },
-            {
-              "kind": "field",
-              "name": "fullHeight",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the stack should take full height of its container"
-            },
-            {
-              "kind": "field",
-              "name": "padding",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Padding inside the stack container (CSS value)"
-            },
-            {
-              "kind": "method",
-              "name": "getFlexDirection",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getAlignItems",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getJustifyContent",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getAlignContent",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "direction",
-              "fieldName": "direction",
-              "default": "'horizontal'",
-              "description": "Direction of the stack layout",
-              "type": {
-                "text": "'horizontal' | 'vertical'"
-              }
-            },
-            {
-              "name": "gap",
-              "fieldName": "gap",
-              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'stretch'",
-              "description": "Alignment of items on the cross axis",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
-              }
-            },
-            {
-              "name": "justify",
-              "fieldName": "justify",
-              "default": "'start'",
-              "description": "Distribution of items on the main axis",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
-              }
-            },
-            {
-              "name": "wrap",
-              "fieldName": "wrap",
-              "default": "false",
-              "description": "Whether items should wrap to multiple lines",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "align-content",
-              "fieldName": "alignContent",
-              "default": "'stretch'",
-              "description": "Alignment of wrapped lines (only applies when wrap is true)",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
-              }
-            },
-            {
-              "name": "reverse",
-              "fieldName": "reverse",
-              "default": "false",
-              "description": "Whether to reverse the order of items",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "max-items",
-              "fieldName": "maxItems",
-              "description": "Maximum number of items allowed in the stack (for CMS validation)",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the stack should take full width of its container",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "full-height",
-              "fieldName": "fullHeight",
-              "default": "false",
-              "description": "Whether the stack should take full height of its container",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "padding",
-              "fieldName": "padding",
-              "description": "Padding inside the stack container (CSS value)",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-stack",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeStack",
-          "declaration": {
-            "name": "LeStack",
-            "module": "src/components/le-stack/le-stack.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-stack",
-          "declaration": {
-            "name": "LeStack",
-            "module": "src/components/le-stack/le-stack.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-text/le-text.tsx",
       "declarations": [
         {
@@ -2595,6 +2328,677 @@
           "declaration": {
             "name": "LeText",
             "module": "src/components/le-text/le-text.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-stack/le-stack.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible stack layout component using CSS flexbox.\n\n`le-stack` arranges its children in a row (horizontal) or column (vertical)\nwith configurable spacing, alignment, and wrapping behavior. Perfect for\ncreating responsive layouts.",
+          "name": "LeStack",
+          "cssProperties": [
+            {
+              "description": "Gap between items (defaults to var(--le-space-md))",
+              "name": "--le-stack-gap"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main stack container",
+              "name": "stack"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Default slot for stack items (le-box components recommended)",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "direction",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'horizontal'",
+              "description": "Direction of the stack layout"
+            },
+            {
+              "kind": "field",
+              "name": "gap",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              },
+              "default": "'stretch'",
+              "description": "Alignment of items on the cross axis"
+            },
+            {
+              "kind": "field",
+              "name": "justify",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
+              },
+              "default": "'start'",
+              "description": "Distribution of items on the main axis"
+            },
+            {
+              "kind": "field",
+              "name": "wrap",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether items should wrap to multiple lines"
+            },
+            {
+              "kind": "field",
+              "name": "alignContent",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
+              },
+              "default": "'stretch'",
+              "description": "Alignment of wrapped lines (only applies when wrap is true)"
+            },
+            {
+              "kind": "field",
+              "name": "reverse",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to reverse the order of items"
+            },
+            {
+              "kind": "field",
+              "name": "maxItems",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of items allowed in the stack (for CMS validation)"
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the stack should take full width of its container"
+            },
+            {
+              "kind": "field",
+              "name": "fullHeight",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the stack should take full height of its container"
+            },
+            {
+              "kind": "field",
+              "name": "padding",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Padding inside the stack container (CSS value)"
+            },
+            {
+              "kind": "method",
+              "name": "getFlexDirection",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getAlignItems",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getJustifyContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getAlignContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "direction",
+              "fieldName": "direction",
+              "default": "'horizontal'",
+              "description": "Direction of the stack layout",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              }
+            },
+            {
+              "name": "gap",
+              "fieldName": "gap",
+              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'stretch'",
+              "description": "Alignment of items on the cross axis",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              }
+            },
+            {
+              "name": "justify",
+              "fieldName": "justify",
+              "default": "'start'",
+              "description": "Distribution of items on the main axis",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
+              }
+            },
+            {
+              "name": "wrap",
+              "fieldName": "wrap",
+              "default": "false",
+              "description": "Whether items should wrap to multiple lines",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "align-content",
+              "fieldName": "alignContent",
+              "default": "'stretch'",
+              "description": "Alignment of wrapped lines (only applies when wrap is true)",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
+              }
+            },
+            {
+              "name": "reverse",
+              "fieldName": "reverse",
+              "default": "false",
+              "description": "Whether to reverse the order of items",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "max-items",
+              "fieldName": "maxItems",
+              "description": "Maximum number of items allowed in the stack (for CMS validation)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the stack should take full width of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "full-height",
+              "fieldName": "fullHeight",
+              "default": "false",
+              "description": "Whether the stack should take full height of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "padding",
+              "fieldName": "padding",
+              "description": "Padding inside the stack container (CSS value)",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-stack",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeStack",
+          "declaration": {
+            "name": "LeStack",
+            "module": "src/components/le-stack/le-stack.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-stack",
+          "declaration": {
+            "name": "LeStack",
+            "module": "src/components/le-stack/le-stack.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-popover/le-popover.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A popover component for displaying floating content.\n\nThis component is used internally by le-slot for property editing\nand component selection. It always renders in default mode regardless\nof the global mode setting.",
+          "name": "LePopover",
+          "slots": [
+            {
+              "description": "Content to display inside the popover",
+              "name": ""
+            },
+            {
+              "description": "Element that triggers the popover (optional)",
+              "name": "trigger"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin'"
+              },
+              "description": "Mode of the popover should be 'default' for internal use"
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the popover is currently open"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
+              },
+              "default": "'bottom'",
+              "description": "Position of the popover relative to its trigger"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'end'"
+              },
+              "default": "'start'",
+              "description": "Alignment of the popover"
+            },
+            {
+              "kind": "field",
+              "name": "popoverTitle",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional title for the popover header"
+            },
+            {
+              "kind": "field",
+              "name": "showClose",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether to show a close button in the header"
+            },
+            {
+              "kind": "field",
+              "name": "closeOnClickOutside",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether clicking outside closes the popover"
+            },
+            {
+              "kind": "field",
+              "name": "closeOnEscape",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether pressing Escape closes the popover"
+            },
+            {
+              "kind": "field",
+              "name": "offset",
+              "type": {
+                "text": "number"
+              },
+              "default": "8",
+              "description": "Offset from the trigger element (in pixels)"
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Fixed width for the popover (e.g., '300px', '20rem')\nIf set, overrides minWidth and maxWidth"
+            },
+            {
+              "kind": "field",
+              "name": "minWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "'200px'",
+              "description": "Minimum width for the popover (e.g., '200px', '15rem')"
+            },
+            {
+              "kind": "field",
+              "name": "maxWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Maximum width for the popover (e.g., '400px', '25rem')"
+            },
+            {
+              "kind": "field",
+              "name": "triggerEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "popoverEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "portalEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "bodyEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "movedNodes",
+              "type": {
+                "text": "{ node: Node; originalParent: Node; originalNextSibling: Node | null }[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "handleOtherPopoverOpen",
+              "privacy": "private",
+              "description": "Handle when another popover is about to open - close this one"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "description": "Opens the popover"
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "description": "Closes the popover"
+            },
+            {
+              "kind": "method",
+              "name": "createPortal",
+              "privacy": "private",
+              "description": "Create the portal element and render popover content into it"
+            },
+            {
+              "kind": "method",
+              "name": "destroyPortal",
+              "privacy": "private",
+              "description": "Destroy the portal element and move content back to original locations"
+            },
+            {
+              "kind": "method",
+              "name": "toggle",
+              "description": "Toggles the popover"
+            },
+            {
+              "kind": "field",
+              "name": "handleDocumentClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updatePosition",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "mode",
+              "fieldName": "mode",
+              "description": "Mode of the popover should be 'default' for internal use",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the popover is currently open",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "position",
+              "fieldName": "position",
+              "default": "'bottom'",
+              "description": "Position of the popover relative to its trigger",
+              "type": {
+                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'start'",
+              "description": "Alignment of the popover",
+              "type": {
+                "text": "'start' | 'center' | 'end'"
+              }
+            },
+            {
+              "name": "popover-title",
+              "fieldName": "popoverTitle",
+              "description": "Optional title for the popover header",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "show-close",
+              "fieldName": "showClose",
+              "default": "true",
+              "description": "Whether to show a close button in the header",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "close-on-click-outside",
+              "fieldName": "closeOnClickOutside",
+              "default": "true",
+              "description": "Whether clicking outside closes the popover",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "close-on-escape",
+              "fieldName": "closeOnEscape",
+              "default": "true",
+              "description": "Whether pressing Escape closes the popover",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "offset",
+              "fieldName": "offset",
+              "default": "8",
+              "description": "Offset from the trigger element (in pixels)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "width",
+              "fieldName": "width",
+              "description": "Fixed width for the popover (e.g., '300px', '20rem')\nIf set, overrides minWidth and maxWidth",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min-width",
+              "fieldName": "minWidth",
+              "default": "'200px'",
+              "description": "Minimum width for the popover (e.g., '200px', '15rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-width",
+              "fieldName": "maxWidth",
+              "description": "Maximum width for the popover (e.g., '400px', '25rem')",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-popover",
+          "events": [
+            {
+              "name": "lePopoverOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the popover opens"
+            },
+            {
+              "name": "lePopoverClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the popover closes"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LePopover",
+          "declaration": {
+            "name": "LePopover",
+            "module": "src/components/le-popover/le-popover.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-popover",
+          "declaration": {
+            "name": "LePopover",
+            "module": "src/components/le-popover/le-popover.tsx"
           }
         }
       ]

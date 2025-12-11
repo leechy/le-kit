@@ -5,6 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
+export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export namespace Components {
     /**
      * A flexible box component for use as a flex item within le-stack.
@@ -327,6 +329,77 @@ export namespace Components {
         "width"?: string;
     }
     /**
+     * A flexible popup/dialog component for alerts, confirms, prompts, and custom content.
+     * Uses the native HTML <dialog> element for proper modal behavior, accessibility,
+     * and focus management. Can be used declaratively in HTML or programmatically 
+     * via leAlert(), leConfirm(), lePrompt().
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LePopup {
+        /**
+          * Text for the cancel button
+          * @default 'Cancel'
+         */
+        "cancelText": string;
+        /**
+          * Whether clicking the backdrop closes the popup (modal only)
+          * @default true
+         */
+        "closeOnBackdrop": boolean;
+        /**
+          * Text for the confirm/OK button
+          * @default 'OK'
+         */
+        "confirmText": string;
+        /**
+          * Default value for prompt input
+          * @default ''
+         */
+        "defaultValue": string;
+        /**
+          * Closes the popup with a result
+         */
+        "hide": (confirmed?: boolean) => Promise<void>;
+        /**
+          * Message text to display (for alert/confirm/prompt types)
+         */
+        "message"?: string;
+        /**
+          * Whether the popup is modal (blocks interaction with page behind)
+          * @default true
+         */
+        "modal": boolean;
+        /**
+          * Whether the popup is currently visible
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Placeholder text for prompt input
+          * @default ''
+         */
+        "placeholder": string;
+        /**
+          * Optional title for the popup header
+         */
+        "popupTitle"?: string;
+        /**
+          * Position of the popup on screen
+          * @default 'center'
+         */
+        "position": PopupPosition;
+        /**
+          * Opens the popup and returns a promise that resolves when closed
+         */
+        "show": () => Promise<PopupResult>;
+        /**
+          * Type of popup: alert (OK only), confirm (OK/Cancel), prompt (input + OK/Cancel), custom
+          * @default 'alert'
+         */
+        "type": PopupType;
+    }
+    /**
      * Slot placeholder component for admin/CMS mode.
      * This component renders a visual placeholder for slots when in admin mode,
      * allowing CMS systems to show available drop zones for content or inline editing.
@@ -501,6 +574,10 @@ export interface LePopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLePopoverElement;
 }
+export interface LePopupCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLePopupElement;
+}
 export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeSlotElement;
@@ -628,6 +705,34 @@ declare global {
         prototype: HTMLLePopoverElement;
         new (): HTMLLePopoverElement;
     };
+    interface HTMLLePopupElementEventMap {
+        "leConfirm": PopupResult;
+        "leCancel": PopupResult;
+        "leOpen": void;
+        "leClose": PopupResult;
+    }
+    /**
+     * A flexible popup/dialog component for alerts, confirms, prompts, and custom content.
+     * Uses the native HTML <dialog> element for proper modal behavior, accessibility,
+     * and focus management. Can be used declaratively in HTML or programmatically 
+     * via leAlert(), leConfirm(), lePrompt().
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface HTMLLePopupElement extends Components.LePopup, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLePopupElementEventMap>(type: K, listener: (this: HTMLLePopupElement, ev: LePopupCustomEvent<HTMLLePopupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLePopupElementEventMap>(type: K, listener: (this: HTMLLePopupElement, ev: LePopupCustomEvent<HTMLLePopupElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLePopupElement: {
+        prototype: HTMLLePopupElement;
+        new (): HTMLLePopupElement;
+    };
     interface HTMLLeSlotElementEventMap {
         "leSlotChange": { name: string; value: string; isValid: boolean };
     }
@@ -694,6 +799,7 @@ declare global {
         "le-card": HTMLLeCardElement;
         "le-component": HTMLLeComponentElement;
         "le-popover": HTMLLePopoverElement;
+        "le-popup": HTMLLePopupElement;
         "le-slot": HTMLLeSlotElement;
         "le-stack": HTMLLeStackElement;
         "le-text": HTMLLeTextElement;
@@ -1021,6 +1127,85 @@ declare namespace LocalJSX {
         "width"?: string;
     }
     /**
+     * A flexible popup/dialog component for alerts, confirms, prompts, and custom content.
+     * Uses the native HTML <dialog> element for proper modal behavior, accessibility,
+     * and focus management. Can be used declaratively in HTML or programmatically 
+     * via leAlert(), leConfirm(), lePrompt().
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LePopup {
+        /**
+          * Text for the cancel button
+          * @default 'Cancel'
+         */
+        "cancelText"?: string;
+        /**
+          * Whether clicking the backdrop closes the popup (modal only)
+          * @default true
+         */
+        "closeOnBackdrop"?: boolean;
+        /**
+          * Text for the confirm/OK button
+          * @default 'OK'
+         */
+        "confirmText"?: string;
+        /**
+          * Default value for prompt input
+          * @default ''
+         */
+        "defaultValue"?: string;
+        /**
+          * Message text to display (for alert/confirm/prompt types)
+         */
+        "message"?: string;
+        /**
+          * Whether the popup is modal (blocks interaction with page behind)
+          * @default true
+         */
+        "modal"?: boolean;
+        /**
+          * Emitted when the popup is cancelled (Cancel clicked or dismissed)
+         */
+        "onLeCancel"?: (event: LePopupCustomEvent<PopupResult>) => void;
+        /**
+          * Emitted when the popup closes
+         */
+        "onLeClose"?: (event: LePopupCustomEvent<PopupResult>) => void;
+        /**
+          * Emitted when the popup is confirmed (OK clicked)
+         */
+        "onLeConfirm"?: (event: LePopupCustomEvent<PopupResult>) => void;
+        /**
+          * Emitted when the popup opens
+         */
+        "onLeOpen"?: (event: LePopupCustomEvent<void>) => void;
+        /**
+          * Whether the popup is currently visible
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Placeholder text for prompt input
+          * @default ''
+         */
+        "placeholder"?: string;
+        /**
+          * Optional title for the popup header
+         */
+        "popupTitle"?: string;
+        /**
+          * Position of the popup on screen
+          * @default 'center'
+         */
+        "position"?: PopupPosition;
+        /**
+          * Type of popup: alert (OK only), confirm (OK/Cancel), prompt (input + OK/Cancel), custom
+          * @default 'alert'
+         */
+        "type"?: PopupType;
+    }
+    /**
      * Slot placeholder component for admin/CMS mode.
      * This component renders a visual placeholder for slots when in admin mode,
      * allowing CMS systems to show available drop zones for content or inline editing.
@@ -1196,6 +1381,7 @@ declare namespace LocalJSX {
         "le-card": LeCard;
         "le-component": LeComponent;
         "le-popover": LePopover;
+        "le-popup": LePopup;
         "le-slot": LeSlot;
         "le-stack": LeStack;
         "le-text": LeText;
@@ -1279,6 +1465,15 @@ declare module "@stencil/core" {
              * @cmsCategory System
              */
             "le-popover": LocalJSX.LePopover & JSXBase.HTMLAttributes<HTMLLePopoverElement>;
+            /**
+             * A flexible popup/dialog component for alerts, confirms, prompts, and custom content.
+             * Uses the native HTML <dialog> element for proper modal behavior, accessibility,
+             * and focus management. Can be used declaratively in HTML or programmatically 
+             * via leAlert(), leConfirm(), lePrompt().
+             * @cmsInternal true
+             * @cmsCategory System
+             */
+            "le-popup": LocalJSX.LePopup & JSXBase.HTMLAttributes<HTMLLePopupElement>;
             /**
              * Slot placeholder component for admin/CMS mode.
              * This component renders a visual placeholder for slots when in admin mode,

@@ -125,6 +125,60 @@
     <template id="default-content">
 
       <div class="demo-section">
+        <h2>Popup / Dialog Component</h2>
+        <p>Modal and non-modal popups using native &lt;dialog&gt;. Supports alerts, confirms, prompts, and fully custom content.</p>
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>Programmatic API:</label>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+              <le-button onclick="showAlert()">leAlert()</le-button>
+              <le-button onclick="showConfirm()">leConfirm()</le-button>
+              <le-button onclick="showPrompt()">lePrompt()</le-button>
+            </div>
+            <p id="popup-result" style="margin-top: 8px; font-size: 13px; color: var(--le-color-text-secondary);"></p>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Custom content (children):</label>
+            <le-button onclick="showCustomPopup()">Show Custom Popup</le-button>
+            
+            <!-- Declarative popup with custom content -->
+            <le-popup id="custom-popup" popup-title="Custom Content" type="custom">
+              <div style="text-align: center;">
+                <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
+                <h3 style="margin: 0 0 8px 0;">Congratulations!</h3>
+                <p style="margin: 0; color: var(--le-color-text-secondary);">
+                  You can put <strong>any HTML</strong> inside the popup!
+                </p>
+              </div>
+              <div slot="footer" style="display: flex; gap: 8px; justify-content: center;">
+                <le-button variant="outlined" onclick="document.getElementById('custom-popup').hide(false)">Maybe Later</le-button>
+                <le-button color="success" onclick="document.getElementById('custom-popup').hide(true)">Awesome!</le-button>
+              </div>
+            </le-popup>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Position variants:</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+              <le-button size="small" onclick="showPositioned('center')">Center</le-button>
+              <le-button size="small" onclick="showPositioned('top')">Top</le-button>
+              <le-button size="small" onclick="showPositioned('bottom')">Bottom</le-button>
+              <le-button size="small" onclick="showPositioned('top-left')">Top-Left</le-button>
+              <le-button size="small" onclick="showPositioned('top-right')">Top-Right</le-button>
+              <le-button size="small" onclick="showPositioned('bottom-left')">Bottom-Left</le-button>
+              <le-button size="small" onclick="showPositioned('bottom-right')">Bottom-Right</le-button>
+            </div>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Non-modal (click outside):</label>
+            <le-button onclick="showNonModal()">Show Non-Modal</le-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-section">
         <h2>Popover Component</h2>
         <p>A reusable popover for floating content, settings panels, and menus.</p>
         <div class="demo-grid">
@@ -461,6 +515,16 @@ console.log(greeting);</le-text>
 
     </template>
 
+    <!-- Import popup API functions as ES module -->
+    <script type="module">
+      import { leAlert, leConfirm, lePrompt } from '/build/le-kit.esm.js';
+      
+      // Make them available globally for onclick handlers
+      window.leAlert = leAlert;
+      window.leConfirm = leConfirm;
+      window.lePrompt = lePrompt;
+    </script>
+
     <script>
       const STORAGE_KEY = 'le-kit-demo-content';
       const contentContainer = document.getElementById('editable-content');
@@ -533,6 +597,56 @@ console.log(greeting);</le-text>
         });
         
         console.log('Theme changed to:', theme);
+      }
+
+      // ============================================
+      // Popup Demo Functions
+      // ============================================
+      
+      // Using the imported leAlert, leConfirm, lePrompt functions
+      async function showAlert() {
+        await leAlert('This is an alert message!', { title: 'Alert' });
+        document.getElementById('popup-result').textContent = 'Alert closed';
+      }
+      
+      async function showConfirm() {
+        const confirmed = await leConfirm('Are you sure you want to proceed?', { 
+          title: 'Confirm Action' 
+        });
+        document.getElementById('popup-result').textContent = `Confirmed: ${confirmed}`;
+      }
+      
+      async function showPrompt() {
+        const name = await lePrompt('What is your name?', { 
+          title: 'Enter Name',
+          placeholder: 'Type your name...'
+        });
+        if (name !== null) {
+          document.getElementById('popup-result').textContent = `Hello, ${name || 'stranger'}!`;
+        } else {
+          document.getElementById('popup-result').textContent = 'Prompt cancelled';
+        }
+      }
+      
+      async function showPositioned(position) {
+        await leAlert(`This popup is positioned at: ${position}`, {
+          title: 'Position Demo',
+          position: position
+        });
+      }
+      
+      async function showNonModal() {
+        await leAlert('This is a non-modal popup. You can still interact with the page behind it.', {
+          title: 'Non-Modal',
+          modal: false
+        });
+      }
+      
+      async function showCustomPopup() {
+        const popup = document.getElementById('custom-popup');
+        const result = await popup.show();
+        document.getElementById('popup-result').textContent = 
+          result.confirmed ? 'You clicked Awesome!' : 'You clicked Maybe Later';
       }
 
       // Initialize on page load

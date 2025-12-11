@@ -132,6 +132,7 @@
             <label>Programmatic API:</label>
             <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
               <le-button onclick="showAlert()">leAlert()</le-button>
+              <le-button onclick="leAlert('Some text in the alert to test it')">leAlert()</le-button>
               <le-button onclick="showConfirm()">leConfirm()</le-button>
               <le-button onclick="showPrompt()">lePrompt()</le-button>
             </div>
@@ -515,17 +516,64 @@ console.log(greeting);</le-text>
 
     </template>
 
-    <!-- Import popup API functions as ES module -->
-    <script type="module">
-      import { leAlert, leConfirm, lePrompt } from '/build/le-kit.esm.js';
+    <!-- 
+      Note: In a real app, you'd import from the package:
+      import { leAlert, leConfirm, lePrompt } from 'le-kit';
       
-      // Make them available globally for onclick handlers
-      window.leAlert = leAlert;
-      window.leConfirm = leConfirm;
-      window.lePrompt = lePrompt;
-    </script>
+      For the dev server demo, we define equivalent helpers below.
+    -->
 
     <script>
+      // ============================================
+      // Popup API helpers (equivalent to le-kit exports)
+      // In production, import these from 'le-kit' package
+      // ============================================
+      
+      async function leAlert(message, options = {}) {
+        const popup = document.createElement('le-popup');
+        popup.message = message;
+        popup.type = 'alert';
+        if (options.title) popup.popupTitle = options.title;
+        if (options.position) popup.position = options.position;
+        if (options.modal !== undefined) popup.modal = options.modal;
+        if (options.confirmText) popup.confirmText = options.confirmText;
+        document.body.appendChild(popup);
+        await popup.show();
+        popup.remove();
+      }
+      
+      async function leConfirm(message, options = {}) {
+        const popup = document.createElement('le-popup');
+        popup.message = message;
+        popup.type = 'confirm';
+        if (options.title) popup.popupTitle = options.title;
+        if (options.position) popup.position = options.position;
+        if (options.modal !== undefined) popup.modal = options.modal;
+        if (options.confirmText) popup.confirmText = options.confirmText;
+        if (options.cancelText) popup.cancelText = options.cancelText;
+        document.body.appendChild(popup);
+        const result = await popup.show();
+        popup.remove();
+        return result.confirmed;
+      }
+      
+      async function lePrompt(message, options = {}) {
+        const popup = document.createElement('le-popup');
+        popup.message = message;
+        popup.type = 'prompt';
+        if (options.title) popup.popupTitle = options.title;
+        if (options.position) popup.position = options.position;
+        if (options.modal !== undefined) popup.modal = options.modal;
+        if (options.placeholder) popup.placeholder = options.placeholder;
+        if (options.defaultValue) popup.defaultValue = options.defaultValue;
+        if (options.confirmText) popup.confirmText = options.confirmText;
+        if (options.cancelText) popup.cancelText = options.cancelText;
+        document.body.appendChild(popup);
+        const result = await popup.show();
+        popup.remove();
+        return result.confirmed ? (result.value ?? '') : null;
+      }
+
       const STORAGE_KEY = 'le-kit-demo-content';
       const contentContainer = document.getElementById('editable-content');
       const defaultTemplate = document.getElementById('default-content');

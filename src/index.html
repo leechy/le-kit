@@ -144,7 +144,7 @@
             <le-button onclick="showCustomPopup()">Show Custom Popup</le-button>
             
             <!-- Declarative popup with custom content -->
-            <le-popup id="custom-popup" popup-title="Custom Content" type="custom">
+            <le-popup id="custom-popup" popup-title="Custom Content" type="custom" modal="false">
               <div style="text-align: center;">
                 <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
                 <h3 style="margin: 0 0 8px 0;">Congratulations!</h3>
@@ -174,7 +174,7 @@
           
           <div class="text-slot-demo">
             <label>Non-modal (click outside):</label>
-            <le-button onclick="showNonModal()">Show Non-Modal</le-button>
+            <le-button onclick="showNonModal({ position: 'bottom-left' })">Show Non-Modal</le-button>
           </div>
         </div>
       </div>
@@ -683,10 +683,11 @@ console.log(greeting);</le-text>
         });
       }
       
-      async function showNonModal() {
+      async function showNonModal(options = {}) {
         await leAlert('This is a non-modal popup. You can still interact with the page behind it.', {
           title: 'Non-Modal',
-          modal: false
+          modal: false,
+          ...options
         });
       }
       

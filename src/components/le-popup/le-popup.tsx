@@ -282,7 +282,9 @@ export class LePopup {
         )}
         
         {/* Default slot for custom content */}
-        <slot></slot>
+        <le-slot name="" tag="div" description="Custom popup content" type="slot">
+          <slot></slot>
+        </le-slot>
       </div>
     );
   }
@@ -333,11 +335,13 @@ export class LePopup {
         ref={(el) => (this.dialogEl = el)}
         onClick={this.handleBackdropClick}
       >
-        <div class="le-popup-container" part="container">
-          {this.renderHeader()}
-          {this.renderBody()}
-          {this.renderFooter()}
-        </div>
+        <le-component component="le-popup">
+          <div class="le-popup-container" part="container">
+            {this.renderHeader()}
+            {this.renderBody()}
+            {this.renderFooter()}
+          </div>
+        </le-component>
       </dialog>
     );
   }

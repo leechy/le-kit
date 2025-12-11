@@ -53,7 +53,7 @@ render() {
  - [le-box](../le-box)
  - [le-button](../le-button)
  - [le-card](../le-card)
- - [le-popover](../le-popover)
+ - [le-popup](../le-popup)
  - [le-stack](../le-stack)
  - [le-text](../le-text)
 
@@ -67,12 +67,12 @@ render() {
 graph TD;
   le-component --> le-popover
   le-component --> le-button
-  le-popover --> le-component
   le-button --> le-component
   le-slot --> le-popover
   le-slot --> le-button
   le-box --> le-component
   le-card --> le-component
+  le-popup --> le-component
   le-stack --> le-component
   le-text --> le-component
   style le-component fill:#f9f,stroke:#333,stroke-width:4px

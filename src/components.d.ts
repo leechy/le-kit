@@ -252,9 +252,8 @@ export namespace Components {
     }
     /**
      * A popover component for displaying floating content.
-     * This component is used internally by le-slot for property editing
-     * and component selection. It always renders in default mode regardless
-     * of the global mode setting.
+     * Uses the native HTML Popover API for proper layering with dialogs
+     * and other top-layer elements. Falls back gracefully in older browsers.
      * @cmsInternal true
      * @cmsCategory System
      */
@@ -324,7 +323,7 @@ export namespace Components {
          */
         "toggle": () => Promise<void>;
         /**
-          * Fixed width for the popover (e.g., '300px', '20rem') If set, overrides minWidth and maxWidth
+          * Fixed width for the popover (e.g., '300px', '20rem')
          */
         "width"?: string;
     }
@@ -685,9 +684,8 @@ declare global {
     }
     /**
      * A popover component for displaying floating content.
-     * This component is used internally by le-slot for property editing
-     * and component selection. It always renders in default mode regardless
-     * of the global mode setting.
+     * Uses the native HTML Popover API for proper layering with dialogs
+     * and other top-layer elements. Falls back gracefully in older browsers.
      * @cmsInternal true
      * @cmsCategory System
      */
@@ -1054,9 +1052,8 @@ declare namespace LocalJSX {
     }
     /**
      * A popover component for displaying floating content.
-     * This component is used internally by le-slot for property editing
-     * and component selection. It always renders in default mode regardless
-     * of the global mode setting.
+     * Uses the native HTML Popover API for proper layering with dialogs
+     * and other top-layer elements. Falls back gracefully in older browsers.
      * @cmsInternal true
      * @cmsCategory System
      */
@@ -1122,7 +1119,7 @@ declare namespace LocalJSX {
          */
         "showClose"?: boolean;
         /**
-          * Fixed width for the popover (e.g., '300px', '20rem') If set, overrides minWidth and maxWidth
+          * Fixed width for the popover (e.g., '300px', '20rem')
          */
         "width"?: string;
     }
@@ -1458,9 +1455,8 @@ declare module "@stencil/core" {
             "le-component": LocalJSX.LeComponent & JSXBase.HTMLAttributes<HTMLLeComponentElement>;
             /**
              * A popover component for displaying floating content.
-             * This component is used internally by le-slot for property editing
-             * and component selection. It always renders in default mode regardless
-             * of the global mode setting.
+             * Uses the native HTML Popover API for proper layering with dialogs
+             * and other top-layer elements. Falls back gracefully in older browsers.
              * @cmsInternal true
              * @cmsCategory System
              */

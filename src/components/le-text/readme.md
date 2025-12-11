@@ -50,9 +50,6 @@ graph TD;
   le-text --> le-component
   le-component --> le-popover
   le-component --> le-button
-  le-popover --> le-button
-  le-popover --> le-component
-  le-popover --> le-slot
   le-button --> le-component
   le-button --> le-slot
   le-slot --> le-popover

@@ -92,6 +92,25 @@ Type: `Promise<PopupResult>`
 | `"input"`          |             |
 
 
+## Dependencies
+
+### Depends on
+
+- [le-component](../le-component)
+
+### Graph
+```mermaid
+graph TD;
+  le-popup --> le-component
+  le-component --> le-popover
+  le-component --> le-button
+  le-button --> le-component
+  le-button --> le-slot
+  le-slot --> le-popover
+  le-slot --> le-button
+  style le-popup fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

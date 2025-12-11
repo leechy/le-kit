@@ -9,26 +9,25 @@
 
 A popover component for displaying floating content.
 
-This component is used internally by le-slot for property editing
-and component selection. It always renders in default mode regardless
-of the global mode setting.
+Uses the native HTML Popover API for proper layering with dialogs
+and other top-layer elements. Falls back gracefully in older browsers.
 
 ## Properties
 
-| Property              | Attribute                | Description                                                                                  | Type                                               | Default     |
-| --------------------- | ------------------------ | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ----------- |
-| `align`               | `align`                  | Alignment of the popover                                                                     | `"center" \| "end" \| "start"`                     | `'start'`   |
-| `closeOnClickOutside` | `close-on-click-outside` | Whether clicking outside closes the popover                                                  | `boolean`                                          | `true`      |
-| `closeOnEscape`       | `close-on-escape`        | Whether pressing Escape closes the popover                                                   | `boolean`                                          | `true`      |
-| `maxWidth`            | `max-width`              | Maximum width for the popover (e.g., '400px', '25rem')                                       | `string`                                           | `undefined` |
-| `minWidth`            | `min-width`              | Minimum width for the popover (e.g., '200px', '15rem')                                       | `string`                                           | `'200px'`   |
-| `mode`                | `mode`                   | Mode of the popover should be 'default' for internal use                                     | `"admin" \| "default"`                             | `undefined` |
-| `offset`              | `offset`                 | Offset from the trigger element (in pixels)                                                  | `number`                                           | `8`         |
-| `open`                | `open`                   | Whether the popover is currently open                                                        | `boolean`                                          | `false`     |
-| `popoverTitle`        | `popover-title`          | Optional title for the popover header                                                        | `string`                                           | `undefined` |
-| `position`            | `position`               | Position of the popover relative to its trigger                                              | `"auto" \| "bottom" \| "left" \| "right" \| "top"` | `'bottom'`  |
-| `showClose`           | `show-close`             | Whether to show a close button in the header                                                 | `boolean`                                          | `true`      |
-| `width`               | `width`                  | Fixed width for the popover (e.g., '300px', '20rem') If set, overrides minWidth and maxWidth | `string`                                           | `undefined` |
+| Property              | Attribute                | Description                                              | Type                                               | Default     |
+| --------------------- | ------------------------ | -------------------------------------------------------- | -------------------------------------------------- | ----------- |
+| `align`               | `align`                  | Alignment of the popover                                 | `"center" \| "end" \| "start"`                     | `'start'`   |
+| `closeOnClickOutside` | `close-on-click-outside` | Whether clicking outside closes the popover              | `boolean`                                          | `true`      |
+| `closeOnEscape`       | `close-on-escape`        | Whether pressing Escape closes the popover               | `boolean`                                          | `true`      |
+| `maxWidth`            | `max-width`              | Maximum width for the popover (e.g., '400px', '25rem')   | `string`                                           | `undefined` |
+| `minWidth`            | `min-width`              | Minimum width for the popover (e.g., '200px', '15rem')   | `string`                                           | `'200px'`   |
+| `mode`                | `mode`                   | Mode of the popover should be 'default' for internal use | `"admin" \| "default"`                             | `undefined` |
+| `offset`              | `offset`                 | Offset from the trigger element (in pixels)              | `number`                                           | `8`         |
+| `open`                | `open`                   | Whether the popover is currently open                    | `boolean`                                          | `false`     |
+| `popoverTitle`        | `popover-title`          | Optional title for the popover header                    | `string`                                           | `undefined` |
+| `position`            | `position`               | Position of the popover relative to its trigger          | `"auto" \| "bottom" \| "left" \| "right" \| "top"` | `'bottom'`  |
+| `showClose`           | `show-close`             | Whether to show a close button in the header             | `boolean`                                          | `true`      |
+| `width`               | `width`                  | Fixed width for the popover (e.g., '300px', '20rem')     | `string`                                           | `undefined` |
 
 
 ## Events
@@ -87,20 +86,9 @@ Type: `Promise<void>`
  - [le-component](../le-component)
  - [le-slot](../le-slot)
 
-### Depends on
-
-- [le-button](../le-button)
-- [le-component](../le-component)
-- [le-slot](../le-slot)
-
 ### Graph
 ```mermaid
 graph TD;
-  le-popover --> le-button
-  le-popover --> le-component
-  le-popover --> le-slot
-  le-button --> le-component
-  le-button --> le-slot
   le-component --> le-popover
   le-slot --> le-popover
   style le-popover fill:#f9f,stroke:#333,stroke-width:4px

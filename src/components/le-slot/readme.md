@@ -51,7 +51,6 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
  - [le-box](../le-box)
  - [le-button](../le-button)
  - [le-card](../le-card)
- - [le-popover](../le-popover)
  - [le-stack](../le-stack)
 
 ### Depends on
@@ -64,7 +63,6 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
 graph TD;
   le-slot --> le-popover
   le-slot --> le-button
-  le-popover --> le-slot
   le-button --> le-slot
   le-component --> le-popover
   le-component --> le-button

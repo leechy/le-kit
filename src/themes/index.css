@@ -16,9 +16,6 @@
 @import './minimal.css';
 @import './warm.css';
 
-/* Portal styles for le-popover (rendered outside shadow DOM) */
-@import '../components/le-popover/le-popover.portal.css';
-
 /* ============================================
    BASE TOKENS
    Structural design tokens that apply to all themes

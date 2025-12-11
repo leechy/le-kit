@@ -598,8 +598,8 @@ console.log(greeting);</le-text>
       }
 
       // Reset content to default
-      function resetContent() {
-        if (confirm('Reset all content to default? This will discard all your changes.')) {
+      async function resetContent() {
+        if (await leConfirm('Reset all content to default? This will discard all your changes.')) {
           localStorage.removeItem(STORAGE_KEY);
           contentContainer.innerHTML = defaultTemplate.innerHTML;
           console.log('Content reset to default');

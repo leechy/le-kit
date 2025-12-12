@@ -73,7 +73,11 @@
   --le-color-border: #e5e7eb;
   --le-color-border-light: #f3f4f6;
   --le-color-border-dark: #d1d5db;
-  
+
+  /** Input borders */
+  --le-border-width: 1px;
+  --le-color-border-input: #c8cfdd;
+
   /* Focus ring */
   --le-color-focus: rgba(17, 24, 39, 0.3);
   

@@ -14,7 +14,7 @@
   --le-slot-label-color: #0066cc;
   --le-slot-description-color: #666;
   --le-slot-required-color: #e53935;
-  --le-slot-dropzone-min-height: 60px;
+  --le-slot-dropzone-min-height: 20px;
   --le-slot-dropzone-border-color: #ccc;
 }
 

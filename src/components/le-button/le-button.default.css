@@ -7,8 +7,8 @@
   
   /* Component-specific tokens */
   --le-button-border-radius: var(--le-radius-md);
-  --le-button-padding-x: 1rem;
-  --le-button-padding-y: 0.40rem;
+  --le-button-padding-x: 0.4rem;
+  --le-button-padding-y: 0.4rem;
   --le-button-font-size: var(--le-font-size-md);
   --le-button-font-weight: var(--le-font-weight-medium);
   --le-button-transition: var(--le-transition-fast);
@@ -169,14 +169,14 @@
  * SIZES
  * =========================================== */
 :host > le-component.size-small .button {
-  --le-button-padding-x: 0.75rem;
-  --le-button-padding-y: 0.30rem;
+  --le-button-padding-x: 0.4rem;
+  --le-button-padding-y: 0.3rem;
   --le-button-padding-top: 0.35rem;
   --le-button-font-size: var(--le-font-size-xs);
 }
 
 :host > le-component.size-large .button {
-  --le-button-padding-x: 1.5rem;
+  --le-button-padding-x: 0.9rem;
   --le-button-padding-y: 0.6rem;
   --le-button-font-size: var(--le-font-size-xl);
 }

@@ -2,9 +2,10 @@
   display: block;
   --le-checkbox-size: 18px;
   --le-checkbox-color: var(--le-color-primary, #007bff);
-  --le-checkbox-label-color: var(--le-text-color, #333);
-  --le-checkbox-desc-color: var(--le-text-muted, #666);
+  --le-checkbox-label-color: var(--le-color-text-primary, #333);
+  --le-checkbox-desc-color: var(--le-color-text-secondary, #666);
   --le-checkbox-border-radius: var(--le-radius-sm, 2px);
+  --le-checkbox-marker-color: var(--le-color-surface, #fff);
 }
 
 .le-checkbox-wrapper {
@@ -38,7 +39,7 @@ input[type="checkbox"] {
   -webkit-appearance: none;
   width: var(--le-checkbox-size);
   height: var(--le-checkbox-size);
-  border: 2px solid var(--le-checkbox-color);
+  border: var(--le-border-width, 2px) solid var(--le-checkbox-color);
   border-radius: var(--le-checkbox-border-radius);
   margin: 0;
   margin-top: 2px; /* Align with text */
@@ -62,7 +63,7 @@ input[type="checkbox"]:checked::after {
   margin: auto;
   width: calc(var(--le-checkbox-size) / 4);
   height: calc(var(--le-checkbox-size) / 2);
-  border: solid white;
+  border: solid var(--le-checkbox-marker-color, #fff);
   border-width: 0 calc(var(--le-checkbox-size) / 10) calc(var(--le-checkbox-size) / 10) 0;
   transform: rotate(45deg);
 }

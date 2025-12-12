@@ -1333,400 +1333,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-popover/le-popover.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A popover component for displaying floating content.\n\nUses the native HTML Popover API for proper layering with dialogs\nand other top-layer elements. Falls back gracefully in older browsers.",
-          "name": "LePopover",
-          "slots": [
-            {
-              "description": "Content to display inside the popover",
-              "name": ""
-            },
-            {
-              "description": "Element that triggers the popover (optional)",
-              "name": "trigger"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "'default' | 'admin'"
-              },
-              "description": "Mode of the popover should be 'default' for internal use"
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the popover is currently open"
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
-              },
-              "default": "'bottom'",
-              "description": "Position of the popover relative to its trigger"
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'start' | 'center' | 'end'"
-              },
-              "default": "'start'",
-              "description": "Alignment of the popover"
-            },
-            {
-              "kind": "field",
-              "name": "popoverTitle",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional title for the popover header"
-            },
-            {
-              "kind": "field",
-              "name": "showClose",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether to show a close button in the header"
-            },
-            {
-              "kind": "field",
-              "name": "closeOnClickOutside",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether clicking outside closes the popover"
-            },
-            {
-              "kind": "field",
-              "name": "closeOnEscape",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether pressing Escape closes the popover"
-            },
-            {
-              "kind": "field",
-              "name": "offset",
-              "type": {
-                "text": "number"
-              },
-              "default": "8",
-              "description": "Offset from the trigger element (in pixels)"
-            },
-            {
-              "kind": "field",
-              "name": "width",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Fixed width for the popover (e.g., '300px', '20rem')"
-            },
-            {
-              "kind": "field",
-              "name": "minWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "default": "'200px'",
-              "description": "Minimum width for the popover (e.g., '200px', '15rem')"
-            },
-            {
-              "kind": "field",
-              "name": "maxWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Maximum width for the popover (e.g., '400px', '25rem')"
-            },
-            {
-              "kind": "field",
-              "name": "isPositioned",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "triggerEl",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "popoverEl",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "uniqueId",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "`le-popover-${Math.random().toString(36).substr(2, 9)}`"
-            },
-            {
-              "kind": "field",
-              "name": "scrollParents",
-              "type": {
-                "text": "Element[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "method",
-              "name": "getScrollParents",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "Element[]"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "element",
-                  "type": {
-                    "text": "Element"
-                  }
-                }
-              ],
-              "description": "Find all scrollable parent elements"
-            },
-            {
-              "kind": "method",
-              "name": "addScrollListeners",
-              "privacy": "private",
-              "description": "Add scroll listeners to all scrollable parents"
-            },
-            {
-              "kind": "method",
-              "name": "removeScrollListeners",
-              "privacy": "private",
-              "description": "Remove scroll listeners"
-            },
-            {
-              "kind": "field",
-              "name": "handleScroll",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handlePopoverToggle",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleOtherPopoverOpen",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "show",
-              "description": "Opens the popover"
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "description": "Closes the popover"
-            },
-            {
-              "kind": "method",
-              "name": "toggle",
-              "description": "Toggles the popover"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "updatePosition",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "mode",
-              "fieldName": "mode",
-              "description": "Mode of the popover should be 'default' for internal use",
-              "type": {
-                "text": "'default' | 'admin'"
-              }
-            },
-            {
-              "name": "open",
-              "fieldName": "open",
-              "default": "false",
-              "description": "Whether the popover is currently open",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "position",
-              "fieldName": "position",
-              "default": "'bottom'",
-              "description": "Position of the popover relative to its trigger",
-              "type": {
-                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'start'",
-              "description": "Alignment of the popover",
-              "type": {
-                "text": "'start' | 'center' | 'end'"
-              }
-            },
-            {
-              "name": "popover-title",
-              "fieldName": "popoverTitle",
-              "description": "Optional title for the popover header",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "show-close",
-              "fieldName": "showClose",
-              "default": "true",
-              "description": "Whether to show a close button in the header",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "close-on-click-outside",
-              "fieldName": "closeOnClickOutside",
-              "default": "true",
-              "description": "Whether clicking outside closes the popover",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "close-on-escape",
-              "fieldName": "closeOnEscape",
-              "default": "true",
-              "description": "Whether pressing Escape closes the popover",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "offset",
-              "fieldName": "offset",
-              "default": "8",
-              "description": "Offset from the trigger element (in pixels)",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "width",
-              "fieldName": "width",
-              "description": "Fixed width for the popover (e.g., '300px', '20rem')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "min-width",
-              "fieldName": "minWidth",
-              "default": "'200px'",
-              "description": "Minimum width for the popover (e.g., '200px', '15rem')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "max-width",
-              "fieldName": "maxWidth",
-              "description": "Maximum width for the popover (e.g., '400px', '25rem')",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-popover",
-          "events": [
-            {
-              "name": "lePopoverOpen",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the popover opens"
-            },
-            {
-              "name": "lePopoverClose",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the popover closes"
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LePopover",
-          "declaration": {
-            "name": "LePopover",
-            "module": "src/components/le-popover/le-popover.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-popover",
-          "declaration": {
-            "name": "LePopover",
-            "module": "src/components/le-popover/le-popover.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-popup/le-popup.tsx",
       "declarations": [
         {
@@ -2829,6 +2435,288 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-string-input/le-string-input.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A text input component with support for labels, descriptions, icons, and external IDs.",
+          "name": "LeStringInput",
+          "cssProperties": [
+            {
+              "description": "Input background color",
+              "name": "--le-input-bg"
+            },
+            {
+              "description": "Input text color",
+              "name": "--le-input-color"
+            },
+            {
+              "description": "Input border style",
+              "name": "--le-input-border"
+            },
+            {
+              "description": "Input border style when focused",
+              "name": "--le-input-border-focus"
+            },
+            {
+              "description": "Input border radius",
+              "name": "--le-input-radius"
+            },
+            {
+              "description": "Input padding",
+              "name": "--le-input-padding"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The label text for the input",
+              "name": ""
+            },
+            {
+              "description": "Additional description text displayed below the input",
+              "name": "description"
+            },
+            {
+              "description": "Icon to display at the start of the input",
+              "name": "icon-start"
+            },
+            {
+              "description": "Icon to display at the end of the input",
+              "name": "icon-end"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The value of the input"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the input"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'text' | 'email' | 'password' | 'tel' | 'url'"
+              },
+              "default": "'text'",
+              "description": "The type of the input (text, email, password, etc.)"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Label for the input"
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string"
+              },
+              "description": "Icon for the start icon"
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string"
+              },
+              "description": "Icon for the end icon"
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "description": "Placeholder text"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "readonly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is read-only"
+            },
+            {
+              "kind": "field",
+              "name": "externalId",
+              "type": {
+                "text": "string"
+              },
+              "description": "External ID for linking with external systems"
+            },
+            {
+              "kind": "field",
+              "name": "handleInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value of the input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "The name of the input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "type",
+              "fieldName": "type",
+              "default": "'text'",
+              "description": "The type of the input (text, email, password, etc.)",
+              "type": {
+                "text": "'text' | 'email' | 'password' | 'tel' | 'url'"
+              }
+            },
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "Label for the input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "description": "Icon for the start icon",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-end",
+              "fieldName": "iconEnd",
+              "description": "Icon for the end icon",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "description": "Placeholder text",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the input is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "readonly",
+              "fieldName": "readonly",
+              "default": "false",
+              "description": "Whether the input is read-only",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "external-id",
+              "fieldName": "externalId",
+              "description": "External ID for linking with external systems",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-string-input",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<{ value: string; name: string; externalId: string }>"
+              },
+              "description": "Emitted when the value changes (on blur or Enter)"
+            },
+            {
+              "name": "leInput",
+              "type": {
+                "text": "EventEmitter<{ value: string; name: string; externalId: string }>"
+              },
+              "description": "Emitted when the input value changes (on keystroke)"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeStringInput",
+          "declaration": {
+            "name": "LeStringInput",
+            "module": "src/components/le-string-input/le-string-input.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-string-input",
+          "declaration": {
+            "name": "LeStringInput",
+            "module": "src/components/le-string-input/le-string-input.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-text/le-text.tsx",
       "declarations": [
         {
@@ -3191,6 +3079,400 @@
           "declaration": {
             "name": "LeText",
             "module": "src/components/le-text/le-text.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-popover/le-popover.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A popover component for displaying floating content.\n\nUses the native HTML Popover API for proper layering with dialogs\nand other top-layer elements. Falls back gracefully in older browsers.",
+          "name": "LePopover",
+          "slots": [
+            {
+              "description": "Content to display inside the popover",
+              "name": ""
+            },
+            {
+              "description": "Element that triggers the popover (optional)",
+              "name": "trigger"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin'"
+              },
+              "description": "Mode of the popover should be 'default' for internal use"
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the popover is currently open"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
+              },
+              "default": "'bottom'",
+              "description": "Position of the popover relative to its trigger"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'end'"
+              },
+              "default": "'start'",
+              "description": "Alignment of the popover"
+            },
+            {
+              "kind": "field",
+              "name": "popoverTitle",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional title for the popover header"
+            },
+            {
+              "kind": "field",
+              "name": "showClose",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether to show a close button in the header"
+            },
+            {
+              "kind": "field",
+              "name": "closeOnClickOutside",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether clicking outside closes the popover"
+            },
+            {
+              "kind": "field",
+              "name": "closeOnEscape",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether pressing Escape closes the popover"
+            },
+            {
+              "kind": "field",
+              "name": "offset",
+              "type": {
+                "text": "number"
+              },
+              "default": "8",
+              "description": "Offset from the trigger element (in pixels)"
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Fixed width for the popover (e.g., '300px', '20rem')"
+            },
+            {
+              "kind": "field",
+              "name": "minWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "'200px'",
+              "description": "Minimum width for the popover (e.g., '200px', '15rem')"
+            },
+            {
+              "kind": "field",
+              "name": "maxWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Maximum width for the popover (e.g., '400px', '25rem')"
+            },
+            {
+              "kind": "field",
+              "name": "isPositioned",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "triggerEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "popoverEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "uniqueId",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "`le-popover-${Math.random().toString(36).substr(2, 9)}`"
+            },
+            {
+              "kind": "field",
+              "name": "scrollParents",
+              "type": {
+                "text": "Element[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "method",
+              "name": "getScrollParents",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Element[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "Element"
+                  }
+                }
+              ],
+              "description": "Find all scrollable parent elements"
+            },
+            {
+              "kind": "method",
+              "name": "addScrollListeners",
+              "privacy": "private",
+              "description": "Add scroll listeners to all scrollable parents"
+            },
+            {
+              "kind": "method",
+              "name": "removeScrollListeners",
+              "privacy": "private",
+              "description": "Remove scroll listeners"
+            },
+            {
+              "kind": "field",
+              "name": "handleScroll",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handlePopoverToggle",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOtherPopoverOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "description": "Opens the popover"
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "description": "Closes the popover"
+            },
+            {
+              "kind": "method",
+              "name": "toggle",
+              "description": "Toggles the popover"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updatePosition",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "mode",
+              "fieldName": "mode",
+              "description": "Mode of the popover should be 'default' for internal use",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the popover is currently open",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "position",
+              "fieldName": "position",
+              "default": "'bottom'",
+              "description": "Position of the popover relative to its trigger",
+              "type": {
+                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'start'",
+              "description": "Alignment of the popover",
+              "type": {
+                "text": "'start' | 'center' | 'end'"
+              }
+            },
+            {
+              "name": "popover-title",
+              "fieldName": "popoverTitle",
+              "description": "Optional title for the popover header",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "show-close",
+              "fieldName": "showClose",
+              "default": "true",
+              "description": "Whether to show a close button in the header",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "close-on-click-outside",
+              "fieldName": "closeOnClickOutside",
+              "default": "true",
+              "description": "Whether clicking outside closes the popover",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "close-on-escape",
+              "fieldName": "closeOnEscape",
+              "default": "true",
+              "description": "Whether pressing Escape closes the popover",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "offset",
+              "fieldName": "offset",
+              "default": "8",
+              "description": "Offset from the trigger element (in pixels)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "width",
+              "fieldName": "width",
+              "description": "Fixed width for the popover (e.g., '300px', '20rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min-width",
+              "fieldName": "minWidth",
+              "default": "'200px'",
+              "description": "Minimum width for the popover (e.g., '200px', '15rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-width",
+              "fieldName": "maxWidth",
+              "description": "Maximum width for the popover (e.g., '400px', '25rem')",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-popover",
+          "events": [
+            {
+              "name": "lePopoverOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the popover opens"
+            },
+            {
+              "name": "lePopoverClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the popover closes"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LePopover",
+          "declaration": {
+            "name": "LePopover",
+            "module": "src/components/le-popover/le-popover.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-popover",
+          "declaration": {
+            "name": "LePopover",
+            "module": "src/components/le-popover/le-popover.tsx"
           }
         }
       ]

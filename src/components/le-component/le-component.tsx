@@ -343,17 +343,15 @@ export class LeComponent {
     // Default: string/text input
     return (
       <div class="property-field">
-        <label htmlFor={`prop-${attr.name}`}>
-          {attr.name}
-          {attr.description && <span class="property-hint">{attr.description}</span>}
-        </label>
-        <input
-          type="text"
-          id={`prop-${attr.name}`}
+        <le-string-input
+          name={`prop-${attr.name}`}
+          label={attr.name}
           value={value ?? ''}
           placeholder={attr.default?.replace(/'/g, '')}
-          onChange={(e) => this.handlePropertyChange(attr.name, (e.target as HTMLInputElement).value, type)}
-        />
+          onChange={(e: any) => this.handlePropertyChange(attr.name, e.detail.value, type)}
+        >
+          <span slot="description">{attr.description}</span>
+        </le-string-input>
       </div>
     );
   }

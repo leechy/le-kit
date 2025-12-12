@@ -556,6 +556,64 @@ export namespace Components {
         "wrap": boolean;
     }
     /**
+     * A text input component with support for labels, descriptions, icons, and external IDs.
+     * @cssprop --le-input-bg - Input background color
+     * @cssprop --le-input-color - Input text color
+     * @cssprop --le-input-border - Input border style
+     * @cssprop --le-input-border-focus - Input border style when focused
+     * @cssprop --le-input-radius - Input border radius
+     * @cssprop --le-input-padding - Input padding
+     */
+    interface LeStringInput {
+        /**
+          * Whether the input is disabled
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * External ID for linking with external systems
+         */
+        "externalId": string;
+        /**
+          * Icon for the end icon
+         */
+        "iconEnd": string;
+        /**
+          * Icon for the start icon
+         */
+        "iconStart": string;
+        /**
+          * Label for the input
+         */
+        "label": string;
+        /**
+          * Mode of the popover should be 'default' for internal use
+         */
+        "mode": 'default' | 'admin';
+        /**
+          * The name of the input
+         */
+        "name": string;
+        /**
+          * Placeholder text
+         */
+        "placeholder": string;
+        /**
+          * Whether the input is read-only
+          * @default false
+         */
+        "readonly": boolean;
+        /**
+          * The type of the input (text, email, password, etc.)
+          * @default 'text'
+         */
+        "type": 'text' | 'email' | 'password' | 'tel' | 'url';
+        /**
+          * The value of the input
+         */
+        "value": string;
+    }
+    /**
      * A text component with rich text editing capabilities in admin mode.
      * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)
      * and provides a Notion-like rich text editor in admin mode with formatting
@@ -615,6 +673,10 @@ export interface LePopupCustomEvent<T> extends CustomEvent<T> {
 export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeSlotElement;
+}
+export interface LeStringInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeStringInputElement;
 }
 declare global {
     /**
@@ -831,6 +893,33 @@ declare global {
         prototype: HTMLLeStackElement;
         new (): HTMLLeStackElement;
     };
+    interface HTMLLeStringInputElementEventMap {
+        "change": { value: string; name: string; externalId: string };
+        "input": { value: string; name: string; externalId: string };
+    }
+    /**
+     * A text input component with support for labels, descriptions, icons, and external IDs.
+     * @cssprop --le-input-bg - Input background color
+     * @cssprop --le-input-color - Input text color
+     * @cssprop --le-input-border - Input border style
+     * @cssprop --le-input-border-focus - Input border style when focused
+     * @cssprop --le-input-radius - Input border radius
+     * @cssprop --le-input-padding - Input padding
+     */
+    interface HTMLLeStringInputElement extends Components.LeStringInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeStringInputElementEventMap>(type: K, listener: (this: HTMLLeStringInputElement, ev: LeStringInputCustomEvent<HTMLLeStringInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeStringInputElementEventMap>(type: K, listener: (this: HTMLLeStringInputElement, ev: LeStringInputCustomEvent<HTMLLeStringInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeStringInputElement: {
+        prototype: HTMLLeStringInputElement;
+        new (): HTMLLeStringInputElement;
+    };
     /**
      * A text component with rich text editing capabilities in admin mode.
      * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)
@@ -860,6 +949,7 @@ declare global {
         "le-popup": HTMLLePopupElement;
         "le-slot": HTMLLeSlotElement;
         "le-stack": HTMLLeStackElement;
+        "le-string-input": HTMLLeStringInputElement;
         "le-text": HTMLLeTextElement;
     }
 }
@@ -1428,6 +1518,72 @@ declare namespace LocalJSX {
         "wrap"?: boolean;
     }
     /**
+     * A text input component with support for labels, descriptions, icons, and external IDs.
+     * @cssprop --le-input-bg - Input background color
+     * @cssprop --le-input-color - Input text color
+     * @cssprop --le-input-border - Input border style
+     * @cssprop --le-input-border-focus - Input border style when focused
+     * @cssprop --le-input-radius - Input border radius
+     * @cssprop --le-input-padding - Input padding
+     */
+    interface LeStringInput {
+        /**
+          * Whether the input is disabled
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * External ID for linking with external systems
+         */
+        "externalId"?: string;
+        /**
+          * Icon for the end icon
+         */
+        "iconEnd"?: string;
+        /**
+          * Icon for the start icon
+         */
+        "iconStart"?: string;
+        /**
+          * Label for the input
+         */
+        "label"?: string;
+        /**
+          * Mode of the popover should be 'default' for internal use
+         */
+        "mode"?: 'default' | 'admin';
+        /**
+          * The name of the input
+         */
+        "name"?: string;
+        /**
+          * Emitted when the value changes (on blur or Enter)
+         */
+        "onChange"?: (event: LeStringInputCustomEvent<{ value: string; name: string; externalId: string }>) => void;
+        /**
+          * Emitted when the input value changes (on keystroke)
+         */
+        "onInput"?: (event: LeStringInputCustomEvent<{ value: string; name: string; externalId: string }>) => void;
+        /**
+          * Placeholder text
+         */
+        "placeholder"?: string;
+        /**
+          * Whether the input is read-only
+          * @default false
+         */
+        "readonly"?: boolean;
+        /**
+          * The type of the input (text, email, password, etc.)
+          * @default 'text'
+         */
+        "type"?: 'text' | 'email' | 'password' | 'tel' | 'url';
+        /**
+          * The value of the input
+         */
+        "value"?: string;
+    }
+    /**
      * A text component with rich text editing capabilities in admin mode.
      * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)
      * and provides a Notion-like rich text editor in admin mode with formatting
@@ -1477,6 +1633,7 @@ declare namespace LocalJSX {
         "le-popup": LePopup;
         "le-slot": LeSlot;
         "le-stack": LeStack;
+        "le-string-input": LeStringInput;
         "le-text": LeText;
     }
 }
@@ -1594,6 +1751,16 @@ declare module "@stencil/core" {
              * @cmsCategory Layout
              */
             "le-stack": LocalJSX.LeStack & JSXBase.HTMLAttributes<HTMLLeStackElement>;
+            /**
+             * A text input component with support for labels, descriptions, icons, and external IDs.
+             * @cssprop --le-input-bg - Input background color
+             * @cssprop --le-input-color - Input text color
+             * @cssprop --le-input-border - Input border style
+             * @cssprop --le-input-border-focus - Input border style when focused
+             * @cssprop --le-input-radius - Input border radius
+             * @cssprop --le-input-padding - Input padding
+             */
+            "le-string-input": LocalJSX.LeStringInput & JSXBase.HTMLAttributes<HTMLLeStringInputElement>;
             /**
              * A text component with rich text editing capabilities in admin mode.
              * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)

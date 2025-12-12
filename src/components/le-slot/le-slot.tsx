@@ -248,9 +248,10 @@ export class LeSlot {
         this.slottedElement.innerHTML = this.textValue;
       } else if (this.tag && this.textValue) {
         // No slotted element exists
+        // If the slot doesn't have a name, then it's the default slot
         // remove the existing non-slotted content (text nodes and elements without slot attribute)
         const rootNode = this.el.getRootNode();
-        if (rootNode instanceof ShadowRoot) {
+        if (!this.name && rootNode instanceof ShadowRoot) {
           const hostComponent = rootNode.host;
           Array.from(hostComponent.childNodes).forEach(node => {
             if (node.nodeType === Node.TEXT_NODE || 
@@ -516,13 +517,13 @@ export class LeSlot {
       case 'text':
         return (
           <div class={{ 'le-slot-input': true, 'has-error': !this.isValidHtml }}>
-            <input
-              type="text"
+            <le-string-input
+              mode="default"
               value={this.textValue}
               placeholder={this.placeholder || `Enter ${this.label || this.name || 'text'}...`}
-              onInput={this.handleTextInput}
-              required={this.required}
-            />
+              onChange={this.handleTextInput}
+              // required={this.required}
+            ></le-string-input>
             {slotElement}
           </div>
         );

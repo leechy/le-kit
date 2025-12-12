@@ -81,6 +81,10 @@
   --le-color-border: #e0e0e0;
   --le-color-border-light: #eeeeee;
   --le-color-border-dark: #bdbdbd;
+
+  /** Input borders */
+  --le-border-width: 2px;
+  --le-color-border-input: #c4d6e6;
   
   /* Focus ring */
   --le-color-focus: rgba(0, 136, 255, 0.5);

@@ -306,21 +306,23 @@ export class LePopup {
     return (
       <div class="le-popup-footer" part="footer">
         {(this.type === 'confirm' || this.type === 'prompt') && (
-          <button
-            class="le-popup-btn le-popup-btn-cancel"
+          <le-button
+            variant="outlined"
             part="button-cancel"
+            class="le-popup-btn"
             onClick={this.handleCancel}
           >
             {this.cancelText}
-          </button>
+          </le-button>
         )}
-        <button
-          class="le-popup-btn le-popup-btn-confirm"
+        <le-button
+          variant="solid"
           part="button-confirm"
+          class="le-popup-btn"
           onClick={this.handleConfirm}
         >
           {this.confirmText}
-        </button>
+        </le-button>
       </div>
     );
   }

@@ -123,6 +123,43 @@
 
     <!-- Default content template (used when localStorage is empty) -->
     <template id="default-content">
+      <div class="demo-section">
+        <h2>Form Components</h2>
+        <p>Input controls for forms with admin mode support.</p>
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>Checkbox:</label>
+            <le-stack direction="horizontal" gap="var(--le-space-md)">
+              <le-checkbox name="terms" value="male" external-id="terms-v1" onchange="console.log('Checkbox changed to', event.detail.checked)">M</le-checkbox>
+              <le-checkbox name="terms" value="female" external-id="terms-v2" onchange="console.log('Checkbox changed to', event.detail.checked)">F</le-checkbox>
+            </le-stack>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Disabled Checkbox:</label>
+            <le-checkbox name="newsletter" value="subscribe" disabled checked>
+              Subscribe to newsletter
+              <span slot="description">You are already subscribed.</span>
+            </le-checkbox>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>String Input:</label>
+            <le-string-input name="dog-name" placeholder="Jeffa" external-id="dog-name-field" label="Dog's Name" icon-start="🐶">
+              <span slot="description">Enter your unique username.</span>
+            </le-string-input>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Text Input:</label>
+            <le-string-input
+              name="text-input"
+              label="Empty text input"
+              icon-end="✏️"
+            ></le-string-input>
+          </div>
+        </div>
+      </div>
 
       <div class="demo-section">
         <h2>Popup / Dialog Component</h2>
@@ -203,28 +240,6 @@
               <span slot="trigger" style="padding: 4px 8px; background: #e3f2fd; border-radius: 4px; cursor: pointer;">Hover info ℹ️</span>
               <p style="margin: 0; font-size: 13px;">Position automatically adjusts based on available viewport space.</p>
             </le-popover>
-          </div>
-        </div>
-      </div>
-
-      <div class="demo-section">
-        <h2>Form Components</h2>
-        <p>Input controls for forms with admin mode support.</p>
-        <div class="demo-grid">
-          <div class="text-slot-demo">
-            <label>Checkbox:</label>
-            <le-checkbox name="terms" value="accepted" external-id="terms-v1" onchange="console.log('Checkbox changed to', event.detail.checked)">
-              I accept the terms and conditions
-              <div slot="description">Please read the terms carefully before accepting.</div>
-            </le-checkbox>
-          </div>
-          
-          <div class="text-slot-demo">
-            <label>Disabled Checkbox:</label>
-            <le-checkbox name="newsletter" value="subscribe" disabled checked>
-              Subscribe to newsletter
-              <span slot="description">You are already subscribed.</span>
-            </le-checkbox>
           </div>
         </div>
       </div>

@@ -57,6 +57,18 @@
   --le-line-height-relaxed: 1.75;
 
   /* ============================================
+   * RADIUSES
+   * ============================================ */
+  --le-radius-none: 0;
+  --le-radius-xs: 0.066rem;   /* 1px */
+  --le-radius-sm: 0.125rem;   /* 2px */
+  --le-radius-md: 0.25rem;    /* 4px */
+  --le-radius-lg: 0.5rem;     /* 8px */
+  --le-radius-xl: 0.75rem;    /* 12px */
+  --le-radius-2xl: 1rem;      /* 16px */
+  --le-radius-full: 9999px;
+
+  /* ============================================
    * TRANSITIONS
    * ============================================ */
   --le-transition-fast: 100ms;

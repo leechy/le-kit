@@ -1,4 +1,4 @@
-import { Component, Prop, h, Element, Event, EventEmitter, Fragment } from '@stencil/core';
+import { Component, Prop, h, Element, Fragment, Event, EventEmitter } from '@stencil/core';
 import { classnames } from '../../utils/utils';
 
 /**
@@ -83,16 +83,21 @@ export class LeButton {
   @Prop() target?: string;
 
   /**
-   * Emitted when the button is clicked
+   * Emitted when the button is clicked.
+   * This is a custom event that wraps the native click but ensures the target is the le-button.
    */
-  @Event() leClick: EventEmitter<MouseEvent>;
+  @Event({ eventName: 'click' }) leClick: EventEmitter<PointerEvent>;
 
-  private handleClick = (event: MouseEvent) => {
+  private handleClick = (event: PointerEvent) => {
+    // We stop the internal button click from bubbling up
+    event.stopPropagation();
+
     if (this.disabled) {
       event.preventDefault();
-      event.stopPropagation();
       return;
     }
+    
+    // And emit our own click event from the host element
     this.leClick.emit(event);
   };
 

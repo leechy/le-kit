@@ -261,13 +261,16 @@ export class LeComponent {
           <p class="no-properties">No editable properties</p>
         )}
         <div class="property-editor-actions">
-          <button
+          <le-button
             type="button"
-            class="delete-component-btn"
+            variant="outlined"
+            color="danger"
+            full-width
             onClick={() => this.deleteComponent()}
           >
-            🗑️ Delete Component
-          </button>
+            <span slot="icon-start">🗑️</span>
+            <span>Delete Component</span>
+          </le-button>
         </div>
       </div>
     );
@@ -306,16 +309,14 @@ export class LeComponent {
     if (type === 'boolean') {
       return (
         <div class="property-field property-field--checkbox">
-          <label htmlFor={`prop-${attr.name}`}>
-            <input
-              type="checkbox"
-              id={`prop-${attr.name}`}
-              checked={value === true || value === ''}
-              onChange={(e) => this.handlePropertyChange(attr.name, (e.target as HTMLInputElement).checked, type)}
-            />
+          <le-checkbox
+            name={`prop-${attr.name}`}
+            checked={value === true || value === ''}
+            onChange={(e) => this.handlePropertyChange(attr.name, (e.target as HTMLInputElement).checked, type)}
+          >
             {attr.name}
-          </label>
-          {attr.description && <span class="property-hint">{attr.description}</span>}
+            {attr.description && <div slot="description">{attr.description}</div>}
+          </le-checkbox>
         </div>
       );
     }

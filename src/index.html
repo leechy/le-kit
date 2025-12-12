@@ -100,8 +100,8 @@
     <div class="controls" mode="default">
       <div class="control-group">
         <span>Mode:</span>
-        <le-button id="btn-mode-default" variant="outlined" selected="true" color="primary" onclick="setMode('default')">Default</le-button>
-        <le-button id="btn-mode-admin" variant="outlined" color="primary" onclick="setMode('admin')">Admin</le-button>
+        <le-button id="btn-mode-default" variant="outlined" selected="true" color="primary" onclick="setMode('default', event)">Default</le-button>
+        <le-button id="btn-mode-admin" variant="outlined" color="primary" onclick="setMode('admin', event)">Admin</le-button>
       </div>
       
       <div class="control-group">
@@ -130,8 +130,7 @@
         <div class="demo-grid">
           <div class="text-slot-demo">
             <label>Programmatic API:</label>
-            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-              <le-button onclick="showAlert()">leAlert()</le-button>
+            <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px;">
               <le-button onclick="leAlert('Some text in the alert to test it')">leAlert()</le-button>
               <le-button onclick="showConfirm()">leConfirm()</le-button>
               <le-button onclick="showPrompt()">lePrompt()</le-button>
@@ -164,10 +163,6 @@
             <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
               <le-button size="small" onclick="showPositioned('center')">Center</le-button>
               <le-button size="small" onclick="showPositioned('top')">Top</le-button>
-              <le-button size="small" onclick="showPositioned('bottom')">Bottom</le-button>
-              <le-button size="small" onclick="showPositioned('top-left')">Top-Left</le-button>
-              <le-button size="small" onclick="showPositioned('top-right')">Top-Right</le-button>
-              <le-button size="small" onclick="showPositioned('bottom-left')">Bottom-Left</le-button>
               <le-button size="small" onclick="showPositioned('bottom-right')">Bottom-Right</le-button>
             </div>
           </div>
@@ -208,6 +203,28 @@
               <span slot="trigger" style="padding: 4px 8px; background: #e3f2fd; border-radius: 4px; cursor: pointer;">Hover info ℹ️</span>
               <p style="margin: 0; font-size: 13px;">Position automatically adjusts based on available viewport space.</p>
             </le-popover>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-section">
+        <h2>Form Components</h2>
+        <p>Input controls for forms with admin mode support.</p>
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>Checkbox:</label>
+            <le-checkbox name="terms" value="accepted" external-id="terms-v1" onchange="console.log('Checkbox changed to', event.detail.checked)">
+              I accept the terms and conditions
+              <div slot="description">Please read the terms carefully before accepting.</div>
+            </le-checkbox>
+          </div>
+          
+          <div class="text-slot-demo">
+            <label>Disabled Checkbox:</label>
+            <le-checkbox name="newsletter" value="subscribe" disabled checked>
+              Subscribe to newsletter
+              <span slot="description">You are already subscribed.</span>
+            </le-checkbox>
           </div>
         </div>
       </div>
@@ -280,27 +297,6 @@ console.log(greeting);</le-text>
         </div>
       </div>
 
-      <div class="demo-section">
-        <h2>Text Slot Types (switch to Admin mode to see)</h2>
-        <p>Demonstrating le-slot with type="text" and type="textarea" for inline text editing.</p>
-        <div class="demo-grid">
-          <div class="text-slot-demo">
-            <label>Single line text input:</label>
-            <le-slot type="text" label="Title" name="title" placeholder="Enter a title...">Default title text</le-slot>
-          </div>
-          
-          <div class="text-slot-demo">
-            <label>Multi-line textarea:</label>
-            <le-slot type="textarea" label="Description" name="description" placeholder="Enter a description...">This is some default description text that spans multiple lines.</le-slot>
-          </div>
-          
-          <div class="text-slot-demo">
-            <label>Required text field:</label>
-            <le-slot type="text" label="Email" name="email" required placeholder="Enter email address..."></le-slot>
-          </div>
-        </div>
-      </div>
-      
       <div class="demo-section">
         <h2>Mixed Themes (theme attribute on individual components)</h2>
         <p>Each card below has a different theme, demonstrating per-component theming.</p>
@@ -617,7 +613,8 @@ console.log(greeting);</le-text>
         }
       });
 
-      function setMode(mode) {
+      function setMode(mode, event) {
+        console.log('Setting mode to:', mode, 'with event:', event);
         document.documentElement.setAttribute('mode', mode);
         
         // Update button states - toggle 'selected' attribute

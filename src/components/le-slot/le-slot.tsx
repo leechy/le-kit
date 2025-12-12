@@ -236,16 +236,30 @@ export class LeSlot {
     const target = event.target as HTMLInputElement | HTMLTextAreaElement;
     this.textValue = target.value;
     this.isValidHtml = this.validateHtml(this.textValue);
-    
+
     if (this.isValidHtml) {
       // Set flag to prevent slotchange from re-reading what we just wrote
       this.isUpdating = true;
-      
+
+      console.log('Updating text value:', this.textValue, 'slottedElement:', this.slottedElement);
+
       if (this.slottedElement) {
         // Update existing slotted element's innerHTML
         this.slottedElement.innerHTML = this.textValue;
       } else if (this.tag && this.textValue) {
-        // No slotted element exists - create one using the specified tag
+        // No slotted element exists
+        // remove the existing non-slotted content (text nodes and elements without slot attribute)
+        const rootNode = this.el.getRootNode();
+        if (rootNode instanceof ShadowRoot) {
+          const hostComponent = rootNode.host;
+          Array.from(hostComponent.childNodes).forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE || 
+               (node.nodeType === Node.ELEMENT_NODE && !(node as Element).hasAttribute('slot'))) {
+              node.remove();
+            }
+          });
+        }
+        // create one using the specified tag
         this.createSlottedElement();
       } else if (this.textValue) {
         // no tag specified - just replace everything in the host component

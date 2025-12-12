@@ -212,6 +212,37 @@ export namespace Components {
         "variant": 'default' | 'outlined' | 'elevated';
     }
     /**
+     * A checkbox component with support for labels, descriptions, and external IDs.
+     * @cssprop --le-checkbox-size - Size of the checkbox input
+     * @cssprop --le-checkbox-color - Color of the checkbox when checked
+     * @cssprop --le-checkbox-label-color - Color of the label text
+     * @cssprop --le-checkbox-desc-color - Color of the description text
+     */
+    interface LeCheckbox {
+        /**
+          * Whether the checkbox is checked
+          * @default false
+         */
+        "checked": boolean;
+        /**
+          * Whether the checkbox is disabled
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * External ID for linking with external systems (e.g. database ID, PDF form field ID)
+         */
+        "externalId": string;
+        /**
+          * The name of the checkbox input
+         */
+        "name": string;
+        /**
+          * The value of the checkbox input
+         */
+        "value": string;
+    }
+    /**
      * Component wrapper for admin mode editing.
      * This component is used internally by other components to provide admin-mode 
      * editing capabilities. It wraps the component's rendered output and shows
@@ -569,6 +600,10 @@ export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeButtonElement;
 }
+export interface LeCheckboxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeCheckboxElement;
+}
 export interface LePopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLePopoverElement;
@@ -601,7 +636,7 @@ declare global {
         new (): HTMLLeBoxElement;
     };
     interface HTMLLeButtonElementEventMap {
-        "leClick": MouseEvent;
+        "click": PointerEvent;
     }
     /**
      * A flexible button component with multiple variants and states.
@@ -650,6 +685,30 @@ declare global {
     var HTMLLeCardElement: {
         prototype: HTMLLeCardElement;
         new (): HTMLLeCardElement;
+    };
+    interface HTMLLeCheckboxElementEventMap {
+        "change": { checked: boolean; value: string; name: string; externalId: string };
+    }
+    /**
+     * A checkbox component with support for labels, descriptions, and external IDs.
+     * @cssprop --le-checkbox-size - Size of the checkbox input
+     * @cssprop --le-checkbox-color - Color of the checkbox when checked
+     * @cssprop --le-checkbox-label-color - Color of the label text
+     * @cssprop --le-checkbox-desc-color - Color of the description text
+     */
+    interface HTMLLeCheckboxElement extends Components.LeCheckbox, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeCheckboxElementEventMap>(type: K, listener: (this: HTMLLeCheckboxElement, ev: LeCheckboxCustomEvent<HTMLLeCheckboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeCheckboxElementEventMap>(type: K, listener: (this: HTMLLeCheckboxElement, ev: LeCheckboxCustomEvent<HTMLLeCheckboxElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeCheckboxElement: {
+        prototype: HTMLLeCheckboxElement;
+        new (): HTMLLeCheckboxElement;
     };
     /**
      * Component wrapper for admin mode editing.
@@ -795,6 +854,7 @@ declare global {
         "le-box": HTMLLeBoxElement;
         "le-button": HTMLLeButtonElement;
         "le-card": HTMLLeCardElement;
+        "le-checkbox": HTMLLeCheckboxElement;
         "le-component": HTMLLeComponentElement;
         "le-popover": HTMLLePopoverElement;
         "le-popup": HTMLLePopupElement;
@@ -951,9 +1011,9 @@ declare namespace LocalJSX {
          */
         "iconOnly"?: boolean;
         /**
-          * Emitted when the button is clicked
+          * Emitted when the button is clicked. This is a custom event that wraps the native click but ensures the target is the le-button.
          */
-        "onLeClick"?: (event: LeButtonCustomEvent<MouseEvent>) => void;
+        "onClick"?: (event: LeButtonCustomEvent<PointerEvent>) => void;
         /**
           * Whether the button is in a selected/active state
           * @default false
@@ -1010,6 +1070,41 @@ declare namespace LocalJSX {
           * @default 'default'
          */
         "variant"?: 'default' | 'outlined' | 'elevated';
+    }
+    /**
+     * A checkbox component with support for labels, descriptions, and external IDs.
+     * @cssprop --le-checkbox-size - Size of the checkbox input
+     * @cssprop --le-checkbox-color - Color of the checkbox when checked
+     * @cssprop --le-checkbox-label-color - Color of the label text
+     * @cssprop --le-checkbox-desc-color - Color of the description text
+     */
+    interface LeCheckbox {
+        /**
+          * Whether the checkbox is checked
+          * @default false
+         */
+        "checked"?: boolean;
+        /**
+          * Whether the checkbox is disabled
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * External ID for linking with external systems (e.g. database ID, PDF form field ID)
+         */
+        "externalId"?: string;
+        /**
+          * The name of the checkbox input
+         */
+        "name"?: string;
+        /**
+          * Emitted when the checked state changes
+         */
+        "onChange"?: (event: LeCheckboxCustomEvent<{ checked: boolean; value: string; name: string; externalId: string }>) => void;
+        /**
+          * The value of the checkbox input
+         */
+        "value"?: string;
     }
     /**
      * Component wrapper for admin mode editing.
@@ -1376,6 +1471,7 @@ declare namespace LocalJSX {
         "le-box": LeBox;
         "le-button": LeButton;
         "le-card": LeCard;
+        "le-checkbox": LeCheckbox;
         "le-component": LeComponent;
         "le-popover": LePopover;
         "le-popup": LePopup;
@@ -1431,6 +1527,14 @@ declare module "@stencil/core" {
              * @cmsCategory Layout
              */
             "le-card": LocalJSX.LeCard & JSXBase.HTMLAttributes<HTMLLeCardElement>;
+            /**
+             * A checkbox component with support for labels, descriptions, and external IDs.
+             * @cssprop --le-checkbox-size - Size of the checkbox input
+             * @cssprop --le-checkbox-color - Color of the checkbox when checked
+             * @cssprop --le-checkbox-label-color - Color of the label text
+             * @cssprop --le-checkbox-desc-color - Color of the description text
+             */
+            "le-checkbox": LocalJSX.LeCheckbox & JSXBase.HTMLAttributes<HTMLLeCheckboxElement>;
             /**
              * Component wrapper for admin mode editing.
              * This component is used internally by other components to provide admin-mode 

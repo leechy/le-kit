@@ -1,0 +1,92 @@
+:host {
+  display: block;
+  --le-checkbox-size: 18px;
+  --le-checkbox-color: var(--le-color-primary, #007bff);
+  --le-checkbox-label-color: var(--le-text-color, #333);
+  --le-checkbox-desc-color: var(--le-text-muted, #666);
+  --le-checkbox-border-radius: var(--le-radius-sm, 2px);
+}
+
+.le-checkbox-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.le-checkbox-label {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+:host([disabled]) .le-checkbox-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.le-checkbox-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.4em;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: var(--le-checkbox-size);
+  height: var(--le-checkbox-size);
+  border: 2px solid var(--le-checkbox-color);
+  border-radius: var(--le-checkbox-border-radius);
+  margin: 0;
+  margin-top: 2px; /* Align with text */
+  position: relative;
+  cursor: inherit;
+  background-color: transparent;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--le-checkbox-color);
+}
+
+input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: calc(var(--le-checkbox-size) / 5);
+  right: 0;
+  margin: auto;
+  width: calc(var(--le-checkbox-size) / 4);
+  height: calc(var(--le-checkbox-size) / 2);
+  border: solid white;
+  border-width: 0 calc(var(--le-checkbox-size) / 10) calc(var(--le-checkbox-size) / 10) 0;
+  transform: rotate(45deg);
+}
+
+input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+
+.le-checkbox-text {
+  flex: 1;
+  flex-wrap: wrap;
+  color: var(--le-checkbox-label-color);
+  line-height: 1.5;
+  text-align: start;
+}
+
+.le-checkbox-description {
+  margin-left: calc(var(--le-checkbox-size) + 8px);
+  font-size: 0.875em;
+  color: var(--le-checkbox-desc-color);
+  line-height: 1.4;
+}
+
+:host [slot="description"] {
+  margin: 0;
+}

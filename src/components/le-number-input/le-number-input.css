@@ -1,0 +1,135 @@
+:host {
+  display: block;
+  --le-input-bg: var(--le-color-surface, #ffffff);
+  --le-input-color: var(--le-color-text-primary, #333333);
+  --le-input-border: var(--le-border-width, 2px) solid var(--le-color-border-input, #007bff);
+  --le-input-radius: var(--le-radius-sm, 4px);
+  --le-input-padding: 2px 6px;
+  --le-input-height: 1.5rem;
+  --le-input-label-color: var(--le-color-text-primary, #333333);
+  --le-input-desc-color: var(--le-color-text-secondary, #666666);
+  --le-input-placeholder-color: #999999;
+  --le-input-border-error: 2px solid var(--le-color-danger, #dc3545);
+  --le-input-error-color: var(--le-color-danger, #dc3545);
+}
+
+.le-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.le-input-label {
+  display: block;
+  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--le-input-label-color);
+  margin-bottom: 2px;
+}
+
+.le-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--le-input-bg);
+  border: var(--le-input-border);
+  border-radius: var(--le-input-radius);
+  transition: border-color 0.2s;
+}
+
+.le-input-container:focus-within {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+
+.le-input-container.has-error {
+  border: var(--le-input-border-error);
+}
+
+:host([disabled]) .le-input-container {
+  opacity: 0.6;
+  background-color: rgba(0,0,0,0.05);
+  cursor: not-allowed;
+}
+
+input {
+  flex: 1;
+  width: 100%;
+  height: calc(var(--le-input-height) - 2px);
+  padding: var(--le-input-padding);
+  border: none;
+  background: transparent;
+  color: var(--le-input-color);
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+  text-align: right; /* Aligned to end */
+  -moz-appearance: textfield; /* Remove default spinners in Firefox */
+}
+
+/* Remove default spinners in Chrome/Safari/Edge */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input::placeholder {
+  color: var(--le-input-placeholder-color);
+}
+
+.icon-start, .icon-end {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  color: var(--le-input-desc-color);
+}
+
+.le-input-controls {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--le-color-border, #cccccc);
+  height: 100%;
+}
+
+.le-input-control-btn {
+  --le-button-border-radius: 0;
+  --le-button-padding-x: 0;
+  --le-button-padding-y: 0;
+  --le-button-small-font-size: 9.5px;
+  --le-button-small-padding: 0 0.2rem;
+  --le-button-icon-aspect-ratio: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50%;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--le-input-desc-color);
+  font-size: 10px;
+  line-height: 1;
+}
+
+.le-input-control-btn:hover {
+  background-color: rgba(0,0,0,0.05);
+  color: var(--le-color-primary, #007bff);
+}
+
+.le-input-control-btn:active {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.le-input-description {
+  font-size: 0.85em;
+  color: var(--le-input-desc-color);
+  margin-top: 2px;
+}
+
+.le-input-error {
+  font-size: 0.85em;
+  color: var(--le-input-error-color);
+  margin-top: 2px;
+}

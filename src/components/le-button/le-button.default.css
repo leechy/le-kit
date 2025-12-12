@@ -9,9 +9,11 @@
   --le-button-border-radius: var(--le-radius-md);
   --le-button-padding-x: 0.4rem;
   --le-button-padding-y: 0.4rem;
+  --le-button-small-padding: 0.25rem;
   --le-button-font-size: var(--le-font-size-md);
   --le-button-font-weight: var(--le-font-weight-medium);
   --le-button-transition: var(--le-transition-fast);
+  --le-button-icon-aspect-ratio: 1;
   
   /* Internal state variables - set by color classes */
   --_btn-bg: var(--le-color-primary);
@@ -172,7 +174,7 @@
   --le-button-padding-x: 0.4rem;
   --le-button-padding-y: 0.3rem;
   --le-button-padding-top: 0.35rem;
-  --le-button-font-size: var(--le-font-size-xs);
+  --le-button-font-size: var(--le-button-small-font-size, var(--le-font-size-xs));
 }
 
 :host > le-component.size-large .button {
@@ -206,11 +208,11 @@
 :host > le-component.icon-only .button {
   padding: 0.5rem;
   padding-bottom: 0.6rem;
-  aspect-ratio: 1;
+  aspect-ratio: var(--le-button-icon-aspect-ratio, 1);
 }
 
 :host > le-component.icon-only.size-small .button {
-  padding: 0.25rem;
+  padding: var(--le-button-small-padding, 0.25rem);
 }
 
 :host > le-component.icon-only.size-large .button {

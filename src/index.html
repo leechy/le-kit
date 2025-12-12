@@ -158,6 +158,22 @@
               icon-end="✏️"
             ></le-string-input>
           </div>
+
+          <div class="text-slot-demo">
+            <label>Number Input:</label>
+            <le-number-input name="quantity" min="0" max="100" value="1" external-id="qty-field" label="Quantity" icon-start="#">
+              <span slot="description">Enter amount (0-100)</span>
+            </le-number-input>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Price Input (Step 0.01):</label>
+            <le-number-input name="price" step="0.01" min="0" value="19.99" external-id="price-field" label="Price" icon-start="$"
+              show-spinners="false"
+            >
+              <span slot="description">Use Shift+Up for +0.1, Alt+Up for +0.001</span>
+            </le-number-input>
+          </div>
         </div>
       </div>
 

@@ -155,6 +155,10 @@ export namespace Components {
          */
         "iconOnly": boolean;
         /**
+          * Mode of the popover should be 'default' for internal use
+         */
+        "mode": 'default' | 'admin';
+        /**
           * Whether the button is in a selected/active state
           * @default false
          */
@@ -280,6 +284,75 @@ export namespace Components {
           * Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties).
          */
         "hostStyle"?: { [key: string]: string };
+    }
+    /**
+     * A number input component with validation, keyboard controls, and custom spinners.
+     * @cssprop --le-input-bg - Input background color
+     * @cssprop --le-input-color - Input text color
+     * @cssprop --le-input-border - Input border style
+     * @cssprop --le-input-border-focus - Input border style when focused
+     * @cssprop --le-input-border-error - Input border style when invalid
+     * @cssprop --le-input-radius - Input border radius
+     * @cssprop --le-input-padding - Input padding
+     */
+    interface LeNumberInput {
+        /**
+          * Whether the input is disabled
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * External ID for linking with external systems
+         */
+        "externalId": string;
+        /**
+          * Icon for the start icon
+         */
+        "iconStart"?: string;
+        /**
+          * Label for the input
+         */
+        "label": string;
+        /**
+          * Maximum allowed value
+         */
+        "max"?: number;
+        /**
+          * Minimum allowed value
+         */
+        "min"?: number;
+        /**
+          * The name of the input
+         */
+        "name": string;
+        /**
+          * Placeholder text
+         */
+        "placeholder": string;
+        /**
+          * Whether the input is read-only
+          * @default false
+         */
+        "readonly": boolean;
+        /**
+          * Whether the input is required
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Whether to show the spinner controls
+          * @default true
+         */
+        "showSpinners": boolean;
+        /**
+          * Step value for increment/decrement
+          * @default 1
+         */
+        "step": number;
+        /**
+          * The value of the input
+         */
+        "value": number;
     }
     /**
      * A popover component for displaying floating content.
@@ -662,6 +735,10 @@ export interface LeCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeCheckboxElement;
 }
+export interface LeNumberInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeNumberInputElement;
+}
 export interface LePopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLePopoverElement;
@@ -798,6 +875,34 @@ declare global {
     var HTMLLeComponentElement: {
         prototype: HTMLLeComponentElement;
         new (): HTMLLeComponentElement;
+    };
+    interface HTMLLeNumberInputElementEventMap {
+        "leChange": { value: number; name: string; externalId: string; isValid: boolean };
+        "leInput": { value: number; name: string; externalId: string; isValid: boolean };
+    }
+    /**
+     * A number input component with validation, keyboard controls, and custom spinners.
+     * @cssprop --le-input-bg - Input background color
+     * @cssprop --le-input-color - Input text color
+     * @cssprop --le-input-border - Input border style
+     * @cssprop --le-input-border-focus - Input border style when focused
+     * @cssprop --le-input-border-error - Input border style when invalid
+     * @cssprop --le-input-radius - Input border radius
+     * @cssprop --le-input-padding - Input padding
+     */
+    interface HTMLLeNumberInputElement extends Components.LeNumberInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeNumberInputElementEventMap>(type: K, listener: (this: HTMLLeNumberInputElement, ev: LeNumberInputCustomEvent<HTMLLeNumberInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeNumberInputElementEventMap>(type: K, listener: (this: HTMLLeNumberInputElement, ev: LeNumberInputCustomEvent<HTMLLeNumberInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeNumberInputElement: {
+        prototype: HTMLLeNumberInputElement;
+        new (): HTMLLeNumberInputElement;
     };
     interface HTMLLePopoverElementEventMap {
         "lePopoverOpen": void;
@@ -945,6 +1050,7 @@ declare global {
         "le-card": HTMLLeCardElement;
         "le-checkbox": HTMLLeCheckboxElement;
         "le-component": HTMLLeComponentElement;
+        "le-number-input": HTMLLeNumberInputElement;
         "le-popover": HTMLLePopoverElement;
         "le-popup": HTMLLePopupElement;
         "le-slot": HTMLLeSlotElement;
@@ -1101,6 +1207,10 @@ declare namespace LocalJSX {
          */
         "iconOnly"?: boolean;
         /**
+          * Mode of the popover should be 'default' for internal use
+         */
+        "mode"?: 'default' | 'admin';
+        /**
           * Emitted when the button is clicked. This is a custom event that wraps the native click but ensures the target is the le-button.
          */
         "onClick"?: (event: LeButtonCustomEvent<PointerEvent>) => void;
@@ -1234,6 +1344,83 @@ declare namespace LocalJSX {
           * Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties).
          */
         "hostStyle"?: { [key: string]: string };
+    }
+    /**
+     * A number input component with validation, keyboard controls, and custom spinners.
+     * @cssprop --le-input-bg - Input background color
+     * @cssprop --le-input-color - Input text color
+     * @cssprop --le-input-border - Input border style
+     * @cssprop --le-input-border-focus - Input border style when focused
+     * @cssprop --le-input-border-error - Input border style when invalid
+     * @cssprop --le-input-radius - Input border radius
+     * @cssprop --le-input-padding - Input padding
+     */
+    interface LeNumberInput {
+        /**
+          * Whether the input is disabled
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * External ID for linking with external systems
+         */
+        "externalId"?: string;
+        /**
+          * Icon for the start icon
+         */
+        "iconStart"?: string;
+        /**
+          * Label for the input
+         */
+        "label"?: string;
+        /**
+          * Maximum allowed value
+         */
+        "max"?: number;
+        /**
+          * Minimum allowed value
+         */
+        "min"?: number;
+        /**
+          * The name of the input
+         */
+        "name"?: string;
+        /**
+          * Emitted when the value changes (on blur or Enter)
+         */
+        "onLeChange"?: (event: LeNumberInputCustomEvent<{ value: number; name: string; externalId: string; isValid: boolean }>) => void;
+        /**
+          * Emitted when the input value changes (on keystroke/spin)
+         */
+        "onLeInput"?: (event: LeNumberInputCustomEvent<{ value: number; name: string; externalId: string; isValid: boolean }>) => void;
+        /**
+          * Placeholder text
+         */
+        "placeholder"?: string;
+        /**
+          * Whether the input is read-only
+          * @default false
+         */
+        "readonly"?: boolean;
+        /**
+          * Whether the input is required
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Whether to show the spinner controls
+          * @default true
+         */
+        "showSpinners"?: boolean;
+        /**
+          * Step value for increment/decrement
+          * @default 1
+         */
+        "step"?: number;
+        /**
+          * The value of the input
+         */
+        "value"?: number;
     }
     /**
      * A popover component for displaying floating content.
@@ -1629,6 +1816,7 @@ declare namespace LocalJSX {
         "le-card": LeCard;
         "le-checkbox": LeCheckbox;
         "le-component": LeComponent;
+        "le-number-input": LeNumberInput;
         "le-popover": LePopover;
         "le-popup": LePopup;
         "le-slot": LeSlot;
@@ -1714,6 +1902,17 @@ declare module "@stencil/core" {
              * @cmsCategory System
              */
             "le-component": LocalJSX.LeComponent & JSXBase.HTMLAttributes<HTMLLeComponentElement>;
+            /**
+             * A number input component with validation, keyboard controls, and custom spinners.
+             * @cssprop --le-input-bg - Input background color
+             * @cssprop --le-input-color - Input text color
+             * @cssprop --le-input-border - Input border style
+             * @cssprop --le-input-border-focus - Input border style when focused
+             * @cssprop --le-input-border-error - Input border style when invalid
+             * @cssprop --le-input-radius - Input border radius
+             * @cssprop --le-input-padding - Input padding
+             */
+            "le-number-input": LocalJSX.LeNumberInput & JSXBase.HTMLAttributes<HTMLLeNumberInputElement>;
             /**
              * A popover component for displaying floating content.
              * Uses the native HTML Popover API for proper layering with dialogs

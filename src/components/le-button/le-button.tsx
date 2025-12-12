@@ -29,6 +29,11 @@ export class LeButton {
   @Element() el: HTMLElement;
 
   /**
+   * Mode of the popover should be 'default' for internal use
+   */
+  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin';
+
+  /**
    * Button variant style
    * @allowedValues solid | outlined | clear
    */

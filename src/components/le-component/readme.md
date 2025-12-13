@@ -53,25 +53,36 @@ render() {
  - [le-box](../le-box)
  - [le-button](../le-button)
  - [le-card](../le-card)
+ - [le-checkbox](../le-checkbox)
+ - [le-number-input](../le-number-input)
  - [le-popup](../le-popup)
  - [le-stack](../le-stack)
+ - [le-string-input](../le-string-input)
  - [le-text](../le-text)
 
 ### Depends on
 
-- [le-popover](../le-popover)
 - [le-button](../le-button)
+- [le-checkbox](../le-checkbox)
+- [le-string-input](../le-string-input)
+- [le-popover](../le-popover)
 
 ### Graph
 ```mermaid
 graph TD;
-  le-component --> le-popover
   le-component --> le-button
+  le-component --> le-checkbox
+  le-component --> le-string-input
+  le-component --> le-popover
   le-button --> le-component
   le-slot --> le-popover
   le-slot --> le-button
+  le-slot --> le-string-input
+  le-string-input --> le-component
+  le-checkbox --> le-component
   le-box --> le-component
   le-card --> le-component
+  le-number-input --> le-component
   le-popup --> le-component
   le-stack --> le-component
   le-text --> le-component

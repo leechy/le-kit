@@ -96,18 +96,29 @@ Type: `Promise<PopupResult>`
 
 ### Depends on
 
+- [le-slot](../le-slot)
+- [le-button](../le-button)
 - [le-component](../le-component)
 
 ### Graph
 ```mermaid
 graph TD;
+  le-popup --> le-slot
+  le-popup --> le-button
   le-popup --> le-component
-  le-component --> le-popover
-  le-component --> le-button
-  le-button --> le-component
-  le-button --> le-slot
   le-slot --> le-popover
   le-slot --> le-button
+  le-slot --> le-string-input
+  le-button --> le-component
+  le-button --> le-slot
+  le-component --> le-button
+  le-component --> le-checkbox
+  le-component --> le-string-input
+  le-component --> le-popover
+  le-checkbox --> le-component
+  le-checkbox --> le-slot
+  le-string-input --> le-component
+  le-string-input --> le-slot
   style le-popup fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -178,6 +178,48 @@
       </div>
 
       <div class="demo-section">
+        <h2>Legacy Components</h2>
+        <p>Component from the ancient version of LeKit, 7 years ago</p>
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>The Round Progress:</label>
+            <le-round-progress
+              value="66"
+              padding="20"
+              style="
+                display: block;
+                width: 150px;
+                height: 150px;
+                --progress-width: 15px;
+                --progress-color: var(--le-color-primary);
+                --progress-shadow: var(--le-shadow-md);
+              "
+            ></le-round-progress>
+          </div>
+          <div class="text-slot-demo">
+            <label>The Turntable:</label>
+            <le-turntable
+              style="
+                width: 150px;
+                height: 150px;
+                box-shadow: var(--le-shadow-md);
+              "
+            >
+              <div style="
+                display: flex;
+                height: 100%;
+                width: 100%;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div>Hello, Le-Kit!</div>
+              </div>
+            </le-turntable>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-section">
         <h2>Popup / Dialog Component</h2>
         <p>Modal and non-modal popups using native &lt;dialog&gt;. Supports alerts, confirms, prompts, and fully custom content.</p>
         <div class="demo-grid">

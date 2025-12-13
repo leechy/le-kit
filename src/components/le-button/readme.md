@@ -88,6 +88,7 @@ A flexible button component with multiple variants and states.
 | `fullWidth` | `full-width` | Whether the button takes full width of its container           | `boolean`                                                                  | `false`     |
 | `href`      | `href`       | Optional href to make the button act as a link                 | `string`                                                                   | `undefined` |
 | `iconOnly`  | `icon-only`  | Whether the button displays only an icon (square aspect ratio) | `boolean`                                                                  | `false`     |
+| `mode`      | `mode`       | Mode of the popover should be 'default' for internal use       | `"admin" \| "default"`                                                     | `undefined` |
 | `selected`  | `selected`   | Whether the button is in a selected/active state               | `boolean`                                                                  | `false`     |
 | `size`      | `size`       | Button size                                                    | `"large" \| "medium" \| "small"`                                           | `'medium'`  |
 | `target`    | `target`     | Link target when href is set                                   | `string`                                                                   | `undefined` |
@@ -97,9 +98,9 @@ A flexible button component with multiple variants and states.
 
 ## Events
 
-| Event     | Description                        | Type                      |
-| --------- | ---------------------------------- | ------------------------- |
-| `leClick` | Emitted when the button is clicked | `CustomEvent<MouseEvent>` |
+| Event   | Description                                                                                                                     | Type                        |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `click` | Emitted when the button is clicked. This is a custom event that wraps the native click but ensures the target is the le-button. | `CustomEvent<PointerEvent>` |
 
 
 ## Slots
@@ -124,6 +125,8 @@ A flexible button component with multiple variants and states.
 ### Used by
 
  - [le-component](../le-component)
+ - [le-number-input](../le-number-input)
+ - [le-popup](../le-popup)
  - [le-slot](../le-slot)
 
 ### Depends on
@@ -137,7 +140,13 @@ graph TD;
   le-button --> le-component
   le-button --> le-slot
   le-component --> le-button
+  le-checkbox --> le-component
+  le-checkbox --> le-slot
   le-slot --> le-button
+  le-string-input --> le-component
+  le-string-input --> le-slot
+  le-number-input --> le-button
+  le-popup --> le-button
   style le-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

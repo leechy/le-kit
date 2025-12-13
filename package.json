@@ -11,11 +11,20 @@
   "exports": {
     ".": {
       "import": "./dist/le-kit/le-kit.esm.js",
-      "require": "./dist/le-kit/le-kit.cjs.js"
+      "require": "./dist/le-kit/le-kit.cjs.js",
+      "types": "./dist/types/index.d.ts"
     },
-    "./le-slot": {
-      "import": "./dist/components/le-slot.js",
-      "types": "./dist/components/le-slot.d.ts"
+    "./core": {
+      "import": "./dist/core/index.js",
+      "types": "./dist/core/index.d.ts"
+    },
+    "./admin": {
+      "import": "./dist/admin/index.js",
+      "types": "./dist/admin/index.d.ts"
+    },
+    "./components": {
+      "import": "./dist/components/index.js",
+      "types": "./dist/components/index.d.ts"
     },
     "./loader": {
       "import": "./loader/index.js",
@@ -32,16 +41,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/user/le-kit.git"
+    "url": "https://github.com/leechy/le-kit.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "files": [
     "dist/",
     "loader/"
   ],
   "scripts": {
+    "prebuild": "node scripts/build-targets.mjs",
     "build": "stencil build",
-    "postbuild": "cp -r src/themes dist/themes && cem analyze --stencil",
-    "prestart": "cem analyze --stencil",
+    "postbuild": "node scripts/bundle-targets.mjs && cp -r src/themes dist/themes && cem analyze --stencil",
+    "prestart": "node scripts/build-targets.mjs && cem analyze --stencil",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",

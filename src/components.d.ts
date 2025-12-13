@@ -502,6 +502,17 @@ export namespace Components {
          */
         "type": PopupType;
     }
+    interface LeRoundProgress {
+        /**
+          * @default 0
+         */
+        "padding": number;
+        "paths": string;
+        /**
+          * @default 0
+         */
+        "value": number;
+    }
     /**
      * Slot placeholder component for admin/CMS mode.
      * This component renders a visual placeholder for slots when in admin mode,
@@ -725,6 +736,16 @@ export namespace Components {
           * @default 'p'
          */
         "variant": 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small';
+    }
+    interface LeTurntable {
+        /**
+          * @default 'center'
+         */
+        "center": string;
+        /**
+          * @default 0
+         */
+        "value": number;
     }
 }
 export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
@@ -957,6 +978,12 @@ declare global {
         prototype: HTMLLePopupElement;
         new (): HTMLLePopupElement;
     };
+    interface HTMLLeRoundProgressElement extends Components.LeRoundProgress, HTMLStencilElement {
+    }
+    var HTMLLeRoundProgressElement: {
+        prototype: HTMLLeRoundProgressElement;
+        new (): HTMLLeRoundProgressElement;
+    };
     interface HTMLLeSlotElementEventMap {
         "leSlotChange": { name: string; value: string; isValid: boolean };
     }
@@ -1044,6 +1071,12 @@ declare global {
         prototype: HTMLLeTextElement;
         new (): HTMLLeTextElement;
     };
+    interface HTMLLeTurntableElement extends Components.LeTurntable, HTMLStencilElement {
+    }
+    var HTMLLeTurntableElement: {
+        prototype: HTMLLeTurntableElement;
+        new (): HTMLLeTurntableElement;
+    };
     interface HTMLElementTagNameMap {
         "le-box": HTMLLeBoxElement;
         "le-button": HTMLLeButtonElement;
@@ -1053,10 +1086,12 @@ declare global {
         "le-number-input": HTMLLeNumberInputElement;
         "le-popover": HTMLLePopoverElement;
         "le-popup": HTMLLePopupElement;
+        "le-round-progress": HTMLLeRoundProgressElement;
         "le-slot": HTMLLeSlotElement;
         "le-stack": HTMLLeStackElement;
         "le-string-input": HTMLLeStringInputElement;
         "le-text": HTMLLeTextElement;
+        "le-turntable": HTMLLeTurntableElement;
     }
 }
 declare namespace LocalJSX {
@@ -1574,6 +1609,17 @@ declare namespace LocalJSX {
          */
         "type"?: PopupType;
     }
+    interface LeRoundProgress {
+        /**
+          * @default 0
+         */
+        "padding"?: number;
+        "paths"?: string;
+        /**
+          * @default 0
+         */
+        "value"?: number;
+    }
     /**
      * Slot placeholder component for admin/CMS mode.
      * This component renders a visual placeholder for slots when in admin mode,
@@ -1810,6 +1856,16 @@ declare namespace LocalJSX {
          */
         "variant"?: 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small';
     }
+    interface LeTurntable {
+        /**
+          * @default 'center'
+         */
+        "center"?: string;
+        /**
+          * @default 0
+         */
+        "value"?: number;
+    }
     interface IntrinsicElements {
         "le-box": LeBox;
         "le-button": LeButton;
@@ -1819,10 +1875,12 @@ declare namespace LocalJSX {
         "le-number-input": LeNumberInput;
         "le-popover": LePopover;
         "le-popup": LePopup;
+        "le-round-progress": LeRoundProgress;
         "le-slot": LeSlot;
         "le-stack": LeStack;
         "le-string-input": LeStringInput;
         "le-text": LeText;
+        "le-turntable": LeTurntable;
     }
 }
 export { LocalJSX as JSX };
@@ -1930,6 +1988,7 @@ declare module "@stencil/core" {
              * @cmsCategory System
              */
             "le-popup": LocalJSX.LePopup & JSXBase.HTMLAttributes<HTMLLePopupElement>;
+            "le-round-progress": LocalJSX.LeRoundProgress & JSXBase.HTMLAttributes<HTMLLeRoundProgressElement>;
             /**
              * Slot placeholder component for admin/CMS mode.
              * This component renders a visual placeholder for slots when in admin mode,
@@ -1974,6 +2033,7 @@ declare module "@stencil/core" {
              * @cmsCategory Content
              */
             "le-text": LocalJSX.LeText & JSXBase.HTMLAttributes<HTMLLeTextElement>;
+            "le-turntable": LocalJSX.LeTurntable & JSXBase.HTMLAttributes<HTMLLeTurntableElement>;
         }
     }
 }

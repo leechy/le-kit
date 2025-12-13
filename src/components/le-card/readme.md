@@ -52,12 +52,19 @@ le-slot acts as a transparent passthrough.
 graph TD;
   le-card --> le-component
   le-card --> le-slot
-  le-component --> le-popover
   le-component --> le-button
+  le-component --> le-checkbox
+  le-component --> le-string-input
+  le-component --> le-popover
   le-button --> le-component
   le-button --> le-slot
   le-slot --> le-popover
   le-slot --> le-button
+  le-slot --> le-string-input
+  le-string-input --> le-component
+  le-string-input --> le-slot
+  le-checkbox --> le-component
+  le-checkbox --> le-slot
   style le-card fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

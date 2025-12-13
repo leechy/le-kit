@@ -48,12 +48,19 @@ toolbar for bold, italic, links, and paragraph type selection.
 ```mermaid
 graph TD;
   le-text --> le-component
-  le-component --> le-popover
   le-component --> le-button
+  le-component --> le-checkbox
+  le-component --> le-string-input
+  le-component --> le-popover
   le-button --> le-component
   le-button --> le-slot
   le-slot --> le-popover
   le-slot --> le-button
+  le-slot --> le-string-input
+  le-string-input --> le-component
+  le-string-input --> le-slot
+  le-checkbox --> le-component
+  le-checkbox --> le-slot
   style le-text fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

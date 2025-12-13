@@ -447,6 +447,139 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-button/le-button.tsx",
       "declarations": [
         {
@@ -745,60 +878,20 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
+      "path": "src/components/le-popover/le-popover.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
-          "cssProperties": [
-            {
-              "description": "Card background color",
-              "name": "--le-card-bg"
-            },
-            {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
-            },
-            {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
-            }
-          ],
+          "description": "A popover component for displaying floating content.\n\nUses the native HTML Popover API for proper layering with dialogs\nand other top-layer elements. Falls back gracefully in older browsers.",
+          "name": "LePopover",
           "slots": [
             {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
+              "description": "Content to display inside the popover",
               "name": ""
             },
             {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
+              "description": "Element that triggers the popover (optional)",
+              "name": "trigger"
             }
           ],
           "members": [
@@ -811,21 +904,221 @@
             },
             {
               "kind": "field",
-              "name": "variant",
+              "name": "mode",
               "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
+                "text": "'default' | 'admin'"
               },
-              "default": "'default'",
-              "description": "Card variant style"
+              "description": "Mode of the popover should be 'default' for internal use"
             },
             {
               "kind": "field",
-              "name": "interactive",
+              "name": "open",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the card is interactive (clickable)"
+              "description": "Whether the popover is currently open"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
+              },
+              "default": "'bottom'",
+              "description": "Position of the popover relative to its trigger"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'end'"
+              },
+              "default": "'start'",
+              "description": "Alignment of the popover"
+            },
+            {
+              "kind": "field",
+              "name": "popoverTitle",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional title for the popover header"
+            },
+            {
+              "kind": "field",
+              "name": "showClose",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether to show a close button in the header"
+            },
+            {
+              "kind": "field",
+              "name": "closeOnClickOutside",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether clicking outside closes the popover"
+            },
+            {
+              "kind": "field",
+              "name": "closeOnEscape",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether pressing Escape closes the popover"
+            },
+            {
+              "kind": "field",
+              "name": "offset",
+              "type": {
+                "text": "number"
+              },
+              "default": "8",
+              "description": "Offset from the trigger element (in pixels)"
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Fixed width for the popover (e.g., '300px', '20rem')"
+            },
+            {
+              "kind": "field",
+              "name": "minWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "'200px'",
+              "description": "Minimum width for the popover (e.g., '200px', '15rem')"
+            },
+            {
+              "kind": "field",
+              "name": "maxWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Maximum width for the popover (e.g., '400px', '25rem')"
+            },
+            {
+              "kind": "field",
+              "name": "isPositioned",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "triggerEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "popoverEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "uniqueId",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "`le-popover-${Math.random().toString(36).substr(2, 9)}`"
+            },
+            {
+              "kind": "field",
+              "name": "scrollParents",
+              "type": {
+                "text": "Element[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "method",
+              "name": "getScrollParents",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Element[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "Element"
+                  }
+                }
+              ],
+              "description": "Find all scrollable parent elements"
+            },
+            {
+              "kind": "method",
+              "name": "addScrollListeners",
+              "privacy": "private",
+              "description": "Add scroll listeners to all scrollable parents"
+            },
+            {
+              "kind": "method",
+              "name": "removeScrollListeners",
+              "privacy": "private",
+              "description": "Remove scroll listeners"
+            },
+            {
+              "kind": "field",
+              "name": "handleScroll",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handlePopoverToggle",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOtherPopoverOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "description": "Opens the popover"
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "description": "Closes the popover"
+            },
+            {
+              "kind": "method",
+              "name": "toggle",
+              "description": "Toggles the popover"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updatePosition",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -834,44 +1127,145 @@
           ],
           "attributes": [
             {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
+              "name": "mode",
+              "fieldName": "mode",
+              "description": "Mode of the popover should be 'default' for internal use",
               "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
+                "text": "'default' | 'admin'"
               }
             },
             {
-              "name": "interactive",
-              "fieldName": "interactive",
+              "name": "open",
+              "fieldName": "open",
               "default": "false",
-              "description": "Whether the card is interactive (clickable)",
+              "description": "Whether the popover is currently open",
               "type": {
                 "text": "boolean"
               }
+            },
+            {
+              "name": "position",
+              "fieldName": "position",
+              "default": "'bottom'",
+              "description": "Position of the popover relative to its trigger",
+              "type": {
+                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'start'",
+              "description": "Alignment of the popover",
+              "type": {
+                "text": "'start' | 'center' | 'end'"
+              }
+            },
+            {
+              "name": "popover-title",
+              "fieldName": "popoverTitle",
+              "description": "Optional title for the popover header",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "show-close",
+              "fieldName": "showClose",
+              "default": "true",
+              "description": "Whether to show a close button in the header",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "close-on-click-outside",
+              "fieldName": "closeOnClickOutside",
+              "default": "true",
+              "description": "Whether clicking outside closes the popover",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "close-on-escape",
+              "fieldName": "closeOnEscape",
+              "default": "true",
+              "description": "Whether pressing Escape closes the popover",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "offset",
+              "fieldName": "offset",
+              "default": "8",
+              "description": "Offset from the trigger element (in pixels)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "width",
+              "fieldName": "width",
+              "description": "Fixed width for the popover (e.g., '300px', '20rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min-width",
+              "fieldName": "minWidth",
+              "default": "'200px'",
+              "description": "Minimum width for the popover (e.g., '200px', '15rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-width",
+              "fieldName": "maxWidth",
+              "description": "Maximum width for the popover (e.g., '400px', '25rem')",
+              "type": {
+                "text": "string"
+              }
             }
           ],
-          "tagName": "le-card",
-          "events": [],
+          "tagName": "le-popover",
+          "events": [
+            {
+              "name": "lePopoverOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the popover opens"
+            },
+            {
+              "name": "lePopoverClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the popover closes"
+            }
+          ],
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "LeCard",
+          "name": "LePopover",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LePopover",
+            "module": "src/components/le-popover/le-popover.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-card",
+          "name": "le-popover",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LePopover",
+            "module": "src/components/le-popover/le-popover.tsx"
           }
         }
       ]
@@ -1044,6 +1438,305 @@
           "declaration": {
             "name": "LeCheckbox",
             "module": "src/components/le-checkbox/le-checkbox.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-component/le-component.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component wrapper for admin mode editing.\n\nThis component is used internally by other components to provide admin-mode \nediting capabilities. It wraps the component's rendered output and shows\na settings popover for editing properties.\n\nIn default mode, it acts as a simple passthrough (display: contents).\nIn admin mode, it shows a border, component name header, and settings popover.\n\nThe host element is found automatically by traversing up through the shadow DOM.\n\nUsage inside a component's render method:\n```tsx\nrender() {\n  return (\n    <le-component component=\"le-card\">\n      <Host>...</Host>\n    </le-component>\n  );\n}\n```",
+          "name": "LeComponent",
+          "slots": [
+            {
+              "description": "The component's rendered content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "component",
+              "type": {
+                "text": "string"
+              },
+              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name."
+            },
+            {
+              "kind": "field",
+              "name": "displayName",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name."
+            },
+            {
+              "kind": "field",
+              "name": "hostClass",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes."
+            },
+            {
+              "kind": "field",
+              "name": "hostStyle",
+              "type": {
+                "text": "{ [key: string]: string } | undefined"
+              },
+              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties)."
+            },
+            {
+              "kind": "field",
+              "name": "hostElement",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private",
+              "description": "Reference to the host element (found automatically from parent)"
+            },
+            {
+              "kind": "field",
+              "name": "adminMode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Internal state to track admin mode"
+            },
+            {
+              "kind": "field",
+              "name": "componentMeta",
+              "type": {
+                "text": "ComponentMetadata | null"
+              },
+              "privacy": "private",
+              "default": "null",
+              "description": "Component metadata loaded from Custom Elements Manifest"
+            },
+            {
+              "kind": "field",
+              "name": "propertyValues",
+              "type": {
+                "text": "Record<string, any>"
+              },
+              "privacy": "private",
+              "default": "{}",
+              "description": "Current property values of the host component"
+            },
+            {
+              "kind": "field",
+              "name": "disconnectModeObserver",
+              "type": {
+                "text": "() => void | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "findHostElement",
+              "privacy": "private",
+              "description": "Find the host element by traversing up through shadow DOM"
+            },
+            {
+              "kind": "method",
+              "name": "formatDisplayName",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "tagName",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Formats a tag name into a display name\ne.g., 'le-card' -> 'Card'"
+            },
+            {
+              "kind": "method",
+              "name": "loadComponentMetadata",
+              "privacy": "private",
+              "description": "Load component metadata from the Custom Elements Manifest"
+            },
+            {
+              "kind": "method",
+              "name": "isInternalAttribute",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Check if an attribute is internal (should not be shown in editor)"
+            },
+            {
+              "kind": "method",
+              "name": "readPropertyValues",
+              "privacy": "private",
+              "description": "Read current property values from the host element"
+            },
+            {
+              "kind": "method",
+              "name": "parseAttributeValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "any"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string | null"
+                  }
+                },
+                {
+                  "name": "type",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Parse an attribute value based on its type"
+            },
+            {
+              "kind": "method",
+              "name": "handlePropertyChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "attrName",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "type",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Handle property value changes from the editor"
+            },
+            {
+              "kind": "method",
+              "name": "deleteComponent",
+              "privacy": "private",
+              "description": "Delete this component from the DOM"
+            },
+            {
+              "kind": "method",
+              "name": "renderPropertyEditor",
+              "privacy": "private",
+              "description": "Render the property editor form"
+            },
+            {
+              "kind": "method",
+              "name": "renderPropertyField",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "attr",
+                  "type": {
+                    "text": "AttributeMetadata"
+                  }
+                }
+              ],
+              "description": "Render a single property field based on its type"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "component",
+              "fieldName": "component",
+              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "display-name",
+              "fieldName": "displayName",
+              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "host-class",
+              "fieldName": "hostClass",
+              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "host-style",
+              "fieldName": "hostStyle",
+              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties).",
+              "type": {
+                "text": "{ [key: string]: string }"
+              }
+            }
+          ],
+          "tagName": "le-component",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeComponent",
+          "declaration": {
+            "name": "LeComponent",
+            "module": "src/components/le-component/le-component.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-component",
+          "declaration": {
+            "name": "LeComponent",
+            "module": "src/components/le-component/le-component.tsx"
           }
         }
       ]
@@ -1455,15 +2148,180 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-component/le-component.tsx",
+      "path": "src/components/le-round-progress/le-round-progress.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "Component wrapper for admin mode editing.\n\nThis component is used internally by other components to provide admin-mode \nediting capabilities. It wraps the component's rendered output and shows\na settings popover for editing properties.\n\nIn default mode, it acts as a simple passthrough (display: contents).\nIn admin mode, it shows a border, component name header, and settings popover.\n\nThe host element is found automatically by traversing up through the shadow DOM.\n\nUsage inside a component's render method:\n```tsx\nrender() {\n  return (\n    <le-component component=\"le-card\">\n      <Host>...</Host>\n    </le-component>\n  );\n}\n```",
-          "name": "LeComponent",
+          "description": "",
+          "name": "LeRoundProgress",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "method",
+              "name": "updateValue",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "padding",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "method",
+              "name": "updatePadding",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "paths",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "updateProgressBackgrounds",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "progressPaths",
+              "type": {
+                "text": "any[]"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "params",
+              "type": {
+                "text": "{\n    width: number;\n    diameter: number;\n    circumference: number;\n  }"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "calcParams"
+            },
+            {
+              "kind": "method",
+              "name": "getViewBox",
+              "description": "Returns the viewPath attribute value for the SVG\nbased on the width of the parent element"
+            },
+            {
+              "kind": "method",
+              "name": "getPath",
+              "description": "Returns the circular path for the progress stroke\nand additional paths in the background"
+            },
+            {
+              "kind": "method",
+              "name": "getStrokeDashArray"
+            },
+            {
+              "kind": "method",
+              "name": "getPaths"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "default": "0",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "padding",
+              "fieldName": "padding",
+              "default": "0",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "paths",
+              "fieldName": "paths",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-round-progress",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeRoundProgress",
+          "declaration": {
+            "name": "LeRoundProgress",
+            "module": "src/components/le-round-progress/le-round-progress.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-round-progress",
+          "declaration": {
+            "name": "LeRoundProgress",
+            "module": "src/components/le-round-progress/le-round-progress.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-slot/le-slot.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Slot placeholder component for admin/CMS mode.\n\nThis component renders a visual placeholder for slots when in admin mode,\nallowing CMS systems to show available drop zones for content or inline editing.\n\nIn non-admin mode, this component renders nothing and acts as a passthrough.",
+          "name": "LeSlot",
           "slots": [
             {
-              "description": "The component's rendered content",
+              "description": "Default slot for placeholder content or drop zone UI",
               "name": ""
             }
           ],
@@ -1477,44 +2335,87 @@
             },
             {
               "kind": "field",
-              "name": "component",
+              "name": "type",
+              "type": {
+                "text": "'slot' | 'text' | 'textarea'"
+              },
+              "default": "'slot'",
+              "description": "The type of slot content.\n- `slot`: Default, shows a dropzone for components (default)\n- `text`: Shows a single-line text input\n- `textarea`: Shows a multi-line text area"
+            },
+            {
+              "kind": "field",
+              "name": "name",
               "type": {
                 "text": "string"
               },
-              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name."
+              "default": "''",
+              "description": "The name of the slot this placeholder represents.\nShould match the slot name in the parent component."
             },
             {
               "kind": "field",
-              "name": "displayName",
+              "name": "label",
               "type": {
                 "text": "string | undefined"
               },
-              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name."
+              "description": "Label to display in admin mode.\nIf not provided, the slot name will be used."
             },
             {
               "kind": "field",
-              "name": "hostClass",
+              "name": "description",
               "type": {
                 "text": "string | undefined"
               },
-              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes."
+              "description": "Description of what content this slot accepts.\nShown in admin mode to guide content editors."
             },
             {
               "kind": "field",
-              "name": "hostStyle",
+              "name": "allowedComponents",
               "type": {
-                "text": "{ [key: string]: string } | undefined"
+                "text": "string | undefined"
               },
-              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties)."
+              "description": "Comma-separated list of allowed component tags for this slot.\nUsed by CMS to filter available components."
             },
             {
               "kind": "field",
-              "name": "hostElement",
+              "name": "multiple",
               "type": {
-                "text": "HTMLElement | undefined"
+                "text": "boolean"
               },
-              "privacy": "private",
-              "description": "Reference to the host element (found automatically from parent)"
+              "default": "true",
+              "description": "Whether multiple components can be dropped in this slot."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this slot is required to have content."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Placeholder text for text/textarea inputs in admin mode."
+            },
+            {
+              "kind": "field",
+              "name": "tag",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The HTML tag to create when there's no slotted element.\nUsed with type=\"text\" or type=\"textarea\" to auto-create elements."
+            },
+            {
+              "kind": "field",
+              "name": "slotStyle",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "CSS styles for the slot dropzone container.\nUseful for layouts - e.g., \"flex-direction: row\" for horizontal stacks.\nOnly applies in admin mode for type=\"slot\"."
             },
             {
               "kind": "field",
@@ -1528,23 +2429,61 @@
             },
             {
               "kind": "field",
-              "name": "componentMeta",
+              "name": "textValue",
               "type": {
-                "text": "ComponentMetadata | null"
+                "text": "string"
               },
               "privacy": "private",
-              "default": "null",
-              "description": "Component metadata loaded from Custom Elements Manifest"
+              "default": "''",
+              "description": "Internal state for text input value (synced from slot content)"
             },
             {
               "kind": "field",
-              "name": "propertyValues",
+              "name": "isValidHtml",
               "type": {
-                "text": "Record<string, any>"
+                "text": "boolean"
               },
               "privacy": "private",
-              "default": "{}",
-              "description": "Current property values of the host component"
+              "default": "true",
+              "description": "Whether the current textValue contains valid HTML"
+            },
+            {
+              "kind": "field",
+              "name": "availableComponents",
+              "type": {
+                "text": "ComponentInfo[]"
+              },
+              "privacy": "private",
+              "default": "[]",
+              "description": "Available components loaded from Custom Elements Manifest"
+            },
+            {
+              "kind": "field",
+              "name": "pickerOpen",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Whether the component picker popover is open"
+            },
+            {
+              "kind": "field",
+              "name": "slotRef",
+              "type": {
+                "text": "HTMLSlotElement | undefined"
+              },
+              "privacy": "private",
+              "description": "Reference to the slot element to access assignedNodes"
+            },
+            {
+              "kind": "field",
+              "name": "slottedElement",
+              "type": {
+                "text": "Element | undefined"
+              },
+              "privacy": "private",
+              "description": "The original slotted element (e.g., <h3 slot=\"header\">)"
             },
             {
               "kind": "field",
@@ -1555,14 +2494,60 @@
               "privacy": "private"
             },
             {
-              "kind": "method",
-              "name": "findHostElement",
+              "kind": "field",
+              "name": "isUpdating",
+              "type": {
+                "text": "boolean"
+              },
               "privacy": "private",
-              "description": "Find the host element by traversing up through shadow DOM"
+              "default": "false",
+              "description": "Flag to prevent re-reading content right after we updated it"
             },
             {
               "kind": "method",
-              "name": "formatDisplayName",
+              "name": "readSlottedContent",
+              "privacy": "private",
+              "description": "Read content from slotted elements via assignedNodes()"
+            },
+            {
+              "kind": "method",
+              "name": "validateHtml",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "html",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Validates if a string contains valid HTML"
+            },
+            {
+              "kind": "field",
+              "name": "handleTextInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "createSlottedElement",
+              "privacy": "private",
+              "description": "Create a new slotted element when none exists.\nThe element is appended to the host component's light DOM."
+            },
+            {
+              "kind": "method",
+              "name": "loadAvailableComponents",
+              "privacy": "private",
+              "description": "Load available components from Custom Elements Manifest"
+            },
+            {
+              "kind": "method",
+              "name": "formatComponentName",
               "privacy": "private",
               "return": {
                 "type": {
@@ -1577,177 +2562,152 @@
                   }
                 }
               ],
-              "description": "Formats a tag name into a display name\ne.g., 'le-card' -> 'Card'"
+              "description": "Format a tag name into a display name\ne.g., 'le-card' -> 'Card'"
             },
             {
               "kind": "method",
-              "name": "loadComponentMetadata",
+              "name": "addComponent",
               "privacy": "private",
-              "description": "Load component metadata from the Custom Elements Manifest"
-            },
-            {
-              "kind": "method",
-              "name": "isInternalAttribute",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
               "parameters": [
                 {
-                  "name": "name",
+                  "name": "tagName",
                   "type": {
                     "text": "string"
                   }
                 }
               ],
-              "description": "Check if an attribute is internal (should not be shown in editor)"
+              "description": "Add a new component to the slot"
             },
             {
-              "kind": "method",
-              "name": "readPropertyValues",
+              "kind": "field",
+              "name": "handleSlotChange",
               "privacy": "private",
-              "description": "Read current property values from the host element"
-            },
-            {
-              "kind": "method",
-              "name": "parseAttributeValue",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "any"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "string | null"
-                  }
-                },
-                {
-                  "name": "type",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Parse an attribute value based on its type"
-            },
-            {
-              "kind": "method",
-              "name": "handlePropertyChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "attrName",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "type",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Handle property value changes from the editor"
-            },
-            {
-              "kind": "method",
-              "name": "deleteComponent",
-              "privacy": "private",
-              "description": "Delete this component from the DOM"
-            },
-            {
-              "kind": "method",
-              "name": "renderPropertyEditor",
-              "privacy": "private",
-              "description": "Render the property editor form"
-            },
-            {
-              "kind": "method",
-              "name": "renderPropertyField",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "attr",
-                  "type": {
-                    "text": "AttributeMetadata"
-                  }
-                }
-              ],
-              "description": "Render a single property field based on its type"
+              "description": "Handle slot change event to re-read content when nodes are assigned"
             },
             {
               "kind": "method",
               "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "renderContent",
+              "privacy": "private"
             }
           ],
           "attributes": [
             {
-              "name": "component",
-              "fieldName": "component",
-              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name.",
+              "name": "type",
+              "fieldName": "type",
+              "default": "'slot'",
+              "description": "The type of slot content.\n- `slot`: Default, shows a dropzone for components (default)\n- `text`: Shows a single-line text input\n- `textarea`: Shows a multi-line text area",
+              "type": {
+                "text": "'slot' | 'text' | 'textarea'"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "default": "''",
+              "description": "The name of the slot this placeholder represents.\nShould match the slot name in the parent component.",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "display-name",
-              "fieldName": "displayName",
-              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name.",
+              "name": "label",
+              "fieldName": "label",
+              "description": "Label to display in admin mode.\nIf not provided, the slot name will be used.",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "host-class",
-              "fieldName": "hostClass",
-              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes.",
+              "name": "description",
+              "fieldName": "description",
+              "description": "Description of what content this slot accepts.\nShown in admin mode to guide content editors.",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "host-style",
-              "fieldName": "hostStyle",
-              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties).",
+              "name": "allowed-components",
+              "fieldName": "allowedComponents",
+              "description": "Comma-separated list of allowed component tags for this slot.\nUsed by CMS to filter available components.",
               "type": {
-                "text": "{ [key: string]: string }"
+                "text": "string"
+              }
+            },
+            {
+              "name": "multiple",
+              "fieldName": "multiple",
+              "default": "true",
+              "description": "Whether multiple components can be dropped in this slot.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether this slot is required to have content.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "description": "Placeholder text for text/textarea inputs in admin mode.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "tag",
+              "fieldName": "tag",
+              "description": "The HTML tag to create when there's no slotted element.\nUsed with type=\"text\" or type=\"textarea\" to auto-create elements.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "slot-style",
+              "fieldName": "slotStyle",
+              "description": "CSS styles for the slot dropzone container.\nUseful for layouts - e.g., \"flex-direction: row\" for horizontal stacks.\nOnly applies in admin mode for type=\"slot\".",
+              "type": {
+                "text": "string"
               }
             }
           ],
-          "tagName": "le-component",
-          "events": [],
+          "tagName": "le-slot",
+          "events": [
+            {
+              "name": "leSlotChange",
+              "type": {
+                "text": "EventEmitter<{ name: string; value: string; isValid: boolean }>"
+              },
+              "description": "Emitted when text content changes in admin mode.\nThe event detail contains the new text value and validity."
+            }
+          ],
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "LeComponent",
+          "name": "LeSlot",
           "declaration": {
-            "name": "LeComponent",
-            "module": "src/components/le-component/le-component.tsx"
+            "name": "LeSlot",
+            "module": "src/components/le-slot/le-slot.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-component",
+          "name": "le-slot",
           "declaration": {
-            "name": "LeComponent",
-            "module": "src/components/le-component/le-component.tsx"
+            "name": "LeSlot",
+            "module": "src/components/le-slot/le-slot.tsx"
           }
         }
       ]
@@ -2158,407 +3118,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-slot/le-slot.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Slot placeholder component for admin/CMS mode.\n\nThis component renders a visual placeholder for slots when in admin mode,\nallowing CMS systems to show available drop zones for content or inline editing.\n\nIn non-admin mode, this component renders nothing and acts as a passthrough.",
-          "name": "LeSlot",
-          "slots": [
-            {
-              "description": "Default slot for placeholder content or drop zone UI",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "'slot' | 'text' | 'textarea'"
-              },
-              "default": "'slot'",
-              "description": "The type of slot content.\n- `slot`: Default, shows a dropzone for components (default)\n- `text`: Shows a single-line text input\n- `textarea`: Shows a multi-line text area"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "The name of the slot this placeholder represents.\nShould match the slot name in the parent component."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Label to display in admin mode.\nIf not provided, the slot name will be used."
-            },
-            {
-              "kind": "field",
-              "name": "description",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Description of what content this slot accepts.\nShown in admin mode to guide content editors."
-            },
-            {
-              "kind": "field",
-              "name": "allowedComponents",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Comma-separated list of allowed component tags for this slot.\nUsed by CMS to filter available components."
-            },
-            {
-              "kind": "field",
-              "name": "multiple",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether multiple components can be dropped in this slot."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether this slot is required to have content."
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Placeholder text for text/textarea inputs in admin mode."
-            },
-            {
-              "kind": "field",
-              "name": "tag",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "The HTML tag to create when there's no slotted element.\nUsed with type=\"text\" or type=\"textarea\" to auto-create elements."
-            },
-            {
-              "kind": "field",
-              "name": "slotStyle",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "CSS styles for the slot dropzone container.\nUseful for layouts - e.g., \"flex-direction: row\" for horizontal stacks.\nOnly applies in admin mode for type=\"slot\"."
-            },
-            {
-              "kind": "field",
-              "name": "adminMode",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Internal state to track admin mode"
-            },
-            {
-              "kind": "field",
-              "name": "textValue",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''",
-              "description": "Internal state for text input value (synced from slot content)"
-            },
-            {
-              "kind": "field",
-              "name": "isValidHtml",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "true",
-              "description": "Whether the current textValue contains valid HTML"
-            },
-            {
-              "kind": "field",
-              "name": "availableComponents",
-              "type": {
-                "text": "ComponentInfo[]"
-              },
-              "privacy": "private",
-              "default": "[]",
-              "description": "Available components loaded from Custom Elements Manifest"
-            },
-            {
-              "kind": "field",
-              "name": "pickerOpen",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Whether the component picker popover is open"
-            },
-            {
-              "kind": "field",
-              "name": "slotRef",
-              "type": {
-                "text": "HTMLSlotElement | undefined"
-              },
-              "privacy": "private",
-              "description": "Reference to the slot element to access assignedNodes"
-            },
-            {
-              "kind": "field",
-              "name": "slottedElement",
-              "type": {
-                "text": "Element | undefined"
-              },
-              "privacy": "private",
-              "description": "The original slotted element (e.g., <h3 slot=\"header\">)"
-            },
-            {
-              "kind": "field",
-              "name": "disconnectModeObserver",
-              "type": {
-                "text": "() => void | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "isUpdating",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Flag to prevent re-reading content right after we updated it"
-            },
-            {
-              "kind": "method",
-              "name": "readSlottedContent",
-              "privacy": "private",
-              "description": "Read content from slotted elements via assignedNodes()"
-            },
-            {
-              "kind": "method",
-              "name": "validateHtml",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "html",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Validates if a string contains valid HTML"
-            },
-            {
-              "kind": "field",
-              "name": "handleTextInput",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "createSlottedElement",
-              "privacy": "private",
-              "description": "Create a new slotted element when none exists.\nThe element is appended to the host component's light DOM."
-            },
-            {
-              "kind": "method",
-              "name": "loadAvailableComponents",
-              "privacy": "private",
-              "description": "Load available components from Custom Elements Manifest"
-            },
-            {
-              "kind": "method",
-              "name": "formatComponentName",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "tagName",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Format a tag name into a display name\ne.g., 'le-card' -> 'Card'"
-            },
-            {
-              "kind": "method",
-              "name": "addComponent",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "tagName",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Add a new component to the slot"
-            },
-            {
-              "kind": "field",
-              "name": "handleSlotChange",
-              "privacy": "private",
-              "description": "Handle slot change event to re-read content when nodes are assigned"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            },
-            {
-              "kind": "method",
-              "name": "renderContent",
-              "privacy": "private"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "type",
-              "fieldName": "type",
-              "default": "'slot'",
-              "description": "The type of slot content.\n- `slot`: Default, shows a dropzone for components (default)\n- `text`: Shows a single-line text input\n- `textarea`: Shows a multi-line text area",
-              "type": {
-                "text": "'slot' | 'text' | 'textarea'"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "default": "''",
-              "description": "The name of the slot this placeholder represents.\nShould match the slot name in the parent component.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "Label to display in admin mode.\nIf not provided, the slot name will be used.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "description",
-              "fieldName": "description",
-              "description": "Description of what content this slot accepts.\nShown in admin mode to guide content editors.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "allowed-components",
-              "fieldName": "allowedComponents",
-              "description": "Comma-separated list of allowed component tags for this slot.\nUsed by CMS to filter available components.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "multiple",
-              "fieldName": "multiple",
-              "default": "true",
-              "description": "Whether multiple components can be dropped in this slot.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "required",
-              "fieldName": "required",
-              "default": "false",
-              "description": "Whether this slot is required to have content.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "placeholder",
-              "fieldName": "placeholder",
-              "description": "Placeholder text for text/textarea inputs in admin mode.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "tag",
-              "fieldName": "tag",
-              "description": "The HTML tag to create when there's no slotted element.\nUsed with type=\"text\" or type=\"textarea\" to auto-create elements.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "slot-style",
-              "fieldName": "slotStyle",
-              "description": "CSS styles for the slot dropzone container.\nUseful for layouts - e.g., \"flex-direction: row\" for horizontal stacks.\nOnly applies in admin mode for type=\"slot\".",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-slot",
-          "events": [
-            {
-              "name": "leSlotChange",
-              "type": {
-                "text": "EventEmitter<{ name: string; value: string; isValid: boolean }>"
-              },
-              "description": "Emitted when text content changes in admin mode.\nThe event detail contains the new text value and validity."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeSlot",
-          "declaration": {
-            "name": "LeSlot",
-            "module": "src/components/le-slot/le-slot.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-slot",
-          "declaration": {
-            "name": "LeSlot",
-            "module": "src/components/le-slot/le-slot.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-stack/le-stack.tsx",
       "declarations": [
         {
@@ -2856,56 +3415,12 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-string-input/le-string-input.tsx",
+      "path": "src/components/le-turntable/le-turntable.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A text input component with support for labels, descriptions, icons, and external IDs.",
-          "name": "LeStringInput",
-          "cssProperties": [
-            {
-              "description": "Input background color",
-              "name": "--le-input-bg"
-            },
-            {
-              "description": "Input text color",
-              "name": "--le-input-color"
-            },
-            {
-              "description": "Input border style",
-              "name": "--le-input-border"
-            },
-            {
-              "description": "Input border style when focused",
-              "name": "--le-input-border-focus"
-            },
-            {
-              "description": "Input border radius",
-              "name": "--le-input-radius"
-            },
-            {
-              "description": "Input padding",
-              "name": "--le-input-padding"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The label text for the input",
-              "name": ""
-            },
-            {
-              "description": "Additional description text displayed below the input",
-              "name": "description"
-            },
-            {
-              "description": "Icon to display at the start of the input",
-              "name": "icon-start"
-            },
-            {
-              "description": "Icon to display at the end of the input",
-              "name": "icon-end"
-            }
-          ],
+          "description": "",
+          "name": "LeTurntable",
           "members": [
             {
               "kind": "field",
@@ -2916,109 +3431,157 @@
             },
             {
               "kind": "field",
-              "name": "mode",
+              "name": "center",
               "type": {
-                "text": "'default' | 'admin'"
+                "text": "string"
               },
-              "description": "Mode of the popover should be 'default' for internal use"
+              "default": "'center'"
             },
             {
               "kind": "field",
               "name": "value",
               "type": {
-                "text": "string"
+                "text": "number"
               },
-              "description": "The value of the input"
+              "default": "0"
+            },
+            {
+              "kind": "method",
+              "name": "updateValue",
+              "parameters": [
+                {
+                  "name": "newValue"
+                }
+              ]
             },
             {
               "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "description": "The name of the input"
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "'text' | 'email' | 'password' | 'tel' | 'url'"
-              },
-              "default": "'text'",
-              "description": "The type of the input (text, email, password, etc.)"
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "description": "Label for the input"
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string"
-              },
-              "description": "Icon for the start icon"
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string"
-              },
-              "description": "Icon for the end icon"
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "description": "Placeholder text"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
+              "name": "rotating",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the input is disabled"
+              "description": "Internal state\n\nusing properties instead of"
             },
             {
               "kind": "field",
-              "name": "readonly",
+              "name": "centerX",
               "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the input is read-only"
+                "text": "number"
+              }
             },
             {
               "kind": "field",
-              "name": "externalId",
+              "name": "centerY",
               "type": {
-                "text": "string"
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "pageX",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "pageY",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "currentAngle",
+              "type": {
+                "text": "number"
               },
-              "description": "External ID for linking with external systems"
+              "default": "0"
             },
             {
               "kind": "field",
-              "name": "handleInput",
-              "privacy": "private"
+              "name": "startAngle",
+              "type": {
+                "text": "number"
+              }
             },
             {
-              "kind": "field",
-              "name": "handleChange",
-              "privacy": "private"
+              "kind": "method",
+              "name": "handleMouseDown",
+              "parameters": [
+                {
+                  "name": "evt",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "description": "Event listeners"
             },
             {
-              "kind": "field",
-              "name": "handleClick",
-              "privacy": "private"
+              "kind": "method",
+              "name": "handleMouseMove",
+              "parameters": [
+                {
+                  "name": "evt",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "description": "Fires when the mouse moves\nchecks is the element rotating right now and if it is\nthen calc the current angle and rotate the element\n\nTODO: attach events only after the dragStart?"
+            },
+            {
+              "kind": "method",
+              "name": "handleMouseUp",
+              "parameters": [
+                {
+                  "name": "evt",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleWindowResize"
+            },
+            {
+              "kind": "method",
+              "name": "getTransformOrigin",
+              "description": "Calculates the transform origin of the component\nand the page offset in pixels\n\nWe'll need these values to calculate the angle of pointer event"
+            },
+            {
+              "kind": "method",
+              "name": "getAngle",
+              "parameters": [
+                {
+                  "name": "posX",
+                  "type": {
+                    "text": "number"
+                  },
+                  "description": "horizontal mouse position"
+                },
+                {
+                  "name": "posY",
+                  "type": {
+                    "text": "number"
+                  },
+                  "description": "vertical mouse position"
+                }
+              ],
+              "description": "Calculates current angle"
+            },
+            {
+              "kind": "method",
+              "name": "setAngle",
+              "parameters": [
+                {
+                  "name": "angle"
+                }
+              ]
             },
             {
               "kind": "method",
@@ -3027,132 +3590,42 @@
           ],
           "attributes": [
             {
-              "name": "mode",
-              "fieldName": "mode",
-              "description": "Mode of the popover should be 'default' for internal use",
+              "name": "center",
+              "fieldName": "center",
+              "default": "'center'",
               "type": {
-                "text": "'default' | 'admin'"
+                "text": "string"
               }
             },
             {
               "name": "value",
               "fieldName": "value",
-              "description": "The value of the input",
+              "default": "0",
               "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "The name of the input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "type",
-              "fieldName": "type",
-              "default": "'text'",
-              "description": "The type of the input (text, email, password, etc.)",
-              "type": {
-                "text": "'text' | 'email' | 'password' | 'tel' | 'url'"
-              }
-            },
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "Label for the input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "icon-start",
-              "fieldName": "iconStart",
-              "description": "Icon for the start icon",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "icon-end",
-              "fieldName": "iconEnd",
-              "description": "Icon for the end icon",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "placeholder",
-              "fieldName": "placeholder",
-              "description": "Placeholder text",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the input is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "readonly",
-              "fieldName": "readonly",
-              "default": "false",
-              "description": "Whether the input is read-only",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "external-id",
-              "fieldName": "externalId",
-              "description": "External ID for linking with external systems",
-              "type": {
-                "text": "string"
+                "text": "number"
               }
             }
           ],
-          "tagName": "le-string-input",
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "EventEmitter<{ value: string; name: string; externalId: string }>"
-              },
-              "description": "Emitted when the value changes (on blur or Enter)"
-            },
-            {
-              "name": "input",
-              "type": {
-                "text": "EventEmitter<{ value: string; name: string; externalId: string }>"
-              },
-              "description": "Emitted when the input value changes (on keystroke)"
-            }
-          ],
+          "tagName": "le-turntable",
+          "events": [],
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "LeStringInput",
+          "name": "LeTurntable",
           "declaration": {
-            "name": "LeStringInput",
-            "module": "src/components/le-string-input/le-string-input.tsx"
+            "name": "LeTurntable",
+            "module": "src/components/le-turntable/le-turntable.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-string-input",
+          "name": "le-turntable",
           "declaration": {
-            "name": "LeStringInput",
-            "module": "src/components/le-string-input/le-string-input.tsx"
+            "name": "LeTurntable",
+            "module": "src/components/le-turntable/le-turntable.tsx"
           }
         }
       ]
@@ -3527,20 +4000,54 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-popover/le-popover.tsx",
+      "path": "src/components/le-string-input/le-string-input.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A popover component for displaying floating content.\n\nUses the native HTML Popover API for proper layering with dialogs\nand other top-layer elements. Falls back gracefully in older browsers.",
-          "name": "LePopover",
+          "description": "A text input component with support for labels, descriptions, icons, and external IDs.",
+          "name": "LeStringInput",
+          "cssProperties": [
+            {
+              "description": "Input background color",
+              "name": "--le-input-bg"
+            },
+            {
+              "description": "Input text color",
+              "name": "--le-input-color"
+            },
+            {
+              "description": "Input border style",
+              "name": "--le-input-border"
+            },
+            {
+              "description": "Input border style when focused",
+              "name": "--le-input-border-focus"
+            },
+            {
+              "description": "Input border radius",
+              "name": "--le-input-radius"
+            },
+            {
+              "description": "Input padding",
+              "name": "--le-input-padding"
+            }
+          ],
           "slots": [
             {
-              "description": "Content to display inside the popover",
+              "description": "The label text for the input",
               "name": ""
             },
             {
-              "description": "Element that triggers the popover (optional)",
-              "name": "trigger"
+              "description": "Additional description text displayed below the input",
+              "name": "description"
+            },
+            {
+              "description": "Icon to display at the start of the input",
+              "name": "icon-start"
+            },
+            {
+              "description": "Icon to display at the end of the input",
+              "name": "icon-end"
             }
           ],
           "members": [
@@ -3561,212 +4068,100 @@
             },
             {
               "kind": "field",
-              "name": "open",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The value of the input"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the input"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'text' | 'email' | 'password' | 'tel' | 'url'"
+              },
+              "default": "'text'",
+              "description": "The type of the input (text, email, password, etc.)"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Label for the input"
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string"
+              },
+              "description": "Icon for the start icon"
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string"
+              },
+              "description": "Icon for the end icon"
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "description": "Placeholder text"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the popover is currently open"
+              "description": "Whether the input is disabled"
             },
             {
               "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
-              },
-              "default": "'bottom'",
-              "description": "Position of the popover relative to its trigger"
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'start' | 'center' | 'end'"
-              },
-              "default": "'start'",
-              "description": "Alignment of the popover"
-            },
-            {
-              "kind": "field",
-              "name": "popoverTitle",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional title for the popover header"
-            },
-            {
-              "kind": "field",
-              "name": "showClose",
+              "name": "readonly",
               "type": {
                 "text": "boolean"
               },
-              "default": "true",
-              "description": "Whether to show a close button in the header"
+              "default": "false",
+              "description": "Whether the input is read-only"
             },
             {
               "kind": "field",
-              "name": "closeOnClickOutside",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether clicking outside closes the popover"
-            },
-            {
-              "kind": "field",
-              "name": "closeOnEscape",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether pressing Escape closes the popover"
-            },
-            {
-              "kind": "field",
-              "name": "offset",
-              "type": {
-                "text": "number"
-              },
-              "default": "8",
-              "description": "Offset from the trigger element (in pixels)"
-            },
-            {
-              "kind": "field",
-              "name": "width",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Fixed width for the popover (e.g., '300px', '20rem')"
-            },
-            {
-              "kind": "field",
-              "name": "minWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "default": "'200px'",
-              "description": "Minimum width for the popover (e.g., '200px', '15rem')"
-            },
-            {
-              "kind": "field",
-              "name": "maxWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Maximum width for the popover (e.g., '400px', '25rem')"
-            },
-            {
-              "kind": "field",
-              "name": "isPositioned",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "triggerEl",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "popoverEl",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "uniqueId",
+              "name": "externalId",
               "type": {
                 "text": "string"
               },
-              "privacy": "private",
-              "default": "`le-popover-${Math.random().toString(36).substr(2, 9)}`"
+              "description": "External ID for linking with external systems"
             },
             {
               "kind": "field",
-              "name": "scrollParents",
-              "type": {
-                "text": "Element[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "method",
-              "name": "getScrollParents",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "Element[]"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "element",
-                  "type": {
-                    "text": "Element"
-                  }
-                }
-              ],
-              "description": "Find all scrollable parent elements"
-            },
-            {
-              "kind": "method",
-              "name": "addScrollListeners",
-              "privacy": "private",
-              "description": "Add scroll listeners to all scrollable parents"
-            },
-            {
-              "kind": "method",
-              "name": "removeScrollListeners",
-              "privacy": "private",
-              "description": "Remove scroll listeners"
-            },
-            {
-              "kind": "field",
-              "name": "handleScroll",
+              "name": "handleInput",
               "privacy": "private"
             },
             {
               "kind": "field",
-              "name": "handlePopoverToggle",
+              "name": "handleChange",
               "privacy": "private"
             },
             {
               "kind": "field",
-              "name": "handleOtherPopoverOpen",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "show",
-              "description": "Opens the popover"
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "description": "Closes the popover"
-            },
-            {
-              "kind": "method",
-              "name": "toggle",
-              "description": "Toggles the popover"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "updatePosition",
+              "name": "handleClick",
               "privacy": "private"
             },
             {
@@ -3784,117 +4179,104 @@
               }
             },
             {
-              "name": "open",
-              "fieldName": "open",
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value of the input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "The name of the input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "type",
+              "fieldName": "type",
+              "default": "'text'",
+              "description": "The type of the input (text, email, password, etc.)",
+              "type": {
+                "text": "'text' | 'email' | 'password' | 'tel' | 'url'"
+              }
+            },
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "Label for the input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "description": "Icon for the start icon",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-end",
+              "fieldName": "iconEnd",
+              "description": "Icon for the end icon",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "description": "Placeholder text",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
               "default": "false",
-              "description": "Whether the popover is currently open",
+              "description": "Whether the input is disabled",
               "type": {
                 "text": "boolean"
               }
             },
             {
-              "name": "position",
-              "fieldName": "position",
-              "default": "'bottom'",
-              "description": "Position of the popover relative to its trigger",
-              "type": {
-                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'start'",
-              "description": "Alignment of the popover",
-              "type": {
-                "text": "'start' | 'center' | 'end'"
-              }
-            },
-            {
-              "name": "popover-title",
-              "fieldName": "popoverTitle",
-              "description": "Optional title for the popover header",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "show-close",
-              "fieldName": "showClose",
-              "default": "true",
-              "description": "Whether to show a close button in the header",
+              "name": "readonly",
+              "fieldName": "readonly",
+              "default": "false",
+              "description": "Whether the input is read-only",
               "type": {
                 "text": "boolean"
               }
             },
             {
-              "name": "close-on-click-outside",
-              "fieldName": "closeOnClickOutside",
-              "default": "true",
-              "description": "Whether clicking outside closes the popover",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "close-on-escape",
-              "fieldName": "closeOnEscape",
-              "default": "true",
-              "description": "Whether pressing Escape closes the popover",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "offset",
-              "fieldName": "offset",
-              "default": "8",
-              "description": "Offset from the trigger element (in pixels)",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "width",
-              "fieldName": "width",
-              "description": "Fixed width for the popover (e.g., '300px', '20rem')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "min-width",
-              "fieldName": "minWidth",
-              "default": "'200px'",
-              "description": "Minimum width for the popover (e.g., '200px', '15rem')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "max-width",
-              "fieldName": "maxWidth",
-              "description": "Maximum width for the popover (e.g., '400px', '25rem')",
+              "name": "external-id",
+              "fieldName": "externalId",
+              "description": "External ID for linking with external systems",
               "type": {
                 "text": "string"
               }
             }
           ],
-          "tagName": "le-popover",
+          "tagName": "le-string-input",
           "events": [
             {
-              "name": "lePopoverOpen",
+              "name": "change",
               "type": {
-                "text": "EventEmitter<void>"
+                "text": "EventEmitter<{ value: string; name: string; externalId: string }>"
               },
-              "description": "Emitted when the popover opens"
+              "description": "Emitted when the value changes (on blur or Enter)"
             },
             {
-              "name": "lePopoverClose",
+              "name": "input",
               "type": {
-                "text": "EventEmitter<void>"
+                "text": "EventEmitter<{ value: string; name: string; externalId: string }>"
               },
-              "description": "Emitted when the popover closes"
+              "description": "Emitted when the input value changes (on keystroke)"
             }
           ],
           "customElement": true
@@ -3903,18 +4285,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LePopover",
+          "name": "LeStringInput",
           "declaration": {
-            "name": "LePopover",
-            "module": "src/components/le-popover/le-popover.tsx"
+            "name": "LeStringInput",
+            "module": "src/components/le-string-input/le-string-input.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-popover",
+          "name": "le-string-input",
           "declaration": {
-            "name": "LePopover",
-            "module": "src/components/le-popover/le-popover.tsx"
+            "name": "LeStringInput",
+            "module": "src/components/le-string-input/le-string-input.tsx"
           }
         }
       ]

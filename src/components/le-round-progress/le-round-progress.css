@@ -1,0 +1,34 @@
+.round-progress--container {
+  position: relative;
+}
+
+.round-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+}
+
+.round-progress--progress {
+  filter: drop-shadow(var(--progress-shadow));
+}
+
+.round-progress--circle {
+  fill: none;
+  stroke: var(--progress-color, #999);
+  stroke-width: var(--progress-width, 4);
+  stroke-linecap: var(--progress-linecap, round);
+  animation: progress--circle 0.5s ease-out forwards;
+  transition: stroke-dasharray 0.5s ease-out;
+}
+
+@keyframes progress--circle {
+  0% { stroke-dasharray: 0 1000; }
+}
+
+.round-progress--path {
+  fill: none;
+  stroke-linecap: round;
+}

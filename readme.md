@@ -61,8 +61,11 @@ defineButton();
 The core build has all CMS editing functionality stripped out at build time for the smallest possible bundle.
 
 ```tsx
-import 'le-kit/core';
+import { defineCustomElements } from 'le-kit/core';
+defineCustomElements();
 ```
+
+> **Note for Stencil apps**: If you're using le-kit in another Stencil project, use the lazy-loading import (`import 'le-kit'`) instead to avoid runtime conflicts.
 
 ### Option 4: Admin Build (CMS Editing)
 

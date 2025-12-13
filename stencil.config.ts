@@ -15,7 +15,7 @@ export const config: Config = {
       type: 'dist-custom-elements',
       dir: 'dist/components',
       customElementsExportBehavior: 'single-export-module',
-      externalRuntime: false,
+      externalRuntime: true,
       includeGlobalScripts: true,
     },
     {

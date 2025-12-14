@@ -34,6 +34,10 @@ function toPascalCase(name) {
 
 /**
  * Get all component names from dist/components
+ * 
+ * Stencil creates chunk files like le-button2.js that contain bundled code.
+ * We identify actual component files by checking for matching .d.ts files,
+ * which only exist for real component exports.
  */
 function getBuiltComponents() {
   const componentsDir = path.join(rootDir, 'dist', 'components');
@@ -42,10 +46,20 @@ function getBuiltComponents() {
     process.exit(1);
   }
 
-  return fs
-    .readdirSync(componentsDir)
+  const files = fs.readdirSync(componentsDir);
+  
+  // Get all .d.ts files (these indicate real component exports)
+  const dtsFiles = new Set(
+    files
+      .filter(file => file.startsWith('le-') && file.endsWith('.d.ts'))
+      .map(file => file.replace('.d.ts', ''))
+  );
+
+  // Return component names that have both .js and .d.ts files
+  return files
     .filter(file => file.startsWith('le-') && file.endsWith('.js') && !file.includes('.d.'))
-    .map(file => file.replace('.js', ''));
+    .map(file => file.replace('.js', ''))
+    .filter(name => dtsFiles.has(name));
 }
 
 /**
@@ -268,6 +282,28 @@ function findMatchingParen(code, hIdx) {
 }
 
 /**
+ * Transform the Stencil-generated index.js to remove admin component exports
+ * This removes export lines for le-component and le-slot
+ */
+function transformIndexFile(content) {
+  let result = content;
+  
+  // Remove export lines for admin-only components
+  for (const adminComponent of ADMIN_ONLY_COMPONENTS) {
+    const pascalName = toPascalCase(adminComponent);
+    
+    // Remove: export { LeComponent, defineCustomElement as defineCustomElementLeComponent } from './le-component.js';
+    const exportRegex = new RegExp(
+      `export\\s*\\{[^}]*${pascalName}[^}]*\\}\\s*from\\s*['"]\\.\\/${adminComponent}\\.js['"];?\\s*\\n?`,
+      'g'
+    );
+    result = result.replace(exportRegex, '');
+  }
+  
+  return result;
+}
+
+/**
  * Copy and transform a file for the core build
  */
 function copyAndTransformFile(srcPath, destPath, transform = false) {
@@ -387,7 +423,7 @@ function createBundles() {
     const srcPath = path.join(srcComponentsDir, file);
     const destPath = path.join(coreComponentsDir, file);
 
-    // Skip admin-only component files
+    // Skip admin-only component files (but keep chunk files they may depend on)
     const componentName = file.replace(/\.(js|d\.ts)$/, '');
     if (ADMIN_ONLY_COMPONENTS.includes(componentName)) {
       continue;
@@ -400,6 +436,10 @@ function createBundles() {
     if (needsTransform && file.endsWith('.js') && !file.endsWith('.d.ts')) {
       copyAndTransformFile(srcPath, destPath, true);
       transformedCount++;
+    } else if (file === 'index.js') {
+      // Transform index.js to remove admin component exports
+      const transformedIndex = transformIndexFile(content);
+      fs.writeFileSync(destPath, transformedIndex);
     } else {
       // Copy as-is (including .d.ts files, runtime files, etc.)
       fs.copyFileSync(srcPath, destPath);

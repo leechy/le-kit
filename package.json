@@ -14,22 +14,6 @@
       "require": "./dist/le-kit/le-kit.cjs.js",
       "types": "./dist/types/index.d.ts"
     },
-    "./core": {
-      "import": "./dist/core/loader.js",
-      "types": "./dist/core/index.d.ts"
-    },
-    "./core/define": {
-      "import": "./dist/core/index.js",
-      "types": "./dist/core/index.d.ts"
-    },
-    "./admin": {
-      "import": "./dist/admin/loader.js",
-      "types": "./dist/admin/index.d.ts"
-    },
-    "./admin/define": {
-      "import": "./dist/admin/index.js",
-      "types": "./dist/admin/index.d.ts"
-    },
     "./components": {
       "import": "./dist/components/index.js",
       "types": "./dist/components/index.d.ts"
@@ -38,38 +22,6 @@
       "import": "./loader/index.js",
       "require": "./loader/index.cjs",
       "types": "./loader/index.d.ts"
-    },
-    "./themes/*.css": {
-      "style": "./dist/themes/*.css",
-      "default": "./dist/themes/*.css"
-    },
-    "./themes": {
-      "style": "./dist/themes/index.css",
-      "default": "./dist/themes/index.css"
-    },
-    "./themes/base": {
-      "style": "./dist/themes/base.css",
-      "default": "./dist/themes/base.css"
-    },
-    "./themes/default": {
-      "style": "./dist/themes/default.css",
-      "default": "./dist/themes/default.css"
-    },
-    "./themes/dark": {
-      "style": "./dist/themes/dark.css",
-      "default": "./dist/themes/dark.css"
-    },
-    "./themes/gradient": {
-      "style": "./dist/themes/gradient.css",
-      "default": "./dist/themes/gradient.css"
-    },
-    "./themes/minimal": {
-      "style": "./dist/themes/minimal.css",
-      "default": "./dist/themes/minimal.css"
-    },
-    "./themes/warm": {
-      "style": "./dist/themes/warm.css",
-      "default": "./dist/themes/warm.css"
     },
     "./dist/themes/*.css": "./dist/themes/*.css"
   },
@@ -86,11 +38,8 @@
     "loader/"
   ],
   "scripts": {
-    "prebuild": "node scripts/build-targets.mjs",
-    "build": "stencil build",
-    "postbuild": "node scripts/bundle-targets.mjs && cp -r src/themes dist/themes && cem analyze --stencil",
-    "prestart": "node scripts/build-targets.mjs && cem analyze --stencil",
-    "start": "stencil build --dev --watch --serve",
+    "build": "stencil build && cp -r src/themes dist/themes && cem analyze --stencil",
+    "start": "cem analyze --stencil && stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate",

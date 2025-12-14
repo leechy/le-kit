@@ -9,7 +9,6 @@ A themeable web component library built with Stencil, featuring a dual-mode syst
 
 - 🎨 **Themeable** — CSS custom properties for complete styling control
 - 🔧 **Dual Mode** — Production (`default`) and CMS editing (`admin`) modes
-- 📦 **Multiple Builds** — Lazy-loaded, standalone, or admin-enabled bundles
 - 🌐 **Framework Agnostic** — Works with any framework or vanilla JS
 - 🪶 **Lightweight** — Tree-shakeable with minimal runtime overhead
 
@@ -21,7 +20,7 @@ npm install le-kit
 
 ## Quick Start
 
-### Option 1: Lazy Loading (Recommended for Stencil apps)
+### Option 1: Lazy Loading (Recommended)
 
 The easiest way to use Le-Kit. Components are automatically loaded on-demand.
 
@@ -42,39 +41,7 @@ The easiest way to use Le-Kit. Components are automatically loaded on-demand.
 </le-card>
 ```
 
-### Option 2: Core Build (No Admin Code)
-
-The core build has all CMS editing functionality stripped out at build time for the smallest possible bundle. Components are auto-registered on import.
-
-```tsx
-// Auto-registers all core components
-import 'le-kit/core';
-```
-
-Or if you need to control when components are registered:
-
-```tsx
-import { defineCustomElements } from 'le-kit/core/define';
-defineCustomElements();
-```
-
-### Option 3: Admin Build (CMS Editing)
-
-Includes full CMS editing capabilities with inline editing and property panels.
-
-```tsx
-// Auto-registers all admin components
-import 'le-kit/admin';
-```
-
-```html
-<!-- Enable admin mode -->
-<html mode="admin">
-  <!-- Components now show editing UI -->
-</html>
-```
-
-### Option 4: Individual Components (Tree-shakeable)
+### Option 2: Individual Components (Tree-shakeable)
 
 Import only the components you need for smaller bundle sizes.
 

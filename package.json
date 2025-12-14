@@ -35,7 +35,8 @@
   },
   "files": [
     "dist/",
-    "loader/"
+    "loader/",
+    "custom-elements.json"
   ],
   "scripts": {
     "build": "stencil build && cp -r src/themes dist/themes && cem analyze --stencil",

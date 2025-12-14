@@ -167,6 +167,28 @@ In admin mode, components display:
 - Settings popovers for component properties
 - Drop zones for adding new components
 
+### Admin Mode Configuration
+
+Admin mode requires the `custom-elements.json` manifest file to be served by your application. This file contains component metadata used by the property editors.
+
+1. **Copy the manifest** to your public/static folder:
+
+```bash
+cp node_modules/le-kit/custom-elements.json public/custom-elements.json
+```
+
+2. **Configure the manifest URL** (optional, if not served at `/custom-elements.json`):
+
+```javascript
+import { configureLeki } from 'le-kit';
+
+configureLeki({
+  manifestUrl: '/assets/custom-elements.json'
+});
+```
+
+The default `manifestUrl` is `/custom-elements.json`. Call `configureLeki()` before any admin-mode components are rendered.
+
 ## Browser Support
 
 Le-Kit supports all modern browsers:

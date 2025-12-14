@@ -9,7 +9,6 @@ export const config: Config = {
     {
       type: 'dist',
       esmLoaderPath: '../loader',
-      copy: [{ src: '../custom-elements.json', dest: 'assets/custom-elements.json' }],
     },
     // Custom elements - all components (admin build)
     {
@@ -33,7 +32,6 @@ export const config: Config = {
         { src: 'global' },
         { src: 'themes', dest: 'build/themes' },
         { src: '../custom-elements.json', dest: 'custom-elements.json' },
-        { src: '../custom-elements.json', dest: 'build/assets/custom-elements.json' },
       ],
     },
   ],

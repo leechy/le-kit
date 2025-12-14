@@ -143,3 +143,43 @@ export function setGlobalMode(mode: LeKitMode): void {
 export function setGlobalTheme(theme: LeKitTheme): void {
   document.documentElement.setAttribute('theme', theme);
 }
+
+/**
+ * Global configuration for le-kit
+ */
+let leKitConfig = {
+  /**
+   * URL to the custom-elements.json manifest.
+   * Used by admin components (le-component, le-slot) to load component metadata.
+   * 
+   * Default: '/custom-elements.json' (served from app root)
+   * 
+   * For apps using le-kit, you may need to:
+   * 1. Copy the manifest from node_modules/le-kit/custom-elements.json to your public folder
+   * 2. Or set this to point to where the manifest is served
+   */
+  manifestUrl: '/custom-elements.json',
+};
+
+/**
+ * Configure le-kit global settings.
+ * 
+ * @example
+ * ```ts
+ * import { configureLeki } from 'le-kit';
+ * 
+ * configureLeki({
+ *   manifestUrl: '/assets/custom-elements.json'
+ * });
+ * ```
+ */
+export function configureLeki(config: Partial<typeof leKitConfig>): void {
+  leKitConfig = { ...leKitConfig, ...config };
+}
+
+/**
+ * Get the current le-kit configuration.
+ */
+export function getLeKitConfig(): typeof leKitConfig {
+  return leKitConfig;
+}

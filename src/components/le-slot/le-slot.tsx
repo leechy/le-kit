@@ -1,5 +1,6 @@
-import { Component, Prop, State, h, Host, Element, Event, EventEmitter, getAssetPath } from '@stencil/core';
+import { Component, Prop, State, h, Host, Element, Event, EventEmitter } from '@stencil/core';
 import { classnames, observeModeChanges } from '../../utils/utils';
+import { getLeKitConfig } from '../../global/app';
 
 /**
  * Slot placeholder component for admin/CMS mode.
@@ -18,7 +19,6 @@ import { classnames, observeModeChanges } from '../../utils/utils';
   tag: 'le-slot',
   styleUrl: 'le-slot.default.css',
   shadow: true,
-  assetsDirs: ['../../assets'],
 })
 export class LeSlot {
   @Element() el: HTMLElement;
@@ -315,8 +315,8 @@ export class LeSlot {
    */
   private async loadAvailableComponents() {
     try {
-      const manifestPath = getAssetPath('assets/custom-elements.json');
-      const response = await fetch(manifestPath);
+      const { manifestUrl } = getLeKitConfig();
+      const response = await fetch(manifestUrl);
       const manifest = await response.json();
 
       const components: ComponentInfo[] = [];

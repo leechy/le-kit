@@ -21,7 +21,7 @@ npm install le-kit
 
 ## Quick Start
 
-### Option 1: Lazy Loading (Recommended)
+### Option 1: Lazy Loading (Recommended for Stencil apps)
 
 The easiest way to use Le-Kit. Components are automatically loaded on-demand.
 
@@ -42,7 +42,39 @@ The easiest way to use Le-Kit. Components are automatically loaded on-demand.
 </le-card>
 ```
 
-### Option 2: Standalone Components (Tree-shakeable)
+### Option 2: Core Build (No Admin Code)
+
+The core build has all CMS editing functionality stripped out at build time for the smallest possible bundle. Components are auto-registered on import.
+
+```tsx
+// Auto-registers all core components
+import 'le-kit/core';
+```
+
+Or if you need to control when components are registered:
+
+```tsx
+import { defineCustomElements } from 'le-kit/core/define';
+defineCustomElements();
+```
+
+### Option 3: Admin Build (CMS Editing)
+
+Includes full CMS editing capabilities with inline editing and property panels.
+
+```tsx
+// Auto-registers all admin components
+import 'le-kit/admin';
+```
+
+```html
+<!-- Enable admin mode -->
+<html mode="admin">
+  <!-- Components now show editing UI -->
+</html>
+```
+
+### Option 4: Individual Components (Tree-shakeable)
 
 Import only the components you need for smaller bundle sizes.
 
@@ -56,54 +88,30 @@ defineCard();
 defineButton();
 ```
 
-### Option 3: Core Build (No Admin Code)
-
-The core build has all CMS editing functionality stripped out at build time for the smallest possible bundle.
-
-```tsx
-import { defineCustomElements } from 'le-kit/core';
-defineCustomElements();
-```
-
-> **Note for Stencil apps**: If you're using le-kit in another Stencil project, use the lazy-loading import (`import 'le-kit'`) instead to avoid runtime conflicts.
-
-### Option 4: Admin Build (CMS Editing)
-
-Includes full CMS editing capabilities with inline editing and property panels.
-
-```tsx
-import 'le-kit/admin';
-```
-
-```html
-<!-- Enable admin mode -->
-<html mode="admin">
-  <!-- Components now show editing UI -->
-</html>
-```
-
 ## Theming
 
-Le-Kit ships with several built-in themes. Import the base styles plus your preferred theme:
+Le-Kit ships with several built-in themes.
+
+### Via HTML link
 
 ```html
-<!-- Base tokens (required) -->
-<link rel="stylesheet" href="le-kit/dist/themes/base.css" />
+<!-- From node_modules -->
+<link rel="stylesheet" href="node_modules/le-kit/dist/themes/base.css" />
+<link rel="stylesheet" href="node_modules/le-kit/dist/themes/default.css" />
 
-<!-- Choose a theme -->
-<link rel="stylesheet" href="le-kit/dist/themes/default.css" />
-<!-- or -->
-<link rel="stylesheet" href="le-kit/dist/themes/dark.css" />
-<link rel="stylesheet" href="le-kit/dist/themes/minimal.css" />
-<link rel="stylesheet" href="le-kit/dist/themes/warm.css" />
-<link rel="stylesheet" href="le-kit/dist/themes/gradient.css" />
+<!-- Or use a CDN like unpkg -->
+<link rel="stylesheet" href="https://unpkg.com/le-kit/dist/themes/base.css" />
+<link rel="stylesheet" href="https://unpkg.com/le-kit/dist/themes/default.css" />
 ```
 
-Or import in JavaScript:
+Available themes: `default`, `dark`, `minimal`, `warm`, `gradient`
+
+### Via JavaScript/CSS import
 
 ```tsx
-import 'le-kit/themes/base';
-import 'le-kit/themes/default';
+// With a bundler that handles CSS imports
+import 'le-kit/dist/themes/base.css';
+import 'le-kit/dist/themes/default.css';
 ```
 
 ### Custom Theming

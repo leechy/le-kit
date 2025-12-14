@@ -423,6 +423,19 @@ function createBundles() {
 
   console.log(`   ✅ Created dist/core/ (${coreComponents.length} components, ${transformedCount} transformed)`);
 
+  // Create auto-register entry for core (import 'le-kit/core' auto-registers)
+  const coreAutoRegister = `/**
+ * Le-Kit Core - Auto-registering entry point
+ * Import this file to automatically register all core components
+ * 
+ * Usage: import 'le-kit/core';
+ */
+import { defineCustomElements } from './index.js';
+defineCustomElements();
+export * from './index.js';
+`;
+  fs.writeFileSync(path.join(coreDir, 'loader.js'), coreAutoRegister);
+
   // === Create dist/admin (unchanged components) ===
   const adminDir = path.join(rootDir, 'dist', 'admin');
   if (fs.existsSync(adminDir)) {
@@ -436,6 +449,19 @@ function createBundles() {
   fs.writeFileSync(path.join(adminDir, 'index.d.ts'), generateDtsContent(components, true, false));
 
   console.log(`   ✅ Created dist/admin/ (${components.length} components)`);
+
+  // Create auto-register entry for admin
+  const adminAutoRegister = `/**
+ * Le-Kit Admin - Auto-registering entry point
+ * Import this file to automatically register all admin components
+ * 
+ * Usage: import 'le-kit/admin';
+ */
+import { defineCustomElements } from './index.js';
+defineCustomElements();
+export * from './index.js';
+`;
+  fs.writeFileSync(path.join(adminDir, 'loader.js'), adminAutoRegister);
 
   console.log('');
   console.log('✨ Bundles created successfully!');

@@ -15,10 +15,18 @@
       "types": "./dist/types/index.d.ts"
     },
     "./core": {
+      "import": "./dist/core/loader.js",
+      "types": "./dist/core/index.d.ts"
+    },
+    "./core/define": {
       "import": "./dist/core/index.js",
       "types": "./dist/core/index.d.ts"
     },
     "./admin": {
+      "import": "./dist/admin/loader.js",
+      "types": "./dist/admin/index.d.ts"
+    },
+    "./admin/define": {
       "import": "./dist/admin/index.js",
       "types": "./dist/admin/index.d.ts"
     },
@@ -31,13 +39,39 @@
       "require": "./loader/index.cjs",
       "types": "./loader/index.d.ts"
     },
-    "./themes": "./dist/themes/index.css",
-    "./themes/base": "./dist/themes/base.css",
-    "./themes/default": "./dist/themes/default.css",
-    "./themes/dark": "./dist/themes/dark.css",
-    "./themes/gradient": "./dist/themes/gradient.css",
-    "./themes/minimal": "./dist/themes/minimal.css",
-    "./themes/warm": "./dist/themes/warm.css"
+    "./themes/*.css": {
+      "style": "./dist/themes/*.css",
+      "default": "./dist/themes/*.css"
+    },
+    "./themes": {
+      "style": "./dist/themes/index.css",
+      "default": "./dist/themes/index.css"
+    },
+    "./themes/base": {
+      "style": "./dist/themes/base.css",
+      "default": "./dist/themes/base.css"
+    },
+    "./themes/default": {
+      "style": "./dist/themes/default.css",
+      "default": "./dist/themes/default.css"
+    },
+    "./themes/dark": {
+      "style": "./dist/themes/dark.css",
+      "default": "./dist/themes/dark.css"
+    },
+    "./themes/gradient": {
+      "style": "./dist/themes/gradient.css",
+      "default": "./dist/themes/gradient.css"
+    },
+    "./themes/minimal": {
+      "style": "./dist/themes/minimal.css",
+      "default": "./dist/themes/minimal.css"
+    },
+    "./themes/warm": {
+      "style": "./dist/themes/warm.css",
+      "default": "./dist/themes/warm.css"
+    },
+    "./dist/themes/*.css": "./dist/themes/*.css"
   },
   "repository": {
     "type": "git",

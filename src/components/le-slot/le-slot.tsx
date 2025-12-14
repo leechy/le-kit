@@ -1,4 +1,4 @@
-import { Component, Prop, State, h, Host, Element, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, State, h, Host, Element, Event, EventEmitter, getAssetPath } from '@stencil/core';
 import { classnames, observeModeChanges } from '../../utils/utils';
 
 /**
@@ -18,6 +18,7 @@ import { classnames, observeModeChanges } from '../../utils/utils';
   tag: 'le-slot',
   styleUrl: 'le-slot.default.css',
   shadow: true,
+  assetsDirs: ['../../assets'],
 })
 export class LeSlot {
   @Element() el: HTMLElement;
@@ -74,7 +75,7 @@ export class LeSlot {
   /**
    * The HTML tag to create when there's no slotted element.
    * Used with type="text" or type="textarea" to auto-create elements.
-   * 
+   *
    * @example "h3" - creates <h3 slot="header">content</h3>
    * @example "p" - creates <p slot="content">content</p>
    */
@@ -131,15 +132,15 @@ export class LeSlot {
   private disconnectModeObserver?: () => void;
 
   connectedCallback() {
-    this.disconnectModeObserver = observeModeChanges(this.el, (mode) => {
+    this.disconnectModeObserver = observeModeChanges(this.el, mode => {
       const wasAdmin = this.adminMode;
       this.adminMode = mode === 'admin';
-      
+
       // When entering admin mode, read content from slotted elements
       if (this.adminMode && !wasAdmin) {
         // Need to wait for render to access slot ref
         requestAnimationFrame(() => this.readSlottedContent());
-        
+
         // Load available components for the component picker
         if (this.type === 'slot') {
           this.loadAvailableComponents();
@@ -162,7 +163,7 @@ export class LeSlot {
    */
   private readSlottedContent() {
     if (!this.slotRef) return;
-    
+
     // Skip if we just updated the content ourselves
     if (this.isUpdating) {
       this.isUpdating = false;
@@ -170,13 +171,11 @@ export class LeSlot {
     }
 
     const assignedNodes = this.slotRef.assignedNodes({ flatten: true });
-    
+
     // For text/textarea types, we want to edit the innerHTML of slotted elements
     if (this.type === 'text' || this.type === 'textarea') {
       // Find the first element node (skip text nodes that are just whitespace)
-      const elementNode = assignedNodes.find(
-        node => node.nodeType === Node.ELEMENT_NODE
-      ) as Element | undefined;
+      const elementNode = assignedNodes.find(node => node.nodeType === Node.ELEMENT_NODE) as Element | undefined;
 
       if (elementNode) {
         // Only update textValue if slotted element changed or we don't have one yet
@@ -192,7 +191,7 @@ export class LeSlot {
           .map(node => node.textContent)
           .join('')
           .trim();
-        
+
         if (textContent && !this.textValue) {
           this.textValue = textContent;
           // console.log(`[le-slot "${this.name}"] Read text content:`, this.textValue);
@@ -207,28 +206,28 @@ export class LeSlot {
   private validateHtml(html: string): boolean {
     // Empty string is valid
     if (!html.trim()) return true;
-    
+
     // Create a template element to parse the HTML
     const template = document.createElement('template');
     template.innerHTML = html;
-    
+
     // Check that we don't have obviously broken HTML
     // Count opening and closing tags for common elements
     const openTags = (html.match(/<[a-z][^>]*(?<!\/)>/gi) || []).length;
     const closeTags = (html.match(/<\/[a-z][^>]*>/gi) || []).length;
     const selfClosing = (html.match(/<[a-z][^>]*\/>/gi) || []).length;
-    
+
     // Simple validation: opening tags (minus self-closing) should roughly match closing tags
     // Allow some tolerance for void elements like <br>, <img>, etc.
     const voidElements = (html.match(/<(br|hr|img|input|meta|link|area|base|col|embed|param|source|track|wbr)[^>]*>/gi) || []).length;
-    
+
     const effectiveOpenTags = openTags - selfClosing - voidElements;
-    
+
     // If difference is too large, HTML is likely broken
     if (Math.abs(effectiveOpenTags - closeTags) > 1) {
       return false;
     }
-    
+
     return true;
   }
 
@@ -254,8 +253,7 @@ export class LeSlot {
         if (!this.name && rootNode instanceof ShadowRoot) {
           const hostComponent = rootNode.host;
           Array.from(hostComponent.childNodes).forEach(node => {
-            if (node.nodeType === Node.TEXT_NODE || 
-               (node.nodeType === Node.ELEMENT_NODE && !(node as Element).hasAttribute('slot'))) {
+            if (node.nodeType === Node.TEXT_NODE || (node.nodeType === Node.ELEMENT_NODE && !(node as Element).hasAttribute('slot'))) {
               node.remove();
             }
           });
@@ -271,11 +269,11 @@ export class LeSlot {
         }
       }
     }
-    
-    this.leSlotChange.emit({ 
-      name: this.name, 
+
+    this.leSlotChange.emit({
+      name: this.name,
       value: this.textValue,
-      isValid: this.isValidHtml 
+      isValid: this.isValidHtml,
     });
   };
 
@@ -285,30 +283,30 @@ export class LeSlot {
    */
   private createSlottedElement() {
     if (!this.tag) return;
-    
+
     // Find the host component (le-card, etc.) by traversing up through shadow DOM
     // le-slot is inside le-card's shadow DOM, so we need to find le-card's host
     const rootNode = this.el.getRootNode();
     if (!(rootNode instanceof ShadowRoot)) return;
-    
+
     const hostComponent = rootNode.host;
     if (!hostComponent) return;
-    
+
     // Create the new element
     const newElement = document.createElement(this.tag);
     newElement.innerHTML = this.textValue;
-    
+
     // Set the slot attribute if this is a named slot
     if (this.name) {
       newElement.setAttribute('slot', this.name);
     }
-    
+
     // Append to the host component's light DOM
     hostComponent.appendChild(newElement);
-    
+
     // Store reference to the new element
     this.slottedElement = newElement;
-    
+
     // console.log(`[le-slot "${this.name}"] Created new <${this.tag}> element`);
   }
 
@@ -317,24 +315,25 @@ export class LeSlot {
    */
   private async loadAvailableComponents() {
     try {
-      const response = await fetch('/custom-elements.json');
+      const manifestPath = getAssetPath('assets/custom-elements.json');
+      const response = await fetch(manifestPath);
       const manifest = await response.json();
-      
+
       const components: ComponentInfo[] = [];
       const allowedList = this.allowedComponents?.split(',').map(s => s.trim()) || [];
-      
+
       for (const module of manifest.modules) {
         for (const declaration of module.declarations || []) {
           if (declaration.tagName && declaration.customElement) {
             // Skip internal components (le-slot, le-component, le-popover)
             const isInternal = ['le-slot', 'le-component', 'le-popover'].includes(declaration.tagName);
             if (isInternal) continue;
-            
+
             // If allowedComponents is specified, filter by it
             if (allowedList.length > 0 && !allowedList.includes(declaration.tagName)) {
               continue;
             }
-            
+
             components.push({
               tagName: declaration.tagName,
               name: this.formatComponentName(declaration.tagName),
@@ -343,8 +342,8 @@ export class LeSlot {
           }
         }
       }
-      
-      this.availableComponents = components;
+
+      this.availableComponents = components || [];
     } catch (error) {
       console.warn('[le-slot] Failed to load component manifest:', error);
     }
@@ -369,21 +368,21 @@ export class LeSlot {
     // Find the host component by traversing up through shadow DOM
     const rootNode = this.el.getRootNode();
     if (!(rootNode instanceof ShadowRoot)) return;
-    
+
     const hostComponent = rootNode.host;
     if (!hostComponent) return;
-    
+
     // Create the new component element
     const newElement = document.createElement(tagName);
-    
+
     // Set the slot attribute if this is a named slot
     if (this.name) {
       newElement.setAttribute('slot', this.name);
     }
-    
+
     // Append to the host component's light DOM
     hostComponent.appendChild(newElement);
-    
+
     // Emit change event so the page can save
     this.leSlotChange.emit({
       name: this.name,
@@ -405,9 +404,9 @@ export class LeSlot {
     // Always render the same structure, CSS handles visibility via .admin-mode class
     return (
       <Host
-        class={{ 
+        class={{
           'admin-mode': this.adminMode,
-          'invalid-html': !this.isValidHtml 
+          'invalid-html': !this.isValidHtml,
         }}
         role={this.adminMode ? 'region' : undefined}
         aria-label={this.adminMode ? `Slot: ${displayLabel}` : undefined}
@@ -419,11 +418,13 @@ export class LeSlot {
       >
         {this.adminMode ? (
           <div class="le-slot-container">
-            <div class={classnames('le-slot-header', {
-              'le-slot-header-no-label': !displayLabel,
-              'le-slot-header-text': this.type === 'text',
-              'le-slot-header-error': !this.isValidHtml
-            })}>
+            <div
+              class={classnames('le-slot-header', {
+                'le-slot-header-no-label': !displayLabel,
+                'le-slot-header-text': this.type === 'text',
+                'le-slot-header-error': !this.isValidHtml,
+              })}
+            >
               {displayLabel && (
                 <span class="le-slot-label">
                   {displayLabel}
@@ -436,26 +437,20 @@ export class LeSlot {
               </le-popover>} */}
               {!this.isValidHtml && <span class="le-slot-invalid">⚠ Invalid HTML</span>}
               {this.type === 'slot' && this.adminMode && (
-                <le-popover 
+                <le-popover
                   mode="default"
                   showClose={true}
                   align="start"
                   position="right"
                   popoverTitle="Add Component"
                   open={this.pickerOpen}
-                  onLePopoverOpen={() => this.pickerOpen = true}
-                  onLePopoverClose={() => this.pickerOpen = false}
+                  onLePopoverOpen={() => (this.pickerOpen = true)}
+                  onLePopoverClose={() => (this.pickerOpen = false)}
                 >
-                  <le-button
-                    type="button"
-                    class="le-slot-button"
-                    slot="trigger"
-                    variant="clear"
-                    size="small"
-                    aria-label="Add component"
-                    icon-only
-                  >
-                    <span class="le-slot-add-btn" slot="icon-only">+</span>
+                  <le-button type="button" class="le-slot-button" slot="trigger" variant="clear" size="small" aria-label="Add component" icon-only>
+                    <span class="le-slot-add-btn" slot="icon-only">
+                      +
+                    </span>
                   </le-button>
                   <div class="le-slot-picker">
                     {this.availableComponents.length > 0 ? (
@@ -470,9 +465,7 @@ export class LeSlot {
                               }}
                             >
                               <span class="le-slot-picker-name">{component.name}</span>
-                              {component.description && (
-                                <span class="le-slot-picker-desc">{component.description}</span>
-                              )}
+                              {component.description && <span class="le-slot-picker-desc">{component.description}</span>}
                             </button>
                           </li>
                         ))}
@@ -490,9 +483,9 @@ export class LeSlot {
           // In default mode, just pass through the slot - slotted content renders naturally
           // Note: We use unnamed slot here because named slots from parent component
           // are passed as le-slot's light DOM children
-          <slot 
-            // ref={(el) => this.slotRef = el as HTMLSlotElement}
-            // onSlotchange={this.handleSlotChange}
+          <slot
+          // ref={(el) => this.slotRef = el as HTMLSlotElement}
+          // onSlotchange={this.handleSlotChange}
           ></slot>
         )}
       </Host>
@@ -506,10 +499,7 @@ export class LeSlot {
     // are passed as le-slot's light DOM children
     const slotElement = (
       <div class="hidden-slot">
-        <slot 
-          ref={(el) => this.slotRef = el as HTMLSlotElement}
-          onSlotchange={this.handleSlotChange}
-        ></slot>
+        <slot ref={el => (this.slotRef = el as HTMLSlotElement)} onSlotchange={this.handleSlotChange}></slot>
       </div>
     );
 
@@ -558,10 +548,7 @@ export class LeSlot {
         }
         return (
           <div class="le-slot-dropzone" style={dropzoneStyle}>
-            <slot 
-              ref={(el) => this.slotRef = el as HTMLSlotElement}
-              onSlotchange={this.handleSlotChange}
-            ></slot>
+            <slot ref={el => (this.slotRef = el as HTMLSlotElement)} onSlotchange={this.handleSlotChange}></slot>
           </div>
         );
     }

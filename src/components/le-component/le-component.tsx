@@ -1,4 +1,4 @@
-import { Component, Prop, State, h, Host, Element } from '@stencil/core';
+import { Component, Prop, State, h, Host, Element, getAssetPath } from '@stencil/core';
 import { classnames, observeModeChanges } from '../../utils/utils';
 
 /**
@@ -33,6 +33,7 @@ import { classnames, observeModeChanges } from '../../utils/utils';
   tag: 'le-component',
   styleUrl: 'le-component.css',
   shadow: true,
+  assetsDirs: ['../../assets'],
 })
 export class LeComponent {
   @Element() el: HTMLElement;
@@ -139,8 +140,9 @@ export class LeComponent {
    */
   private async loadComponentMetadata() {
     try {
-      // Fetch the manifest - in production this would be bundled or cached
-      const response = await fetch('/custom-elements.json');
+      // Fetch the manifest using getAssetPath for correct bundle path
+      const manifestPath = getAssetPath('assets/custom-elements.json');
+      const response = await fetch(manifestPath);
       const manifest = await response.json();
 
       // Find the component definition

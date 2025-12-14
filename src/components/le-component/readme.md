@@ -9,7 +9,7 @@
 
 Component wrapper for admin mode editing.
 
-This component is used internally by other components to provide admin-mode 
+This component is used internally by other components to provide admin-mode
 editing capabilities. It wraps the component's rendered output and shows
 a settings popover for editing properties.
 

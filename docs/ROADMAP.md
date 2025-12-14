@@ -38,7 +38,6 @@ Use multiple entry points with `dist-custom-elements` output target and conditio
   - Stencil's `@Build.isDev` / custom build flags
   - Rollup plugin for conditional compilation
   - Separate Stencil builds with different configs
-  
 - [ ] **1.2** Implement new approach
 
 - [ ] **1.3** Add framework output targets:

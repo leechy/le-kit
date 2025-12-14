@@ -4,7 +4,7 @@ import { classnames, observeModeChanges } from '../../utils/utils';
 /**
  * Component wrapper for admin mode editing.
  *
- * This component is used internally by other components to provide admin-mode 
+ * This component is used internally by other components to provide admin-mode
  * editing capabilities. It wraps the component's rendered output and shows
  * a settings popover for editing properties.
  *
@@ -89,7 +89,7 @@ export class LeComponent {
     // so we need to find the shadow root's host element
     this.findHostElement();
 
-    this.disconnectModeObserver = observeModeChanges(this.el, (mode) => {
+    this.disconnectModeObserver = observeModeChanges(this.el, mode => {
       this.adminMode = mode === 'admin';
       // Load metadata and refresh property values only when entering admin mode
       if (this.adminMode) {
@@ -149,9 +149,7 @@ export class LeComponent {
       for (const module of manifest.modules) {
         for (const declaration of module.declarations || []) {
           if (declaration.tagName === this.component) {
-            const attributes = (declaration.attributes || []).filter(
-              (attr: AttributeMetadata) => !this.isInternalAttribute(attr.name)
-            );
+            const attributes = (declaration.attributes || []).filter((attr: AttributeMetadata) => !this.isInternalAttribute(attr.name));
             this.componentMeta = {
               tagName: declaration.tagName,
               description: declaration.description,
@@ -197,7 +195,7 @@ export class LeComponent {
    */
   private parseAttributeValue(value: string | null, type?: string): any {
     if (value === null) return undefined;
-    
+
     if (type === 'boolean') {
       return value !== null && value !== 'false';
     }
@@ -256,20 +254,14 @@ export class LeComponent {
     return (
       <div class="property-editor-container">
         {hasProperties ? (
-          <form class="property-editor" onSubmit={(e) => e.preventDefault()}>
+          <form class="property-editor" onSubmit={e => e.preventDefault()}>
             {this.componentMeta!.attributes.map(attr => this.renderPropertyField(attr))}
           </form>
         ) : (
           <p class="no-properties">No editable properties</p>
         )}
         <div class="property-editor-actions">
-          <le-button
-            type="button"
-            variant="outlined"
-            color="danger"
-            full-width
-            onClick={() => this.deleteComponent()}
-          >
+          <le-button type="button" variant="outlined" color="danger" full-width onClick={() => this.deleteComponent()}>
             <span slot="icon-start">🗑️</span>
             <span>Delete Component</span>
           </le-button>
@@ -295,12 +287,11 @@ export class LeComponent {
             {attr.name}
             {attr.description && <span class="property-hint">{attr.description}</span>}
           </label>
-          <select
-            id={`prop-${attr.name}`}
-            onChange={(e) => this.handlePropertyChange(attr.name, (e.target as HTMLSelectElement).value, type)}
-          >
+          <select id={`prop-${attr.name}`} onChange={e => this.handlePropertyChange(attr.name, (e.target as HTMLSelectElement).value, type)}>
             {options.map(opt => (
-              <option value={opt} selected={value === opt || (!value && attr.default?.replace(/'/g, '') === opt)}>{opt}</option>
+              <option value={opt} selected={value === opt || (!value && attr.default?.replace(/'/g, '') === opt)}>
+                {opt}
+              </option>
             ))}
           </select>
         </div>
@@ -314,7 +305,7 @@ export class LeComponent {
           <le-checkbox
             name={`prop-${attr.name}`}
             checked={value === true || value === ''}
-            onChange={(e) => this.handlePropertyChange(attr.name, (e.target as HTMLInputElement).checked, type)}
+            onChange={e => this.handlePropertyChange(attr.name, (e.target as HTMLInputElement).checked, type)}
           >
             {attr.name}
             {attr.description && <div slot="description">{attr.description}</div>}
@@ -336,7 +327,7 @@ export class LeComponent {
             id={`prop-${attr.name}`}
             value={value ?? ''}
             placeholder={attr.default}
-            onChange={(e) => this.handlePropertyChange(attr.name, (e.target as HTMLInputElement).value, type)}
+            onChange={e => this.handlePropertyChange(attr.name, (e.target as HTMLInputElement).value, type)}
           />
         </div>
       );
@@ -376,23 +367,11 @@ export class LeComponent {
         <div class="le-component-wrapper">
           <div class="le-component-header">
             <span class="le-component-name">{name}</span>
-            <le-popover 
-              popoverTitle={`${name} Settings`}
-              position="right"
-              align="start"
-              min-width="300px"
-              mode="default"
-            >
-              <le-button
-                type="button"
-                class="le-component-button"
-                slot="trigger"
-                variant="clear"
-                size="small"
-                aria-label="Edit component properties"
-                icon-only
-              >
-                <span class="le-component-trigger" slot="icon-only">⚙</span>
+            <le-popover popoverTitle={`${name} Settings`} position="right" align="start" min-width="300px" mode="default">
+              <le-button type="button" class="le-component-button" slot="trigger" variant="clear" size="small" aria-label="Edit component properties" icon-only>
+                <span class="le-component-trigger" slot="icon-only">
+                  ⚙
+                </span>
               </le-button>
               {this.renderPropertyEditor()}
             </le-popover>

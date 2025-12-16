@@ -1,4 +1,4 @@
-import { Component, Prop, Event, EventEmitter, h, Host } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, h } from '@stencil/core';
 
 /**
  * A tag/chip component for displaying labels with optional dismiss functionality.
@@ -102,11 +102,13 @@ export class LeTag {
 
   render() {
     return (
-      <Host>
+      <le-component component="le-tag">
         <span class="tag">
           {this.renderIcon()}
           <span class="tag-label">
-            <slot>{this.label}</slot>
+            <le-slot name="" tag="span" type="text">
+              <slot>{this.label}</slot>
+            </le-slot>
           </span>
           {this.dismissible && (
             <button type="button" class="tag-dismiss" onClick={this.handleDismiss} disabled={this.disabled} aria-label="Remove">
@@ -116,7 +118,7 @@ export class LeTag {
             </button>
           )}
         </span>
-      </Host>
+      </le-component>
     );
   }
 }

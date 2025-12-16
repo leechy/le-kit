@@ -447,304 +447,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-button/le-button.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible button component with multiple variants and states.",
-          "name": "LeButton",
-          "cssProperties": [
-            {
-              "description": "Button background color",
-              "name": "--le-button-bg"
-            },
-            {
-              "description": "Button text color",
-              "name": "--le-button-color"
-            },
-            {
-              "description": "Button border radius",
-              "name": "--le-button-border-radius"
-            },
-            {
-              "description": "Button horizontal padding",
-              "name": "--le-button-padding-x"
-            },
-            {
-              "description": "Button vertical padding",
-              "name": "--le-button-padding-y"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The native button element",
-              "name": "button"
-            },
-            {
-              "description": "The button content wrapper",
-              "name": "content"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Button text content",
-              "name": ""
-            },
-            {
-              "description": "Icon before the text",
-              "name": "icon-start"
-            },
-            {
-              "description": "Icon after the text",
-              "name": "icon-end"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "'default' | 'admin'"
-              },
-              "description": "Mode of the popover should be 'default' for internal use"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'solid' | 'outlined' | 'clear' | 'system'"
-              },
-              "default": "'solid'",
-              "description": "Button variant style"
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
-              },
-              "default": "'primary'",
-              "description": "Button color theme (uses theme semantic colors)"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Button size"
-            },
-            {
-              "kind": "field",
-              "name": "selected",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is in a selected/active state"
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button takes full width of its container"
-            },
-            {
-              "kind": "field",
-              "name": "iconOnly",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button displays only an icon (square aspect ratio)"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is disabled"
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "'button' | 'submit' | 'reset'"
-              },
-              "default": "'button'",
-              "description": "The button type attribute"
-            },
-            {
-              "kind": "field",
-              "name": "href",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional href to make the button act as a link"
-            },
-            {
-              "kind": "field",
-              "name": "target",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Link target when href is set"
-            },
-            {
-              "kind": "field",
-              "name": "handleClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "mode",
-              "fieldName": "mode",
-              "description": "Mode of the popover should be 'default' for internal use",
-              "type": {
-                "text": "'default' | 'admin'"
-              }
-            },
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'solid'",
-              "description": "Button variant style",
-              "type": {
-                "text": "'solid' | 'outlined' | 'clear' | 'system'"
-              }
-            },
-            {
-              "name": "color",
-              "fieldName": "color",
-              "default": "'primary'",
-              "description": "Button color theme (uses theme semantic colors)",
-              "type": {
-                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Button size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "selected",
-              "fieldName": "selected",
-              "default": "false",
-              "description": "Whether the button is in a selected/active state",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the button takes full width of its container",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "icon-only",
-              "fieldName": "iconOnly",
-              "default": "false",
-              "description": "Whether the button displays only an icon (square aspect ratio)",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the button is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "type",
-              "fieldName": "type",
-              "default": "'button'",
-              "description": "The button type attribute",
-              "type": {
-                "text": "'button' | 'submit' | 'reset'"
-              }
-            },
-            {
-              "name": "href",
-              "fieldName": "href",
-              "description": "Optional href to make the button act as a link",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "target",
-              "fieldName": "target",
-              "description": "Link target when href is set",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-button",
-          "events": [
-            {
-              "name": "click",
-              "type": {
-                "text": "EventEmitter<PointerEvent>"
-              },
-              "description": "Emitted when the button is clicked.\nThis is a custom event that wraps the native click but ensures the target is the le-button."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeButton",
-          "declaration": {
-            "name": "LeButton",
-            "module": "src/components/le-button/le-button.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-button",
-          "declaration": {
-            "name": "LeButton",
-            "module": "src/components/le-button/le-button.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-card/le-card.tsx",
       "declarations": [
         {
@@ -872,6 +574,356 @@
           "declaration": {
             "name": "LeCard",
             "module": "src/components/le-card/le-card.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-button/le-button.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible button component with multiple variants and states.",
+          "name": "LeButton",
+          "cssProperties": [
+            {
+              "description": "Button background color",
+              "name": "--le-button-bg"
+            },
+            {
+              "description": "Button text color",
+              "name": "--le-button-color"
+            },
+            {
+              "description": "Button border radius",
+              "name": "--le-button-border-radius"
+            },
+            {
+              "description": "Button horizontal padding",
+              "name": "--le-button-padding-x"
+            },
+            {
+              "description": "Button vertical padding",
+              "name": "--le-button-padding-y"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The native button element",
+              "name": "button"
+            },
+            {
+              "description": "The button content wrapper",
+              "name": "content"
+            },
+            {
+              "description": "The start icon slot",
+              "name": "icon-start"
+            },
+            {
+              "description": "The end icon slot",
+              "name": "icon-end"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Button text content",
+              "name": ""
+            },
+            {
+              "description": "Icon for icon-only buttons",
+              "name": "icon-only"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin'"
+              },
+              "description": "Mode of the popover should be 'default' for internal use"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'solid' | 'outlined' | 'clear' | 'system'"
+              },
+              "default": "'solid'",
+              "description": "Button variant style"
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
+              },
+              "default": "'primary'",
+              "description": "Button color theme (uses theme semantic colors)"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Button size"
+            },
+            {
+              "kind": "field",
+              "name": "selected",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is in a selected/active state"
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button takes full width of its container"
+            },
+            {
+              "kind": "field",
+              "name": "iconOnly",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "Icon only button image or emoji\nif this prop is set, the button will render only the icon slot"
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "Start icon image or emoji"
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "End icon image or emoji"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              },
+              "default": "'button'",
+              "description": "The button type attribute"
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional href to make the button act as a link"
+            },
+            {
+              "kind": "field",
+              "name": "target",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Link target when href is set"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'space-between' | 'end'"
+              },
+              "default": "'center'",
+              "description": "Alignment of the button label without the end icon"
+            },
+            {
+              "kind": "field",
+              "name": "handleClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "mode",
+              "fieldName": "mode",
+              "description": "Mode of the popover should be 'default' for internal use",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'solid'",
+              "description": "Button variant style",
+              "type": {
+                "text": "'solid' | 'outlined' | 'clear' | 'system'"
+              }
+            },
+            {
+              "name": "color",
+              "fieldName": "color",
+              "default": "'primary'",
+              "description": "Button color theme (uses theme semantic colors)",
+              "type": {
+                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Button size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "selected",
+              "fieldName": "selected",
+              "default": "false",
+              "description": "Whether the button is in a selected/active state",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the button takes full width of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "icon-only",
+              "fieldName": "iconOnly",
+              "description": "Icon only button image or emoji\nif this prop is set, the button will render only the icon slot",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "description": "Start icon image or emoji",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "icon-end",
+              "fieldName": "iconEnd",
+              "description": "End icon image or emoji",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the button is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "type",
+              "fieldName": "type",
+              "default": "'button'",
+              "description": "The button type attribute",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              }
+            },
+            {
+              "name": "href",
+              "fieldName": "href",
+              "description": "Optional href to make the button act as a link",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "target",
+              "fieldName": "target",
+              "description": "Link target when href is set",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'center'",
+              "description": "Alignment of the button label without the end icon",
+              "type": {
+                "text": "'start' | 'center' | 'space-between' | 'end'"
+              }
+            }
+          ],
+          "tagName": "le-button",
+          "events": [
+            {
+              "name": "click",
+              "type": {
+                "text": "EventEmitter<PointerEvent>"
+              },
+              "description": "Emitted when the button is clicked.\nThis is a custom event that wraps the native click but ensures the target is the le-button."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeButton",
+          "declaration": {
+            "name": "LeButton",
+            "module": "src/components/le-button/le-button.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-button",
+          "declaration": {
+            "name": "LeButton",
+            "module": "src/components/le-button/le-button.tsx"
           }
         }
       ]
@@ -1050,19 +1102,395 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-popover/le-popover.tsx",
+      "path": "src/components/le-combobox/le-combobox.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A popover component for displaying floating content.\n\nUses the native HTML Popover API for proper layering with dialogs\nand other top-layer elements. Falls back gracefully in older browsers.",
-          "name": "LePopover",
-          "slots": [
+          "description": "A combobox component with searchable dropdown.\n\nCombines a text input with a dropdown list, allowing users to\nfilter options by typing or select from the list.",
+          "name": "LeCombobox",
+          "members": [
             {
-              "description": "Content to display inside the popover",
-              "name": ""
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
             },
             {
-              "description": "Element that triggers the popover (optional)",
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "LeOption[] | string"
+              },
+              "default": "[]",
+              "description": "The options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "LeOptionValue | undefined"
+              },
+              "description": "The currently selected value."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Type to search...'",
+              "description": "Placeholder text for the input."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the combobox is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether selection is required."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Size variant of the combobox."
+            },
+            {
+              "kind": "field",
+              "name": "allowCustom",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to allow custom values not in the options list."
+            },
+            {
+              "kind": "field",
+              "name": "minSearchLength",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "description": "Minimum characters before showing filtered results."
+            },
+            {
+              "kind": "field",
+              "name": "emptyText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dropdown is currently open."
+            },
+            {
+              "kind": "field",
+              "name": "inputValue",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "selectedOption",
+              "type": {
+                "text": "LeOption | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "dropdownEl",
+              "type": {
+                "text": "HTMLLeDropdownBaseElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "inputEl",
+              "type": {
+                "text": "HTMLInputElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleOptionsChange"
+            },
+            {
+              "kind": "field",
+              "name": "parsedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectedOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "filterOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOptionSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleInputChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleInputFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleInputKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleClear",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "showDropdown",
+              "description": "Opens the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "hideDropdown",
+              "description": "Closes the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "focusInput",
+              "description": "Focuses the input element."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "fieldName": "options",
+              "default": "[]",
+              "description": "The options to display in the dropdown.",
+              "type": {
+                "text": "LeOption[] | string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The currently selected value.",
+              "type": {
+                "text": "LeOptionValue"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "'Type to search...'",
+              "description": "Placeholder text for the input.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the combobox is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether selection is required.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "Name attribute for form submission.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Size variant of the combobox.",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "allow-custom",
+              "fieldName": "allowCustom",
+              "default": "false",
+              "description": "Whether to allow custom values not in the options list.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "min-search-length",
+              "fieldName": "minSearchLength",
+              "default": "0",
+              "description": "Minimum characters before showing filtered results.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "empty-text",
+              "fieldName": "emptyText",
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the dropdown is currently open.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-combobox",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeOptionSelectDetail>"
+              },
+              "description": "Emitted when the selected value changes."
+            },
+            {
+              "name": "leInput",
+              "type": {
+                "text": "EventEmitter<{ value: string }>"
+              },
+              "description": "Emitted when the input value changes (for custom values)."
+            },
+            {
+              "name": "leOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown opens."
+            },
+            {
+              "name": "leClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown closes."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCombobox",
+          "declaration": {
+            "name": "LeCombobox",
+            "module": "src/components/le-combobox/le-combobox.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-combobox",
+          "declaration": {
+            "name": "LeCombobox",
+            "module": "src/components/le-combobox/le-combobox.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-dropdown-base/le-dropdown-base.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Internal dropdown base component that provides shared functionality\nfor select, combobox, and multiselect components.\n\nWraps le-popover for positioning and provides:\n- Option list rendering with groups\n- Keyboard navigation (↑↓, Enter, Escape, Home/End)\n- Option filtering support\n- Single and multi-select modes",
+          "name": "LeDropdownBase",
+          "slots": [
+            {
+              "description": "The element that triggers the dropdown",
               "name": "trigger"
             }
           ],
@@ -1076,11 +1504,29 @@
             },
             {
               "kind": "field",
-              "name": "mode",
+              "name": "options",
               "type": {
-                "text": "'default' | 'admin'"
+                "text": "LeOption[]"
               },
-              "description": "Mode of the popover should be 'default' for internal use"
+              "default": "[]",
+              "description": "The options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "LeOptionValue | LeOptionValue[] | undefined"
+              },
+              "description": "Current value(s) - single value or array for multiselect."
+            },
+            {
+              "kind": "field",
+              "name": "multiple",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether multiple selection is allowed."
             },
             {
               "kind": "field",
@@ -1089,69 +1535,60 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the popover is currently open"
+              "description": "Whether the dropdown is open."
             },
             {
               "kind": "field",
-              "name": "position",
+              "name": "disabled",
               "type": {
-                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
+                "text": "boolean"
               },
-              "default": "'bottom'",
-              "description": "Position of the popover relative to its trigger"
+              "default": "false",
+              "description": "Whether the dropdown is disabled."
             },
             {
               "kind": "field",
-              "name": "align",
+              "name": "filterFn",
               "type": {
-                "text": "'start' | 'center' | 'end'"
+                "text": "(option: LeOption, query: string) => boolean | undefined"
               },
-              "default": "'start'",
-              "description": "Alignment of the popover"
+              "description": "Filter function for options.\nReturn true to include the option."
             },
             {
               "kind": "field",
-              "name": "popoverTitle",
+              "name": "filterQuery",
               "type": {
-                "text": "string | undefined"
+                "text": "string"
               },
-              "description": "Optional title for the popover header"
+              "default": "''",
+              "description": "Current filter query string."
             },
             {
               "kind": "field",
-              "name": "showClose",
+              "name": "emptyText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'No options'",
+              "description": "Placeholder text when no options match filter."
+            },
+            {
+              "kind": "field",
+              "name": "showCheckboxes",
               "type": {
                 "text": "boolean"
               },
               "default": "true",
-              "description": "Whether to show a close button in the header"
+              "description": "Whether to show checkboxes for multiselect mode."
             },
             {
               "kind": "field",
-              "name": "closeOnClickOutside",
+              "name": "maxHeight",
               "type": {
-                "text": "boolean"
+                "text": "string"
               },
-              "default": "true",
-              "description": "Whether clicking outside closes the popover"
-            },
-            {
-              "kind": "field",
-              "name": "closeOnEscape",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether pressing Escape closes the popover"
-            },
-            {
-              "kind": "field",
-              "name": "offset",
-              "type": {
-                "text": "number"
-              },
-              "default": "8",
-              "description": "Offset from the trigger element (in pixels)"
+              "default": "'300px'",
+              "description": "Maximum height of the dropdown list."
             },
             {
               "kind": "field",
@@ -1159,137 +1596,202 @@
               "type": {
                 "text": "string | undefined"
               },
-              "description": "Fixed width for the popover (e.g., '300px', '20rem')"
+              "description": "Width of the dropdown. If not set, matches trigger width."
             },
             {
               "kind": "field",
-              "name": "minWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "default": "'200px'",
-              "description": "Minimum width for the popover (e.g., '200px', '15rem')"
-            },
-            {
-              "kind": "field",
-              "name": "maxWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Maximum width for the popover (e.g., '400px', '25rem')"
-            },
-            {
-              "kind": "field",
-              "name": "isPositioned",
+              "name": "fullWidth",
               "type": {
                 "text": "boolean"
               },
-              "privacy": "private",
-              "default": "false"
+              "default": "false",
+              "description": "Sets the dropdown to full width of the trigger."
             },
             {
               "kind": "field",
-              "name": "triggerEl",
+              "name": "focusedIndex",
               "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "popoverEl",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "uniqueId",
-              "type": {
-                "text": "string"
+                "text": "number"
               },
               "privacy": "private",
-              "default": "`le-popover-${Math.random().toString(36).substr(2, 9)}`"
+              "default": "-1"
             },
             {
               "kind": "field",
-              "name": "scrollParents",
+              "name": "filteredOptions",
               "type": {
-                "text": "Element[]"
+                "text": "LeOption[]"
               },
               "privacy": "private",
               "default": "[]"
             },
             {
+              "kind": "field",
+              "name": "popoverEl",
+              "type": {
+                "text": "HTMLLePopoverElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "listEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "triggerWidth",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
               "kind": "method",
-              "name": "getScrollParents",
+              "name": "handleOptionsChange"
+            },
+            {
+              "kind": "method",
+              "name": "updateFilteredOptions",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getSelectableOptions",
               "privacy": "private",
               "return": {
                 "type": {
-                  "text": "Element[]"
+                  "text": "LeOption[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isSelected",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
                 }
               },
               "parameters": [
                 {
-                  "name": "element",
+                  "name": "option",
                   "type": {
-                    "text": "Element"
+                    "text": "LeOption"
                   }
                 }
-              ],
-              "description": "Find all scrollable parent elements"
+              ]
             },
             {
               "kind": "method",
-              "name": "addScrollListeners",
+              "name": "handleOptionClick",
               "privacy": "private",
-              "description": "Add scroll listeners to all scrollable parents"
+              "parameters": [
+                {
+                  "name": "option",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
             },
             {
               "kind": "method",
-              "name": "removeScrollListeners",
+              "name": "scrollToFocused",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handlePopoverOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handlePopoverClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getInitialFocusIndex",
               "privacy": "private",
-              "description": "Remove scroll listeners"
-            },
-            {
-              "kind": "field",
-              "name": "handleScroll",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handlePopoverToggle",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleOtherPopoverOpen",
-              "privacy": "private"
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              }
             },
             {
               "kind": "method",
               "name": "show",
-              "description": "Opens the popover"
+              "description": "Opens the dropdown."
             },
             {
               "kind": "method",
               "name": "hide",
-              "description": "Closes the popover"
+              "description": "Closes the dropdown."
             },
             {
               "kind": "method",
               "name": "toggle",
-              "description": "Toggles the popover"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerClick",
-              "privacy": "private"
+              "description": "Toggles the dropdown."
             },
             {
               "kind": "method",
-              "name": "updatePosition",
+              "name": "renderIcon",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "icon",
+                  "type": {
+                    "text": "string | undefined"
+                  }
+                },
+                {
+                  "name": "className",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderOption",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "option",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderOptions",
               "privacy": "private"
             },
             {
@@ -1299,125 +1801,133 @@
           ],
           "attributes": [
             {
-              "name": "mode",
-              "fieldName": "mode",
-              "description": "Mode of the popover should be 'default' for internal use",
+              "name": "options",
+              "fieldName": "options",
+              "default": "[]",
+              "description": "The options to display in the dropdown.",
               "type": {
-                "text": "'default' | 'admin'"
+                "text": "LeOption[]"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "Current value(s) - single value or array for multiselect.",
+              "type": {
+                "text": "LeOptionValue | LeOptionValue[]"
+              }
+            },
+            {
+              "name": "multiple",
+              "fieldName": "multiple",
+              "default": "false",
+              "description": "Whether multiple selection is allowed.",
+              "type": {
+                "text": "boolean"
               }
             },
             {
               "name": "open",
               "fieldName": "open",
               "default": "false",
-              "description": "Whether the popover is currently open",
+              "description": "Whether the dropdown is open.",
               "type": {
                 "text": "boolean"
               }
             },
             {
-              "name": "position",
-              "fieldName": "position",
-              "default": "'bottom'",
-              "description": "Position of the popover relative to its trigger",
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the dropdown is disabled.",
               "type": {
-                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
+                "text": "boolean"
               }
             },
             {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'start'",
-              "description": "Alignment of the popover",
+              "name": "filter-fn",
+              "fieldName": "filterFn",
+              "description": "Filter function for options.\nReturn true to include the option.",
               "type": {
-                "text": "'start' | 'center' | 'end'"
+                "text": "(option: LeOption, query: string) => boolean"
               }
             },
             {
-              "name": "popover-title",
-              "fieldName": "popoverTitle",
-              "description": "Optional title for the popover header",
+              "name": "filter-query",
+              "fieldName": "filterQuery",
+              "default": "''",
+              "description": "Current filter query string.",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "show-close",
-              "fieldName": "showClose",
+              "name": "empty-text",
+              "fieldName": "emptyText",
+              "default": "'No options'",
+              "description": "Placeholder text when no options match filter.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "show-checkboxes",
+              "fieldName": "showCheckboxes",
               "default": "true",
-              "description": "Whether to show a close button in the header",
+              "description": "Whether to show checkboxes for multiselect mode.",
               "type": {
                 "text": "boolean"
               }
             },
             {
-              "name": "close-on-click-outside",
-              "fieldName": "closeOnClickOutside",
-              "default": "true",
-              "description": "Whether clicking outside closes the popover",
+              "name": "max-height",
+              "fieldName": "maxHeight",
+              "default": "'300px'",
+              "description": "Maximum height of the dropdown list.",
               "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "close-on-escape",
-              "fieldName": "closeOnEscape",
-              "default": "true",
-              "description": "Whether pressing Escape closes the popover",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "offset",
-              "fieldName": "offset",
-              "default": "8",
-              "description": "Offset from the trigger element (in pixels)",
-              "type": {
-                "text": "number"
+                "text": "string"
               }
             },
             {
               "name": "width",
               "fieldName": "width",
-              "description": "Fixed width for the popover (e.g., '300px', '20rem')",
+              "description": "Width of the dropdown. If not set, matches trigger width.",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "min-width",
-              "fieldName": "minWidth",
-              "default": "'200px'",
-              "description": "Minimum width for the popover (e.g., '200px', '15rem')",
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Sets the dropdown to full width of the trigger.",
               "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "max-width",
-              "fieldName": "maxWidth",
-              "description": "Maximum width for the popover (e.g., '400px', '25rem')",
-              "type": {
-                "text": "string"
+                "text": "boolean"
               }
             }
           ],
-          "tagName": "le-popover",
+          "tagName": "le-dropdown-base",
           "events": [
             {
-              "name": "lePopoverOpen",
+              "name": "leOptionSelect",
               "type": {
-                "text": "EventEmitter<void>"
+                "text": "EventEmitter<LeOptionSelectDetail>"
               },
-              "description": "Emitted when the popover opens"
+              "description": "Emitted when an option is selected."
             },
             {
-              "name": "lePopoverClose",
+              "name": "leDropdownOpen",
               "type": {
                 "text": "EventEmitter<void>"
               },
-              "description": "Emitted when the popover closes"
+              "description": "Emitted when the dropdown opens."
+            },
+            {
+              "name": "leDropdownClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown closes."
             }
           ],
           "customElement": true
@@ -1426,18 +1936,434 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LePopover",
+          "name": "LeDropdownBase",
           "declaration": {
-            "name": "LePopover",
-            "module": "src/components/le-popover/le-popover.tsx"
+            "name": "LeDropdownBase",
+            "module": "src/components/le-dropdown-base/le-dropdown-base.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-popover",
+          "name": "le-dropdown-base",
           "declaration": {
-            "name": "LePopover",
-            "module": "src/components/le-popover/le-popover.tsx"
+            "name": "LeDropdownBase",
+            "module": "src/components/le-dropdown-base/le-dropdown-base.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-multiselect/le-multiselect.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A multiselect component for selecting multiple options.\n\nDisplays selected items as tags with optional search filtering.",
+          "name": "LeMultiselect",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "LeOption[] | string"
+              },
+              "default": "[]",
+              "description": "The options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "LeOptionValue[]"
+              },
+              "default": "[]",
+              "description": "The currently selected values."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Select options...'",
+              "description": "Placeholder text when no options are selected."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the multiselect is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether selection is required."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Size variant of the multiselect."
+            },
+            {
+              "kind": "field",
+              "name": "maxSelections",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of selections allowed."
+            },
+            {
+              "kind": "field",
+              "name": "showSelectAll",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to show a \"Select All\" option."
+            },
+            {
+              "kind": "field",
+              "name": "searchable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is searchable."
+            },
+            {
+              "kind": "field",
+              "name": "emptyText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dropdown is currently open."
+            },
+            {
+              "kind": "field",
+              "name": "selectedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "searchQuery",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "dropdownEl",
+              "type": {
+                "text": "HTMLLeDropdownBaseElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "inputEl",
+              "type": {
+                "text": "HTMLInputElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleOptionsChange"
+            },
+            {
+              "kind": "field",
+              "name": "parsedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "effectiveOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectedOptions",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "filterOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOptionSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "emitChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTagDismiss",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSearchInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleClearAll",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "showDropdown",
+              "description": "Opens the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "hideDropdown",
+              "description": "Closes the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "clearSelection",
+              "description": "Clears all selections."
+            },
+            {
+              "kind": "method",
+              "name": "renderTags",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "fieldName": "options",
+              "default": "[]",
+              "description": "The options to display in the dropdown.",
+              "type": {
+                "text": "LeOption[] | string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "default": "[]",
+              "description": "The currently selected values.",
+              "type": {
+                "text": "LeOptionValue[]"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "'Select options...'",
+              "description": "Placeholder text when no options are selected.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the multiselect is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether selection is required.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "Name attribute for form submission.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Size variant of the multiselect.",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "max-selections",
+              "fieldName": "maxSelections",
+              "description": "Maximum number of selections allowed.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "show-select-all",
+              "fieldName": "showSelectAll",
+              "default": "false",
+              "description": "Whether to show a \"Select All\" option.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "searchable",
+              "fieldName": "searchable",
+              "default": "false",
+              "description": "Whether the input is searchable.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "empty-text",
+              "fieldName": "emptyText",
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the dropdown is currently open.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-multiselect",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeMultiOptionSelectDetail>"
+              },
+              "description": "Emitted when the selected values change."
+            },
+            {
+              "name": "leOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown opens."
+            },
+            {
+              "name": "leClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown closes."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeMultiselect",
+          "declaration": {
+            "name": "LeMultiselect",
+            "module": "src/components/le-multiselect/le-multiselect.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-multiselect",
+          "declaration": {
+            "name": "LeMultiselect",
+            "module": "src/components/le-multiselect/le-multiselect.tsx"
           }
         }
       ]
@@ -1737,6 +2663,833 @@
           "declaration": {
             "name": "LeComponent",
             "module": "src/components/le-component/le-component.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-number-input/le-number-input.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A number input component with validation, keyboard controls, and custom spinners.",
+          "name": "LeNumberInput",
+          "cssProperties": [
+            {
+              "description": "Input background color",
+              "name": "--le-input-bg"
+            },
+            {
+              "description": "Input text color",
+              "name": "--le-input-color"
+            },
+            {
+              "description": "Input border style",
+              "name": "--le-input-border"
+            },
+            {
+              "description": "Input border style when focused",
+              "name": "--le-input-border-focus"
+            },
+            {
+              "description": "Input border style when invalid",
+              "name": "--le-input-border-error"
+            },
+            {
+              "description": "Input border radius",
+              "name": "--le-input-radius"
+            },
+            {
+              "description": "Input padding",
+              "name": "--le-input-padding"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The label text for the input",
+              "name": ""
+            },
+            {
+              "description": "Additional description text displayed below the input",
+              "name": "description"
+            },
+            {
+              "description": "Icon to display at the start of the input",
+              "name": "icon-start"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "description": "The value of the input"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the input"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Label for the input"
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "description": "Placeholder text"
+            },
+            {
+              "kind": "field",
+              "name": "min",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Minimum allowed value"
+            },
+            {
+              "kind": "field",
+              "name": "max",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum allowed value"
+            },
+            {
+              "kind": "field",
+              "name": "step",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Step value for increment/decrement"
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is required"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "readonly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is read-only"
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Icon for the start icon"
+            },
+            {
+              "kind": "field",
+              "name": "showSpinners",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether to show the spinner controls"
+            },
+            {
+              "kind": "field",
+              "name": "externalId",
+              "type": {
+                "text": "string"
+              },
+              "description": "External ID for linking with external systems"
+            },
+            {
+              "kind": "field",
+              "name": "isValid",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "true",
+              "description": "Internal validation state"
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "method",
+              "name": "valueChanged"
+            },
+            {
+              "kind": "method",
+              "name": "validate",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "emitChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "emitInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updateValue",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleWheel",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "increment",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "decrement",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value of the input",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "The name of the input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "Label for the input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "description": "Placeholder text",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min",
+              "fieldName": "min",
+              "description": "Minimum allowed value",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "max",
+              "fieldName": "max",
+              "description": "Maximum allowed value",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "step",
+              "fieldName": "step",
+              "default": "1",
+              "description": "Step value for increment/decrement",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether the input is required",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the input is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "readonly",
+              "fieldName": "readonly",
+              "default": "false",
+              "description": "Whether the input is read-only",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "description": "Icon for the start icon",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "show-spinners",
+              "fieldName": "showSpinners",
+              "default": "true",
+              "description": "Whether to show the spinner controls",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "external-id",
+              "fieldName": "externalId",
+              "description": "External ID for linking with external systems",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-number-input",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<{ value: number; name: string; externalId: string; isValid: boolean }>"
+              },
+              "description": "Emitted when the value changes (on blur or Enter)"
+            },
+            {
+              "name": "leInput",
+              "type": {
+                "text": "EventEmitter<{ value: number; name: string; externalId: string; isValid: boolean }>"
+              },
+              "description": "Emitted when the input value changes (on keystroke/spin)"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeNumberInput",
+          "declaration": {
+            "name": "LeNumberInput",
+            "module": "src/components/le-number-input/le-number-input.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-number-input",
+          "declaration": {
+            "name": "LeNumberInput",
+            "module": "src/components/le-number-input/le-number-input.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-popover/le-popover.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A popover component for displaying floating content.\n\nUses the native HTML Popover API for proper layering with dialogs\nand other top-layer elements. Falls back gracefully in older browsers.",
+          "name": "LePopover",
+          "cssParts": [
+            {
+              "description": "The popover trigger element",
+              "name": "trigger"
+            },
+            {
+              "description": "The popover content wrapper",
+              "name": "content"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Content to display inside the popover",
+              "name": ""
+            },
+            {
+              "description": "Element that triggers the popover (optional)",
+              "name": "trigger"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin'"
+              },
+              "description": "Mode of the popover should be 'default' for internal use"
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the popover is currently open"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
+              },
+              "default": "'bottom'",
+              "description": "Position of the popover relative to its trigger"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'end'"
+              },
+              "default": "'start'",
+              "description": "Alignment of the popover"
+            },
+            {
+              "kind": "field",
+              "name": "popoverTitle",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional title for the popover header"
+            },
+            {
+              "kind": "field",
+              "name": "showClose",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether to show a close button in the header"
+            },
+            {
+              "kind": "field",
+              "name": "closeOnClickOutside",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether clicking outside closes the popover"
+            },
+            {
+              "kind": "field",
+              "name": "closeOnEscape",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether pressing Escape closes the popover"
+            },
+            {
+              "kind": "field",
+              "name": "offset",
+              "type": {
+                "text": "number"
+              },
+              "default": "8",
+              "description": "Offset from the trigger element (in pixels)"
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Fixed width for the popover (e.g., '300px', '20rem')"
+            },
+            {
+              "kind": "field",
+              "name": "minWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "'200px'",
+              "description": "Minimum width for the popover (e.g., '200px', '15rem')"
+            },
+            {
+              "kind": "field",
+              "name": "maxWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Maximum width for the popover (e.g., '400px', '25rem')"
+            },
+            {
+              "kind": "field",
+              "name": "triggerFullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Should the popover's trigger take full width of its container"
+            },
+            {
+              "kind": "field",
+              "name": "isPositioned",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "triggerEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "popoverEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "uniqueId",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "`le-popover-${Math.random().toString(36).substr(2, 9)}`"
+            },
+            {
+              "kind": "field",
+              "name": "scrollParents",
+              "type": {
+                "text": "Element[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "method",
+              "name": "getScrollParents",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Element[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "Element"
+                  }
+                }
+              ],
+              "description": "Find all scrollable parent elements"
+            },
+            {
+              "kind": "method",
+              "name": "addScrollListeners",
+              "privacy": "private",
+              "description": "Add scroll listeners to all scrollable parents"
+            },
+            {
+              "kind": "method",
+              "name": "removeScrollListeners",
+              "privacy": "private",
+              "description": "Remove scroll listeners"
+            },
+            {
+              "kind": "field",
+              "name": "handleScroll",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handlePopoverToggle",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOtherPopoverOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "description": "Opens the popover"
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "description": "Closes the popover"
+            },
+            {
+              "kind": "method",
+              "name": "toggle",
+              "description": "Toggles the popover"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updatePosition",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "mode",
+              "fieldName": "mode",
+              "description": "Mode of the popover should be 'default' for internal use",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the popover is currently open",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "position",
+              "fieldName": "position",
+              "default": "'bottom'",
+              "description": "Position of the popover relative to its trigger",
+              "type": {
+                "text": "'top' | 'bottom' | 'left' | 'right' | 'auto'"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'start'",
+              "description": "Alignment of the popover",
+              "type": {
+                "text": "'start' | 'center' | 'end'"
+              }
+            },
+            {
+              "name": "popover-title",
+              "fieldName": "popoverTitle",
+              "description": "Optional title for the popover header",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "show-close",
+              "fieldName": "showClose",
+              "default": "true",
+              "description": "Whether to show a close button in the header",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "close-on-click-outside",
+              "fieldName": "closeOnClickOutside",
+              "default": "true",
+              "description": "Whether clicking outside closes the popover",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "close-on-escape",
+              "fieldName": "closeOnEscape",
+              "default": "true",
+              "description": "Whether pressing Escape closes the popover",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "offset",
+              "fieldName": "offset",
+              "default": "8",
+              "description": "Offset from the trigger element (in pixels)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "width",
+              "fieldName": "width",
+              "description": "Fixed width for the popover (e.g., '300px', '20rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min-width",
+              "fieldName": "minWidth",
+              "default": "'200px'",
+              "description": "Minimum width for the popover (e.g., '200px', '15rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-width",
+              "fieldName": "maxWidth",
+              "description": "Maximum width for the popover (e.g., '400px', '25rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "trigger-full-width",
+              "fieldName": "triggerFullWidth",
+              "default": "false",
+              "description": "Should the popover's trigger take full width of its container",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-popover",
+          "events": [
+            {
+              "name": "lePopoverOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the popover opens"
+            },
+            {
+              "name": "lePopoverClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the popover closes"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LePopover",
+          "declaration": {
+            "name": "LePopover",
+            "module": "src/components/le-popover/le-popover.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-popover",
+          "declaration": {
+            "name": "LePopover",
+            "module": "src/components/le-popover/le-popover.tsx"
           }
         }
       ]
@@ -2306,6 +4059,319 @@
           "declaration": {
             "name": "LeRoundProgress",
             "module": "src/components/le-round-progress/le-round-progress.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-select/le-select.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A select dropdown component for single selection.",
+          "name": "LeSelect",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "LeOption[] | string"
+              },
+              "default": "[]",
+              "description": "The options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "LeOptionValue | undefined"
+              },
+              "description": "The currently selected value."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Select an option'",
+              "description": "Placeholder text when no option is selected."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the select is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether selection is required."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Size variant of the select."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'solid'"
+              },
+              "default": "'default'",
+              "description": "Visual variant of the select."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dropdown is currently open."
+            },
+            {
+              "kind": "field",
+              "name": "selectedOption",
+              "type": {
+                "text": "LeOption | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "dropdownEl",
+              "type": {
+                "text": "HTMLLeDropdownBaseElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleOptionsChange"
+            },
+            {
+              "kind": "field",
+              "name": "parsedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectedOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOptionSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "showDropdown",
+              "description": "Opens the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "hideDropdown",
+              "description": "Closes the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "renderIcon",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "icon",
+                  "type": {
+                    "text": "string | undefined"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "fieldName": "options",
+              "default": "[]",
+              "description": "The options to display in the dropdown.",
+              "type": {
+                "text": "LeOption[] | string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The currently selected value.",
+              "type": {
+                "text": "LeOptionValue"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "'Select an option'",
+              "description": "Placeholder text when no option is selected.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the select is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether selection is required.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "Name attribute for form submission.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Size variant of the select.",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Visual variant of the select.",
+              "type": {
+                "text": "'default' | 'outlined' | 'solid'"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the dropdown is currently open.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-select",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeOptionSelectDetail>"
+              },
+              "description": "Emitted when the selected value changes."
+            },
+            {
+              "name": "leOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown opens."
+            },
+            {
+              "name": "leClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown closes."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeSelect",
+          "declaration": {
+            "name": "LeSelect",
+            "module": "src/components/le-select/le-select.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-select",
+          "declaration": {
+            "name": "LeSelect",
+            "module": "src/components/le-select/le-select.tsx"
           }
         }
       ]
@@ -3313,129 +5379,43 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-number-input/le-number-input.tsx",
+      "path": "src/components/le-tag/le-tag.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A number input component with validation, keyboard controls, and custom spinners.",
-          "name": "LeNumberInput",
-          "cssProperties": [
-            {
-              "description": "Input background color",
-              "name": "--le-input-bg"
-            },
-            {
-              "description": "Input text color",
-              "name": "--le-input-color"
-            },
-            {
-              "description": "Input border style",
-              "name": "--le-input-border"
-            },
-            {
-              "description": "Input border style when focused",
-              "name": "--le-input-border-focus"
-            },
-            {
-              "description": "Input border style when invalid",
-              "name": "--le-input-border-error"
-            },
-            {
-              "description": "Input border radius",
-              "name": "--le-input-radius"
-            },
-            {
-              "description": "Input padding",
-              "name": "--le-input-padding"
-            }
-          ],
+          "description": "A tag/chip component for displaying labels with optional dismiss functionality.",
+          "name": "LeTag",
           "slots": [
             {
-              "description": "The label text for the input",
+              "description": "Default slot for custom content (overrides label prop)",
               "name": ""
-            },
-            {
-              "description": "Additional description text displayed below the input",
-              "name": "description"
-            },
-            {
-              "description": "Icon to display at the start of the input",
-              "name": "icon-start"
             }
           ],
           "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "number"
-              },
-              "description": "The value of the input"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "description": "The name of the input"
-            },
             {
               "kind": "field",
               "name": "label",
               "type": {
                 "text": "string"
               },
-              "description": "Label for the input"
+              "description": "The text label to display in the tag."
             },
             {
               "kind": "field",
-              "name": "placeholder",
+              "name": "icon",
               "type": {
-                "text": "string"
+                "text": "string | undefined"
               },
-              "description": "Placeholder text"
+              "description": "Icon to display before the label.\nCan be an emoji, URL, or icon name."
             },
             {
               "kind": "field",
-              "name": "min",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Minimum allowed value"
-            },
-            {
-              "kind": "field",
-              "name": "max",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum allowed value"
-            },
-            {
-              "kind": "field",
-              "name": "step",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Step value for increment/decrement"
-            },
-            {
-              "kind": "field",
-              "name": "required",
+              "name": "dismissible",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the input is required"
+              "description": "Whether the tag can be dismissed (shows close button)."
             },
             {
               "kind": "field",
@@ -3444,121 +5424,34 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the input is disabled"
+              "description": "Whether the tag is disabled."
             },
             {
               "kind": "field",
-              "name": "readonly",
+              "name": "size",
               "type": {
-                "text": "boolean"
+                "text": "'small' | 'medium' | 'large'"
               },
-              "default": "false",
-              "description": "Whether the input is read-only"
+              "default": "'medium'",
+              "description": "The size of the tag."
             },
             {
               "kind": "field",
-              "name": "iconStart",
+              "name": "variant",
               "type": {
-                "text": "string | undefined"
+                "text": "'default' | 'primary' | 'success' | 'warning' | 'danger'"
               },
-              "description": "Icon for the start icon"
+              "default": "'default'",
+              "description": "The visual variant of the tag."
             },
             {
               "kind": "field",
-              "name": "showSpinners",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether to show the spinner controls"
-            },
-            {
-              "kind": "field",
-              "name": "externalId",
-              "type": {
-                "text": "string"
-              },
-              "description": "External ID for linking with external systems"
-            },
-            {
-              "kind": "field",
-              "name": "isValid",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "true",
-              "description": "Internal validation state"
-            },
-            {
-              "kind": "field",
-              "name": "validationMessage",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''"
-            },
-            {
-              "kind": "method",
-              "name": "valueChanged"
-            },
-            {
-              "kind": "method",
-              "name": "validate",
+              "name": "handleDismiss",
               "privacy": "private"
             },
             {
               "kind": "method",
-              "name": "emitChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "emitInput",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "updateValue",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "newValue",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "handleInput",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleWheel",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "increment",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "decrement",
+              "name": "renderIcon",
               "privacy": "private"
             },
             {
@@ -3568,67 +5461,26 @@
           ],
           "attributes": [
             {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value of the input",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "The name of the input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
               "name": "label",
               "fieldName": "label",
-              "description": "Label for the input",
+              "description": "The text label to display in the tag.",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "placeholder",
-              "fieldName": "placeholder",
-              "description": "Placeholder text",
+              "name": "icon",
+              "fieldName": "icon",
+              "description": "Icon to display before the label.\nCan be an emoji, URL, or icon name.",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "min",
-              "fieldName": "min",
-              "description": "Minimum allowed value",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "max",
-              "fieldName": "max",
-              "description": "Maximum allowed value",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "step",
-              "fieldName": "step",
-              "default": "1",
-              "description": "Step value for increment/decrement",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "required",
-              "fieldName": "required",
+              "name": "dismissible",
+              "fieldName": "dismissible",
               "default": "false",
-              "description": "Whether the input is required",
+              "description": "Whether the tag can be dismissed (shows close button).",
               "type": {
                 "text": "boolean"
               }
@@ -3637,61 +5489,38 @@
               "name": "disabled",
               "fieldName": "disabled",
               "default": "false",
-              "description": "Whether the input is disabled",
+              "description": "Whether the tag is disabled.",
               "type": {
                 "text": "boolean"
               }
             },
             {
-              "name": "readonly",
-              "fieldName": "readonly",
-              "default": "false",
-              "description": "Whether the input is read-only",
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "The size of the tag.",
               "type": {
-                "text": "boolean"
+                "text": "'small' | 'medium' | 'large'"
               }
             },
             {
-              "name": "icon-start",
-              "fieldName": "iconStart",
-              "description": "Icon for the start icon",
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "The visual variant of the tag.",
               "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "show-spinners",
-              "fieldName": "showSpinners",
-              "default": "true",
-              "description": "Whether to show the spinner controls",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "external-id",
-              "fieldName": "externalId",
-              "description": "External ID for linking with external systems",
-              "type": {
-                "text": "string"
+                "text": "'default' | 'primary' | 'success' | 'warning' | 'danger'"
               }
             }
           ],
-          "tagName": "le-number-input",
+          "tagName": "le-tag",
           "events": [
             {
-              "name": "leChange",
+              "name": "leDismiss",
               "type": {
-                "text": "EventEmitter<{ value: number; name: string; externalId: string; isValid: boolean }>"
+                "text": "EventEmitter<void>"
               },
-              "description": "Emitted when the value changes (on blur or Enter)"
-            },
-            {
-              "name": "leInput",
-              "type": {
-                "text": "EventEmitter<{ value: number; name: string; externalId: string; isValid: boolean }>"
-              },
-              "description": "Emitted when the input value changes (on keystroke/spin)"
+              "description": "Emitted when the dismiss button is clicked."
             }
           ],
           "customElement": true
@@ -3700,18 +5529,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LeNumberInput",
+          "name": "LeTag",
           "declaration": {
-            "name": "LeNumberInput",
-            "module": "src/components/le-number-input/le-number-input.tsx"
+            "name": "LeTag",
+            "module": "src/components/le-tag/le-tag.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-number-input",
+          "name": "le-tag",
           "declaration": {
-            "name": "LeNumberInput",
-            "module": "src/components/le-number-input/le-number-input.tsx"
+            "name": "LeTag",
+            "module": "src/components/le-tag/le-tag.tsx"
           }
         }
       ]

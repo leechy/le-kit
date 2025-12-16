@@ -14,21 +14,6 @@
       "require": "./dist/cjs/le-kit.cjs.js",
       "types": "./dist/types/index.d.ts"
     },
-    "./admin": {
-      "import": "./dist/le-kit/le-kit.esm.js",
-      "require": "./dist/cjs/le-kit.cjs.js",
-      "types": "./dist/types/index.d.ts"
-    },
-    "./core": {
-      "import": "./dist/core/le-kit/le-kit.esm.js",
-      "require": "./dist/core/cjs/le-kit.cjs.js",
-      "types": "./dist/core/types/index.d.ts"
-    },
-    "./core/loader": {
-      "import": "./dist/core/loader/index.js",
-      "require": "./dist/core/loader/index.cjs.js",
-      "types": "./dist/core/loader/index.d.ts"
-    },
     "./components": {
       "import": "./dist/components/index.js",
       "types": "./dist/components/index.d.ts"
@@ -50,11 +35,10 @@
   },
   "files": [
     "dist/",
-    "dist/core/",
     "loader/"
   ],
   "scripts": {
-    "build": "npm run build:core && npm run build:admin",
+    "build": "npm run build:admin",
     "build:admin": "stencil build && cp -r src/themes dist/themes && cem analyze --stencil",
     "build:core": "node scripts/prepare-core.mjs && stencil build --config stencil.core.config.ts",
     "start": "cem analyze --stencil && stencil build --dev --watch --serve",

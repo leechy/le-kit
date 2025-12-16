@@ -14,7 +14,7 @@ export const config: Config = {
         { src: 'themes', dest: 'dist/components/themes' },
         {
           src: '../src/assets/custom-elements.json',
-          dest: './assets/custom-elements.json'
+          dest: './assets/custom-elements.json',
         },
       ],
     },
@@ -25,17 +25,17 @@ export const config: Config = {
         { src: 'themes', dest: 'dist/components/themes' },
         {
           src: '../src/assets/custom-elements.json',
-          dest: './assets/custom-elements.json'
+          dest: './assets/custom-elements.json',
         },
       ],
     },
-    {
-      type: 'dist-custom-elements',
-      dir: 'dist-core/components',
-      copy: [
-        { src: '../dist-core', dest: 'dist/core' },
-      ],
-    },
+    // {
+    //   type: 'dist-custom-elements',
+    //   dir: 'dist-core/components',
+    //   copy: [
+    //     { src: '../dist-core', dest: 'dist/core' },
+    //   ],
+    // },
     // reactOutputTarget({
     //   outDir: 'dist/react/',
     // }),
@@ -58,11 +58,11 @@ export const config: Config = {
         { src: 'themes', dest: 'build/themes' },
         {
           src: '../src/assets/custom-elements.json',
-          dest: 'src/components/assets/custom-elements.json'
+          dest: 'src/components/assets/custom-elements.json',
         },
         {
           src: '../src/assets/custom-elements.json',
-          dest: './build/assets/custom-elements.json'
+          dest: './build/assets/custom-elements.json',
         },
       ],
     },

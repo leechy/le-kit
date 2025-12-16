@@ -81,19 +81,22 @@ A flexible button component with multiple variants and states.
 
 ## Properties
 
-| Property    | Attribute    | Description                                                    | Type                                                                       | Default     |
-| ----------- | ------------ | -------------------------------------------------------------- | -------------------------------------------------------------------------- | ----------- |
-| `color`     | `color`      | Button color theme (uses theme semantic colors)                | `"danger" \| "info" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'` |
-| `disabled`  | `disabled`   | Whether the button is disabled                                 | `boolean`                                                                  | `false`     |
-| `fullWidth` | `full-width` | Whether the button takes full width of its container           | `boolean`                                                                  | `false`     |
-| `href`      | `href`       | Optional href to make the button act as a link                 | `string`                                                                   | `undefined` |
-| `iconOnly`  | `icon-only`  | Whether the button displays only an icon (square aspect ratio) | `boolean`                                                                  | `false`     |
-| `mode`      | `mode`       | Mode of the popover should be 'default' for internal use       | `"admin" \| "default"`                                                     | `undefined` |
-| `selected`  | `selected`   | Whether the button is in a selected/active state               | `boolean`                                                                  | `false`     |
-| `size`      | `size`       | Button size                                                    | `"large" \| "medium" \| "small"`                                           | `'medium'`  |
-| `target`    | `target`     | Link target when href is set                                   | `string`                                                                   | `undefined` |
-| `type`      | `type`       | The button type attribute                                      | `"button" \| "reset" \| "submit"`                                          | `'button'`  |
-| `variant`   | `variant`    | Button variant style                                           | `"clear" \| "outlined" \| "solid" \| "system"`                             | `'solid'`   |
+| Property    | Attribute    | Description                                                                                    | Type                                                                       | Default     |
+| ----------- | ------------ | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ----------- |
+| `align`     | `align`      | Alignment of the button label without the end icon                                             | `"center" \| "end" \| "space-between" \| "start"`                          | `'center'`  |
+| `color`     | `color`      | Button color theme (uses theme semantic colors)                                                | `"danger" \| "info" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'` |
+| `disabled`  | `disabled`   | Whether the button is disabled                                                                 | `boolean`                                                                  | `false`     |
+| `fullWidth` | `full-width` | Whether the button takes full width of its container                                           | `boolean`                                                                  | `false`     |
+| `href`      | `href`       | Optional href to make the button act as a link                                                 | `string`                                                                   | `undefined` |
+| `iconEnd`   | `icon-end`   | End icon image or emoji                                                                        | `Node \| string`                                                           | `undefined` |
+| `iconOnly`  | `icon-only`  | Icon only button image or emoji if this prop is set, the button will render only the icon slot | `Node \| string`                                                           | `undefined` |
+| `iconStart` | `icon-start` | Start icon image or emoji                                                                      | `Node \| string`                                                           | `undefined` |
+| `mode`      | `mode`       | Mode of the popover should be 'default' for internal use                                       | `"admin" \| "default"`                                                     | `undefined` |
+| `selected`  | `selected`   | Whether the button is in a selected/active state                                               | `boolean`                                                                  | `false`     |
+| `size`      | `size`       | Button size                                                                                    | `"large" \| "medium" \| "small"`                                           | `'medium'`  |
+| `target`    | `target`     | Link target when href is set                                                                   | `string`                                                                   | `undefined` |
+| `type`      | `type`       | The button type attribute                                                                      | `"button" \| "reset" \| "submit"`                                          | `'button'`  |
+| `variant`   | `variant`    | Button variant style                                                                           | `"clear" \| "outlined" \| "solid" \| "system"`                             | `'solid'`   |
 
 
 ## Events
@@ -105,19 +108,20 @@ A flexible button component with multiple variants and states.
 
 ## Slots
 
-| Slot           | Description          |
-| -------------- | -------------------- |
-|                | Button text content  |
-| `"icon-end"`   | Icon after the text  |
-| `"icon-start"` | Icon before the text |
+| Slot          | Description                |
+| ------------- | -------------------------- |
+|               | Button text content        |
+| `"icon-only"` | Icon for icon-only buttons |
 
 
 ## Shadow Parts
 
-| Part        | Description |
-| ----------- | ----------- |
-| `"button"`  |             |
-| `"content"` |             |
+| Part           | Description |
+| -------------- | ----------- |
+| `"button"`     |             |
+| `"content"`    |             |
+| `"icon-end"`   |             |
+| `"icon-start"` |             |
 
 
 ## Dependencies
@@ -127,6 +131,7 @@ A flexible button component with multiple variants and states.
  - [le-component](../le-component)
  - [le-number-input](../le-number-input)
  - [le-popup](../le-popup)
+ - [le-select](../le-select)
  - [le-slot](../le-slot)
 
 ### Depends on
@@ -147,6 +152,7 @@ graph TD;
   le-string-input --> le-slot
   le-number-input --> le-button
   le-popup --> le-button
+  le-select --> le-button
   style le-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -1,0 +1,163 @@
+/**
+ * le-dropdown-base component styles
+ *
+ * Internal component - minimal styling, meant to be customized
+ * by wrapper components (le-select, le-combobox, etc.)
+ */
+
+:host {
+  display: block;
+  --le-dropdown-list-padding: var(--le-spacing-1);
+  --le-dropdown-empty-padding: var(--le-spacing-4);
+  --le-dropdown-option-radius: var(--le-radius-md);
+  --le-dropdown-font-size: var(--le-font-size-sm);
+  --le-dropdown-option-padding: var(--le-spacing-1) var(--le-spacing-2);
+  --le-dropdown-group-padding: var(--le-spacing-2) var(--le-spacing-2) var(--le-spacing-1);
+  --le-dropdown-group-font-size: var(--le-font-size-xs);
+}
+
+:host([disabled]) {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Dropdown list container */
+le-popover::part(content) {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--le-dropdown-list-padding, 0.25rem);
+}
+
+/* Empty state */
+.dropdown-empty {
+  padding: var(--le-dropdown-empty-padding);
+  text-align: center;
+  color: var(--le-color-text-secondary, #9ca3af);
+  font-size: var(--le-dropdown-font-size);
+}
+
+/* Group header */
+.dropdown-group-header {
+  padding: var(--le-dropdown-group-padding);
+  font-size: var(--le-dropdown-group-font-size);
+  font-weight: 700;
+  color: var(--le-color-text-secondary, #9ca3af);
+  letter-spacing: 0.05em;
+}
+
+/* Separator */
+.dropdown-separator {
+  height: 1px;
+  margin: var(--le-dropdown-separator-margin, 0.25rem 0);
+  background: var(--le-color-border, #e5e7eb);
+}
+
+/* Option item */
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  gap: var(--le-dropdown-option-gap, 0.5rem);
+  padding: var(--le-dropdown-option-padding);
+  font-size: var(--le-dropdown-font-size, 0.875rem);
+  line-height: 1.4;
+  color: var(--le-color-text, #1f2937);
+  border: 1px solid transparent;
+  border-radius: var(--le-dropdown-option-radius, 0.25rem);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.1s ease;
+}
+
+.dropdown-option:hover,
+.dropdown-option.is-focused {
+  border-color: var(--le-color-border-hover, #d1d5db);
+}
+
+.dropdown-option.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dropdown-option.is-disabled:hover {
+  background: transparent;
+}
+
+/* Checkbox for multiselect */
+.option-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--le-color-border, #d1d5db);
+  border-radius: 0.25rem;
+  background: var(--le-color-surface, #fff);
+  flex-shrink: 0;
+}
+
+.is-selected .option-checkbox {
+  background: var(--le-color-primary, #3b82f6);
+  border-color: var(--le-color-primary, #3b82f6);
+  color: white;
+}
+
+.option-checkbox svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+/* Icons */
+.option-icon-start,
+.option-icon-end {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.option-icon-start img,
+.option-icon-end img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Content */
+.option-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.option-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.option-description {
+  font-size: 0.75rem;
+  color: var(--le-color-text-muted, #6b7280);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Check mark for single select */
+.option-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  color: var(--le-color-primary, #3b82f6);
+  flex-shrink: 0;
+}
+
+.option-check svg {
+  width: 1rem;
+  height: 1rem;
+}

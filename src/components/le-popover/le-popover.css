@@ -8,6 +8,11 @@
   position: relative;
 }
 
+:host([trigger-full-width]) {
+  display: block;
+  width: 100%;
+}
+
 /* ============================================
    Trigger
    ============================================ */
@@ -15,6 +20,11 @@
 .le-popover-trigger {
   display: inline-flex;
   cursor: pointer;
+}
+
+.le-popover-trigger-full-width {
+  display: flex;
+  width: 100%;
 }
 
 .le-popover-default-trigger {

@@ -1,14 +1,18 @@
-import { Component, Prop, Method, Event, EventEmitter, State, h, Element } from '@stencil/core';
+import { Component, Prop, Method, Event, EventEmitter, State, h, Element, Host } from '@stencil/core';
+import { classnames } from '../../utils/utils';
 
 /**
  * A popover component for displaying floating content.
- * 
+ *
  * Uses the native HTML Popover API for proper layering with dialogs
  * and other top-layer elements. Falls back gracefully in older browsers.
  *
  * @slot - Content to display inside the popover
  * @slot trigger - Element that triggers the popover (optional)
- * 
+ *
+ * @csspart trigger - The popover trigger element
+ * @csspart content - The popover content wrapper
+ *
  * @cmsInternal true
  * @cmsCategory System
  */
@@ -81,6 +85,11 @@ export class LePopover {
   @Prop() maxWidth?: string;
 
   /**
+   * Should the popover's trigger take full width of its container
+   */
+  @Prop() triggerFullWidth: boolean = false;
+
+  /**
    * Emitted when the popover opens
    */
   @Event() lePopoverOpen: EventEmitter<void>;
@@ -100,7 +109,7 @@ export class LePopover {
   componentDidLoad() {
     // Listen for toggle events from the native popover API
     this.popoverEl?.addEventListener('toggle', this.handlePopoverToggle as EventListener);
-    
+
     // Listen for other popovers opening to close this one
     document.addEventListener('le-popover-will-open', this.handleOtherPopoverOpen);
   }
@@ -117,7 +126,7 @@ export class LePopover {
   private getScrollParents(element: Element): Element[] {
     const scrollParents: Element[] = [];
     let parent = element.parentElement;
-    
+
     while (parent) {
       const style = getComputedStyle(parent);
       const overflow = style.overflow + style.overflowY + style.overflowX;
@@ -126,7 +135,7 @@ export class LePopover {
       }
       parent = parent.parentElement;
     }
-    
+
     // Always include window for page scroll
     return scrollParents;
   }
@@ -136,14 +145,14 @@ export class LePopover {
    */
   private addScrollListeners() {
     if (!this.triggerEl) return;
-    
+
     this.scrollParents = this.getScrollParents(this.triggerEl);
-    
+
     // Listen to each scroll parent
     this.scrollParents.forEach(parent => {
       parent.addEventListener('scroll', this.handleScroll, { passive: true });
     });
-    
+
     // Also listen to window scroll and resize
     window.addEventListener('scroll', this.handleScroll, { passive: true });
     window.addEventListener('resize', this.handleScroll, { passive: true });
@@ -184,7 +193,7 @@ export class LePopover {
   private handleOtherPopoverOpen = (event: Event) => {
     const customEvent = event as CustomEvent;
     if (customEvent.detail?.popover === this.el) return;
-    
+
     if (this.open) {
       this.hide();
     }
@@ -195,10 +204,12 @@ export class LePopover {
    */
   @Method()
   async show() {
-    document.dispatchEvent(new CustomEvent('le-popover-will-open', {
-      detail: { popover: this.el }
-    }));
-    
+    document.dispatchEvent(
+      new CustomEvent('le-popover-will-open', {
+        detail: { popover: this.el },
+      }),
+    );
+
     this.popoverEl?.showPopover();
   }
 
@@ -325,7 +336,7 @@ export class LePopover {
           left = triggerRect.right - popoverRect.width;
           break;
       }
-      
+
       // Constrain to viewport
       if (left < viewportPadding) {
         left = viewportPadding;
@@ -347,7 +358,7 @@ export class LePopover {
           top = triggerRect.bottom - popoverRect.height;
           break;
       }
-      
+
       if (top < viewportPadding) top = viewportPadding;
       if (top + popoverRect.height > viewportHeight - viewportPadding) {
         maxHeight = viewportHeight - top - viewportPadding;
@@ -357,7 +368,7 @@ export class LePopover {
     // Apply styles
     this.popoverEl.style.top = `${top}px`;
     this.popoverEl.style.left = `${left}px`;
-    
+
     if (maxHeight !== null && maxHeight > 100) {
       this.popoverEl.style.maxHeight = `${maxHeight}px`;
       this.popoverEl.style.overflowY = 'auto';
@@ -373,50 +384,43 @@ export class LePopover {
     const popoverStyles: Record<string, string> = {
       visibility: this.isPositioned ? 'visible' : 'hidden',
     };
-    
+
     if (this.width) popoverStyles.width = this.width;
     if (this.minWidth) popoverStyles.minWidth = this.minWidth;
     if (this.maxWidth) popoverStyles.maxWidth = this.maxWidth;
 
-    return [
-      <div 
-        class="le-popover-trigger" 
-        ref={(el) => (this.triggerEl = el)}
-        onClick={this.handleTriggerClick}
-      >
-        <slot name="trigger">
-          <button type="button" class="le-popover-default-trigger">
-            <span>⊕</span>
-          </button>
-        </slot>
-      </div>,
-      
-      <div
-        id={this.uniqueId}
-        class="le-popover-content"
-        popover={this.closeOnClickOutside ? 'auto' : 'manual'}
-        ref={(el) => (this.popoverEl = el)}
-        style={popoverStyles}
-      >
-        {(this.popoverTitle || this.showClose) && (
-          <div class="le-popover-header">
-            {this.popoverTitle && <span class="le-popover-title">{this.popoverTitle}</span>}
-            {this.showClose && (
-              <button 
-                type="button" 
-                class="le-popover-close"
-                onClick={() => this.hide()}
-                aria-label="Close"
-              >
-                ×
-              </button>
-            )}
-          </div>
-        )}
-        <div class="le-popover-body">
-          <slot></slot>
+    return (
+      <Host trigger-full-width={this.triggerFullWidth}>
+        <div
+          class={classnames('le-popover-trigger', {
+            'le-popover-trigger-full-width': this.triggerFullWidth,
+          })}
+          ref={el => (this.triggerEl = el)}
+          onClick={this.handleTriggerClick}
+          part="trigger"
+        >
+          <slot name="trigger">
+            <button type="button" class="le-popover-default-trigger">
+              <span>⊕</span>
+            </button>
+          </slot>
         </div>
-      </div>
-    ];
+        <div id={this.uniqueId} class="le-popover-content" popover={this.closeOnClickOutside ? 'auto' : 'manual'} ref={el => (this.popoverEl = el)} style={popoverStyles}>
+          {(this.popoverTitle || this.showClose) && (
+            <div class="le-popover-header">
+              {this.popoverTitle && <span class="le-popover-title">{this.popoverTitle}</span>}
+              {this.showClose && (
+                <button type="button" class="le-popover-close" onClick={() => this.hide()} aria-label="Close">
+                  ×
+                </button>
+              )}
+            </div>
+          )}
+          <div class="le-popover-body" part="content">
+            <slot></slot>
+          </div>
+        </div>
+      </Host>
+    );
   }
 }

@@ -56,6 +56,7 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
  - [le-popup](../le-popup)
  - [le-stack](../le-stack)
  - [le-string-input](../le-string-input)
+ - [le-tag](../le-tag)
 
 ### Depends on
 
@@ -81,6 +82,7 @@ graph TD;
   le-number-input --> le-slot
   le-popup --> le-slot
   le-stack --> le-slot
+  le-tag --> le-slot
   style le-slot fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

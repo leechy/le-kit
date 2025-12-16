@@ -1,0 +1,163 @@
+/**
+ * le-multiselect component styles
+ *
+ * CSS Custom Properties:
+ * --le-multiselect-min-height
+ * --le-multiselect-padding
+ * --le-multiselect-font-size
+ * --le-multiselect-border-radius
+ * --le-multiselect-border-color
+ * --le-multiselect-bg
+ * --le-multiselect-color
+ */
+
+:host {
+  display: inline-block;
+  min-width: 250px;
+
+  --le-multiselect-min-height: 0;
+  --le-multiselect-padding: var(--le-spacing-1) var(--le-spacing-1) var(--le-spacing-1) var(--le-spacing-2);
+  --le-multiselect-border-color: var(--le-color-primary, #3b82f6);
+}
+
+:host([disabled]) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Trigger wrapper */
+.multiselect-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: var(--le-multiselect-min-height);
+  padding: var(--le-multiselect-padding);
+  line-height: var(--le-line-height-tight);
+  background: var(--le-multiselect-bg, var(--le-color-surface, #fff));
+  border: 1px solid color-mix(in srgb, var(--le-multiselect-border-color) 33%, transparent);
+  border-radius: var(--le-multiselect-border-radius, 0.375rem);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.multiselect-trigger:hover:not(.is-disabled),
+:host(:focus-within) .multiselect-trigger:not(.is-disabled) {
+  border-color: var(--le-multiselect-border-color);
+}
+
+:host(:focus-within) .multiselect-trigger {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+:host([full-width]) {
+  width: 100%;
+}
+
+.multiselect-trigger.is-open {
+  border-color: var(--le-color-primary, #3b82f6);
+}
+
+.multiselect-trigger.is-disabled {
+  cursor: not-allowed;
+  background: var(--le-color-surface-disabled, #f9fafb);
+}
+
+/* Placeholder */
+.multiselect-placeholder {
+  color: color-mix(in srgb, var(--le-color-text-secondary) 66%, transparent);
+}
+
+/* Tags container */
+.multiselect-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Actions (clear + arrow) */
+.multiselect-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* Clear button */
+.multiselect-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  background: transparent;
+  color: var(--le-color-primary, #3b82f6);
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.multiselect-clear:hover {
+  opacity: 1;
+  background: var(--le-color-surface-hover, #f3f4f6);
+}
+
+.multiselect-clear svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* Arrow icon */
+.multiselect-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1rem;
+  color: var(--le-color-primary, #3b82f6);
+  transition: transform 0.2s ease;
+}
+
+.multiselect-arrow svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.multiselect-trigger.is-open .multiselect-arrow {
+  transform: rotate(180deg);
+}
+
+/* Search in dropdown */
+.search-input::part(container):focus-within {
+  outline: none !important;
+}
+.search-input {
+  --le-input-radius: var(--le-radius-md);
+}
+
+/* Status message */
+.multiselect-status {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--le-color-text-muted, #6b7280);
+}
+
+/* Size variants */
+:host([size='small']) .multiselect-trigger {
+  --le-multiselect-min-height: 2rem;
+  --le-multiselect-padding: 0.25rem 0.375rem;
+  --le-multiselect-font-size: 0.75rem;
+}
+
+:host([size='large']) .multiselect-trigger {
+  --le-multiselect-min-height: 3rem;
+  --le-multiselect-padding: 0.5rem 0.625rem;
+  --le-multiselect-font-size: 1rem;
+}

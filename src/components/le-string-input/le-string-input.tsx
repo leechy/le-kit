@@ -25,6 +25,11 @@ export class LeStringInput {
   @Element() el: HTMLElement;
 
   /**
+   * Pass the ref of the input element to the parent component
+   */
+  @Prop() inputRef?: (el: HTMLInputElement) => void;
+
+  /**
    * Mode of the popover should be 'default' for internal use
    */
   @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin';
@@ -82,12 +87,20 @@ export class LeStringInput {
   /**
    * Emitted when the value changes (on blur or Enter)
    */
-  @Event({ eventName: 'change' }) leChange: EventEmitter<{ value: string; name: string; externalId: string }>;
+  @Event({ eventName: 'change' }) leChange: EventEmitter<{
+    value: string;
+    name: string;
+    externalId: string;
+  }>;
 
   /**
    * Emitted when the input value changes (on keystroke)
    */
-  @Event({ eventName: 'input' }) leInput: EventEmitter<{ value: string; name: string; externalId: string }>;
+  @Event({ eventName: 'input' }) leInput: EventEmitter<{
+    value: string;
+    name: string;
+    externalId: string;
+  }>;
 
   private handleInput = (ev: Event) => {
     const input = ev.target as HTMLInputElement;
@@ -95,7 +108,7 @@ export class LeStringInput {
     this.leInput.emit({
       value: this.value,
       name: this.name,
-      externalId: this.externalId
+      externalId: this.externalId,
     });
   };
 
@@ -105,7 +118,7 @@ export class LeStringInput {
     this.leChange.emit({
       value: this.value,
       name: this.name,
-      externalId: this.externalId
+      externalId: this.externalId,
     });
   };
 
@@ -115,17 +128,22 @@ export class LeStringInput {
 
   render() {
     return (
-      <le-component component="le-string-input" hostClass={classnames({ 'disabled': this.disabled })}>
+      <le-component component="le-string-input" hostClass={classnames({ disabled: this.disabled })}>
         <div class="le-input-wrapper">
           {this.label && (
-            <label class="le-input-label" htmlFor={this.name}>{this.label}</label>
+            <label class="le-input-label" htmlFor={this.name}>
+              {this.label}
+            </label>
           )}
-          
-          <div class="le-input-container">
-            {this.iconStart && (
-              <span class="icon-start">{this.iconStart}</span>
-            )}
+
+          <div class="le-input-container" part="container">
+            {this.iconStart && <span class="icon-start">{this.iconStart}</span>}
             <input
+              ref={el => {
+                if (this.inputRef) {
+                  this.inputRef(el);
+                }
+              }}
               id={this.name}
               type={this.type}
               name={this.name}
@@ -137,9 +155,7 @@ export class LeStringInput {
               onChange={this.handleChange}
               onClick={this.handleClick}
             />
-            {this.iconEnd && (
-              <span class="icon-end">{this.iconEnd}</span>
-            )}
+            {this.iconEnd && <span class="icon-end">{this.iconEnd}</span>}
           </div>
 
           <div class="le-input-description">

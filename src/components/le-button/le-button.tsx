@@ -125,8 +125,6 @@ export class LeButton {
   };
 
   render() {
-    console.log('Button with iconEnd:', this.iconEnd);
-
     const classes = classnames(`variant-${this.variant}`, `color-${this.color}`, `size-${this.size}`, {
       'selected': this.selected,
       'full-width': this.fullWidth,

@@ -119,13 +119,22 @@ export class LeDropdownBase {
   }
 
   private updateFilteredOptions() {
+    // Remember previously focused option
+    const focusedOption = this.filteredOptions[this.focusedIndex];
+
     if (!this.filterQuery || !this.filterFn) {
       this.filteredOptions = this.options;
     } else {
       this.filteredOptions = this.options.filter(opt => this.filterFn!(opt, this.filterQuery));
     }
-    // Reset focus when options change
-    this.focusedIndex = -1;
+
+    // try to maintain focus on same option if still present
+    if (focusedOption) {
+      const newIndex = this.filteredOptions.indexOf(focusedOption);
+      this.focusedIndex = newIndex >= 0 ? newIndex : this.getInitialFocusIndex();
+    } else {
+      this.focusedIndex = -1;
+    }
   }
 
   private getSelectableOptions(): LeOption[] {
@@ -135,6 +144,9 @@ export class LeDropdownBase {
   private isSelected(option: LeOption): boolean {
     const optValue = option.value ?? option.label;
     if (this.multiple && Array.isArray(this.value)) {
+      setTimeout(() => {
+        this.popoverEl?.updatePosition();
+      }, 50);
       return this.value.includes(optValue);
     }
     return this.value === optValue;
@@ -160,31 +172,58 @@ export class LeDropdownBase {
   private handleKeyDown = (e: KeyboardEvent) => {
     if (!this.open) return;
 
-    const selectableOptions = this.getSelectableOptions();
-    const optionCount = selectableOptions.length;
+    const optionCount = this.filteredOptions.length;
 
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        this.focusedIndex = this.focusedIndex < optionCount - 1 ? this.focusedIndex + 1 : 0;
+        // check for the next non-disabled option and focus
+        let nextIndex = this.focusedIndex < optionCount - 1 ? this.focusedIndex + 1 : 0;
+        while (this.filteredOptions[nextIndex].disabled) {
+          nextIndex = ++nextIndex < optionCount ? nextIndex : 0;
+        }
+        this.focusedIndex = nextIndex;
         this.scrollToFocused();
         break;
 
       case 'ArrowUp':
         e.preventDefault();
-        this.focusedIndex = this.focusedIndex > 0 ? this.focusedIndex - 1 : optionCount - 1;
+        // check for the previous non-disabled option and focus
+        let prevIndex = this.focusedIndex > 0 ? this.focusedIndex - 1 : optionCount - 1;
+        while (this.filteredOptions[prevIndex].disabled) {
+          prevIndex = --prevIndex >= 0 ? prevIndex : optionCount - 1;
+        }
+        this.focusedIndex = prevIndex;
         this.scrollToFocused();
         break;
 
       case 'Home':
         e.preventDefault();
-        this.focusedIndex = 0;
+        // check for the first non-disabled option and focus
+        let firstIndex = 0;
+        while (this.filteredOptions[firstIndex].disabled) {
+          firstIndex++;
+          if (firstIndex >= optionCount) {
+            firstIndex = -1;
+            break;
+          }
+        }
+        this.focusedIndex = firstIndex;
         this.scrollToFocused();
         break;
 
       case 'End':
         e.preventDefault();
-        this.focusedIndex = optionCount - 1;
+        // check for the last non-disabled option and focus
+        let lastIndex = optionCount - 1;
+        while (this.filteredOptions[lastIndex].disabled) {
+          lastIndex--;
+          if (lastIndex < 0) {
+            lastIndex = -1;
+            break;
+          }
+        }
+        this.focusedIndex = lastIndex;
         this.scrollToFocused();
         break;
 
@@ -192,7 +231,8 @@ export class LeDropdownBase {
       case ' ':
         e.preventDefault();
         if (this.focusedIndex >= 0 && this.focusedIndex < optionCount) {
-          const option = selectableOptions[this.focusedIndex];
+          const option = this.filteredOptions[this.focusedIndex];
+          if (!option || option.disabled) return;
           this.leOptionSelect.emit({
             value: option.value ?? option.label,
             option,
@@ -319,22 +359,13 @@ export class LeDropdownBase {
           }
         }}
       >
-        {this.multiple && this.showCheckboxes && (
-          <span class="option-checkbox">
-            {isSelected ? (
-              <svg viewBox="0 0 16 16" fill="currentColor">
-                <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z" />
-              </svg>
-            ) : null}
-          </span>
-        )}
         {this.renderIcon(option.iconStart, 'option-icon-start')}
         <div class="option-content">
           <span class="option-label">{option.label}</span>
           {option.description && <span class="option-description">{option.description}</span>}
         </div>
         {this.renderIcon(option.iconEnd, 'option-icon-end')}
-        {!this.multiple && isSelected && (
+        {(!this.multiple || this.showCheckboxes) && isSelected && (
           <span class="option-check">
             <svg viewBox="0 0 16 16" fill="currentColor">
               <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z" />
@@ -414,6 +445,7 @@ export class LeDropdownBase {
           onLePopoverClose={this.handlePopoverClose}
         >
           <slot name="trigger" slot="trigger" />
+          <slot name="header" />
           <div class="dropdown-list" role="listbox" aria-multiselectable={this.multiple ? 'true' : undefined} ref={el => (this.listEl = el)} style={{ maxHeight: this.maxHeight }}>
             {this.renderOptions()}
           </div>

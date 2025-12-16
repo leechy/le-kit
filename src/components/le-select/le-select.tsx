@@ -1,4 +1,14 @@
-import { Component, Prop, State, Event, EventEmitter, Method, Element, Watch, h } from '@stencil/core';
+import {
+  Component,
+  Prop,
+  State,
+  Event,
+  EventEmitter,
+  Method,
+  Element,
+  Watch,
+  h,
+} from '@stencil/core';
 import { LeOption, LeOptionValue, LeOptionSelectDetail } from '../../types/options';
 
 /**
@@ -89,6 +99,16 @@ export class LeSelect {
   @Prop({ reflect: true }) variant: 'default' | 'outlined' | 'solid' = 'default';
 
   /**
+   * Whether the input is searchable.
+   */
+  @Prop() searchable: boolean = false;
+
+  /**
+   * Text to show when no options match the search.
+   */
+  @Prop() emptyText: string = 'No results found';
+
+  /**
    * Whether the dropdown is currently open.
    */
   @Prop({ mutable: true, reflect: true }) open: boolean = false;
@@ -110,7 +130,10 @@ export class LeSelect {
 
   @State() private selectedOption?: LeOption;
 
+  @State() private searchQuery: string = '';
+
   private dropdownEl?: HTMLLeDropdownBaseElement;
+  private inputEl?: HTMLInputElement;
 
   @Watch('value')
   handleValueChange() {
@@ -145,6 +168,16 @@ export class LeSelect {
     }
   }
 
+  private filterOption = (option: LeOption, query: string): boolean => {
+    if (!query) return true;
+
+    const searchLower = query.toLowerCase();
+    return (
+      option.label.toLowerCase().includes(searchLower) ||
+      (option.description?.toLowerCase().includes(searchLower) ?? false)
+    );
+  };
+
   private handleOptionSelect = (e: CustomEvent<LeOptionSelectDetail>) => {
     this.value = e.detail.value;
     this.selectedOption = e.detail.option;
@@ -154,6 +187,13 @@ export class LeSelect {
   private handleDropdownOpen = () => {
     this.open = true;
     this.leOpen.emit();
+
+    // Focus search input if searchable
+    if (this.searchable) {
+      setTimeout(() => {
+        this.inputEl?.focus();
+      }, 50);
+    }
   };
 
   private handleDropdownClose = () => {
@@ -174,6 +214,11 @@ export class LeSelect {
       e.preventDefault();
       this.dropdownEl?.show();
     }
+  };
+
+  private handleSearchInput = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    this.searchQuery = target.value;
   };
 
   /**
@@ -212,6 +257,8 @@ export class LeSelect {
           options={this.parsedOptions}
           value={this.value}
           disabled={this.disabled}
+          filterFn={this.searchable ? this.filterOption : undefined}
+          filterQuery={this.searchQuery}
           onLeOptionSelect={this.handleOptionSelect}
           onLeDropdownOpen={this.handleDropdownOpen}
           onLeDropdownClose={this.handleDropdownClose}
@@ -234,15 +281,42 @@ export class LeSelect {
             onClick={this.handleTriggerClick}
             onKeyDown={this.handleTriggerKeyDown}
             fullWidth={this.fullWidth}
-            iconStart={hasValue && this.selectedOption?.iconStart ? this.renderIcon(this.selectedOption.iconStart) : null}
+            iconStart={
+              hasValue && this.selectedOption?.iconStart
+                ? this.renderIcon(this.selectedOption.iconStart)
+                : null
+            }
             iconEnd={
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <path d="M4 6l4 4 4-4" />
               </svg>
             }
           >
-            <span class="trigger-label">{hasValue ? this.selectedOption!.label : this.placeholder}</span>
+            <span class="trigger-label">
+              {hasValue ? this.selectedOption!.label : this.placeholder}
+            </span>
           </le-button>
+
+          {/* Search input shown in dropdown header */}
+          {this.searchable && this.open && (
+            <div class="multiselect-search" slot="header">
+              <le-string-input
+                mode="default"
+                inputRef={el => (this.inputEl = el)}
+                class="search-input"
+                placeholder="Search..."
+                value={this.searchQuery}
+                onInput={this.handleSearchInput}
+              />
+            </div>
+          )}
         </le-dropdown-base>
 
         {/* Hidden input for form submission */}

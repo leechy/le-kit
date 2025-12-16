@@ -54,8 +54,7 @@
 
 /* Placeholder state */
 .select-trigger:not(.has-value) .trigger-label {
-  color: var(--le-color-text-secondary);
-  opacity: 0.8;
+  color: color-mix(in srgb, var(--le-color-text-secondary) 66%, transparent);
 }
 
 /* Trigger icon */
@@ -111,4 +110,12 @@ le-button::part(icon-end) svg {
 
 le-button.is-open::part(icon-end) {
   transform: rotate(180deg);
+}
+
+/* Search in dropdown */
+.search-input::part(container):focus-within {
+  outline: none !important;
+}
+.search-input {
+  --le-input-radius: var(--le-radius-md);
 }

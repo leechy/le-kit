@@ -99,6 +99,14 @@ export class LePopover {
    */
   @Event() lePopoverClose: EventEmitter<void>;
 
+  /**
+   * Method to update the popover position from a parent component
+   */
+  @Method()
+  async updatePosition() {
+    this._updatePosition();
+  }
+
   @State() private isPositioned: boolean = false;
 
   private triggerEl?: HTMLElement;
@@ -172,7 +180,7 @@ export class LePopover {
 
   private handleScroll = () => {
     if (this.open) {
-      this.updatePosition();
+      this._updatePosition();
     }
   };
 
@@ -180,7 +188,7 @@ export class LePopover {
     if (event.newState === 'open') {
       this.open = true;
       this.addScrollListeners();
-      this.updatePosition();
+      this._updatePosition();
       this.lePopoverOpen.emit();
     } else {
       this.open = false;
@@ -238,7 +246,7 @@ export class LePopover {
     this.toggle();
   };
 
-  private updatePosition() {
+  private _updatePosition() {
     if (!this.triggerEl || !this.popoverEl) return;
 
     const triggerRect = this.triggerEl.getBoundingClientRect();

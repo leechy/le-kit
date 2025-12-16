@@ -51,6 +51,11 @@ export class LeTag {
   @Prop() label: string;
 
   /**
+   * Mode of the popover should be 'default' for internal use
+   */
+  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin';
+
+  /**
    * Icon to display before the label.
    * Can be an emoji, URL, or icon name.
    */

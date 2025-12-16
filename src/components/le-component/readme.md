@@ -54,10 +54,13 @@ render() {
  - [le-button](../le-button)
  - [le-card](../le-card)
  - [le-checkbox](../le-checkbox)
+ - [le-multiselect](../le-multiselect)
  - [le-number-input](../le-number-input)
  - [le-popup](../le-popup)
+ - [le-select](../le-select)
  - [le-stack](../le-stack)
  - [le-string-input](../le-string-input)
+ - [le-tag](../le-tag)
  - [le-text](../le-text)
 
 ### Depends on
@@ -82,9 +85,12 @@ graph TD;
   le-checkbox --> le-component
   le-box --> le-component
   le-card --> le-component
+  le-multiselect --> le-component
   le-number-input --> le-component
   le-popup --> le-component
+  le-select --> le-component
   le-stack --> le-component
+  le-tag --> le-component
   le-text --> le-component
   style le-component fill:#f9f,stroke:#333,stroke-width:4px
 ```

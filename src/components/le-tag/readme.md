@@ -41,9 +41,29 @@ A tag/chip component for displaying labels with optional dismiss functionality.
 
  - [le-multiselect](../le-multiselect)
 
+### Depends on
+
+- [le-component](../le-component)
+- [le-slot](../le-slot)
+
 ### Graph
 ```mermaid
 graph TD;
+  le-tag --> le-component
+  le-tag --> le-slot
+  le-component --> le-button
+  le-component --> le-checkbox
+  le-component --> le-string-input
+  le-component --> le-popover
+  le-button --> le-component
+  le-button --> le-slot
+  le-slot --> le-popover
+  le-slot --> le-button
+  le-slot --> le-string-input
+  le-string-input --> le-component
+  le-string-input --> le-slot
+  le-checkbox --> le-component
+  le-checkbox --> le-slot
   le-multiselect --> le-tag
   style le-tag fill:#f9f,stroke:#333,stroke-width:4px
 ```

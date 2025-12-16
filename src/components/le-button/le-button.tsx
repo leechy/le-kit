@@ -5,8 +5,7 @@ import { classnames } from '../../utils/utils';
  * A flexible button component with multiple variants and states.
  *
  * @slot - Button text content
- * @slot icon-start - Icon before the text
- * @slot icon-end - Icon after the text
+ * @slot icon-only - Icon for icon-only buttons
  *
  * @cssprop --le-button-bg - Button background color
  * @cssprop --le-button-color - Button text color
@@ -16,13 +15,15 @@ import { classnames } from '../../utils/utils';
  *
  * @csspart button - The native button element
  * @csspart content - The button content wrapper
+ * @csspart icon-start - The start icon slot
+ * @csspart icon-end - The end icon slot
  *
  * @cmsEditable true
  * @cmsCategory Actions
  */
 @Component({
   tag: 'le-button',
-  styleUrl: 'le-button.default.css',
+  styleUrl: 'le-button.css',
   shadow: true,
 })
 export class LeButton {
@@ -62,9 +63,20 @@ export class LeButton {
   @Prop({ reflect: true }) fullWidth: boolean = false;
 
   /**
-   * Whether the button displays only an icon (square aspect ratio)
+   * Icon only button image or emoji
+   * if this prop is set, the button will render only the icon slot
    */
-  @Prop() iconOnly: boolean = false;
+  @Prop() iconOnly?: string | Node;
+
+  /**
+   * Start icon image or emoji
+   */
+  @Prop() iconStart?: string | Node;
+
+  /**
+   * End icon image or emoji
+   */
+  @Prop() iconEnd?: string | Node;
 
   /**
    * Whether the button is disabled
@@ -88,6 +100,12 @@ export class LeButton {
   @Prop() target?: string;
 
   /**
+   * Alignment of the button label without the end icon
+   * @allowedValues start | center | space-between | end
+   */
+  @Prop() align: 'start' | 'center' | 'space-between' | 'end' = 'center';
+
+  /**
    * Emitted when the button is clicked.
    * This is a custom event that wraps the native click but ensures the target is the le-button.
    */
@@ -101,12 +119,14 @@ export class LeButton {
       event.preventDefault();
       return;
     }
-    
+
     // And emit our own click event from the host element
     this.leClick.emit(event);
   };
 
   render() {
+    console.log('Button with iconEnd:', this.iconEnd);
+
     const classes = classnames(`variant-${this.variant}`, `color-${this.color}`, `size-${this.size}`, {
       'selected': this.selected,
       'full-width': this.fullWidth,
@@ -119,22 +139,26 @@ export class LeButton {
 
     return (
       <le-component component="le-button" hostClass={classes}>
-        <TagType class="button" part="button" {...attrs} onClick={this.handleClick}>
-          {this.iconOnly ? (
-            <span class="icon-start">
-              <slot name="icon-only"></slot>
-            </span>
+        <TagType class={classnames('le-button-container', `le-button-align-${this.align}`)} part="button" {...attrs} onClick={this.handleClick}>
+          {this.iconOnly !== undefined ? (
+            <slot name="icon-only">{typeof this.iconOnly === 'string' ? this.iconOnly : null}</slot>
           ) : (
             <Fragment>
-              <span class="icon-start">
-                <slot name="icon-start"></slot>
+              <span class="le-button-label">
+                {this.iconStart && (
+                  <span class="icon-start" part="icon-start">
+                    {this.iconStart}
+                  </span>
+                )}
+                <le-slot name="" description="Button text" type="text" class="content" part="content">
+                  <slot></slot>
+                </le-slot>
               </span>
-              <le-slot name="" description="Button text" type="text" class="content" part="content">
-                <slot></slot>
-              </le-slot>
-              <span class="icon-end">
-                <slot name="icon-end"></slot>
-              </span>
+              {this.iconEnd && (
+                <span class="icon-end" part="icon-end">
+                  {this.iconEnd}
+                </span>
+              )}
             </Fragment>
           )}
         </TagType>

@@ -7,19 +7,22 @@
   
   /* Component-specific tokens */
   --le-button-border-radius: var(--le-radius-md);
-  --le-button-padding-x: 0.4rem;
-  --le-button-padding-y: 0.4rem;
+  --le-button-padding-x: var(--le-spacing-3);
+  --le-button-padding-y: var(--le-spacing-1);
+  --le-button-padding: var(--le-button-padding-y) var(--le-button-padding-x);
   --le-button-small-padding: 0.25rem;
   --le-button-font-size: var(--le-font-size-md);
   --le-button-font-weight: var(--le-font-weight-medium);
   --le-button-transition: var(--le-transition-fast);
+  --le-transition-easing: ease-in-out;
   --le-button-icon-aspect-ratio: 1;
+  --le-button-color: var(--le-color-primary-contrast);
   
   /* Internal state variables - set by color classes */
   --_btn-bg: var(--le-color-primary);
   --_btn-bg-hover: var(--le-color-primary-dark);
   --_btn-bg-system: var(--le-color-black);
-  --_btn-color: var(--le-color-primary-contrast);
+  --_btn-color: var(--le-button-color);
   --_btn-border-color: var(--le-color-primary);
 }
 
@@ -28,13 +31,14 @@
   width: 100%;
 }
 
-.button {
+.le-button-container {
   display: inline-flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: var(--le-spacing-3);
   width: 100%;
-  padding: var(--le-button-padding-y) var(--le-button-padding-x);
+  padding: var(--le-button-padding);
   border: 1px solid var(--_btn-border-color);
   border-radius: var(--le-button-border-radius);
   background: var(--_btn-bg);
@@ -52,23 +56,31 @@
     transform var(--le-button-transition) var(--le-transition-easing);
 }
 
-.button:hover:not(:disabled) {
+.le-button-container:hover:not(:disabled) {
   background: var(--_btn-bg-hover);
   border-color: var(--_btn-bg-hover);
 }
 
-.button:active:not(:disabled) {
-  transform: translateY(1px);
+.le-button-container:active:not(:disabled) {
+  box-shadow: inset 0 0 6px var(--le-color-shadow);
 }
 
-.button:focus-visible {
+.le-button-container:focus-visible {
   outline: 2px solid var(--le-color-focus);
   outline-offset: 2px;
 }
 
-.button:disabled {
+.le-button-container:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.le-button-label {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--le-spacing-2);
 }
 
 /* ===========================================
@@ -79,7 +91,7 @@
 :host > le-component.color-primary {
   --_btn-bg: var(--le-color-primary);
   --_btn-bg-hover: var(--le-color-primary-dark);
-  --_btn-color: var(--le-color-primary-contrast);
+  --_btn-color: var(--le-button-color);
   --_btn-border-color: var(--le-color-primary);
 }
 
@@ -128,40 +140,39 @@
  * =========================================== */
 
 /* Solid (default) - already styled by color classes */
-:host > le-component.variant-solid .button {
+:host > le-component.variant-solid .le-button-container {
   box-shadow: var(--le-shadow-sm);
 }
 
-:host > le-component.variant-solid .button:hover:not(:disabled) {
+:host > le-component.variant-solid .le-button-container:hover:not(:disabled) {
   box-shadow: var(--le-shadow-md);
 }
 
 /* Outlined */
-:host > le-component.variant-outlined .button {
+:host > le-component.variant-outlined .le-button-container {
   background: transparent;
   color: var(--_btn-bg);
+  border-color: color-mix(in srgb, var(--_btn-border-color) 33%, transparent);
+}
+
+:host > le-component.variant-outlined .le-button-container:hover:not(:disabled) {
   border-color: var(--_btn-border-color);
 }
 
-:host > le-component.variant-outlined .button:hover:not(:disabled) {
-  background: var(--_btn-bg);
-  color: var(--_btn-color);
-}
-
 /* Clear (ghost) */
-:host > le-component.variant-clear .button {
+:host > le-component.variant-clear .le-button-container {
   background: transparent;
   color: var(--_btn-bg);
   border-color: transparent;
 }
 
-:host > le-component.variant-clear .button:hover:not(:disabled) {
+:host > le-component.variant-clear .le-button-container:hover:not(:disabled) {
   background: var(--le-color-gray-100);
   border-color: transparent;
 }
 
 /* System (controls without access) */
-:host > le-component.variant-system .button {
+:host > le-component.variant-system .le-button-container {
   background: transparent;
   color: var(--_btn-bg-system);
   border-color: transparent;
@@ -170,14 +181,14 @@
 /* ===========================================
  * SIZES
  * =========================================== */
-:host > le-component.size-small .button {
+:host > le-component.size-small .le-button-container {
   --le-button-padding-x: 0.4rem;
   --le-button-padding-y: 0.3rem;
   --le-button-padding-top: 0.35rem;
   --le-button-font-size: var(--le-button-small-font-size, var(--le-font-size-xs));
 }
 
-:host > le-component.size-large .button {
+:host > le-component.size-large .le-button-container {
   --le-button-padding-x: 0.9rem;
   --le-button-padding-y: 0.6rem;
   --le-button-font-size: var(--le-font-size-xl);
@@ -194,28 +205,28 @@
 }
 
 /* Selected state */
-:host > le-component.selected .button {
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+:host > le-component.selected .le-button-container {
+  box-shadow: inset 0 0 4px var(--le-color-shadow);
 }
 
-:host > le-component.variant-outlined.selected .button,
-:host > le-component.variant-clear.selected .button {
+:host > le-component.variant-outlined.selected .le-button-container,
+:host > le-component.variant-clear.selected .le-button-container {
   background: var(--_btn-bg);
   color: var(--_btn-color);
 }
 
 /* Icon only */
-:host > le-component.icon-only .button {
+:host > le-component.icon-only .le-button-container {
   padding: 0.5rem;
   padding-bottom: 0.6rem;
   aspect-ratio: var(--le-button-icon-aspect-ratio, 1);
 }
 
-:host > le-component.icon-only.size-small .button {
+:host > le-component.icon-only.size-small .le-button-container {
   padding: var(--le-button-small-padding, 0.25rem);
 }
 
-:host > le-component.icon-only.size-large .button {
+:host > le-component.icon-only.size-large .le-button-container {
   padding: 0.75rem;
 }
 
@@ -260,4 +271,20 @@
   justify-content: center;
   width: 1.125em;
   height: 1.125em;
+}
+
+/* ===========================================
+ * ALIGNMENT MODIFIERS
+ * =========================================== */
+.le-button-align-start {
+  justify-content: flex-start;
+}
+.le-button-align-center {
+  justify-content: center;
+}
+.le-button-align-space-between {
+  justify-content: space-between;
+}
+.le-button-align-end {
+  justify-content: flex-end;
 }

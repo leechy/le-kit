@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src-core",
+    "types"
+  ],
+  "exclude": [
+    "src",
+    "node_modules"
+  ]
+}

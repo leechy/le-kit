@@ -1,4 +1,5 @@
 import { Config } from '@stencil/core';
+import { reactOutputTarget } from '@stencil/react-output-target';
 
 export const config: Config = {
   namespace: 'le-kit',
@@ -9,15 +10,39 @@ export const config: Config = {
     {
       type: 'dist',
       esmLoaderPath: '../loader',
+      copy: [
+        { src: 'themes', dest: 'dist/components/themes' },
+        {
+          src: '../src/assets/custom-elements.json',
+          dest: './assets/custom-elements.json'
+        },
+      ],
     },
-    // Custom elements - all components (admin build)
     {
       type: 'dist-custom-elements',
       dir: 'dist/components',
-      customElementsExportBehavior: 'single-export-module',
-      externalRuntime: true,
-      includeGlobalScripts: true,
+      copy: [
+        { src: 'themes', dest: 'dist/components/themes' },
+        {
+          src: '../src/assets/custom-elements.json',
+          dest: './assets/custom-elements.json'
+        },
+      ],
     },
+    {
+      type: 'dist-custom-elements',
+      dir: 'dist-core/components',
+      copy: [
+        { src: '../dist-core', dest: 'dist/core' },
+      ],
+    },
+    // reactOutputTarget({
+    //   outDir: 'dist/react/',
+    // }),
+    // {
+    //   type: 'dist-custom-elements',
+    //   externalRuntime: false
+    // },
     {
       type: 'docs-readme',
     },
@@ -31,7 +56,14 @@ export const config: Config = {
       copy: [
         { src: 'global' },
         { src: 'themes', dest: 'build/themes' },
-        { src: '../custom-elements.json', dest: 'custom-elements.json' },
+        {
+          src: '../src/assets/custom-elements.json',
+          dest: 'src/components/assets/custom-elements.json'
+        },
+        {
+          src: '../src/assets/custom-elements.json',
+          dest: './build/assets/custom-elements.json'
+        },
       ],
     },
   ],

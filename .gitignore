@@ -1,4 +1,5 @@
 dist/
+dist-core/
 www/
 loader/
 
@@ -24,3 +25,4 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 .env
+src-core/

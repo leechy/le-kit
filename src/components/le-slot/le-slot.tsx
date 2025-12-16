@@ -1,4 +1,4 @@
-import { Component, Prop, State, h, Host, Element, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, State, h, Host, Element, Event, EventEmitter, getAssetPath } from '@stencil/core';
 import { classnames, observeModeChanges } from '../../utils/utils';
 import { getLeKitConfig } from '../../global/app';
 
@@ -315,8 +315,9 @@ export class LeSlot {
    */
   private async loadAvailableComponents() {
     try {
-      const { manifestUrl } = getLeKitConfig();
-      const response = await fetch(manifestUrl);
+      const { manifestFile } = getLeKitConfig();
+      const manifestFileResolved = getAssetPath(`./assets/${manifestFile}`);
+      const response = await fetch(manifestFileResolved);
       const manifest = await response.json();
 
       const components: ComponentInfo[] = [];

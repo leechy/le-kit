@@ -158,7 +158,7 @@ let leKitConfig = {
    * 1. Copy the manifest from node_modules/le-kit/custom-elements.json to your public folder
    * 2. Or set this to point to where the manifest is served
    */
-  manifestUrl: '/custom-elements.json',
+  manifestFile: '/custom-elements.json',
 };
 
 /**
@@ -166,14 +166,14 @@ let leKitConfig = {
  * 
  * @example
  * ```ts
- * import { configureLeki } from 'le-kit';
+ * import { configureLeKit } from 'le-kit';
  * 
- * configureLeki({
- *   manifestUrl: '/assets/custom-elements.json'
+ * configureLeKit({
+ *   manifestFile: 'custom-elements.json'
  * });
  * ```
  */
-export function configureLeki(config: Partial<typeof leKitConfig>): void {
+export function configureLeKit(config: Partial<typeof leKitConfig>): void {
   leKitConfig = { ...leKitConfig, ...config };
 }
 

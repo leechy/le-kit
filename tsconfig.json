@@ -18,9 +18,11 @@
     "jsxFragmentFactory": "h.Fragment"
   },
   "include": [
-    "src"
+    "src",
+    "types"
   ],
   "exclude": [
+    "src-core",
     "node_modules"
   ]
 }

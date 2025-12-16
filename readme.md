@@ -183,11 +183,11 @@ cp node_modules/le-kit/custom-elements.json public/custom-elements.json
 import { configureLeki } from 'le-kit';
 
 configureLeki({
-  manifestUrl: '/assets/custom-elements.json'
+  manifestFile: 'custom-elements.json'
 });
 ```
 
-The default `manifestUrl` is `/custom-elements.json`. Call `configureLeki()` before any admin-mode components are rendered.
+The default `manifestFile` is `custom-elements.json`. Call `configureLeKit()` before any admin-mode components are rendered.
 
 ## Browser Support
 

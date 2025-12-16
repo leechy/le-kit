@@ -1,4 +1,4 @@
-import { Component, Prop, State, h, Host, Element } from '@stencil/core';
+import { Component, Prop, State, h, Host, Element, getAssetPath } from '@stencil/core';
 import { classnames, observeModeChanges } from '../../utils/utils';
 import { getLeKitConfig } from '../../global/app';
 
@@ -34,6 +34,7 @@ import { getLeKitConfig } from '../../global/app';
   tag: 'le-component',
   styleUrl: 'le-component.css',
   shadow: true,
+  assetsDirs: ['assets'],
 })
 export class LeComponent {
   @Element() el: HTMLElement;
@@ -141,8 +142,9 @@ export class LeComponent {
   private async loadComponentMetadata() {
     try {
       // Fetch the manifest from configured URL
-      const { manifestUrl } = getLeKitConfig();
-      const response = await fetch(manifestUrl);
+      const { manifestFile } = getLeKitConfig();
+      const manifestFileResolved = getAssetPath(`./assets/${manifestFile}`)
+      const response = await fetch(manifestFileResolved);
       const manifest = await response.json();
 
       // Find the component definition

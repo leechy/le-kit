@@ -14,7 +14,7 @@ export default {
   exclude: ['**/*.spec.tsx', '**/*.e2e.tsx', '**/test/**'],
 
   /** Output directory for custom-elements.json */
-  outdir: './',
+  outdir: './src/assets',
 
   /** Enable Stencil.js support */
   // Note: The --stencil flag enables the Stencil plugin automatically

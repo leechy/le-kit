@@ -1,0 +1,139 @@
+/**
+ * le-tag component styles
+ *
+ * CSS Custom Properties:
+ * --le-tag-font-size
+ * --le-tag-font-weight
+ * --le-tag-padding-x
+ * --le-tag-padding-y
+ * --le-tag-border-radius
+ * --le-tag-gap
+ * --le-tag-bg
+ * --le-tag-color
+ * --le-tag-border-color
+ */
+
+:host {
+  display: inline-flex;
+  --le-tag-font-size: var(--le-font-size-sm);
+  --le-tag-font-weight: var(--le-font-weight-medium);
+  --le-tag-color: var(--le-color-text);
+  --le-tag-bg: var(--le-color-surface-alt);
+  --le-tag-dismiss-size: 1.75em;
+}
+
+:host([disabled]) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--le-tag-gap, 0.375rem);
+  padding: var(--le-tag-padding-y, 0.25rem) var(--le-tag-padding-x, 0.625rem);
+  font-size: var(--le-tag-font-size);
+  font-weight: var(--le-tag-font-weight);
+  line-height: 1.4;
+  color: var(--le-tag-color, var(--le-color-text, #1f2937));
+  background: var(--le-tag-bg, var(--le-color-surface-alt, #f3f4f6));
+  border: 1px solid var(--le-tag-border-color, transparent);
+  border-radius: var(--le-tag-border-radius, 9999px);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Sizes */
+:host([size='small']) .tag {
+  --le-tag-font-size: 0.75rem;
+  --le-tag-padding-x: 0.5rem;
+  --le-tag-padding-y: 0.125rem;
+  --le-tag-gap: 0.25rem;
+  --le-tag-dismiss-size: 1.25em;
+}
+
+:host([size='large']) .tag {
+  --le-tag-font-size: 1rem;
+  --le-tag-padding-x: 0.875rem;
+  --le-tag-padding-y: 0.375rem;
+  --le-tag-gap: 0.5rem;
+  --le-tag-dismiss-size: 2em;
+}
+
+/* Variants */
+:host([variant='primary']) .tag {
+  --le-tag-bg: var(--le-color-primary, #dbeafe);
+  --le-tag-color: var(--le-color-primary-contrast, #1e40af);
+}
+
+:host([variant='success']) .tag {
+  --le-tag-bg: var(--le-color-success, #dcfce7);
+  --le-tag-color: var(--le-color-success-contrast, #166534);
+}
+
+:host([variant='warning']) .tag {
+  --le-tag-bg: var(--le-color-warning-light, #fef3c7);
+  --le-tag-color: var(--le-color-warning-contrast, #92400e);
+}
+
+:host([variant='danger']) .tag {
+  --le-tag-bg: var(--le-color-danger, #fee2e2);
+  --le-tag-color: var(--le-color-danger-contrast, #991b1b);
+}
+
+/* Icon */
+.tag-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tag-icon img {
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+}
+
+/* Label */
+.tag-label {
+  display: inline-block;
+}
+
+/* Dismiss button */
+.tag-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--le-tag-dismiss-size);
+  height: var(--le-tag-dismiss-size);
+  padding: 0;
+  margin-block: calc(var(--le-tag-dismiss-size) * -1);
+  margin-right: calc(var(--le-tag-dismiss-size) / 3 * -1);
+  border: none;
+  background: transparent;
+  color: currentColor;
+  opacity: 0.6;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.tag-dismiss:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.tag-dismiss:focus-visible {
+  outline: 2px solid var(--le-color-primary, #3b82f6);
+  outline-offset: 1px;
+}
+
+.tag-dismiss svg {
+  width: 0.75em;
+  height: 0.75em;
+}
+
+.tag-dismiss:disabled {
+  cursor: not-allowed;
+}

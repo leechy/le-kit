@@ -74,6 +74,11 @@ export class LeSelect {
   @Prop() name?: string;
 
   /**
+   * Whether the select should take full width of its container.
+   */
+  @Prop() fullWidth: boolean = false;
+
+  /**
    * Size variant of the select.
    */
   @Prop({ reflect: true }) size: 'small' | 'medium' | 'large' = 'medium';
@@ -210,7 +215,7 @@ export class LeSelect {
           onLeOptionSelect={this.handleOptionSelect}
           onLeDropdownOpen={this.handleDropdownOpen}
           onLeDropdownClose={this.handleDropdownClose}
-          full-width
+          fullWidth={this.fullWidth}
         >
           <le-button
             variant={this.variant && this.variant !== 'default' ? this.variant : 'outlined'}
@@ -228,7 +233,7 @@ export class LeSelect {
             aria-expanded={this.open ? 'true' : 'false'}
             onClick={this.handleTriggerClick}
             onKeyDown={this.handleTriggerKeyDown}
-            full-width
+            fullWidth={this.fullWidth}
             iconStart={hasValue && this.selectedOption?.iconStart ? this.renderIcon(this.selectedOption.iconStart) : null}
             iconEnd={
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">

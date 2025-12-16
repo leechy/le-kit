@@ -24,6 +24,10 @@
   pointer-events: none;
 }
 
+:host([full-width]) {
+  width: 100%;
+}
+
 /* Trigger button */
 .select-trigger {
   display: flex;

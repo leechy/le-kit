@@ -649,6 +649,40 @@ console.log(greeting);</le-text>
         </div>
       </div>
 
+      <div class="demo-section">
+        <h2>Rich Text Editor</h2>
+        <p>Block-based rich text editor with Notion-like features. Use "/" to open block menu, select text for formatting toolbar.</p>
+        
+        <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
+          <label>Basic Editor:</label>
+          <le-rich-text-editor
+            id="demo-editor"
+            placeholder="Start typing... Use / for commands"
+            min-height="200px"
+            style="margin-top: 8px;"
+          ></le-rich-text-editor>
+        </div>
+        
+        <div class="text-slot-demo" style="margin-bottom: var(--le-space-md);">
+          <label>Editor with Initial Content:</label>
+          <le-rich-text-editor
+            id="demo-editor-content"
+            min-height="300px"
+            style="margin-top: 8px;"
+          ></le-rich-text-editor>
+        </div>
+        
+        <div class="text-slot-demo">
+          <label>Editor Output:</label>
+          <div style="display: flex; gap: var(--le-space-md); margin-top: 8px;">
+            <le-button variant="outlined" onclick="getEditorHtml()">Get HTML</le-button>
+            <le-button variant="outlined" onclick="getEditorMarkdown()">Get Markdown</le-button>
+            <le-button variant="outlined" onclick="getEditorBlocks()">Get Blocks</le-button>
+          </div>
+          <pre id="editor-output" style="margin-top: var(--le-space-md); padding: var(--le-space-md); background: var(--le-color-surface-alt); border-radius: var(--le-radius-md); overflow: auto; max-height: 200px; font-size: 12px;"></pre>
+        </div>
+      </div>
+
     </template>
 
     <!-- 
@@ -946,6 +980,50 @@ console.log(greeting);</le-text>
       document.getElementById('small-select').value = '1';
       document.getElementById('medium-select').options = sizeOptions;
       document.getElementById('large-select').options = sizeOptions;
+
+      // ============================================
+      // Rich Text Editor Demo Functions
+      // ============================================
+      
+      // Initialize editor with content
+      const editorWithContent = document.getElementById('demo-editor-content');
+      if (editorWithContent) {
+        editorWithContent.setHtml(`
+          <h1>Welcome to the Rich Text Editor</h1>
+          <p>This is a <strong>block-based</strong> editor with <em>Notion-like</em> features.</p>
+          <h2>Features</h2>
+          <ul>
+            <li>Block types: paragraphs, headings, lists, quotes, code</li>
+            <li>Inline formatting: <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <code>code</code></li>
+            <li>Keyboard shortcuts for fast editing</li>
+          </ul>
+          <blockquote>Try typing "/" to open the block menu, or select text to see the formatting toolbar.</blockquote>
+          <pre>const greeting = "Hello, World!";
+console.log(greeting);</pre>
+          <p>Enjoy editing!</p>
+        `);
+      }
+      
+      function getEditorHtml() {
+        const editor = document.getElementById('demo-editor');
+        editor.getHtml().then(html => {
+          document.getElementById('editor-output').textContent = html;
+        });
+      }
+      
+      function getEditorMarkdown() {
+        const editor = document.getElementById('demo-editor');
+        editor.getMarkdown().then(md => {
+          document.getElementById('editor-output').textContent = md;
+        });
+      }
+      
+      function getEditorBlocks() {
+        const editor = document.getElementById('demo-editor');
+        editor.getBlocks().then(blocks => {
+          document.getElementById('editor-output').textContent = JSON.stringify(blocks, null, 2);
+        });
+      }
     </script>
   </body>
 </html>

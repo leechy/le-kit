@@ -86,4 +86,47 @@
   --le-z-modal: 1050;
   --le-z-popover: 1060;
   --le-z-tooltip: 1070;
+
+  /* ============================================
+   * RICH TEXT EDITOR
+   * ============================================ */
+  
+  /* Editor Container */
+  --le-editor-padding: var(--le-spacing-4);
+  --le-editor-min-height: 200px;
+  
+  /* Blocks */
+  --le-editor-block-spacing: var(--le-spacing-1);
+  --le-editor-block-padding-x: var(--le-spacing-3);
+  --le-editor-block-padding-y: var(--le-spacing-2);
+  
+  /* Block Controls */
+  --le-editor-controls-size: 24px;
+  --le-editor-controls-gap: var(--le-spacing-1);
+  
+  /* Typography */
+  --le-editor-font-size: var(--le-font-size-md);
+  --le-editor-line-height: var(--le-line-height-relaxed);
+  
+  /* Headings */
+  --le-editor-h1-size: var(--le-font-size-3xl);
+  --le-editor-h2-size: var(--le-font-size-2xl);
+  --le-editor-h3-size: var(--le-font-size-xl);
+  --le-editor-heading-weight: var(--le-font-weight-bold);
+  
+  /* Quote */
+  --le-editor-quote-border-width: 3px;
+  
+  /* Code */
+  --le-editor-code-padding: var(--le-spacing-3);
+  --le-editor-inline-code-padding: 0.125em 0.375em;
+  
+  /* Divider */
+  --le-editor-divider-margin: var(--le-spacing-4);
+  
+  /* Lists */
+  --le-editor-list-indent: var(--le-spacing-6);
+  
+  /* Toolbar */
+  --le-editor-toolbar-button-size: 32px;
 }

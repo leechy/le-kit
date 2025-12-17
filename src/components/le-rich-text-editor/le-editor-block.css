@@ -1,0 +1,262 @@
+/**
+ * le-editor-block styles
+ * Individual block in the rich text editor
+ */
+
+:host {
+  display: block;
+  position: relative;
+  margin: var(--le-editor-block-spacing) 0;
+}
+
+/* ============================================
+   Block Controls (drag handle + type icon)
+   ============================================ */
+
+.block-controls {
+  position: absolute;
+  left: calc(-1 * var(--le-editor-controls-size) * 2 - var(--le-editor-controls-gap) * 2);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--le-editor-controls-gap);
+  opacity: 0;
+  transition: opacity var(--le-transition-fast) ease;
+  pointer-events: none;
+}
+
+.block-controls.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.block-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--le-editor-controls-size);
+  height: var(--le-editor-controls-size);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--le-editor-controls-color);
+  border-radius: var(--le-radius-md);
+  cursor: grab;
+  transition: background-color var(--le-transition-fast) ease,
+    color var(--le-transition-fast) ease;
+}
+
+.block-drag-handle:hover {
+  background: var(--le-editor-controls-hover-bg);
+  color: var(--le-editor-controls-hover-color);
+}
+
+.block-drag-handle:active {
+  cursor: grabbing;
+}
+
+.block-drag-handle svg {
+  width: 14px;
+  height: 14px;
+}
+
+.block-type-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--le-editor-controls-size);
+  height: var(--le-editor-controls-size);
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  color: var(--le-editor-controls-color);
+  border-radius: var(--le-radius-md);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--le-transition-fast) ease,
+    color var(--le-transition-fast) ease;
+}
+
+.block-type-icon:hover {
+  background: var(--le-editor-controls-hover-bg);
+  color: var(--le-editor-controls-hover-color);
+}
+
+/* ============================================
+   Block Wrapper
+   ============================================ */
+
+.block-wrapper {
+  padding: var(--le-editor-block-padding-y) var(--le-editor-block-padding-x);
+  border-radius: var(--le-radius-md);
+  transition: background-color var(--le-transition-fast) ease;
+}
+
+:host(:hover) .block-wrapper {
+  background: var(--le-editor-block-hover-bg);
+}
+
+:host(.is-focused) .block-wrapper {
+  background: var(--le-editor-block-hover-bg);
+}
+
+/* ============================================
+   Editable Content
+   ============================================ */
+
+.block-content {
+  outline: none;
+  font-family: var(--le-font-family-base);
+  font-size: var(--le-editor-font-size);
+  line-height: var(--le-editor-line-height);
+  color: var(--le-color-text-primary);
+  margin: 0;
+  min-height: 1.5em;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* Placeholder */
+.block-content.is-empty::before {
+  content: attr(data-placeholder);
+  color: var(--le-editor-placeholder-color);
+  pointer-events: none;
+  position: absolute;
+}
+
+/* ============================================
+   Block Type Styles
+   ============================================ */
+
+/* Paragraph */
+.block-paragraph {
+  /* Default styles, inherits from .block-content */
+  font-size: inherit;
+}
+
+/* Headings */
+.block-heading1 {
+  font-size: var(--le-editor-h1-size);
+  font-weight: var(--le-editor-heading-weight);
+  color: var(--le-editor-heading-color);
+  line-height: var(--le-line-height-tight);
+  margin-top: 0.5em;
+}
+
+.block-heading2 {
+  font-size: var(--le-editor-h2-size);
+  font-weight: var(--le-editor-heading-weight);
+  color: var(--le-editor-heading-color);
+  line-height: var(--le-line-height-tight);
+  margin-top: 0.4em;
+}
+
+.block-heading3 {
+  font-size: var(--le-editor-h3-size);
+  font-weight: var(--le-editor-heading-weight);
+  color: var(--le-editor-heading-color);
+  line-height: var(--le-line-height-tight);
+  margin-top: 0.3em;
+}
+
+/* Quote */
+.block-quote {
+  font-style: italic;
+  color: var(--le-editor-quote-color);
+  padding-left: 1em;
+  border-left: var(--le-editor-quote-border-width) solid var(--le-editor-quote-border-color);
+  background: var(--le-editor-quote-bg);
+  border-radius: 0 var(--le-radius-md) var(--le-radius-md) 0;
+  margin: 0;
+  padding: var(--le-spacing-3);
+  padding-left: 1em;
+}
+
+/* Code */
+.block-code {
+  font-family: var(--le-font-family-mono);
+  font-size: var(--le-font-size-sm);
+  background: var(--le-editor-code-bg);
+  color: var(--le-editor-code-color);
+  padding: var(--le-editor-code-padding);
+  border-radius: var(--le-radius-md);
+  display: block;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* Lists */
+.block-list {
+  margin: 0;
+  padding-left: var(--le-editor-list-indent);
+}
+
+.block-list li {
+  min-height: 1.5em;
+}
+
+.block-bullet-list {
+  list-style-type: disc;
+}
+
+.block-numbered-list {
+  list-style-type: decimal;
+}
+
+/* Divider */
+.block-divider {
+  border: none;
+  border-top: 1px solid var(--le-editor-divider-color);
+  margin: var(--le-editor-divider-margin) 0;
+}
+
+:host(.block-type-divider) .block-wrapper {
+  padding: 0;
+}
+
+:host(.block-type-divider):hover .block-wrapper {
+  background: transparent;
+}
+
+/* ============================================
+   Inline Formatting (content styles)
+   ============================================ */
+
+.block-content strong,
+.block-content b {
+  font-weight: var(--le-font-weight-bold);
+}
+
+.block-content em,
+.block-content i {
+  font-style: italic;
+}
+
+.block-content u {
+  text-decoration: underline;
+}
+
+.block-content s,
+.block-content strike {
+  text-decoration: line-through;
+}
+
+.block-content code {
+  font-family: var(--le-font-family-mono);
+  font-size: 0.9em;
+  background: var(--le-editor-inline-code-bg);
+  color: var(--le-editor-inline-code-color);
+  padding: var(--le-editor-inline-code-padding);
+  border-radius: var(--le-radius-sm);
+}
+
+.block-content a {
+  color: var(--le-editor-link-color);
+  text-decoration: underline;
+}
+
+.block-content a:hover {
+  text-decoration: none;
+}

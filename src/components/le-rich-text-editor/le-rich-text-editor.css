@@ -1,0 +1,85 @@
+/**
+ * le-rich-text-editor styles
+ * Main container for the block-based editor
+ */
+
+:host {
+  display: block;
+  font-family: var(--le-font-family-base);
+}
+
+/* ============================================
+   Editor Container
+   ============================================ */
+
+.editor {
+  position: relative;
+  background: var(--le-editor-bg);
+  border: 1px solid var(--le-editor-border-color);
+  border-radius: var(--le-radius-lg);
+  padding: var(--le-editor-padding);
+  min-height: var(--le-editor-min-height);
+  cursor: text;
+}
+
+.editor:focus-within {
+  border-color: var(--le-color-primary);
+  box-shadow: 0 0 0 3px var(--le-color-focus);
+}
+
+:host([readonly]) .editor {
+  cursor: default;
+  background: var(--le-color-background-secondary);
+}
+
+/* ============================================
+   Blocks Container
+   ============================================ */
+
+.editor-blocks {
+  /* Space for block controls on left */
+  padding-left: calc(var(--le-editor-controls-size) * 2 + var(--le-editor-controls-gap) * 2);
+}
+
+/* ============================================
+   Placeholder
+   ============================================ */
+
+.editor-placeholder {
+  position: absolute;
+  top: var(--le-editor-padding);
+  left: calc(var(--le-editor-padding) + var(--le-editor-controls-size) * 2 + var(--le-editor-controls-gap) * 2 + var(--le-editor-block-padding-x));
+  color: var(--le-editor-placeholder-color);
+  pointer-events: none;
+  user-select: none;
+  font-size: var(--le-editor-font-size);
+  line-height: var(--le-editor-line-height);
+  padding-top: var(--le-editor-block-padding-y);
+}
+
+.editor.is-empty .editor-blocks le-editor-block:first-child {
+  /* Hide block-level placeholder when showing editor placeholder */
+  opacity: 0;
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+
+.editor.is-empty::after {
+  /* Additional empty state styling if needed */
+  content: '';
+}
+
+/* ============================================
+   Drag and Drop States
+   ============================================ */
+
+.editor.is-dragging {
+  user-select: none;
+}
+
+.editor-blocks.drag-over {
+  /* Visual feedback during drag */
+  background: var(--le-editor-block-hover-bg);
+}

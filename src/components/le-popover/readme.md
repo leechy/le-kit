@@ -71,6 +71,16 @@ Type: `Promise<void>`
 
 
 
+### `updatePosition() => Promise<void>`
+
+Method to update the popover position from a parent component
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 
 ## Slots
 

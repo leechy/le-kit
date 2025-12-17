@@ -447,6 +447,139 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-button/le-button.tsx",
       "declarations": [
         {
@@ -797,60 +930,38 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
+      "path": "src/components/le-checkbox/le-checkbox.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
+          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
+          "name": "LeCheckbox",
           "cssProperties": [
             {
-              "description": "Card background color",
-              "name": "--le-card-bg"
+              "description": "Size of the checkbox input",
+              "name": "--le-checkbox-size"
             },
             {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
+              "description": "Color of the checkbox when checked",
+              "name": "--le-checkbox-color"
             },
             {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
+              "description": "Color of the label text",
+              "name": "--le-checkbox-label-color"
             },
             {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
+              "description": "Color of the description text",
+              "name": "--le-checkbox-desc-color"
             }
           ],
           "slots": [
             {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
+              "description": "The label text for the checkbox",
               "name": ""
             },
             {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
+              "description": "Additional description text displayed below the label",
+              "name": "description"
             }
           ],
           "members": [
@@ -863,21 +974,50 @@
             },
             {
               "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
+              "name": "checked",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the card is interactive (clickable)"
+              "description": "Whether the checkbox is checked"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The value of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "externalId",
+              "type": {
+                "text": "string"
+              },
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
+            },
+            {
+              "kind": "field",
+              "name": "handleChange",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -886,44 +1026,76 @@
           ],
           "attributes": [
             {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              }
-            },
-            {
-              "name": "interactive",
-              "fieldName": "interactive",
+              "name": "checked",
+              "fieldName": "checked",
               "default": "false",
-              "description": "Whether the card is interactive (clickable)",
+              "description": "Whether the checkbox is checked",
               "type": {
                 "text": "boolean"
               }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the checkbox is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "The name of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "external-id",
+              "fieldName": "externalId",
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
+              "type": {
+                "text": "string"
+              }
             }
           ],
-          "tagName": "le-card",
-          "events": [],
+          "tagName": "le-checkbox",
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
+              },
+              "description": "Emitted when the checked state changes"
+            }
+          ],
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "LeCard",
+          "name": "LeCheckbox",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-card",
+          "name": "le-checkbox",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
           }
         }
       ]
@@ -1223,6 +1395,471 @@
           "declaration": {
             "name": "LeComponent",
             "module": "src/components/le-component/le-component.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-multiselect/le-multiselect.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A multiselect component for selecting multiple options.\n\nDisplays selected items as tags with optional search filtering.",
+          "name": "LeMultiselect",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "LeOption[] | string"
+              },
+              "default": "[]",
+              "description": "The options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "LeOptionValue[]"
+              },
+              "default": "[]",
+              "description": "The currently selected values."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Select options...'",
+              "description": "Placeholder text when no options are selected."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the multiselect is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether selection is required."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the multiselect should take full width of its container."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Size variant of the multiselect."
+            },
+            {
+              "kind": "field",
+              "name": "maxSelections",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of selections allowed."
+            },
+            {
+              "kind": "field",
+              "name": "selectAllLabel",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "'Select All'",
+              "description": "Labels for the \"Select All\" option."
+            },
+            {
+              "kind": "field",
+              "name": "deselectAllLabel",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "'Deselect All'"
+            },
+            {
+              "kind": "field",
+              "name": "showSelectAll",
+              "type": {
+                "text": "boolean | string | string[]"
+              },
+              "default": "false",
+              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s)."
+            },
+            {
+              "kind": "field",
+              "name": "searchable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is searchable."
+            },
+            {
+              "kind": "field",
+              "name": "emptyText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dropdown is currently open."
+            },
+            {
+              "kind": "field",
+              "name": "selectedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "searchQuery",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "dropdownEl",
+              "type": {
+                "text": "HTMLLeDropdownBaseElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "inputEl",
+              "type": {
+                "text": "HTMLInputElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleOptionsChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleShowSelectAllChange",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "boolean | string | string[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "parsedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "effectiveOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectedOptions",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "filterOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOptionSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "emitChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTagDismiss",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSearchInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleClearAll",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "showDropdown",
+              "description": "Opens the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "hideDropdown",
+              "description": "Closes the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "clearSelection",
+              "description": "Clears all selections."
+            },
+            {
+              "kind": "method",
+              "name": "renderTags",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "fieldName": "options",
+              "default": "[]",
+              "description": "The options to display in the dropdown.",
+              "type": {
+                "text": "LeOption[] | string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "default": "[]",
+              "description": "The currently selected values.",
+              "type": {
+                "text": "LeOptionValue[]"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "'Select options...'",
+              "description": "Placeholder text when no options are selected.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the multiselect is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether selection is required.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "Name attribute for form submission.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the multiselect should take full width of its container.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Size variant of the multiselect.",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "max-selections",
+              "fieldName": "maxSelections",
+              "description": "Maximum number of selections allowed.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "show-select-all",
+              "fieldName": "showSelectAll",
+              "default": "false",
+              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s).",
+              "type": {
+                "text": "boolean | string | string[]"
+              }
+            },
+            {
+              "name": "searchable",
+              "fieldName": "searchable",
+              "default": "false",
+              "description": "Whether the input is searchable.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "empty-text",
+              "fieldName": "emptyText",
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the dropdown is currently open.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-multiselect",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeMultiOptionSelectDetail>"
+              },
+              "description": "Emitted when the selected values change."
+            },
+            {
+              "name": "leOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown opens."
+            },
+            {
+              "name": "leClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown closes."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeMultiselect",
+          "declaration": {
+            "name": "LeMultiselect",
+            "module": "src/components/le-multiselect/le-multiselect.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-multiselect",
+          "declaration": {
+            "name": "LeMultiselect",
+            "module": "src/components/le-multiselect/le-multiselect.tsx"
           }
         }
       ]
@@ -1713,643 +2350,6 @@
           "declaration": {
             "name": "LeDropdownBase",
             "module": "src/components/le-dropdown-base/le-dropdown-base.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-multiselect/le-multiselect.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A multiselect component for selecting multiple options.\n\nDisplays selected items as tags with optional search filtering.",
-          "name": "LeMultiselect",
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "LeOption[] | string"
-              },
-              "default": "[]",
-              "description": "The options to display in the dropdown."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "LeOptionValue[]"
-              },
-              "default": "[]",
-              "description": "The currently selected values."
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Select options...'",
-              "description": "Placeholder text when no options are selected."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the multiselect is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether selection is required."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Name attribute for form submission."
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the multiselect should take full width of its container."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Size variant of the multiselect."
-            },
-            {
-              "kind": "field",
-              "name": "maxSelections",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum number of selections allowed."
-            },
-            {
-              "kind": "field",
-              "name": "selectAllLabel",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "'Select All'",
-              "description": "Labels for the \"Select All\" option."
-            },
-            {
-              "kind": "field",
-              "name": "deselectAllLabel",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "'Deselect All'"
-            },
-            {
-              "kind": "field",
-              "name": "showSelectAll",
-              "type": {
-                "text": "boolean | string | string[]"
-              },
-              "default": "false",
-              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s)."
-            },
-            {
-              "kind": "field",
-              "name": "searchable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the input is searchable."
-            },
-            {
-              "kind": "field",
-              "name": "emptyText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'No results found'",
-              "description": "Text to show when no options match the search."
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the dropdown is currently open."
-            },
-            {
-              "kind": "field",
-              "name": "selectedOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "searchQuery",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "dropdownEl",
-              "type": {
-                "text": "HTMLLeDropdownBaseElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "inputEl",
-              "type": {
-                "text": "HTMLInputElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleValueChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleOptionsChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleShowSelectAllChange",
-              "parameters": [
-                {
-                  "name": "newValue",
-                  "type": {
-                    "text": "boolean | string | string[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "parsedOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "effectiveOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "updateSelectedOptions",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "filterOption",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleOptionSelect",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "emitChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDropdownOpen",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDropdownClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTagDismiss",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleSearchInput",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleClearAll",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "showDropdown",
-              "description": "Opens the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "hideDropdown",
-              "description": "Closes the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "clearSelection",
-              "description": "Clears all selections."
-            },
-            {
-              "kind": "method",
-              "name": "renderTags",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "options",
-              "fieldName": "options",
-              "default": "[]",
-              "description": "The options to display in the dropdown.",
-              "type": {
-                "text": "LeOption[] | string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "default": "[]",
-              "description": "The currently selected values.",
-              "type": {
-                "text": "LeOptionValue[]"
-              }
-            },
-            {
-              "name": "placeholder",
-              "fieldName": "placeholder",
-              "default": "'Select options...'",
-              "description": "Placeholder text when no options are selected.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the multiselect is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "required",
-              "fieldName": "required",
-              "default": "false",
-              "description": "Whether selection is required.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "Name attribute for form submission.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the multiselect should take full width of its container.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Size variant of the multiselect.",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "max-selections",
-              "fieldName": "maxSelections",
-              "description": "Maximum number of selections allowed.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "show-select-all",
-              "fieldName": "showSelectAll",
-              "default": "false",
-              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s).",
-              "type": {
-                "text": "boolean | string | string[]"
-              }
-            },
-            {
-              "name": "searchable",
-              "fieldName": "searchable",
-              "default": "false",
-              "description": "Whether the input is searchable.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "empty-text",
-              "fieldName": "emptyText",
-              "default": "'No results found'",
-              "description": "Text to show when no options match the search.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "open",
-              "fieldName": "open",
-              "default": "false",
-              "description": "Whether the dropdown is currently open.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-multiselect",
-          "events": [
-            {
-              "name": "leChange",
-              "type": {
-                "text": "EventEmitter<LeMultiOptionSelectDetail>"
-              },
-              "description": "Emitted when the selected values change."
-            },
-            {
-              "name": "leOpen",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dropdown opens."
-            },
-            {
-              "name": "leClose",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dropdown closes."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeMultiselect",
-          "declaration": {
-            "name": "LeMultiselect",
-            "module": "src/components/le-multiselect/le-multiselect.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-multiselect",
-          "declaration": {
-            "name": "LeMultiselect",
-            "module": "src/components/le-multiselect/le-multiselect.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-checkbox/le-checkbox.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
-          "name": "LeCheckbox",
-          "cssProperties": [
-            {
-              "description": "Size of the checkbox input",
-              "name": "--le-checkbox-size"
-            },
-            {
-              "description": "Color of the checkbox when checked",
-              "name": "--le-checkbox-color"
-            },
-            {
-              "description": "Color of the label text",
-              "name": "--le-checkbox-label-color"
-            },
-            {
-              "description": "Color of the description text",
-              "name": "--le-checkbox-desc-color"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The label text for the checkbox",
-              "name": ""
-            },
-            {
-              "description": "Additional description text displayed below the label",
-              "name": "description"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is checked"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is disabled"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "description": "The name of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "description": "The value of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "externalId",
-              "type": {
-                "text": "string"
-              },
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
-            },
-            {
-              "kind": "field",
-              "name": "handleChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "checked",
-              "fieldName": "checked",
-              "default": "false",
-              "description": "Whether the checkbox is checked",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the checkbox is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "The name of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "external-id",
-              "fieldName": "externalId",
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-checkbox",
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
-              },
-              "description": "Emitted when the checked state changes"
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCheckbox",
-          "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-checkbox",
-          "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
           }
         }
       ]
@@ -3996,6 +3996,1470 @@
           "declaration": {
             "name": "LePopup",
             "module": "src/components/le-popup/le-popup.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-rich-text-editor/le-block-menu.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Block menu (command palette) for the rich text editor.\nTriggered by \"/\" at the start of a block or clicking the block type icon.",
+          "name": "LeBlockMenu",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the menu is visible."
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "{ x: number; y: number }"
+              },
+              "default": "{ x: 0, y: 0 }",
+              "description": "Position to show the menu at."
+            },
+            {
+              "kind": "field",
+              "name": "blockTypes",
+              "type": {
+                "text": "BlockTypeConfig[]"
+              },
+              "default": "DEFAULT_BLOCK_CONFIGS",
+              "description": "Available block types."
+            },
+            {
+              "kind": "field",
+              "name": "searchQuery",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "filteredTypes",
+              "type": {
+                "text": "BlockTypeConfig[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "focusedIndex",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "menuEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "searchInputEl",
+              "type": {
+                "text": "HTMLInputElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleOpenChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleSearchChange"
+            },
+            {
+              "kind": "method",
+              "name": "filterTypes",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "description": "Show the menu."
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "description": "Hide the menu."
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "scrollToFocused",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "selectBlockType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "config",
+                  "type": {
+                    "text": "BlockTypeConfig"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleClickOutside",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderBlockTypeItem",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "config",
+                  "type": {
+                    "text": "BlockTypeConfig"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the menu is visible.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "position",
+              "fieldName": "position",
+              "default": "{ x: 0, y: 0 }",
+              "description": "Position to show the menu at.",
+              "type": {
+                "text": "{ x: number; y: number }"
+              }
+            },
+            {
+              "name": "block-types",
+              "fieldName": "blockTypes",
+              "default": "DEFAULT_BLOCK_CONFIGS",
+              "description": "Available block types.",
+              "type": {
+                "text": "BlockTypeConfig[]"
+              }
+            }
+          ],
+          "tagName": "le-block-menu",
+          "events": [
+            {
+              "name": "leBlockTypeSelect",
+              "type": {
+                "text": "EventEmitter<{ type: BlockType; config: BlockTypeConfig }>"
+              },
+              "description": "Emitted when a block type is selected."
+            },
+            {
+              "name": "leMenuClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the menu is closed."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeBlockMenu",
+          "declaration": {
+            "name": "LeBlockMenu",
+            "module": "src/components/le-rich-text-editor/le-block-menu.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-block-menu",
+          "declaration": {
+            "name": "LeBlockMenu",
+            "module": "src/components/le-rich-text-editor/le-block-menu.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-rich-text-editor/le-editor-block.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Internal component representing a single block in the rich text editor.",
+          "name": "LeEditorBlock",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "block",
+              "type": {
+                "text": "LeBlock"
+              },
+              "description": "The block data."
+            },
+            {
+              "kind": "field",
+              "name": "focused",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this block is currently focused."
+            },
+            {
+              "kind": "field",
+              "name": "readonly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the editor is in readonly mode."
+            },
+            {
+              "kind": "field",
+              "name": "listStart",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "For numbered lists, which number to start at (1-based)."
+            },
+            {
+              "kind": "field",
+              "name": "isEmpty",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "showControls",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "contentEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "config",
+              "type": {
+                "text": "BlockTypeConfig"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleBlockChange"
+            },
+            {
+              "kind": "method",
+              "name": "updateConfig",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "focusContent",
+              "parameters": [
+                {
+                  "name": "atEnd",
+                  "default": "false",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "Focus the editable content area."
+            },
+            {
+              "kind": "method",
+              "name": "getContent",
+              "return": {
+                "type": {
+                  "text": "Promise<string>"
+                }
+              },
+              "description": "Get the current HTML content."
+            },
+            {
+              "kind": "method",
+              "name": "setContent",
+              "parameters": [
+                {
+                  "name": "html",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Set the HTML content."
+            },
+            {
+              "kind": "field",
+              "name": "handleInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleMarkdownShortcut",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "content",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleSlashCommand",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlur",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSelectionChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleMouseUp",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDragHandleMouseDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "isAtStart",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "range",
+                  "optional": true,
+                  "type": {
+                    "text": "Range"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isAtEnd",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "range",
+                  "optional": true,
+                  "type": {
+                    "text": "Range"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderDragHandle",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "blockIconEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockIconClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderBlockIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderContent",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleMouseEnter",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleMouseLeave",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "block",
+              "fieldName": "block",
+              "description": "The block data.",
+              "type": {
+                "text": "LeBlock"
+              }
+            },
+            {
+              "name": "focused",
+              "fieldName": "focused",
+              "default": "false",
+              "description": "Whether this block is currently focused.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "readonly",
+              "fieldName": "readonly",
+              "default": "false",
+              "description": "Whether the editor is in readonly mode.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "list-start",
+              "fieldName": "listStart",
+              "default": "1",
+              "description": "For numbered lists, which number to start at (1-based).",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-editor-block",
+          "events": [
+            {
+              "name": "leBlockChange",
+              "type": {
+                "text": "EventEmitter<{ block: LeBlock; content: string }>"
+              },
+              "description": "Emitted when the block content changes."
+            },
+            {
+              "name": "leBlockEnter",
+              "type": {
+                "text": "EventEmitter<{ block: LeBlock; cursorAtEnd: boolean }>"
+              },
+              "description": "Emitted when Enter is pressed (request new block)."
+            },
+            {
+              "name": "leBlockBackspace",
+              "type": {
+                "text": "EventEmitter<{ block: LeBlock }>"
+              },
+              "description": "Emitted when Backspace is pressed at start of block."
+            },
+            {
+              "name": "leBlockDelete",
+              "type": {
+                "text": "EventEmitter<{ block: LeBlock }>"
+              },
+              "description": "Emitted when Delete is pressed at end of block."
+            },
+            {
+              "name": "leBlockNavigateUp",
+              "type": {
+                "text": "EventEmitter<{ block: LeBlock }>"
+              },
+              "description": "Emitted when arrow up is pressed at start."
+            },
+            {
+              "name": "leBlockNavigateDown",
+              "type": {
+                "text": "EventEmitter<{ block: LeBlock }>"
+              },
+              "description": "Emitted when arrow down is pressed at end."
+            },
+            {
+              "name": "leBlockTypeChange",
+              "type": {
+                "text": "EventEmitter<{ block: LeBlock; newType: BlockType }>"
+              },
+              "description": "Emitted when block type should change (via markdown shortcut)."
+            },
+            {
+              "name": "leBlockMenuOpen",
+              "type": {
+                "text": "EventEmitter<{ block: LeBlock; position: { x: number; y: number }; anchor?: HTMLElement }>"
+              },
+              "description": "Emitted when block menu should open (via icon click or \"/\")."
+            },
+            {
+              "name": "leBlockFocus",
+              "type": {
+                "text": "EventEmitter<{ block: LeBlock }>"
+              },
+              "description": "Emitted when block requests focus."
+            },
+            {
+              "name": "leBlockBlur",
+              "type": {
+                "text": "EventEmitter<{ block: LeBlock }>"
+              },
+              "description": "Emitted when block loses focus."
+            },
+            {
+              "name": "leBlockSelection",
+              "type": {
+                "text": "EventEmitter<{\n    block: LeBlock;\n    hasSelection: boolean;\n    range?: Range;\n    rect?: DOMRect;\n  }>"
+              },
+              "description": "Emitted when text is selected (for showing format toolbar)."
+            },
+            {
+              "name": "leBlockDragStart",
+              "type": {
+                "text": "EventEmitter<{ block: LeBlock }>"
+              },
+              "description": "Emitted when drag handle is grabbed."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeEditorBlock",
+          "declaration": {
+            "name": "LeEditorBlock",
+            "module": "src/components/le-rich-text-editor/le-editor-block.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-editor-block",
+          "declaration": {
+            "name": "LeEditorBlock",
+            "module": "src/components/le-rich-text-editor/le-editor-block.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-rich-text-editor/le-format-toolbar.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Floating format toolbar for text selection in the rich text editor.\nPositions itself above the selection.",
+          "name": "LeFormatToolbar",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the toolbar is visible."
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "{ x: number; y: number }"
+              },
+              "default": "{ x: 0, y: 0 }",
+              "description": "Position to show the toolbar at (center-x, top-y of selection)."
+            },
+            {
+              "kind": "field",
+              "name": "formats",
+              "type": {
+                "text": "FormatType[]"
+              },
+              "default": "['bold', 'italic', 'underline', 'strikethrough', 'code', 'link']",
+              "description": "Which format buttons to show."
+            },
+            {
+              "kind": "field",
+              "name": "activeFormats",
+              "type": {
+                "text": "FormatType[]"
+              },
+              "default": "[]",
+              "description": "Currently active formats."
+            },
+            {
+              "kind": "field",
+              "name": "showLinkInput",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "linkUrl",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "toolbarEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "linkInputEl",
+              "type": {
+                "text": "HTMLInputElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "description": "Show the toolbar."
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "description": "Hide the toolbar."
+            },
+            {
+              "kind": "method",
+              "name": "updatePosition",
+              "parameters": [
+                {
+                  "name": "x",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "y",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Update position."
+            },
+            {
+              "kind": "field",
+              "name": "handleFormatClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleLinkSubmit",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleLinkCancel",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "isFormatActive",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "FormatType"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderFormatButtons",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderLinkInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the toolbar is visible.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "position",
+              "fieldName": "position",
+              "default": "{ x: 0, y: 0 }",
+              "description": "Position to show the toolbar at (center-x, top-y of selection).",
+              "type": {
+                "text": "{ x: number; y: number }"
+              }
+            },
+            {
+              "name": "formats",
+              "fieldName": "formats",
+              "default": "['bold', 'italic', 'underline', 'strikethrough', 'code', 'link']",
+              "description": "Which format buttons to show.",
+              "type": {
+                "text": "FormatType[]"
+              }
+            },
+            {
+              "name": "active-formats",
+              "fieldName": "activeFormats",
+              "default": "[]",
+              "description": "Currently active formats.",
+              "type": {
+                "text": "FormatType[]"
+              }
+            }
+          ],
+          "tagName": "le-format-toolbar",
+          "events": [
+            {
+              "name": "leFormat",
+              "type": {
+                "text": "EventEmitter<{ format: FormatType }>"
+              },
+              "description": "Emitted when a format button is clicked."
+            },
+            {
+              "name": "leLinkRequest",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when link button is clicked (needs special handling)."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeFormatToolbar",
+          "declaration": {
+            "name": "LeFormatToolbar",
+            "module": "src/components/le-rich-text-editor/le-format-toolbar.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-format-toolbar",
+          "declaration": {
+            "name": "LeFormatToolbar",
+            "module": "src/components/le-rich-text-editor/le-format-toolbar.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-rich-text-editor/le-rich-text-editor.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Rich text editor with block-based editing, similar to Notion.\n\nFeatures:\n- Block-based content structure (paragraphs, headings, lists, quotes, code, dividers)\n- Markdown shortcuts (# for headings, - for lists, > for quotes, etc.)\n- Inline formatting toolbar (bold, italic, underline, strikethrough, code, links)\n- Block command menu triggered by /\n- Drag and drop block reordering\n- HTML and Markdown export",
+          "name": "LeRichTextEditor",
+          "slots": [
+            {
+              "description": "Default slot (not used, content managed internally)",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Initial HTML content."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Type '/' for commands...\"",
+              "description": "Placeholder text shown in empty editor."
+            },
+            {
+              "kind": "field",
+              "name": "readonly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the editor is in readonly mode."
+            },
+            {
+              "kind": "field",
+              "name": "autofocus",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to autofocus on mount."
+            },
+            {
+              "kind": "field",
+              "name": "minHeight",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Minimum height of the editor."
+            },
+            {
+              "kind": "field",
+              "name": "maxHeight",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Maximum height (scrollable)."
+            },
+            {
+              "kind": "field",
+              "name": "blockTypes",
+              "type": {
+                "text": "BlockTypeConfig[]"
+              },
+              "default": "DEFAULT_BLOCK_CONFIGS",
+              "description": "Available block types."
+            },
+            {
+              "kind": "field",
+              "name": "blocks",
+              "type": {
+                "text": "LeBlock[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "focusedBlockId",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "showBlockMenu",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "blockMenuPosition",
+              "type": {
+                "text": "{ x: number; y: number }"
+              },
+              "privacy": "private",
+              "default": "{ x: 0, y: 0 }"
+            },
+            {
+              "kind": "field",
+              "name": "showFormatToolbar",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "formatToolbarPosition",
+              "type": {
+                "text": "{ x: number; y: number }"
+              },
+              "privacy": "private",
+              "default": "{ x: 0, y: 0 }"
+            },
+            {
+              "kind": "field",
+              "name": "activeFormats",
+              "type": {
+                "text": "FormatType[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "blockRefs",
+              "type": {
+                "text": "Map<string, HTMLLeEditorBlockElement>"
+              },
+              "privacy": "private",
+              "default": "new Map()"
+            },
+            {
+              "kind": "field",
+              "name": "blockMenuEl",
+              "type": {
+                "text": "HTMLLeBlockMenuElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "formatToolbarEl",
+              "type": {
+                "text": "HTMLLeFormatToolbarElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "editorEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "targetBlockForMenu",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "parseHtml",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "html",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "elementToBlock",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "LeBlock | null"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "el",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getHtml",
+              "return": {
+                "type": {
+                  "text": "Promise<string>"
+                }
+              },
+              "description": "Get the content as HTML."
+            },
+            {
+              "kind": "method",
+              "name": "getMarkdown",
+              "return": {
+                "type": {
+                  "text": "Promise<string>"
+                }
+              },
+              "description": "Get the content as Markdown."
+            },
+            {
+              "kind": "method",
+              "name": "htmlToPlainText",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "html",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getBlocks",
+              "return": {
+                "type": {
+                  "text": "Promise<LeBlock[]>"
+                }
+              },
+              "description": "Get the raw block data."
+            },
+            {
+              "kind": "method",
+              "name": "setHtml",
+              "parameters": [
+                {
+                  "name": "html",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Set content from HTML."
+            },
+            {
+              "kind": "method",
+              "name": "focusEditor",
+              "description": "Focus the editor."
+            },
+            {
+              "kind": "method",
+              "name": "blurEditor",
+              "description": "Blur the editor."
+            },
+            {
+              "kind": "method",
+              "name": "focusBlock",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "blockId",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "atEnd",
+                  "default": "false",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getBlockIndex",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "blockId",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getListStartNumber",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Calculate the start number for numbered lists.\nCounts consecutive numbered-list blocks before this one."
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockEnter",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockBackspace",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockDelete",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockNavigateUp",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockNavigateDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockTypeChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updateBlockType",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "blockId",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "newType",
+                  "type": {
+                    "text": "BlockType"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockMenuOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockTypeSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockMenuClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockBlur",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlockSelection",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSelectionChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updateActiveFormats",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleFormat",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleEditorClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "registerBlockRef",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "Initial HTML content.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "\"Type '/' for commands...\"",
+              "description": "Placeholder text shown in empty editor.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "readonly",
+              "fieldName": "readonly",
+              "default": "false",
+              "description": "Whether the editor is in readonly mode.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "autofocus",
+              "fieldName": "autofocus",
+              "default": "false",
+              "description": "Whether to autofocus on mount.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "min-height",
+              "fieldName": "minHeight",
+              "description": "Minimum height of the editor.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-height",
+              "fieldName": "maxHeight",
+              "description": "Maximum height (scrollable).",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "block-types",
+              "fieldName": "blockTypes",
+              "default": "DEFAULT_BLOCK_CONFIGS",
+              "description": "Available block types.",
+              "type": {
+                "text": "BlockTypeConfig[]"
+              }
+            }
+          ],
+          "tagName": "le-rich-text-editor",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeBlockChangeDetail>"
+              },
+              "description": "Emitted when content changes."
+            },
+            {
+              "name": "leBlockAdd",
+              "type": {
+                "text": "EventEmitter<LeBlock>"
+              },
+              "description": "Emitted when a block is added."
+            },
+            {
+              "name": "leBlockRemove",
+              "type": {
+                "text": "EventEmitter<LeBlock>"
+              },
+              "description": "Emitted when a block is removed."
+            },
+            {
+              "name": "leFocus",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when editor gains focus."
+            },
+            {
+              "name": "leBlur",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when editor loses focus."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeRichTextEditor",
+          "declaration": {
+            "name": "LeRichTextEditor",
+            "module": "src/components/le-rich-text-editor/le-rich-text-editor.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-rich-text-editor",
+          "declaration": {
+            "name": "LeRichTextEditor",
+            "module": "src/components/le-rich-text-editor/le-rich-text-editor.tsx"
           }
         }
       ]

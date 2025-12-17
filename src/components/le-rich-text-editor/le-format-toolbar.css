@@ -1,0 +1,188 @@
+/**
+ * le-format-toolbar styles
+ * Floating formatting toolbar for rich text editor
+ */
+
+:host {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* ============================================
+   Toolbar Container (positioned absolutely)
+   ============================================ */
+
+.format-toolbar-container {
+  position: fixed;
+  z-index: 1000;
+  transform: translate(-50%, -100%);
+  padding-bottom: 8px;
+  animation: toolbar-fade-in 0.15s ease-out;
+  pointer-events: auto;
+}
+
+@keyframes toolbar-fade-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% + 4px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%);
+  }
+}
+
+.format-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  background: var(--le-editor-toolbar-bg);
+  border: 1px solid var(--le-editor-toolbar-border-color);
+  border-radius: var(--le-radius-lg);
+  box-shadow: var(--le-shadow-lg);
+}
+
+/* ============================================
+   Format Buttons
+   ============================================ */
+
+.toolbar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--le-editor-toolbar-button-size);
+  height: var(--le-editor-toolbar-button-size);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--le-color-text-primary);
+  border-radius: var(--le-radius-md);
+  cursor: pointer;
+  transition: background-color var(--le-transition-fast) ease,
+    color var(--le-transition-fast) ease;
+}
+
+.toolbar-button:hover {
+  background: var(--le-editor-toolbar-button-hover-bg);
+}
+
+.toolbar-button.is-active {
+  background: var(--le-editor-toolbar-button-active-bg);
+  color: var(--le-editor-toolbar-button-active-color);
+}
+
+.button-icon {
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--le-font-family-base);
+  line-height: 1;
+}
+
+/* Bold */
+.format-bold .button-icon {
+  font-weight: 700;
+}
+
+/* Italic */
+.format-italic .button-icon {
+  font-style: italic;
+  font-family: Georgia, serif;
+}
+
+/* Underline */
+.format-underline .button-icon {
+  text-decoration: underline;
+}
+
+/* Strikethrough */
+.format-strikethrough .button-icon {
+  text-decoration: line-through;
+}
+
+/* Code */
+.format-code .button-icon {
+  font-family: var(--le-font-family-mono);
+  font-size: 12px;
+}
+
+/* Link */
+.format-link .button-icon {
+  font-size: 16px;
+}
+
+/* ============================================
+   Link Input Form
+   ============================================ */
+
+.link-input-form {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.link-input {
+  width: 200px;
+  height: 28px;
+  padding: 0 8px;
+  font-size: 13px;
+  font-family: var(--le-font-family-base);
+  color: var(--le-color-text-primary);
+  background: var(--le-color-background);
+  border: 1px solid var(--le-color-border);
+  border-radius: var(--le-radius-md);
+  outline: none;
+}
+
+.link-input:focus {
+  border-color: var(--le-color-primary);
+  box-shadow: 0 0 0 2px var(--le-color-focus);
+}
+
+.link-input::placeholder {
+  color: var(--le-color-text-disabled);
+}
+
+.link-submit,
+.link-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: var(--le-radius-md);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color var(--le-transition-fast) ease;
+}
+
+.link-submit {
+  background: var(--le-color-success);
+  color: var(--le-color-white);
+}
+
+.link-submit:hover:not(:disabled) {
+  background: var(--le-color-success-dark);
+}
+
+.link-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.link-cancel {
+  background: var(--le-color-gray-200);
+  color: var(--le-color-text-secondary);
+}
+
+.link-cancel:hover {
+  background: var(--le-color-gray-300);
+}

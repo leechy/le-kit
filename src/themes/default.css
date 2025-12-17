@@ -108,4 +108,58 @@
   --le-shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
   --le-shadow-xl: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
   --le-shadow-2xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+
+  /* ============================================
+   * RICH TEXT EDITOR COLORS
+   * ============================================ */
+  
+  /* Editor Container */
+  --le-editor-bg: var(--le-color-surface);
+  --le-editor-border-color: var(--le-color-border);
+  
+  /* Blocks */
+  --le-editor-block-hover-bg: var(--le-color-gray-50);
+  --le-editor-block-focus-ring: 0 0 0 2px var(--le-color-focus);
+  
+  /* Block Controls */
+  --le-editor-controls-color: var(--le-color-text-secondary);
+  --le-editor-controls-hover-color: var(--le-color-text-primary);
+  --le-editor-controls-hover-bg: var(--le-color-gray-100);
+  
+  /* Placeholder */
+  --le-editor-placeholder-color: var(--le-color-text-disabled);
+  
+  /* Headings */
+  --le-editor-heading-color: var(--le-color-text-primary);
+  
+  /* Quote */
+  --le-editor-quote-border-color: var(--le-color-primary);
+  --le-editor-quote-bg: var(--le-color-gray-50);
+  --le-editor-quote-color: var(--le-color-text-secondary);
+  
+  /* Code */
+  --le-editor-code-bg: var(--le-color-gray-100);
+  --le-editor-code-color: var(--le-color-text-primary);
+  --le-editor-inline-code-bg: var(--le-color-gray-100);
+  --le-editor-inline-code-color: var(--le-color-danger);
+  
+  /* Divider */
+  --le-editor-divider-color: var(--le-color-border);
+  
+  /* Lists */
+  --le-editor-list-marker-color: var(--le-color-text-secondary);
+  
+  /* Links */
+  --le-editor-link-color: var(--le-color-primary);
+  
+  /* Toolbar */
+  --le-editor-toolbar-bg: var(--le-color-surface);
+  --le-editor-toolbar-border-color: var(--le-color-border);
+  --le-editor-toolbar-button-hover-bg: var(--le-color-gray-100);
+  --le-editor-toolbar-button-active-bg: var(--le-color-primary);
+  --le-editor-toolbar-button-active-color: var(--le-color-primary-contrast);
+  
+  /* Block Menu */
+  --le-editor-menu-width: 280px;
+  --le-editor-menu-max-height: 320px;
 }

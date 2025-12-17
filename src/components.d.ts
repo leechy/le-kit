@@ -5,11 +5,45 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { BlockType, BlockTypeConfig, LeBlock, LeBlockChangeDetail } from "./types/blocks";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
+import { FormatType } from "./components/le-rich-text-editor/le-format-toolbar";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
+export { BlockType, BlockTypeConfig, LeBlock, LeBlockChangeDetail } from "./types/blocks";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
+export { FormatType } from "./components/le-rich-text-editor/le-format-toolbar";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export namespace Components {
+    /**
+     * Block menu (command palette) for the rich text editor.
+     * Triggered by "/" at the start of a block or clicking the block type icon.
+     * @cmsInternal true
+     */
+    interface LeBlockMenu {
+        /**
+          * Available block types.
+          * @default DEFAULT_BLOCK_CONFIGS
+         */
+        "blockTypes": BlockTypeConfig[];
+        /**
+          * Hide the menu.
+         */
+        "hide": () => Promise<void>;
+        /**
+          * Whether the menu is visible.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Position to show the menu at.
+          * @default { x: 0, y: 0 }
+         */
+        "position": { x: number; y: number };
+        /**
+          * Show the menu.
+         */
+        "show": () => Promise<void>;
+    }
     /**
      * A flexible box component for use as a flex item within le-stack.
      * `le-box` wraps content and provides flex item properties like grow, shrink,
@@ -484,6 +518,82 @@ export namespace Components {
         "width"?: string;
     }
     /**
+     * Internal component representing a single block in the rich text editor.
+     * @cmsInternal true
+     */
+    interface LeEditorBlock {
+        /**
+          * The block data.
+         */
+        "block": LeBlock;
+        /**
+          * Focus the editable content area.
+         */
+        "focusContent": (atEnd?: boolean) => Promise<void>;
+        /**
+          * Whether this block is currently focused.
+          * @default false
+         */
+        "focused": boolean;
+        /**
+          * Get the current HTML content.
+         */
+        "getContent": () => Promise<string>;
+        /**
+          * For numbered lists, which number to start at (1-based).
+          * @default 1
+         */
+        "listStart": number;
+        /**
+          * Whether the editor is in readonly mode.
+          * @default false
+         */
+        "readonly": boolean;
+        /**
+          * Set the HTML content.
+         */
+        "setContent": (html: string) => Promise<void>;
+    }
+    /**
+     * Floating format toolbar for text selection in the rich text editor.
+     * Positions itself above the selection.
+     * @cmsInternal true
+     */
+    interface LeFormatToolbar {
+        /**
+          * Currently active formats.
+          * @default []
+         */
+        "activeFormats": FormatType[];
+        /**
+          * Which format buttons to show.
+          * @default ['bold', 'italic', 'underline', 'strikethrough', 'code', 'link']
+         */
+        "formats": FormatType[];
+        /**
+          * Hide the toolbar.
+         */
+        "hide": () => Promise<void>;
+        /**
+          * Whether the toolbar is visible.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Position to show the toolbar at (center-x, top-y of selection).
+          * @default { x: 0, y: 0 }
+         */
+        "position": { x: number; y: number };
+        /**
+          * Show the toolbar.
+         */
+        "show": () => Promise<void>;
+        /**
+          * Update position.
+         */
+        "updatePosition": (x: number, y: number) => Promise<void>;
+    }
+    /**
      * A multiselect component for selecting multiple options.
      * Displays selected items as tags with optional search filtering.
      * @cmsEditable true
@@ -815,6 +925,88 @@ export namespace Components {
           * @default 'alert'
          */
         "type": PopupType;
+    }
+    /**
+     * Rich text editor with block-based editing, similar to Notion.
+     * Features:
+     * - Block-based content structure (paragraphs, headings, lists, quotes, code, dividers)
+     * - Markdown shortcuts (# for headings, - for lists, > for quotes, etc.)
+     * - Inline formatting toolbar (bold, italic, underline, strikethrough, code, links)
+     * - Block command menu triggered by /
+     * - Drag and drop block reordering
+     * - HTML and Markdown export
+     * @cmsEditable true
+     * @cmsCategory Content
+     * @example Basic usage
+     * ```html
+     * <le-rich-text-editor placeholder="Start writing..."></le-rich-text-editor>
+     * ```
+     * @example With initial content
+     * ```html
+     * <le-rich-text-editor id="editor"></le-rich-text-editor>
+     * <script>
+     * const editor = document.getElementById('editor');
+     * editor.setHtml('<h1>Hello</h1><p>World</p>');
+     * </script>
+     * ```
+     */
+    interface LeRichTextEditor {
+        /**
+          * Whether to autofocus on mount.
+          * @default false
+         */
+        "autofocus": boolean;
+        /**
+          * Available block types.
+          * @default DEFAULT_BLOCK_CONFIGS
+         */
+        "blockTypes": BlockTypeConfig[];
+        /**
+          * Blur the editor.
+         */
+        "blurEditor": () => Promise<void>;
+        /**
+          * Focus the editor.
+         */
+        "focusEditor": () => Promise<void>;
+        /**
+          * Get the raw block data.
+         */
+        "getBlocks": () => Promise<LeBlock[]>;
+        /**
+          * Get the content as HTML.
+         */
+        "getHtml": () => Promise<string>;
+        /**
+          * Get the content as Markdown.
+         */
+        "getMarkdown": () => Promise<string>;
+        /**
+          * Maximum height (scrollable).
+         */
+        "maxHeight"?: string;
+        /**
+          * Minimum height of the editor.
+         */
+        "minHeight"?: string;
+        /**
+          * Placeholder text shown in empty editor.
+          * @default "Type '/' for commands..."
+         */
+        "placeholder": string;
+        /**
+          * Whether the editor is in readonly mode.
+          * @default false
+         */
+        "readonly": boolean;
+        /**
+          * Set content from HTML.
+         */
+        "setHtml": (html: string) => Promise<void>;
+        /**
+          * Initial HTML content.
+         */
+        "value"?: string;
     }
     interface LeRoundProgress {
         /**
@@ -1234,6 +1426,10 @@ export namespace Components {
         "value": number;
     }
 }
+export interface LeBlockMenuCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeBlockMenuElement;
+}
 export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeButtonElement;
@@ -1250,6 +1446,14 @@ export interface LeDropdownBaseCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeDropdownBaseElement;
 }
+export interface LeEditorBlockCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeEditorBlockElement;
+}
+export interface LeFormatToolbarCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeFormatToolbarElement;
+}
 export interface LeMultiselectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeMultiselectElement;
@@ -1265,6 +1469,10 @@ export interface LePopoverCustomEvent<T> extends CustomEvent<T> {
 export interface LePopupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLePopupElement;
+}
+export interface LeRichTextEditorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeRichTextEditorElement;
 }
 export interface LeSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1283,6 +1491,29 @@ export interface LeTagCustomEvent<T> extends CustomEvent<T> {
     target: HTMLLeTagElement;
 }
 declare global {
+    interface HTMLLeBlockMenuElementEventMap {
+        "leBlockTypeSelect": { type: BlockType; config: BlockTypeConfig };
+        "leMenuClose": void;
+    }
+    /**
+     * Block menu (command palette) for the rich text editor.
+     * Triggered by "/" at the start of a block or clicking the block type icon.
+     * @cmsInternal true
+     */
+    interface HTMLLeBlockMenuElement extends Components.LeBlockMenu, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeBlockMenuElementEventMap>(type: K, listener: (this: HTMLLeBlockMenuElement, ev: LeBlockMenuCustomEvent<HTMLLeBlockMenuElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeBlockMenuElementEventMap>(type: K, listener: (this: HTMLLeBlockMenuElement, ev: LeBlockMenuCustomEvent<HTMLLeBlockMenuElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeBlockMenuElement: {
+        prototype: HTMLLeBlockMenuElement;
+        new (): HTMLLeBlockMenuElement;
+    };
     /**
      * A flexible box component for use as a flex item within le-stack.
      * `le-box` wraps content and provides flex item properties like grow, shrink,
@@ -1477,6 +1708,70 @@ declare global {
         prototype: HTMLLeDropdownBaseElement;
         new (): HTMLLeDropdownBaseElement;
     };
+    interface HTMLLeEditorBlockElementEventMap {
+        "leBlockChange": { block: LeBlock; content: string };
+        "leBlockEnter": { block: LeBlock; cursorAtEnd: boolean };
+        "leBlockBackspace": { block: LeBlock };
+        "leBlockDelete": { block: LeBlock };
+        "leBlockNavigateUp": { block: LeBlock };
+        "leBlockNavigateDown": { block: LeBlock };
+        "leBlockTypeChange": { block: LeBlock; newType: BlockType };
+        "leBlockMenuOpen": {
+    block: LeBlock;
+    position: { x: number; y: number };
+    anchor?: HTMLElement;
+  };
+        "leBlockFocus": { block: LeBlock };
+        "leBlockBlur": { block: LeBlock };
+        "leBlockSelection": {
+    block: LeBlock;
+    hasSelection: boolean;
+    range?: Range;
+    rect?: DOMRect;
+  };
+        "leBlockDragStart": { block: LeBlock };
+    }
+    /**
+     * Internal component representing a single block in the rich text editor.
+     * @cmsInternal true
+     */
+    interface HTMLLeEditorBlockElement extends Components.LeEditorBlock, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeEditorBlockElementEventMap>(type: K, listener: (this: HTMLLeEditorBlockElement, ev: LeEditorBlockCustomEvent<HTMLLeEditorBlockElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeEditorBlockElementEventMap>(type: K, listener: (this: HTMLLeEditorBlockElement, ev: LeEditorBlockCustomEvent<HTMLLeEditorBlockElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeEditorBlockElement: {
+        prototype: HTMLLeEditorBlockElement;
+        new (): HTMLLeEditorBlockElement;
+    };
+    interface HTMLLeFormatToolbarElementEventMap {
+        "leFormat": { format: FormatType };
+        "leLinkRequest": void;
+    }
+    /**
+     * Floating format toolbar for text selection in the rich text editor.
+     * Positions itself above the selection.
+     * @cmsInternal true
+     */
+    interface HTMLLeFormatToolbarElement extends Components.LeFormatToolbar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeFormatToolbarElementEventMap>(type: K, listener: (this: HTMLLeFormatToolbarElement, ev: LeFormatToolbarCustomEvent<HTMLLeFormatToolbarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeFormatToolbarElementEventMap>(type: K, listener: (this: HTMLLeFormatToolbarElement, ev: LeFormatToolbarCustomEvent<HTMLLeFormatToolbarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeFormatToolbarElement: {
+        prototype: HTMLLeFormatToolbarElement;
+        new (): HTMLLeFormatToolbarElement;
+    };
     interface HTMLLeMultiselectElementEventMap {
         "leChange": LeMultiOptionSelectDetail;
         "leOpen": void;
@@ -1606,6 +1901,51 @@ declare global {
     var HTMLLePopupElement: {
         prototype: HTMLLePopupElement;
         new (): HTMLLePopupElement;
+    };
+    interface HTMLLeRichTextEditorElementEventMap {
+        "leChange": LeBlockChangeDetail;
+        "leBlockAdd": LeBlock;
+        "leBlockRemove": LeBlock;
+        "leFocus": void;
+        "leBlur": void;
+    }
+    /**
+     * Rich text editor with block-based editing, similar to Notion.
+     * Features:
+     * - Block-based content structure (paragraphs, headings, lists, quotes, code, dividers)
+     * - Markdown shortcuts (# for headings, - for lists, > for quotes, etc.)
+     * - Inline formatting toolbar (bold, italic, underline, strikethrough, code, links)
+     * - Block command menu triggered by /
+     * - Drag and drop block reordering
+     * - HTML and Markdown export
+     * @cmsEditable true
+     * @cmsCategory Content
+     * @example Basic usage
+     * ```html
+     * <le-rich-text-editor placeholder="Start writing..."></le-rich-text-editor>
+     * ```
+     * @example With initial content
+     * ```html
+     * <le-rich-text-editor id="editor"></le-rich-text-editor>
+     * <script>
+     * const editor = document.getElementById('editor');
+     * editor.setHtml('<h1>Hello</h1><p>World</p>');
+     * </script>
+     * ```
+     */
+    interface HTMLLeRichTextEditorElement extends Components.LeRichTextEditor, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeRichTextEditorElementEventMap>(type: K, listener: (this: HTMLLeRichTextEditorElement, ev: LeRichTextEditorCustomEvent<HTMLLeRichTextEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeRichTextEditorElementEventMap>(type: K, listener: (this: HTMLLeRichTextEditorElement, ev: LeRichTextEditorCustomEvent<HTMLLeRichTextEditorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeRichTextEditorElement: {
+        prototype: HTMLLeRichTextEditorElement;
+        new (): HTMLLeRichTextEditorElement;
     };
     interface HTMLLeRoundProgressElement extends Components.LeRoundProgress, HTMLStencilElement {
     }
@@ -1812,6 +2152,7 @@ declare global {
         new (): HTMLLeTurntableElement;
     };
     interface HTMLElementTagNameMap {
+        "le-block-menu": HTMLLeBlockMenuElement;
         "le-box": HTMLLeBoxElement;
         "le-button": HTMLLeButtonElement;
         "le-card": HTMLLeCardElement;
@@ -1819,10 +2160,13 @@ declare global {
         "le-combobox": HTMLLeComboboxElement;
         "le-component": HTMLLeComponentElement;
         "le-dropdown-base": HTMLLeDropdownBaseElement;
+        "le-editor-block": HTMLLeEditorBlockElement;
+        "le-format-toolbar": HTMLLeFormatToolbarElement;
         "le-multiselect": HTMLLeMultiselectElement;
         "le-number-input": HTMLLeNumberInputElement;
         "le-popover": HTMLLePopoverElement;
         "le-popup": HTMLLePopupElement;
+        "le-rich-text-editor": HTMLLeRichTextEditorElement;
         "le-round-progress": HTMLLeRoundProgressElement;
         "le-select": HTMLLeSelectElement;
         "le-slot": HTMLLeSlotElement;
@@ -1834,6 +2178,36 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    /**
+     * Block menu (command palette) for the rich text editor.
+     * Triggered by "/" at the start of a block or clicking the block type icon.
+     * @cmsInternal true
+     */
+    interface LeBlockMenu {
+        /**
+          * Available block types.
+          * @default DEFAULT_BLOCK_CONFIGS
+         */
+        "blockTypes"?: BlockTypeConfig[];
+        /**
+          * Emitted when a block type is selected.
+         */
+        "onLeBlockTypeSelect"?: (event: LeBlockMenuCustomEvent<{ type: BlockType; config: BlockTypeConfig }>) => void;
+        /**
+          * Emitted when the menu is closed.
+         */
+        "onLeMenuClose"?: (event: LeBlockMenuCustomEvent<void>) => void;
+        /**
+          * Whether the menu is visible.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Position to show the menu at.
+          * @default { x: 0, y: 0 }
+         */
+        "position"?: { x: number; y: number };
+    }
     /**
      * A flexible box component for use as a flex item within le-stack.
      * `le-box` wraps content and provides flex item properties like grow, shrink,
@@ -2320,6 +2694,123 @@ declare namespace LocalJSX {
         "width"?: string;
     }
     /**
+     * Internal component representing a single block in the rich text editor.
+     * @cmsInternal true
+     */
+    interface LeEditorBlock {
+        /**
+          * The block data.
+         */
+        "block"?: LeBlock;
+        /**
+          * Whether this block is currently focused.
+          * @default false
+         */
+        "focused"?: boolean;
+        /**
+          * For numbered lists, which number to start at (1-based).
+          * @default 1
+         */
+        "listStart"?: number;
+        /**
+          * Emitted when Backspace is pressed at start of block.
+         */
+        "onLeBlockBackspace"?: (event: LeEditorBlockCustomEvent<{ block: LeBlock }>) => void;
+        /**
+          * Emitted when block loses focus.
+         */
+        "onLeBlockBlur"?: (event: LeEditorBlockCustomEvent<{ block: LeBlock }>) => void;
+        /**
+          * Emitted when the block content changes.
+         */
+        "onLeBlockChange"?: (event: LeEditorBlockCustomEvent<{ block: LeBlock; content: string }>) => void;
+        /**
+          * Emitted when Delete is pressed at end of block.
+         */
+        "onLeBlockDelete"?: (event: LeEditorBlockCustomEvent<{ block: LeBlock }>) => void;
+        /**
+          * Emitted when drag handle is grabbed.
+         */
+        "onLeBlockDragStart"?: (event: LeEditorBlockCustomEvent<{ block: LeBlock }>) => void;
+        /**
+          * Emitted when Enter is pressed (request new block).
+         */
+        "onLeBlockEnter"?: (event: LeEditorBlockCustomEvent<{ block: LeBlock; cursorAtEnd: boolean }>) => void;
+        /**
+          * Emitted when block requests focus.
+         */
+        "onLeBlockFocus"?: (event: LeEditorBlockCustomEvent<{ block: LeBlock }>) => void;
+        /**
+          * Emitted when block menu should open (via icon click or "/").
+         */
+        "onLeBlockMenuOpen"?: (event: LeEditorBlockCustomEvent<{
+    block: LeBlock;
+    position: { x: number; y: number };
+    anchor?: HTMLElement;
+  }>) => void;
+        /**
+          * Emitted when arrow down is pressed at end.
+         */
+        "onLeBlockNavigateDown"?: (event: LeEditorBlockCustomEvent<{ block: LeBlock }>) => void;
+        /**
+          * Emitted when arrow up is pressed at start.
+         */
+        "onLeBlockNavigateUp"?: (event: LeEditorBlockCustomEvent<{ block: LeBlock }>) => void;
+        /**
+          * Emitted when text is selected (for showing format toolbar).
+         */
+        "onLeBlockSelection"?: (event: LeEditorBlockCustomEvent<{
+    block: LeBlock;
+    hasSelection: boolean;
+    range?: Range;
+    rect?: DOMRect;
+  }>) => void;
+        /**
+          * Emitted when block type should change (via markdown shortcut).
+         */
+        "onLeBlockTypeChange"?: (event: LeEditorBlockCustomEvent<{ block: LeBlock; newType: BlockType }>) => void;
+        /**
+          * Whether the editor is in readonly mode.
+          * @default false
+         */
+        "readonly"?: boolean;
+    }
+    /**
+     * Floating format toolbar for text selection in the rich text editor.
+     * Positions itself above the selection.
+     * @cmsInternal true
+     */
+    interface LeFormatToolbar {
+        /**
+          * Currently active formats.
+          * @default []
+         */
+        "activeFormats"?: FormatType[];
+        /**
+          * Which format buttons to show.
+          * @default ['bold', 'italic', 'underline', 'strikethrough', 'code', 'link']
+         */
+        "formats"?: FormatType[];
+        /**
+          * Emitted when a format button is clicked.
+         */
+        "onLeFormat"?: (event: LeFormatToolbarCustomEvent<{ format: FormatType }>) => void;
+        /**
+          * Emitted when link button is clicked (needs special handling).
+         */
+        "onLeLinkRequest"?: (event: LeFormatToolbarCustomEvent<void>) => void;
+        /**
+          * Whether the toolbar is visible.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Position to show the toolbar at (center-x, top-y of selection).
+          * @default { x: 0, y: 0 }
+         */
+        "position"?: { x: number; y: number };
+    }
+    /**
      * A multiselect component for selecting multiple options.
      * Displays selected items as tags with optional search filtering.
      * @cmsEditable true
@@ -2659,6 +3150,84 @@ declare namespace LocalJSX {
           * @default 'alert'
          */
         "type"?: PopupType;
+    }
+    /**
+     * Rich text editor with block-based editing, similar to Notion.
+     * Features:
+     * - Block-based content structure (paragraphs, headings, lists, quotes, code, dividers)
+     * - Markdown shortcuts (# for headings, - for lists, > for quotes, etc.)
+     * - Inline formatting toolbar (bold, italic, underline, strikethrough, code, links)
+     * - Block command menu triggered by /
+     * - Drag and drop block reordering
+     * - HTML and Markdown export
+     * @cmsEditable true
+     * @cmsCategory Content
+     * @example Basic usage
+     * ```html
+     * <le-rich-text-editor placeholder="Start writing..."></le-rich-text-editor>
+     * ```
+     * @example With initial content
+     * ```html
+     * <le-rich-text-editor id="editor"></le-rich-text-editor>
+     * <script>
+     * const editor = document.getElementById('editor');
+     * editor.setHtml('<h1>Hello</h1><p>World</p>');
+     * </script>
+     * ```
+     */
+    interface LeRichTextEditor {
+        /**
+          * Whether to autofocus on mount.
+          * @default false
+         */
+        "autofocus"?: boolean;
+        /**
+          * Available block types.
+          * @default DEFAULT_BLOCK_CONFIGS
+         */
+        "blockTypes"?: BlockTypeConfig[];
+        /**
+          * Maximum height (scrollable).
+         */
+        "maxHeight"?: string;
+        /**
+          * Minimum height of the editor.
+         */
+        "minHeight"?: string;
+        /**
+          * Emitted when a block is added.
+         */
+        "onLeBlockAdd"?: (event: LeRichTextEditorCustomEvent<LeBlock>) => void;
+        /**
+          * Emitted when a block is removed.
+         */
+        "onLeBlockRemove"?: (event: LeRichTextEditorCustomEvent<LeBlock>) => void;
+        /**
+          * Emitted when editor loses focus.
+         */
+        "onLeBlur"?: (event: LeRichTextEditorCustomEvent<void>) => void;
+        /**
+          * Emitted when content changes.
+         */
+        "onLeChange"?: (event: LeRichTextEditorCustomEvent<LeBlockChangeDetail>) => void;
+        /**
+          * Emitted when editor gains focus.
+         */
+        "onLeFocus"?: (event: LeRichTextEditorCustomEvent<void>) => void;
+        /**
+          * Placeholder text shown in empty editor.
+          * @default "Type '/' for commands..."
+         */
+        "placeholder"?: string;
+        /**
+          * Whether the editor is in readonly mode.
+          * @default false
+         */
+        "readonly"?: boolean;
+        /**
+          * Initial HTML content.
+         */
+        "value"?: string;
     }
     interface LeRoundProgress {
         /**
@@ -3106,6 +3675,7 @@ declare namespace LocalJSX {
         "value"?: number;
     }
     interface IntrinsicElements {
+        "le-block-menu": LeBlockMenu;
         "le-box": LeBox;
         "le-button": LeButton;
         "le-card": LeCard;
@@ -3113,10 +3683,13 @@ declare namespace LocalJSX {
         "le-combobox": LeCombobox;
         "le-component": LeComponent;
         "le-dropdown-base": LeDropdownBase;
+        "le-editor-block": LeEditorBlock;
+        "le-format-toolbar": LeFormatToolbar;
         "le-multiselect": LeMultiselect;
         "le-number-input": LeNumberInput;
         "le-popover": LePopover;
         "le-popup": LePopup;
+        "le-rich-text-editor": LeRichTextEditor;
         "le-round-progress": LeRoundProgress;
         "le-select": LeSelect;
         "le-slot": LeSlot;
@@ -3131,6 +3704,12 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * Block menu (command palette) for the rich text editor.
+             * Triggered by "/" at the start of a block or clicking the block type icon.
+             * @cmsInternal true
+             */
+            "le-block-menu": LocalJSX.LeBlockMenu & JSXBase.HTMLAttributes<HTMLLeBlockMenuElement>;
             /**
              * A flexible box component for use as a flex item within le-stack.
              * `le-box` wraps content and provides flex item properties like grow, shrink,
@@ -3242,6 +3821,17 @@ declare module "@stencil/core" {
              */
             "le-dropdown-base": LocalJSX.LeDropdownBase & JSXBase.HTMLAttributes<HTMLLeDropdownBaseElement>;
             /**
+             * Internal component representing a single block in the rich text editor.
+             * @cmsInternal true
+             */
+            "le-editor-block": LocalJSX.LeEditorBlock & JSXBase.HTMLAttributes<HTMLLeEditorBlockElement>;
+            /**
+             * Floating format toolbar for text selection in the rich text editor.
+             * Positions itself above the selection.
+             * @cmsInternal true
+             */
+            "le-format-toolbar": LocalJSX.LeFormatToolbar & JSXBase.HTMLAttributes<HTMLLeFormatToolbarElement>;
+            /**
              * A multiselect component for selecting multiple options.
              * Displays selected items as tags with optional search filtering.
              * @cmsEditable true
@@ -3300,6 +3890,31 @@ declare module "@stencil/core" {
              * @cmsCategory System
              */
             "le-popup": LocalJSX.LePopup & JSXBase.HTMLAttributes<HTMLLePopupElement>;
+            /**
+             * Rich text editor with block-based editing, similar to Notion.
+             * Features:
+             * - Block-based content structure (paragraphs, headings, lists, quotes, code, dividers)
+             * - Markdown shortcuts (# for headings, - for lists, > for quotes, etc.)
+             * - Inline formatting toolbar (bold, italic, underline, strikethrough, code, links)
+             * - Block command menu triggered by /
+             * - Drag and drop block reordering
+             * - HTML and Markdown export
+             * @cmsEditable true
+             * @cmsCategory Content
+             * @example Basic usage
+             * ```html
+             * <le-rich-text-editor placeholder="Start writing..."></le-rich-text-editor>
+             * ```
+             * @example With initial content
+             * ```html
+             * <le-rich-text-editor id="editor"></le-rich-text-editor>
+             * <script>
+             * const editor = document.getElementById('editor');
+             * editor.setHtml('<h1>Hello</h1><p>World</p>');
+             * </script>
+             * ```
+             */
+            "le-rich-text-editor": LocalJSX.LeRichTextEditor & JSXBase.HTMLAttributes<HTMLLeRichTextEditorElement>;
             "le-round-progress": LocalJSX.LeRoundProgress & JSXBase.HTMLAttributes<HTMLLeRoundProgressElement>;
             /**
              * A select dropdown component for single selection.

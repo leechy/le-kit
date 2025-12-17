@@ -1,0 +1,249 @@
+/**
+ * Default mode styles for le-button
+ * Uses global design tokens with component-specific overrides
+ */
+:host {
+  display: inline-block;
+  
+  /* Component-specific tokens */
+  --le-tab-border-radius: var(--le-radius-md);
+  --le-tab-padding-x: var(--le-spacing-4);
+  --le-tab-padding-y: var(--le-spacing-2);
+  --le-tab-padding: var(--le-tab-padding-y) var(--le-tab-padding-x);
+  --le-tab-small-padding: 0.25rem;
+  --le-tab-font-size: var(--le-font-size-md);
+  --le-tab-font-weight: var(--le-font-weight-medium);
+  --le-tab-transition: var(--le-transition-fast);
+  --le-transition-easing: ease-in-out;
+  --le-tab-icon-aspect-ratio: 1;
+  --le-tab-color: var(--le-color-text-primary);
+  --le-selected-tab-color: var(--le-color-primary);
+  
+  /* Internal state variables - set by color classes */
+  --_tab-bg: var(--le-color-primary);
+  --_tab-bg-hover: var(--le-color-primary-dark);
+  --_tab-bg-system: var(--le-color-black);
+  --_tab-color: var(--le-tab-color);
+  --_tab-border-color: var(--le-color-primary);
+}
+
+:host([full-width]) {
+  display: block;
+  width: 100%;
+}
+
+.le-tab-container {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--le-spacing-3);
+  width: 100%;
+  padding: var(--le-tab-padding);
+  color: var(--_tab-color);
+  font-family: var(--le-font-family-base);
+  font-size: var(--le-tab-font-size);
+  font-weight: var(--le-tab-font-weight);
+  line-height: var(--le-line-height-tight);
+  text-decoration: none;
+  cursor: pointer;
+  transition: 
+    background-color var(--le-tab-transition) var(--le-transition-easing),
+    border-color var(--le-tab-transition) var(--le-transition-easing),
+    box-shadow var(--le-tab-transition) var(--le-transition-easing),
+    transform var(--le-tab-transition) var(--le-transition-easing);
+}
+
+.le-tab-container:hover:not(:disabled) {
+  color: var(--le-selected-tab-color);
+}
+
+.le-tab-container:focus-visible {
+  outline: none;
+}
+
+.le-tab-container:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.le-tab-label {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--le-spacing-2);
+}
+
+/* ===========================================
+ * STYLE VARIANTS
+ * =========================================== */
+
+/* Underlined (default for tabs), depends on the position (top, bottom, start, end) */
+.le-tab-container.variant-underlined {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 0;
+}
+.le-tab-container.variant-underlined.position-start,
+.le-tab-container.variant-underlined.position-end {
+  border-block-width: 0;
+}
+.le-tab-container.variant-underlined.position-start {
+  padding-inline-start: 0;
+}
+.le-tab-container.variant-underlined.position-top,
+.le-tab-container.variant-underlined.position-bottom {
+  border-inline-width: 0;
+}
+.le-tab-container.variant-underlined.position-start.selected {
+  border-inline-end-color: var(--_tab-border-color);
+}
+.le-tab-container.variant-underlined.position-end.selected {
+  border-inline-start-color: var(--_tab-border-color);
+}
+.le-tab-container.variant-underlined.position-top.selected {
+  border-bottom-color: var(--_tab-border-color);
+}
+.le-tab-container.variant-underlined.position-bottom.selected {
+  border-top-color: var(--_tab-border-color);
+}
+
+/* Solid (default) - already styled by color classes */
+.le-tab-container.variant-solid {
+  background: transparent;
+  border-radius: var(--le-tab-border-radius);
+  border: none;
+}
+.le-tab-container.variant-solid.selected {
+  background: var(--_tab-bg);
+  color: var(--le-color-on-primary);
+}
+
+/* Pills */
+.le-tab-container.variant-pills {
+  background: transparent;
+  border-radius: var(--le-radius-full);
+  border: none;
+}
+.le-tab-container.variant-pills.selected {
+  background: var(--_tab-bg);
+  color: var(--le-color-on-primary);
+}
+
+/* Enclosed */
+.le-tab-container.variant-enclosed {
+  padding-block: var(--le-spacing-1);
+  background: transparent;
+  border-radius: var(--le-tab-border-radius);
+  border: none;
+}
+.le-tab-container.variant-enclosed.selected {
+  background: var(--_tab-bg);
+  color: var(--le-color-on-primary);
+}
+
+/* ===========================================
+ * SIZES
+ * =========================================== */
+.le-tab-container.size-small {
+  --le-tab-padding-x: 0.4rem;
+  --le-tab-padding-y: 0.3rem;
+  --le-tab-padding-top: 0.35rem;
+  --le-tab-font-size: var(--le-tab-small-font-size, var(--le-font-size-xs));
+}
+
+.le-tab-container.size-large {
+  --le-tab-padding-x: 0.9rem;
+  --le-tab-padding-y: 0.6rem;
+  --le-tab-font-size: var(--le-font-size-xl);
+}
+
+/* ===========================================
+ * STATES & MODIFIERS
+ * =========================================== */
+
+/* Full width */
+.le-tab-container.full-width {
+  display: block;
+  width: 100%;
+}
+
+.le-tab-container.variant-underlined.selected,
+.le-tab-container.variant-clear.selected {
+  color: var(--le-selected-tab-color);
+}
+
+/* Icon only */
+:host > le-component.icon-only .le-tab-container {
+  padding: 0.5rem;
+  padding-bottom: 0.6rem;
+  aspect-ratio: var(--le-tab-icon-aspect-ratio, 1);
+}
+
+.le-tab-container.icon-only.size-small {
+  padding: var(--le-tab-small-padding, 0.25rem);
+}
+
+.le-tab-container.icon-only.size-large {
+  padding: 0.75rem;
+}
+
+/* Hide content in icon-only mode */
+.le-tab-container.icon-only .content {
+  display: none;
+}
+
+/* ===========================================
+ * CONTENT (le-slot wrapper)
+ * =========================================== */
+.content {
+  display: inline;
+}
+
+.content:empty {
+  display: none;
+}
+
+/* ===========================================
+ * ICON WRAPPERS & SLOTS
+ * =========================================== */
+.icon-start,
+.icon-only,
+.icon-end {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-start:empty,
+.icon-only:empty,
+.icon-end:empty {
+  display: none;
+}
+
+::slotted([slot="icon-start"]),
+::slotted([slot="icon-only"]),
+::slotted([slot="icon-end"]) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.125em;
+  height: 1.125em;
+}
+
+/* ===========================================
+ * ALIGNMENT MODIFIERS
+ * =========================================== */
+.le-tab-align-start {
+  justify-content: flex-start;
+}
+.le-tab-align-center {
+  justify-content: center;
+}
+.le-tab-align-space-between {
+  justify-content: space-between;
+}
+.le-tab-align-end {
+  justify-content: flex-end;
+}

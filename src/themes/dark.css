@@ -81,7 +81,7 @@
   --le-color-border-input: #515c6b;
 
   /* Focus ring */
-  --le-color-focus: rgba(77, 166, 255, 0.3);
+  --le-color-focus: rgba(77, 166, 255, 0.15);
   
   /* Border radius - same as default */
   --le-radius-none: 0;

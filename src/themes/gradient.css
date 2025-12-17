@@ -81,7 +81,7 @@
   --le-color-border-input: #eccddd;
   
   /* Focus ring */
-  --le-color-focus: rgba(139, 92, 246, 0.3);
+  --le-color-focus: rgba(139, 92, 246, 0.15);
   
   /* Border radius - more rounded */
   --le-radius-none: 0;

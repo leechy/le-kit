@@ -1,0 +1,30 @@
+/**
+ * le-tab-panel - Styles
+ */
+
+:host {
+  display: contents;
+  --le-tab-panel-radius: var(--le-radius-md);
+  --le-tab-panel-padding: var(--le-spacing-4);
+}
+
+.tab-panel {
+  margin-top: 4px;
+  display: none;
+  border-radius: var(--le-tab-panel-radius);
+  padding: var(--le-tab-panel-padding);
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+.tab-panel:focus-visible {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+
+/* For lazy panels that have been rendered but are now hidden */
+.tab-panel.lazy-hidden {
+  display: none;
+}

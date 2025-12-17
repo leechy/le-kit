@@ -1,0 +1,134 @@
+/**
+ * le-tabs - Default mode styles
+ */
+
+:host {
+  display: block;
+  --le-tabs-border-color: var(--le-border-color);
+  --le-tabs-padding-y: var(--le-spacing-2);
+  --le-tabs-padding-x: var(--le-spacing-4);
+  --le-tabs-enclosed-bg: var(--le-color-background-secondary);
+}
+
+.le-tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.le-tabs.orientation-vertical {
+  flex-direction: row;
+}
+
+/* ============================================
+ * TABLIST
+ * ============================================ */
+
+.tablist {
+  display: flex;
+  position: relative;
+  border-radius: var(--le-radius-md);
+  gap: var(--le-tabs-gap, var(--le-spacing-1));
+}
+.tablist.wrap-tabs {
+  flex-wrap: wrap;
+}
+.tablist:focus,
+.tablist:focus-within {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+
+.orientation-horizontal .tablist {
+  flex-direction: row;
+  border-bottom: 1px solid var(--le-tabs-border-color);
+}
+
+.orientation-vertical .tablist {
+  flex-direction: column;
+  border-right: 1px solid var(--le-tabs-border-color);
+  min-width: 150px;
+}
+
+.full-width .tablist {
+  width: 100%;
+}
+
+.full-width.orientation-horizontal .tab {
+  flex: 1;
+}
+
+/* ============================================
+ * VARIANT: UNDERLINED
+ * ============================================ */
+
+.variant-underlined .tablist {
+  padding-inline: 4px;
+}
+
+/* ============================================
+ * VARIANT: PILLS
+ * ============================================ */
+
+.variant-pills .tablist {
+  border-radius: calc(1.12rem);
+}
+
+
+/* ============================================
+ * VARIANT: ENCLOSED
+ * ============================================ */
+
+.variant-enclosed .tablist {
+  border: none;
+  gap: 0;
+  background-color: var(--le-tabs-enclosed-bg);
+  border-radius: calc(var(--le-radius-md) + var(--le-spacing-1));
+  padding: var(--le-spacing-1);
+}
+
+/* ============================================
+ * TAB ICON
+ * ============================================ */
+
+.tab-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  font-size: 1.1em;
+}
+
+.tab-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ============================================
+ * PANELS
+ * ============================================ */
+
+.panels {
+  flex: 1;
+  min-height: 0;
+}
+
+.panel {
+  padding: var(--le-tabs-panel-padding, var(--le-spacing-4));
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.orientation-vertical .panels {
+  padding-left: var(--le-spacing-4);
+}
+
+.position-end .panels {
+  order: 1;
+}
+.position-end .tablist {
+  order: 2;
+}

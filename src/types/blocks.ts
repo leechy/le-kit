@@ -8,7 +8,16 @@
  * Available block types for the editor.
  * Start with essential types, expand in future versions.
  */
-export type BlockType = 'paragraph' | 'heading1' | 'heading2' | 'heading3' | 'bullet-list' | 'numbered-list' | 'quote' | 'code' | 'divider';
+export type BlockType =
+  | 'paragraph'
+  | 'heading1'
+  | 'heading2'
+  | 'heading3'
+  | 'bullet-list'
+  | 'numbered-list'
+  | 'quote'
+  | 'code'
+  | 'divider';
 
 /**
  * A single block in the editor.
@@ -140,7 +149,7 @@ export const DEFAULT_BLOCK_CONFIGS: BlockTypeConfig[] = [
   {
     type: 'paragraph',
     label: 'Text',
-    icon: '📝',
+    icon: '¶',
     tag: 'p',
     placeholder: 'Type something...',
     editable: true,

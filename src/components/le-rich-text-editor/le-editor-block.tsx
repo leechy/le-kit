@@ -200,7 +200,8 @@ export class LeEditorBlock {
     switch (e.key) {
       case 'Enter':
         if (e.shiftKey) {
-          // Shift+Enter: soft line break, let default happen
+          // Shift+Enter: soft line break,
+          // TODO: we need <br> in html content
           return;
         }
         e.preventDefault();

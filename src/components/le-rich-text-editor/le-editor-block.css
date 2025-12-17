@@ -7,6 +7,7 @@
   display: block;
   position: relative;
   margin: var(--le-editor-block-spacing) 0;
+  padding-left: calc(var(--le-editor-controls-size) * 2 + var(--le-editor-controls-gap) * 2);
 }
 
 /* ============================================
@@ -15,9 +16,9 @@
 
 .block-controls {
   position: absolute;
-  left: calc(-1 * var(--le-editor-controls-size) * 2 - var(--le-editor-controls-gap) * 2);
-  top: 50%;
-  transform: translateY(-50%);
+  left: 0;
+  top: 0;
+  margin: var(--le-editor-block-padding-y) 0;
   display: flex;
   align-items: center;
   gap: var(--le-editor-controls-gap);

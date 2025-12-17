@@ -38,7 +38,7 @@
 
 .editor-blocks {
   /* Space for block controls on left */
-  padding-left: calc(var(--le-editor-controls-size) * 2 + var(--le-editor-controls-gap) * 2);
+  
 }
 
 /* ============================================

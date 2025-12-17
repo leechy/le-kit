@@ -5,7 +5,9 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
+export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export namespace Components {
     /**
@@ -125,10 +127,18 @@ export namespace Components {
      * @cssprop --le-button-padding-y - Button vertical padding
      * @csspart button - The native button element
      * @csspart content - The button content wrapper
+     * @csspart icon-start - The start icon slot
+     * @csspart icon-end - The end icon slot
      * @cmsEditable true
      * @cmsCategory Actions
      */
     interface LeButton {
+        /**
+          * Alignment of the button label without the end icon
+          * @allowedValues start | center | space-between | end
+          * @default 'center'
+         */
+        "align": 'start' | 'center' | 'space-between' | 'end';
         /**
           * Button color theme (uses theme semantic colors)
           * @allowedValues primary | secondary | success | warning | danger | info
@@ -150,10 +160,17 @@ export namespace Components {
          */
         "href"?: string;
         /**
-          * Whether the button displays only an icon (square aspect ratio)
-          * @default false
+          * End icon image or emoji
          */
-        "iconOnly": boolean;
+        "iconEnd"?: string | Node;
+        /**
+          * Icon only button image or emoji if this prop is set, the button will render only the icon slot
+         */
+        "iconOnly"?: string | Node;
+        /**
+          * Start icon image or emoji
+         */
+        "iconStart"?: string | Node;
         /**
           * Mode of the popover should be 'default' for internal use
          */
@@ -247,6 +264,100 @@ export namespace Components {
         "value": string;
     }
     /**
+     * A combobox component with searchable dropdown.
+     * Combines a text input with a dropdown list, allowing users to
+     * filter options by typing or select from the list.
+     * @cmsEditable true
+     * @cmsCategory Form
+     * @example Basic combobox
+     * ```html
+     * <le-combobox
+     * placeholder="Search..."
+     * options='[{"label": "Apple"}, {"label": "Banana"}, {"label": "Cherry"}]'
+     * ></le-combobox>
+     * ```
+     * @example Allow custom values
+     * ```html
+     * <le-combobox
+     * placeholder="Type or select..."
+     * allow-custom
+     * options='[{"label": "Red"}, {"label": "Green"}, {"label": "Blue"}]'
+     * ></le-combobox>
+     * ```
+     */
+    interface LeCombobox {
+        /**
+          * Whether to allow custom values not in the options list.
+          * @default false
+         */
+        "allowCustom": boolean;
+        /**
+          * Whether the combobox is disabled.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Text to show when no options match the search.
+          * @default 'No results found'
+         */
+        "emptyText": string;
+        /**
+          * Focuses the input element.
+         */
+        "focusInput": () => Promise<void>;
+        /**
+          * Whether the multiselect should take full width of its container.
+          * @default false
+         */
+        "fullWidth": boolean;
+        /**
+          * Closes the dropdown.
+         */
+        "hideDropdown": () => Promise<void>;
+        /**
+          * Minimum characters before showing filtered results.
+          * @default 0
+         */
+        "minSearchLength": number;
+        /**
+          * Name attribute for form submission.
+         */
+        "name"?: string;
+        /**
+          * Whether the dropdown is currently open.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * The options to display in the dropdown.
+          * @default []
+         */
+        "options": LeOption[] | string;
+        /**
+          * Placeholder text for the input.
+          * @default 'Type to search...'
+         */
+        "placeholder": string;
+        /**
+          * Whether selection is required.
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Opens the dropdown.
+         */
+        "showDropdown": () => Promise<void>;
+        /**
+          * Size variant of the combobox.
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * The currently selected value.
+         */
+        "value"?: LeOptionValue;
+    }
+    /**
      * Component wrapper for admin mode editing.
      * This component is used internally by other components to provide admin-mode
      * editing capabilities. It wraps the component's rendered output and shows
@@ -284,6 +395,198 @@ export namespace Components {
           * Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties).
          */
         "hostStyle"?: { [key: string]: string };
+    }
+    /**
+     * Internal dropdown base component that provides shared functionality
+     * for select, combobox, and multiselect components.
+     * Wraps le-popover for positioning and provides:
+     * - Option list rendering with groups
+     * - Keyboard navigation (↑↓, Enter, Escape, Home/End)
+     * - Option filtering support
+     * - Single and multi-select modes
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LeDropdownBase {
+        /**
+          * Whether to close the dropdown when clicking outside. (used to support combobox with input focus)
+          * @default true
+         */
+        "closeOnClickOutside": boolean;
+        /**
+          * Whether the dropdown is disabled.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Placeholder text when no options match filter.
+          * @default 'No options'
+         */
+        "emptyText": string;
+        /**
+          * Filter function for options. Return true to include the option.
+         */
+        "filterFn"?: (option: LeOption, query: string) => boolean;
+        /**
+          * Current filter query string.
+          * @default ''
+         */
+        "filterQuery": string;
+        /**
+          * Sets the dropdown to full width of the trigger.
+          * @default false
+         */
+        "fullWidth": boolean;
+        /**
+          * Closes the dropdown.
+         */
+        "hide": () => Promise<void>;
+        /**
+          * Maximum height of the dropdown list.
+          * @default '300px'
+         */
+        "maxHeight": string;
+        /**
+          * Whether multiple selection is allowed.
+          * @default false
+         */
+        "multiple": boolean;
+        /**
+          * Whether the dropdown is open.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * The options to display in the dropdown.
+          * @default []
+         */
+        "options": LeOption[];
+        /**
+          * Opens the dropdown.
+         */
+        "show": () => Promise<void>;
+        /**
+          * Whether to show checkboxes for multiselect mode.
+          * @default true
+         */
+        "showCheckboxes": boolean;
+        /**
+          * Toggles the dropdown.
+         */
+        "toggle": () => Promise<void>;
+        /**
+          * Current value(s) - single value or array for multiselect.
+         */
+        "value"?: LeOptionValue | LeOptionValue[];
+        /**
+          * Width of the dropdown. If not set, matches trigger width.
+         */
+        "width"?: string;
+    }
+    /**
+     * A multiselect component for selecting multiple options.
+     * Displays selected items as tags with optional search filtering.
+     * @cmsEditable true
+     * @cmsCategory Form
+     * @example Basic multiselect
+     * ```html
+     * <le-multiselect
+     * placeholder="Select options..."
+     * options='[{"label": "Red"}, {"label": "Green"}, {"label": "Blue"}]'
+     * ></le-multiselect>
+     * ```
+     * @example With max selections
+     * ```html
+     * <le-multiselect
+     * max-selections="3"
+     * options='[{"label": "Option 1"}, {"label": "Option 2"}, {"label": "Option 3"}, {"label": "Option 4"}]'
+     * ></le-multiselect>
+     * ```
+     * @example With search
+     * ```html
+     * <le-multiselect
+     * searchable
+     * placeholder="Search and select..."
+     * options='[{"label": "Apple"}, {"label": "Banana"}, {"label": "Cherry"}]'
+     * ></le-multiselect>
+     * ```
+     */
+    interface LeMultiselect {
+        /**
+          * Clears all selections.
+         */
+        "clearSelection": () => Promise<void>;
+        /**
+          * Whether the multiselect is disabled.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Text to show when no options match the search.
+          * @default 'No results found'
+         */
+        "emptyText": string;
+        /**
+          * Whether the multiselect should take full width of its container.
+          * @default false
+         */
+        "fullWidth": boolean;
+        /**
+          * Closes the dropdown.
+         */
+        "hideDropdown": () => Promise<void>;
+        /**
+          * Maximum number of selections allowed.
+         */
+        "maxSelections"?: number;
+        /**
+          * Name attribute for form submission.
+         */
+        "name"?: string;
+        /**
+          * Whether the dropdown is currently open.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * The options to display in the dropdown.
+          * @default []
+         */
+        "options": LeOption[] | string;
+        /**
+          * Placeholder text when no options are selected.
+          * @default 'Select options...'
+         */
+        "placeholder": string;
+        /**
+          * Whether selection is required.
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Whether the input is searchable.
+          * @default false
+         */
+        "searchable": boolean;
+        /**
+          * Opens the dropdown.
+         */
+        "showDropdown": () => Promise<void>;
+        /**
+          * Whether to show a "Select All" option. Also accepts a string or array of strings to customize the label(s).
+          * @default false
+         */
+        "showSelectAll": boolean | string | string[];
+        /**
+          * Size variant of the multiselect.
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * The currently selected values.
+          * @default []
+         */
+        "value": LeOptionValue[];
     }
     /**
      * A number input component with validation, keyboard controls, and custom spinners.
@@ -358,6 +661,8 @@ export namespace Components {
      * A popover component for displaying floating content.
      * Uses the native HTML Popover API for proper layering with dialogs
      * and other top-layer elements. Falls back gracefully in older browsers.
+     * @csspart trigger - The popover trigger element
+     * @csspart content - The popover content wrapper
      * @cmsInternal true
      * @cmsCategory System
      */
@@ -426,6 +731,15 @@ export namespace Components {
           * Toggles the popover
          */
         "toggle": () => Promise<void>;
+        /**
+          * Should the popover's trigger take full width of its container
+          * @default false
+         */
+        "triggerFullWidth": boolean;
+        /**
+          * Method to update the popover position from a parent component
+         */
+        "updatePosition": () => Promise<void>;
         /**
           * Fixed width for the popover (e.g., '300px', '20rem')
          */
@@ -512,6 +826,104 @@ export namespace Components {
           * @default 0
          */
         "value": number;
+    }
+    /**
+     * A select dropdown component for single selection.
+     * @cmsEditable true
+     * @cmsCategory Form
+     * @example Basic select
+     * ```html
+     * <le-select
+     * placeholder="Choose an option"
+     * options='[{"label": "Option 1", "value": "1"}, {"label": "Option 2", "value": "2"}]'
+     * ></le-select>
+     * ```
+     * @example With icons
+     * ```html
+     * <le-select
+     * options='[
+     * {"label": "Apple", "value": "apple", "iconStart": "🍎"},
+     * {"label": "Banana", "value": "banana", "iconStart": "🍌"}
+     * ]'
+     * ></le-select>
+     * ```
+     * @example Grouped options
+     * ```html
+     * <le-select
+     * options='[
+     * {"label": "Apple", "value": "apple", "group": "Fruits"},
+     * {"label": "Carrot", "value": "carrot", "group": "Vegetables"}
+     * ]'
+     * ></le-select>
+     * ```
+     */
+    interface LeSelect {
+        /**
+          * Whether the select is disabled.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Text to show when no options match the search.
+          * @default 'No results found'
+         */
+        "emptyText": string;
+        /**
+          * Whether the select should take full width of its container.
+          * @default false
+         */
+        "fullWidth": boolean;
+        /**
+          * Closes the dropdown.
+         */
+        "hideDropdown": () => Promise<void>;
+        /**
+          * Name attribute for form submission.
+         */
+        "name"?: string;
+        /**
+          * Whether the dropdown is currently open.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * The options to display in the dropdown.
+          * @default []
+         */
+        "options": LeOption[] | string;
+        /**
+          * Placeholder text when no option is selected.
+          * @default 'Select an option'
+         */
+        "placeholder": string;
+        /**
+          * Whether selection is required.
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Whether the input is searchable.
+          * @default false
+         */
+        "searchable": boolean;
+        /**
+          * Opens the dropdown.
+         */
+        "showDropdown": () => Promise<void>;
+        /**
+          * Size variant of the select.
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * The currently selected value.
+         */
+        "value"?: LeOptionValue;
+        /**
+          * Visual variant of the select.
+          * @default 'default'
+         */
+        "variant": 'default' | 'outlined' | 'solid';
     }
     /**
      * Slot placeholder component for admin/CMS mode.
@@ -659,6 +1071,11 @@ export namespace Components {
          */
         "externalId": string;
         /**
+          * Hide description slot
+          * @default false
+         */
+        "hideDescription": boolean;
+        /**
           * Icon for the end icon
          */
         "iconEnd": string;
@@ -666,6 +1083,10 @@ export namespace Components {
           * Icon for the start icon
          */
         "iconStart": string;
+        /**
+          * Pass the ref of the input element to the parent component
+         */
+        "inputRef"?: (el: HTMLInputElement) => void;
         /**
           * Label for the input
          */
@@ -696,6 +1117,71 @@ export namespace Components {
           * The value of the input
          */
         "value": string;
+    }
+    /**
+     * A tag/chip component for displaying labels with optional dismiss functionality.
+     * @cmsEditable false
+     * @cmsCategory Form
+     * @example Basic tag
+     * ```html
+     * <le-tag label="JavaScript"></le-tag>
+     * ```
+     * @example Dismissible tag
+     * ```html
+     * <le-tag label="Remove me" dismissible></le-tag>
+     * ```
+     * @example With icon
+     * ```html
+     * <le-tag label="Settings" icon="⚙️"></le-tag>
+     * ```
+     * @example Different sizes
+     * ```html
+     * <le-tag label="Small" size="small"></le-tag>
+     * <le-tag label="Medium" size="medium"></le-tag>
+     * <le-tag label="Large" size="large"></le-tag>
+     * ```
+     * @example Different variants
+     * ```html
+     * <le-tag label="Default" variant="default"></le-tag>
+     * <le-tag label="Primary" variant="primary"></le-tag>
+     * <le-tag label="Success" variant="success"></le-tag>
+     * <le-tag label="Warning" variant="warning"></le-tag>
+     * <le-tag label="Danger" variant="danger"></le-tag>
+     * ```
+     */
+    interface LeTag {
+        /**
+          * Whether the tag is disabled.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Whether the tag can be dismissed (shows close button).
+          * @default false
+         */
+        "dismissible": boolean;
+        /**
+          * Icon to display before the label. Can be an emoji, URL, or icon name.
+         */
+        "icon"?: string;
+        /**
+          * The text label to display in the tag.
+         */
+        "label": string;
+        /**
+          * Mode of the popover should be 'default' for internal use
+         */
+        "mode": 'default' | 'admin';
+        /**
+          * The size of the tag.
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * The visual variant of the tag.
+          * @default 'default'
+         */
+        "variant": 'default' | 'primary' | 'success' | 'warning' | 'danger';
     }
     /**
      * A text component with rich text editing capabilities in admin mode.
@@ -756,6 +1242,18 @@ export interface LeCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeCheckboxElement;
 }
+export interface LeComboboxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeComboboxElement;
+}
+export interface LeDropdownBaseCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeDropdownBaseElement;
+}
+export interface LeMultiselectCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeMultiselectElement;
+}
 export interface LeNumberInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeNumberInputElement;
@@ -768,6 +1266,10 @@ export interface LePopupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLePopupElement;
 }
+export interface LeSelectCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeSelectElement;
+}
 export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeSlotElement;
@@ -775,6 +1277,10 @@ export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
 export interface LeStringInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeStringInputElement;
+}
+export interface LeTagCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeTagElement;
 }
 declare global {
     /**
@@ -807,6 +1313,8 @@ declare global {
      * @cssprop --le-button-padding-y - Button vertical padding
      * @csspart button - The native button element
      * @csspart content - The button content wrapper
+     * @csspart icon-start - The start icon slot
+     * @csspart icon-end - The end icon slot
      * @cmsEditable true
      * @cmsCategory Actions
      */
@@ -870,6 +1378,48 @@ declare global {
         prototype: HTMLLeCheckboxElement;
         new (): HTMLLeCheckboxElement;
     };
+    interface HTMLLeComboboxElementEventMap {
+        "leChange": LeOptionSelectDetail;
+        "leInput": { value: string };
+        "leOpen": void;
+        "leClose": void;
+    }
+    /**
+     * A combobox component with searchable dropdown.
+     * Combines a text input with a dropdown list, allowing users to
+     * filter options by typing or select from the list.
+     * @cmsEditable true
+     * @cmsCategory Form
+     * @example Basic combobox
+     * ```html
+     * <le-combobox
+     * placeholder="Search..."
+     * options='[{"label": "Apple"}, {"label": "Banana"}, {"label": "Cherry"}]'
+     * ></le-combobox>
+     * ```
+     * @example Allow custom values
+     * ```html
+     * <le-combobox
+     * placeholder="Type or select..."
+     * allow-custom
+     * options='[{"label": "Red"}, {"label": "Green"}, {"label": "Blue"}]'
+     * ></le-combobox>
+     * ```
+     */
+    interface HTMLLeComboboxElement extends Components.LeCombobox, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeComboboxElementEventMap>(type: K, listener: (this: HTMLLeComboboxElement, ev: LeComboboxCustomEvent<HTMLLeComboboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeComboboxElementEventMap>(type: K, listener: (this: HTMLLeComboboxElement, ev: LeComboboxCustomEvent<HTMLLeComboboxElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeComboboxElement: {
+        prototype: HTMLLeComboboxElement;
+        new (): HTMLLeComboboxElement;
+    };
     /**
      * Component wrapper for admin mode editing.
      * This component is used internally by other components to provide admin-mode
@@ -896,6 +1446,83 @@ declare global {
     var HTMLLeComponentElement: {
         prototype: HTMLLeComponentElement;
         new (): HTMLLeComponentElement;
+    };
+    interface HTMLLeDropdownBaseElementEventMap {
+        "leOptionSelect": LeOptionSelectDetail;
+        "leDropdownOpen": void;
+        "leDropdownClose": void;
+    }
+    /**
+     * Internal dropdown base component that provides shared functionality
+     * for select, combobox, and multiselect components.
+     * Wraps le-popover for positioning and provides:
+     * - Option list rendering with groups
+     * - Keyboard navigation (↑↓, Enter, Escape, Home/End)
+     * - Option filtering support
+     * - Single and multi-select modes
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface HTMLLeDropdownBaseElement extends Components.LeDropdownBase, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeDropdownBaseElementEventMap>(type: K, listener: (this: HTMLLeDropdownBaseElement, ev: LeDropdownBaseCustomEvent<HTMLLeDropdownBaseElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeDropdownBaseElementEventMap>(type: K, listener: (this: HTMLLeDropdownBaseElement, ev: LeDropdownBaseCustomEvent<HTMLLeDropdownBaseElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeDropdownBaseElement: {
+        prototype: HTMLLeDropdownBaseElement;
+        new (): HTMLLeDropdownBaseElement;
+    };
+    interface HTMLLeMultiselectElementEventMap {
+        "leChange": LeMultiOptionSelectDetail;
+        "leOpen": void;
+        "leClose": void;
+    }
+    /**
+     * A multiselect component for selecting multiple options.
+     * Displays selected items as tags with optional search filtering.
+     * @cmsEditable true
+     * @cmsCategory Form
+     * @example Basic multiselect
+     * ```html
+     * <le-multiselect
+     * placeholder="Select options..."
+     * options='[{"label": "Red"}, {"label": "Green"}, {"label": "Blue"}]'
+     * ></le-multiselect>
+     * ```
+     * @example With max selections
+     * ```html
+     * <le-multiselect
+     * max-selections="3"
+     * options='[{"label": "Option 1"}, {"label": "Option 2"}, {"label": "Option 3"}, {"label": "Option 4"}]'
+     * ></le-multiselect>
+     * ```
+     * @example With search
+     * ```html
+     * <le-multiselect
+     * searchable
+     * placeholder="Search and select..."
+     * options='[{"label": "Apple"}, {"label": "Banana"}, {"label": "Cherry"}]'
+     * ></le-multiselect>
+     * ```
+     */
+    interface HTMLLeMultiselectElement extends Components.LeMultiselect, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeMultiselectElementEventMap>(type: K, listener: (this: HTMLLeMultiselectElement, ev: LeMultiselectCustomEvent<HTMLLeMultiselectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeMultiselectElementEventMap>(type: K, listener: (this: HTMLLeMultiselectElement, ev: LeMultiselectCustomEvent<HTMLLeMultiselectElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeMultiselectElement: {
+        prototype: HTMLLeMultiselectElement;
+        new (): HTMLLeMultiselectElement;
     };
     interface HTMLLeNumberInputElementEventMap {
         "leChange": { value: number; name: string; externalId: string; isValid: boolean };
@@ -933,6 +1560,8 @@ declare global {
      * A popover component for displaying floating content.
      * Uses the native HTML Popover API for proper layering with dialogs
      * and other top-layer elements. Falls back gracefully in older browsers.
+     * @csspart trigger - The popover trigger element
+     * @csspart content - The popover content wrapper
      * @cmsInternal true
      * @cmsCategory System
      */
@@ -984,6 +1613,55 @@ declare global {
         prototype: HTMLLeRoundProgressElement;
         new (): HTMLLeRoundProgressElement;
     };
+    interface HTMLLeSelectElementEventMap {
+        "leChange": LeOptionSelectDetail;
+        "leOpen": void;
+        "leClose": void;
+    }
+    /**
+     * A select dropdown component for single selection.
+     * @cmsEditable true
+     * @cmsCategory Form
+     * @example Basic select
+     * ```html
+     * <le-select
+     * placeholder="Choose an option"
+     * options='[{"label": "Option 1", "value": "1"}, {"label": "Option 2", "value": "2"}]'
+     * ></le-select>
+     * ```
+     * @example With icons
+     * ```html
+     * <le-select
+     * options='[
+     * {"label": "Apple", "value": "apple", "iconStart": "🍎"},
+     * {"label": "Banana", "value": "banana", "iconStart": "🍌"}
+     * ]'
+     * ></le-select>
+     * ```
+     * @example Grouped options
+     * ```html
+     * <le-select
+     * options='[
+     * {"label": "Apple", "value": "apple", "group": "Fruits"},
+     * {"label": "Carrot", "value": "carrot", "group": "Vegetables"}
+     * ]'
+     * ></le-select>
+     * ```
+     */
+    interface HTMLLeSelectElement extends Components.LeSelect, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeSelectElementEventMap>(type: K, listener: (this: HTMLLeSelectElement, ev: LeSelectCustomEvent<HTMLLeSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeSelectElementEventMap>(type: K, listener: (this: HTMLLeSelectElement, ev: LeSelectCustomEvent<HTMLLeSelectElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeSelectElement: {
+        prototype: HTMLLeSelectElement;
+        new (): HTMLLeSelectElement;
+    };
     interface HTMLLeSlotElementEventMap {
         "leSlotChange": { name: string; value: string; isValid: boolean };
     }
@@ -1026,8 +1704,16 @@ declare global {
         new (): HTMLLeStackElement;
     };
     interface HTMLLeStringInputElementEventMap {
-        "change": { value: string; name: string; externalId: string };
-        "input": { value: string; name: string; externalId: string };
+        "change": {
+    value: string;
+    name: string;
+    externalId: string;
+  };
+        "input": {
+    value: string;
+    name: string;
+    externalId: string;
+  };
     }
     /**
      * A text input component with support for labels, descriptions, icons, and external IDs.
@@ -1051,6 +1737,54 @@ declare global {
     var HTMLLeStringInputElement: {
         prototype: HTMLLeStringInputElement;
         new (): HTMLLeStringInputElement;
+    };
+    interface HTMLLeTagElementEventMap {
+        "leDismiss": void;
+    }
+    /**
+     * A tag/chip component for displaying labels with optional dismiss functionality.
+     * @cmsEditable false
+     * @cmsCategory Form
+     * @example Basic tag
+     * ```html
+     * <le-tag label="JavaScript"></le-tag>
+     * ```
+     * @example Dismissible tag
+     * ```html
+     * <le-tag label="Remove me" dismissible></le-tag>
+     * ```
+     * @example With icon
+     * ```html
+     * <le-tag label="Settings" icon="⚙️"></le-tag>
+     * ```
+     * @example Different sizes
+     * ```html
+     * <le-tag label="Small" size="small"></le-tag>
+     * <le-tag label="Medium" size="medium"></le-tag>
+     * <le-tag label="Large" size="large"></le-tag>
+     * ```
+     * @example Different variants
+     * ```html
+     * <le-tag label="Default" variant="default"></le-tag>
+     * <le-tag label="Primary" variant="primary"></le-tag>
+     * <le-tag label="Success" variant="success"></le-tag>
+     * <le-tag label="Warning" variant="warning"></le-tag>
+     * <le-tag label="Danger" variant="danger"></le-tag>
+     * ```
+     */
+    interface HTMLLeTagElement extends Components.LeTag, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeTagElementEventMap>(type: K, listener: (this: HTMLLeTagElement, ev: LeTagCustomEvent<HTMLLeTagElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeTagElementEventMap>(type: K, listener: (this: HTMLLeTagElement, ev: LeTagCustomEvent<HTMLLeTagElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeTagElement: {
+        prototype: HTMLLeTagElement;
+        new (): HTMLLeTagElement;
     };
     /**
      * A text component with rich text editing capabilities in admin mode.
@@ -1082,14 +1816,19 @@ declare global {
         "le-button": HTMLLeButtonElement;
         "le-card": HTMLLeCardElement;
         "le-checkbox": HTMLLeCheckboxElement;
+        "le-combobox": HTMLLeComboboxElement;
         "le-component": HTMLLeComponentElement;
+        "le-dropdown-base": HTMLLeDropdownBaseElement;
+        "le-multiselect": HTMLLeMultiselectElement;
         "le-number-input": HTMLLeNumberInputElement;
         "le-popover": HTMLLePopoverElement;
         "le-popup": HTMLLePopupElement;
         "le-round-progress": HTMLLeRoundProgressElement;
+        "le-select": HTMLLeSelectElement;
         "le-slot": HTMLLeSlotElement;
         "le-stack": HTMLLeStackElement;
         "le-string-input": HTMLLeStringInputElement;
+        "le-tag": HTMLLeTagElement;
         "le-text": HTMLLeTextElement;
         "le-turntable": HTMLLeTurntableElement;
     }
@@ -1212,10 +1951,18 @@ declare namespace LocalJSX {
      * @cssprop --le-button-padding-y - Button vertical padding
      * @csspart button - The native button element
      * @csspart content - The button content wrapper
+     * @csspart icon-start - The start icon slot
+     * @csspart icon-end - The end icon slot
      * @cmsEditable true
      * @cmsCategory Actions
      */
     interface LeButton {
+        /**
+          * Alignment of the button label without the end icon
+          * @allowedValues start | center | space-between | end
+          * @default 'center'
+         */
+        "align"?: 'start' | 'center' | 'space-between' | 'end';
         /**
           * Button color theme (uses theme semantic colors)
           * @allowedValues primary | secondary | success | warning | danger | info
@@ -1237,10 +1984,17 @@ declare namespace LocalJSX {
          */
         "href"?: string;
         /**
-          * Whether the button displays only an icon (square aspect ratio)
-          * @default false
+          * End icon image or emoji
          */
-        "iconOnly"?: boolean;
+        "iconEnd"?: string | Node;
+        /**
+          * Icon only button image or emoji if this prop is set, the button will render only the icon slot
+         */
+        "iconOnly"?: string | Node;
+        /**
+          * Start icon image or emoji
+         */
+        "iconStart"?: string | Node;
         /**
           * Mode of the popover should be 'default' for internal use
          */
@@ -1342,6 +2096,104 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * A combobox component with searchable dropdown.
+     * Combines a text input with a dropdown list, allowing users to
+     * filter options by typing or select from the list.
+     * @cmsEditable true
+     * @cmsCategory Form
+     * @example Basic combobox
+     * ```html
+     * <le-combobox
+     * placeholder="Search..."
+     * options='[{"label": "Apple"}, {"label": "Banana"}, {"label": "Cherry"}]'
+     * ></le-combobox>
+     * ```
+     * @example Allow custom values
+     * ```html
+     * <le-combobox
+     * placeholder="Type or select..."
+     * allow-custom
+     * options='[{"label": "Red"}, {"label": "Green"}, {"label": "Blue"}]'
+     * ></le-combobox>
+     * ```
+     */
+    interface LeCombobox {
+        /**
+          * Whether to allow custom values not in the options list.
+          * @default false
+         */
+        "allowCustom"?: boolean;
+        /**
+          * Whether the combobox is disabled.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Text to show when no options match the search.
+          * @default 'No results found'
+         */
+        "emptyText"?: string;
+        /**
+          * Whether the multiselect should take full width of its container.
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Minimum characters before showing filtered results.
+          * @default 0
+         */
+        "minSearchLength"?: number;
+        /**
+          * Name attribute for form submission.
+         */
+        "name"?: string;
+        /**
+          * Emitted when the selected value changes.
+         */
+        "onLeChange"?: (event: LeComboboxCustomEvent<LeOptionSelectDetail>) => void;
+        /**
+          * Emitted when the dropdown closes.
+         */
+        "onLeClose"?: (event: LeComboboxCustomEvent<void>) => void;
+        /**
+          * Emitted when the input value changes (for custom values).
+         */
+        "onLeInput"?: (event: LeComboboxCustomEvent<{ value: string }>) => void;
+        /**
+          * Emitted when the dropdown opens.
+         */
+        "onLeOpen"?: (event: LeComboboxCustomEvent<void>) => void;
+        /**
+          * Whether the dropdown is currently open.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * The options to display in the dropdown.
+          * @default []
+         */
+        "options"?: LeOption[] | string;
+        /**
+          * Placeholder text for the input.
+          * @default 'Type to search...'
+         */
+        "placeholder"?: string;
+        /**
+          * Whether selection is required.
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Size variant of the combobox.
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * The currently selected value.
+         */
+        "value"?: LeOptionValue;
+    }
+    /**
      * Component wrapper for admin mode editing.
      * This component is used internally by other components to provide admin-mode
      * editing capabilities. It wraps the component's rendered output and shows
@@ -1379,6 +2231,198 @@ declare namespace LocalJSX {
           * Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties).
          */
         "hostStyle"?: { [key: string]: string };
+    }
+    /**
+     * Internal dropdown base component that provides shared functionality
+     * for select, combobox, and multiselect components.
+     * Wraps le-popover for positioning and provides:
+     * - Option list rendering with groups
+     * - Keyboard navigation (↑↓, Enter, Escape, Home/End)
+     * - Option filtering support
+     * - Single and multi-select modes
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LeDropdownBase {
+        /**
+          * Whether to close the dropdown when clicking outside. (used to support combobox with input focus)
+          * @default true
+         */
+        "closeOnClickOutside"?: boolean;
+        /**
+          * Whether the dropdown is disabled.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Placeholder text when no options match filter.
+          * @default 'No options'
+         */
+        "emptyText"?: string;
+        /**
+          * Filter function for options. Return true to include the option.
+         */
+        "filterFn"?: (option: LeOption, query: string) => boolean;
+        /**
+          * Current filter query string.
+          * @default ''
+         */
+        "filterQuery"?: string;
+        /**
+          * Sets the dropdown to full width of the trigger.
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Maximum height of the dropdown list.
+          * @default '300px'
+         */
+        "maxHeight"?: string;
+        /**
+          * Whether multiple selection is allowed.
+          * @default false
+         */
+        "multiple"?: boolean;
+        /**
+          * Emitted when the dropdown closes.
+         */
+        "onLeDropdownClose"?: (event: LeDropdownBaseCustomEvent<void>) => void;
+        /**
+          * Emitted when the dropdown opens.
+         */
+        "onLeDropdownOpen"?: (event: LeDropdownBaseCustomEvent<void>) => void;
+        /**
+          * Emitted when an option is selected.
+         */
+        "onLeOptionSelect"?: (event: LeDropdownBaseCustomEvent<LeOptionSelectDetail>) => void;
+        /**
+          * Whether the dropdown is open.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * The options to display in the dropdown.
+          * @default []
+         */
+        "options"?: LeOption[];
+        /**
+          * Whether to show checkboxes for multiselect mode.
+          * @default true
+         */
+        "showCheckboxes"?: boolean;
+        /**
+          * Current value(s) - single value or array for multiselect.
+         */
+        "value"?: LeOptionValue | LeOptionValue[];
+        /**
+          * Width of the dropdown. If not set, matches trigger width.
+         */
+        "width"?: string;
+    }
+    /**
+     * A multiselect component for selecting multiple options.
+     * Displays selected items as tags with optional search filtering.
+     * @cmsEditable true
+     * @cmsCategory Form
+     * @example Basic multiselect
+     * ```html
+     * <le-multiselect
+     * placeholder="Select options..."
+     * options='[{"label": "Red"}, {"label": "Green"}, {"label": "Blue"}]'
+     * ></le-multiselect>
+     * ```
+     * @example With max selections
+     * ```html
+     * <le-multiselect
+     * max-selections="3"
+     * options='[{"label": "Option 1"}, {"label": "Option 2"}, {"label": "Option 3"}, {"label": "Option 4"}]'
+     * ></le-multiselect>
+     * ```
+     * @example With search
+     * ```html
+     * <le-multiselect
+     * searchable
+     * placeholder="Search and select..."
+     * options='[{"label": "Apple"}, {"label": "Banana"}, {"label": "Cherry"}]'
+     * ></le-multiselect>
+     * ```
+     */
+    interface LeMultiselect {
+        /**
+          * Whether the multiselect is disabled.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Text to show when no options match the search.
+          * @default 'No results found'
+         */
+        "emptyText"?: string;
+        /**
+          * Whether the multiselect should take full width of its container.
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Maximum number of selections allowed.
+         */
+        "maxSelections"?: number;
+        /**
+          * Name attribute for form submission.
+         */
+        "name"?: string;
+        /**
+          * Emitted when the selected values change.
+         */
+        "onLeChange"?: (event: LeMultiselectCustomEvent<LeMultiOptionSelectDetail>) => void;
+        /**
+          * Emitted when the dropdown closes.
+         */
+        "onLeClose"?: (event: LeMultiselectCustomEvent<void>) => void;
+        /**
+          * Emitted when the dropdown opens.
+         */
+        "onLeOpen"?: (event: LeMultiselectCustomEvent<void>) => void;
+        /**
+          * Whether the dropdown is currently open.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * The options to display in the dropdown.
+          * @default []
+         */
+        "options"?: LeOption[] | string;
+        /**
+          * Placeholder text when no options are selected.
+          * @default 'Select options...'
+         */
+        "placeholder"?: string;
+        /**
+          * Whether selection is required.
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Whether the input is searchable.
+          * @default false
+         */
+        "searchable"?: boolean;
+        /**
+          * Whether to show a "Select All" option. Also accepts a string or array of strings to customize the label(s).
+          * @default false
+         */
+        "showSelectAll"?: boolean | string | string[];
+        /**
+          * Size variant of the multiselect.
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * The currently selected values.
+          * @default []
+         */
+        "value"?: LeOptionValue[];
     }
     /**
      * A number input component with validation, keyboard controls, and custom spinners.
@@ -1461,6 +2505,8 @@ declare namespace LocalJSX {
      * A popover component for displaying floating content.
      * Uses the native HTML Popover API for proper layering with dialogs
      * and other top-layer elements. Falls back gracefully in older browsers.
+     * @csspart trigger - The popover trigger element
+     * @csspart content - The popover content wrapper
      * @cmsInternal true
      * @cmsCategory System
      */
@@ -1525,6 +2571,11 @@ declare namespace LocalJSX {
           * @default true
          */
         "showClose"?: boolean;
+        /**
+          * Should the popover's trigger take full width of its container
+          * @default false
+         */
+        "triggerFullWidth"?: boolean;
         /**
           * Fixed width for the popover (e.g., '300px', '20rem')
          */
@@ -1619,6 +2670,108 @@ declare namespace LocalJSX {
           * @default 0
          */
         "value"?: number;
+    }
+    /**
+     * A select dropdown component for single selection.
+     * @cmsEditable true
+     * @cmsCategory Form
+     * @example Basic select
+     * ```html
+     * <le-select
+     * placeholder="Choose an option"
+     * options='[{"label": "Option 1", "value": "1"}, {"label": "Option 2", "value": "2"}]'
+     * ></le-select>
+     * ```
+     * @example With icons
+     * ```html
+     * <le-select
+     * options='[
+     * {"label": "Apple", "value": "apple", "iconStart": "🍎"},
+     * {"label": "Banana", "value": "banana", "iconStart": "🍌"}
+     * ]'
+     * ></le-select>
+     * ```
+     * @example Grouped options
+     * ```html
+     * <le-select
+     * options='[
+     * {"label": "Apple", "value": "apple", "group": "Fruits"},
+     * {"label": "Carrot", "value": "carrot", "group": "Vegetables"}
+     * ]'
+     * ></le-select>
+     * ```
+     */
+    interface LeSelect {
+        /**
+          * Whether the select is disabled.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Text to show when no options match the search.
+          * @default 'No results found'
+         */
+        "emptyText"?: string;
+        /**
+          * Whether the select should take full width of its container.
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Name attribute for form submission.
+         */
+        "name"?: string;
+        /**
+          * Emitted when the selected value changes.
+         */
+        "onLeChange"?: (event: LeSelectCustomEvent<LeOptionSelectDetail>) => void;
+        /**
+          * Emitted when the dropdown closes.
+         */
+        "onLeClose"?: (event: LeSelectCustomEvent<void>) => void;
+        /**
+          * Emitted when the dropdown opens.
+         */
+        "onLeOpen"?: (event: LeSelectCustomEvent<void>) => void;
+        /**
+          * Whether the dropdown is currently open.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * The options to display in the dropdown.
+          * @default []
+         */
+        "options"?: LeOption[] | string;
+        /**
+          * Placeholder text when no option is selected.
+          * @default 'Select an option'
+         */
+        "placeholder"?: string;
+        /**
+          * Whether selection is required.
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Whether the input is searchable.
+          * @default false
+         */
+        "searchable"?: boolean;
+        /**
+          * Size variant of the select.
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * The currently selected value.
+         */
+        "value"?: LeOptionValue;
+        /**
+          * Visual variant of the select.
+          * @default 'default'
+         */
+        "variant"?: 'default' | 'outlined' | 'solid';
     }
     /**
      * Slot placeholder component for admin/CMS mode.
@@ -1770,6 +2923,11 @@ declare namespace LocalJSX {
          */
         "externalId"?: string;
         /**
+          * Hide description slot
+          * @default false
+         */
+        "hideDescription"?: boolean;
+        /**
           * Icon for the end icon
          */
         "iconEnd"?: string;
@@ -1777,6 +2935,10 @@ declare namespace LocalJSX {
           * Icon for the start icon
          */
         "iconStart"?: string;
+        /**
+          * Pass the ref of the input element to the parent component
+         */
+        "inputRef"?: (el: HTMLInputElement) => void;
         /**
           * Label for the input
          */
@@ -1792,11 +2954,19 @@ declare namespace LocalJSX {
         /**
           * Emitted when the value changes (on blur or Enter)
          */
-        "onChange"?: (event: LeStringInputCustomEvent<{ value: string; name: string; externalId: string }>) => void;
+        "onChange"?: (event: LeStringInputCustomEvent<{
+    value: string;
+    name: string;
+    externalId: string;
+  }>) => void;
         /**
           * Emitted when the input value changes (on keystroke)
          */
-        "onInput"?: (event: LeStringInputCustomEvent<{ value: string; name: string; externalId: string }>) => void;
+        "onInput"?: (event: LeStringInputCustomEvent<{
+    value: string;
+    name: string;
+    externalId: string;
+  }>) => void;
         /**
           * Placeholder text
          */
@@ -1815,6 +2985,75 @@ declare namespace LocalJSX {
           * The value of the input
          */
         "value"?: string;
+    }
+    /**
+     * A tag/chip component for displaying labels with optional dismiss functionality.
+     * @cmsEditable false
+     * @cmsCategory Form
+     * @example Basic tag
+     * ```html
+     * <le-tag label="JavaScript"></le-tag>
+     * ```
+     * @example Dismissible tag
+     * ```html
+     * <le-tag label="Remove me" dismissible></le-tag>
+     * ```
+     * @example With icon
+     * ```html
+     * <le-tag label="Settings" icon="⚙️"></le-tag>
+     * ```
+     * @example Different sizes
+     * ```html
+     * <le-tag label="Small" size="small"></le-tag>
+     * <le-tag label="Medium" size="medium"></le-tag>
+     * <le-tag label="Large" size="large"></le-tag>
+     * ```
+     * @example Different variants
+     * ```html
+     * <le-tag label="Default" variant="default"></le-tag>
+     * <le-tag label="Primary" variant="primary"></le-tag>
+     * <le-tag label="Success" variant="success"></le-tag>
+     * <le-tag label="Warning" variant="warning"></le-tag>
+     * <le-tag label="Danger" variant="danger"></le-tag>
+     * ```
+     */
+    interface LeTag {
+        /**
+          * Whether the tag is disabled.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Whether the tag can be dismissed (shows close button).
+          * @default false
+         */
+        "dismissible"?: boolean;
+        /**
+          * Icon to display before the label. Can be an emoji, URL, or icon name.
+         */
+        "icon"?: string;
+        /**
+          * The text label to display in the tag.
+         */
+        "label"?: string;
+        /**
+          * Mode of the popover should be 'default' for internal use
+         */
+        "mode"?: 'default' | 'admin';
+        /**
+          * Emitted when the dismiss button is clicked.
+         */
+        "onLeDismiss"?: (event: LeTagCustomEvent<void>) => void;
+        /**
+          * The size of the tag.
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * The visual variant of the tag.
+          * @default 'default'
+         */
+        "variant"?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
     }
     /**
      * A text component with rich text editing capabilities in admin mode.
@@ -1871,14 +3110,19 @@ declare namespace LocalJSX {
         "le-button": LeButton;
         "le-card": LeCard;
         "le-checkbox": LeCheckbox;
+        "le-combobox": LeCombobox;
         "le-component": LeComponent;
+        "le-dropdown-base": LeDropdownBase;
+        "le-multiselect": LeMultiselect;
         "le-number-input": LeNumberInput;
         "le-popover": LePopover;
         "le-popup": LePopup;
         "le-round-progress": LeRoundProgress;
+        "le-select": LeSelect;
         "le-slot": LeSlot;
         "le-stack": LeStack;
         "le-string-input": LeStringInput;
+        "le-tag": LeTag;
         "le-text": LeText;
         "le-turntable": LeTurntable;
     }
@@ -1909,6 +3153,8 @@ declare module "@stencil/core" {
              * @cssprop --le-button-padding-y - Button vertical padding
              * @csspart button - The native button element
              * @csspart content - The button content wrapper
+             * @csspart icon-start - The start icon slot
+             * @csspart icon-end - The end icon slot
              * @cmsEditable true
              * @cmsCategory Actions
              */
@@ -1939,6 +3185,29 @@ declare module "@stencil/core" {
              */
             "le-checkbox": LocalJSX.LeCheckbox & JSXBase.HTMLAttributes<HTMLLeCheckboxElement>;
             /**
+             * A combobox component with searchable dropdown.
+             * Combines a text input with a dropdown list, allowing users to
+             * filter options by typing or select from the list.
+             * @cmsEditable true
+             * @cmsCategory Form
+             * @example Basic combobox
+             * ```html
+             * <le-combobox
+             * placeholder="Search..."
+             * options='[{"label": "Apple"}, {"label": "Banana"}, {"label": "Cherry"}]'
+             * ></le-combobox>
+             * ```
+             * @example Allow custom values
+             * ```html
+             * <le-combobox
+             * placeholder="Type or select..."
+             * allow-custom
+             * options='[{"label": "Red"}, {"label": "Green"}, {"label": "Blue"}]'
+             * ></le-combobox>
+             * ```
+             */
+            "le-combobox": LocalJSX.LeCombobox & JSXBase.HTMLAttributes<HTMLLeComboboxElement>;
+            /**
              * Component wrapper for admin mode editing.
              * This component is used internally by other components to provide admin-mode
              * editing capabilities. It wraps the component's rendered output and shows
@@ -1961,6 +3230,47 @@ declare module "@stencil/core" {
              */
             "le-component": LocalJSX.LeComponent & JSXBase.HTMLAttributes<HTMLLeComponentElement>;
             /**
+             * Internal dropdown base component that provides shared functionality
+             * for select, combobox, and multiselect components.
+             * Wraps le-popover for positioning and provides:
+             * - Option list rendering with groups
+             * - Keyboard navigation (↑↓, Enter, Escape, Home/End)
+             * - Option filtering support
+             * - Single and multi-select modes
+             * @cmsInternal true
+             * @cmsCategory System
+             */
+            "le-dropdown-base": LocalJSX.LeDropdownBase & JSXBase.HTMLAttributes<HTMLLeDropdownBaseElement>;
+            /**
+             * A multiselect component for selecting multiple options.
+             * Displays selected items as tags with optional search filtering.
+             * @cmsEditable true
+             * @cmsCategory Form
+             * @example Basic multiselect
+             * ```html
+             * <le-multiselect
+             * placeholder="Select options..."
+             * options='[{"label": "Red"}, {"label": "Green"}, {"label": "Blue"}]'
+             * ></le-multiselect>
+             * ```
+             * @example With max selections
+             * ```html
+             * <le-multiselect
+             * max-selections="3"
+             * options='[{"label": "Option 1"}, {"label": "Option 2"}, {"label": "Option 3"}, {"label": "Option 4"}]'
+             * ></le-multiselect>
+             * ```
+             * @example With search
+             * ```html
+             * <le-multiselect
+             * searchable
+             * placeholder="Search and select..."
+             * options='[{"label": "Apple"}, {"label": "Banana"}, {"label": "Cherry"}]'
+             * ></le-multiselect>
+             * ```
+             */
+            "le-multiselect": LocalJSX.LeMultiselect & JSXBase.HTMLAttributes<HTMLLeMultiselectElement>;
+            /**
              * A number input component with validation, keyboard controls, and custom spinners.
              * @cssprop --le-input-bg - Input background color
              * @cssprop --le-input-color - Input text color
@@ -1975,6 +3285,8 @@ declare module "@stencil/core" {
              * A popover component for displaying floating content.
              * Uses the native HTML Popover API for proper layering with dialogs
              * and other top-layer elements. Falls back gracefully in older browsers.
+             * @csspart trigger - The popover trigger element
+             * @csspart content - The popover content wrapper
              * @cmsInternal true
              * @cmsCategory System
              */
@@ -1989,6 +3301,37 @@ declare module "@stencil/core" {
              */
             "le-popup": LocalJSX.LePopup & JSXBase.HTMLAttributes<HTMLLePopupElement>;
             "le-round-progress": LocalJSX.LeRoundProgress & JSXBase.HTMLAttributes<HTMLLeRoundProgressElement>;
+            /**
+             * A select dropdown component for single selection.
+             * @cmsEditable true
+             * @cmsCategory Form
+             * @example Basic select
+             * ```html
+             * <le-select
+             * placeholder="Choose an option"
+             * options='[{"label": "Option 1", "value": "1"}, {"label": "Option 2", "value": "2"}]'
+             * ></le-select>
+             * ```
+             * @example With icons
+             * ```html
+             * <le-select
+             * options='[
+             * {"label": "Apple", "value": "apple", "iconStart": "🍎"},
+             * {"label": "Banana", "value": "banana", "iconStart": "🍌"}
+             * ]'
+             * ></le-select>
+             * ```
+             * @example Grouped options
+             * ```html
+             * <le-select
+             * options='[
+             * {"label": "Apple", "value": "apple", "group": "Fruits"},
+             * {"label": "Carrot", "value": "carrot", "group": "Vegetables"}
+             * ]'
+             * ></le-select>
+             * ```
+             */
+            "le-select": LocalJSX.LeSelect & JSXBase.HTMLAttributes<HTMLLeSelectElement>;
             /**
              * Slot placeholder component for admin/CMS mode.
              * This component renders a visual placeholder for slots when in admin mode,
@@ -2019,6 +3362,38 @@ declare module "@stencil/core" {
              * @cssprop --le-input-padding - Input padding
              */
             "le-string-input": LocalJSX.LeStringInput & JSXBase.HTMLAttributes<HTMLLeStringInputElement>;
+            /**
+             * A tag/chip component for displaying labels with optional dismiss functionality.
+             * @cmsEditable false
+             * @cmsCategory Form
+             * @example Basic tag
+             * ```html
+             * <le-tag label="JavaScript"></le-tag>
+             * ```
+             * @example Dismissible tag
+             * ```html
+             * <le-tag label="Remove me" dismissible></le-tag>
+             * ```
+             * @example With icon
+             * ```html
+             * <le-tag label="Settings" icon="⚙️"></le-tag>
+             * ```
+             * @example Different sizes
+             * ```html
+             * <le-tag label="Small" size="small"></le-tag>
+             * <le-tag label="Medium" size="medium"></le-tag>
+             * <le-tag label="Large" size="large"></le-tag>
+             * ```
+             * @example Different variants
+             * ```html
+             * <le-tag label="Default" variant="default"></le-tag>
+             * <le-tag label="Primary" variant="primary"></le-tag>
+             * <le-tag label="Success" variant="success"></le-tag>
+             * <le-tag label="Warning" variant="warning"></le-tag>
+             * <le-tag label="Danger" variant="danger"></le-tag>
+             * ```
+             */
+            "le-tag": LocalJSX.LeTag & JSXBase.HTMLAttributes<HTMLLeTagElement>;
             /**
              * A text component with rich text editing capabilities in admin mode.
              * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)

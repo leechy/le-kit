@@ -447,139 +447,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
-          "cssProperties": [
-            {
-              "description": "Card background color",
-              "name": "--le-card-bg"
-            },
-            {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
-            },
-            {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
-              "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              }
-            },
-            {
-              "name": "interactive",
-              "fieldName": "interactive",
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-card",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCard",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-card",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-button/le-button.tsx",
       "declarations": [
         {
@@ -930,38 +797,60 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-checkbox/le-checkbox.tsx",
+      "path": "src/components/le-card/le-card.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
-          "name": "LeCheckbox",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
           "cssProperties": [
             {
-              "description": "Size of the checkbox input",
-              "name": "--le-checkbox-size"
+              "description": "Card background color",
+              "name": "--le-card-bg"
             },
             {
-              "description": "Color of the checkbox when checked",
-              "name": "--le-checkbox-color"
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
             },
             {
-              "description": "Color of the label text",
-              "name": "--le-checkbox-label-color"
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
             },
             {
-              "description": "Color of the description text",
-              "name": "--le-checkbox-desc-color"
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
             }
           ],
           "slots": [
             {
-              "description": "The label text for the checkbox",
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
               "name": ""
             },
             {
-              "description": "Additional description text displayed below the label",
-              "name": "description"
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
             }
           ],
           "members": [
@@ -974,50 +863,21 @@
             },
             {
               "kind": "field",
-              "name": "checked",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the checkbox is checked"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is disabled"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "description": "The name of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "description": "The value of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "externalId",
-              "type": {
-                "text": "string"
-              },
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
-            },
-            {
-              "kind": "field",
-              "name": "handleChange",
-              "privacy": "private"
+              "description": "Whether the card is interactive (clickable)"
             },
             {
               "kind": "method",
@@ -1026,1344 +886,44 @@
           ],
           "attributes": [
             {
-              "name": "checked",
-              "fieldName": "checked",
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
               "default": "false",
-              "description": "Whether the checkbox is checked",
+              "description": "Whether the card is interactive (clickable)",
               "type": {
                 "text": "boolean"
               }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the checkbox is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "The name of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "external-id",
-              "fieldName": "externalId",
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
-              "type": {
-                "text": "string"
-              }
             }
           ],
-          "tagName": "le-checkbox",
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
-              },
-              "description": "Emitted when the checked state changes"
-            }
-          ],
+          "tagName": "le-card",
+          "events": [],
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "LeCheckbox",
+          "name": "LeCard",
           "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-checkbox",
+          "name": "le-card",
           "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-combobox/le-combobox.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A combobox component with searchable dropdown.\n\nCombines a text input with a dropdown list, allowing users to\nfilter options by typing or select from the list.",
-          "name": "LeCombobox",
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "LeOption[] | string"
-              },
-              "default": "[]",
-              "description": "The options to display in the dropdown."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "LeOptionValue | undefined"
-              },
-              "description": "The currently selected value."
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Type to search...'",
-              "description": "Placeholder text for the input."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the combobox is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether selection is required."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Name attribute for form submission."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Size variant of the combobox."
-            },
-            {
-              "kind": "field",
-              "name": "allowCustom",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to allow custom values not in the options list."
-            },
-            {
-              "kind": "field",
-              "name": "minSearchLength",
-              "type": {
-                "text": "number"
-              },
-              "default": "0",
-              "description": "Minimum characters before showing filtered results."
-            },
-            {
-              "kind": "field",
-              "name": "emptyText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'No results found'",
-              "description": "Text to show when no options match the search."
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the dropdown is currently open."
-            },
-            {
-              "kind": "field",
-              "name": "inputValue",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "selectedOption",
-              "type": {
-                "text": "LeOption | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "dropdownEl",
-              "type": {
-                "text": "HTMLLeDropdownBaseElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "inputEl",
-              "type": {
-                "text": "HTMLInputElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleValueChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleOptionsChange"
-            },
-            {
-              "kind": "field",
-              "name": "parsedOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "updateSelectedOption",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "filterOption",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleOptionSelect",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDropdownOpen",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDropdownClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleInputChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleInputFocus",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleInputKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleClear",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "showDropdown",
-              "description": "Opens the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "hideDropdown",
-              "description": "Closes the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "focusInput",
-              "description": "Focuses the input element."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "options",
-              "fieldName": "options",
-              "default": "[]",
-              "description": "The options to display in the dropdown.",
-              "type": {
-                "text": "LeOption[] | string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The currently selected value.",
-              "type": {
-                "text": "LeOptionValue"
-              }
-            },
-            {
-              "name": "placeholder",
-              "fieldName": "placeholder",
-              "default": "'Type to search...'",
-              "description": "Placeholder text for the input.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the combobox is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "required",
-              "fieldName": "required",
-              "default": "false",
-              "description": "Whether selection is required.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "Name attribute for form submission.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Size variant of the combobox.",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "allow-custom",
-              "fieldName": "allowCustom",
-              "default": "false",
-              "description": "Whether to allow custom values not in the options list.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "min-search-length",
-              "fieldName": "minSearchLength",
-              "default": "0",
-              "description": "Minimum characters before showing filtered results.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "empty-text",
-              "fieldName": "emptyText",
-              "default": "'No results found'",
-              "description": "Text to show when no options match the search.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "open",
-              "fieldName": "open",
-              "default": "false",
-              "description": "Whether the dropdown is currently open.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-combobox",
-          "events": [
-            {
-              "name": "leChange",
-              "type": {
-                "text": "EventEmitter<LeOptionSelectDetail>"
-              },
-              "description": "Emitted when the selected value changes."
-            },
-            {
-              "name": "leInput",
-              "type": {
-                "text": "EventEmitter<{ value: string }>"
-              },
-              "description": "Emitted when the input value changes (for custom values)."
-            },
-            {
-              "name": "leOpen",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dropdown opens."
-            },
-            {
-              "name": "leClose",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dropdown closes."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCombobox",
-          "declaration": {
-            "name": "LeCombobox",
-            "module": "src/components/le-combobox/le-combobox.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-combobox",
-          "declaration": {
-            "name": "LeCombobox",
-            "module": "src/components/le-combobox/le-combobox.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-dropdown-base/le-dropdown-base.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Internal dropdown base component that provides shared functionality\nfor select, combobox, and multiselect components.\n\nWraps le-popover for positioning and provides:\n- Option list rendering with groups\n- Keyboard navigation (↑↓, Enter, Escape, Home/End)\n- Option filtering support\n- Single and multi-select modes",
-          "name": "LeDropdownBase",
-          "slots": [
-            {
-              "description": "The element that triggers the dropdown",
-              "name": "trigger"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "default": "[]",
-              "description": "The options to display in the dropdown."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "LeOptionValue | LeOptionValue[] | undefined"
-              },
-              "description": "Current value(s) - single value or array for multiselect."
-            },
-            {
-              "kind": "field",
-              "name": "multiple",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether multiple selection is allowed."
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the dropdown is open."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the dropdown is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "filterFn",
-              "type": {
-                "text": "(option: LeOption, query: string) => boolean | undefined"
-              },
-              "description": "Filter function for options.\nReturn true to include the option."
-            },
-            {
-              "kind": "field",
-              "name": "filterQuery",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Current filter query string."
-            },
-            {
-              "kind": "field",
-              "name": "emptyText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'No options'",
-              "description": "Placeholder text when no options match filter."
-            },
-            {
-              "kind": "field",
-              "name": "showCheckboxes",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether to show checkboxes for multiselect mode."
-            },
-            {
-              "kind": "field",
-              "name": "maxHeight",
-              "type": {
-                "text": "string"
-              },
-              "default": "'300px'",
-              "description": "Maximum height of the dropdown list."
-            },
-            {
-              "kind": "field",
-              "name": "width",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Width of the dropdown. If not set, matches trigger width."
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Sets the dropdown to full width of the trigger."
-            },
-            {
-              "kind": "field",
-              "name": "focusedIndex",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "-1"
-            },
-            {
-              "kind": "field",
-              "name": "filteredOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "popoverEl",
-              "type": {
-                "text": "HTMLLePopoverElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "listEl",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "triggerWidth",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "0"
-            },
-            {
-              "kind": "method",
-              "name": "handleOptionsChange"
-            },
-            {
-              "kind": "method",
-              "name": "updateFilteredOptions",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "getSelectableOptions",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "LeOption[]"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "isSelected",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "option",
-                  "type": {
-                    "text": "LeOption"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleOptionClick",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "option",
-                  "type": {
-                    "text": "LeOption"
-                  }
-                },
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "handleKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "scrollToFocused",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handlePopoverOpen",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handlePopoverClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "getInitialFocusIndex",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "number"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "show",
-              "description": "Opens the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "description": "Closes the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "toggle",
-              "description": "Toggles the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "renderIcon",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "icon",
-                  "type": {
-                    "text": "string | undefined"
-                  }
-                },
-                {
-                  "name": "className",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "renderOption",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "option",
-                  "type": {
-                    "text": "LeOption"
-                  }
-                },
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "renderOptions",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "options",
-              "fieldName": "options",
-              "default": "[]",
-              "description": "The options to display in the dropdown.",
-              "type": {
-                "text": "LeOption[]"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "Current value(s) - single value or array for multiselect.",
-              "type": {
-                "text": "LeOptionValue | LeOptionValue[]"
-              }
-            },
-            {
-              "name": "multiple",
-              "fieldName": "multiple",
-              "default": "false",
-              "description": "Whether multiple selection is allowed.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "open",
-              "fieldName": "open",
-              "default": "false",
-              "description": "Whether the dropdown is open.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the dropdown is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "filter-fn",
-              "fieldName": "filterFn",
-              "description": "Filter function for options.\nReturn true to include the option.",
-              "type": {
-                "text": "(option: LeOption, query: string) => boolean"
-              }
-            },
-            {
-              "name": "filter-query",
-              "fieldName": "filterQuery",
-              "default": "''",
-              "description": "Current filter query string.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "empty-text",
-              "fieldName": "emptyText",
-              "default": "'No options'",
-              "description": "Placeholder text when no options match filter.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "show-checkboxes",
-              "fieldName": "showCheckboxes",
-              "default": "true",
-              "description": "Whether to show checkboxes for multiselect mode.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "max-height",
-              "fieldName": "maxHeight",
-              "default": "'300px'",
-              "description": "Maximum height of the dropdown list.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "width",
-              "fieldName": "width",
-              "description": "Width of the dropdown. If not set, matches trigger width.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Sets the dropdown to full width of the trigger.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-dropdown-base",
-          "events": [
-            {
-              "name": "leOptionSelect",
-              "type": {
-                "text": "EventEmitter<LeOptionSelectDetail>"
-              },
-              "description": "Emitted when an option is selected."
-            },
-            {
-              "name": "leDropdownOpen",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dropdown opens."
-            },
-            {
-              "name": "leDropdownClose",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dropdown closes."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeDropdownBase",
-          "declaration": {
-            "name": "LeDropdownBase",
-            "module": "src/components/le-dropdown-base/le-dropdown-base.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-dropdown-base",
-          "declaration": {
-            "name": "LeDropdownBase",
-            "module": "src/components/le-dropdown-base/le-dropdown-base.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-multiselect/le-multiselect.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A multiselect component for selecting multiple options.\n\nDisplays selected items as tags with optional search filtering.",
-          "name": "LeMultiselect",
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "LeOption[] | string"
-              },
-              "default": "[]",
-              "description": "The options to display in the dropdown."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "LeOptionValue[]"
-              },
-              "default": "[]",
-              "description": "The currently selected values."
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Select options...'",
-              "description": "Placeholder text when no options are selected."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the multiselect is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether selection is required."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Name attribute for form submission."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Size variant of the multiselect."
-            },
-            {
-              "kind": "field",
-              "name": "maxSelections",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum number of selections allowed."
-            },
-            {
-              "kind": "field",
-              "name": "showSelectAll",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to show a \"Select All\" option."
-            },
-            {
-              "kind": "field",
-              "name": "searchable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the input is searchable."
-            },
-            {
-              "kind": "field",
-              "name": "emptyText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'No results found'",
-              "description": "Text to show when no options match the search."
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the dropdown is currently open."
-            },
-            {
-              "kind": "field",
-              "name": "selectedOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "searchQuery",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "dropdownEl",
-              "type": {
-                "text": "HTMLLeDropdownBaseElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "inputEl",
-              "type": {
-                "text": "HTMLInputElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleValueChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleOptionsChange"
-            },
-            {
-              "kind": "field",
-              "name": "parsedOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "effectiveOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "updateSelectedOptions",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "filterOption",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleOptionSelect",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "emitChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDropdownOpen",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDropdownClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTagDismiss",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleSearchInput",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleClearAll",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "showDropdown",
-              "description": "Opens the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "hideDropdown",
-              "description": "Closes the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "clearSelection",
-              "description": "Clears all selections."
-            },
-            {
-              "kind": "method",
-              "name": "renderTags",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "options",
-              "fieldName": "options",
-              "default": "[]",
-              "description": "The options to display in the dropdown.",
-              "type": {
-                "text": "LeOption[] | string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "default": "[]",
-              "description": "The currently selected values.",
-              "type": {
-                "text": "LeOptionValue[]"
-              }
-            },
-            {
-              "name": "placeholder",
-              "fieldName": "placeholder",
-              "default": "'Select options...'",
-              "description": "Placeholder text when no options are selected.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the multiselect is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "required",
-              "fieldName": "required",
-              "default": "false",
-              "description": "Whether selection is required.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "Name attribute for form submission.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Size variant of the multiselect.",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "max-selections",
-              "fieldName": "maxSelections",
-              "description": "Maximum number of selections allowed.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "show-select-all",
-              "fieldName": "showSelectAll",
-              "default": "false",
-              "description": "Whether to show a \"Select All\" option.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "searchable",
-              "fieldName": "searchable",
-              "default": "false",
-              "description": "Whether the input is searchable.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "empty-text",
-              "fieldName": "emptyText",
-              "default": "'No results found'",
-              "description": "Text to show when no options match the search.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "open",
-              "fieldName": "open",
-              "default": "false",
-              "description": "Whether the dropdown is currently open.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-multiselect",
-          "events": [
-            {
-              "name": "leChange",
-              "type": {
-                "text": "EventEmitter<LeMultiOptionSelectDetail>"
-              },
-              "description": "Emitted when the selected values change."
-            },
-            {
-              "name": "leOpen",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dropdown opens."
-            },
-            {
-              "name": "leClose",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dropdown closes."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeMultiselect",
-          "declaration": {
-            "name": "LeMultiselect",
-            "module": "src/components/le-multiselect/le-multiselect.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-multiselect",
-          "declaration": {
-            "name": "LeMultiselect",
-            "module": "src/components/le-multiselect/le-multiselect.tsx"
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
           }
         }
       ]
@@ -2663,6 +1223,1543 @@
           "declaration": {
             "name": "LeComponent",
             "module": "src/components/le-component/le-component.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-dropdown-base/le-dropdown-base.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Internal dropdown base component that provides shared functionality\nfor select, combobox, and multiselect components.\n\nWraps le-popover for positioning and provides:\n- Option list rendering with groups\n- Keyboard navigation (↑↓, Enter, Escape, Home/End)\n- Option filtering support\n- Single and multi-select modes",
+          "name": "LeDropdownBase",
+          "slots": [
+            {
+              "description": "The element that triggers the dropdown",
+              "name": "trigger"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "default": "[]",
+              "description": "The options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "LeOptionValue | LeOptionValue[] | undefined"
+              },
+              "description": "Current value(s) - single value or array for multiselect."
+            },
+            {
+              "kind": "field",
+              "name": "multiple",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether multiple selection is allowed."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dropdown is open."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dropdown is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "filterFn",
+              "type": {
+                "text": "(option: LeOption, query: string) => boolean | undefined"
+              },
+              "description": "Filter function for options.\nReturn true to include the option."
+            },
+            {
+              "kind": "field",
+              "name": "filterQuery",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Current filter query string."
+            },
+            {
+              "kind": "field",
+              "name": "emptyText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'No options'",
+              "description": "Placeholder text when no options match filter."
+            },
+            {
+              "kind": "field",
+              "name": "showCheckboxes",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether to show checkboxes for multiselect mode."
+            },
+            {
+              "kind": "field",
+              "name": "maxHeight",
+              "type": {
+                "text": "string"
+              },
+              "default": "'300px'",
+              "description": "Maximum height of the dropdown list."
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Width of the dropdown. If not set, matches trigger width."
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Sets the dropdown to full width of the trigger."
+            },
+            {
+              "kind": "field",
+              "name": "closeOnClickOutside",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether to close the dropdown when clicking outside.\n(used to support combobox with input focus)"
+            },
+            {
+              "kind": "field",
+              "name": "focusedIndex",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "-1"
+            },
+            {
+              "kind": "field",
+              "name": "filteredOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "popoverEl",
+              "type": {
+                "text": "HTMLLePopoverElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "listEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "triggerWidth",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "method",
+              "name": "handleOptionsChange"
+            },
+            {
+              "kind": "method",
+              "name": "updateFilteredOptions",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getSelectableOptions",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "LeOption[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isSelected",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "option",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleOptionClick",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "option",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "scrollToFocused",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handlePopoverOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handlePopoverClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getInitialFocusIndex",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "description": "Opens the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "description": "Closes the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "toggle",
+              "description": "Toggles the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "renderIcon",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "icon",
+                  "type": {
+                    "text": "string | undefined"
+                  }
+                },
+                {
+                  "name": "className",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderOption",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "option",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderOptions",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "fieldName": "options",
+              "default": "[]",
+              "description": "The options to display in the dropdown.",
+              "type": {
+                "text": "LeOption[]"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "Current value(s) - single value or array for multiselect.",
+              "type": {
+                "text": "LeOptionValue | LeOptionValue[]"
+              }
+            },
+            {
+              "name": "multiple",
+              "fieldName": "multiple",
+              "default": "false",
+              "description": "Whether multiple selection is allowed.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the dropdown is open.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the dropdown is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "filter-fn",
+              "fieldName": "filterFn",
+              "description": "Filter function for options.\nReturn true to include the option.",
+              "type": {
+                "text": "(option: LeOption, query: string) => boolean"
+              }
+            },
+            {
+              "name": "filter-query",
+              "fieldName": "filterQuery",
+              "default": "''",
+              "description": "Current filter query string.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "empty-text",
+              "fieldName": "emptyText",
+              "default": "'No options'",
+              "description": "Placeholder text when no options match filter.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "show-checkboxes",
+              "fieldName": "showCheckboxes",
+              "default": "true",
+              "description": "Whether to show checkboxes for multiselect mode.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "max-height",
+              "fieldName": "maxHeight",
+              "default": "'300px'",
+              "description": "Maximum height of the dropdown list.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "width",
+              "fieldName": "width",
+              "description": "Width of the dropdown. If not set, matches trigger width.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Sets the dropdown to full width of the trigger.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "close-on-click-outside",
+              "fieldName": "closeOnClickOutside",
+              "default": "true",
+              "description": "Whether to close the dropdown when clicking outside.\n(used to support combobox with input focus)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-dropdown-base",
+          "events": [
+            {
+              "name": "leOptionSelect",
+              "type": {
+                "text": "EventEmitter<LeOptionSelectDetail>"
+              },
+              "description": "Emitted when an option is selected."
+            },
+            {
+              "name": "leDropdownOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown opens."
+            },
+            {
+              "name": "leDropdownClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown closes."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeDropdownBase",
+          "declaration": {
+            "name": "LeDropdownBase",
+            "module": "src/components/le-dropdown-base/le-dropdown-base.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-dropdown-base",
+          "declaration": {
+            "name": "LeDropdownBase",
+            "module": "src/components/le-dropdown-base/le-dropdown-base.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-multiselect/le-multiselect.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A multiselect component for selecting multiple options.\n\nDisplays selected items as tags with optional search filtering.",
+          "name": "LeMultiselect",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "LeOption[] | string"
+              },
+              "default": "[]",
+              "description": "The options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "LeOptionValue[]"
+              },
+              "default": "[]",
+              "description": "The currently selected values."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Select options...'",
+              "description": "Placeholder text when no options are selected."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the multiselect is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether selection is required."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the multiselect should take full width of its container."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Size variant of the multiselect."
+            },
+            {
+              "kind": "field",
+              "name": "maxSelections",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of selections allowed."
+            },
+            {
+              "kind": "field",
+              "name": "selectAllLabel",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "'Select All'",
+              "description": "Labels for the \"Select All\" option."
+            },
+            {
+              "kind": "field",
+              "name": "deselectAllLabel",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "'Deselect All'"
+            },
+            {
+              "kind": "field",
+              "name": "showSelectAll",
+              "type": {
+                "text": "boolean | string | string[]"
+              },
+              "default": "false",
+              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s)."
+            },
+            {
+              "kind": "field",
+              "name": "searchable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is searchable."
+            },
+            {
+              "kind": "field",
+              "name": "emptyText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dropdown is currently open."
+            },
+            {
+              "kind": "field",
+              "name": "selectedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "searchQuery",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "dropdownEl",
+              "type": {
+                "text": "HTMLLeDropdownBaseElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "inputEl",
+              "type": {
+                "text": "HTMLInputElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleOptionsChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleShowSelectAllChange",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "boolean | string | string[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "parsedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "effectiveOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectedOptions",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "filterOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOptionSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "emitChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTagDismiss",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSearchInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleClearAll",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "showDropdown",
+              "description": "Opens the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "hideDropdown",
+              "description": "Closes the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "clearSelection",
+              "description": "Clears all selections."
+            },
+            {
+              "kind": "method",
+              "name": "renderTags",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "fieldName": "options",
+              "default": "[]",
+              "description": "The options to display in the dropdown.",
+              "type": {
+                "text": "LeOption[] | string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "default": "[]",
+              "description": "The currently selected values.",
+              "type": {
+                "text": "LeOptionValue[]"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "'Select options...'",
+              "description": "Placeholder text when no options are selected.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the multiselect is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether selection is required.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "Name attribute for form submission.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the multiselect should take full width of its container.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Size variant of the multiselect.",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "max-selections",
+              "fieldName": "maxSelections",
+              "description": "Maximum number of selections allowed.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "show-select-all",
+              "fieldName": "showSelectAll",
+              "default": "false",
+              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s).",
+              "type": {
+                "text": "boolean | string | string[]"
+              }
+            },
+            {
+              "name": "searchable",
+              "fieldName": "searchable",
+              "default": "false",
+              "description": "Whether the input is searchable.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "empty-text",
+              "fieldName": "emptyText",
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the dropdown is currently open.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-multiselect",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeMultiOptionSelectDetail>"
+              },
+              "description": "Emitted when the selected values change."
+            },
+            {
+              "name": "leOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown opens."
+            },
+            {
+              "name": "leClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown closes."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeMultiselect",
+          "declaration": {
+            "name": "LeMultiselect",
+            "module": "src/components/le-multiselect/le-multiselect.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-multiselect",
+          "declaration": {
+            "name": "LeMultiselect",
+            "module": "src/components/le-multiselect/le-multiselect.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-checkbox/le-checkbox.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
+          "name": "LeCheckbox",
+          "cssProperties": [
+            {
+              "description": "Size of the checkbox input",
+              "name": "--le-checkbox-size"
+            },
+            {
+              "description": "Color of the checkbox when checked",
+              "name": "--le-checkbox-color"
+            },
+            {
+              "description": "Color of the label text",
+              "name": "--le-checkbox-label-color"
+            },
+            {
+              "description": "Color of the description text",
+              "name": "--le-checkbox-desc-color"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The label text for the checkbox",
+              "name": ""
+            },
+            {
+              "description": "Additional description text displayed below the label",
+              "name": "description"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is checked"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The value of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "externalId",
+              "type": {
+                "text": "string"
+              },
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
+            },
+            {
+              "kind": "field",
+              "name": "handleChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "checked",
+              "fieldName": "checked",
+              "default": "false",
+              "description": "Whether the checkbox is checked",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the checkbox is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "The name of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "external-id",
+              "fieldName": "externalId",
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-checkbox",
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
+              },
+              "description": "Emitted when the checked state changes"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCheckbox",
+          "declaration": {
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-checkbox",
+          "declaration": {
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-combobox/le-combobox.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A combobox component with searchable dropdown.\n\nCombines a text input with a dropdown list, allowing users to\nfilter options by typing or select from the list.",
+          "name": "LeCombobox",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "LeOption[] | string"
+              },
+              "default": "[]",
+              "description": "The options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "LeOptionValue | undefined"
+              },
+              "description": "The currently selected value."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Type to search...'",
+              "description": "Placeholder text for the input."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the combobox is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether selection is required."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the multiselect should take full width of its container."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Size variant of the combobox."
+            },
+            {
+              "kind": "field",
+              "name": "allowCustom",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to allow custom values not in the options list."
+            },
+            {
+              "kind": "field",
+              "name": "minSearchLength",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "description": "Minimum characters before showing filtered results."
+            },
+            {
+              "kind": "field",
+              "name": "emptyText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dropdown is currently open."
+            },
+            {
+              "kind": "method",
+              "name": "handleWindowClick",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "inputValue",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "selectedOption",
+              "type": {
+                "text": "LeOption | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "dropdownEl",
+              "type": {
+                "text": "HTMLLeDropdownBaseElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "inputEl",
+              "type": {
+                "text": "HTMLInputElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleOptionsChange"
+            },
+            {
+              "kind": "field",
+              "name": "parsedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectedOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "filterOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOptionSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleInputChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleInputFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleInputKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleClear",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "showDropdown",
+              "description": "Opens the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "hideDropdown",
+              "description": "Closes the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "focusInput",
+              "description": "Focuses the input element."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "fieldName": "options",
+              "default": "[]",
+              "description": "The options to display in the dropdown.",
+              "type": {
+                "text": "LeOption[] | string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The currently selected value.",
+              "type": {
+                "text": "LeOptionValue"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "'Type to search...'",
+              "description": "Placeholder text for the input.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the combobox is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether selection is required.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "Name attribute for form submission.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the multiselect should take full width of its container.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Size variant of the combobox.",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "allow-custom",
+              "fieldName": "allowCustom",
+              "default": "false",
+              "description": "Whether to allow custom values not in the options list.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "min-search-length",
+              "fieldName": "minSearchLength",
+              "default": "0",
+              "description": "Minimum characters before showing filtered results.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "empty-text",
+              "fieldName": "emptyText",
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the dropdown is currently open.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-combobox",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeOptionSelectDetail>"
+              },
+              "description": "Emitted when the selected value changes."
+            },
+            {
+              "name": "leInput",
+              "type": {
+                "text": "EventEmitter<{ value: string }>"
+              },
+              "description": "Emitted when the input value changes (for custom values)."
+            },
+            {
+              "name": "leOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown opens."
+            },
+            {
+              "name": "leClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown closes."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCombobox",
+          "declaration": {
+            "name": "LeCombobox",
+            "module": "src/components/le-combobox/le-combobox.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-combobox",
+          "declaration": {
+            "name": "LeCombobox",
+            "module": "src/components/le-combobox/le-combobox.tsx"
           }
         }
       ]
@@ -3222,6 +3319,11 @@
               "description": "Should the popover's trigger take full width of its container"
             },
             {
+              "kind": "method",
+              "name": "updatePosition",
+              "description": "Method to update the popover position from a parent component"
+            },
+            {
               "kind": "field",
               "name": "isPositioned",
               "type": {
@@ -3332,7 +3434,7 @@
             },
             {
               "kind": "method",
-              "name": "updatePosition",
+              "name": "_updatePosition",
               "privacy": "private"
             },
             {
@@ -4133,6 +4235,15 @@
             },
             {
               "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the select should take full width of its container."
+            },
+            {
+              "kind": "field",
               "name": "size",
               "type": {
                 "text": "'small' | 'medium' | 'large'"
@@ -4148,6 +4259,24 @@
               },
               "default": "'default'",
               "description": "Visual variant of the select."
+            },
+            {
+              "kind": "field",
+              "name": "searchable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is searchable."
+            },
+            {
+              "kind": "field",
+              "name": "emptyText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search."
             },
             {
               "kind": "field",
@@ -4168,9 +4297,26 @@
             },
             {
               "kind": "field",
+              "name": "searchQuery",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
               "name": "dropdownEl",
               "type": {
                 "text": "HTMLLeDropdownBaseElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "inputEl",
+              "type": {
+                "text": "HTMLInputElement | undefined"
               },
               "privacy": "private"
             },
@@ -4198,6 +4344,11 @@
             },
             {
               "kind": "field",
+              "name": "filterOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
               "name": "handleOptionSelect",
               "privacy": "private"
             },
@@ -4219,6 +4370,11 @@
             {
               "kind": "field",
               "name": "handleTriggerKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSearchInput",
               "privacy": "private"
             },
             {
@@ -4303,6 +4459,15 @@
               }
             },
             {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the select should take full width of its container.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
               "name": "size",
               "fieldName": "size",
               "default": "'medium'",
@@ -4318,6 +4483,24 @@
               "description": "Visual variant of the select.",
               "type": {
                 "text": "'default' | 'outlined' | 'solid'"
+              }
+            },
+            {
+              "name": "searchable",
+              "fieldName": "searchable",
+              "default": "false",
+              "description": "Whether the input is searchable.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "empty-text",
+              "fieldName": "emptyText",
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search.",
+              "type": {
+                "text": "string"
               }
             },
             {
@@ -5136,6 +5319,14 @@
             },
             {
               "kind": "field",
+              "name": "inputRef",
+              "type": {
+                "text": "(el: HTMLInputElement) => void | undefined"
+              },
+              "description": "Pass the ref of the input element to the parent component"
+            },
+            {
+              "kind": "field",
               "name": "mode",
               "type": {
                 "text": "'default' | 'admin'"
@@ -5201,6 +5392,15 @@
             },
             {
               "kind": "field",
+              "name": "hideDescription",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hide description slot"
+            },
+            {
+              "kind": "field",
               "name": "disabled",
               "type": {
                 "text": "boolean"
@@ -5246,6 +5446,14 @@
             }
           ],
           "attributes": [
+            {
+              "name": "input-ref",
+              "fieldName": "inputRef",
+              "description": "Pass the ref of the input element to the parent component",
+              "type": {
+                "text": "(el: HTMLInputElement) => void"
+              }
+            },
             {
               "name": "mode",
               "fieldName": "mode",
@@ -5312,6 +5520,15 @@
               }
             },
             {
+              "name": "hide-description",
+              "fieldName": "hideDescription",
+              "default": "false",
+              "description": "Hide description slot",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
               "name": "disabled",
               "fieldName": "disabled",
               "default": "false",
@@ -5343,14 +5560,14 @@
             {
               "name": "change",
               "type": {
-                "text": "EventEmitter<{ value: string; name: string; externalId: string }>"
+                "text": "EventEmitter<{\n    value: string;\n    name: string;\n    externalId: string;\n  }>"
               },
               "description": "Emitted when the value changes (on blur or Enter)"
             },
             {
               "name": "input",
               "type": {
-                "text": "EventEmitter<{ value: string; name: string; externalId: string }>"
+                "text": "EventEmitter<{\n    value: string;\n    name: string;\n    externalId: string;\n  }>"
               },
               "description": "Emitted when the input value changes (on keystroke)"
             }
@@ -5399,6 +5616,14 @@
                 "text": "string"
               },
               "description": "The text label to display in the tag."
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin'"
+              },
+              "description": "Mode of the popover should be 'default' for internal use"
             },
             {
               "kind": "field",
@@ -5466,6 +5691,14 @@
               "description": "The text label to display in the tag.",
               "type": {
                 "text": "string"
+              }
+            },
+            {
+              "name": "mode",
+              "fieldName": "mode",
+              "description": "Mode of the popover should be 'default' for internal use",
+              "type": {
+                "text": "'default' | 'admin'"
               }
             },
             {

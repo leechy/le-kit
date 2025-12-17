@@ -62,6 +62,7 @@
   /* Surface colors */
   --le-color-surface: #ffffff;
   --le-color-surface-elevated: #ffffff;
+  --le-color-surface-alt: #f3f4f6;
   
   /* Text colors */
   --le-color-text-primary: #111827;
@@ -71,6 +72,7 @@
   
   /* Border colors */
   --le-color-border: #e5e7eb;
+  --le-color-border-hover: #a7aaae;
   --le-color-border-light: #f3f4f6;
   --le-color-border-dark: #d1d5db;
 
@@ -91,6 +93,7 @@
   --le-radius-full: 9999px;
   
   /* Shadows - very subtle */
+  --le-color-shadow: color-mix(in srgb, var(--le-color-primary) 80%, transparent);
   --le-shadow-none: none;
   --le-shadow-sm: none;
   --le-shadow-md: 0 1px 2px rgba(0, 0, 0, 0.05);

@@ -1,4 +1,15 @@
-import { Component, Prop, State, Event, EventEmitter, Method, Element, Watch, h, Host } from '@stencil/core';
+import {
+  Component,
+  Prop,
+  State,
+  Event,
+  EventEmitter,
+  Method,
+  Element,
+  Watch,
+  h,
+  Host,
+} from '@stencil/core';
 import { LeOption, LeOptionValue, LeOptionSelectDetail } from '../../types/options';
 import { generateId } from '../../utils/utils';
 
@@ -85,6 +96,12 @@ export class LeDropdownBase {
    * Sets the dropdown to full width of the trigger.
    */
   @Prop() fullWidth: boolean = false;
+
+  /**
+   * Whether to close the dropdown when clicking outside.
+   * (used to support combobox with input focus)
+   */
+  @Prop() closeOnClickOutside: boolean = true;
 
   /**
    * Emitted when an option is selected.
@@ -257,7 +274,9 @@ export class LeDropdownBase {
   private scrollToFocused() {
     if (!this.listEl || this.focusedIndex < 0) return;
 
-    const focusedEl = this.listEl.querySelector(`[data-index="${this.focusedIndex}"]`) as HTMLElement;
+    const focusedEl = this.listEl.querySelector(
+      `[data-index="${this.focusedIndex}"]`,
+    ) as HTMLElement;
     if (focusedEl) {
       focusedEl.scrollIntoView({ block: 'nearest' });
     }
@@ -435,7 +454,7 @@ export class LeDropdownBase {
           position="bottom"
           align="start"
           showClose={false}
-          closeOnClickOutside={true}
+          closeOnClickOutside={this.closeOnClickOutside}
           closeOnEscape={true}
           offset={4}
           width={dropdownWidth}
@@ -446,7 +465,13 @@ export class LeDropdownBase {
         >
           <slot name="trigger" slot="trigger" />
           <slot name="header" />
-          <div class="dropdown-list" role="listbox" aria-multiselectable={this.multiple ? 'true' : undefined} ref={el => (this.listEl = el)} style={{ maxHeight: this.maxHeight }}>
+          <div
+            class="dropdown-list"
+            role="listbox"
+            aria-multiselectable={this.multiple ? 'true' : undefined}
+            ref={el => (this.listEl = el)}
+            style={{ maxHeight: this.maxHeight }}
+          >
             {this.renderOptions()}
           </div>
         </le-popover>

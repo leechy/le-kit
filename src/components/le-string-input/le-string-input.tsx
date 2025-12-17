@@ -70,6 +70,11 @@ export class LeStringInput {
   @Prop() placeholder: string;
 
   /**
+   * Hide description slot
+   */
+  @Prop() hideDescription: boolean = false;
+
+  /**
    * Whether the input is disabled
    */
   @Prop() disabled: boolean = false;
@@ -158,11 +163,13 @@ export class LeStringInput {
             {this.iconEnd && <span class="icon-end">{this.iconEnd}</span>}
           </div>
 
-          <div class="le-input-description">
-            <le-slot name="description" type="text" tag="p" label="Description">
-              <slot name="description"></slot>
-            </le-slot>
-          </div>
+          {!this.hideDescription && (
+            <div class="le-input-description">
+              <le-slot name="description" type="text" tag="p" label="Description">
+                <slot name="description"></slot>
+              </le-slot>
+            </div>
+          )}
         </div>
       </le-component>
     );

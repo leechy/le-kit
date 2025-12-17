@@ -70,6 +70,7 @@
   /* Surface colors (cards, modals, etc.) */
   --le-color-surface: #ffffff;
   --le-color-surface-elevated: #ffffff;
+  --le-color-surface-alt: #e9ebed;
   
   /* Text colors */
   --le-color-text-primary: #212121;
@@ -79,6 +80,7 @@
   
   /* Border colors */
   --le-color-border: #e0e0e0;
+  --le-color-border-hover: #9dd1ff;
   --le-color-border-light: #eeeeee;
   --le-color-border-dark: #bdbdbd;
 
@@ -87,7 +89,7 @@
   --le-color-border-input: #c4d6e6;
   
   /* Focus ring */
-  --le-color-focus: rgba(0, 136, 255, 0.5);
+  --le-color-focus: rgba(0, 136, 255, 0.3);
   
   /* Border radius */
   --le-radius-none: 0;
@@ -99,6 +101,7 @@
   --le-radius-full: 9999px;
   
   /* Shadows */
+  --le-color-shadow: color-mix(in srgb, var(--le-color-primary) 80%, transparent);
   --le-shadow-none: none;
   --le-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --le-shadow-md: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);

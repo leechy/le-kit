@@ -124,6 +124,74 @@
     <!-- Default content template (used when localStorage is empty) -->
     <template id="default-content">
       <div class="demo-section">
+        <h2>Dropdown Components</h2>
+        <p>Select, combobox, and multiselect components for form inputs.</p>
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>Select Component:</label>
+            <le-select
+              id="demo-select"
+              placeholder="Choose a fruit..."
+              full-width
+            ></le-select>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Combobox (input with suggestions):</label>
+            <le-combobox
+              id="demo-combobox"
+              placeholder="Type to search..."
+              full-width
+            ></le-combobox>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Multiselect:</label>
+            <le-multiselect
+              id="demo-multiselect"
+              placeholder="Select colors..."
+              full-width
+              searchable
+            ></le-multiselect>
+            <!-- show-select-all='["Выбрать все", "Очистить выбор"]' -->
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Grouped Select:</label>
+            <le-select
+              id="demo-grouped-select"
+              placeholder="Choose a country..."
+              full-width
+              searchable
+            ></le-select>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Select Sizes:</label>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <le-select id="small-select" size="small" placeholder="Small"></le-select>
+              <le-select id="medium-select" size="medium" placeholder="Medium (default)"></le-select>
+              <le-select id="large-select" size="large" placeholder="Large"></le-select>
+            </div>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Tag Component:</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+              <le-tag label="Default"></le-tag>
+              <le-tag label="Primary" variant="primary"></le-tag>
+              <le-tag label="Success" variant="success"></le-tag>
+              <le-tag label="Warning" variant="warning"></le-tag>
+              <le-tag label="Danger" variant="danger"></le-tag>
+              <le-tag label="Dismissible" dismissible></le-tag>
+              <le-tag label="With Icon" icon="⭐"></le-tag>
+              <le-tag label="Large Dismissible" size="large" dismissible></le-tag>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-section">
         <h2>Form Components</h2>
         <p>Input controls for forms with admin mode support.</p>
         <div class="demo-grid">
@@ -447,19 +515,15 @@ console.log(greeting);</le-text>
               <le-button icon-only color="primary" size="small">
                 <svg slot="icon-only" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
               </le-button>
-              <le-button icon-only variant="clear" size="small">
-                <div slot="icon-only">⚙️</div>
-              </le-button>
+              <le-button variant="clear" size="large" icon-only="⚙️"></le-button>
               <le-button icon-only variant="outlined" color="secondary">
                 <svg slot="icon-only" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
               </le-button>
-              <le-button color="success">
-                <svg slot="icon-start" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <le-button color="success" icon-start="✅">
                 <div>With Icon</div>
               </le-button>
-              <le-button>
+              <le-button icon-end="→" color="info">
                 <div>Next</div>
-                <div slot="icon-end">→</div>
               </le-button>
             </div>
           </div>
@@ -772,6 +836,116 @@ console.log(greeting);</le-text>
 
       // Initialize on page load
       initContent();
+
+      document.getElementById('demo-combobox').options = [
+        { label: 'JavaScript', value: 'js', description: 'Dynamic scripting language' },
+        { label: 'TypeScript', value: 'ts', description: 'Typed JavaScript superset' },
+        { label: 'Python', value: 'py', description: 'Readable general-purpose language' },
+        { label: 'Rust', value: 'rs', description: 'Memory-safe systems language' },
+        { label: 'Go', value: 'go', description: 'Simple concurrent language' },
+      ];
+      document.getElementById('demo-select').options = [
+        { label: 'Apple', value: 'apple', iconStart: '🍎' },
+        { label: 'Banana', value: 'banana', iconStart: '🍌' },
+        { label: 'Cherry', value: 'cherry', iconStart: '🍒' },
+        { label: 'Orange', value: 'orange', iconStart: '🍊' },
+        { label: 'Grapes', value: 'grapes', iconStart: '🍇' },
+        { label: 'Pineapple', value: 'pineapple', iconEnd: '🍍' },
+        { label: 'Mango', value: 'mango', iconStart: '🥭' },
+        { label: 'Papaya', value: 'papaya', iconStart: '🍈' },
+        { label: 'Kiwi', value: 'kiwi', iconStart: '🥝' },
+        { label: 'Strawberry', value: 'strawberry', iconStart: '🍓' },
+        { label: 'Watermelon', value: 'watermelon', iconStart: '🍉' },
+        { label: 'Peach', value: 'peach', iconStart: '🍑' },
+        { label: 'Lemon', value: 'lemon', iconStart: '🍋' },
+        { label: 'Coconut', value: 'coconut', iconStart: '🥥' },
+        { label: 'Avocado', value: 'avocado', iconStart: '🥑' },
+        { label: 'Blueberry', value: 'blueberry', iconStart: '🫐' },
+        { label: 'Raspberry', value: 'raspberry', iconStart: '🍇' },
+        { label: 'Blackberry', value: 'blackberry', iconStart: '🍇' },
+        { label: 'Cranberry', value: 'cranberry', iconStart: '🍒' },
+        { label: 'Fig', value: 'fig', iconStart: '🍈' },
+        { label: 'Date', value: 'date', iconStart: '🍇' },
+        { label: 'Pomegranate', value: 'pomegranate', iconStart: '🍎' },
+      ];
+      document.getElementById('demo-multiselect').options = [
+        { label: 'Red', value: 'red' },
+        { label: 'Green', value: 'green' },
+        { label: 'Blue', value: 'blue' },
+        { label: 'Yellow', value: 'yellow', disabled: true },
+        { label: 'Purple', value: 'purple' },
+        { label: 'Orange', value: 'orange' },
+      ];
+      document.getElementById('demo-grouped-select').options = [
+        { label: 'Albania', value: 'albania', group: 'Europe', description: 'Poorest country in Europe', disabled: true },
+        { label: 'Belgium', value: 'belgium', group: 'Europe', description: 'Famous for waffles and chocolate' },
+        { label: 'Chile', value: 'chile', group: 'South America', description: 'Longest north-south country' },
+        { label: 'Dominican Republic', value: 'dominican-republic', group: 'North America', description: 'Shares island with Haiti' },
+        { label: 'Ecuador', value: 'ecuador', group: 'South America', description: 'Named after the equator' },
+        { label: 'Finland', value: 'finland', group: 'Europe', description: 'Land of a thousand lakes' },
+        { label: 'Greece', value: 'greece', group: 'Europe', description: 'Birthplace of democracy' },
+        { label: 'Haiti', value: 'haiti', group: 'North America', description: 'First independent nation in Latin America' },
+        { label: 'Iceland', value: 'iceland', group: 'Europe', description: 'Volcanic island nation' },
+        { label: 'Jamaica', value: 'jamaica', group: 'North America', description: 'Famous for reggae music' },
+        { label: 'Kazakhstan', value: 'kazakhstan', group: 'Asia', description: 'Largest landlocked country' },
+        { label: 'Latvia', value: 'latvia', group: 'Europe', description: 'Known for its forests and beaches' },
+        { label: 'Morocco', value: 'morocco', group: 'Africa', description: 'Famous for its cuisine and markets' },
+        { label: 'Nepal', value: 'nepal', group: 'Asia', description: 'Home to Mount Everest' },
+        { label: 'Oman', value: 'oman', group: 'Asia', description: 'Known for its desert landscapes' },
+        { label: 'Peru', value: 'peru', group: 'South America', description: 'Home to Machu Picchu' },
+        { label: 'Qatar', value: 'qatar', group: 'Asia', description: 'Rich in oil and gas reserves' },
+        { label: 'Romania', value: 'romania', group: 'Europe', description: 'Famous for Dracula legend' },
+        { label: 'Sweden', value: 'sweden', group: 'Europe', description: 'Known for its innovation and design' },
+        { label: 'Thailand', value: 'thailand', group: 'Asia', description: "Land of Smiles" },
+        { label: 'Canada', value: 'canada', group: 'North America', description: 'Second largest country by area' },
+        { label: 'Denmark', value: 'denmark', group: 'Europe', description: 'Known for its high quality of life' },
+        { label: 'Egypt', value: 'egypt', group: 'Africa', description: 'Home to ancient pyramids' },
+        { label: 'France', value: 'france', group: 'Europe', description: 'Famous for art, cuisine, and fashion' },
+        { label: 'Germany', value: 'germany', group: 'Europe', description: 'Known for engineering and beer' },
+        { label: 'Hungary', value: 'hungary', group: 'Europe', description: 'Famous for thermal baths' },
+        { label: 'India', value: 'india', group: 'Asia', description: 'Second most populous country' },
+        { label: 'Japan', value: 'japan', group: 'Asia', description: 'Land of the rising sun' },
+        { label: 'Kenya', value: 'kenya', group: 'Africa', description: 'Famous for wildlife safaris' },
+        { label: 'Luxembourg', value: 'luxembourg', group: 'Europe', description: 'One of the richest countries' },
+        { label: 'Mexico', value: 'mexico', group: 'North America', description: 'Known for its vibrant culture' },
+        { label: 'Nigeria', value: 'nigeria', group: 'Africa', description: 'Most populous country in Africa' },
+        { label: 'Oman', value: 'oman', group: 'Asia', description: 'Known for its desert landscapes' },
+        { label: 'Portugal', value: 'portugal', group: 'Europe', description: 'Famous for port wine' },
+        { label: 'Qatar', value: 'qatar', group: 'Asia', description: 'Rich in oil and gas reserves' },
+        { label: 'Russia', value: 'russia', group: 'Europe', description: "Largest country by area" },
+        { label: 'Spain', value: 'spain', group: 'Europe', description: "Famous for flamenco and tapas" },
+        { label: 'Turkey', value: 'turkey', group: 'Asia', description: "Bridges Europe and Asia" },
+        { label: 'Denmark', value: 'denmark', group: 'Europe' },
+        { label: 'Egypt', value: 'egypt', group: 'Africa' },
+        { label: 'France', value: 'france', group: 'Europe' },
+        { label: 'Germany', value: 'germany', group: 'Europe' },
+        { label: 'Hungary', value: 'hungary', group: 'Europe' },
+        { label: 'India', value: 'india', group: 'Asia' },
+        { label: 'Japan', value: 'japan', group: 'Asia' },
+        { label: 'Kenya', value: 'kenya', group: 'Africa' },
+        { label: 'Luxembourg', value: 'luxembourg', group: 'Europe' },
+        { label: 'Mexico', value: 'mexico', group: 'North America' },
+        { label: 'Nigeria', value: 'nigeria', group: 'Africa' },
+        { label: 'Oman', value: 'oman', group: 'Asia' },
+        { label: 'Portugal', value: 'portugal', group: 'Europe' },
+        { label: 'Qatar', value: 'qatar', group: 'Asia' },
+        { label: 'Russia', value: 'russia', group: 'Europe' },
+        { label: 'Spain', value: 'spain', group: 'Europe' },
+        { label: 'Turkey', value: 'turkey', group: 'Asia' },
+        { label: 'Uganda', value: 'uganda', group: 'Africa' },
+        { label: 'Vietnam', value: 'vietnam', group: 'Asia' },
+        { label: 'Yemen', value: 'yemen', group: 'Asia' },
+        { label: 'Zimbabwe', value: 'zimbabwe', group: 'Africa' },
+        { label: 'United States', value: 'usa', group: 'North America' },
+      ];
+      const sizeOptions = [
+        { label: 'Option 1', value: '1' },
+        { label: 'Option 2', value: '2' },
+      ];
+      document.getElementById('small-select').options = sizeOptions;
+      document.getElementById('small-select').value = '1';
+      document.getElementById('medium-select').options = sizeOptions;
+      document.getElementById('large-select').options = sizeOptions;
     </script>
   </body>
 </html>

@@ -1,4 +1,14 @@
-import { Component, Prop, Method, Event, EventEmitter, State, h, Element, Host } from '@stencil/core';
+import {
+  Component,
+  Prop,
+  Method,
+  Event,
+  EventEmitter,
+  State,
+  h,
+  Element,
+  Host,
+} from '@stencil/core';
 import { classnames } from '../../utils/utils';
 
 /**
@@ -284,7 +294,10 @@ export class LePopover {
 
     // Adjust alignment for horizontal overflow
     if (position === 'top' || position === 'bottom') {
-      if (align === 'start' && triggerRect.left + popoverRect.width > viewportWidth - viewportPadding) {
+      if (
+        align === 'start' &&
+        triggerRect.left + popoverRect.width > viewportWidth - viewportPadding
+      ) {
         align = 'end';
       } else if (align === 'end' && triggerRect.right - popoverRect.width < viewportPadding) {
         align = 'start';
@@ -413,12 +426,23 @@ export class LePopover {
             </button>
           </slot>
         </div>
-        <div id={this.uniqueId} class="le-popover-content" popover={this.closeOnClickOutside ? 'auto' : 'manual'} ref={el => (this.popoverEl = el)} style={popoverStyles}>
+        <div
+          id={this.uniqueId}
+          class="le-popover-content"
+          popover={this.closeOnClickOutside ? 'auto' : 'manual'}
+          ref={el => (this.popoverEl = el)}
+          style={popoverStyles}
+        >
           {(this.popoverTitle || this.showClose) && (
             <div class="le-popover-header">
               {this.popoverTitle && <span class="le-popover-title">{this.popoverTitle}</span>}
               {this.showClose && (
-                <button type="button" class="le-popover-close" onClick={() => this.hide()} aria-label="Close">
+                <button
+                  type="button"
+                  class="le-popover-close"
+                  onClick={() => this.hide()}
+                  aria-label="Close"
+                >
                   ×
                 </button>
               )}

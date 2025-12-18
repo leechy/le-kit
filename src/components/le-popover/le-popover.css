@@ -86,6 +86,16 @@
   transform: scale(1);
 }
 
+/* Fallback for browsers without the Popover API */
+.le-popover-content[data-fallback-open="false"] {
+  display: none;
+}
+
+.le-popover-content[data-fallback-open="true"] {
+  opacity: 1;
+  transform: scale(1);
+}
+
 /* Starting style for animation (CSS Anchor Positioning spec) */
 @starting-style {
   .le-popover-content:popover-open {

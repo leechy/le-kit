@@ -2,6 +2,7 @@ import { Component, Prop, State, h, Host, Element, getAssetPath } from '@stencil
 import { classnames, observeModeChanges } from '../../utils/utils';
 import { getLeKitConfig } from '../../global/app';
 import { leConfirm } from '../le-popup/le-popup.api';
+import { LeOptionSelectDetail } from '../..';
 
 /**
  * Component wrapper for admin mode editing.
@@ -300,7 +301,7 @@ export class LeComponent {
             {attr.name}
             {attr.description && <span class="property-hint">{attr.description}</span>}
           </label>
-          {/* <le-select
+          <le-select
             options={[...options.map(opt => ({ label: opt, value: opt }))]}
             full-width
             value={value ?? attr.default?.replace(/'/g, '')}
@@ -308,22 +309,7 @@ export class LeComponent {
             onLeChange={(e: CustomEvent<LeOptionSelectDetail>) =>
               this.handlePropertyChange(attr.name, e.detail.value, type)
             }
-          ></le-select> */}
-          <select
-            id={`prop-${attr.name}`}
-            onChange={e =>
-              this.handlePropertyChange(attr.name, (e.target as HTMLSelectElement).value, type)
-            }
-          >
-            {options.map(opt => (
-              <option
-                value={opt}
-                selected={value === opt || (!value && attr.default?.replace(/'/g, '') === opt)}
-              >
-                {opt}
-              </option>
-            ))}
-          </select>
+          ></le-select>
         </div>
       );
     }

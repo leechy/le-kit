@@ -61,6 +61,10 @@ Type: `Promise<void>`
 
 ## Dependencies
 
+### Used by
+
+ - [le-component](../le-component)
+
 ### Depends on
 
 - [le-component](../le-component)
@@ -75,11 +79,7 @@ graph TD;
   le-select --> le-dropdown-base
   le-select --> le-button
   le-select --> le-string-input
-  le-component --> le-button
-  le-component --> le-checkbox
-  le-component --> le-string-input
-  le-component --> le-popover
-  le-component --> le-popup
+  le-component --> le-select
   le-button --> le-component
   le-button --> le-slot
   le-slot --> le-popover

@@ -145,14 +145,15 @@ graph TD;
   le-button --> le-component
   le-button --> le-slot
   le-component --> le-button
-  le-checkbox --> le-component
-  le-checkbox --> le-slot
-  le-slot --> le-button
+  le-select --> le-button
+  le-dropdown-base --> le-popover
   le-string-input --> le-component
   le-string-input --> le-slot
+  le-slot --> le-button
+  le-checkbox --> le-component
+  le-checkbox --> le-slot
   le-popup --> le-button
   le-number-input --> le-button
-  le-select --> le-button
   style le-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

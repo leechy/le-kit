@@ -255,6 +255,17 @@
           </div>
 
           <div class="text-slot-demo">
+            <label>Nested select inside popover:</label>
+            <le-popover>
+              <le-button slot="trigger" variant="outlined">Open popover</le-button>
+              <div style="display: flex; flex-direction: column; gap: var(--le-space-sm);">
+                <p style="margin: 0;">The select should open without closing this popover.</p>
+                <le-select id="demo-select-nested" placeholder="Choose a fruit..." full-width></le-select>
+              </div>
+            </le-popover>
+          </div>
+
+          <div class="text-slot-demo">
             <label>Combobox (input with suggestions):</label>
             <le-combobox
               id="demo-combobox"
@@ -277,7 +288,7 @@
           <div class="text-slot-demo">
             <label>Grouped Select:</label>
             <le-select
-              id="demo-grouped-select"
+              id="demo-grouped-select-2"
               placeholder="Choose a country..."
               full-width
               searchable
@@ -433,6 +444,12 @@
                 <p style="margin: 0; color: var(--le-color-text-secondary);">
                   You can put <strong>any HTML</strong> inside the popup!
                 </p>
+                <le-select
+                  id="demo-grouped-select"
+                  placeholder="Choose a country..."
+                  full-width
+                  searchable
+                ></le-select>
               </div>
               <div slot="footer" style="display: flex; gap: 8px; justify-content: center;">
                 <le-button variant="outlined" onclick="document.getElementById('custom-popup').hide(false)">Maybe Later</le-button>
@@ -986,6 +1003,11 @@ console.log(greeting);</le-text>
         { label: 'Date', value: 'date', iconStart: '🍇' },
         { label: 'Pomegranate', value: 'pomegranate', iconStart: '🍎' },
       ];
+
+      const nestedSelect = document.getElementById('demo-select-nested');
+      if (nestedSelect) {
+        nestedSelect.options = document.getElementById('demo-select').options;
+      }
       document.getElementById('demo-multiselect').options = [
         { label: 'Red', value: 'red' },
         { label: 'Green', value: 'green' },
@@ -994,7 +1016,7 @@ console.log(greeting);</le-text>
         { label: 'Purple', value: 'purple' },
         { label: 'Orange', value: 'orange' },
       ];
-      document.getElementById('demo-grouped-select').options = [
+      const groupedSelectOptions = [
         { label: 'Albania', value: 'albania', group: 'Europe', description: 'Poorest country in Europe', disabled: true },
         { label: 'Belgium', value: 'belgium', group: 'Europe', description: 'Famous for waffles and chocolate' },
         { label: 'Chile', value: 'chile', group: 'South America', description: 'Longest north-south country' },
@@ -1056,6 +1078,8 @@ console.log(greeting);</le-text>
         { label: 'Zimbabwe', value: 'zimbabwe', group: 'Africa' },
         { label: 'United States', value: 'usa', group: 'North America' },
       ];
+      document.getElementById('demo-grouped-select').options = groupedSelectOptions;
+      document.getElementById('demo-grouped-select-2').options = groupedSelectOptions;
       const sizeOptions = [
         { label: 'Option 1', value: '1' },
         { label: 'Option 2', value: '2' },

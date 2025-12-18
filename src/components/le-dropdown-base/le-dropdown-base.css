@@ -45,6 +45,10 @@ le-popover::part(content) {
   letter-spacing: 0.05em;
 }
 
+.dropdown-list {
+  text-align: initial;
+}
+
 /* Separator */
 .dropdown-separator {
   height: 1px;

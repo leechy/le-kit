@@ -11,6 +11,10 @@ import {
 } from '@stencil/core';
 import { classnames } from '../../utils/utils';
 
+// Keep a simple stack so Escape closes the most recently opened popover first.
+// This also helps nested popovers behave naturally.
+const openPopoverStack: HTMLElement[] = [];
+
 /**
  * A popover component for displaying floating content.
  *
@@ -124,19 +128,97 @@ export class LePopover {
   private uniqueId: string = `le-popover-${Math.random().toString(36).substr(2, 9)}`;
   private scrollParents: Element[] = [];
 
+  private isListeningForDismiss: boolean = false;
+
+  private get supportsPopoverApi(): boolean {
+    return typeof (HTMLElement.prototype as any).showPopover === 'function';
+  }
+
+  private shadowContains(container: HTMLElement, node: HTMLElement): boolean {
+    let current: Node | null = node;
+    while (current) {
+      if (current === container) return true;
+
+      if (current instanceof ShadowRoot) {
+        current = current.host;
+        continue;
+      }
+
+      if (current.parentNode) {
+        current = current.parentNode;
+        continue;
+      }
+
+      const root = current.getRootNode?.();
+      if (root instanceof ShadowRoot) {
+        current = root.host;
+        continue;
+      }
+
+      break;
+    }
+
+    return false;
+  }
+
   componentDidLoad() {
     // Listen for toggle events from the native popover API
     this.popoverEl?.addEventListener('toggle', this.handlePopoverToggle as EventListener);
 
     // Listen for other popovers opening to close this one
     document.addEventListener('le-popover-will-open', this.handleOtherPopoverOpen);
+
+    // If the popover is initially open (unlikely, but possible), wire listeners.
+    if (this.open) {
+      this.addDismissListeners();
+    }
   }
 
   disconnectedCallback() {
     this.popoverEl?.removeEventListener('toggle', this.handlePopoverToggle as EventListener);
     document.removeEventListener('le-popover-will-open', this.handleOtherPopoverOpen);
     this.removeScrollListeners();
+    this.removeDismissListeners();
   }
+
+  private addDismissListeners() {
+    if (this.isListeningForDismiss) return;
+
+    // Use capture so clicks inside the trigger (which stops propagation) are still observed.
+    document.addEventListener('pointerdown', this.handleDocumentPointerDown, true);
+    document.addEventListener('keydown', this.handleDocumentKeyDown, true);
+    this.isListeningForDismiss = true;
+  }
+
+  private removeDismissListeners() {
+    if (!this.isListeningForDismiss) return;
+    document.removeEventListener('pointerdown', this.handleDocumentPointerDown, true);
+    document.removeEventListener('keydown', this.handleDocumentKeyDown, true);
+    this.isListeningForDismiss = false;
+  }
+
+  private handleDocumentPointerDown = (event: PointerEvent) => {
+    if (!this.open || !this.closeOnClickOutside) return;
+
+    // If the click happens inside this popover component (trigger OR content), don't close.
+    const path = (event.composedPath?.() ?? []) as EventTarget[];
+    if (path.includes(this.el)) return;
+
+    this.hide();
+  };
+
+  private handleDocumentKeyDown = (event: KeyboardEvent) => {
+    if (!this.open || !this.closeOnEscape) return;
+    if (event.key !== 'Escape') return;
+
+    // Only the top-most opened popover handles Escape.
+    const top = openPopoverStack[openPopoverStack.length - 1];
+    if (top !== this.el) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    this.hide();
+  };
 
   /**
    * Find all scrollable parent elements
@@ -194,23 +276,54 @@ export class LePopover {
     }
   };
 
+  private handleOpened() {
+    this.open = true;
+
+    // Track stack order for Escape handling.
+    const existingIndex = openPopoverStack.indexOf(this.el);
+    if (existingIndex >= 0) openPopoverStack.splice(existingIndex, 1);
+    openPopoverStack.push(this.el);
+
+    this.addDismissListeners();
+    this.addScrollListeners();
+    this._updatePosition();
+    this.lePopoverOpen.emit();
+  }
+
+  private handleClosed() {
+    this.open = false;
+    this.isPositioned = false;
+    this.removeScrollListeners();
+    this.removeDismissListeners();
+
+    const index = openPopoverStack.indexOf(this.el);
+    if (index >= 0) openPopoverStack.splice(index, 1);
+
+    this.lePopoverClose.emit();
+  }
+
   private handlePopoverToggle = (event: ToggleEvent) => {
     if (event.newState === 'open') {
-      this.open = true;
-      this.addScrollListeners();
-      this._updatePosition();
-      this.lePopoverOpen.emit();
+      this.handleOpened();
     } else {
-      this.open = false;
-      this.isPositioned = false;
-      this.removeScrollListeners();
-      this.lePopoverClose.emit();
+      this.handleClosed();
     }
   };
 
   private handleOtherPopoverOpen = (event: Event) => {
     const customEvent = event as CustomEvent;
-    if (customEvent.detail?.popover === this.el) return;
+    const openingPopover = customEvent.detail?.popover as HTMLElement | undefined;
+    if (!openingPopover) return;
+    if (openingPopover === this.el) return;
+
+    // Allow nested popovers (e.g., le-select inside another popover).
+    // Use a shadow-DOM-aware containment check.
+    if (
+      this.shadowContains(this.el, openingPopover) ||
+      this.shadowContains(openingPopover, this.el)
+    ) {
+      return;
+    }
 
     if (this.open) {
       this.hide();
@@ -228,7 +341,11 @@ export class LePopover {
       }),
     );
 
-    this.popoverEl?.showPopover();
+    if (this.supportsPopoverApi) {
+      this.popoverEl?.showPopover();
+    } else {
+      this.handleOpened();
+    }
   }
 
   /**
@@ -236,7 +353,11 @@ export class LePopover {
    */
   @Method()
   async hide() {
-    this.popoverEl?.hidePopover();
+    if (this.supportsPopoverApi) {
+      this.popoverEl?.hidePopover();
+    } else {
+      this.handleClosed();
+    }
   }
 
   /**
@@ -429,9 +550,12 @@ export class LePopover {
         <div
           id={this.uniqueId}
           class="le-popover-content"
-          popover={this.closeOnClickOutside ? 'auto' : 'manual'}
+          // Always use manual mode so nested popovers can be open together.
+          // We implement click-outside and Escape handling ourselves.
+          popover="manual"
           ref={el => (this.popoverEl = el)}
           style={popoverStyles}
+          data-fallback-open={this.supportsPopoverApi ? undefined : String(this.open)}
         >
           {(this.popoverTitle || this.showClose) && (
             <div class="le-popover-header">

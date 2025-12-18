@@ -77,6 +77,8 @@ graph TD;
   le-button --> le-component
   le-button --> le-slot
   le-slot --> le-string-input
+  le-select --> le-string-input
+  le-dropdown-base --> le-popover
   le-checkbox --> le-component
   le-checkbox --> le-slot
   le-popup --> le-slot
@@ -84,7 +86,6 @@ graph TD;
   le-popup --> le-component
   le-combobox --> le-string-input
   le-multiselect --> le-string-input
-  le-select --> le-string-input
   style le-string-input fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

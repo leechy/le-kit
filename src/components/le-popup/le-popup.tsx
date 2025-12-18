@@ -1,4 +1,5 @@
 import { Component, Prop, Method, Event, EventEmitter, State, Element, h } from '@stencil/core';
+import { LeKitMode } from '../../global/app';
 
 /**
  * Popup type determines the buttons shown
@@ -8,7 +9,14 @@ export type PopupType = 'alert' | 'confirm' | 'prompt' | 'custom';
 /**
  * Popup position on the screen
  */
-export type PopupPosition = 'center' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+export type PopupPosition =
+  | 'center'
+  | 'top'
+  | 'bottom'
+  | 'top-left'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-right';
 
 /**
  * Result returned by the popup when closed
@@ -20,15 +28,15 @@ export interface PopupResult {
 
 /**
  * A flexible popup/dialog component for alerts, confirms, prompts, and custom content.
- * 
+ *
  * Uses the native HTML <dialog> element for proper modal behavior, accessibility,
- * and focus management. Can be used declaratively in HTML or programmatically 
+ * and focus management. Can be used declaratively in HTML or programmatically
  * via leAlert(), leConfirm(), lePrompt().
  *
  * @slot - Default slot for custom body content
  * @slot header - Custom header content (replaces title)
  * @slot footer - Custom footer content (replaces default buttons)
- * 
+ *
  * @cmsInternal true
  * @cmsCategory System
  */
@@ -39,6 +47,11 @@ export interface PopupResult {
 })
 export class LePopup {
   @Element() el: HTMLElement;
+
+  /**
+   * The mode of the Le Kit (e.g., 'default' or 'admin')
+   */
+  @Prop({ mutable: true, reflect: true }) mode: LeKitMode = 'default';
 
   /**
    * Whether the popup is currently visible
@@ -148,11 +161,11 @@ export class LePopup {
    */
   @Method()
   async show(): Promise<PopupResult> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.resolvePromise = resolve;
       this.inputValue = this.defaultValue;
       this.open = true;
-      
+
       // Use requestAnimationFrame to ensure the dialog element is rendered
       requestAnimationFrame(() => {
         if (this.dialogEl) {
@@ -161,9 +174,9 @@ export class LePopup {
           } else {
             this.dialogEl.show();
           }
-          
+
           this.leOpen.emit();
-          
+
           // Focus input for prompt type
           if (this.type === 'prompt' && this.inputEl) {
             this.inputEl.focus();
@@ -183,11 +196,11 @@ export class LePopup {
       confirmed,
       value: this.type === 'prompt' ? this.inputValue : undefined,
     };
-    
+
     this.dialogEl?.close();
     this.open = false;
     this.leClose.emit(result);
-    
+
     if (this.resolvePromise) {
       this.resolvePromise(result);
       this.resolvePromise = undefined;
@@ -216,12 +229,11 @@ export class LePopup {
     // Check if click was on the dialog backdrop (outside the dialog box)
     if (this.closeOnBackdrop && e.target === this.dialogEl) {
       const rect = this.dialogEl.getBoundingClientRect();
-      const clickedInDialog = (
+      const clickedInDialog =
         e.clientX >= rect.left &&
         e.clientX <= rect.right &&
         e.clientY >= rect.top &&
-        e.clientY <= rect.bottom
-      );
+        e.clientY <= rect.bottom;
       if (!clickedInDialog) {
         this.handleCancel();
       }
@@ -251,7 +263,7 @@ export class LePopup {
         </div>
       );
     }
-    
+
     if (this.popupTitle) {
       return (
         <div class="le-popup-header" part="header">
@@ -259,7 +271,7 @@ export class LePopup {
         </div>
       );
     }
-    
+
     return null;
   }
 
@@ -267,7 +279,7 @@ export class LePopup {
     return (
       <div class="le-popup-body" part="body">
         {this.message && <p class="le-popup-message">{this.message}</p>}
-        
+
         {this.type === 'prompt' && (
           <input
             type="text"
@@ -277,10 +289,10 @@ export class LePopup {
             value={this.inputValue}
             onInput={this.handleInputChange}
             onKeyDown={this.handleKeyDown}
-            ref={(el) => (this.inputEl = el)}
+            ref={el => (this.inputEl = el)}
           />
         )}
-        
+
         {/* Default slot for custom content */}
         <le-slot name="" tag="div" description="Custom popup content" type="slot">
           <slot></slot>
@@ -297,12 +309,12 @@ export class LePopup {
         </div>
       );
     }
-    
+
     // For custom type without footer slot, don't render default buttons
     if (this.type === 'custom') {
       return null;
     }
-    
+
     return (
       <div class="le-popup-footer" part="footer">
         {(this.type === 'confirm' || this.type === 'prompt') && (
@@ -329,12 +341,12 @@ export class LePopup {
 
   render() {
     const positionClass = `le-popup-position-${this.position}`;
-    
+
     return (
       <dialog
         class={`le-popup-dialog ${positionClass}`}
         part="dialog"
-        ref={(el) => (this.dialogEl = el)}
+        ref={el => (this.dialogEl = el)}
         onClick={this.handleBackdropClick}
       >
         <le-component component="le-popup">

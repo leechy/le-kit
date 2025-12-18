@@ -6,8 +6,10 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
+import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
+export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export namespace Components {
     /**
@@ -748,7 +750,7 @@ export namespace Components {
     /**
      * A flexible popup/dialog component for alerts, confirms, prompts, and custom content.
      * Uses the native HTML <dialog> element for proper modal behavior, accessibility,
-     * and focus management. Can be used declaratively in HTML or programmatically 
+     * and focus management. Can be used declaratively in HTML or programmatically
      * via leAlert(), leConfirm(), lePrompt().
      * @cmsInternal true
      * @cmsCategory System
@@ -788,6 +790,11 @@ export namespace Components {
          */
         "modal": boolean;
         /**
+          * The mode of the Le Kit (e.g., 'default' or 'admin')
+          * @default 'default'
+         */
+        "mode": LeKitMode;
+        /**
           * Whether the popup is currently visible
           * @default false
          */
@@ -826,6 +833,91 @@ export namespace Components {
           * @default 0
          */
         "value": number;
+    }
+    /**
+     * A segment component used as a child of le-segmented-control.
+     * Each le-segment defines both the segment button label and the panel content.
+     * The parent le-segmented-control component automatically reads these segments and creates
+     * the segmented control interface.
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface LeSegment {
+        /**
+          * Whether this tab is disabled.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Get tab configuration for parent component
+         */
+        "getSegmentConfig": () => Promise<{ label: string; value: string; iconStart?: string; iconEnd?: string; disabled: boolean; }>;
+        /**
+          * Get the effective value (value or label as fallback)
+         */
+        "getValue": () => Promise<string>;
+        /**
+          * Icon displayed at the end of the tab button.
+         */
+        "iconEnd"?: string;
+        /**
+          * Icon displayed at the start of the tab button. Can be an emoji, URL, or icon class.
+         */
+        "iconStart"?: string;
+        /**
+          * The label displayed in the tab button.
+         */
+        "label": string;
+        /**
+          * The value used to identify this tab. Defaults to the label if not provided.
+         */
+        "value"?: string;
+    }
+    /**
+     * A segmented control component (iOS-style toggle buttons).
+     * Perfect for toggling between a small set of related options.
+     * @cssprop --le-segmented-bg - Background color of the control
+     * @cssprop --le-segmented-padding - Padding around segments
+     * @cssprop --le-segmented-gap - Gap between segments
+     * @cssprop --le-segmented-radius - Border radius of the control
+     * @csspart container - The main container
+     * @csspart segment - Individual segment buttons
+     * @csspart segment-active - The currently active segment
+     * @cmsEditable true
+     * @cmsCategory Form
+     */
+    interface LeSegmentedControl {
+        /**
+          * Whether the control is disabled.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Whether the control should take full width.
+          * @default false
+         */
+        "fullWidth": boolean;
+        /**
+          * Array of options for the segmented control.
+          * @default []
+         */
+        "options": LeOption[];
+        /**
+          * Scroll behavior for overflowing tabs.
+          * @allowedValues auto | hidden | visible | scroll
+          * @default 'auto'
+         */
+        "overflow": 'auto' | 'hidden' | 'visible' | 'scroll';
+        /**
+          * Size of the control.
+          * @allowedValues small | medium | large
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * The value of the currently selected option.
+         */
+        "value"?: LeOptionValue;
     }
     /**
      * A select dropdown component for single selection.
@@ -1119,6 +1211,279 @@ export namespace Components {
         "value": string;
     }
     /**
+     * A flexible tab component with multiple variants and states.
+     * @cssprop --le-tab-bg - Tab background color
+     * @cssprop --le-tab-color - Tab text color
+     * @cssprop --le-tab-border-radius - Tab border radius
+     * @cssprop --le-tab-padding-x - Tab horizontal padding
+     * @cssprop --le-tab-padding-y - Tab vertical padding
+     * @csspart button - The native button element
+     * @csspart content - The tab content wrapper
+     * @csspart icon-start - The start icon slot
+     * @csspart icon-end - The end icon slot
+     * @cmsEditable true
+     * @cmsCategory Actions
+     */
+    interface LeTab {
+        /**
+          * Alignment of the tab label without the end icon
+          * @allowedValues start | center | space-between | end
+          * @default 'center'
+         */
+        "align": 'start' | 'center' | 'space-between' | 'end';
+        /**
+          * Whether the tab is disabled
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Whether the tab can get focus needed for accessibility when used in custom tab implementations
+          * @default true
+         */
+        "focusable": boolean;
+        /**
+          * Whether the tab takes full width of its container
+          * @default false
+         */
+        "fullWidth": boolean;
+        /**
+          * Get tab configuration for parent component
+         */
+        "getTabConfig": () => Promise<{ label: string; value: string; icon: string | Node; disabled: boolean; }>;
+        /**
+          * Optional href to make the tab act as a link
+         */
+        "href"?: string;
+        /**
+          * Icon only tab image or emoji if this prop is set, the tab will render only the icon slot
+         */
+        "icon"?: string | Node;
+        /**
+          * End icon image or emoji
+         */
+        "iconEnd"?: string | Node;
+        /**
+          * Start icon image or emoji
+         */
+        "iconStart"?: string | Node;
+        /**
+          * Label if it is not provided via slot
+         */
+        "label"?: string;
+        /**
+          * Mode of the popover should be 'default' for internal use
+         */
+        "mode": 'default' | 'admin';
+        /**
+          * Position of the tabs when used within a le-tabs component
+          * @allowedValues top | bottom | start | end
+          * @default 'top'
+         */
+        "position": 'top' | 'bottom' | 'start' | 'end';
+        /**
+          * Whether the tab is in a selected/active state
+          * @default false
+         */
+        "selected": boolean;
+        /**
+          * Whether to show the label when in icon-only mode
+          * @default false
+         */
+        "showLabel": boolean;
+        /**
+          * Tab size
+          * @allowedValues small | medium | large
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * Link target when href is set
+         */
+        "target"?: string;
+        /**
+          * Value of the tab, defaults to label if not provided
+         */
+        "value"?: string;
+        /**
+          * Tab variant style
+          * @allowedValues solid | underlined | clear | enclosed | icon-only
+          * @default 'underlined'
+         */
+        "variant": 'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only';
+    }
+    /**
+     * A presentational tab bar component without panels.
+     * Use this for navigation/routing scenarios where you manage the content
+     * externally based on the selection events. For tabs with built-in panels,
+     * use `le-tabs` instead.
+     * @cssprop --le-tab-bar-border-color - Border color
+     * @cssprop --le-tab-bar-gap - Gap between tabs
+     * @cssprop --le-tab-bar-indicator-color - Active indicator color
+     * @cssprop --le-tab-bar-padding-x - Horizontal padding for tabs
+     * @cssprop --le-tab-bar-padding-y - Vertical padding for tabs
+     * @csspart tablist - The tab button container
+     * @csspart tab - Individual tab buttons
+     * @csspart tab-active - The currently active tab
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface LeTabBar {
+        /**
+          * Whether to show a border below the tab bar.
+          * @default true
+         */
+        "bordered": boolean;
+        /**
+          * Whether tabs should stretch to fill available width.
+          * @default true
+         */
+        "fullWidth": boolean;
+        /**
+          * Position of the tab bar.
+          * @allowedValues top | bottom
+          * @default 'top'
+         */
+        "position": 'top' | 'bottom';
+        /**
+          * The value of the currently selected tab.
+         */
+        "selected"?: LeOptionValue;
+        /**
+          * Whether to show labels in icon-only mode.
+          * @default false
+         */
+        "showLabels": boolean;
+        /**
+          * Size of the tabs.
+          * @allowedValues small | medium | large
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * Array of tab options defining the tabs to display.
+          * @default []
+         */
+        "tabs": LeOption[];
+    }
+    /**
+     * A tab panel component used as a child of le-tabs.
+     * Each le-tab-panel defines both the tab button label and the panel content.
+     * The parent le-tabs component automatically reads these panels and creates
+     * the tab interface.
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface LeTabPanel {
+        /**
+          * Whether this tab is disabled.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Get tab configuration for parent component
+         */
+        "getTabConfig": () => Promise<{ label: string; value: string; iconStart?: string; iconEnd?: string; disabled: boolean; }>;
+        /**
+          * Get the effective value (value or label as fallback)
+         */
+        "getValue": () => Promise<string>;
+        /**
+          * Icon displayed at the end of the tab button.
+         */
+        "iconEnd"?: string;
+        /**
+          * Icon displayed at the start of the tab button. Can be an emoji, URL, or icon class.
+         */
+        "iconStart"?: string;
+        /**
+          * The label displayed in the tab button.
+         */
+        "label": string;
+        /**
+          * Whether to render the panel content only when active (lazy loading). When true, content is not rendered until the tab is first selected. When false (default), content is always in DOM but hidden when inactive.
+          * @default false
+         */
+        "lazy": boolean;
+        /**
+          * Set the active state (called by parent le-tabs)
+         */
+        "setActive": (isActive: boolean) => Promise<void>;
+        /**
+          * The value used to identify this tab. Defaults to the label if not provided.
+         */
+        "value"?: string;
+    }
+    /**
+     * A flexible tabs component for organizing content into tabbed panels.
+     * Supports two modes:
+     * 1. **Declarative**: Use `<le-tab-panel>` children to define tabs and content
+     * 2. **Programmatic**: Use the `tabs` prop with named slots for content
+     * Full keyboard navigation and ARIA support included.
+     * @cssprop --le-tabs-border-color - Border color for tab list
+     * @cssprop --le-tabs-gap - Gap between tabs
+     * @cssprop --le-tabs-indicator-color - Active tab indicator color
+     * @cssprop --le-tabs-padding-x - Horizontal padding for tab buttons
+     * @cssprop --le-tabs-padding-y - Vertical padding for tab buttons
+     * @csspart tablist - The tab button container (role="tablist")
+     * @csspart tab - Individual tab buttons
+     * @csspart tab-active - The currently active tab
+     * @csspart panels - Container for panel content
+     * @csspart panel - Individual panel containers
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface LeTabs {
+        /**
+          * Whether tabs should stretch to fill available width.
+          * @default false
+         */
+        "fullWidth": boolean;
+        /**
+          * Orientation of the tabs.
+          * @allowedValues horizontal | vertical
+          * @default 'horizontal'
+         */
+        "orientation": 'horizontal' | 'vertical';
+        /**
+          * Scroll behavior for overflowing tabs.
+          * @allowedValues auto | hidden | visible | scroll
+          * @default 'auto'
+         */
+        "overflow": 'auto' | 'hidden' | 'visible' | 'scroll';
+        /**
+          * Position of the tabs relative to the panels.
+          * @allowedValues start | end
+          * @default 'start'
+         */
+        "position": 'start' | 'end';
+        /**
+          * The value of the currently selected tab. If not provided, defaults to the first tab.
+         */
+        "selected"?: LeOptionValue;
+        /**
+          * Size of the tabs.
+          * @allowedValues sm | md | lg
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * Array of tab options (programmatic mode). If le-tab-panel children exist, they take precedence.
+          * @default []
+         */
+        "tabs": LeOption[];
+        /**
+          * Tab variant style.
+          * @allowedValues underlined | solid | pills | enclosed | icon-only
+          * @default 'underlined'
+         */
+        "variant": 'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only';
+        /**
+          * Wrap the tabs if they exceed container width.
+          * @default false
+         */
+        "wrap": boolean;
+    }
+    /**
      * A tag/chip component for displaying labels with optional dismiss functionality.
      * @cmsEditable false
      * @cmsCategory Form
@@ -1266,6 +1631,10 @@ export interface LePopupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLePopupElement;
 }
+export interface LeSegmentedControlCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeSegmentedControlElement;
+}
 export interface LeSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeSelectElement;
@@ -1277,6 +1646,18 @@ export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
 export interface LeStringInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeStringInputElement;
+}
+export interface LeTabCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeTabElement;
+}
+export interface LeTabBarCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeTabBarElement;
+}
+export interface LeTabsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeTabsElement;
 }
 export interface LeTagCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1588,7 +1969,7 @@ declare global {
     /**
      * A flexible popup/dialog component for alerts, confirms, prompts, and custom content.
      * Uses the native HTML <dialog> element for proper modal behavior, accessibility,
-     * and focus management. Can be used declaratively in HTML or programmatically 
+     * and focus management. Can be used declaratively in HTML or programmatically
      * via leAlert(), leConfirm(), lePrompt().
      * @cmsInternal true
      * @cmsCategory System
@@ -1612,6 +1993,50 @@ declare global {
     var HTMLLeRoundProgressElement: {
         prototype: HTMLLeRoundProgressElement;
         new (): HTMLLeRoundProgressElement;
+    };
+    /**
+     * A segment component used as a child of le-segmented-control.
+     * Each le-segment defines both the segment button label and the panel content.
+     * The parent le-segmented-control component automatically reads these segments and creates
+     * the segmented control interface.
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface HTMLLeSegmentElement extends Components.LeSegment, HTMLStencilElement {
+    }
+    var HTMLLeSegmentElement: {
+        prototype: HTMLLeSegmentElement;
+        new (): HTMLLeSegmentElement;
+    };
+    interface HTMLLeSegmentedControlElementEventMap {
+        "leChange": LeOptionSelectDetail;
+    }
+    /**
+     * A segmented control component (iOS-style toggle buttons).
+     * Perfect for toggling between a small set of related options.
+     * @cssprop --le-segmented-bg - Background color of the control
+     * @cssprop --le-segmented-padding - Padding around segments
+     * @cssprop --le-segmented-gap - Gap between segments
+     * @cssprop --le-segmented-radius - Border radius of the control
+     * @csspart container - The main container
+     * @csspart segment - Individual segment buttons
+     * @csspart segment-active - The currently active segment
+     * @cmsEditable true
+     * @cmsCategory Form
+     */
+    interface HTMLLeSegmentedControlElement extends Components.LeSegmentedControl, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeSegmentedControlElementEventMap>(type: K, listener: (this: HTMLLeSegmentedControlElement, ev: LeSegmentedControlCustomEvent<HTMLLeSegmentedControlElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeSegmentedControlElementEventMap>(type: K, listener: (this: HTMLLeSegmentedControlElement, ev: LeSegmentedControlCustomEvent<HTMLLeSegmentedControlElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeSegmentedControlElement: {
+        prototype: HTMLLeSegmentedControlElement;
+        new (): HTMLLeSegmentedControlElement;
     };
     interface HTMLLeSelectElementEventMap {
         "leChange": LeOptionSelectDetail;
@@ -1738,6 +2163,120 @@ declare global {
         prototype: HTMLLeStringInputElement;
         new (): HTMLLeStringInputElement;
     };
+    interface HTMLLeTabElementEventMap {
+        "click": PointerEvent;
+    }
+    /**
+     * A flexible tab component with multiple variants and states.
+     * @cssprop --le-tab-bg - Tab background color
+     * @cssprop --le-tab-color - Tab text color
+     * @cssprop --le-tab-border-radius - Tab border radius
+     * @cssprop --le-tab-padding-x - Tab horizontal padding
+     * @cssprop --le-tab-padding-y - Tab vertical padding
+     * @csspart button - The native button element
+     * @csspart content - The tab content wrapper
+     * @csspart icon-start - The start icon slot
+     * @csspart icon-end - The end icon slot
+     * @cmsEditable true
+     * @cmsCategory Actions
+     */
+    interface HTMLLeTabElement extends Components.LeTab, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeTabElementEventMap>(type: K, listener: (this: HTMLLeTabElement, ev: LeTabCustomEvent<HTMLLeTabElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeTabElementEventMap>(type: K, listener: (this: HTMLLeTabElement, ev: LeTabCustomEvent<HTMLLeTabElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeTabElement: {
+        prototype: HTMLLeTabElement;
+        new (): HTMLLeTabElement;
+    };
+    interface HTMLLeTabBarElementEventMap {
+        "leTabChange": LeOptionSelectDetail;
+    }
+    /**
+     * A presentational tab bar component without panels.
+     * Use this for navigation/routing scenarios where you manage the content
+     * externally based on the selection events. For tabs with built-in panels,
+     * use `le-tabs` instead.
+     * @cssprop --le-tab-bar-border-color - Border color
+     * @cssprop --le-tab-bar-gap - Gap between tabs
+     * @cssprop --le-tab-bar-indicator-color - Active indicator color
+     * @cssprop --le-tab-bar-padding-x - Horizontal padding for tabs
+     * @cssprop --le-tab-bar-padding-y - Vertical padding for tabs
+     * @csspart tablist - The tab button container
+     * @csspart tab - Individual tab buttons
+     * @csspart tab-active - The currently active tab
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface HTMLLeTabBarElement extends Components.LeTabBar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeTabBarElementEventMap>(type: K, listener: (this: HTMLLeTabBarElement, ev: LeTabBarCustomEvent<HTMLLeTabBarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeTabBarElementEventMap>(type: K, listener: (this: HTMLLeTabBarElement, ev: LeTabBarCustomEvent<HTMLLeTabBarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeTabBarElement: {
+        prototype: HTMLLeTabBarElement;
+        new (): HTMLLeTabBarElement;
+    };
+    /**
+     * A tab panel component used as a child of le-tabs.
+     * Each le-tab-panel defines both the tab button label and the panel content.
+     * The parent le-tabs component automatically reads these panels and creates
+     * the tab interface.
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface HTMLLeTabPanelElement extends Components.LeTabPanel, HTMLStencilElement {
+    }
+    var HTMLLeTabPanelElement: {
+        prototype: HTMLLeTabPanelElement;
+        new (): HTMLLeTabPanelElement;
+    };
+    interface HTMLLeTabsElementEventMap {
+        "leTabChange": LeOptionSelectDetail;
+    }
+    /**
+     * A flexible tabs component for organizing content into tabbed panels.
+     * Supports two modes:
+     * 1. **Declarative**: Use `<le-tab-panel>` children to define tabs and content
+     * 2. **Programmatic**: Use the `tabs` prop with named slots for content
+     * Full keyboard navigation and ARIA support included.
+     * @cssprop --le-tabs-border-color - Border color for tab list
+     * @cssprop --le-tabs-gap - Gap between tabs
+     * @cssprop --le-tabs-indicator-color - Active tab indicator color
+     * @cssprop --le-tabs-padding-x - Horizontal padding for tab buttons
+     * @cssprop --le-tabs-padding-y - Vertical padding for tab buttons
+     * @csspart tablist - The tab button container (role="tablist")
+     * @csspart tab - Individual tab buttons
+     * @csspart tab-active - The currently active tab
+     * @csspart panels - Container for panel content
+     * @csspart panel - Individual panel containers
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface HTMLLeTabsElement extends Components.LeTabs, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeTabsElementEventMap>(type: K, listener: (this: HTMLLeTabsElement, ev: LeTabsCustomEvent<HTMLLeTabsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeTabsElementEventMap>(type: K, listener: (this: HTMLLeTabsElement, ev: LeTabsCustomEvent<HTMLLeTabsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeTabsElement: {
+        prototype: HTMLLeTabsElement;
+        new (): HTMLLeTabsElement;
+    };
     interface HTMLLeTagElementEventMap {
         "leDismiss": void;
     }
@@ -1824,10 +2363,16 @@ declare global {
         "le-popover": HTMLLePopoverElement;
         "le-popup": HTMLLePopupElement;
         "le-round-progress": HTMLLeRoundProgressElement;
+        "le-segment": HTMLLeSegmentElement;
+        "le-segmented-control": HTMLLeSegmentedControlElement;
         "le-select": HTMLLeSelectElement;
         "le-slot": HTMLLeSlotElement;
         "le-stack": HTMLLeStackElement;
         "le-string-input": HTMLLeStringInputElement;
+        "le-tab": HTMLLeTabElement;
+        "le-tab-bar": HTMLLeTabBarElement;
+        "le-tab-panel": HTMLLeTabPanelElement;
+        "le-tabs": HTMLLeTabsElement;
         "le-tag": HTMLLeTagElement;
         "le-text": HTMLLeTextElement;
         "le-turntable": HTMLLeTurntableElement;
@@ -2584,7 +3129,7 @@ declare namespace LocalJSX {
     /**
      * A flexible popup/dialog component for alerts, confirms, prompts, and custom content.
      * Uses the native HTML <dialog> element for proper modal behavior, accessibility,
-     * and focus management. Can be used declaratively in HTML or programmatically 
+     * and focus management. Can be used declaratively in HTML or programmatically
      * via leAlert(), leConfirm(), lePrompt().
      * @cmsInternal true
      * @cmsCategory System
@@ -2619,6 +3164,11 @@ declare namespace LocalJSX {
           * @default true
          */
         "modal"?: boolean;
+        /**
+          * The mode of the Le Kit (e.g., 'default' or 'admin')
+          * @default 'default'
+         */
+        "mode"?: LeKitMode;
         /**
           * Emitted when the popup is cancelled (Cancel clicked or dismissed)
          */
@@ -2670,6 +3220,87 @@ declare namespace LocalJSX {
           * @default 0
          */
         "value"?: number;
+    }
+    /**
+     * A segment component used as a child of le-segmented-control.
+     * Each le-segment defines both the segment button label and the panel content.
+     * The parent le-segmented-control component automatically reads these segments and creates
+     * the segmented control interface.
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface LeSegment {
+        /**
+          * Whether this tab is disabled.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Icon displayed at the end of the tab button.
+         */
+        "iconEnd"?: string;
+        /**
+          * Icon displayed at the start of the tab button. Can be an emoji, URL, or icon class.
+         */
+        "iconStart"?: string;
+        /**
+          * The label displayed in the tab button.
+         */
+        "label": string;
+        /**
+          * The value used to identify this tab. Defaults to the label if not provided.
+         */
+        "value"?: string;
+    }
+    /**
+     * A segmented control component (iOS-style toggle buttons).
+     * Perfect for toggling between a small set of related options.
+     * @cssprop --le-segmented-bg - Background color of the control
+     * @cssprop --le-segmented-padding - Padding around segments
+     * @cssprop --le-segmented-gap - Gap between segments
+     * @cssprop --le-segmented-radius - Border radius of the control
+     * @csspart container - The main container
+     * @csspart segment - Individual segment buttons
+     * @csspart segment-active - The currently active segment
+     * @cmsEditable true
+     * @cmsCategory Form
+     */
+    interface LeSegmentedControl {
+        /**
+          * Whether the control is disabled.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Whether the control should take full width.
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Emitted when the selection changes.
+         */
+        "onLeChange"?: (event: LeSegmentedControlCustomEvent<LeOptionSelectDetail>) => void;
+        /**
+          * Array of options for the segmented control.
+          * @default []
+         */
+        "options"?: LeOption[];
+        /**
+          * Scroll behavior for overflowing tabs.
+          * @allowedValues auto | hidden | visible | scroll
+          * @default 'auto'
+         */
+        "overflow"?: 'auto' | 'hidden' | 'visible' | 'scroll';
+        /**
+          * Size of the control.
+          * @allowedValues small | medium | large
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * The value of the currently selected option.
+         */
+        "value"?: LeOptionValue;
     }
     /**
      * A select dropdown component for single selection.
@@ -2987,6 +3618,275 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * A flexible tab component with multiple variants and states.
+     * @cssprop --le-tab-bg - Tab background color
+     * @cssprop --le-tab-color - Tab text color
+     * @cssprop --le-tab-border-radius - Tab border radius
+     * @cssprop --le-tab-padding-x - Tab horizontal padding
+     * @cssprop --le-tab-padding-y - Tab vertical padding
+     * @csspart button - The native button element
+     * @csspart content - The tab content wrapper
+     * @csspart icon-start - The start icon slot
+     * @csspart icon-end - The end icon slot
+     * @cmsEditable true
+     * @cmsCategory Actions
+     */
+    interface LeTab {
+        /**
+          * Alignment of the tab label without the end icon
+          * @allowedValues start | center | space-between | end
+          * @default 'center'
+         */
+        "align"?: 'start' | 'center' | 'space-between' | 'end';
+        /**
+          * Whether the tab is disabled
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Whether the tab can get focus needed for accessibility when used in custom tab implementations
+          * @default true
+         */
+        "focusable"?: boolean;
+        /**
+          * Whether the tab takes full width of its container
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Optional href to make the tab act as a link
+         */
+        "href"?: string;
+        /**
+          * Icon only tab image or emoji if this prop is set, the tab will render only the icon slot
+         */
+        "icon"?: string | Node;
+        /**
+          * End icon image or emoji
+         */
+        "iconEnd"?: string | Node;
+        /**
+          * Start icon image or emoji
+         */
+        "iconStart"?: string | Node;
+        /**
+          * Label if it is not provided via slot
+         */
+        "label"?: string;
+        /**
+          * Mode of the popover should be 'default' for internal use
+         */
+        "mode"?: 'default' | 'admin';
+        /**
+          * Emitted when the tab is clicked. This is a custom event that wraps the native click but ensures the target is the le-tab.
+         */
+        "onClick"?: (event: LeTabCustomEvent<PointerEvent>) => void;
+        /**
+          * Position of the tabs when used within a le-tabs component
+          * @allowedValues top | bottom | start | end
+          * @default 'top'
+         */
+        "position"?: 'top' | 'bottom' | 'start' | 'end';
+        /**
+          * Whether the tab is in a selected/active state
+          * @default false
+         */
+        "selected"?: boolean;
+        /**
+          * Whether to show the label when in icon-only mode
+          * @default false
+         */
+        "showLabel"?: boolean;
+        /**
+          * Tab size
+          * @allowedValues small | medium | large
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * Link target when href is set
+         */
+        "target"?: string;
+        /**
+          * Value of the tab, defaults to label if not provided
+         */
+        "value"?: string;
+        /**
+          * Tab variant style
+          * @allowedValues solid | underlined | clear | enclosed | icon-only
+          * @default 'underlined'
+         */
+        "variant"?: 'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only';
+    }
+    /**
+     * A presentational tab bar component without panels.
+     * Use this for navigation/routing scenarios where you manage the content
+     * externally based on the selection events. For tabs with built-in panels,
+     * use `le-tabs` instead.
+     * @cssprop --le-tab-bar-border-color - Border color
+     * @cssprop --le-tab-bar-gap - Gap between tabs
+     * @cssprop --le-tab-bar-indicator-color - Active indicator color
+     * @cssprop --le-tab-bar-padding-x - Horizontal padding for tabs
+     * @cssprop --le-tab-bar-padding-y - Vertical padding for tabs
+     * @csspart tablist - The tab button container
+     * @csspart tab - Individual tab buttons
+     * @csspart tab-active - The currently active tab
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface LeTabBar {
+        /**
+          * Whether to show a border below the tab bar.
+          * @default true
+         */
+        "bordered"?: boolean;
+        /**
+          * Whether tabs should stretch to fill available width.
+          * @default true
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Emitted when the selected tab changes.
+         */
+        "onLeTabChange"?: (event: LeTabBarCustomEvent<LeOptionSelectDetail>) => void;
+        /**
+          * Position of the tab bar.
+          * @allowedValues top | bottom
+          * @default 'top'
+         */
+        "position"?: 'top' | 'bottom';
+        /**
+          * The value of the currently selected tab.
+         */
+        "selected"?: LeOptionValue;
+        /**
+          * Whether to show labels in icon-only mode.
+          * @default false
+         */
+        "showLabels"?: boolean;
+        /**
+          * Size of the tabs.
+          * @allowedValues small | medium | large
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * Array of tab options defining the tabs to display.
+          * @default []
+         */
+        "tabs"?: LeOption[];
+    }
+    /**
+     * A tab panel component used as a child of le-tabs.
+     * Each le-tab-panel defines both the tab button label and the panel content.
+     * The parent le-tabs component automatically reads these panels and creates
+     * the tab interface.
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface LeTabPanel {
+        /**
+          * Whether this tab is disabled.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Icon displayed at the end of the tab button.
+         */
+        "iconEnd"?: string;
+        /**
+          * Icon displayed at the start of the tab button. Can be an emoji, URL, or icon class.
+         */
+        "iconStart"?: string;
+        /**
+          * The label displayed in the tab button.
+         */
+        "label": string;
+        /**
+          * Whether to render the panel content only when active (lazy loading). When true, content is not rendered until the tab is first selected. When false (default), content is always in DOM but hidden when inactive.
+          * @default false
+         */
+        "lazy"?: boolean;
+        /**
+          * The value used to identify this tab. Defaults to the label if not provided.
+         */
+        "value"?: string;
+    }
+    /**
+     * A flexible tabs component for organizing content into tabbed panels.
+     * Supports two modes:
+     * 1. **Declarative**: Use `<le-tab-panel>` children to define tabs and content
+     * 2. **Programmatic**: Use the `tabs` prop with named slots for content
+     * Full keyboard navigation and ARIA support included.
+     * @cssprop --le-tabs-border-color - Border color for tab list
+     * @cssprop --le-tabs-gap - Gap between tabs
+     * @cssprop --le-tabs-indicator-color - Active tab indicator color
+     * @cssprop --le-tabs-padding-x - Horizontal padding for tab buttons
+     * @cssprop --le-tabs-padding-y - Vertical padding for tab buttons
+     * @csspart tablist - The tab button container (role="tablist")
+     * @csspart tab - Individual tab buttons
+     * @csspart tab-active - The currently active tab
+     * @csspart panels - Container for panel content
+     * @csspart panel - Individual panel containers
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface LeTabs {
+        /**
+          * Whether tabs should stretch to fill available width.
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Emitted when the selected tab changes.
+         */
+        "onLeTabChange"?: (event: LeTabsCustomEvent<LeOptionSelectDetail>) => void;
+        /**
+          * Orientation of the tabs.
+          * @allowedValues horizontal | vertical
+          * @default 'horizontal'
+         */
+        "orientation"?: 'horizontal' | 'vertical';
+        /**
+          * Scroll behavior for overflowing tabs.
+          * @allowedValues auto | hidden | visible | scroll
+          * @default 'auto'
+         */
+        "overflow"?: 'auto' | 'hidden' | 'visible' | 'scroll';
+        /**
+          * Position of the tabs relative to the panels.
+          * @allowedValues start | end
+          * @default 'start'
+         */
+        "position"?: 'start' | 'end';
+        /**
+          * The value of the currently selected tab. If not provided, defaults to the first tab.
+         */
+        "selected"?: LeOptionValue;
+        /**
+          * Size of the tabs.
+          * @allowedValues sm | md | lg
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * Array of tab options (programmatic mode). If le-tab-panel children exist, they take precedence.
+          * @default []
+         */
+        "tabs"?: LeOption[];
+        /**
+          * Tab variant style.
+          * @allowedValues underlined | solid | pills | enclosed | icon-only
+          * @default 'underlined'
+         */
+        "variant"?: 'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only';
+        /**
+          * Wrap the tabs if they exceed container width.
+          * @default false
+         */
+        "wrap"?: boolean;
+    }
+    /**
      * A tag/chip component for displaying labels with optional dismiss functionality.
      * @cmsEditable false
      * @cmsCategory Form
@@ -3118,10 +4018,16 @@ declare namespace LocalJSX {
         "le-popover": LePopover;
         "le-popup": LePopup;
         "le-round-progress": LeRoundProgress;
+        "le-segment": LeSegment;
+        "le-segmented-control": LeSegmentedControl;
         "le-select": LeSelect;
         "le-slot": LeSlot;
         "le-stack": LeStack;
         "le-string-input": LeStringInput;
+        "le-tab": LeTab;
+        "le-tab-bar": LeTabBar;
+        "le-tab-panel": LeTabPanel;
+        "le-tabs": LeTabs;
         "le-tag": LeTag;
         "le-text": LeText;
         "le-turntable": LeTurntable;
@@ -3294,13 +4200,36 @@ declare module "@stencil/core" {
             /**
              * A flexible popup/dialog component for alerts, confirms, prompts, and custom content.
              * Uses the native HTML <dialog> element for proper modal behavior, accessibility,
-             * and focus management. Can be used declaratively in HTML or programmatically 
+             * and focus management. Can be used declaratively in HTML or programmatically
              * via leAlert(), leConfirm(), lePrompt().
              * @cmsInternal true
              * @cmsCategory System
              */
             "le-popup": LocalJSX.LePopup & JSXBase.HTMLAttributes<HTMLLePopupElement>;
             "le-round-progress": LocalJSX.LeRoundProgress & JSXBase.HTMLAttributes<HTMLLeRoundProgressElement>;
+            /**
+             * A segment component used as a child of le-segmented-control.
+             * Each le-segment defines both the segment button label and the panel content.
+             * The parent le-segmented-control component automatically reads these segments and creates
+             * the segmented control interface.
+             * @cmsEditable true
+             * @cmsCategory Navigation
+             */
+            "le-segment": LocalJSX.LeSegment & JSXBase.HTMLAttributes<HTMLLeSegmentElement>;
+            /**
+             * A segmented control component (iOS-style toggle buttons).
+             * Perfect for toggling between a small set of related options.
+             * @cssprop --le-segmented-bg - Background color of the control
+             * @cssprop --le-segmented-padding - Padding around segments
+             * @cssprop --le-segmented-gap - Gap between segments
+             * @cssprop --le-segmented-radius - Border radius of the control
+             * @csspart container - The main container
+             * @csspart segment - Individual segment buttons
+             * @csspart segment-active - The currently active segment
+             * @cmsEditable true
+             * @cmsCategory Form
+             */
+            "le-segmented-control": LocalJSX.LeSegmentedControl & JSXBase.HTMLAttributes<HTMLLeSegmentedControlElement>;
             /**
              * A select dropdown component for single selection.
              * @cmsEditable true
@@ -3362,6 +4291,67 @@ declare module "@stencil/core" {
              * @cssprop --le-input-padding - Input padding
              */
             "le-string-input": LocalJSX.LeStringInput & JSXBase.HTMLAttributes<HTMLLeStringInputElement>;
+            /**
+             * A flexible tab component with multiple variants and states.
+             * @cssprop --le-tab-bg - Tab background color
+             * @cssprop --le-tab-color - Tab text color
+             * @cssprop --le-tab-border-radius - Tab border radius
+             * @cssprop --le-tab-padding-x - Tab horizontal padding
+             * @cssprop --le-tab-padding-y - Tab vertical padding
+             * @csspart button - The native button element
+             * @csspart content - The tab content wrapper
+             * @csspart icon-start - The start icon slot
+             * @csspart icon-end - The end icon slot
+             * @cmsEditable true
+             * @cmsCategory Actions
+             */
+            "le-tab": LocalJSX.LeTab & JSXBase.HTMLAttributes<HTMLLeTabElement>;
+            /**
+             * A presentational tab bar component without panels.
+             * Use this for navigation/routing scenarios where you manage the content
+             * externally based on the selection events. For tabs with built-in panels,
+             * use `le-tabs` instead.
+             * @cssprop --le-tab-bar-border-color - Border color
+             * @cssprop --le-tab-bar-gap - Gap between tabs
+             * @cssprop --le-tab-bar-indicator-color - Active indicator color
+             * @cssprop --le-tab-bar-padding-x - Horizontal padding for tabs
+             * @cssprop --le-tab-bar-padding-y - Vertical padding for tabs
+             * @csspart tablist - The tab button container
+             * @csspart tab - Individual tab buttons
+             * @csspart tab-active - The currently active tab
+             * @cmsEditable true
+             * @cmsCategory Navigation
+             */
+            "le-tab-bar": LocalJSX.LeTabBar & JSXBase.HTMLAttributes<HTMLLeTabBarElement>;
+            /**
+             * A tab panel component used as a child of le-tabs.
+             * Each le-tab-panel defines both the tab button label and the panel content.
+             * The parent le-tabs component automatically reads these panels and creates
+             * the tab interface.
+             * @cmsEditable true
+             * @cmsCategory Navigation
+             */
+            "le-tab-panel": LocalJSX.LeTabPanel & JSXBase.HTMLAttributes<HTMLLeTabPanelElement>;
+            /**
+             * A flexible tabs component for organizing content into tabbed panels.
+             * Supports two modes:
+             * 1. **Declarative**: Use `<le-tab-panel>` children to define tabs and content
+             * 2. **Programmatic**: Use the `tabs` prop with named slots for content
+             * Full keyboard navigation and ARIA support included.
+             * @cssprop --le-tabs-border-color - Border color for tab list
+             * @cssprop --le-tabs-gap - Gap between tabs
+             * @cssprop --le-tabs-indicator-color - Active tab indicator color
+             * @cssprop --le-tabs-padding-x - Horizontal padding for tab buttons
+             * @cssprop --le-tabs-padding-y - Vertical padding for tab buttons
+             * @csspart tablist - The tab button container (role="tablist")
+             * @csspart tab - Individual tab buttons
+             * @csspart tab-active - The currently active tab
+             * @csspart panels - Container for panel content
+             * @csspart panel - Individual panel containers
+             * @cmsEditable true
+             * @cmsCategory Navigation
+             */
+            "le-tabs": LocalJSX.LeTabs & JSXBase.HTMLAttributes<HTMLLeTabsElement>;
             /**
              * A tag/chip component for displaying labels with optional dismiss functionality.
              * @cmsEditable false

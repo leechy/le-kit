@@ -1,6 +1,7 @@
 import { Component, Prop, State, h, Host, Element, getAssetPath } from '@stencil/core';
 import { classnames, observeModeChanges } from '../../utils/utils';
 import { getLeKitConfig } from '../../global/app';
+import { leConfirm } from '../le-popup/le-popup.api';
 
 /**
  * Component wrapper for admin mode editing.
@@ -143,7 +144,7 @@ export class LeComponent {
     try {
       // Fetch the manifest from configured URL
       const { manifestFile } = getLeKitConfig();
-      const manifestFileResolved = getAssetPath(`./assets/${manifestFile}`)
+      const manifestFileResolved = getAssetPath(`./assets/${manifestFile}`);
       const response = await fetch(manifestFileResolved);
       const manifest = await response.json();
 
@@ -151,7 +152,9 @@ export class LeComponent {
       for (const module of manifest.modules) {
         for (const declaration of module.declarations || []) {
           if (declaration.tagName === this.component) {
-            const attributes = (declaration.attributes || []).filter((attr: AttributeMetadata) => !this.isInternalAttribute(attr.name));
+            const attributes = (declaration.attributes || []).filter(
+              (attr: AttributeMetadata) => !this.isInternalAttribute(attr.name),
+            );
             this.componentMeta = {
               tagName: declaration.tagName,
               description: declaration.description,
@@ -228,6 +231,8 @@ export class LeComponent {
 
     // Update local state
     this.propertyValues = { ...this.propertyValues, [attrName]: value };
+
+    // update the host element the way the parent element mutation observer would catch it?
   }
 
   /**
@@ -238,7 +243,7 @@ export class LeComponent {
 
     // Confirm deletion
     const name = this.displayName || this.formatDisplayName(this.component);
-    if (!confirm(`Delete this ${name}?`)) return;
+    if (!leConfirm(`Delete this ${name}?`)) return;
 
     // Remove the host element from its parent
     const parent = this.hostElement.parentElement;
@@ -263,7 +268,13 @@ export class LeComponent {
           <p class="no-properties">No editable properties</p>
         )}
         <div class="property-editor-actions">
-          <le-button type="button" variant="outlined" color="danger" full-width onClick={() => this.deleteComponent()}>
+          <le-button
+            type="button"
+            variant="outlined"
+            color="danger"
+            full-width
+            onClick={() => this.deleteComponent()}
+          >
             <span slot="icon-start">🗑️</span>
             <span>Delete Component</span>
           </le-button>
@@ -289,9 +300,26 @@ export class LeComponent {
             {attr.name}
             {attr.description && <span class="property-hint">{attr.description}</span>}
           </label>
-          <select id={`prop-${attr.name}`} onChange={e => this.handlePropertyChange(attr.name, (e.target as HTMLSelectElement).value, type)}>
+          {/* <le-select
+            options={[...options.map(opt => ({ label: opt, value: opt }))]}
+            full-width
+            value={value ?? attr.default?.replace(/'/g, '')}
+            placeholder={attr.default?.replace(/'/g, '')}
+            onLeChange={(e: CustomEvent<LeOptionSelectDetail>) =>
+              this.handlePropertyChange(attr.name, e.detail.value, type)
+            }
+          ></le-select> */}
+          <select
+            id={`prop-${attr.name}`}
+            onChange={e =>
+              this.handlePropertyChange(attr.name, (e.target as HTMLSelectElement).value, type)
+            }
+          >
             {options.map(opt => (
-              <option value={opt} selected={value === opt || (!value && attr.default?.replace(/'/g, '') === opt)}>
+              <option
+                value={opt}
+                selected={value === opt || (!value && attr.default?.replace(/'/g, '') === opt)}
+              >
                 {opt}
               </option>
             ))}
@@ -307,7 +335,9 @@ export class LeComponent {
           <le-checkbox
             name={`prop-${attr.name}`}
             checked={value === true || value === ''}
-            onChange={e => this.handlePropertyChange(attr.name, (e.target as HTMLInputElement).checked, type)}
+            onChange={e =>
+              this.handlePropertyChange(attr.name, (e.target as HTMLInputElement).checked, type)
+            }
           >
             {attr.name}
             {attr.description && <div slot="description">{attr.description}</div>}
@@ -329,7 +359,9 @@ export class LeComponent {
             id={`prop-${attr.name}`}
             value={value ?? ''}
             placeholder={attr.default}
-            onChange={e => this.handlePropertyChange(attr.name, (e.target as HTMLInputElement).value, type)}
+            onChange={e =>
+              this.handlePropertyChange(attr.name, (e.target as HTMLInputElement).value, type)
+            }
           />
         </div>
       );
@@ -369,8 +401,22 @@ export class LeComponent {
         <div class="le-component-wrapper">
           <div class="le-component-header">
             <span class="le-component-name">{name}</span>
-            <le-popover popoverTitle={`${name} Settings`} position="right" align="start" min-width="300px" mode="default">
-              <le-button type="button" class="le-component-button" slot="trigger" variant="clear" size="small" aria-label="Edit component properties" icon-only>
+            <le-popover
+              popoverTitle={`${name} Settings`}
+              position="right"
+              align="start"
+              min-width="300px"
+              mode="default"
+            >
+              <le-button
+                type="button"
+                class="le-component-button"
+                slot="trigger"
+                variant="clear"
+                size="small"
+                aria-label="Edit component properties"
+                icon-only
+              >
                 <span class="le-component-trigger" slot="icon-only">
                   ⚙
                 </span>

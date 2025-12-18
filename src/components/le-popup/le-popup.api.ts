@@ -1,21 +1,22 @@
 /**
  * Programmatic API for le-popup component
- * 
+ *
  * These functions allow you to show popups without manually creating elements.
- * 
+ *
  * @example
  * // Alert
  * await leAlert('Something happened!');
- * 
+ *
  * // Confirm
  * const confirmed = await leConfirm('Are you sure?');
  * if (confirmed) { ... }
- * 
+ *
  * // Prompt
  * const name = await lePrompt('What is your name?');
  * if (name !== null) { ... }
  */
 
+import { LeKitMode } from '../..';
 import type { PopupType, PopupPosition, PopupResult } from './le-popup';
 
 /**
@@ -39,6 +40,7 @@ export interface PopupOptions {
 interface HTMLLePopupElement extends HTMLElement {
   open: boolean;
   type: PopupType;
+  mode: LeKitMode;
   popupTitle?: string;
   message?: string;
   modal: boolean;
@@ -56,7 +58,7 @@ interface HTMLLePopupElement extends HTMLElement {
  * @param message - The message to display
  * @param options - Optional configuration
  * @returns Promise that resolves when closed
- * 
+ *
  * @example
  * await leAlert('File saved successfully!');
  * await leAlert('Error occurred', { title: 'Error', theme: 'dark' });
@@ -64,7 +66,7 @@ interface HTMLLePopupElement extends HTMLElement {
 export async function leAlert(message: string, options: PopupOptions = {}): Promise<void> {
   const popup = createPopupElement(message, { ...options, type: 'alert' });
   document.body.appendChild(popup);
-  
+
   await popup.show();
   popup.remove();
 }
@@ -74,7 +76,7 @@ export async function leAlert(message: string, options: PopupOptions = {}): Prom
  * @param message - The message to display
  * @param options - Optional configuration
  * @returns Promise that resolves to true (confirmed) or false (cancelled)
- * 
+ *
  * @example
  * const confirmed = await leConfirm('Delete this item?');
  * if (confirmed) {
@@ -84,10 +86,10 @@ export async function leAlert(message: string, options: PopupOptions = {}): Prom
 export async function leConfirm(message: string, options: PopupOptions = {}): Promise<boolean> {
   const popup = createPopupElement(message, { ...options, type: 'confirm' });
   document.body.appendChild(popup);
-  
+
   const result = await popup.show();
   popup.remove();
-  
+
   return result.confirmed;
 }
 
@@ -96,9 +98,9 @@ export async function leConfirm(message: string, options: PopupOptions = {}): Pr
  * @param message - The message to display
  * @param options - Optional configuration (including defaultValue, placeholder)
  * @returns Promise that resolves to the input value or null if cancelled
- * 
+ *
  * @example
- * const name = await lePrompt('Enter your name:', { 
+ * const name = await lePrompt('Enter your name:', {
  *   title: 'Welcome',
  *   placeholder: 'John Doe',
  *   defaultValue: 'Guest'
@@ -107,14 +109,17 @@ export async function leConfirm(message: string, options: PopupOptions = {}): Pr
  *   greetUser(name);
  * }
  */
-export async function lePrompt(message: string, options: PopupOptions = {}): Promise<string | null> {
+export async function lePrompt(
+  message: string,
+  options: PopupOptions = {},
+): Promise<string | null> {
   const popup = createPopupElement(message, { ...options, type: 'prompt' });
   document.body.appendChild(popup);
-  
+
   const result = await popup.show();
   popup.remove();
-  
-  return result.confirmed ? (result.value ?? '') : null;
+
+  return result.confirmed ? result.value ?? '' : null;
 }
 
 /**
@@ -122,10 +127,11 @@ export async function lePrompt(message: string, options: PopupOptions = {}): Pro
  */
 function createPopupElement(message: string, options: PopupOptions): HTMLLePopupElement {
   const popup = document.createElement('le-popup') as HTMLLePopupElement;
-  
+
   popup.message = message;
   popup.type = options.type || 'alert';
-  
+  popup.mode = 'default';
+
   if (options.title) popup.popupTitle = options.title;
   if (options.modal !== undefined) popup.modal = options.modal;
   if (options.position) popup.position = options.position;
@@ -134,6 +140,6 @@ function createPopupElement(message: string, options: PopupOptions): HTMLLePopup
   if (options.placeholder) popup.placeholder = options.placeholder;
   if (options.defaultValue) popup.defaultValue = options.defaultValue;
   if (options.theme) popup.setAttribute('theme', options.theme);
-  
+
   return popup;
 }

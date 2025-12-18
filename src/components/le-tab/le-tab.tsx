@@ -1,4 +1,14 @@
-import { Component, Prop, h, Element, Fragment, Event, EventEmitter, Host } from '@stencil/core';
+import {
+  Component,
+  Prop,
+  h,
+  Element,
+  Fragment,
+  Event,
+  EventEmitter,
+  Host,
+  Method,
+} from '@stencil/core';
 import { classnames } from '../../utils/utils';
 
 /**
@@ -33,6 +43,16 @@ export class LeTab {
    * Mode of the popover should be 'default' for internal use
    */
   @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin';
+
+  /**
+   * Label if it is not provided via slot
+   */
+  @Prop() label?: string;
+
+  /**
+   * Value of the tab, defaults to label if not provided
+   */
+  @Prop() value?: string;
 
   /**
    * Tab variant style
@@ -72,7 +92,12 @@ export class LeTab {
    * Icon only tab image or emoji
    * if this prop is set, the tab will render only the icon slot
    */
-  @Prop() iconOnly?: string | Node;
+  @Prop() icon?: string | Node;
+
+  /**
+   * Whether to show the label when in icon-only mode
+   */
+  @Prop() showLabel: boolean = false;
 
   /**
    * Start icon image or emoji
@@ -106,6 +131,24 @@ export class LeTab {
   @Prop() align: 'start' | 'center' | 'space-between' | 'end' = 'center';
 
   /**
+   * Get tab configuration for parent component
+   */
+  @Method()
+  async getTabConfig(): Promise<{
+    label: string;
+    value: string;
+    icon: string | Node;
+    disabled: boolean;
+  }> {
+    return {
+      label: this.label,
+      value: this.value ?? this.label,
+      icon: this.icon,
+      disabled: this.disabled,
+    };
+  }
+
+  /**
    * Emitted when the tab is clicked.
    * This is a custom event that wraps the native click but ensures the target is the le-tab.
    */
@@ -132,7 +175,7 @@ export class LeTab {
       {
         'selected': this.selected,
         'full-width': this.fullWidth,
-        'icon-only': this.iconOnly,
+        'icon-only': this.icon !== undefined,
         'disabled': this.disabled,
       },
     );
@@ -152,10 +195,11 @@ export class LeTab {
             onClick={this.handleClick}
             tabIndex={this.focusable ? 0 : -1}
           >
-            {this.iconOnly !== undefined ? (
-              <slot name="icon-only">
-                {typeof this.iconOnly === 'string' ? this.iconOnly : null}
-              </slot>
+            {this.icon !== undefined ? (
+              <div class="icon-only">
+                <div class="icon">{this.icon}</div>
+                {this.showLabel && <span class="icon-label">{this.label}</span>}
+              </div>
             ) : (
               <Fragment>
                 <span class="le-tab-label">
@@ -171,7 +215,7 @@ export class LeTab {
                     class="content"
                     part="content"
                   >
-                    <slot></slot>
+                    <slot>{this.label}</slot>
                   </le-slot>
                 </span>
                 {this.iconEnd && (

@@ -106,11 +106,11 @@
       
       <div class="control-group">
         <span>Theme:</span>
-        <le-button id="btn-theme-default" variant="outlined" selected color="secondary" onclick="setTheme('default')">Default</le-button>
-        <le-button id="btn-theme-dark" variant="outlined" color="secondary" onclick="setTheme('dark')">Dark</le-button>
-        <le-button id="btn-theme-gradient" variant="outlined" color="secondary" onclick="setTheme('gradient')">Gradient</le-button>
-        <le-button id="btn-theme-minimal" variant="outlined" color="secondary" onclick="setTheme('minimal')">Minimal</le-button>
-        <le-button id="btn-theme-warm" variant="outlined" color="secondary" onclick="setTheme('warm')">Warm</le-button>
+        <le-button id="btn-theme-default" variant="solid" selected onclick="setTheme('default')" theme="default">Default</le-button>
+        <le-button id="btn-theme-dark" variant="solid" onclick="setTheme('dark')" theme="dark">Dark</le-button>
+        <le-button id="btn-theme-gradient" variant="solid" onclick="setTheme('gradient')" theme="gradient">Gradient</le-button>
+        <le-button id="btn-theme-minimal" variant="solid" onclick="setTheme('minimal')" theme="minimal">Minimal</le-button>
+        <le-button id="btn-theme-warm" variant="solid" onclick="setTheme('warm')" theme="warm">Warm</le-button>
       </div>
 
       <div class="control-group">
@@ -123,6 +123,124 @@
 
     <!-- Default content template (used when localStorage is empty) -->
     <template id="default-content">
+      <div class="demo-section">
+        <h2>Tabs Components</h2>
+        <p>Tab navigation with multiple variants and orientations. Tabs can be defined declaratively using &lt;le-tab-panel&gt; children.</p>
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>Basic Tabs (declarative, underline):</label>
+            <le-tabs>
+              <le-tab-panel label="Home" value="home">
+                <h3>Home</h3>
+                <p>Welcome to the home panel. This content is displayed when the Home tab is active.</p>
+              </le-tab-panel>
+              <le-tab-panel label="Profile" value="profile">
+                <h3>Profile</h3>
+                <p>Your profile information goes here. Edit your settings and preferences.</p>
+              </le-tab-panel>
+              <le-tab-panel label="Settings" value="settings">
+                <h3>Settings</h3>
+                <p>Configure your application settings in this panel.</p>
+              </le-tab-panel>
+            </le-tabs>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Tabs with Icons (pills variant):</label>
+            <le-tabs variant="pills" wrap>
+              <le-tab-panel label="Dashboard" value="dashboard" icon-start="📊">
+                Dashboard content with charts and stats
+              </le-tab-panel>
+              <le-tab-panel label="Users" value="users" icon-start="👥">
+                Users list and management
+              </le-tab-panel>
+              <le-tab-panel label="Reports" value="reports" icon-start="📄">
+                Reports and analytics
+              </le-tab-panel>
+            </le-tabs>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Enclosed Variant (full width):</label>
+            <le-tabs variant="enclosed" full-width>
+              <le-tab-panel label="Day" value="day">Today's schedule and events</le-tab-panel>
+              <le-tab-panel label="Week" value="week">Weekly calendar view</le-tab-panel>
+              <le-tab-panel label="Month" value="month">Monthly overview</le-tab-panel>
+            </le-tabs>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Vertical Tabs (solid) with disabled:</label>
+            <le-tabs orientation="vertical" variant="solid">
+              <le-tab-panel label="General" value="general" icon-start="⚙️">General settings content</le-tab-panel>
+              <le-tab-panel label="Security" value="security" icon-start="🔒">Security and privacy options</le-tab-panel>
+              <le-tab-panel label="Notifications" value="notifications" icon-start="🔔">Notification preferences</le-tab-panel>
+              <le-tab-panel label="Billing" value="billing" disabled icon-start="💳">Billing (coming soon)</le-tab-panel>
+            </le-tabs>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Lazy rendering (check console):</label>
+            <le-tabs variant="pills">
+              <le-tab-panel label="Immediate" value="immediate">
+                <div>This content loads immediately</div>
+                <script>console.log('Immediate panel rendered');</script>
+              </le-tab-panel>
+              <le-tab-panel label="Lazy" value="lazy" lazy>
+                <div>This content only renders when first activated!</div>
+              </le-tab-panel>
+            </le-tabs>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Tab Bar (no panels, for navigation):</label>
+            <le-tab-bar id="demo-tab-bar" show-labels selected="reports" bordered position="bottom">
+              <le-tab label="Dashboard" value="dashboard" icon="⛳︎"></le-tab>
+              <le-tab label="Reports" value="reports" icon="✍︎"></le-tab>
+              <le-tab label="Settings" value="settings" icon="⚒︎"></le-tab>
+            </le-tab-bar>
+            <div id="tab-bar-content">
+              Selected: <strong id="tab-bar-selected">dashboard</strong>
+            </div>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Segmented Control:</label>
+            <div style="display: flex; flex-direction: column; gap: var(--le-spacing-4);">
+              <div>
+                <span style="font-size: var(--le-font-size-sm); color: var(--le-text-secondary);">View mode:</span>
+                <le-segmented-control id="demo-segmented-view">
+                  <le-segment label="List" value="list"></le-segment>
+                  <le-segment label="Grid" value="grid"></le-segment>
+                  <le-segment label="Compact" value="compact"></le-segment>
+                </le-segmented-control>
+              </div>
+              <div>
+                <span style="font-size: var(--le-font-size-sm); color: var(--le-text-secondary);">With icons:</span>
+                <le-segmented-control id="demo-segmented-icons" full-width overflow="visible">
+                  <le-segment label="Home" value="home" icon-start="🏠"></le-segment>
+                  <le-segment label="Search" value="search" icon-start="🔍"></le-segment>
+                  <le-segment label="Notifications" value="notifications" icon-start="🔔"></le-segment>
+                  <le-segment label="Profile" value="profile" icon-start="👤"></le-segment>
+                </le-segmented-control>
+              </div>
+              <div>
+                <span style="font-size: var(--le-font-size-sm); color: var(--le-text-secondary);">Sizes:</span>
+                <div style="display: flex; flex-direction: column; gap: var(--le-spacing-2); align-items: flex-start;">
+                  <le-segmented-control id="demo-segmented-sm" size="small"></le-segmented-control>
+                  <le-segmented-control id="demo-segmented-md" size="medium"></le-segmented-control>
+                  <le-segmented-control id="demo-segmented-lg" size="large"></le-segmented-control>
+                </div>
+              </div>
+              <div>
+                <span style="font-size: var(--le-font-size-sm); color: var(--le-text-secondary);">Full width:</span>
+                <le-segmented-control id="demo-segmented-full" full-width></le-segmented-control>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="demo-section">
         <h2>Dropdown Components</h2>
         <p>Select, combobox, and multiselect components for form inputs.</p>
@@ -946,6 +1064,23 @@ console.log(greeting);</le-text>
       document.getElementById('small-select').value = '1';
       document.getElementById('medium-select').options = sizeOptions;
       document.getElementById('large-select').options = sizeOptions;
+
+      // Tab bar (programmatic - no panels, for navigation)
+      const tabBar = document.getElementById('demo-tab-bar');
+      tabBar.addEventListener('leTabChange', (e) => {
+        document.getElementById('tab-bar-selected').textContent = e.detail.value;
+      });
+
+      // Segmented controls
+      const segmentOptions = [
+        { label: 'Option A', value: 'a' },
+        { label: 'Option B', value: 'b' },
+        { label: 'Option C', value: 'c' },
+      ];
+      document.getElementById('demo-segmented-sm').options = segmentOptions;
+      document.getElementById('demo-segmented-md').options = segmentOptions;
+      document.getElementById('demo-segmented-lg').options = segmentOptions;
+      document.getElementById('demo-segmented-full').options = segmentOptions;
     </script>
   </body>
 </html>

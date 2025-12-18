@@ -35,6 +35,7 @@
   --le-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   --le-font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
   
+  --le-font-size-2xs: 0.625rem;
   --le-font-size-xs: 0.75rem;
   --le-font-size-sm: 0.875rem;
   --le-font-size-md: 1rem;

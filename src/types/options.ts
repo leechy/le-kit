@@ -61,6 +61,12 @@ export interface LeOption {
   value?: string | number;
 
   /**
+   * Main icon, used in the tab bar or as a start icon in menus.
+   * Can be a URL, icon name, or emoji character.
+   */
+  icon?: string;
+
+  /**
    * Whether the option is disabled and cannot be selected.
    */
   disabled?: boolean;
@@ -109,6 +115,11 @@ export interface LeOption {
    * Add a visual separator line before or after this option.
    */
   separator?: 'before' | 'after';
+
+  /**
+   * URL to navigate to when the option is selected.
+   */
+  href?: string;
 
   /**
    * Custom data passthrough for application-specific needs.

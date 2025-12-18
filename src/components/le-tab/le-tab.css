@@ -16,8 +16,10 @@
   --le-tab-transition: var(--le-transition-fast);
   --le-transition-easing: ease-in-out;
   --le-tab-icon-aspect-ratio: 1;
+  --le-tab-icon-only-aspect-ratio: 2.5;
   --le-tab-color: var(--le-color-text-primary);
   --le-selected-tab-color: var(--le-color-primary);
+  --le-selected-icon-only-tab-background: color-mix(in srgb, var(--_tab-bg) 10%, transparent);
   
   /* Internal state variables - set by color classes */
   --_tab-bg: var(--le-color-primary);
@@ -142,6 +144,44 @@
   background: var(--_tab-bg);
   color: var(--le-color-on-primary);
 }
+
+/* Icon only (used in le-tab-bar - mobile navigation) */
+.le-tab-container.variant-icon-only {
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: var(--_tab-color);
+}
+.le-tab-container.variant-icon-only .icon-only {
+  flex-direction: column;
+}
+.le-tab-container.variant-icon-only .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--le-font-size-3xl);
+  aspect-ratio: var(--le-tab-icon-only-aspect-ratio);
+  font-size: var(--le-font-size-2xl);
+  border-radius: var(--le-radius-full);
+}
+.le-tab-container.variant-icon-only .icon-label {
+  margin-top: var(--le-spacing-1);
+  font-size: var(--le-font-size-2xs);
+}
+
+.le-tab-container.variant-icon-only.selected {
+  color: var(--le-selected-tab-color);
+}
+.le-tab-container.variant-icon-only.selected .icon {
+  background: var(--le-selected-icon-only-tab-background);
+}
+.le-tab-container.variant-icon-only.size-small {
+  padding: var(--le-tab-small-padding, 0.25rem);
+}
+.le-tab-container.variant-icon-only .content {
+  display: none;
+}
+
 
 /* ===========================================
  * SIZES

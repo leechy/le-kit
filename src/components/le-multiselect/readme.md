@@ -13,21 +13,21 @@ Displays selected items as tags with optional search filtering.
 
 ## Properties
 
-| Property        | Attribute         | Description                                                      | Type                             | Default               |
-| --------------- | ----------------- | ---------------------------------------------------------------- | -------------------------------- | --------------------- |
-| `disabled`      | `disabled`        | Whether the multiselect is disabled.                             | `boolean`                        | `false`               |
-| `emptyText`     | `empty-text`      | Text to show when no options match the search.                   | `string`                         | `'No results found'`  |
-| `fullWidth`     | `full-width`      | Whether the multiselect should take full width of its container. | `boolean`                        | `false`               |
-| `maxSelections` | `max-selections`  | Maximum number of selections allowed.                            | `number`                         | `undefined`           |
-| `name`          | `name`            | Name attribute for form submission.                              | `string`                         | `undefined`           |
-| `open`          | `open`            | Whether the dropdown is currently open.                          | `boolean`                        | `false`               |
-| `options`       | `options`         | The options to display in the dropdown.                          | `LeOption[] \| string`           | `[]`                  |
-| `placeholder`   | `placeholder`     | Placeholder text when no options are selected.                   | `string`                         | `'Select options...'` |
-| `required`      | `required`        | Whether selection is required.                                   | `boolean`                        | `false`               |
-| `searchable`    | `searchable`      | Whether the input is searchable.                                 | `boolean`                        | `false`               |
-| `showSelectAll` | `show-select-all` | Whether to show a "Select All" option.                           | `boolean`                        | `false`               |
-| `size`          | `size`            | Size variant of the multiselect.                                 | `"large" \| "medium" \| "small"` | `'medium'`            |
-| `value`         | --                | The currently selected values.                                   | `LeOptionValue[]`                | `[]`                  |
+| Property        | Attribute         | Description                                                                                                 | Type                             | Default               |
+| --------------- | ----------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------- | --------------------- |
+| `disabled`      | `disabled`        | Whether the multiselect is disabled.                                                                        | `boolean`                        | `false`               |
+| `emptyText`     | `empty-text`      | Text to show when no options match the search.                                                              | `string`                         | `'No results found'`  |
+| `fullWidth`     | `full-width`      | Whether the multiselect should take full width of its container.                                            | `boolean`                        | `false`               |
+| `maxSelections` | `max-selections`  | Maximum number of selections allowed.                                                                       | `number`                         | `undefined`           |
+| `name`          | `name`            | Name attribute for form submission.                                                                         | `string`                         | `undefined`           |
+| `open`          | `open`            | Whether the dropdown is currently open.                                                                     | `boolean`                        | `false`               |
+| `options`       | `options`         | The options to display in the dropdown.                                                                     | `LeOption[] \| string`           | `[]`                  |
+| `placeholder`   | `placeholder`     | Placeholder text when no options are selected.                                                              | `string`                         | `'Select options...'` |
+| `required`      | `required`        | Whether selection is required.                                                                              | `boolean`                        | `false`               |
+| `searchable`    | `searchable`      | Whether the input is searchable.                                                                            | `boolean`                        | `false`               |
+| `showSelectAll` | `show-select-all` | Whether to show a "Select All" option. Also accepts a string or array of strings to customize the label(s). | `boolean \| string \| string[]`  | `false`               |
+| `size`          | `size`            | Size variant of the multiselect.                                                                            | `"large" \| "medium" \| "small"` | `'medium'`            |
+| `value`         | --                | The currently selected values.                                                                              | `LeOptionValue[]`                | `[]`                  |
 
 
 ## Events
@@ -79,6 +79,7 @@ Type: `Promise<void>`
 - [le-tag](../le-tag)
 - [le-component](../le-component)
 - [le-dropdown-base](../le-dropdown-base)
+- [le-string-input](../le-string-input)
 
 ### Graph
 ```mermaid
@@ -86,12 +87,14 @@ graph TD;
   le-multiselect --> le-tag
   le-multiselect --> le-component
   le-multiselect --> le-dropdown-base
+  le-multiselect --> le-string-input
   le-tag --> le-component
   le-tag --> le-slot
   le-component --> le-button
   le-component --> le-checkbox
   le-component --> le-string-input
   le-component --> le-popover
+  le-component --> le-popup
   le-button --> le-component
   le-button --> le-slot
   le-slot --> le-popover
@@ -101,6 +104,9 @@ graph TD;
   le-string-input --> le-slot
   le-checkbox --> le-component
   le-checkbox --> le-slot
+  le-popup --> le-slot
+  le-popup --> le-button
+  le-popup --> le-component
   le-dropdown-base --> le-popover
   style le-multiselect fill:#f9f,stroke:#333,stroke-width:4px
 ```

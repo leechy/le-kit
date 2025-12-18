@@ -447,139 +447,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
-          "cssProperties": [
-            {
-              "description": "Card background color",
-              "name": "--le-card-bg"
-            },
-            {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
-            },
-            {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
-              "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              }
-            },
-            {
-              "name": "interactive",
-              "fieldName": "interactive",
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-card",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCard",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-card",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-checkbox/le-checkbox.tsx",
       "declarations": [
         {
@@ -1102,12 +969,145 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-combobox/le-combobox.tsx",
+      "path": "src/components/le-card/le-card.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A combobox component with searchable dropdown.\n\nCombines a text input with a dropdown list, allowing users to\nfilter options by typing or select from the list.",
-          "name": "LeCombobox",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-multiselect/le-multiselect.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A multiselect component for selecting multiple options.\n\nDisplays selected items as tags with optional search filtering.",
+          "name": "LeMultiselect",
           "members": [
             {
               "kind": "field",
@@ -1129,9 +1129,10 @@
               "kind": "field",
               "name": "value",
               "type": {
-                "text": "LeOptionValue | undefined"
+                "text": "LeOptionValue[]"
               },
-              "description": "The currently selected value."
+              "default": "[]",
+              "description": "The currently selected values."
             },
             {
               "kind": "field",
@@ -1139,8 +1140,8 @@
               "type": {
                 "text": "string"
               },
-              "default": "'Type to search...'",
-              "description": "Placeholder text for the input."
+              "default": "'Select options...'",
+              "description": "Placeholder text when no options are selected."
             },
             {
               "kind": "field",
@@ -1149,7 +1150,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the combobox is disabled."
+              "description": "Whether the multiselect is disabled."
             },
             {
               "kind": "field",
@@ -1184,25 +1185,52 @@
                 "text": "'small' | 'medium' | 'large'"
               },
               "default": "'medium'",
-              "description": "Size variant of the combobox."
+              "description": "Size variant of the multiselect."
             },
             {
               "kind": "field",
-              "name": "allowCustom",
+              "name": "maxSelections",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of selections allowed."
+            },
+            {
+              "kind": "field",
+              "name": "selectAllLabel",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "'Select All'",
+              "description": "Labels for the \"Select All\" option."
+            },
+            {
+              "kind": "field",
+              "name": "deselectAllLabel",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "'Deselect All'"
+            },
+            {
+              "kind": "field",
+              "name": "showSelectAll",
+              "type": {
+                "text": "boolean | string | string[]"
+              },
+              "default": "false",
+              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s)."
+            },
+            {
+              "kind": "field",
+              "name": "searchable",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether to allow custom values not in the options list."
-            },
-            {
-              "kind": "field",
-              "name": "minSearchLength",
-              "type": {
-                "text": "number"
-              },
-              "default": "0",
-              "description": "Minimum characters before showing filtered results."
+              "description": "Whether the input is searchable."
             },
             {
               "kind": "field",
@@ -1223,33 +1251,22 @@
               "description": "Whether the dropdown is currently open."
             },
             {
-              "kind": "method",
-              "name": "handleWindowClick",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ]
+              "kind": "field",
+              "name": "selectedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "default": "[]"
             },
             {
               "kind": "field",
-              "name": "inputValue",
+              "name": "searchQuery",
               "type": {
                 "text": "string"
               },
               "privacy": "private",
               "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "selectedOption",
-              "type": {
-                "text": "LeOption | undefined"
-              },
-              "privacy": "private"
             },
             {
               "kind": "field",
@@ -1276,6 +1293,18 @@
               "name": "handleOptionsChange"
             },
             {
+              "kind": "method",
+              "name": "handleShowSelectAllChange",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "boolean | string | string[]"
+                  }
+                }
+              ]
+            },
+            {
               "kind": "field",
               "name": "parsedOptions",
               "type": {
@@ -1285,8 +1314,17 @@
               "readonly": true
             },
             {
+              "kind": "field",
+              "name": "effectiveOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
               "kind": "method",
-              "name": "updateSelectedOption",
+              "name": "updateSelectedOptions",
               "privacy": "private"
             },
             {
@@ -1297,6 +1335,11 @@
             {
               "kind": "field",
               "name": "handleOptionSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "emitChange",
               "privacy": "private"
             },
             {
@@ -1311,22 +1354,27 @@
             },
             {
               "kind": "field",
-              "name": "handleInputChange",
+              "name": "handleTriggerClick",
               "privacy": "private"
             },
             {
               "kind": "field",
-              "name": "handleInputFocus",
+              "name": "handleTriggerKeyDown",
               "privacy": "private"
             },
             {
               "kind": "field",
-              "name": "handleInputKeyDown",
+              "name": "handleTagDismiss",
               "privacy": "private"
             },
             {
               "kind": "field",
-              "name": "handleClear",
+              "name": "handleSearchInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleClearAll",
               "privacy": "private"
             },
             {
@@ -1341,8 +1389,13 @@
             },
             {
               "kind": "method",
-              "name": "focusInput",
-              "description": "Focuses the input element."
+              "name": "clearSelection",
+              "description": "Clears all selections."
+            },
+            {
+              "kind": "method",
+              "name": "renderTags",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -1362,16 +1415,17 @@
             {
               "name": "value",
               "fieldName": "value",
-              "description": "The currently selected value.",
+              "default": "[]",
+              "description": "The currently selected values.",
               "type": {
-                "text": "LeOptionValue"
+                "text": "LeOptionValue[]"
               }
             },
             {
               "name": "placeholder",
               "fieldName": "placeholder",
-              "default": "'Type to search...'",
-              "description": "Placeholder text for the input.",
+              "default": "'Select options...'",
+              "description": "Placeholder text when no options are selected.",
               "type": {
                 "text": "string"
               }
@@ -1380,7 +1434,7 @@
               "name": "disabled",
               "fieldName": "disabled",
               "default": "false",
-              "description": "Whether the combobox is disabled.",
+              "description": "Whether the multiselect is disabled.",
               "type": {
                 "text": "boolean"
               }
@@ -1415,27 +1469,35 @@
               "name": "size",
               "fieldName": "size",
               "default": "'medium'",
-              "description": "Size variant of the combobox.",
+              "description": "Size variant of the multiselect.",
               "type": {
                 "text": "'small' | 'medium' | 'large'"
               }
             },
             {
-              "name": "allow-custom",
-              "fieldName": "allowCustom",
-              "default": "false",
-              "description": "Whether to allow custom values not in the options list.",
+              "name": "max-selections",
+              "fieldName": "maxSelections",
+              "description": "Maximum number of selections allowed.",
               "type": {
-                "text": "boolean"
+                "text": "number"
               }
             },
             {
-              "name": "min-search-length",
-              "fieldName": "minSearchLength",
-              "default": "0",
-              "description": "Minimum characters before showing filtered results.",
+              "name": "show-select-all",
+              "fieldName": "showSelectAll",
+              "default": "false",
+              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s).",
               "type": {
-                "text": "number"
+                "text": "boolean | string | string[]"
+              }
+            },
+            {
+              "name": "searchable",
+              "fieldName": "searchable",
+              "default": "false",
+              "description": "Whether the input is searchable.",
+              "type": {
+                "text": "boolean"
               }
             },
             {
@@ -1457,21 +1519,14 @@
               }
             }
           ],
-          "tagName": "le-combobox",
+          "tagName": "le-multiselect",
           "events": [
             {
               "name": "leChange",
               "type": {
-                "text": "EventEmitter<LeOptionSelectDetail>"
+                "text": "EventEmitter<LeMultiOptionSelectDetail>"
               },
-              "description": "Emitted when the selected value changes."
-            },
-            {
-              "name": "leInput",
-              "type": {
-                "text": "EventEmitter<{ value: string }>"
-              },
-              "description": "Emitted when the input value changes (for custom values)."
+              "description": "Emitted when the selected values change."
             },
             {
               "name": "leOpen",
@@ -1494,18 +1549,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LeCombobox",
+          "name": "LeMultiselect",
           "declaration": {
-            "name": "LeCombobox",
-            "module": "src/components/le-combobox/le-combobox.tsx"
+            "name": "LeMultiselect",
+            "module": "src/components/le-multiselect/le-multiselect.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-combobox",
+          "name": "le-multiselect",
           "declaration": {
-            "name": "LeCombobox",
-            "module": "src/components/le-combobox/le-combobox.tsx"
+            "name": "LeMultiselect",
+            "module": "src/components/le-multiselect/le-multiselect.tsx"
           }
         }
       ]
@@ -2301,12 +2356,12 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-multiselect/le-multiselect.tsx",
+      "path": "src/components/le-combobox/le-combobox.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A multiselect component for selecting multiple options.\n\nDisplays selected items as tags with optional search filtering.",
-          "name": "LeMultiselect",
+          "description": "A combobox component with searchable dropdown.\n\nCombines a text input with a dropdown list, allowing users to\nfilter options by typing or select from the list.",
+          "name": "LeCombobox",
           "members": [
             {
               "kind": "field",
@@ -2328,10 +2383,9 @@
               "kind": "field",
               "name": "value",
               "type": {
-                "text": "LeOptionValue[]"
+                "text": "LeOptionValue | undefined"
               },
-              "default": "[]",
-              "description": "The currently selected values."
+              "description": "The currently selected value."
             },
             {
               "kind": "field",
@@ -2339,8 +2393,8 @@
               "type": {
                 "text": "string"
               },
-              "default": "'Select options...'",
-              "description": "Placeholder text when no options are selected."
+              "default": "'Type to search...'",
+              "description": "Placeholder text for the input."
             },
             {
               "kind": "field",
@@ -2349,7 +2403,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the multiselect is disabled."
+              "description": "Whether the combobox is disabled."
             },
             {
               "kind": "field",
@@ -2384,52 +2438,25 @@
                 "text": "'small' | 'medium' | 'large'"
               },
               "default": "'medium'",
-              "description": "Size variant of the multiselect."
+              "description": "Size variant of the combobox."
             },
             {
               "kind": "field",
-              "name": "maxSelections",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum number of selections allowed."
-            },
-            {
-              "kind": "field",
-              "name": "selectAllLabel",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "'Select All'",
-              "description": "Labels for the \"Select All\" option."
-            },
-            {
-              "kind": "field",
-              "name": "deselectAllLabel",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "'Deselect All'"
-            },
-            {
-              "kind": "field",
-              "name": "showSelectAll",
-              "type": {
-                "text": "boolean | string | string[]"
-              },
-              "default": "false",
-              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s)."
-            },
-            {
-              "kind": "field",
-              "name": "searchable",
+              "name": "allowCustom",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the input is searchable."
+              "description": "Whether to allow custom values not in the options list."
+            },
+            {
+              "kind": "field",
+              "name": "minSearchLength",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "description": "Minimum characters before showing filtered results."
             },
             {
               "kind": "field",
@@ -2450,22 +2477,33 @@
               "description": "Whether the dropdown is currently open."
             },
             {
-              "kind": "field",
-              "name": "selectedOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "default": "[]"
+              "kind": "method",
+              "name": "handleWindowClick",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
             },
             {
               "kind": "field",
-              "name": "searchQuery",
+              "name": "inputValue",
               "type": {
                 "text": "string"
               },
               "privacy": "private",
               "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "selectedOption",
+              "type": {
+                "text": "LeOption | undefined"
+              },
+              "privacy": "private"
             },
             {
               "kind": "field",
@@ -2492,18 +2530,6 @@
               "name": "handleOptionsChange"
             },
             {
-              "kind": "method",
-              "name": "handleShowSelectAllChange",
-              "parameters": [
-                {
-                  "name": "newValue",
-                  "type": {
-                    "text": "boolean | string | string[]"
-                  }
-                }
-              ]
-            },
-            {
               "kind": "field",
               "name": "parsedOptions",
               "type": {
@@ -2513,17 +2539,8 @@
               "readonly": true
             },
             {
-              "kind": "field",
-              "name": "effectiveOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
               "kind": "method",
-              "name": "updateSelectedOptions",
+              "name": "updateSelectedOption",
               "privacy": "private"
             },
             {
@@ -2534,11 +2551,6 @@
             {
               "kind": "field",
               "name": "handleOptionSelect",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "emitChange",
               "privacy": "private"
             },
             {
@@ -2553,27 +2565,22 @@
             },
             {
               "kind": "field",
-              "name": "handleTriggerClick",
+              "name": "handleInputChange",
               "privacy": "private"
             },
             {
               "kind": "field",
-              "name": "handleTriggerKeyDown",
+              "name": "handleInputFocus",
               "privacy": "private"
             },
             {
               "kind": "field",
-              "name": "handleTagDismiss",
+              "name": "handleInputKeyDown",
               "privacy": "private"
             },
             {
               "kind": "field",
-              "name": "handleSearchInput",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleClearAll",
+              "name": "handleClear",
               "privacy": "private"
             },
             {
@@ -2588,13 +2595,8 @@
             },
             {
               "kind": "method",
-              "name": "clearSelection",
-              "description": "Clears all selections."
-            },
-            {
-              "kind": "method",
-              "name": "renderTags",
-              "privacy": "private"
+              "name": "focusInput",
+              "description": "Focuses the input element."
             },
             {
               "kind": "method",
@@ -2614,17 +2616,16 @@
             {
               "name": "value",
               "fieldName": "value",
-              "default": "[]",
-              "description": "The currently selected values.",
+              "description": "The currently selected value.",
               "type": {
-                "text": "LeOptionValue[]"
+                "text": "LeOptionValue"
               }
             },
             {
               "name": "placeholder",
               "fieldName": "placeholder",
-              "default": "'Select options...'",
-              "description": "Placeholder text when no options are selected.",
+              "default": "'Type to search...'",
+              "description": "Placeholder text for the input.",
               "type": {
                 "text": "string"
               }
@@ -2633,7 +2634,7 @@
               "name": "disabled",
               "fieldName": "disabled",
               "default": "false",
-              "description": "Whether the multiselect is disabled.",
+              "description": "Whether the combobox is disabled.",
               "type": {
                 "text": "boolean"
               }
@@ -2668,35 +2669,27 @@
               "name": "size",
               "fieldName": "size",
               "default": "'medium'",
-              "description": "Size variant of the multiselect.",
+              "description": "Size variant of the combobox.",
               "type": {
                 "text": "'small' | 'medium' | 'large'"
               }
             },
             {
-              "name": "max-selections",
-              "fieldName": "maxSelections",
-              "description": "Maximum number of selections allowed.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "show-select-all",
-              "fieldName": "showSelectAll",
+              "name": "allow-custom",
+              "fieldName": "allowCustom",
               "default": "false",
-              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s).",
-              "type": {
-                "text": "boolean | string | string[]"
-              }
-            },
-            {
-              "name": "searchable",
-              "fieldName": "searchable",
-              "default": "false",
-              "description": "Whether the input is searchable.",
+              "description": "Whether to allow custom values not in the options list.",
               "type": {
                 "text": "boolean"
+              }
+            },
+            {
+              "name": "min-search-length",
+              "fieldName": "minSearchLength",
+              "default": "0",
+              "description": "Minimum characters before showing filtered results.",
+              "type": {
+                "text": "number"
               }
             },
             {
@@ -2718,14 +2711,21 @@
               }
             }
           ],
-          "tagName": "le-multiselect",
+          "tagName": "le-combobox",
           "events": [
             {
               "name": "leChange",
               "type": {
-                "text": "EventEmitter<LeMultiOptionSelectDetail>"
+                "text": "EventEmitter<LeOptionSelectDetail>"
               },
-              "description": "Emitted when the selected values change."
+              "description": "Emitted when the selected value changes."
+            },
+            {
+              "name": "leInput",
+              "type": {
+                "text": "EventEmitter<{ value: string }>"
+              },
+              "description": "Emitted when the input value changes (for custom values)."
             },
             {
               "name": "leOpen",
@@ -2748,18 +2748,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LeMultiselect",
+          "name": "LeCombobox",
           "declaration": {
-            "name": "LeMultiselect",
-            "module": "src/components/le-multiselect/le-multiselect.tsx"
+            "name": "LeCombobox",
+            "module": "src/components/le-combobox/le-combobox.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-multiselect",
+          "name": "le-combobox",
           "declaration": {
-            "name": "LeMultiselect",
-            "module": "src/components/le-multiselect/le-multiselect.tsx"
+            "name": "LeCombobox",
+            "module": "src/components/le-combobox/le-combobox.tsx"
           }
         }
       ]
@@ -4185,155 +4185,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-segmented-control/le-segment.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A segment component used as a child of le-segmented-control.\n\nEach le-segment defines both the segment button label and the panel content.\nThe parent le-segmented-control component automatically reads these segments and creates\nthe segmented control interface.",
-          "name": "LeSegment",
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLLeSegmentElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "description": "The label displayed in the tab button."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "The value used to identify this tab.\nDefaults to the label if not provided."
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class."
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Icon displayed at the end of the tab button."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether this tab is disabled."
-            },
-            {
-              "kind": "method",
-              "name": "getValue",
-              "return": {
-                "type": {
-                  "text": "Promise<string>"
-                }
-              },
-              "description": "Get the effective value (value or label as fallback)"
-            },
-            {
-              "kind": "method",
-              "name": "getSegmentConfig",
-              "return": {
-                "type": {
-                  "text": "Promise<{\n    label: string;\n    value: string;\n    iconStart?: string;\n    iconEnd?: string;\n    disabled: boolean;\n  }>"
-                }
-              },
-              "description": "Get tab configuration for parent component"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "The label displayed in the tab button.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value used to identify this tab.\nDefaults to the label if not provided.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "icon-start",
-              "fieldName": "iconStart",
-              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "icon-end",
-              "fieldName": "iconEnd",
-              "description": "Icon displayed at the end of the tab button.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether this tab is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-segment",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeSegment",
-          "declaration": {
-            "name": "LeSegment",
-            "module": "src/components/le-segmented-control/le-segment.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-segment",
-          "declaration": {
-            "name": "LeSegment",
-            "module": "src/components/le-segmented-control/le-segment.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-segmented-control/le-segmented-control.tsx",
       "declarations": [
         {
@@ -4469,7 +4320,7 @@
               },
               "privacy": "private",
               "default": "false",
-              "description": "Whether we're using declarative mode (le-segment children)"
+              "description": "Whether we're using declarative mode (le-tab children)"
             },
             {
               "kind": "field",
@@ -6339,7 +6190,7 @@
               "name": "getTabConfig",
               "return": {
                 "type": {
-                  "text": "Promise<{\n    label: string;\n    value: string;\n    icon: string | Node;\n    disabled: boolean;\n  }>"
+                  "text": "Promise<{\n    label: string;\n    value: string;\n    icon: string | Node;\n    iconStart?: string | Node;\n    iconEnd?: string | Node;\n    disabled: boolean;\n  }>"
                 }
               },
               "description": "Get tab configuration for parent component"
@@ -7732,6 +7583,223 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-turntable/le-turntable.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LeTurntable",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "center",
+              "type": {
+                "text": "string"
+              },
+              "default": "'center'"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "method",
+              "name": "updateValue",
+              "parameters": [
+                {
+                  "name": "newValue"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "rotating",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Internal state\n\nusing properties instead of"
+            },
+            {
+              "kind": "field",
+              "name": "centerX",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "centerY",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "pageX",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "pageY",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "currentAngle",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "startAngle",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "handleMouseDown",
+              "parameters": [
+                {
+                  "name": "evt",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "description": "Event listeners"
+            },
+            {
+              "kind": "method",
+              "name": "handleMouseMove",
+              "parameters": [
+                {
+                  "name": "evt",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ],
+              "description": "Fires when the mouse moves\nchecks is the element rotating right now and if it is\nthen calc the current angle and rotate the element\n\nTODO: attach events only after the dragStart?"
+            },
+            {
+              "kind": "method",
+              "name": "handleMouseUp",
+              "parameters": [
+                {
+                  "name": "evt",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleWindowResize"
+            },
+            {
+              "kind": "method",
+              "name": "getTransformOrigin",
+              "description": "Calculates the transform origin of the component\nand the page offset in pixels\n\nWe'll need these values to calculate the angle of pointer event"
+            },
+            {
+              "kind": "method",
+              "name": "getAngle",
+              "parameters": [
+                {
+                  "name": "posX",
+                  "type": {
+                    "text": "number"
+                  },
+                  "description": "horizontal mouse position"
+                },
+                {
+                  "name": "posY",
+                  "type": {
+                    "text": "number"
+                  },
+                  "description": "vertical mouse position"
+                }
+              ],
+              "description": "Calculates current angle"
+            },
+            {
+              "kind": "method",
+              "name": "setAngle",
+              "parameters": [
+                {
+                  "name": "angle"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "center",
+              "fieldName": "center",
+              "default": "'center'",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "default": "0",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-turntable",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeTurntable",
+          "declaration": {
+            "name": "LeTurntable",
+            "module": "src/components/le-turntable/le-turntable.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-turntable",
+          "declaration": {
+            "name": "LeTurntable",
+            "module": "src/components/le-turntable/le-turntable.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-text/le-text.tsx",
       "declarations": [
         {
@@ -8094,223 +8162,6 @@
           "declaration": {
             "name": "LeText",
             "module": "src/components/le-text/le-text.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-turntable/le-turntable.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "LeTurntable",
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "center",
-              "type": {
-                "text": "string"
-              },
-              "default": "'center'"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "number"
-              },
-              "default": "0"
-            },
-            {
-              "kind": "method",
-              "name": "updateValue",
-              "parameters": [
-                {
-                  "name": "newValue"
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "rotating",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Internal state\n\nusing properties instead of"
-            },
-            {
-              "kind": "field",
-              "name": "centerX",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "centerY",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "pageX",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "pageY",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "currentAngle",
-              "type": {
-                "text": "number"
-              },
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "startAngle",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "handleMouseDown",
-              "parameters": [
-                {
-                  "name": "evt",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ],
-              "description": "Event listeners"
-            },
-            {
-              "kind": "method",
-              "name": "handleMouseMove",
-              "parameters": [
-                {
-                  "name": "evt",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ],
-              "description": "Fires when the mouse moves\nchecks is the element rotating right now and if it is\nthen calc the current angle and rotate the element\n\nTODO: attach events only after the dragStart?"
-            },
-            {
-              "kind": "method",
-              "name": "handleMouseUp",
-              "parameters": [
-                {
-                  "name": "evt",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleWindowResize"
-            },
-            {
-              "kind": "method",
-              "name": "getTransformOrigin",
-              "description": "Calculates the transform origin of the component\nand the page offset in pixels\n\nWe'll need these values to calculate the angle of pointer event"
-            },
-            {
-              "kind": "method",
-              "name": "getAngle",
-              "parameters": [
-                {
-                  "name": "posX",
-                  "type": {
-                    "text": "number"
-                  },
-                  "description": "horizontal mouse position"
-                },
-                {
-                  "name": "posY",
-                  "type": {
-                    "text": "number"
-                  },
-                  "description": "vertical mouse position"
-                }
-              ],
-              "description": "Calculates current angle"
-            },
-            {
-              "kind": "method",
-              "name": "setAngle",
-              "parameters": [
-                {
-                  "name": "angle"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "center",
-              "fieldName": "center",
-              "default": "'center'",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "default": "0",
-              "type": {
-                "text": "number"
-              }
-            }
-          ],
-          "tagName": "le-turntable",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeTurntable",
-          "declaration": {
-            "name": "LeTurntable",
-            "module": "src/components/le-turntable/le-turntable.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-turntable",
-          "declaration": {
-            "name": "LeTurntable",
-            "module": "src/components/le-turntable/le-turntable.tsx"
           }
         }
       ]

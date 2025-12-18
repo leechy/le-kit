@@ -54,12 +54,18 @@ render() {
  - [le-button](../le-button)
  - [le-card](../le-card)
  - [le-checkbox](../le-checkbox)
+ - [le-combobox](../le-combobox)
  - [le-multiselect](../le-multiselect)
  - [le-number-input](../le-number-input)
  - [le-popup](../le-popup)
+ - [le-segmented-control](../le-segmented-control)
  - [le-select](../le-select)
  - [le-stack](../le-stack)
  - [le-string-input](../le-string-input)
+ - [le-tab](../le-tab)
+ - [le-tab-bar](../le-tab-bar)
+ - [le-tab-panel](../le-tab-panel)
+ - [le-tabs](../le-tabs)
  - [le-tag](../le-tag)
  - [le-text](../le-text)
 
@@ -69,6 +75,7 @@ render() {
 - [le-checkbox](../le-checkbox)
 - [le-string-input](../le-string-input)
 - [le-popover](../le-popover)
+- [le-popup](../le-popup)
 
 ### Graph
 ```mermaid
@@ -77,19 +84,26 @@ graph TD;
   le-component --> le-checkbox
   le-component --> le-string-input
   le-component --> le-popover
+  le-component --> le-popup
   le-button --> le-component
   le-slot --> le-popover
   le-slot --> le-button
   le-slot --> le-string-input
   le-string-input --> le-component
   le-checkbox --> le-component
+  le-popup --> le-component
   le-box --> le-component
   le-card --> le-component
+  le-combobox --> le-component
   le-multiselect --> le-component
   le-number-input --> le-component
-  le-popup --> le-component
+  le-segmented-control --> le-component
   le-select --> le-component
   le-stack --> le-component
+  le-tab --> le-component
+  le-tab-bar --> le-component
+  le-tab-panel --> le-component
+  le-tabs --> le-component
   le-tag --> le-component
   le-text --> le-component
   style le-component fill:#f9f,stroke:#333,stroke-width:4px

@@ -10,7 +10,7 @@
 A flexible popup/dialog component for alerts, confirms, prompts, and custom content.
 
 Uses the native HTML <dialog> element for proper modal behavior, accessibility,
-and focus management. Can be used declaratively in HTML or programmatically 
+and focus management. Can be used declaratively in HTML or programmatically
 via leAlert(), leConfirm(), lePrompt().
 
 ## Properties
@@ -23,6 +23,7 @@ via leAlert(), leConfirm(), lePrompt().
 | `defaultValue`    | `default-value`     | Default value for prompt input                                                          | `string`                                                                                        | `''`        |
 | `message`         | `message`           | Message text to display (for alert/confirm/prompt types)                                | `string`                                                                                        | `undefined` |
 | `modal`           | `modal`             | Whether the popup is modal (blocks interaction with page behind)                        | `boolean`                                                                                       | `true`      |
+| `mode`            | `mode`              | The mode of the Le Kit (e.g., 'default' or 'admin')                                     | `string`                                                                                        | `'default'` |
 | `open`            | `open`              | Whether the popup is currently visible                                                  | `boolean`                                                                                       | `false`     |
 | `placeholder`     | `placeholder`       | Placeholder text for prompt input                                                       | `string`                                                                                        | `''`        |
 | `popupTitle`      | `popup-title`       | Optional title for the popup header                                                     | `string`                                                                                        | `undefined` |
@@ -94,6 +95,10 @@ Type: `Promise<PopupResult>`
 
 ## Dependencies
 
+### Used by
+
+ - [le-component](../le-component)
+
 ### Depends on
 
 - [le-slot](../le-slot)
@@ -111,10 +116,7 @@ graph TD;
   le-slot --> le-string-input
   le-button --> le-component
   le-button --> le-slot
-  le-component --> le-button
-  le-component --> le-checkbox
-  le-component --> le-string-input
-  le-component --> le-popover
+  le-component --> le-popup
   le-checkbox --> le-component
   le-checkbox --> le-slot
   le-string-input --> le-component

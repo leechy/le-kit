@@ -1,114 +1,81 @@
 # le-tab-bar
 
+
+
+<!-- Auto Generated Below -->
+
+
+## Overview
+
 A presentational tab bar component without panels.
 
-Use this for navigation or routing scenarios where you manage the content
-externally based on selection events. For tabs with built-in panel management,
+Use this for navigation/routing scenarios where you manage the content
+externally based on the selection events. For tabs with built-in panels,
 use `le-tabs` instead.
-
-## Features
-
-- **Three variants**: underline, pills, minimal
-- **Full keyboard navigation**: Arrow keys, Home, End
-- **ARIA compliant**: Proper roles and attributes
-- **No panel management**: Just emits events for external handling
-- **Router-friendly**: Designed for SPA navigation patterns
-
-## Usage
-
-### Basic
-
-```html
-<le-tab-bar id="navTabs"></le-tab-bar>
-
-<script>
-  const tabs = document.getElementById('navTabs');
-  tabs.tabs = [
-    { label: 'Dashboard', value: '/dashboard' },
-    { label: 'Users', value: '/users' },
-    { label: 'Settings', value: '/settings' },
-  ];
-  tabs.selected = '/dashboard';
-
-  tabs.addEventListener('leTabChange', e => {
-    // Handle navigation
-    router.navigate(e.detail.value);
-  });
-</script>
-```
-
-### With Icons
-
-```html
-<le-tab-bar id="iconNav">
-  <!-- Tab bar renders only buttons, content managed externally -->
-</le-tab-bar>
-
-<script>
-  document.getElementById('iconNav').tabs = [
-    { label: 'Home', value: 'home', iconStart: '🏠' },
-    { label: 'Search', value: 'search', iconStart: '🔍' },
-    { label: 'Profile', value: 'profile', iconStart: '👤' },
-  ];
-</script>
-```
-
-### Variants
-
-```html
-<!-- Underline (default) -->
-<le-tab-bar variant="underline"></le-tab-bar>
-
-<!-- Pills -->
-<le-tab-bar variant="pills"></le-tab-bar>
-
-<!-- Minimal (no background, no border) -->
-<le-tab-bar variant="minimal" bordered="false"></le-tab-bar>
-```
 
 ## Properties
 
-| Property    | Type                                  | Default     | Description                |
-| ----------- | ------------------------------------- | ----------- | -------------------------- |
-| `tabs`      | `LeOption[]`                          | `[]`        | Array of tab options       |
-| `selected`  | `string \| number`                    | First tab   | Value of the selected tab  |
-| `variant`   | `'underline' \| 'pills' \| 'minimal'` | `underline` | Visual style variant       |
-| `fullWidth` | `boolean`                             | `false`     | Stretch tabs to fill width |
-| `size`      | `'sm' \| 'md' \| 'lg'`                | `md`        | Tab size                   |
-| `bordered`  | `boolean`                             | `true`      | Show border below tab bar  |
+| Property     | Attribute     | Description                                          | Type                             | Default     |
+| ------------ | ------------- | ---------------------------------------------------- | -------------------------------- | ----------- |
+| `bordered`   | `bordered`    | Whether to show a border below the tab bar.          | `boolean`                        | `true`      |
+| `fullWidth`  | `full-width`  | Whether tabs should stretch to fill available width. | `boolean`                        | `true`      |
+| `position`   | `position`    | Position of the tab bar.                             | `"bottom" \| "top"`              | `'top'`     |
+| `selected`   | `selected`    | The value of the currently selected tab.             | `number \| string`               | `undefined` |
+| `showLabels` | `show-labels` | Whether to show labels in icon-only mode.            | `boolean`                        | `false`     |
+| `size`       | `size`        | Size of the tabs.                                    | `"large" \| "medium" \| "small"` | `'medium'`  |
+| `tabs`       | --            | Array of tab options defining the tabs to display.   | `LeOption[]`                     | `[]`        |
+
 
 ## Events
 
-| Event         | Detail              | Description                  |
-| ------------- | ------------------- | ---------------------------- |
-| `leTabChange` | `{ value, option }` | Emitted when tab is selected |
+| Event         | Description                            | Type                                |
+| ------------- | -------------------------------------- | ----------------------------------- |
+| `leTabChange` | Emitted when the selected tab changes. | `CustomEvent<LeOptionSelectDetail>` |
 
-## CSS Custom Properties
 
-| Property                         | Default                    | Description            |
-| -------------------------------- | -------------------------- | ---------------------- |
-| `--le-tab-bar-border-color`      | `var(--le-border-color)`   | Border color           |
-| `--le-tab-bar-gap`               | `var(--le-spacing-1)`      | Gap between tabs       |
-| `--le-tab-bar-indicator-color`   | `var(--le-color-primary)`  | Active indicator color |
-| `--le-tab-bar-padding-x`         | `var(--le-spacing-4)`      | Horizontal padding     |
-| `--le-tab-bar-padding-y`         | `var(--le-spacing-3)`      | Vertical padding       |
-| `--le-tab-bar-text-color`        | `var(--le-text-secondary)` | Inactive text color    |
-| `--le-tab-bar-text-color-active` | `var(--le-color-primary)`  | Active text color      |
+## Shadow Parts
 
-## CSS Parts
+| Part        | Description |
+| ----------- | ----------- |
+| `"tablist"` |             |
 
-| Part         | Description                     |
-| ------------ | ------------------------------- |
-| `tablist`    | The tab button container        |
-| `tab`        | Individual tab buttons          |
-| `tab-active` | The currently active tab button |
 
-## Keyboard Navigation
+## Dependencies
 
-| Key           | Action             |
-| ------------- | ------------------ |
-| `Arrow Left`  | Focus previous tab |
-| `Arrow Right` | Focus next tab     |
-| `Home`        | Focus first tab    |
-| `End`         | Focus last tab     |
-| `Enter/Space` | Select focused tab |
+### Depends on
+
+- [le-component](../le-component)
+- [le-slot](../le-slot)
+- [le-tab](../le-tab)
+
+### Graph
+```mermaid
+graph TD;
+  le-tab-bar --> le-component
+  le-tab-bar --> le-slot
+  le-tab-bar --> le-tab
+  le-component --> le-button
+  le-component --> le-checkbox
+  le-component --> le-string-input
+  le-component --> le-popover
+  le-component --> le-popup
+  le-button --> le-component
+  le-button --> le-slot
+  le-slot --> le-popover
+  le-slot --> le-button
+  le-slot --> le-string-input
+  le-string-input --> le-component
+  le-string-input --> le-slot
+  le-checkbox --> le-component
+  le-checkbox --> le-slot
+  le-popup --> le-slot
+  le-popup --> le-button
+  le-popup --> le-component
+  le-tab --> le-component
+  le-tab --> le-slot
+  style le-tab-bar fill:#f9f,stroke:#333,stroke-width:4px
+```
+
+----------------------------------------------
+
+*Built with [StencilJS](https://stenciljs.com/)*

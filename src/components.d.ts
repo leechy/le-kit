@@ -835,45 +835,6 @@ export namespace Components {
         "value": number;
     }
     /**
-     * A segment component used as a child of le-segmented-control.
-     * Each le-segment defines both the segment button label and the panel content.
-     * The parent le-segmented-control component automatically reads these segments and creates
-     * the segmented control interface.
-     * @cmsEditable true
-     * @cmsCategory Navigation
-     */
-    interface LeSegment {
-        /**
-          * Whether this tab is disabled.
-          * @default false
-         */
-        "disabled": boolean;
-        /**
-          * Get tab configuration for parent component
-         */
-        "getSegmentConfig": () => Promise<{ label: string; value: string; iconStart?: string; iconEnd?: string; disabled: boolean; }>;
-        /**
-          * Get the effective value (value or label as fallback)
-         */
-        "getValue": () => Promise<string>;
-        /**
-          * Icon displayed at the end of the tab button.
-         */
-        "iconEnd"?: string;
-        /**
-          * Icon displayed at the start of the tab button. Can be an emoji, URL, or icon class.
-         */
-        "iconStart"?: string;
-        /**
-          * The label displayed in the tab button.
-         */
-        "label": string;
-        /**
-          * The value used to identify this tab. Defaults to the label if not provided.
-         */
-        "value"?: string;
-    }
-    /**
      * A segmented control component (iOS-style toggle buttons).
      * Perfect for toggling between a small set of related options.
      * @cssprop --le-segmented-bg - Background color of the control
@@ -1249,7 +1210,7 @@ export namespace Components {
         /**
           * Get tab configuration for parent component
          */
-        "getTabConfig": () => Promise<{ label: string; value: string; icon: string | Node; disabled: boolean; }>;
+        "getTabConfig": () => Promise<{ label: string; value: string; icon: string | Node; iconStart?: string | Node; iconEnd?: string | Node; disabled: boolean; }>;
         /**
           * Optional href to make the tab act as a link
          */
@@ -1994,20 +1955,6 @@ declare global {
         prototype: HTMLLeRoundProgressElement;
         new (): HTMLLeRoundProgressElement;
     };
-    /**
-     * A segment component used as a child of le-segmented-control.
-     * Each le-segment defines both the segment button label and the panel content.
-     * The parent le-segmented-control component automatically reads these segments and creates
-     * the segmented control interface.
-     * @cmsEditable true
-     * @cmsCategory Navigation
-     */
-    interface HTMLLeSegmentElement extends Components.LeSegment, HTMLStencilElement {
-    }
-    var HTMLLeSegmentElement: {
-        prototype: HTMLLeSegmentElement;
-        new (): HTMLLeSegmentElement;
-    };
     interface HTMLLeSegmentedControlElementEventMap {
         "leChange": LeOptionSelectDetail;
     }
@@ -2363,7 +2310,6 @@ declare global {
         "le-popover": HTMLLePopoverElement;
         "le-popup": HTMLLePopupElement;
         "le-round-progress": HTMLLeRoundProgressElement;
-        "le-segment": HTMLLeSegmentElement;
         "le-segmented-control": HTMLLeSegmentedControlElement;
         "le-select": HTMLLeSelectElement;
         "le-slot": HTMLLeSlotElement;
@@ -3222,37 +3168,6 @@ declare namespace LocalJSX {
         "value"?: number;
     }
     /**
-     * A segment component used as a child of le-segmented-control.
-     * Each le-segment defines both the segment button label and the panel content.
-     * The parent le-segmented-control component automatically reads these segments and creates
-     * the segmented control interface.
-     * @cmsEditable true
-     * @cmsCategory Navigation
-     */
-    interface LeSegment {
-        /**
-          * Whether this tab is disabled.
-          * @default false
-         */
-        "disabled"?: boolean;
-        /**
-          * Icon displayed at the end of the tab button.
-         */
-        "iconEnd"?: string;
-        /**
-          * Icon displayed at the start of the tab button. Can be an emoji, URL, or icon class.
-         */
-        "iconStart"?: string;
-        /**
-          * The label displayed in the tab button.
-         */
-        "label": string;
-        /**
-          * The value used to identify this tab. Defaults to the label if not provided.
-         */
-        "value"?: string;
-    }
-    /**
      * A segmented control component (iOS-style toggle buttons).
      * Perfect for toggling between a small set of related options.
      * @cssprop --le-segmented-bg - Background color of the control
@@ -4018,7 +3933,6 @@ declare namespace LocalJSX {
         "le-popover": LePopover;
         "le-popup": LePopup;
         "le-round-progress": LeRoundProgress;
-        "le-segment": LeSegment;
         "le-segmented-control": LeSegmentedControl;
         "le-select": LeSelect;
         "le-slot": LeSlot;
@@ -4207,15 +4121,6 @@ declare module "@stencil/core" {
              */
             "le-popup": LocalJSX.LePopup & JSXBase.HTMLAttributes<HTMLLePopupElement>;
             "le-round-progress": LocalJSX.LeRoundProgress & JSXBase.HTMLAttributes<HTMLLeRoundProgressElement>;
-            /**
-             * A segment component used as a child of le-segmented-control.
-             * Each le-segment defines both the segment button label and the panel content.
-             * The parent le-segmented-control component automatically reads these segments and creates
-             * the segmented control interface.
-             * @cmsEditable true
-             * @cmsCategory Navigation
-             */
-            "le-segment": LocalJSX.LeSegment & JSXBase.HTMLAttributes<HTMLLeSegmentElement>;
             /**
              * A segmented control component (iOS-style toggle buttons).
              * Perfect for toggling between a small set of related options.

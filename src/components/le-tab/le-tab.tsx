@@ -138,12 +138,16 @@ export class LeTab {
     label: string;
     value: string;
     icon: string | Node;
+    iconStart?: string | Node;
+    iconEnd?: string | Node;
     disabled: boolean;
   }> {
     return {
       label: this.label,
       value: this.value ?? this.label,
       icon: this.icon,
+      iconStart: this.iconStart,
+      iconEnd: this.iconEnd,
       disabled: this.disabled,
     };
   }

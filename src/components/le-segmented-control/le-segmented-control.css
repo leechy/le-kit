@@ -6,6 +6,10 @@
   display: inline-block;
   max-width: 100%;
   --le-segmented-control-bg: var(--le-color-background-secondary);
+  --le-segmented-control-padding: var(--le-spacing-1);
+}
+:host([full-width]) {
+  width: 100%;
 }
 :host(.overflow-visible) {
   max-width: none;
@@ -17,8 +21,8 @@
   border: none;
   gap: 0;
   background-color: var(--le-segmented-control-bg);
-  border-radius: calc(var(--le-radius-md) + var(--le-spacing-1));
-  padding: var(--le-spacing-1);
+  border-radius: calc(var(--le-radius-md) + var(--le-segmented-control-padding));
+  padding: var(--le-segmented-control-padding);
 }
 
 .le-segmented-control.overflow-auto {
@@ -37,6 +41,7 @@
 .le-segmented-control.full-width {
   display: flex;
   width: 100%;
+  width: calc(100% - var(--le-segmented-control-padding) * 2);
 }
 
 .le-segmented-control.disabled {

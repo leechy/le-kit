@@ -56,6 +56,7 @@ graph TD;
   le-component --> le-checkbox
   le-component --> le-string-input
   le-component --> le-popover
+  le-component --> le-popup
   le-button --> le-component
   le-button --> le-slot
   le-slot --> le-popover
@@ -65,6 +66,9 @@ graph TD;
   le-string-input --> le-slot
   le-checkbox --> le-component
   le-checkbox --> le-slot
+  le-popup --> le-slot
+  le-popup --> le-button
+  le-popup --> le-component
   style le-card fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

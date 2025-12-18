@@ -59,6 +59,9 @@ graph TD;
   le-slot --> le-string-input
   le-string-input --> le-component
   le-string-input --> le-slot
+  le-popup --> le-slot
+  le-popup --> le-button
+  le-popup --> le-component
   style le-checkbox fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

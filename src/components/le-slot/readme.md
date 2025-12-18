@@ -56,6 +56,10 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
  - [le-popup](../le-popup)
  - [le-stack](../le-stack)
  - [le-string-input](../le-string-input)
+ - [le-tab](../le-tab)
+ - [le-tab-bar](../le-tab-bar)
+ - [le-tab-panel](../le-tab-panel)
+ - [le-tabs](../le-tabs)
  - [le-tag](../le-tag)
 
 ### Depends on
@@ -75,13 +79,18 @@ graph TD;
   le-component --> le-checkbox
   le-component --> le-string-input
   le-component --> le-popover
+  le-component --> le-popup
   le-checkbox --> le-slot
   le-string-input --> le-slot
+  le-popup --> le-slot
   le-box --> le-slot
   le-card --> le-slot
   le-number-input --> le-slot
-  le-popup --> le-slot
   le-stack --> le-slot
+  le-tab --> le-slot
+  le-tab-bar --> le-slot
+  le-tab-panel --> le-slot
+  le-tabs --> le-slot
   le-tag --> le-slot
   style le-slot fill:#f9f,stroke:#333,stroke-width:4px
 ```

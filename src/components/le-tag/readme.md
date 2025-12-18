@@ -17,6 +17,7 @@ A tag/chip component for displaying labels with optional dismiss functionality.
 | `dismissible` | `dismissible` | Whether the tag can be dismissed (shows close button).                | `boolean`                                                      | `false`     |
 | `icon`        | `icon`        | Icon to display before the label. Can be an emoji, URL, or icon name. | `string`                                                       | `undefined` |
 | `label`       | `label`       | The text label to display in the tag.                                 | `string`                                                       | `undefined` |
+| `mode`        | `mode`        | Mode of the popover should be 'default' for internal use              | `"admin" \| "default"`                                         | `undefined` |
 | `size`        | `size`        | The size of the tag.                                                  | `"large" \| "medium" \| "small"`                               | `'medium'`  |
 | `variant`     | `variant`     | The visual variant of the tag.                                        | `"danger" \| "default" \| "primary" \| "success" \| "warning"` | `'default'` |
 
@@ -55,6 +56,7 @@ graph TD;
   le-component --> le-checkbox
   le-component --> le-string-input
   le-component --> le-popover
+  le-component --> le-popup
   le-button --> le-component
   le-button --> le-slot
   le-slot --> le-popover
@@ -64,6 +66,9 @@ graph TD;
   le-string-input --> le-slot
   le-checkbox --> le-component
   le-checkbox --> le-slot
+  le-popup --> le-slot
+  le-popup --> le-button
+  le-popup --> le-component
   le-multiselect --> le-tag
   style le-tag fill:#f9f,stroke:#333,stroke-width:4px
 ```

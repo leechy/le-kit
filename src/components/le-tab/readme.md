@@ -77,41 +77,57 @@ A flexible button component with multiple variants, colors, sizes, and states.
 
 ## Overview
 
-A flexible button component with multiple variants and states.
+A flexible tab component with multiple variants and states.
 
 ## Properties
 
-| Property    | Attribute    | Description                                                                                    | Type                                                                       | Default     |
-| ----------- | ------------ | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ----------- |
-| `align`     | `align`      | Alignment of the button label without the end icon                                             | `"center" \| "end" \| "space-between" \| "start"`                          | `'center'`  |
-| `color`     | `color`      | Button color theme (uses theme semantic colors)                                                | `"danger" \| "info" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'` |
-| `disabled`  | `disabled`   | Whether the button is disabled                                                                 | `boolean`                                                                  | `false`     |
-| `fullWidth` | `full-width` | Whether the button takes full width of its container                                           | `boolean`                                                                  | `false`     |
-| `href`      | `href`       | Optional href to make the button act as a link                                                 | `string`                                                                   | `undefined` |
-| `iconEnd`   | `icon-end`   | End icon image or emoji                                                                        | `Node \| string`                                                           | `undefined` |
-| `iconOnly`  | `icon-only`  | Icon only button image or emoji if this prop is set, the button will render only the icon slot | `Node \| string`                                                           | `undefined` |
-| `iconStart` | `icon-start` | Start icon image or emoji                                                                      | `Node \| string`                                                           | `undefined` |
-| `mode`      | `mode`       | Mode of the popover should be 'default' for internal use                                       | `"admin" \| "default"`                                                     | `undefined` |
-| `selected`  | `selected`   | Whether the button is in a selected/active state                                               | `boolean`                                                                  | `false`     |
-| `size`      | `size`       | Button size                                                                                    | `"large" \| "medium" \| "small"`                                           | `'medium'`  |
-| `target`    | `target`     | Link target when href is set                                                                   | `string`                                                                   | `undefined` |
-| `type`      | `type`       | The button type attribute                                                                      | `"button" \| "reset" \| "submit"`                                          | `'button'`  |
-| `variant`   | `variant`    | Button variant style                                                                           | `"clear" \| "outlined" \| "solid" \| "system"`                             | `'solid'`   |
+| Property    | Attribute    | Description                                                                                    | Type                                                              | Default        |
+| ----------- | ------------ | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | -------------- |
+| `align`     | `align`      | Alignment of the tab label without the end icon                                                | `"center" \| "end" \| "space-between" \| "start"`                 | `'center'`     |
+| `disabled`  | `disabled`   | Whether the tab is disabled                                                                    | `boolean`                                                         | `false`        |
+| `focusable` | `focusable`  | Whether the tab can get focus needed for accessibility when used in custom tab implementations | `boolean`                                                         | `true`         |
+| `fullWidth` | `full-width` | Whether the tab takes full width of its container                                              | `boolean`                                                         | `false`        |
+| `href`      | `href`       | Optional href to make the tab act as a link                                                    | `string`                                                          | `undefined`    |
+| `icon`      | `icon`       | Icon only tab image or emoji if this prop is set, the tab will render only the icon slot       | `Node \| string`                                                  | `undefined`    |
+| `iconEnd`   | `icon-end`   | End icon image or emoji                                                                        | `Node \| string`                                                  | `undefined`    |
+| `iconStart` | `icon-start` | Start icon image or emoji                                                                      | `Node \| string`                                                  | `undefined`    |
+| `label`     | `label`      | Label if it is not provided via slot                                                           | `string`                                                          | `undefined`    |
+| `mode`      | `mode`       | Mode of the popover should be 'default' for internal use                                       | `"admin" \| "default"`                                            | `undefined`    |
+| `position`  | `position`   | Position of the tabs when used within a le-tabs component                                      | `"bottom" \| "end" \| "start" \| "top"`                           | `'top'`        |
+| `selected`  | `selected`   | Whether the tab is in a selected/active state                                                  | `boolean`                                                         | `false`        |
+| `showLabel` | `show-label` | Whether to show the label when in icon-only mode                                               | `boolean`                                                         | `false`        |
+| `size`      | `size`       | Tab size                                                                                       | `"large" \| "medium" \| "small"`                                  | `'medium'`     |
+| `target`    | `target`     | Link target when href is set                                                                   | `string`                                                          | `undefined`    |
+| `value`     | `value`      | Value of the tab, defaults to label if not provided                                            | `string`                                                          | `undefined`    |
+| `variant`   | `variant`    | Tab variant style                                                                              | `"enclosed" \| "icon-only" \| "pills" \| "solid" \| "underlined"` | `'underlined'` |
 
 
 ## Events
 
-| Event   | Description                                                                                                                     | Type                        |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `click` | Emitted when the button is clicked. This is a custom event that wraps the native click but ensures the target is the le-button. | `CustomEvent<PointerEvent>` |
+| Event   | Description                                                                                                               | Type                        |
+| ------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `click` | Emitted when the tab is clicked. This is a custom event that wraps the native click but ensures the target is the le-tab. | `CustomEvent<PointerEvent>` |
+
+
+## Methods
+
+### `getTabConfig() => Promise<{ label: string; value: string; icon: string | Node; iconStart?: string | Node; iconEnd?: string | Node; disabled: boolean; }>`
+
+Get tab configuration for parent component
+
+#### Returns
+
+Type: `Promise<{ label: string; value: string; icon: string | Node; iconStart?: string | Node; iconEnd?: string | Node; disabled: boolean; }>`
+
+
 
 
 ## Slots
 
-| Slot          | Description                |
-| ------------- | -------------------------- |
-|               | Button text content        |
-| `"icon-only"` | Icon for icon-only buttons |
+| Slot          | Description             |
+| ------------- | ----------------------- |
+|               | Tab text content        |
+| `"icon-only"` | Icon for icon-only tabs |
 
 
 ## Shadow Parts
@@ -128,11 +144,9 @@ A flexible button component with multiple variants and states.
 
 ### Used by
 
- - [le-component](../le-component)
- - [le-number-input](../le-number-input)
- - [le-popup](../le-popup)
- - [le-select](../le-select)
- - [le-slot](../le-slot)
+ - [le-segmented-control](../le-segmented-control)
+ - [le-tab-bar](../le-tab-bar)
+ - [le-tabs](../le-tabs)
 
 ### Depends on
 
@@ -142,18 +156,29 @@ A flexible button component with multiple variants and states.
 ### Graph
 ```mermaid
 graph TD;
+  le-tab --> le-component
+  le-tab --> le-slot
+  le-component --> le-button
+  le-component --> le-checkbox
+  le-component --> le-string-input
+  le-component --> le-popover
+  le-component --> le-popup
   le-button --> le-component
   le-button --> le-slot
-  le-component --> le-button
-  le-checkbox --> le-component
-  le-checkbox --> le-slot
+  le-slot --> le-popover
   le-slot --> le-button
+  le-slot --> le-string-input
   le-string-input --> le-component
   le-string-input --> le-slot
-  le-number-input --> le-button
+  le-checkbox --> le-component
+  le-checkbox --> le-slot
+  le-popup --> le-slot
   le-popup --> le-button
-  le-select --> le-button
-  style le-button fill:#f9f,stroke:#333,stroke-width:4px
+  le-popup --> le-component
+  le-segmented-control --> le-tab
+  le-tab-bar --> le-tab
+  le-tabs --> le-tab
+  style le-tab fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

@@ -11,19 +11,21 @@ A text input component with support for labels, descriptions, icons, and externa
 
 ## Properties
 
-| Property      | Attribute     | Description                                              | Type                                                | Default     |
-| ------------- | ------------- | -------------------------------------------------------- | --------------------------------------------------- | ----------- |
-| `disabled`    | `disabled`    | Whether the input is disabled                            | `boolean`                                           | `false`     |
-| `externalId`  | `external-id` | External ID for linking with external systems            | `string`                                            | `undefined` |
-| `iconEnd`     | `icon-end`    | Icon for the end icon                                    | `string`                                            | `undefined` |
-| `iconStart`   | `icon-start`  | Icon for the start icon                                  | `string`                                            | `undefined` |
-| `label`       | `label`       | Label for the input                                      | `string`                                            | `undefined` |
-| `mode`        | `mode`        | Mode of the popover should be 'default' for internal use | `"admin" \| "default"`                              | `undefined` |
-| `name`        | `name`        | The name of the input                                    | `string`                                            | `undefined` |
-| `placeholder` | `placeholder` | Placeholder text                                         | `string`                                            | `undefined` |
-| `readonly`    | `readonly`    | Whether the input is read-only                           | `boolean`                                           | `false`     |
-| `type`        | `type`        | The type of the input (text, email, password, etc.)      | `"email" \| "password" \| "tel" \| "text" \| "url"` | `'text'`    |
-| `value`       | `value`       | The value of the input                                   | `string`                                            | `undefined` |
+| Property          | Attribute          | Description                                               | Type                                                | Default     |
+| ----------------- | ------------------ | --------------------------------------------------------- | --------------------------------------------------- | ----------- |
+| `disabled`        | `disabled`         | Whether the input is disabled                             | `boolean`                                           | `false`     |
+| `externalId`      | `external-id`      | External ID for linking with external systems             | `string`                                            | `undefined` |
+| `hideDescription` | `hide-description` | Hide description slot                                     | `boolean`                                           | `false`     |
+| `iconEnd`         | `icon-end`         | Icon for the end icon                                     | `string`                                            | `undefined` |
+| `iconStart`       | `icon-start`       | Icon for the start icon                                   | `string`                                            | `undefined` |
+| `inputRef`        | --                 | Pass the ref of the input element to the parent component | `(el: HTMLInputElement) => void`                    | `undefined` |
+| `label`           | `label`            | Label for the input                                       | `string`                                            | `undefined` |
+| `mode`            | `mode`             | Mode of the popover should be 'default' for internal use  | `"admin" \| "default"`                              | `undefined` |
+| `name`            | `name`             | The name of the input                                     | `string`                                            | `undefined` |
+| `placeholder`     | `placeholder`      | Placeholder text                                          | `string`                                            | `undefined` |
+| `readonly`        | `readonly`         | Whether the input is read-only                            | `boolean`                                           | `false`     |
+| `type`            | `type`             | The type of the input (text, email, password, etc.)       | `"email" \| "password" \| "tel" \| "text" \| "url"` | `'text'`    |
+| `value`           | `value`            | The value of the input                                    | `string`                                            | `undefined` |
 
 
 ## Events
@@ -44,11 +46,21 @@ A text input component with support for labels, descriptions, icons, and externa
 | `"icon-start"`  | Icon to display at the start of the input             |
 
 
+## Shadow Parts
+
+| Part          | Description |
+| ------------- | ----------- |
+| `"container"` |             |
+
+
 ## Dependencies
 
 ### Used by
 
+ - [le-combobox](../le-combobox)
  - [le-component](../le-component)
+ - [le-multiselect](../le-multiselect)
+ - [le-select](../le-select)
  - [le-slot](../le-slot)
 
 ### Depends on
@@ -67,6 +79,12 @@ graph TD;
   le-slot --> le-string-input
   le-checkbox --> le-component
   le-checkbox --> le-slot
+  le-popup --> le-slot
+  le-popup --> le-button
+  le-popup --> le-component
+  le-combobox --> le-string-input
+  le-multiselect --> le-string-input
+  le-select --> le-string-input
   style le-string-input fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

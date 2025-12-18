@@ -150,8 +150,8 @@ graph TD;
   le-slot --> le-button
   le-string-input --> le-component
   le-string-input --> le-slot
-  le-number-input --> le-button
   le-popup --> le-button
+  le-number-input --> le-button
   le-select --> le-button
   style le-button fill:#f9f,stroke:#333,stroke-width:4px
 ```

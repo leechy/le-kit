@@ -20,6 +20,15 @@ interface SegmentConfig {
   disabled: boolean;
 }
 
+interface TabConfig {
+  label: string;
+  value: string;
+  iconStart?: string;
+  iconEnd?: string;
+  disabled: boolean;
+  panel?: HTMLElement & { setActive: (active: boolean) => Promise<void> };
+}
+
 /**
  * A segmented control component (iOS-style toggle buttons).
  *
@@ -90,7 +99,7 @@ export class LeSegmentedControl {
   @State() private focusedIndex: number = 0;
 
   /**
-   * Whether we're using declarative mode (le-segment children)
+   * Whether we're using declarative mode (le-tab children)
    */
   @State() private isDeclarativeMode: boolean = false;
 
@@ -146,10 +155,10 @@ export class LeSegmentedControl {
   }
 
   private async buildSegmentsConfigs() {
-    // Check for le-segment children
-    const segments = Array.from(this.el.querySelectorAll(':scope > le-segment')) as Array<
+    // Check for le-tab children
+    const segments = Array.from(this.el.querySelectorAll(':scope > le-tab')) as Array<
       HTMLElement & {
-        getSegmentConfig: () => Promise<SegmentConfig>;
+        getTabConfig: () => Promise<TabConfig>;
         setActive: (active: boolean) => Promise<void>;
       }
     >;
@@ -157,10 +166,10 @@ export class LeSegmentedControl {
     if (segments.length > 0) {
       // Declarative mode - build from children
       this.isDeclarativeMode = true;
-      const configs: SegmentConfig[] = [];
+      const configs: TabConfig[] = [];
 
       for (const segment of segments) {
-        const config = await segment.getSegmentConfig();
+        const config = await segment.getTabConfig();
         configs.push({ ...config });
       }
 

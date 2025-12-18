@@ -103,6 +103,12 @@ export class LeTabs {
   @Prop() wrap: boolean = false;
 
   /**
+   * Scroll behavior for overflowing tabs.
+   * @allowedValues auto | hidden | visible | scroll
+   */
+  @Prop() overflow: 'auto' | 'hidden' | 'visible' | 'scroll' = 'auto';
+
+  /**
    * Internal tab configurations (built from children or tabs prop)
    */
   @State() private tabConfigs: TabConfig[] = [];
@@ -367,6 +373,7 @@ export class LeTabs {
             class={{
               'tablist': true,
               'wrap-tabs': this.wrap,
+              [`overflow-${this.overflow}`]: true,
             }}
             role="tablist"
             aria-orientation={orientation}

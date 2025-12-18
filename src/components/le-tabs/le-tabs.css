@@ -4,6 +4,7 @@
 
 :host {
   display: block;
+  --le-tabs-gap: var(--le-spacing-1);
   --le-tabs-border-color: var(--le-border-color);
   --le-tabs-padding-y: var(--le-spacing-2);
   --le-tabs-padding-x: var(--le-spacing-4);
@@ -27,13 +28,24 @@
   display: flex;
   position: relative;
   border-radius: var(--le-radius-md);
-  gap: var(--le-tabs-gap, var(--le-spacing-1));
+  gap: var(--le-tabs-gap);
 }
 .tablist.wrap-tabs {
   flex-wrap: wrap;
 }
-.tablist:focus,
-.tablist:focus-within {
+.tablist.overflow-auto {
+  overflow: auto;
+}
+.tablist.overflow-hidden {
+  overflow: hidden;
+}
+.tablist.overflow-visible {
+  overflow: visible;
+}
+.tablist.overflow-scroll {
+  overflow: scroll;
+}
+.tablist:focus {
   outline: 2px solid var(--le-color-focus);
   outline-offset: 2px;
 }

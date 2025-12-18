@@ -1,0 +1,73 @@
+/**
+ * le-segmented-control - Default mode styles
+ */
+
+:host {
+  display: inline-block;
+  max-width: 100%;
+  --le-segmented-control-bg: var(--le-color-background-secondary);
+}
+:host(.overflow-visible) {
+  max-width: none;
+}
+
+.le-segmented-control {
+  flex-direction: row;
+  white-space: nowrap;
+  border: none;
+  gap: 0;
+  background-color: var(--le-segmented-control-bg);
+  border-radius: calc(var(--le-radius-md) + var(--le-spacing-1));
+  padding: var(--le-spacing-1);
+}
+
+.le-segmented-control.overflow-auto {
+  overflow: auto;
+}
+.le-segmented-control.overflow-hidden {
+  overflow: hidden;
+}
+.le-segmented-control.overflow-visible {
+  overflow: visible;
+}
+.le-segmented-control.overflow-scroll {
+  overflow: scroll;
+}
+
+.le-segmented-control.full-width {
+  display: flex;
+  width: 100%;
+}
+
+.le-segmented-control.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.le-segmented-control:focus {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+
+
+/* ============================================
+ * SEGMENT BUTTON
+ * ============================================ */
+
+.full-width .segment {
+  flex: 1;
+}
+
+.segment:focus-visible {
+  outline: 2px solid var(--le-focus-ring-color, var(--le-color-primary));
+  outline-offset: 2px;
+}
+
+.segment-active {
+  color: var(--le-segmented-text-color-active, var(--le-text-primary));
+}
+
+.segment-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

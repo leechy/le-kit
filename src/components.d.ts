@@ -8,9 +8,11 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
+import { LeWebPageHeaderMode, LeWebPageHeaderRevealMode, LeWebPageHeaderShrinkMode } from "./components/le-web-page-header/le-web-page-header";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
+export { LeWebPageHeaderMode, LeWebPageHeaderRevealMode, LeWebPageHeaderShrinkMode } from "./components/le-web-page-header/le-web-page-header";
 export namespace Components {
     /**
      * A flexible box component for use as a flex item within le-stack.
@@ -1559,6 +1561,76 @@ export namespace Components {
          */
         "value": number;
     }
+    /**
+     * A functional page header with scroll-aware behaviors.
+     * Features:
+     * - Static or fixed (fixed keeps layout space via a placeholder)
+     * - Optional shrink-on-scroll styling hook
+     * - Optional reveal-on-scroll-up (hide on down, show on up)
+     * - Optional title handoff via event + scroll position
+     * Slots:
+     * - `start`: left side (logo/back button)
+     * - `title`: centered/primary title content
+     * - `end`: right side actions
+     * - default: extra content row (e.g., tabs/search) rendered below main row
+     * Events listened:
+     * - `leWebPageTitleChange`: set a compact title to show when page title scrolled away
+     * - `leWebPageTitleVisibility`: alternatively drive title visibility explicitly
+     * @cssprop --le-web-page-header-bg - Background (color/gradient)
+     * @cssprop --le-web-page-header-color - Text color
+     * @cssprop --le-web-page-header-border - Border (e.g. 1px solid ...)
+     * @cssprop --le-web-page-header-shadow - Shadow/elevation
+     * @cssprop --le-web-page-header-max-width - Inner content max width
+     * @cssprop --le-web-page-header-padding-x - Horizontal padding
+     * @cssprop --le-web-page-header-padding-y - Vertical padding
+     * @cssprop --le-web-page-header-gap - Gap between zones
+     * @cssprop --le-web-page-header-height - Base height (main row)
+     * @cssprop --le-web-page-header-height-condensed - Condensed height when shrunk
+     * @cssprop --le-web-page-header-transition - Transition timing
+     * @cssprop --le-web-page-header-z - Z-index (fixed mode)
+     * @csspart placeholder - The placeholder element that reserves space in fixed mode
+     * @csspart header - The header container
+     * @csspart inner - Inner max-width container
+     * @csspart row - Main row
+     * @csspart start - Start zone
+     * @csspart title - Title zone
+     * @csspart end - End zone
+     * @csspart secondary - Secondary row
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeWebPageHeader {
+        /**
+          * Layout behavior. `fixed` uses a placeholder to avoid overlap.
+          * @default 'static'
+         */
+        "mode": LeWebPageHeaderMode;
+        /**
+          * Reveal behavior: hide on scroll down, show on scroll up.
+          * @default 'none'
+         */
+        "reveal": LeWebPageHeaderRevealMode;
+        /**
+          * Minimum delta (px) to consider direction changes (reduces jitter).
+          * @default 8
+         */
+        "revealThreshold": number;
+        /**
+          * Shrink styling hook when scrolling down beyond `shrinkOffset`.
+          * @default 'none'
+         */
+        "shrink": LeWebPageHeaderShrinkMode;
+        /**
+          * Y offset (px) after which `shrunk` becomes true.
+          * @default 24
+         */
+        "shrinkOffset": number;
+        /**
+          * If true, show a compact title when the page title is not visible. Title content is driven by `leWebPageTitleChange` or `leWebPageTitleVisibility`.
+          * @default false
+         */
+        "smartTitle": boolean;
+    }
 }
 export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1623,6 +1695,10 @@ export interface LeTabsCustomEvent<T> extends CustomEvent<T> {
 export interface LeTagCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeTagElement;
+}
+export interface LeWebPageHeaderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeWebPageHeaderElement;
 }
 declare global {
     /**
@@ -2297,6 +2373,66 @@ declare global {
         prototype: HTMLLeTurntableElement;
         new (): HTMLLeTurntableElement;
     };
+    interface HTMLLeWebPageHeaderElementEventMap {
+        "leWebPageHeaderState": {
+    y: number;
+    direction: 'up' | 'down';
+    revealed: boolean;
+    shrunk: boolean;
+  };
+    }
+    /**
+     * A functional page header with scroll-aware behaviors.
+     * Features:
+     * - Static or fixed (fixed keeps layout space via a placeholder)
+     * - Optional shrink-on-scroll styling hook
+     * - Optional reveal-on-scroll-up (hide on down, show on up)
+     * - Optional title handoff via event + scroll position
+     * Slots:
+     * - `start`: left side (logo/back button)
+     * - `title`: centered/primary title content
+     * - `end`: right side actions
+     * - default: extra content row (e.g., tabs/search) rendered below main row
+     * Events listened:
+     * - `leWebPageTitleChange`: set a compact title to show when page title scrolled away
+     * - `leWebPageTitleVisibility`: alternatively drive title visibility explicitly
+     * @cssprop --le-web-page-header-bg - Background (color/gradient)
+     * @cssprop --le-web-page-header-color - Text color
+     * @cssprop --le-web-page-header-border - Border (e.g. 1px solid ...)
+     * @cssprop --le-web-page-header-shadow - Shadow/elevation
+     * @cssprop --le-web-page-header-max-width - Inner content max width
+     * @cssprop --le-web-page-header-padding-x - Horizontal padding
+     * @cssprop --le-web-page-header-padding-y - Vertical padding
+     * @cssprop --le-web-page-header-gap - Gap between zones
+     * @cssprop --le-web-page-header-height - Base height (main row)
+     * @cssprop --le-web-page-header-height-condensed - Condensed height when shrunk
+     * @cssprop --le-web-page-header-transition - Transition timing
+     * @cssprop --le-web-page-header-z - Z-index (fixed mode)
+     * @csspart placeholder - The placeholder element that reserves space in fixed mode
+     * @csspart header - The header container
+     * @csspart inner - Inner max-width container
+     * @csspart row - Main row
+     * @csspart start - Start zone
+     * @csspart title - Title zone
+     * @csspart end - End zone
+     * @csspart secondary - Secondary row
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeWebPageHeaderElement extends Components.LeWebPageHeader, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeWebPageHeaderElementEventMap>(type: K, listener: (this: HTMLLeWebPageHeaderElement, ev: LeWebPageHeaderCustomEvent<HTMLLeWebPageHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeWebPageHeaderElementEventMap>(type: K, listener: (this: HTMLLeWebPageHeaderElement, ev: LeWebPageHeaderCustomEvent<HTMLLeWebPageHeaderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeWebPageHeaderElement: {
+        prototype: HTMLLeWebPageHeaderElement;
+        new (): HTMLLeWebPageHeaderElement;
+    };
     interface HTMLElementTagNameMap {
         "le-box": HTMLLeBoxElement;
         "le-button": HTMLLeButtonElement;
@@ -2322,6 +2458,7 @@ declare global {
         "le-tag": HTMLLeTagElement;
         "le-text": HTMLLeTextElement;
         "le-turntable": HTMLLeTurntableElement;
+        "le-web-page-header": HTMLLeWebPageHeaderElement;
     }
 }
 declare namespace LocalJSX {
@@ -3920,6 +4057,85 @@ declare namespace LocalJSX {
          */
         "value"?: number;
     }
+    /**
+     * A functional page header with scroll-aware behaviors.
+     * Features:
+     * - Static or fixed (fixed keeps layout space via a placeholder)
+     * - Optional shrink-on-scroll styling hook
+     * - Optional reveal-on-scroll-up (hide on down, show on up)
+     * - Optional title handoff via event + scroll position
+     * Slots:
+     * - `start`: left side (logo/back button)
+     * - `title`: centered/primary title content
+     * - `end`: right side actions
+     * - default: extra content row (e.g., tabs/search) rendered below main row
+     * Events listened:
+     * - `leWebPageTitleChange`: set a compact title to show when page title scrolled away
+     * - `leWebPageTitleVisibility`: alternatively drive title visibility explicitly
+     * @cssprop --le-web-page-header-bg - Background (color/gradient)
+     * @cssprop --le-web-page-header-color - Text color
+     * @cssprop --le-web-page-header-border - Border (e.g. 1px solid ...)
+     * @cssprop --le-web-page-header-shadow - Shadow/elevation
+     * @cssprop --le-web-page-header-max-width - Inner content max width
+     * @cssprop --le-web-page-header-padding-x - Horizontal padding
+     * @cssprop --le-web-page-header-padding-y - Vertical padding
+     * @cssprop --le-web-page-header-gap - Gap between zones
+     * @cssprop --le-web-page-header-height - Base height (main row)
+     * @cssprop --le-web-page-header-height-condensed - Condensed height when shrunk
+     * @cssprop --le-web-page-header-transition - Transition timing
+     * @cssprop --le-web-page-header-z - Z-index (fixed mode)
+     * @csspart placeholder - The placeholder element that reserves space in fixed mode
+     * @csspart header - The header container
+     * @csspart inner - Inner max-width container
+     * @csspart row - Main row
+     * @csspart start - Start zone
+     * @csspart title - Title zone
+     * @csspart end - End zone
+     * @csspart secondary - Secondary row
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeWebPageHeader {
+        /**
+          * Layout behavior. `fixed` uses a placeholder to avoid overlap.
+          * @default 'static'
+         */
+        "mode"?: LeWebPageHeaderMode;
+        /**
+          * Emits whenever scroll-driven state changes.
+         */
+        "onLeWebPageHeaderState"?: (event: LeWebPageHeaderCustomEvent<{
+    y: number;
+    direction: 'up' | 'down';
+    revealed: boolean;
+    shrunk: boolean;
+  }>) => void;
+        /**
+          * Reveal behavior: hide on scroll down, show on scroll up.
+          * @default 'none'
+         */
+        "reveal"?: LeWebPageHeaderRevealMode;
+        /**
+          * Minimum delta (px) to consider direction changes (reduces jitter).
+          * @default 8
+         */
+        "revealThreshold"?: number;
+        /**
+          * Shrink styling hook when scrolling down beyond `shrinkOffset`.
+          * @default 'none'
+         */
+        "shrink"?: LeWebPageHeaderShrinkMode;
+        /**
+          * Y offset (px) after which `shrunk` becomes true.
+          * @default 24
+         */
+        "shrinkOffset"?: number;
+        /**
+          * If true, show a compact title when the page title is not visible. Title content is driven by `leWebPageTitleChange` or `leWebPageTitleVisibility`.
+          * @default false
+         */
+        "smartTitle"?: boolean;
+    }
     interface IntrinsicElements {
         "le-box": LeBox;
         "le-button": LeButton;
@@ -3945,6 +4161,7 @@ declare namespace LocalJSX {
         "le-tag": LeTag;
         "le-text": LeText;
         "le-turntable": LeTurntable;
+        "le-web-page-header": LeWebPageHeader;
     }
 }
 export { LocalJSX as JSX };
@@ -4304,6 +4521,45 @@ declare module "@stencil/core" {
              */
             "le-text": LocalJSX.LeText & JSXBase.HTMLAttributes<HTMLLeTextElement>;
             "le-turntable": LocalJSX.LeTurntable & JSXBase.HTMLAttributes<HTMLLeTurntableElement>;
+            /**
+             * A functional page header with scroll-aware behaviors.
+             * Features:
+             * - Static or fixed (fixed keeps layout space via a placeholder)
+             * - Optional shrink-on-scroll styling hook
+             * - Optional reveal-on-scroll-up (hide on down, show on up)
+             * - Optional title handoff via event + scroll position
+             * Slots:
+             * - `start`: left side (logo/back button)
+             * - `title`: centered/primary title content
+             * - `end`: right side actions
+             * - default: extra content row (e.g., tabs/search) rendered below main row
+             * Events listened:
+             * - `leWebPageTitleChange`: set a compact title to show when page title scrolled away
+             * - `leWebPageTitleVisibility`: alternatively drive title visibility explicitly
+             * @cssprop --le-web-page-header-bg - Background (color/gradient)
+             * @cssprop --le-web-page-header-color - Text color
+             * @cssprop --le-web-page-header-border - Border (e.g. 1px solid ...)
+             * @cssprop --le-web-page-header-shadow - Shadow/elevation
+             * @cssprop --le-web-page-header-max-width - Inner content max width
+             * @cssprop --le-web-page-header-padding-x - Horizontal padding
+             * @cssprop --le-web-page-header-padding-y - Vertical padding
+             * @cssprop --le-web-page-header-gap - Gap between zones
+             * @cssprop --le-web-page-header-height - Base height (main row)
+             * @cssprop --le-web-page-header-height-condensed - Condensed height when shrunk
+             * @cssprop --le-web-page-header-transition - Transition timing
+             * @cssprop --le-web-page-header-z - Z-index (fixed mode)
+             * @csspart placeholder - The placeholder element that reserves space in fixed mode
+             * @csspart header - The header container
+             * @csspart inner - Inner max-width container
+             * @csspart row - Main row
+             * @csspart start - Start zone
+             * @csspart title - Title zone
+             * @csspart end - End zone
+             * @csspart secondary - Secondary row
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-web-page-header": LocalJSX.LeWebPageHeader & JSXBase.HTMLAttributes<HTMLLeWebPageHeaderElement>;
         }
     }
 }

@@ -1,0 +1,127 @@
+:host {
+  display: block;
+
+  /* Offset for fixed positioning (e.g. if page has top padding or another fixed bar). */
+  --le-web-page-header-fixed-offset: 0px;
+
+  --le-web-page-header-bg: var(--le-color-surface);
+  --le-web-page-header-color: var(--le-color-text);
+  --le-web-page-header-border: 1px solid color-mix(in srgb, var(--le-color-border) 70%, transparent);
+  --le-web-page-header-shadow: none;
+
+  --le-web-page-header-max-width: 1200px;
+  --le-web-page-header-padding-x: var(--le-space-md);
+  --le-web-page-header-padding-y: var(--le-space-sm);
+  --le-web-page-header-gap: var(--le-space-sm);
+
+  --le-web-page-header-height: 64px;
+  --le-web-page-header-height-condensed: 48px;
+
+  --le-web-page-header-transition: var(--le-transition-normal);
+  --le-web-page-header-z: 1000;
+}
+
+/* le-component receives hostClass; keep styles on that boundary */
+:host > le-component {
+  display: block;
+}
+
+.placeholder {
+  height: var(--le-web-page-header-height);
+}
+
+:host > le-component.is-shrunk .placeholder {
+  height: var(--le-web-page-header-height-condensed);
+}
+
+.header {
+  width: 100%;
+  background: var(--le-web-page-header-bg);
+  color: var(--le-web-page-header-color);
+  border-bottom: var(--le-web-page-header-border);
+  box-shadow: var(--le-web-page-header-shadow);
+}
+
+:host > le-component.mode-fixed .header {
+  position: fixed;
+  top: var(--le-web-page-header-fixed-offset);
+  left: 0;
+  right: 0;
+  z-index: var(--le-web-page-header-z);
+}
+
+:host > le-component.mode-static .header {
+  position: relative;
+}
+
+.inner {
+  max-width: var(--le-web-page-header-max-width);
+  margin: 0 auto;
+  padding: 0 var(--le-web-page-header-padding-x);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--le-web-page-header-gap);
+  height: var(--le-web-page-header-height);
+  transition: height var(--le-web-page-header-transition), padding var(--le-web-page-header-transition), transform var(--le-web-page-header-transition);
+}
+
+:host > le-component.is-shrunk .row {
+  height: var(--le-web-page-header-height-condensed);
+}
+
+/* reveal behavior */
+:host > le-component.mode-fixed.is-hidden .header {
+  transform: translateY(-110%);
+  transition: transform var(--le-web-page-header-transition);
+}
+
+:host > le-component.mode-fixed.is-revealed .header {
+  transform: translateY(0);
+  transition: transform var(--le-web-page-header-transition);
+}
+
+.start,
+.title,
+.end {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.start {
+  justify-content: flex-start;
+}
+
+.end {
+  justify-content: flex-end;
+}
+
+.title {
+  justify-content: center;
+  text-align: center;
+}
+
+.title-slot ::slotted(*) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compact-title {
+  font: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.secondary {
+  padding: 0 0 var(--le-web-page-header-padding-y);
+}
+
+.secondary:empty {
+  display: none;
+}

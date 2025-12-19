@@ -61,6 +61,7 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
  - [le-tab-panel](../le-tab-panel)
  - [le-tabs](../le-tabs)
  - [le-tag](../le-tag)
+ - [le-web-page-header](../le-web-page-header)
 
 ### Depends on
 
@@ -98,6 +99,7 @@ graph TD;
   le-tab-panel --> le-slot
   le-tabs --> le-slot
   le-tag --> le-slot
+  le-web-page-header --> le-slot
   style le-slot fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

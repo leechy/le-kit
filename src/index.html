@@ -124,6 +124,66 @@
     <!-- Default content template (used when localStorage is empty) -->
     <template id="default-content">
       <div class="demo-section">
+        <h2>Web Page Header (le-web-page-header)</h2>
+        <p>
+          Scroll down: header hides. Scroll up: header reveals. When the page title scrolls away, the header shows a compact title.
+        </p>
+
+        <le-web-page-header
+          id="demo-web-page-header"
+          mode="fixed"
+          reveal="reveal"
+          shrink="shrink"
+          shrink-offset="24"
+          smart-title
+          style="
+            --le-web-page-header-bg: var(--le-color-surface);
+            --le-web-page-header-shadow: var(--le-shadow-sm);
+            --le-web-page-header-border: 1px solid var(--le-color-border);
+            --le-web-page-header-max-width: 1200px;
+            --le-web-page-header-fixed-offset: var(--le-space-lg);
+          "
+        >
+          <div slot="start" style="display:flex; align-items:center; gap: 8px;">
+            <le-tag>LE</le-tag>
+            <le-text variant="label">le-kit</le-text>
+          </div>
+
+          <le-text slot="title" variant="h4">Landing</le-text>
+
+          <div slot="end" style="display:flex; gap: 8px;">
+            <le-button variant="outlined" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">Top</le-button>
+            <le-button variant="solid" color="primary" onclick="leAlert('Action clicked', { title: 'Header' })">Action</le-button>
+          </div>
+
+          <div style="padding: var(--le-space-sm) 0; display:flex; gap: 8px; flex-wrap: wrap; align-items:center;">
+            <le-text variant="small">Demo controls:</le-text>
+            <le-button variant="outlined" onclick="toggleHeaderProp('mode', ['fixed','static'])">Toggle fixed/static</le-button>
+            <le-button variant="outlined" onclick="toggleHeaderProp('reveal', ['reveal','none'])">Toggle reveal</le-button>
+            <le-button variant="outlined" onclick="toggleHeaderProp('shrink', ['shrink','none'])">Toggle shrink</le-button>
+            <le-button variant="outlined" onclick="toggleHeaderBool('smartTitle')">Toggle smart title</le-button>
+          </div>
+          <div style="padding-bottom: var(--le-space-sm);">
+            <le-text id="header-state" variant="small"></le-text>
+          </div>
+        </le-web-page-header>
+
+        <div class="text-slot-demo" style="margin-top: var(--le-space-md);">
+          <label>Scroll area (title sentinel):</label>
+          <div style="padding: var(--le-space-md); background: var(--le-color-surface); border-radius: var(--le-radius-md); border: 1px solid var(--le-color-border);">
+            <h1 id="page-title" style="margin-top: 0;">Landing</h1>
+            <p>
+              This title is observed by the demo script. When it scrolls out of view, the header switches to the compact title.
+            </p>
+            <div style="height: 900px;"></div>
+            <h2>More content</h2>
+            <p>Keep scrolling to see reveal/shrink behavior.</p>
+            <div style="height: 900px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-section">
         <h2>Tabs Components</h2>
         <p>Tab navigation with multiple variants and orientations. Tabs can be defined declaratively using &lt;le-tab-panel&gt; children.</p>
         <div class="demo-grid">
@@ -919,6 +979,39 @@ console.log(greeting);</le-text>
       }
 
       // ============================================
+      // Web Page Header demo helpers
+      // ============================================
+      function getDemoHeader() {
+        return document.getElementById('demo-web-page-header');
+      }
+
+      function toggleHeaderProp(attrName, values) {
+        const header = getDemoHeader();
+        if (!header) return;
+        const current = header.getAttribute(attrName) || '';
+        const next = current === values[0] ? values[1] : values[0];
+        header.setAttribute(attrName, next);
+      }
+
+      function toggleHeaderBool(attrName) {
+        const header = getDemoHeader();
+        if (!header) return;
+        if (header.hasAttribute(attrName)) header.removeAttribute(attrName);
+        else header.setAttribute(attrName, '');
+      }
+
+      function setupHeaderStateDebug() {
+        const header = getDemoHeader();
+        const out = document.getElementById('header-state');
+        if (!header || !out) return;
+
+        header.addEventListener('leWebPageHeaderState', (e) => {
+          const d = e.detail || {};
+          out.textContent = `mode=${header.getAttribute('mode')} reveal=${header.getAttribute('reveal')} shrink=${header.getAttribute('shrink')} smartTitle=${header.hasAttribute('smart-title')} | y=${Math.round(d.y || 0)} dir=${d.direction} revealed=${d.revealed} shrunk=${d.shrunk}`;
+        });
+      }
+
+      // ============================================
       // Popup Demo Functions
       // ============================================
       
@@ -971,6 +1064,37 @@ console.log(greeting);</le-text>
 
       // Initialize on page load
       initContent();
+
+      // ============================================
+      // Web Page Header demo: title handoff
+      // ============================================
+      function setupHeaderTitleObserver() {
+        const titleEl = document.getElementById('page-title');
+        if (!titleEl) return;
+
+        // Provide initial compact title
+        window.dispatchEvent(new CustomEvent('leWebPageTitleChange', { detail: { title: titleEl.textContent?.trim() || '' } }));
+
+        if (!('IntersectionObserver' in window)) return;
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            const entry = entries[0];
+            const visible = !!entry?.isIntersecting;
+            window.dispatchEvent(new CustomEvent('leWebPageTitleVisibility', { detail: { visible } }));
+          },
+          {
+            root: null,
+            threshold: 0.25,
+          },
+        );
+
+        observer.observe(titleEl);
+      }
+
+      // The content is injected into #editable-content, so run after initContent.
+      setupHeaderTitleObserver();
+      setupHeaderStateDebug();
 
       document.getElementById('demo-combobox').options = [
         { label: 'JavaScript', value: 'js', description: 'Dynamic scripting language' },

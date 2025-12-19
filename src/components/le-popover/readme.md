@@ -104,6 +104,7 @@ Type: `Promise<void>`
 
  - [le-component](../le-component)
  - [le-dropdown-base](../le-dropdown-base)
+ - [le-emoji-picker](../le-emoji-picker)
  - [le-slot](../le-slot)
 
 ### Graph
@@ -111,6 +112,7 @@ Type: `Promise<void>`
 graph TD;
   le-component --> le-popover
   le-dropdown-base --> le-popover
+  le-emoji-picker --> le-popover
   le-slot --> le-popover
   style le-popover fill:#f9f,stroke:#333,stroke-width:4px
 ```

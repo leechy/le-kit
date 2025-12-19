@@ -1,0 +1,119 @@
+:host {
+  display: inline-block;
+}
+
+.default-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--le-space-xs, 4px) var(--le-space-sm, 8px);
+  border: 1px solid var(--le-color-border, #e0e0e0);
+  border-radius: var(--le-radius-md, 6px);
+  background: var(--le-color-surface, #fff);
+  color: var(--le-color-text, #333);
+  cursor: pointer;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--le-space-sm, 8px);
+}
+
+.search input {
+  width: 100%;
+  padding: var(--le-space-xs, 4px) var(--le-space-sm, 8px);
+  border: 1px solid var(--le-color-border, #ddd);
+  border-radius: var(--le-radius-md, 6px);
+  background: var(--le-color-surface, #fff);
+  color: var(--le-color-text, #333);
+  font: inherit;
+}
+
+.search input:focus {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+
+.categories {
+  display: flex;
+  gap: var(--le-space-xs, 4px);
+  flex-wrap: wrap;
+}
+
+.category {
+  padding: 2px 8px;
+  border: 1px solid var(--le-color-border, #ddd);
+  border-radius: var(--le-radius-md, 6px);
+  background: var(--le-color-surface, #fff);
+  color: var(--le-color-text, #333);
+  font-size: var(--le-font-size-sm, 13px);
+  cursor: pointer;
+}
+
+.category.active {
+  border-color: var(--le-color-primary);
+}
+
+.sections {
+  max-height: 320px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.section {
+  padding-bottom: var(--le-space-sm, 8px);
+}
+
+.section-title {
+  font-size: var(--le-font-size-xs, 12px);
+  font-weight: var(--le-font-weight-medium, 500);
+  color: var(--le-color-text-secondary, #666);
+  margin: 0 0 var(--le-space-xs, 4px) 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 2px;
+}
+
+@media (max-width: 420px) {
+  .grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+.emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  border-radius: var(--le-radius-sm, 4px);
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.emoji:hover {
+  border-color: var(--le-color-border, #ddd);
+  background: var(--le-color-surface-alt, rgba(0, 0, 0, 0.03));
+}
+
+.loading,
+.empty {
+  padding: var(--le-space-sm, 8px);
+  color: var(--le-color-text-secondary, #666);
+  font-size: var(--le-font-size-sm, 13px);
+}
+
+.results {
+  max-height: 320px;
+  overflow: auto;
+}
+
+.recents {
+  padding-bottom: var(--le-space-xs, 4px);
+}

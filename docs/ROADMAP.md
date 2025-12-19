@@ -87,9 +87,9 @@ import 'le-kit';
 
 ### Steps
 
-- [ ] **2.1** Define shared `LeOption` interface in `src/types/options.ts` (see [Shared Types](#shared-types))
+- [x] **2.1** Define shared `LeOption` interface in `src/types/options.ts` (see [Shared Types](#shared-types))
 
-- [ ] **2.2** Create `le-dropdown-base` internal component:
+- [x] **2.2** Create `le-dropdown-base` internal component:
 
   - Wraps `le-popover` for positioning
   - Renders option list from `LeOption[]`
@@ -98,27 +98,27 @@ import 'le-kit';
   - Handles nested options rendering (children)
   - Emits: `leOptionSelect`, `leDropdownOpen`, `leDropdownClose`
 
-- [ ] **2.3** Create `le-tag` component:
+- [x] **2.3** Create `le-tag` component:
 
   - Props: `label`, `icon`, `dismissible`, `disabled`, `size`
   - Emits: `leDismiss`
   - Styling: pill shape, optional close button
 
-- [ ] **2.4** Create `le-select` component:
+- [x] **2.4** Create `le-select` component:
 
   - Props: `options`, `value`, `placeholder`, `disabled`, `required`, `name`
   - Single selection mode
   - Display selected option label in trigger
   - Emits: `leChange` with `{ value, option }`
 
-- [ ] **2.5** Create `le-combobox` component:
+- [x] **2.5** Create `le-combobox` component:
 
   - Extends select with text input trigger
   - Props: additional `allowCustom`, `minSearchLength`
   - Filters options as user types
   - Optionally allows custom values not in options
 
-- [ ] **2.6** Create `le-multiselect` component:
+- [x] **2.6** Create `le-multiselect` component:
   - Multiple selection with checkboxes
   - Display selected as `le-tag` components
   - Props: additional `maxSelections`, `showSelectAll`
@@ -196,25 +196,25 @@ import 'le-kit';
 
 ### Steps
 
-- [ ] **4.1** Create `le-tabs` core component:
+- [x] **4.1** Create `le-tabs` core component:
 
   - Props: `tabs` (LeOption[]), `selected`, `orientation` (horizontal/vertical)
   - Keyboard: Arrow keys, Home/End, focus management
   - Slots: `<div slot="panel-{value}">` for each tab's content
   - Emits: `leTabChange` with `{ value, tab }`
 
-- [ ] **4.2** Support two content modes:
+- [x] **4.2** Support two content modes:
 
   - **Slotted panels**: Content in named slots, component handles show/hide
   - **External content**: No slots, consumer handles display based on `leTabChange`
 
-- [ ] **4.3** Create `le-tab-bar` presentational component:
+- [x] **4.3** Create `le-tab-bar` presentational component:
 
   - Just the tab buttons row
   - For navigation/routing scenarios
   - Props: `tabs`, `selected`, `fullWidth`
 
-- [ ] **4.4** Create `le-segmented-control` variant:
+- [x] **4.4** Create `le-segmented-control` variant:
 
   - Pill/button style
   - Sliding indicator animation

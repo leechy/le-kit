@@ -6,9 +6,11 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
+import { LeEmojiSelectDetail } from "./components/le-emoji-picker/le-emoji-picker";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
+export { LeEmojiSelectDetail } from "./components/le-emoji-picker/le-emoji-picker";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export namespace Components {
@@ -484,6 +486,32 @@ export namespace Components {
           * Width of the dropdown. If not set, matches trigger width.
          */
         "width"?: string;
+    }
+    /**
+     * Emoji picker for selecting an emoji icon.
+     * Uses le-popover for the dropdown layer.
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LeEmojiPicker {
+        "hide": () => Promise<void>;
+        /**
+          * Whether the picker popover is open.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * How many recently used emojis to keep.
+          * @default 20
+         */
+        "recentCount": number;
+        /**
+          * Placeholder for the search input.
+          * @default 'Search emojis…'
+         */
+        "searchPlaceholder": string;
+        "show": () => Promise<void>;
+        "toggle": () => Promise<void>;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -1576,6 +1604,10 @@ export interface LeDropdownBaseCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeDropdownBaseElement;
 }
+export interface LeEmojiPickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeEmojiPickerElement;
+}
 export interface LeMultiselectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeMultiselectElement;
@@ -1818,6 +1850,29 @@ declare global {
     var HTMLLeDropdownBaseElement: {
         prototype: HTMLLeDropdownBaseElement;
         new (): HTMLLeDropdownBaseElement;
+    };
+    interface HTMLLeEmojiPickerElementEventMap {
+        "leEmojiSelect": LeEmojiSelectDetail;
+    }
+    /**
+     * Emoji picker for selecting an emoji icon.
+     * Uses le-popover for the dropdown layer.
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface HTMLLeEmojiPickerElement extends Components.LeEmojiPicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeEmojiPickerElementEventMap>(type: K, listener: (this: HTMLLeEmojiPickerElement, ev: LeEmojiPickerCustomEvent<HTMLLeEmojiPickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeEmojiPickerElementEventMap>(type: K, listener: (this: HTMLLeEmojiPickerElement, ev: LeEmojiPickerCustomEvent<HTMLLeEmojiPickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeEmojiPickerElement: {
+        prototype: HTMLLeEmojiPickerElement;
+        new (): HTMLLeEmojiPickerElement;
     };
     interface HTMLLeMultiselectElementEventMap {
         "leChange": LeMultiOptionSelectDetail;
@@ -2305,6 +2360,7 @@ declare global {
         "le-combobox": HTMLLeComboboxElement;
         "le-component": HTMLLeComponentElement;
         "le-dropdown-base": HTMLLeDropdownBaseElement;
+        "le-emoji-picker": HTMLLeEmojiPickerElement;
         "le-multiselect": HTMLLeMultiselectElement;
         "le-number-input": HTMLLeNumberInputElement;
         "le-popover": HTMLLePopoverElement;
@@ -2809,6 +2865,33 @@ declare namespace LocalJSX {
           * Width of the dropdown. If not set, matches trigger width.
          */
         "width"?: string;
+    }
+    /**
+     * Emoji picker for selecting an emoji icon.
+     * Uses le-popover for the dropdown layer.
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LeEmojiPicker {
+        /**
+          * Emitted when an emoji is selected.
+         */
+        "onLeEmojiSelect"?: (event: LeEmojiPickerCustomEvent<LeEmojiSelectDetail>) => void;
+        /**
+          * Whether the picker popover is open.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * How many recently used emojis to keep.
+          * @default 20
+         */
+        "recentCount"?: number;
+        /**
+          * Placeholder for the search input.
+          * @default 'Search emojis…'
+         */
+        "searchPlaceholder"?: string;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -3928,6 +4011,7 @@ declare namespace LocalJSX {
         "le-combobox": LeCombobox;
         "le-component": LeComponent;
         "le-dropdown-base": LeDropdownBase;
+        "le-emoji-picker": LeEmojiPicker;
         "le-multiselect": LeMultiselect;
         "le-number-input": LeNumberInput;
         "le-popover": LePopover;
@@ -4061,6 +4145,13 @@ declare module "@stencil/core" {
              * @cmsCategory System
              */
             "le-dropdown-base": LocalJSX.LeDropdownBase & JSXBase.HTMLAttributes<HTMLLeDropdownBaseElement>;
+            /**
+             * Emoji picker for selecting an emoji icon.
+             * Uses le-popover for the dropdown layer.
+             * @cmsInternal true
+             * @cmsCategory System
+             */
+            "le-emoji-picker": LocalJSX.LeEmojiPicker & JSXBase.HTMLAttributes<HTMLLeEmojiPickerElement>;
             /**
              * A multiselect component for selecting multiple options.
              * Displays selected items as tags with optional search filtering.

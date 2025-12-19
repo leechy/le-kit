@@ -246,6 +246,19 @@
         <p>Select, combobox, and multiselect components for form inputs.</p>
         <div class="demo-grid">
           <div class="text-slot-demo">
+            <label>Emoji Picker:</label>
+            <div style="display: flex; align-items: center; gap: var(--le-space-sm); flex-wrap: wrap;">
+              <le-emoji-picker id="demo-emoji-picker">
+                <le-button slot="trigger" variant="outlined">Pick emoji</le-button>
+              </le-emoji-picker>
+              <div>
+                Selected:
+                <strong id="demo-emoji-selected">(none)</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-slot-demo">
             <label>Select Component:</label>
             <le-select
               id="demo-select"
@@ -1094,6 +1107,14 @@ console.log(greeting);</le-text>
       tabBar.addEventListener('leTabChange', (e) => {
         document.getElementById('tab-bar-selected').textContent = e.detail.value;
       });
+
+      // Emoji picker demo
+      const emojiPicker = document.getElementById('demo-emoji-picker');
+      if (emojiPicker) {
+        emojiPicker.addEventListener('leEmojiSelect', (e) => {
+          document.getElementById('demo-emoji-selected').textContent = `${e.detail.emoji} ${e.detail.label}`;
+        });
+      }
 
       // Segmented controls
       const segmentOptions = [

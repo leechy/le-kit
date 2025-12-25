@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.track {
+  width: 100%;
+  height: var(--le-scroll-progress-height, 4px);
+  background: var(--le-scroll-progress-bg, transparent);
+}
+
+.fill {
+  height: 100%; 
+  width: 0;
+  background: var(--le-scroll-progress-fill, var(--le-color-primary, currentColor));
+  border-radius: var(--le-scroll-progress-border-radius, 2px);
+  transition: width var(--le-transition-fast, 120ms linear);
+}

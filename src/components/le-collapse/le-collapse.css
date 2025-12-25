@@ -1,0 +1,31 @@
+:host {
+  --le-collapse-duration: var(--le-transition-normal);
+
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-rows var(--le-collapse-duration),
+    opacity var(--le-collapse-duration);
+}
+
+:host([data-open="false"]),
+:host([open="false"]) {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+:host([fade="false"][data-open="false"]),
+:host([fade="false"][open="false"]) {
+  opacity: 0;
+}
+
+.region {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+:host([scroll]) .region {
+  justify-content: flex-start;
+}

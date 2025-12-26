@@ -10,7 +10,7 @@ import {
   State,
   Watch,
 } from '@stencil/core';
-import { classnames, observeModeChanges } from '../../utils/utils';
+import { classnames } from '../../utils/utils';
 
 export type LeHeaderPosition = 'static' | 'sticky' | 'fixed';
 
@@ -46,7 +46,6 @@ export type LeHeaderPosition = 'static' | 'sticky' | 'fixed';
  * @cssprop --le-header-transition - Transition timing
  * @cssprop --le-header-z - Z-index (fixed mode)
  *
- * @csspart placeholder - The placeholder element that reserves space in fixed mode
  * @csspart header - The header container
  * @csspart inner - Inner max-width container
  * @csspart row - Main row
@@ -92,6 +91,11 @@ export class LeHeader {
    */
   @Prop({ attribute: 'shrink-offset', reflect: true }) shrinkOffset?: string;
 
+  /**
+   * If true, expand the header when hovered
+   */
+  @Prop({ attribute: 'expand-on-hover', reflect: true }) expandOnHover: boolean = false;
+
   /** Emits whenever scroll-driven state changes. */
   @Event() leHeaderState: EventEmitter<{
     y: number;
@@ -108,10 +112,10 @@ export class LeHeader {
   @Event({ bubbles: true, composed: true })
   leHeaderVisibilityChange: EventEmitter<{ visible: boolean; y: number }>;
 
-  @State() private adminMode: boolean = false;
   @State() private revealed: boolean = true;
   @State() private shrunk: boolean = false;
   @State() private placeholderHeight: number | null = null;
+  @State() private hoverActive: boolean = false;
 
   private disconnectModeObserver?: () => void;
   private rafId: number | null = null;
@@ -121,10 +125,10 @@ export class LeHeader {
   private headerEl?: HTMLElement;
   private shrinkSelectorEl?: Element | null;
 
-  connectedCallback() {
-    this.disconnectModeObserver = observeModeChanges(this.el, mode => {
-      this.adminMode = mode === 'admin';
-    });
+  private setShrunk(next: boolean, y: number) {
+    if (next === this.shrunk) return;
+    this.shrunk = next;
+    this.leHeaderShrinkChange.emit({ shrunk: this.shrunk, y });
   }
 
   componentDidLoad() {
@@ -212,7 +216,11 @@ export class LeHeader {
   }
 
   private scheduleUpdate(force: boolean = false) {
-    if (this.rafId != null && !force) return;
+    if (this.rafId != null) {
+      if (!force) return;
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
     this.rafId = requestAnimationFrame(() => {
       this.rafId = null;
       this.updateFromScroll();
@@ -251,22 +259,21 @@ export class LeHeader {
     const direction: 'up' | 'down' = delta < 0 ? 'up' : 'down';
 
     // Shrink behavior
-    let nextShrunk = false;
+    let computedShrunk = false;
     const headerHeight = Math.max(0, this.placeholderHeight ?? 0);
     const shrinkStartPx = typeof window !== 'undefined' ? this.resolveShrinkStartPx() : null;
 
     if (this.shrinkSelectorEl) {
       const rect = (this.shrinkSelectorEl as HTMLElement).getBoundingClientRect();
-      nextShrunk = rect.bottom <= 0;
+      computedShrunk = rect.bottom <= 0;
     } else if (shrinkStartPx != null) {
       const effectiveStart = Math.max(shrinkStartPx, headerHeight);
-      nextShrunk = y >= effectiveStart;
+      computedShrunk = y >= effectiveStart;
     }
 
-    if (nextShrunk !== this.shrunk) {
-      this.shrunk = nextShrunk;
-      this.leHeaderShrinkChange.emit({ shrunk: this.shrunk, y });
-    }
+    // Hover override: when enabled and hovered, force expanded.
+    const nextShrunk = this.expandOnHover && this.hoverActive ? false : computedShrunk;
+    this.setShrunk(nextShrunk, y);
 
     // Reveal-on-scroll (sticky-only)
     const revealThreshold = this.parseRevealThreshold();
@@ -314,13 +321,22 @@ export class LeHeader {
       'is-revealed': this.revealed,
       'is-hidden': !this.revealed,
       'is-shrunk': this.shrunk,
-      'is-admin': this.adminMode,
     });
 
-    // Placeholder is now a separate component; header no longer renders it.
-
     return (
-      <Host class={hostClass}>
+      <Host
+        class={hostClass}
+        onMouseEnter={() => {
+          if (!this.expandOnHover) return;
+          this.hoverActive = true;
+          this.scheduleUpdate(true);
+        }}
+        onMouseLeave={() => {
+          if (!this.expandOnHover) return;
+          this.hoverActive = false;
+          this.scheduleUpdate(true);
+        }}
+      >
         <le-component component="le-header">
           <header
             class="header"

@@ -9,6 +9,7 @@ import { Component, Element, h, Host, Listen, Prop, State, Watch } from '@stenci
  * @cssprop --le-scroll-progress-height - Bar height
  * @cssprop --le-scroll-progress-bg - Track background
  * @cssprop --le-scroll-progress-fill - Fill color
+ * @cssprop --le-scroll-progress-z - Z-index of the progress bar (1001 by default, above header)
  *
  * @csspart track - Outer track
  * @csspart fill - Inner fill

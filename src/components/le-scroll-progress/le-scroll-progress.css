@@ -1,6 +1,11 @@
 :host {
   display: block;
 }
+:host([sticky]) {
+  position: sticky;
+  top: 0;
+  z-index: var(--le-scroll-progress-z, 1001);
+}
 
 .track {
   width: 100%;

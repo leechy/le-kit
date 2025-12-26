@@ -52,6 +52,7 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
  - [le-button](../le-button)
  - [le-card](../le-card)
  - [le-checkbox](../le-checkbox)
+ - [le-header](../le-header)
  - [le-number-input](../le-number-input)
  - [le-popup](../le-popup)
  - [le-stack](../le-stack)
@@ -61,7 +62,6 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
  - [le-tab-panel](../le-tab-panel)
  - [le-tabs](../le-tabs)
  - [le-tag](../le-tag)
- - [le-web-page-header](../le-web-page-header)
 
 ### Depends on
 
@@ -92,6 +92,7 @@ graph TD;
   le-popup --> le-slot
   le-box --> le-slot
   le-card --> le-slot
+  le-header --> le-slot
   le-number-input --> le-slot
   le-stack --> le-slot
   le-tab --> le-slot
@@ -99,7 +100,6 @@ graph TD;
   le-tab-panel --> le-slot
   le-tabs --> le-slot
   le-tag --> le-slot
-  le-web-page-header --> le-slot
   style le-slot fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

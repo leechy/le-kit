@@ -54,7 +54,9 @@ render() {
  - [le-button](../le-button)
  - [le-card](../le-card)
  - [le-checkbox](../le-checkbox)
+ - [le-collapse](../le-collapse)
  - [le-combobox](../le-combobox)
+ - [le-header](../le-header)
  - [le-multiselect](../le-multiselect)
  - [le-number-input](../le-number-input)
  - [le-popup](../le-popup)
@@ -68,7 +70,6 @@ render() {
  - [le-tabs](../le-tabs)
  - [le-tag](../le-tag)
  - [le-text](../le-text)
- - [le-web-page-header](../le-web-page-header)
 
 ### Depends on
 
@@ -99,7 +100,9 @@ graph TD;
   le-popup --> le-component
   le-box --> le-component
   le-card --> le-component
+  le-collapse --> le-component
   le-combobox --> le-component
+  le-header --> le-component
   le-multiselect --> le-component
   le-number-input --> le-component
   le-segmented-control --> le-component
@@ -110,7 +113,6 @@ graph TD;
   le-tabs --> le-component
   le-tag --> le-component
   le-text --> le-component
-  le-web-page-header --> le-component
   style le-component fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

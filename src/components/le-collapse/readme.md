@@ -10,7 +10,7 @@
 Animated show/hide wrapper.
 
 Supports height collapse (auto->0) and/or fading.
-Can optionally listen to the nearest `le-web-page-header` shrink events.
+Can optionally listen to the nearest `le-header` shrink events.
 
 ## Properties
 

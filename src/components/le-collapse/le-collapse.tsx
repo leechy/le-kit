@@ -6,7 +6,7 @@ export type LeCollapseAnimation = 'fade' | 'collapse' | 'fade-collapse';
  * Animated show/hide wrapper.
  *
  * Supports height collapse (auto->0) and/or fading.
- * Can optionally listen to the nearest `le-web-page-header` shrink events.
+ * Can optionally listen to the nearest `le-header` shrink events.
  *
  * @slot - Content to animate
  *
@@ -34,10 +34,10 @@ export class LeCollapse {
     false;
 
   /**
-   * Handles `leWebPageHeaderShrinkChange` events from the `le-web-page-header`.
+   * Handles `leHeaderShrinkChange` events from the `le-header`.
    * In case multiple headers are present, only the nearest one in the DOM tree is used.
    */
-  @Listen('leWebPageHeaderShrinkChange', { target: 'window' })
+  @Listen('leHeaderShrinkChange', { target: 'window' })
   handleHeaderShrink(ev: Event) {
     const e = ev as CustomEvent<{ shrunk: boolean }>;
     this.headerShrunk = !!e.detail?.shrunk;

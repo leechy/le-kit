@@ -37,6 +37,10 @@ export class LeScrollProgress {
   private rafId: number | null = null;
   private targetEl: Element | null = null;
 
+  componentWillLoad() {
+    this.updateProgress();
+  }
+
   componentDidLoad() {
     this.resolveTarget();
     this.updateProgress();

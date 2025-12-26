@@ -14,9 +14,9 @@
   grid-template-rows: 0fr;
   opacity: 0;
 }
-:host([fade="false"][data-open="false"]),
-:host([fade="false"][open="false"]) {
-  opacity: 0;
+:host([no-fading][data-open="false"]),
+:host([no-fading][open="false"]) {
+  opacity: 1;
 }
 
 .region {
@@ -26,6 +26,6 @@
   overflow: hidden;
 }
 
-:host([scroll]) .region {
+:host([scroll-down]) .region {
   justify-content: flex-start;
 }

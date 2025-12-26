@@ -29,6 +29,12 @@ export class LeCollapse {
   /** Whether the content should be shown. */
   @Prop({ mutable: true, reflect: true }) open: boolean = true;
 
+  /** Whether the content should scroll down from the top when open. */
+  @Prop({ attribute: 'scroll-down', reflect: true }) scrollDown: boolean = false;
+
+  /** Stop fading the content when collapsing/expanding. */
+  @Prop({ attribute: 'no-fading', reflect: true }) noFading: boolean = false;
+
   /** If true, collapse/expand based on the nearest header shrink event. */
   @Prop({ attribute: 'collapse-on-header-shrink', reflect: true }) collapseOnHeaderShrink: boolean =
     false;

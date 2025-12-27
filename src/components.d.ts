@@ -8,11 +8,9 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
-import { LeWebPageHeaderMode, LeWebPageHeaderRevealMode, LeWebPageHeaderShrinkMode } from "./components/le-web-page-header/le-web-page-header";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
-export { LeWebPageHeaderMode, LeWebPageHeaderRevealMode, LeWebPageHeaderShrinkMode } from "./components/le-web-page-header/le-web-page-header";
 export namespace Components {
     /**
      * A flexible box component for use as a flex item within le-stack.
@@ -268,6 +266,38 @@ export namespace Components {
         "value": string;
     }
     /**
+     * Animated show/hide wrapper.
+     * Supports height collapse (auto->0) and/or fading.
+     * Can optionally listen to the nearest `le-header` shrink events.
+     * @cssprop --le-collapse-duration - Transition duration
+     * @csspart region - Collapsible region
+     * @csspart content - Inner content
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeCollapse {
+        /**
+          * If true, collapse/expand based on the nearest header shrink event.
+          * @default false
+         */
+        "collapseOnHeaderShrink": boolean;
+        /**
+          * Stop fading the content when collapsing/expanding.
+          * @default false
+         */
+        "noFading": boolean;
+        /**
+          * Whether the content should be shown.
+          * @default true
+         */
+        "open": boolean;
+        /**
+          * Whether the content should scroll down from the top when open.
+          * @default false
+         */
+        "scrollDown": boolean;
+    }
+    /**
      * A combobox component with searchable dropdown.
      * Combines a text input with a dropdown list, allowing users to
      * filter options by typing or select from the list.
@@ -401,6 +431,21 @@ export namespace Components {
         "hostStyle"?: { [key: string]: string };
     }
     /**
+     * Shows a "smart" header title based on what has scrolled out of view.
+     * When `selector` matches multiple elements, the title becomes the last element
+     * (top-to-bottom) that has fully scrolled out above the viewport.
+     * @csspart title - The rendered title
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeCurrentHeading {
+        /**
+          * CSS selector for page title/headings to watch (e.g. `.page-title`, `main h2`).
+          * @default ''
+         */
+        "selector": string;
+    }
+    /**
      * Internal dropdown base component that provides shared functionality
      * for select, combobox, and multiselect components.
      * Wraps le-popover for positioning and provides:
@@ -486,6 +531,78 @@ export namespace Components {
           * Width of the dropdown. If not set, matches trigger width.
          */
         "width"?: string;
+    }
+    /**
+     * A functional page header with scroll-aware behaviors.
+     * Features:
+     * - Static (default), sticky, or fixed positioning
+     * - Optional shrink-on-scroll behavior via `shrink-offset`
+     * - Optional reveal-on-scroll-up via `reveal-on-scroll` (sticky only)
+     * Slots:
+     * - `start`: left side (logo/back button)
+     * - `title`: centered/primary title content
+     * - `end`: right side actions
+     * - default: extra content row (e.g., tabs/search) rendered below main row
+     * @cssprop --le-header-bg - Background (color/gradient)
+     * @cssprop --le-header-color - Text color
+     * @cssprop --le-header-border - Border (e.g. 1px solid ...)
+     * @cssprop --le-header-shadow - Shadow/elevation
+     * @cssprop --le-header-max-width - Inner content max width
+     * @cssprop --le-header-padding-x - Horizontal padding
+     * @cssprop --le-header-padding-y - Vertical padding
+     * @cssprop --le-header-gap - Gap between zones
+     * @cssprop --le-header-height - Base height (main row)
+     * @cssprop --le-header-height-condensed - Condensed height when shrunk
+     * @cssprop --le-header-transition - Transition timing
+     * @cssprop --le-header-z - Z-index (fixed mode)
+     * @csspart header - The header container
+     * @csspart inner - Inner max-width container
+     * @csspart row - Main row
+     * @csspart start - Start zone
+     * @csspart title - Title zone
+     * @csspart end - End zone
+     * @csspart secondary - Secondary row
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeHeader {
+        /**
+          * If true, expand the header when hovered
+          * @default false
+         */
+        "expandOnHover": boolean;
+        /**
+          * Fixed positioning (out-of-flow). Takes precedence over `sticky`/`static`.
+          * @default false
+         */
+        "fixed": boolean;
+        /**
+          * Force static positioning (default). Ignored if `sticky` or `fixed` are true.
+          * @default false
+         */
+        "isStatic": boolean;
+        /**
+          * Sticky-only reveal behavior (hide on scroll down, show on scroll up). - missing/false: disabled - true/empty attribute: enabled with default threshold (16) - number (as string): enabled and used as threshold
+         */
+        "revealOnScroll"?: string;
+        /**
+          * Shrink trigger. - missing/0: disabled - number (px): shrink when scrollY >= that value (but never before header height) - css var name (e.g. --foo): shrink when scrollY >= resolved var value - selector (e.g. .page-title): shrink when that element scrolls out of view above the viewport
+         */
+        "shrinkOffset"?: string;
+        /**
+          * Sticky positioning (in-flow). Ignored if `fixed` is true.
+          * @default false
+         */
+        "sticky": boolean;
+    }
+    /**
+     * Placeholder for `le-header`.
+     * Reserves space using the global CSS variable `--le-header-height`.
+     * The header component updates that variable when it renders.
+     * @cssprop --le-header-height - Published header height (px)
+     * @cmsInternal true
+     */
+    interface LeHeaderPlaceholder {
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -835,6 +952,29 @@ export namespace Components {
           * @default 0
          */
         "value": number;
+    }
+    /**
+     * Displays scroll progress as a simple bar.
+     * If `track-scroll-progress` is present without a value, tracks the full document.
+     * If it is a selector string, tracks progress within the matched element.
+     * @cssprop --le-scroll-progress-height - Bar height
+     * @cssprop --le-scroll-progress-bg - Track background
+     * @cssprop --le-scroll-progress-fill - Fill color
+     * @cssprop --le-scroll-progress-sticky-top - If sticky, stop position to parent top
+     * @cssprop --le-scroll-progress-fixed-top - If fixed, distance from window top
+     * @cssprop --le-scroll-progress-fixed-left - If fixed, distance from window left
+     * @cssprop --le-scroll-progress-fixed-right - If fixed, distance from window right
+     * @cssprop --le-scroll-progress-z - Z-index of the progress bar (1001 by default, above header)
+     * @csspart track - Outer track
+     * @csspart fill - Inner fill
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeScrollProgress {
+        /**
+          * Boolean or selector string.
+         */
+        "trackScrollProgress"?: string;
     }
     /**
      * A segmented control component (iOS-style toggle buttons).
@@ -1561,76 +1701,6 @@ export namespace Components {
          */
         "value": number;
     }
-    /**
-     * A functional page header with scroll-aware behaviors.
-     * Features:
-     * - Static or fixed (fixed keeps layout space via a placeholder)
-     * - Optional shrink-on-scroll styling hook
-     * - Optional reveal-on-scroll-up (hide on down, show on up)
-     * - Optional title handoff via event + scroll position
-     * Slots:
-     * - `start`: left side (logo/back button)
-     * - `title`: centered/primary title content
-     * - `end`: right side actions
-     * - default: extra content row (e.g., tabs/search) rendered below main row
-     * Events listened:
-     * - `leWebPageTitleChange`: set a compact title to show when page title scrolled away
-     * - `leWebPageTitleVisibility`: alternatively drive title visibility explicitly
-     * @cssprop --le-web-page-header-bg - Background (color/gradient)
-     * @cssprop --le-web-page-header-color - Text color
-     * @cssprop --le-web-page-header-border - Border (e.g. 1px solid ...)
-     * @cssprop --le-web-page-header-shadow - Shadow/elevation
-     * @cssprop --le-web-page-header-max-width - Inner content max width
-     * @cssprop --le-web-page-header-padding-x - Horizontal padding
-     * @cssprop --le-web-page-header-padding-y - Vertical padding
-     * @cssprop --le-web-page-header-gap - Gap between zones
-     * @cssprop --le-web-page-header-height - Base height (main row)
-     * @cssprop --le-web-page-header-height-condensed - Condensed height when shrunk
-     * @cssprop --le-web-page-header-transition - Transition timing
-     * @cssprop --le-web-page-header-z - Z-index (fixed mode)
-     * @csspart placeholder - The placeholder element that reserves space in fixed mode
-     * @csspart header - The header container
-     * @csspart inner - Inner max-width container
-     * @csspart row - Main row
-     * @csspart start - Start zone
-     * @csspart title - Title zone
-     * @csspart end - End zone
-     * @csspart secondary - Secondary row
-     * @cmsEditable true
-     * @cmsCategory Layout
-     */
-    interface LeWebPageHeader {
-        /**
-          * Layout behavior. `fixed` uses a placeholder to avoid overlap.
-          * @default 'static'
-         */
-        "mode": LeWebPageHeaderMode;
-        /**
-          * Reveal behavior: hide on scroll down, show on scroll up.
-          * @default 'none'
-         */
-        "reveal": LeWebPageHeaderRevealMode;
-        /**
-          * Minimum delta (px) to consider direction changes (reduces jitter).
-          * @default 8
-         */
-        "revealThreshold": number;
-        /**
-          * Shrink styling hook when scrolling down beyond `shrinkOffset`.
-          * @default 'none'
-         */
-        "shrink": LeWebPageHeaderShrinkMode;
-        /**
-          * Y offset (px) after which `shrunk` becomes true.
-          * @default 24
-         */
-        "shrinkOffset": number;
-        /**
-          * If true, show a compact title when the page title is not visible. Title content is driven by `leWebPageTitleChange` or `leWebPageTitleVisibility`.
-          * @default false
-         */
-        "smartTitle": boolean;
-    }
 }
 export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1647,6 +1717,10 @@ export interface LeComboboxCustomEvent<T> extends CustomEvent<T> {
 export interface LeDropdownBaseCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeDropdownBaseElement;
+}
+export interface LeHeaderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeHeaderElement;
 }
 export interface LeMultiselectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1695,10 +1769,6 @@ export interface LeTabsCustomEvent<T> extends CustomEvent<T> {
 export interface LeTagCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeTagElement;
-}
-export interface LeWebPageHeaderCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLLeWebPageHeaderElement;
 }
 declare global {
     /**
@@ -1796,6 +1866,22 @@ declare global {
         prototype: HTMLLeCheckboxElement;
         new (): HTMLLeCheckboxElement;
     };
+    /**
+     * Animated show/hide wrapper.
+     * Supports height collapse (auto->0) and/or fading.
+     * Can optionally listen to the nearest `le-header` shrink events.
+     * @cssprop --le-collapse-duration - Transition duration
+     * @csspart region - Collapsible region
+     * @csspart content - Inner content
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeCollapseElement extends Components.LeCollapse, HTMLStencilElement {
+    }
+    var HTMLLeCollapseElement: {
+        prototype: HTMLLeCollapseElement;
+        new (): HTMLLeCollapseElement;
+    };
     interface HTMLLeComboboxElementEventMap {
         "leChange": LeOptionSelectDetail;
         "leInput": { value: string };
@@ -1865,6 +1951,20 @@ declare global {
         prototype: HTMLLeComponentElement;
         new (): HTMLLeComponentElement;
     };
+    /**
+     * Shows a "smart" header title based on what has scrolled out of view.
+     * When `selector` matches multiple elements, the title becomes the last element
+     * (top-to-bottom) that has fully scrolled out above the viewport.
+     * @csspart title - The rendered title
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeCurrentHeadingElement extends Components.LeCurrentHeading, HTMLStencilElement {
+    }
+    var HTMLLeCurrentHeadingElement: {
+        prototype: HTMLLeCurrentHeadingElement;
+        new (): HTMLLeCurrentHeadingElement;
+    };
     interface HTMLLeDropdownBaseElementEventMap {
         "leOptionSelect": LeOptionSelectDetail;
         "leDropdownOpen": void;
@@ -1894,6 +1994,76 @@ declare global {
     var HTMLLeDropdownBaseElement: {
         prototype: HTMLLeDropdownBaseElement;
         new (): HTMLLeDropdownBaseElement;
+    };
+    interface HTMLLeHeaderElementEventMap {
+        "leHeaderState": {
+    y: number;
+    direction: 'up' | 'down';
+    revealed: boolean;
+    shrunk: boolean;
+  };
+        "leHeaderShrinkChange": { shrunk: boolean; y: number };
+        "leHeaderVisibilityChange": { visible: boolean; y: number };
+    }
+    /**
+     * A functional page header with scroll-aware behaviors.
+     * Features:
+     * - Static (default), sticky, or fixed positioning
+     * - Optional shrink-on-scroll behavior via `shrink-offset`
+     * - Optional reveal-on-scroll-up via `reveal-on-scroll` (sticky only)
+     * Slots:
+     * - `start`: left side (logo/back button)
+     * - `title`: centered/primary title content
+     * - `end`: right side actions
+     * - default: extra content row (e.g., tabs/search) rendered below main row
+     * @cssprop --le-header-bg - Background (color/gradient)
+     * @cssprop --le-header-color - Text color
+     * @cssprop --le-header-border - Border (e.g. 1px solid ...)
+     * @cssprop --le-header-shadow - Shadow/elevation
+     * @cssprop --le-header-max-width - Inner content max width
+     * @cssprop --le-header-padding-x - Horizontal padding
+     * @cssprop --le-header-padding-y - Vertical padding
+     * @cssprop --le-header-gap - Gap between zones
+     * @cssprop --le-header-height - Base height (main row)
+     * @cssprop --le-header-height-condensed - Condensed height when shrunk
+     * @cssprop --le-header-transition - Transition timing
+     * @cssprop --le-header-z - Z-index (fixed mode)
+     * @csspart header - The header container
+     * @csspart inner - Inner max-width container
+     * @csspart row - Main row
+     * @csspart start - Start zone
+     * @csspart title - Title zone
+     * @csspart end - End zone
+     * @csspart secondary - Secondary row
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeHeaderElement extends Components.LeHeader, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeHeaderElementEventMap>(type: K, listener: (this: HTMLLeHeaderElement, ev: LeHeaderCustomEvent<HTMLLeHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeHeaderElementEventMap>(type: K, listener: (this: HTMLLeHeaderElement, ev: LeHeaderCustomEvent<HTMLLeHeaderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeHeaderElement: {
+        prototype: HTMLLeHeaderElement;
+        new (): HTMLLeHeaderElement;
+    };
+    /**
+     * Placeholder for `le-header`.
+     * Reserves space using the global CSS variable `--le-header-height`.
+     * The header component updates that variable when it renders.
+     * @cssprop --le-header-height - Published header height (px)
+     * @cmsInternal true
+     */
+    interface HTMLLeHeaderPlaceholderElement extends Components.LeHeaderPlaceholder, HTMLStencilElement {
+    }
+    var HTMLLeHeaderPlaceholderElement: {
+        prototype: HTMLLeHeaderPlaceholderElement;
+        new (): HTMLLeHeaderPlaceholderElement;
     };
     interface HTMLLeMultiselectElementEventMap {
         "leChange": LeMultiOptionSelectDetail;
@@ -2030,6 +2200,29 @@ declare global {
     var HTMLLeRoundProgressElement: {
         prototype: HTMLLeRoundProgressElement;
         new (): HTMLLeRoundProgressElement;
+    };
+    /**
+     * Displays scroll progress as a simple bar.
+     * If `track-scroll-progress` is present without a value, tracks the full document.
+     * If it is a selector string, tracks progress within the matched element.
+     * @cssprop --le-scroll-progress-height - Bar height
+     * @cssprop --le-scroll-progress-bg - Track background
+     * @cssprop --le-scroll-progress-fill - Fill color
+     * @cssprop --le-scroll-progress-sticky-top - If sticky, stop position to parent top
+     * @cssprop --le-scroll-progress-fixed-top - If fixed, distance from window top
+     * @cssprop --le-scroll-progress-fixed-left - If fixed, distance from window left
+     * @cssprop --le-scroll-progress-fixed-right - If fixed, distance from window right
+     * @cssprop --le-scroll-progress-z - Z-index of the progress bar (1001 by default, above header)
+     * @csspart track - Outer track
+     * @csspart fill - Inner fill
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeScrollProgressElement extends Components.LeScrollProgress, HTMLStencilElement {
+    }
+    var HTMLLeScrollProgressElement: {
+        prototype: HTMLLeScrollProgressElement;
+        new (): HTMLLeScrollProgressElement;
     };
     interface HTMLLeSegmentedControlElementEventMap {
         "leChange": LeOptionSelectDetail;
@@ -2373,79 +2566,24 @@ declare global {
         prototype: HTMLLeTurntableElement;
         new (): HTMLLeTurntableElement;
     };
-    interface HTMLLeWebPageHeaderElementEventMap {
-        "leWebPageHeaderState": {
-    y: number;
-    direction: 'up' | 'down';
-    revealed: boolean;
-    shrunk: boolean;
-  };
-    }
-    /**
-     * A functional page header with scroll-aware behaviors.
-     * Features:
-     * - Static or fixed (fixed keeps layout space via a placeholder)
-     * - Optional shrink-on-scroll styling hook
-     * - Optional reveal-on-scroll-up (hide on down, show on up)
-     * - Optional title handoff via event + scroll position
-     * Slots:
-     * - `start`: left side (logo/back button)
-     * - `title`: centered/primary title content
-     * - `end`: right side actions
-     * - default: extra content row (e.g., tabs/search) rendered below main row
-     * Events listened:
-     * - `leWebPageTitleChange`: set a compact title to show when page title scrolled away
-     * - `leWebPageTitleVisibility`: alternatively drive title visibility explicitly
-     * @cssprop --le-web-page-header-bg - Background (color/gradient)
-     * @cssprop --le-web-page-header-color - Text color
-     * @cssprop --le-web-page-header-border - Border (e.g. 1px solid ...)
-     * @cssprop --le-web-page-header-shadow - Shadow/elevation
-     * @cssprop --le-web-page-header-max-width - Inner content max width
-     * @cssprop --le-web-page-header-padding-x - Horizontal padding
-     * @cssprop --le-web-page-header-padding-y - Vertical padding
-     * @cssprop --le-web-page-header-gap - Gap between zones
-     * @cssprop --le-web-page-header-height - Base height (main row)
-     * @cssprop --le-web-page-header-height-condensed - Condensed height when shrunk
-     * @cssprop --le-web-page-header-transition - Transition timing
-     * @cssprop --le-web-page-header-z - Z-index (fixed mode)
-     * @csspart placeholder - The placeholder element that reserves space in fixed mode
-     * @csspart header - The header container
-     * @csspart inner - Inner max-width container
-     * @csspart row - Main row
-     * @csspart start - Start zone
-     * @csspart title - Title zone
-     * @csspart end - End zone
-     * @csspart secondary - Secondary row
-     * @cmsEditable true
-     * @cmsCategory Layout
-     */
-    interface HTMLLeWebPageHeaderElement extends Components.LeWebPageHeader, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLLeWebPageHeaderElementEventMap>(type: K, listener: (this: HTMLLeWebPageHeaderElement, ev: LeWebPageHeaderCustomEvent<HTMLLeWebPageHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLLeWebPageHeaderElementEventMap>(type: K, listener: (this: HTMLLeWebPageHeaderElement, ev: LeWebPageHeaderCustomEvent<HTMLLeWebPageHeaderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-    }
-    var HTMLLeWebPageHeaderElement: {
-        prototype: HTMLLeWebPageHeaderElement;
-        new (): HTMLLeWebPageHeaderElement;
-    };
     interface HTMLElementTagNameMap {
         "le-box": HTMLLeBoxElement;
         "le-button": HTMLLeButtonElement;
         "le-card": HTMLLeCardElement;
         "le-checkbox": HTMLLeCheckboxElement;
+        "le-collapse": HTMLLeCollapseElement;
         "le-combobox": HTMLLeComboboxElement;
         "le-component": HTMLLeComponentElement;
+        "le-current-heading": HTMLLeCurrentHeadingElement;
         "le-dropdown-base": HTMLLeDropdownBaseElement;
+        "le-header": HTMLLeHeaderElement;
+        "le-header-placeholder": HTMLLeHeaderPlaceholderElement;
         "le-multiselect": HTMLLeMultiselectElement;
         "le-number-input": HTMLLeNumberInputElement;
         "le-popover": HTMLLePopoverElement;
         "le-popup": HTMLLePopupElement;
         "le-round-progress": HTMLLeRoundProgressElement;
+        "le-scroll-progress": HTMLLeScrollProgressElement;
         "le-segmented-control": HTMLLeSegmentedControlElement;
         "le-select": HTMLLeSelectElement;
         "le-slot": HTMLLeSlotElement;
@@ -2458,7 +2596,6 @@ declare global {
         "le-tag": HTMLLeTagElement;
         "le-text": HTMLLeTextElement;
         "le-turntable": HTMLLeTurntableElement;
-        "le-web-page-header": HTMLLeWebPageHeaderElement;
     }
 }
 declare namespace LocalJSX {
@@ -2724,6 +2861,38 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * Animated show/hide wrapper.
+     * Supports height collapse (auto->0) and/or fading.
+     * Can optionally listen to the nearest `le-header` shrink events.
+     * @cssprop --le-collapse-duration - Transition duration
+     * @csspart region - Collapsible region
+     * @csspart content - Inner content
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeCollapse {
+        /**
+          * If true, collapse/expand based on the nearest header shrink event.
+          * @default false
+         */
+        "collapseOnHeaderShrink"?: boolean;
+        /**
+          * Stop fading the content when collapsing/expanding.
+          * @default false
+         */
+        "noFading"?: boolean;
+        /**
+          * Whether the content should be shown.
+          * @default true
+         */
+        "open"?: boolean;
+        /**
+          * Whether the content should scroll down from the top when open.
+          * @default false
+         */
+        "scrollDown"?: boolean;
+    }
+    /**
      * A combobox component with searchable dropdown.
      * Combines a text input with a dropdown list, allowing users to
      * filter options by typing or select from the list.
@@ -2861,6 +3030,21 @@ declare namespace LocalJSX {
         "hostStyle"?: { [key: string]: string };
     }
     /**
+     * Shows a "smart" header title based on what has scrolled out of view.
+     * When `selector` matches multiple elements, the title becomes the last element
+     * (top-to-bottom) that has fully scrolled out above the viewport.
+     * @csspart title - The rendered title
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeCurrentHeading {
+        /**
+          * CSS selector for page title/headings to watch (e.g. `.page-title`, `main h2`).
+          * @default ''
+         */
+        "selector"?: string;
+    }
+    /**
      * Internal dropdown base component that provides shared functionality
      * for select, combobox, and multiselect components.
      * Wraps le-popover for positioning and provides:
@@ -2946,6 +3130,95 @@ declare namespace LocalJSX {
           * Width of the dropdown. If not set, matches trigger width.
          */
         "width"?: string;
+    }
+    /**
+     * A functional page header with scroll-aware behaviors.
+     * Features:
+     * - Static (default), sticky, or fixed positioning
+     * - Optional shrink-on-scroll behavior via `shrink-offset`
+     * - Optional reveal-on-scroll-up via `reveal-on-scroll` (sticky only)
+     * Slots:
+     * - `start`: left side (logo/back button)
+     * - `title`: centered/primary title content
+     * - `end`: right side actions
+     * - default: extra content row (e.g., tabs/search) rendered below main row
+     * @cssprop --le-header-bg - Background (color/gradient)
+     * @cssprop --le-header-color - Text color
+     * @cssprop --le-header-border - Border (e.g. 1px solid ...)
+     * @cssprop --le-header-shadow - Shadow/elevation
+     * @cssprop --le-header-max-width - Inner content max width
+     * @cssprop --le-header-padding-x - Horizontal padding
+     * @cssprop --le-header-padding-y - Vertical padding
+     * @cssprop --le-header-gap - Gap between zones
+     * @cssprop --le-header-height - Base height (main row)
+     * @cssprop --le-header-height-condensed - Condensed height when shrunk
+     * @cssprop --le-header-transition - Transition timing
+     * @cssprop --le-header-z - Z-index (fixed mode)
+     * @csspart header - The header container
+     * @csspart inner - Inner max-width container
+     * @csspart row - Main row
+     * @csspart start - Start zone
+     * @csspart title - Title zone
+     * @csspart end - End zone
+     * @csspart secondary - Secondary row
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeHeader {
+        /**
+          * If true, expand the header when hovered
+          * @default false
+         */
+        "expandOnHover"?: boolean;
+        /**
+          * Fixed positioning (out-of-flow). Takes precedence over `sticky`/`static`.
+          * @default false
+         */
+        "fixed"?: boolean;
+        /**
+          * Force static positioning (default). Ignored if `sticky` or `fixed` are true.
+          * @default false
+         */
+        "isStatic"?: boolean;
+        /**
+          * Emits when the header shrinks/expands (only on change).
+         */
+        "onLeHeaderShrinkChange"?: (event: LeHeaderCustomEvent<{ shrunk: boolean; y: number }>) => void;
+        /**
+          * Emits whenever scroll-driven state changes.
+         */
+        "onLeHeaderState"?: (event: LeHeaderCustomEvent<{
+    y: number;
+    direction: 'up' | 'down';
+    revealed: boolean;
+    shrunk: boolean;
+  }>) => void;
+        /**
+          * Emits when the header hides/shows (only on change).
+         */
+        "onLeHeaderVisibilityChange"?: (event: LeHeaderCustomEvent<{ visible: boolean; y: number }>) => void;
+        /**
+          * Sticky-only reveal behavior (hide on scroll down, show on scroll up). - missing/false: disabled - true/empty attribute: enabled with default threshold (16) - number (as string): enabled and used as threshold
+         */
+        "revealOnScroll"?: string;
+        /**
+          * Shrink trigger. - missing/0: disabled - number (px): shrink when scrollY >= that value (but never before header height) - css var name (e.g. --foo): shrink when scrollY >= resolved var value - selector (e.g. .page-title): shrink when that element scrolls out of view above the viewport
+         */
+        "shrinkOffset"?: string;
+        /**
+          * Sticky positioning (in-flow). Ignored if `fixed` is true.
+          * @default false
+         */
+        "sticky"?: boolean;
+    }
+    /**
+     * Placeholder for `le-header`.
+     * Reserves space using the global CSS variable `--le-header-height`.
+     * The header component updates that variable when it renders.
+     * @cssprop --le-header-height - Published header height (px)
+     * @cmsInternal true
+     */
+    interface LeHeaderPlaceholder {
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -3303,6 +3576,29 @@ declare namespace LocalJSX {
           * @default 0
          */
         "value"?: number;
+    }
+    /**
+     * Displays scroll progress as a simple bar.
+     * If `track-scroll-progress` is present without a value, tracks the full document.
+     * If it is a selector string, tracks progress within the matched element.
+     * @cssprop --le-scroll-progress-height - Bar height
+     * @cssprop --le-scroll-progress-bg - Track background
+     * @cssprop --le-scroll-progress-fill - Fill color
+     * @cssprop --le-scroll-progress-sticky-top - If sticky, stop position to parent top
+     * @cssprop --le-scroll-progress-fixed-top - If fixed, distance from window top
+     * @cssprop --le-scroll-progress-fixed-left - If fixed, distance from window left
+     * @cssprop --le-scroll-progress-fixed-right - If fixed, distance from window right
+     * @cssprop --le-scroll-progress-z - Z-index of the progress bar (1001 by default, above header)
+     * @csspart track - Outer track
+     * @csspart fill - Inner fill
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeScrollProgress {
+        /**
+          * Boolean or selector string.
+         */
+        "trackScrollProgress"?: string;
     }
     /**
      * A segmented control component (iOS-style toggle buttons).
@@ -4057,98 +4353,24 @@ declare namespace LocalJSX {
          */
         "value"?: number;
     }
-    /**
-     * A functional page header with scroll-aware behaviors.
-     * Features:
-     * - Static or fixed (fixed keeps layout space via a placeholder)
-     * - Optional shrink-on-scroll styling hook
-     * - Optional reveal-on-scroll-up (hide on down, show on up)
-     * - Optional title handoff via event + scroll position
-     * Slots:
-     * - `start`: left side (logo/back button)
-     * - `title`: centered/primary title content
-     * - `end`: right side actions
-     * - default: extra content row (e.g., tabs/search) rendered below main row
-     * Events listened:
-     * - `leWebPageTitleChange`: set a compact title to show when page title scrolled away
-     * - `leWebPageTitleVisibility`: alternatively drive title visibility explicitly
-     * @cssprop --le-web-page-header-bg - Background (color/gradient)
-     * @cssprop --le-web-page-header-color - Text color
-     * @cssprop --le-web-page-header-border - Border (e.g. 1px solid ...)
-     * @cssprop --le-web-page-header-shadow - Shadow/elevation
-     * @cssprop --le-web-page-header-max-width - Inner content max width
-     * @cssprop --le-web-page-header-padding-x - Horizontal padding
-     * @cssprop --le-web-page-header-padding-y - Vertical padding
-     * @cssprop --le-web-page-header-gap - Gap between zones
-     * @cssprop --le-web-page-header-height - Base height (main row)
-     * @cssprop --le-web-page-header-height-condensed - Condensed height when shrunk
-     * @cssprop --le-web-page-header-transition - Transition timing
-     * @cssprop --le-web-page-header-z - Z-index (fixed mode)
-     * @csspart placeholder - The placeholder element that reserves space in fixed mode
-     * @csspart header - The header container
-     * @csspart inner - Inner max-width container
-     * @csspart row - Main row
-     * @csspart start - Start zone
-     * @csspart title - Title zone
-     * @csspart end - End zone
-     * @csspart secondary - Secondary row
-     * @cmsEditable true
-     * @cmsCategory Layout
-     */
-    interface LeWebPageHeader {
-        /**
-          * Layout behavior. `fixed` uses a placeholder to avoid overlap.
-          * @default 'static'
-         */
-        "mode"?: LeWebPageHeaderMode;
-        /**
-          * Emits whenever scroll-driven state changes.
-         */
-        "onLeWebPageHeaderState"?: (event: LeWebPageHeaderCustomEvent<{
-    y: number;
-    direction: 'up' | 'down';
-    revealed: boolean;
-    shrunk: boolean;
-  }>) => void;
-        /**
-          * Reveal behavior: hide on scroll down, show on scroll up.
-          * @default 'none'
-         */
-        "reveal"?: LeWebPageHeaderRevealMode;
-        /**
-          * Minimum delta (px) to consider direction changes (reduces jitter).
-          * @default 8
-         */
-        "revealThreshold"?: number;
-        /**
-          * Shrink styling hook when scrolling down beyond `shrinkOffset`.
-          * @default 'none'
-         */
-        "shrink"?: LeWebPageHeaderShrinkMode;
-        /**
-          * Y offset (px) after which `shrunk` becomes true.
-          * @default 24
-         */
-        "shrinkOffset"?: number;
-        /**
-          * If true, show a compact title when the page title is not visible. Title content is driven by `leWebPageTitleChange` or `leWebPageTitleVisibility`.
-          * @default false
-         */
-        "smartTitle"?: boolean;
-    }
     interface IntrinsicElements {
         "le-box": LeBox;
         "le-button": LeButton;
         "le-card": LeCard;
         "le-checkbox": LeCheckbox;
+        "le-collapse": LeCollapse;
         "le-combobox": LeCombobox;
         "le-component": LeComponent;
+        "le-current-heading": LeCurrentHeading;
         "le-dropdown-base": LeDropdownBase;
+        "le-header": LeHeader;
+        "le-header-placeholder": LeHeaderPlaceholder;
         "le-multiselect": LeMultiselect;
         "le-number-input": LeNumberInput;
         "le-popover": LePopover;
         "le-popup": LePopup;
         "le-round-progress": LeRoundProgress;
+        "le-scroll-progress": LeScrollProgress;
         "le-segmented-control": LeSegmentedControl;
         "le-select": LeSelect;
         "le-slot": LeSlot;
@@ -4161,7 +4383,6 @@ declare namespace LocalJSX {
         "le-tag": LeTag;
         "le-text": LeText;
         "le-turntable": LeTurntable;
-        "le-web-page-header": LeWebPageHeader;
     }
 }
 export { LocalJSX as JSX };
@@ -4222,6 +4443,17 @@ declare module "@stencil/core" {
              */
             "le-checkbox": LocalJSX.LeCheckbox & JSXBase.HTMLAttributes<HTMLLeCheckboxElement>;
             /**
+             * Animated show/hide wrapper.
+             * Supports height collapse (auto->0) and/or fading.
+             * Can optionally listen to the nearest `le-header` shrink events.
+             * @cssprop --le-collapse-duration - Transition duration
+             * @csspart region - Collapsible region
+             * @csspart content - Inner content
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-collapse": LocalJSX.LeCollapse & JSXBase.HTMLAttributes<HTMLLeCollapseElement>;
+            /**
              * A combobox component with searchable dropdown.
              * Combines a text input with a dropdown list, allowing users to
              * filter options by typing or select from the list.
@@ -4267,6 +4499,15 @@ declare module "@stencil/core" {
              */
             "le-component": LocalJSX.LeComponent & JSXBase.HTMLAttributes<HTMLLeComponentElement>;
             /**
+             * Shows a "smart" header title based on what has scrolled out of view.
+             * When `selector` matches multiple elements, the title becomes the last element
+             * (top-to-bottom) that has fully scrolled out above the viewport.
+             * @csspart title - The rendered title
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-current-heading": LocalJSX.LeCurrentHeading & JSXBase.HTMLAttributes<HTMLLeCurrentHeadingElement>;
+            /**
              * Internal dropdown base component that provides shared functionality
              * for select, combobox, and multiselect components.
              * Wraps le-popover for positioning and provides:
@@ -4278,6 +4519,48 @@ declare module "@stencil/core" {
              * @cmsCategory System
              */
             "le-dropdown-base": LocalJSX.LeDropdownBase & JSXBase.HTMLAttributes<HTMLLeDropdownBaseElement>;
+            /**
+             * A functional page header with scroll-aware behaviors.
+             * Features:
+             * - Static (default), sticky, or fixed positioning
+             * - Optional shrink-on-scroll behavior via `shrink-offset`
+             * - Optional reveal-on-scroll-up via `reveal-on-scroll` (sticky only)
+             * Slots:
+             * - `start`: left side (logo/back button)
+             * - `title`: centered/primary title content
+             * - `end`: right side actions
+             * - default: extra content row (e.g., tabs/search) rendered below main row
+             * @cssprop --le-header-bg - Background (color/gradient)
+             * @cssprop --le-header-color - Text color
+             * @cssprop --le-header-border - Border (e.g. 1px solid ...)
+             * @cssprop --le-header-shadow - Shadow/elevation
+             * @cssprop --le-header-max-width - Inner content max width
+             * @cssprop --le-header-padding-x - Horizontal padding
+             * @cssprop --le-header-padding-y - Vertical padding
+             * @cssprop --le-header-gap - Gap between zones
+             * @cssprop --le-header-height - Base height (main row)
+             * @cssprop --le-header-height-condensed - Condensed height when shrunk
+             * @cssprop --le-header-transition - Transition timing
+             * @cssprop --le-header-z - Z-index (fixed mode)
+             * @csspart header - The header container
+             * @csspart inner - Inner max-width container
+             * @csspart row - Main row
+             * @csspart start - Start zone
+             * @csspart title - Title zone
+             * @csspart end - End zone
+             * @csspart secondary - Secondary row
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-header": LocalJSX.LeHeader & JSXBase.HTMLAttributes<HTMLLeHeaderElement>;
+            /**
+             * Placeholder for `le-header`.
+             * Reserves space using the global CSS variable `--le-header-height`.
+             * The header component updates that variable when it renders.
+             * @cssprop --le-header-height - Published header height (px)
+             * @cmsInternal true
+             */
+            "le-header-placeholder": LocalJSX.LeHeaderPlaceholder & JSXBase.HTMLAttributes<HTMLLeHeaderPlaceholderElement>;
             /**
              * A multiselect component for selecting multiple options.
              * Displays selected items as tags with optional search filtering.
@@ -4338,6 +4621,24 @@ declare module "@stencil/core" {
              */
             "le-popup": LocalJSX.LePopup & JSXBase.HTMLAttributes<HTMLLePopupElement>;
             "le-round-progress": LocalJSX.LeRoundProgress & JSXBase.HTMLAttributes<HTMLLeRoundProgressElement>;
+            /**
+             * Displays scroll progress as a simple bar.
+             * If `track-scroll-progress` is present without a value, tracks the full document.
+             * If it is a selector string, tracks progress within the matched element.
+             * @cssprop --le-scroll-progress-height - Bar height
+             * @cssprop --le-scroll-progress-bg - Track background
+             * @cssprop --le-scroll-progress-fill - Fill color
+             * @cssprop --le-scroll-progress-sticky-top - If sticky, stop position to parent top
+             * @cssprop --le-scroll-progress-fixed-top - If fixed, distance from window top
+             * @cssprop --le-scroll-progress-fixed-left - If fixed, distance from window left
+             * @cssprop --le-scroll-progress-fixed-right - If fixed, distance from window right
+             * @cssprop --le-scroll-progress-z - Z-index of the progress bar (1001 by default, above header)
+             * @csspart track - Outer track
+             * @csspart fill - Inner fill
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-scroll-progress": LocalJSX.LeScrollProgress & JSXBase.HTMLAttributes<HTMLLeScrollProgressElement>;
             /**
              * A segmented control component (iOS-style toggle buttons).
              * Perfect for toggling between a small set of related options.
@@ -4521,45 +4822,6 @@ declare module "@stencil/core" {
              */
             "le-text": LocalJSX.LeText & JSXBase.HTMLAttributes<HTMLLeTextElement>;
             "le-turntable": LocalJSX.LeTurntable & JSXBase.HTMLAttributes<HTMLLeTurntableElement>;
-            /**
-             * A functional page header with scroll-aware behaviors.
-             * Features:
-             * - Static or fixed (fixed keeps layout space via a placeholder)
-             * - Optional shrink-on-scroll styling hook
-             * - Optional reveal-on-scroll-up (hide on down, show on up)
-             * - Optional title handoff via event + scroll position
-             * Slots:
-             * - `start`: left side (logo/back button)
-             * - `title`: centered/primary title content
-             * - `end`: right side actions
-             * - default: extra content row (e.g., tabs/search) rendered below main row
-             * Events listened:
-             * - `leWebPageTitleChange`: set a compact title to show when page title scrolled away
-             * - `leWebPageTitleVisibility`: alternatively drive title visibility explicitly
-             * @cssprop --le-web-page-header-bg - Background (color/gradient)
-             * @cssprop --le-web-page-header-color - Text color
-             * @cssprop --le-web-page-header-border - Border (e.g. 1px solid ...)
-             * @cssprop --le-web-page-header-shadow - Shadow/elevation
-             * @cssprop --le-web-page-header-max-width - Inner content max width
-             * @cssprop --le-web-page-header-padding-x - Horizontal padding
-             * @cssprop --le-web-page-header-padding-y - Vertical padding
-             * @cssprop --le-web-page-header-gap - Gap between zones
-             * @cssprop --le-web-page-header-height - Base height (main row)
-             * @cssprop --le-web-page-header-height-condensed - Condensed height when shrunk
-             * @cssprop --le-web-page-header-transition - Transition timing
-             * @cssprop --le-web-page-header-z - Z-index (fixed mode)
-             * @csspart placeholder - The placeholder element that reserves space in fixed mode
-             * @csspart header - The header container
-             * @csspart inner - Inner max-width container
-             * @csspart row - Main row
-             * @csspart start - Start zone
-             * @csspart title - Title zone
-             * @csspart end - End zone
-             * @csspart secondary - Secondary row
-             * @cmsEditable true
-             * @cmsCategory Layout
-             */
-            "le-web-page-header": LocalJSX.LeWebPageHeader & JSXBase.HTMLAttributes<HTMLLeWebPageHeaderElement>;
         }
     }
 }

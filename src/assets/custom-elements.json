@@ -797,6 +797,904 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-checkbox/le-checkbox.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
+          "name": "LeCheckbox",
+          "cssProperties": [
+            {
+              "description": "Size of the checkbox input",
+              "name": "--le-checkbox-size"
+            },
+            {
+              "description": "Color of the checkbox when checked",
+              "name": "--le-checkbox-color"
+            },
+            {
+              "description": "Color of the label text",
+              "name": "--le-checkbox-label-color"
+            },
+            {
+              "description": "Color of the description text",
+              "name": "--le-checkbox-desc-color"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The label text for the checkbox",
+              "name": ""
+            },
+            {
+              "description": "Additional description text displayed below the label",
+              "name": "description"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is checked"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The value of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "externalId",
+              "type": {
+                "text": "string"
+              },
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
+            },
+            {
+              "kind": "field",
+              "name": "handleChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "checked",
+              "fieldName": "checked",
+              "default": "false",
+              "description": "Whether the checkbox is checked",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the checkbox is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "The name of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "external-id",
+              "fieldName": "externalId",
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-checkbox",
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
+              },
+              "description": "Emitted when the checked state changes"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCheckbox",
+          "declaration": {
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-checkbox",
+          "declaration": {
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-collapse/le-collapse.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Animated show/hide wrapper.\n\nSupports height collapse (auto->0) and/or fading.\nCan optionally listen to the nearest `le-header` shrink events.",
+          "name": "LeCollapse",
+          "cssProperties": [
+            {
+              "description": "Transition duration",
+              "name": "--le-collapse-duration"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "Collapsible region",
+              "name": "region"
+            },
+            {
+              "description": "Inner content",
+              "name": "content"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Content to animate",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether the content should be shown."
+            },
+            {
+              "kind": "field",
+              "name": "scrollDown",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the content should scroll down from the top when open."
+            },
+            {
+              "kind": "field",
+              "name": "noFading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Stop fading the content when collapsing/expanding."
+            },
+            {
+              "kind": "field",
+              "name": "collapseOnHeaderShrink",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "If true, collapse/expand based on the nearest header shrink event."
+            },
+            {
+              "kind": "method",
+              "name": "handleHeaderShrink",
+              "parameters": [
+                {
+                  "name": "ev",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ],
+              "description": "Handles `leHeaderShrinkChange` events from the `le-header`.\nIn case multiple headers are present, only the nearest one in the DOM tree is used."
+            },
+            {
+              "kind": "field",
+              "name": "headerShrunk",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "onOpenChange",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "onDrivenStateChange",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "shouldBeOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "applyOpenState",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "true",
+              "description": "Whether the content should be shown.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "scroll-down",
+              "fieldName": "scrollDown",
+              "default": "false",
+              "description": "Whether the content should scroll down from the top when open.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "no-fading",
+              "fieldName": "noFading",
+              "default": "false",
+              "description": "Stop fading the content when collapsing/expanding.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "collapse-on-header-shrink",
+              "fieldName": "collapseOnHeaderShrink",
+              "default": "false",
+              "description": "If true, collapse/expand based on the nearest header shrink event.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-collapse",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCollapse",
+          "declaration": {
+            "name": "LeCollapse",
+            "module": "src/components/le-collapse/le-collapse.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-collapse",
+          "declaration": {
+            "name": "LeCollapse",
+            "module": "src/components/le-collapse/le-collapse.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-combobox/le-combobox.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A combobox component with searchable dropdown.\n\nCombines a text input with a dropdown list, allowing users to\nfilter options by typing or select from the list.",
+          "name": "LeCombobox",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "LeOption[] | string"
+              },
+              "default": "[]",
+              "description": "The options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "LeOptionValue | undefined"
+              },
+              "description": "The currently selected value."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Type to search...'",
+              "description": "Placeholder text for the input."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the combobox is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether selection is required."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the multiselect should take full width of its container."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Size variant of the combobox."
+            },
+            {
+              "kind": "field",
+              "name": "allowCustom",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to allow custom values not in the options list."
+            },
+            {
+              "kind": "field",
+              "name": "minSearchLength",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "description": "Minimum characters before showing filtered results."
+            },
+            {
+              "kind": "field",
+              "name": "emptyText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dropdown is currently open."
+            },
+            {
+              "kind": "method",
+              "name": "handleWindowClick",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "inputValue",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "selectedOption",
+              "type": {
+                "text": "LeOption | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "dropdownEl",
+              "type": {
+                "text": "HTMLLeDropdownBaseElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "inputEl",
+              "type": {
+                "text": "HTMLInputElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleOptionsChange"
+            },
+            {
+              "kind": "field",
+              "name": "parsedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectedOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "filterOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOptionSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleInputChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleInputFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleInputKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleClear",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "showDropdown",
+              "description": "Opens the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "hideDropdown",
+              "description": "Closes the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "focusInput",
+              "description": "Focuses the input element."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "fieldName": "options",
+              "default": "[]",
+              "description": "The options to display in the dropdown.",
+              "type": {
+                "text": "LeOption[] | string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The currently selected value.",
+              "type": {
+                "text": "LeOptionValue"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "'Type to search...'",
+              "description": "Placeholder text for the input.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the combobox is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether selection is required.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "Name attribute for form submission.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the multiselect should take full width of its container.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Size variant of the combobox.",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "allow-custom",
+              "fieldName": "allowCustom",
+              "default": "false",
+              "description": "Whether to allow custom values not in the options list.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "min-search-length",
+              "fieldName": "minSearchLength",
+              "default": "0",
+              "description": "Minimum characters before showing filtered results.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "empty-text",
+              "fieldName": "emptyText",
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the dropdown is currently open.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-combobox",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeOptionSelectDetail>"
+              },
+              "description": "Emitted when the selected value changes."
+            },
+            {
+              "name": "leInput",
+              "type": {
+                "text": "EventEmitter<{ value: string }>"
+              },
+              "description": "Emitted when the input value changes (for custom values)."
+            },
+            {
+              "name": "leOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown opens."
+            },
+            {
+              "name": "leClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown closes."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCombobox",
+          "declaration": {
+            "name": "LeCombobox",
+            "module": "src/components/le-combobox/le-combobox.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-combobox",
+          "declaration": {
+            "name": "LeCombobox",
+            "module": "src/components/le-combobox/le-combobox.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-component/le-component.tsx",
       "declarations": [
         {
@@ -1090,6 +1988,112 @@
           "declaration": {
             "name": "LeComponent",
             "module": "src/components/le-component/le-component.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-current-heading/le-current-heading.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Shows a \"smart\" header title based on what has scrolled out of view.\n\nWhen `selector` matches multiple elements, the title becomes the last element\n(top-to-bottom) that has fully scrolled out above the viewport.",
+          "name": "LeCurrentHeading",
+          "cssParts": [
+            {
+              "description": "The rendered title",
+              "name": "title"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Optional fallback content if no watched title is active",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "selector",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "CSS selector for page title/headings to watch (e.g. `.page-title`, `main h2`)."
+            },
+            {
+              "kind": "field",
+              "name": "activeText",
+              "type": {
+                "text": "string | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "method",
+              "name": "onSelectorChange",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "onScroll",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "onResize",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "updateActiveTitle",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "selector",
+              "fieldName": "selector",
+              "default": "''",
+              "description": "CSS selector for page title/headings to watch (e.g. `.page-title`, `main h2`).",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-current-heading",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCurrentHeading",
+          "declaration": {
+            "name": "LeCurrentHeading",
+            "module": "src/components/le-current-heading/le-current-heading.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-current-heading",
+          "declaration": {
+            "name": "LeCurrentHeading",
+            "module": "src/components/le-current-heading/le-current-heading.tsx"
           }
         }
       ]
@@ -1586,60 +2590,108 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
+      "path": "src/components/le-header/le-header.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
+          "description": "A functional page header with scroll-aware behaviors.\n\nFeatures:\n- Static (default), sticky, or fixed positioning\n- Optional shrink-on-scroll behavior via `shrink-offset`\n- Optional reveal-on-scroll-up via `reveal-on-scroll` (sticky only)\n\nSlots:\n- `start`: left side (logo/back button)\n- `title`: centered/primary title content\n- `end`: right side actions\n- default: extra content row (e.g., tabs/search) rendered below main row",
+          "name": "LeHeader",
           "cssProperties": [
             {
-              "description": "Card background color",
-              "name": "--le-card-bg"
+              "description": "Background (color/gradient)",
+              "name": "--le-header-bg"
             },
             {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
+              "description": "Text color",
+              "name": "--le-header-color"
             },
             {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
+              "description": "Border (e.g. 1px solid ...)",
+              "name": "--le-header-border"
             },
             {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
+              "description": "Shadow/elevation",
+              "name": "--le-header-shadow"
+            },
+            {
+              "description": "Inner content max width",
+              "name": "--le-header-max-width"
+            },
+            {
+              "description": "Horizontal padding",
+              "name": "--le-header-padding-x"
+            },
+            {
+              "description": "Vertical padding",
+              "name": "--le-header-padding-y"
+            },
+            {
+              "description": "Gap between zones",
+              "name": "--le-header-gap"
+            },
+            {
+              "description": "Base height (main row)",
+              "name": "--le-header-height"
+            },
+            {
+              "description": "Condensed height when shrunk",
+              "name": "--le-header-height-condensed"
+            },
+            {
+              "description": "Transition timing",
+              "name": "--le-header-transition"
+            },
+            {
+              "description": "Z-index (fixed mode)",
+              "name": "--le-header-z"
             }
           ],
           "cssParts": [
             {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
+              "description": "The header container",
               "name": "header"
             },
             {
-              "description": "The card content section",
-              "name": "content"
+              "description": "Inner max-width container",
+              "name": "inner"
             },
             {
-              "description": "The card footer section",
-              "name": "footer"
+              "description": "Main row",
+              "name": "row"
+            },
+            {
+              "description": "Start zone",
+              "name": "start"
+            },
+            {
+              "description": "Title zone",
+              "name": "title"
+            },
+            {
+              "description": "End zone",
+              "name": "end"
+            },
+            {
+              "description": "Secondary row",
+              "name": "secondary"
             }
           ],
           "slots": [
             {
-              "description": "Card header content (title, actions)",
-              "name": "header"
+              "description": "Start area content",
+              "name": "start"
             },
             {
-              "description": "Default slot for main card content",
+              "description": "Title content",
+              "name": "title"
+            },
+            {
+              "description": "End area content",
+              "name": "end"
+            },
+            {
+              "description": "Optional secondary row content",
               "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
             }
           ],
           "members": [
@@ -1652,21 +2704,253 @@
             },
             {
               "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
+              "name": "isStatic",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the card is interactive (clickable)"
+              "description": "Force static positioning (default). Ignored if `sticky` or `fixed` are true."
+            },
+            {
+              "kind": "field",
+              "name": "sticky",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Sticky positioning (in-flow). Ignored if `fixed` is true."
+            },
+            {
+              "kind": "field",
+              "name": "fixed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Fixed positioning (out-of-flow). Takes precedence over `sticky`/`static`."
+            },
+            {
+              "kind": "field",
+              "name": "revealOnScroll",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Sticky-only reveal behavior (hide on scroll down, show on scroll up).\n- missing/false: disabled\n- true/empty attribute: enabled with default threshold (16)\n- number (as string): enabled and used as threshold"
+            },
+            {
+              "kind": "field",
+              "name": "shrinkOffset",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Shrink trigger.\n- missing/0: disabled\n- number (px): shrink when scrollY >= that value (but never before header height)\n- css var name (e.g. --foo): shrink when scrollY >= resolved var value\n- selector (e.g. .page-title): shrink when that element scrolls out of view above the viewport"
+            },
+            {
+              "kind": "field",
+              "name": "expandOnHover",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "If true, expand the header when hovered"
+            },
+            {
+              "kind": "field",
+              "name": "revealed",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "shrunk",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "placeholderHeight",
+              "type": {
+                "text": "number | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "hoverActive",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "disconnectModeObserver",
+              "type": {
+                "text": "() => void | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "rafId",
+              "type": {
+                "text": "number | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "measureRafId",
+              "type": {
+                "text": "number | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "lastY",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "lastEmittedDirection",
+              "type": {
+                "text": "'up' | 'down'"
+              },
+              "privacy": "private",
+              "default": "'down'"
+            },
+            {
+              "kind": "field",
+              "name": "headerEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "shrinkSelectorEl",
+              "type": {
+                "text": "Element | null | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "setShrunk",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "next",
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "y",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onBehaviorPropsChange",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "onWindowScroll",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "onWindowResize",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "getPosition",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "LeHeaderPosition"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "parseRevealThreshold",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number | null"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "resolveShrinkStartPx",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number | null"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "scheduleUpdate",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "force",
+                  "default": "false",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "scheduleMeasure",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "force",
+                  "default": "false",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "measurePlaceholderHeight",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updateFromScroll",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -1675,25 +2959,125 @@
           ],
           "attributes": [
             {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
+              "name": "static",
+              "fieldName": "isStatic",
+              "default": "false",
+              "description": "Force static positioning (default). Ignored if `sticky` or `fixed` are true.",
               "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
+                "text": "boolean"
               }
             },
             {
-              "name": "interactive",
-              "fieldName": "interactive",
+              "name": "sticky",
+              "fieldName": "sticky",
               "default": "false",
-              "description": "Whether the card is interactive (clickable)",
+              "description": "Sticky positioning (in-flow). Ignored if `fixed` is true.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "fixed",
+              "fieldName": "fixed",
+              "default": "false",
+              "description": "Fixed positioning (out-of-flow). Takes precedence over `sticky`/`static`.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "reveal-on-scroll",
+              "fieldName": "revealOnScroll",
+              "description": "Sticky-only reveal behavior (hide on scroll down, show on scroll up).\n- missing/false: disabled\n- true/empty attribute: enabled with default threshold (16)\n- number (as string): enabled and used as threshold",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "shrink-offset",
+              "fieldName": "shrinkOffset",
+              "description": "Shrink trigger.\n- missing/0: disabled\n- number (px): shrink when scrollY >= that value (but never before header height)\n- css var name (e.g. --foo): shrink when scrollY >= resolved var value\n- selector (e.g. .page-title): shrink when that element scrolls out of view above the viewport",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "expand-on-hover",
+              "fieldName": "expandOnHover",
+              "default": "false",
+              "description": "If true, expand the header when hovered",
               "type": {
                 "text": "boolean"
               }
             }
           ],
-          "tagName": "le-card",
+          "tagName": "le-header",
+          "events": [
+            {
+              "name": "leHeaderState",
+              "type": {
+                "text": "EventEmitter<{\n    y: number;\n    direction: 'up' | 'down';\n    revealed: boolean;\n    shrunk: boolean;\n  }>"
+              },
+              "description": "Emits whenever scroll-driven state changes."
+            },
+            {
+              "name": "leHeaderShrinkChange",
+              "type": {
+                "text": "EventEmitter<{ shrunk: boolean; y: number }>"
+              },
+              "description": "Emits when the header shrinks/expands (only on change)."
+            },
+            {
+              "name": "leHeaderVisibilityChange",
+              "type": {
+                "text": "EventEmitter<{ visible: boolean; y: number }>"
+              },
+              "description": "Emits when the header hides/shows (only on change)."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeHeader",
+          "declaration": {
+            "name": "LeHeader",
+            "module": "src/components/le-header/le-header.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-header",
+          "declaration": {
+            "name": "LeHeader",
+            "module": "src/components/le-header/le-header.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-header-placeholder/le-header-placeholder.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Placeholder for `le-header`.\n\nReserves space using the global CSS variable `--le-header-height`.\nThe header component updates that variable when it renders.",
+          "name": "LeHeaderPlaceholder",
+          "cssProperties": [
+            {
+              "description": "Published header height (px)",
+              "name": "--le-header-height"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "tagName": "le-header-placeholder",
           "events": [],
           "customElement": true
         }
@@ -1701,600 +3085,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LeCard",
+          "name": "LeHeaderPlaceholder",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LeHeaderPlaceholder",
+            "module": "src/components/le-header-placeholder/le-header-placeholder.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-card",
+          "name": "le-header-placeholder",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-combobox/le-combobox.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A combobox component with searchable dropdown.\n\nCombines a text input with a dropdown list, allowing users to\nfilter options by typing or select from the list.",
-          "name": "LeCombobox",
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "LeOption[] | string"
-              },
-              "default": "[]",
-              "description": "The options to display in the dropdown."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "LeOptionValue | undefined"
-              },
-              "description": "The currently selected value."
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Type to search...'",
-              "description": "Placeholder text for the input."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the combobox is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether selection is required."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Name attribute for form submission."
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the multiselect should take full width of its container."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Size variant of the combobox."
-            },
-            {
-              "kind": "field",
-              "name": "allowCustom",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to allow custom values not in the options list."
-            },
-            {
-              "kind": "field",
-              "name": "minSearchLength",
-              "type": {
-                "text": "number"
-              },
-              "default": "0",
-              "description": "Minimum characters before showing filtered results."
-            },
-            {
-              "kind": "field",
-              "name": "emptyText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'No results found'",
-              "description": "Text to show when no options match the search."
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the dropdown is currently open."
-            },
-            {
-              "kind": "method",
-              "name": "handleWindowClick",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "inputValue",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "selectedOption",
-              "type": {
-                "text": "LeOption | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "dropdownEl",
-              "type": {
-                "text": "HTMLLeDropdownBaseElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "inputEl",
-              "type": {
-                "text": "HTMLInputElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleValueChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleOptionsChange"
-            },
-            {
-              "kind": "field",
-              "name": "parsedOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "updateSelectedOption",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "filterOption",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleOptionSelect",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDropdownOpen",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDropdownClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleInputChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleInputFocus",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleInputKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleClear",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "showDropdown",
-              "description": "Opens the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "hideDropdown",
-              "description": "Closes the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "focusInput",
-              "description": "Focuses the input element."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "options",
-              "fieldName": "options",
-              "default": "[]",
-              "description": "The options to display in the dropdown.",
-              "type": {
-                "text": "LeOption[] | string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The currently selected value.",
-              "type": {
-                "text": "LeOptionValue"
-              }
-            },
-            {
-              "name": "placeholder",
-              "fieldName": "placeholder",
-              "default": "'Type to search...'",
-              "description": "Placeholder text for the input.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the combobox is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "required",
-              "fieldName": "required",
-              "default": "false",
-              "description": "Whether selection is required.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "Name attribute for form submission.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the multiselect should take full width of its container.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Size variant of the combobox.",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "allow-custom",
-              "fieldName": "allowCustom",
-              "default": "false",
-              "description": "Whether to allow custom values not in the options list.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "min-search-length",
-              "fieldName": "minSearchLength",
-              "default": "0",
-              "description": "Minimum characters before showing filtered results.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "empty-text",
-              "fieldName": "emptyText",
-              "default": "'No results found'",
-              "description": "Text to show when no options match the search.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "open",
-              "fieldName": "open",
-              "default": "false",
-              "description": "Whether the dropdown is currently open.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-combobox",
-          "events": [
-            {
-              "name": "leChange",
-              "type": {
-                "text": "EventEmitter<LeOptionSelectDetail>"
-              },
-              "description": "Emitted when the selected value changes."
-            },
-            {
-              "name": "leInput",
-              "type": {
-                "text": "EventEmitter<{ value: string }>"
-              },
-              "description": "Emitted when the input value changes (for custom values)."
-            },
-            {
-              "name": "leOpen",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dropdown opens."
-            },
-            {
-              "name": "leClose",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dropdown closes."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCombobox",
-          "declaration": {
-            "name": "LeCombobox",
-            "module": "src/components/le-combobox/le-combobox.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-combobox",
-          "declaration": {
-            "name": "LeCombobox",
-            "module": "src/components/le-combobox/le-combobox.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-checkbox/le-checkbox.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
-          "name": "LeCheckbox",
-          "cssProperties": [
-            {
-              "description": "Size of the checkbox input",
-              "name": "--le-checkbox-size"
-            },
-            {
-              "description": "Color of the checkbox when checked",
-              "name": "--le-checkbox-color"
-            },
-            {
-              "description": "Color of the label text",
-              "name": "--le-checkbox-label-color"
-            },
-            {
-              "description": "Color of the description text",
-              "name": "--le-checkbox-desc-color"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The label text for the checkbox",
-              "name": ""
-            },
-            {
-              "description": "Additional description text displayed below the label",
-              "name": "description"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is checked"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is disabled"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "description": "The name of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "description": "The value of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "externalId",
-              "type": {
-                "text": "string"
-              },
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
-            },
-            {
-              "kind": "field",
-              "name": "handleChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "checked",
-              "fieldName": "checked",
-              "default": "false",
-              "description": "Whether the checkbox is checked",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the checkbox is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "The name of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "external-id",
-              "fieldName": "externalId",
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-checkbox",
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
-              },
-              "description": "Emitted when the checked state changes"
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCheckbox",
-          "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-checkbox",
-          "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
+            "name": "LeHeaderPlaceholder",
+            "module": "src/components/le-header-placeholder/le-header-placeholder.tsx"
           }
         }
       ]
@@ -4251,6 +5053,192 @@
           "declaration": {
             "name": "LeRoundProgress",
             "module": "src/components/le-round-progress/le-round-progress.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-scroll-progress/le-scroll-progress.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Displays scroll progress as a simple bar.\n\nIf `track-scroll-progress` is present without a value, tracks the full document.\nIf it is a selector string, tracks progress within the matched element.",
+          "name": "LeScrollProgress",
+          "cssProperties": [
+            {
+              "description": "Bar height",
+              "name": "--le-scroll-progress-height"
+            },
+            {
+              "description": "Track background",
+              "name": "--le-scroll-progress-bg"
+            },
+            {
+              "description": "Fill color",
+              "name": "--le-scroll-progress-fill"
+            },
+            {
+              "description": "If sticky, stop position to parent top",
+              "name": "--le-scroll-progress-sticky-top"
+            },
+            {
+              "description": "If fixed, distance from window top",
+              "name": "--le-scroll-progress-fixed-top"
+            },
+            {
+              "description": "If fixed, distance from window left",
+              "name": "--le-scroll-progress-fixed-left"
+            },
+            {
+              "description": "If fixed, distance from window right",
+              "name": "--le-scroll-progress-fixed-right"
+            },
+            {
+              "description": "Z-index of the progress bar (1001 by default, above header)",
+              "name": "--le-scroll-progress-z"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "Outer track",
+              "name": "track"
+            },
+            {
+              "description": "Inner fill",
+              "name": "fill"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "trackScrollProgress",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Boolean or selector string."
+            },
+            {
+              "kind": "field",
+              "name": "progress",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "rafId",
+              "type": {
+                "text": "number | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "targetEl",
+              "type": {
+                "text": "Element | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "method",
+              "name": "onTrackChange",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "onScroll",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "onResize",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "scheduleUpdate",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "force",
+                  "default": "false",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "resolveTarget",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "clamp01",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "n",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "updateProgress",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "track-scroll-progress",
+              "fieldName": "trackScrollProgress",
+              "description": "Boolean or selector string.",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-scroll-progress",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeScrollProgress",
+          "declaration": {
+            "name": "LeScrollProgress",
+            "module": "src/components/le-scroll-progress/le-scroll-progress.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-scroll-progress",
+          "declaration": {
+            "name": "LeScrollProgress",
+            "module": "src/components/le-scroll-progress/le-scroll-progress.tsx"
           }
         }
       ]
@@ -6458,417 +7446,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-tab-panel/le-tab-panel.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A tab panel component used as a child of le-tabs.\n\nEach le-tab-panel defines both the tab button label and the panel content.\nThe parent le-tabs component automatically reads these panels and creates\nthe tab interface.",
-          "name": "LeTabPanel",
-          "slots": [
-            {
-              "description": "Default slot for panel content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLLeTabPanelElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "description": "The label displayed in the tab button."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "The value used to identify this tab.\nDefaults to the label if not provided."
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class."
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Icon displayed at the end of the tab button."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether this tab is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "lazy",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive."
-            },
-            {
-              "kind": "field",
-              "name": "active",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Internal: Whether this panel is currently active (set by parent le-tabs)"
-            },
-            {
-              "kind": "field",
-              "name": "hasBeenActive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Internal: Track if panel has ever been activated (for lazy rendering)"
-            },
-            {
-              "kind": "method",
-              "name": "activeChanged",
-              "parameters": [
-                {
-                  "name": "isActive",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getValue",
-              "return": {
-                "type": {
-                  "text": "Promise<string>"
-                }
-              },
-              "description": "Get the effective value (value or label as fallback)"
-            },
-            {
-              "kind": "method",
-              "name": "getTabConfig",
-              "return": {
-                "type": {
-                  "text": "Promise<{\n    label: string;\n    value: string;\n    iconStart?: string;\n    iconEnd?: string;\n    disabled: boolean;\n  }>"
-                }
-              },
-              "description": "Get tab configuration for parent component"
-            },
-            {
-              "kind": "method",
-              "name": "setActive",
-              "parameters": [
-                {
-                  "name": "isActive",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ],
-              "description": "Set the active state (called by parent le-tabs)"
-            },
-            {
-              "kind": "method",
-              "name": "shouldRenderContent",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Check if panel should render content"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "The label displayed in the tab button.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value used to identify this tab.\nDefaults to the label if not provided.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "icon-start",
-              "fieldName": "iconStart",
-              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "icon-end",
-              "fieldName": "iconEnd",
-              "description": "Icon displayed at the end of the tab button.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether this tab is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "lazy",
-              "fieldName": "lazy",
-              "default": "false",
-              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-tab-panel",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeTabPanel",
-          "declaration": {
-            "name": "LeTabPanel",
-            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-tab-panel",
-          "declaration": {
-            "name": "LeTabPanel",
-            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-tag/le-tag.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A tag/chip component for displaying labels with optional dismiss functionality.",
-          "name": "LeTag",
-          "slots": [
-            {
-              "description": "Default slot for custom content (overrides label prop)",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "description": "The text label to display in the tag."
-            },
-            {
-              "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "'default' | 'admin'"
-              },
-              "description": "Mode of the popover should be 'default' for internal use"
-            },
-            {
-              "kind": "field",
-              "name": "icon",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Icon to display before the label.\nCan be an emoji, URL, or icon name."
-            },
-            {
-              "kind": "field",
-              "name": "dismissible",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the tag can be dismissed (shows close button)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the tag is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "The size of the tag."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'primary' | 'success' | 'warning' | 'danger'"
-              },
-              "default": "'default'",
-              "description": "The visual variant of the tag."
-            },
-            {
-              "kind": "field",
-              "name": "handleDismiss",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "renderIcon",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "The text label to display in the tag.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "mode",
-              "fieldName": "mode",
-              "description": "Mode of the popover should be 'default' for internal use",
-              "type": {
-                "text": "'default' | 'admin'"
-              }
-            },
-            {
-              "name": "icon",
-              "fieldName": "icon",
-              "description": "Icon to display before the label.\nCan be an emoji, URL, or icon name.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "dismissible",
-              "fieldName": "dismissible",
-              "default": "false",
-              "description": "Whether the tag can be dismissed (shows close button).",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the tag is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "The size of the tag.",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "The visual variant of the tag.",
-              "type": {
-                "text": "'default' | 'primary' | 'success' | 'warning' | 'danger'"
-              }
-            }
-          ],
-          "tagName": "le-tag",
-          "events": [
-            {
-              "name": "leDismiss",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dismiss button is clicked."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeTag",
-          "declaration": {
-            "name": "LeTag",
-            "module": "src/components/le-tag/le-tag.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-tag",
-          "declaration": {
-            "name": "LeTag",
-            "module": "src/components/le-tag/le-tag.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-tab-bar/le-tab-bar.tsx",
       "declarations": [
         {
@@ -7238,6 +7815,233 @@
           "declaration": {
             "name": "LeTabBar",
             "module": "src/components/le-tab-bar/le-tab-bar.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-tab-panel/le-tab-panel.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A tab panel component used as a child of le-tabs.\n\nEach le-tab-panel defines both the tab button label and the panel content.\nThe parent le-tabs component automatically reads these panels and creates\nthe tab interface.",
+          "name": "LeTabPanel",
+          "slots": [
+            {
+              "description": "Default slot for panel content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLLeTabPanelElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "The label displayed in the tab button."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The value used to identify this tab.\nDefaults to the label if not provided."
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class."
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Icon displayed at the end of the tab button."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this tab is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "lazy",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive."
+            },
+            {
+              "kind": "field",
+              "name": "active",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Internal: Whether this panel is currently active (set by parent le-tabs)"
+            },
+            {
+              "kind": "field",
+              "name": "hasBeenActive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Internal: Track if panel has ever been activated (for lazy rendering)"
+            },
+            {
+              "kind": "method",
+              "name": "activeChanged",
+              "parameters": [
+                {
+                  "name": "isActive",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getValue",
+              "return": {
+                "type": {
+                  "text": "Promise<string>"
+                }
+              },
+              "description": "Get the effective value (value or label as fallback)"
+            },
+            {
+              "kind": "method",
+              "name": "getTabConfig",
+              "return": {
+                "type": {
+                  "text": "Promise<{\n    label: string;\n    value: string;\n    iconStart?: string;\n    iconEnd?: string;\n    disabled: boolean;\n  }>"
+                }
+              },
+              "description": "Get tab configuration for parent component"
+            },
+            {
+              "kind": "method",
+              "name": "setActive",
+              "parameters": [
+                {
+                  "name": "isActive",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "Set the active state (called by parent le-tabs)"
+            },
+            {
+              "kind": "method",
+              "name": "shouldRenderContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Check if panel should render content"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "The label displayed in the tab button.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value used to identify this tab.\nDefaults to the label if not provided.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-end",
+              "fieldName": "iconEnd",
+              "description": "Icon displayed at the end of the tab button.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether this tab is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "lazy",
+              "fieldName": "lazy",
+              "default": "false",
+              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-tab-panel",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeTabPanel",
+          "declaration": {
+            "name": "LeTabPanel",
+            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-tab-panel",
+          "declaration": {
+            "name": "LeTabPanel",
+            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
           }
         }
       ]
@@ -7655,6 +8459,190 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-tag/le-tag.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A tag/chip component for displaying labels with optional dismiss functionality.",
+          "name": "LeTag",
+          "slots": [
+            {
+              "description": "Default slot for custom content (overrides label prop)",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "The text label to display in the tag."
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin'"
+              },
+              "description": "Mode of the popover should be 'default' for internal use"
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Icon to display before the label.\nCan be an emoji, URL, or icon name."
+            },
+            {
+              "kind": "field",
+              "name": "dismissible",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the tag can be dismissed (shows close button)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the tag is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "The size of the tag."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'primary' | 'success' | 'warning' | 'danger'"
+              },
+              "default": "'default'",
+              "description": "The visual variant of the tag."
+            },
+            {
+              "kind": "field",
+              "name": "handleDismiss",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "The text label to display in the tag.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "mode",
+              "fieldName": "mode",
+              "description": "Mode of the popover should be 'default' for internal use",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
+              "name": "icon",
+              "fieldName": "icon",
+              "description": "Icon to display before the label.\nCan be an emoji, URL, or icon name.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "dismissible",
+              "fieldName": "dismissible",
+              "default": "false",
+              "description": "Whether the tag can be dismissed (shows close button).",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the tag is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "The size of the tag.",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "The visual variant of the tag.",
+              "type": {
+                "text": "'default' | 'primary' | 'success' | 'warning' | 'danger'"
+              }
+            }
+          ],
+          "tagName": "le-tag",
+          "events": [
+            {
+              "name": "leDismiss",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dismiss button is clicked."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeTag",
+          "declaration": {
+            "name": "LeTag",
+            "module": "src/components/le-tag/le-tag.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-tag",
+          "declaration": {
+            "name": "LeTag",
+            "module": "src/components/le-tag/le-tag.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-text/le-text.tsx",
       "declarations": [
         {
@@ -8017,415 +9005,6 @@
           "declaration": {
             "name": "LeText",
             "module": "src/components/le-text/le-text.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-web-page-header/le-web-page-header.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A functional page header with scroll-aware behaviors.\n\nFeatures:\n- Static or fixed (fixed keeps layout space via a placeholder)\n- Optional shrink-on-scroll styling hook\n- Optional reveal-on-scroll-up (hide on down, show on up)\n- Optional title handoff via event + scroll position\n\nSlots:\n- `start`: left side (logo/back button)\n- `title`: centered/primary title content\n- `end`: right side actions\n- default: extra content row (e.g., tabs/search) rendered below main row\n\nEvents listened:\n- `leWebPageTitleChange`: set a compact title to show when page title scrolled away\n- `leWebPageTitleVisibility`: alternatively drive title visibility explicitly",
-          "name": "LeWebPageHeader",
-          "cssProperties": [
-            {
-              "description": "Background (color/gradient)",
-              "name": "--le-web-page-header-bg"
-            },
-            {
-              "description": "Text color",
-              "name": "--le-web-page-header-color"
-            },
-            {
-              "description": "Border (e.g. 1px solid ...)",
-              "name": "--le-web-page-header-border"
-            },
-            {
-              "description": "Shadow/elevation",
-              "name": "--le-web-page-header-shadow"
-            },
-            {
-              "description": "Inner content max width",
-              "name": "--le-web-page-header-max-width"
-            },
-            {
-              "description": "Horizontal padding",
-              "name": "--le-web-page-header-padding-x"
-            },
-            {
-              "description": "Vertical padding",
-              "name": "--le-web-page-header-padding-y"
-            },
-            {
-              "description": "Gap between zones",
-              "name": "--le-web-page-header-gap"
-            },
-            {
-              "description": "Base height (main row)",
-              "name": "--le-web-page-header-height"
-            },
-            {
-              "description": "Condensed height when shrunk",
-              "name": "--le-web-page-header-height-condensed"
-            },
-            {
-              "description": "Transition timing",
-              "name": "--le-web-page-header-transition"
-            },
-            {
-              "description": "Z-index (fixed mode)",
-              "name": "--le-web-page-header-z"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The placeholder element that reserves space in fixed mode",
-              "name": "placeholder"
-            },
-            {
-              "description": "The header container",
-              "name": "header"
-            },
-            {
-              "description": "Inner max-width container",
-              "name": "inner"
-            },
-            {
-              "description": "Main row",
-              "name": "row"
-            },
-            {
-              "description": "Start zone",
-              "name": "start"
-            },
-            {
-              "description": "Title zone",
-              "name": "title"
-            },
-            {
-              "description": "End zone",
-              "name": "end"
-            },
-            {
-              "description": "Secondary row",
-              "name": "secondary"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Start area content",
-              "name": "start"
-            },
-            {
-              "description": "Title content",
-              "name": "title"
-            },
-            {
-              "description": "End area content",
-              "name": "end"
-            },
-            {
-              "description": "Optional secondary row content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "LeWebPageHeaderMode"
-              },
-              "default": "'static'",
-              "description": "Layout behavior. `fixed` uses a placeholder to avoid overlap."
-            },
-            {
-              "kind": "field",
-              "name": "shrink",
-              "type": {
-                "text": "LeWebPageHeaderShrinkMode"
-              },
-              "default": "'none'",
-              "description": "Shrink styling hook when scrolling down beyond `shrinkOffset`."
-            },
-            {
-              "kind": "field",
-              "name": "shrinkOffset",
-              "type": {
-                "text": "number"
-              },
-              "default": "24",
-              "description": "Y offset (px) after which `shrunk` becomes true."
-            },
-            {
-              "kind": "field",
-              "name": "reveal",
-              "type": {
-                "text": "LeWebPageHeaderRevealMode"
-              },
-              "default": "'none'",
-              "description": "Reveal behavior: hide on scroll down, show on scroll up."
-            },
-            {
-              "kind": "field",
-              "name": "revealThreshold",
-              "type": {
-                "text": "number"
-              },
-              "default": "8",
-              "description": "Minimum delta (px) to consider direction changes (reduces jitter)."
-            },
-            {
-              "kind": "field",
-              "name": "smartTitle",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "If true, show a compact title when the page title is not visible.\nTitle content is driven by `leWebPageTitleChange` or `leWebPageTitleVisibility`."
-            },
-            {
-              "kind": "field",
-              "name": "adminMode",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "revealed",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "shrunk",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "compactTitle",
-              "type": {
-                "text": "string | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "pageTitleVisible",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "disconnectModeObserver",
-              "type": {
-                "text": "() => void | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "rafId",
-              "type": {
-                "text": "number | null"
-              },
-              "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "lastY",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "lastEmittedDirection",
-              "type": {
-                "text": "'up' | 'down'"
-              },
-              "privacy": "private",
-              "default": "'down'"
-            },
-            {
-              "kind": "method",
-              "name": "onBehaviorPropsChange",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "onWindowScroll",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "onWindowResize",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "onTitleChange",
-              "privacy": "protected",
-              "parameters": [
-                {
-                  "name": "ev",
-                  "type": {
-                    "text": "CustomEvent<{ title?: string }>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "onTitleVisibility",
-              "privacy": "protected",
-              "parameters": [
-                {
-                  "name": "ev",
-                  "type": {
-                    "text": "CustomEvent<{ visible: boolean }>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "scheduleUpdate",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "force",
-                  "default": "false",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "updateFromScroll",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "renderTitle",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "mode",
-              "fieldName": "mode",
-              "default": "'static'",
-              "description": "Layout behavior. `fixed` uses a placeholder to avoid overlap.",
-              "type": {
-                "text": "LeWebPageHeaderMode"
-              }
-            },
-            {
-              "name": "shrink",
-              "fieldName": "shrink",
-              "default": "'none'",
-              "description": "Shrink styling hook when scrolling down beyond `shrinkOffset`.",
-              "type": {
-                "text": "LeWebPageHeaderShrinkMode"
-              }
-            },
-            {
-              "name": "shrink-offset",
-              "fieldName": "shrinkOffset",
-              "default": "24",
-              "description": "Y offset (px) after which `shrunk` becomes true.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "reveal",
-              "fieldName": "reveal",
-              "default": "'none'",
-              "description": "Reveal behavior: hide on scroll down, show on scroll up.",
-              "type": {
-                "text": "LeWebPageHeaderRevealMode"
-              }
-            },
-            {
-              "name": "reveal-threshold",
-              "fieldName": "revealThreshold",
-              "default": "8",
-              "description": "Minimum delta (px) to consider direction changes (reduces jitter).",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "smart-title",
-              "fieldName": "smartTitle",
-              "default": "false",
-              "description": "If true, show a compact title when the page title is not visible.\nTitle content is driven by `leWebPageTitleChange` or `leWebPageTitleVisibility`.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-web-page-header",
-          "events": [
-            {
-              "name": "leWebPageHeaderState",
-              "type": {
-                "text": "EventEmitter<{\n    y: number;\n    direction: 'up' | 'down';\n    revealed: boolean;\n    shrunk: boolean;\n  }>"
-              },
-              "description": "Emits whenever scroll-driven state changes."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeWebPageHeader",
-          "declaration": {
-            "name": "LeWebPageHeader",
-            "module": "src/components/le-web-page-header/le-web-page-header.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-web-page-header",
-          "declaration": {
-            "name": "LeWebPageHeader",
-            "module": "src/components/le-web-page-header/le-web-page-header.tsx"
           }
         }
       ]

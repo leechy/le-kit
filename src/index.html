@@ -12,7 +12,6 @@
     <style>
       body {
         font-family: var(--le-font-family);
-        padding: var(--le-space-lg);
         background: var(--le-color-background);
         color: var(--le-color-text);
         margin: 0;
@@ -20,6 +19,7 @@
       }
       .demo-section {
         margin-bottom: var(--le-space-2xl);
+        padding: var(--le-space-lg);
       }
       h1, h2 {
         color: var(--le-color-text);
@@ -28,17 +28,14 @@
         color: var(--le-color-text-secondary);
       }
       .controls {
-        margin-bottom: var(--le-space-lg);
-        padding: var(--le-space-md);
-        background: var(--le-color-surface);
-        border-radius: var(--le-radius-lg);
         display: flex;
         flex-wrap: wrap;
         gap: var(--le-space-lg);
         align-items: center;
-        box-shadow: var(--le-shadow-sm);
+        justify-content: space-around;
       }
       .control-group {
+        padding-block: var(--le-space-sm);
         display: flex;
         gap: var(--le-space-sm);
         align-items: center;
@@ -95,28 +92,71 @@
     </style>
   </head>
   <body>
-    <h1>Le-Kit Component Library</h1>
-    
-    <div class="controls" mode="default">
-      <div class="control-group">
-        <span>Mode:</span>
-        <le-button id="btn-mode-default" variant="outlined" selected="true" color="primary" onclick="setMode('default', event)">Default</le-button>
-        <le-button id="btn-mode-admin" variant="outlined" color="primary" onclick="setMode('admin', event)">Admin</le-button>
-      </div>
-      
-      <div class="control-group">
-        <span>Theme:</span>
-        <le-button id="btn-theme-default" variant="solid" selected onclick="setTheme('default')" theme="default">Default</le-button>
-        <le-button id="btn-theme-dark" variant="solid" onclick="setTheme('dark')" theme="dark">Dark</le-button>
-        <le-button id="btn-theme-gradient" variant="solid" onclick="setTheme('gradient')" theme="gradient">Gradient</le-button>
-        <le-button id="btn-theme-minimal" variant="solid" onclick="setTheme('minimal')" theme="minimal">Minimal</le-button>
-        <le-button id="btn-theme-warm" variant="solid" onclick="setTheme('warm')" theme="warm">Warm</le-button>
+    <!-- Sticky scroll progress bar, sits on the top of the page (and header) -->
+    <le-scroll-progress track-scroll-progress="main" fixed></le-scroll-progress>
+
+    <le-header
+      id="demo-header"
+      sticky
+      dont-reveal-on-scroll
+      expand-on-hover
+      shrink-offset="h2"
+      style="
+        --le-header-top-offset: 12px;
+        --le-header-shadow: var(--le-shadow-lg);
+        --le-header-border-radius: 42px;
+        --le-header-padding-y: var(--le-space-xs);
+        --le-header-padding-x: var(--le-space-xl);
+
+        --le-header-border: 1px solid var(--le-color-border);
+        --le-header-max-width: 800px;
+        --le-header-content-max-width: 750px;
+      "
+    >
+      <div slot="start" style="display:flex; align-items:center; gap: 8px;">
+        <svg width="120" height="50" viewBox="0 0 1335.47179 635.583768" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="Logo?" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Logo" transform="translate(667.735894, 317.791884) rotate(5.000000) translate(-667.735894, -317.791884) translate(20.403897, 55.420298)">
+              <path d="M28.0166541,57.5523042 C5.20666788,142.301999 -7.89382862,265.477544 5.20666788,375.230033 C18.3071644,484.982521 76.0301231,524.743172 123.592056,524.743172 C171.153989,524.743172 232.392683,486.19824 245.995938,409.589158 C259.599194,332.980077 243.199716,293.765984 199.501702,293.765984 C155.803688,293.765984 128.755836,345.380526 144.217297,412.430463 C159.678758,479.480399 236.974598,515.951383 290.309612,506.713137 C343.644625,497.474892 361.52566,454.50232 367.416671,411.562738" id="Path" stroke="#18619D" stroke-width="70" stroke-linecap="round"></path>
+              <path d="M620.540378,286.107359 C650.745472,244.042526 679.234461,195.921193 694.546637,146.035125 C709.858813,96.1490568 713.335928,36.1088324 682.528068,36.1088324 C651.720208,36.1088324 636.305578,136.05686 636.305578,195.921193 C636.305578,255.785527 634.325651,369.215468 624.264394,476.713137 C633.667817,406.902755 665.042995,349.2825 682.879578,320.536473 C700.71616,291.790447 729.971458,271.833042 740.060137,269.579878 C724.3537,273.162096 666.257259,325.09429 660.841458,377.383594 C655.425658,429.672898 699.353725,475.005079 762.745368,462.890593 C826.137012,450.776106 871.753368,369.571295 882.011358,260.478087 C880.41108,352.157939 901.114361,421.327536 960.93382,428.619572 C1020.75328,435.911609 1051.64961,369.491929 1066.18709,317.41631 C1080.72456,265.340691 1094.4543,117.552847 1080.72456,0 C1044.67417,225.740379 1076.87432,392.362397 1154.8045,423.589452 C1232.73467,454.816506 1269.31763,386.931719 1294.66399,321.404389" id="Path-2" stroke="#2781CA" stroke-width="50" stroke-linecap="round" stroke-linejoin="round"></path>
+              <ellipse id="Oval" fill="#2781CA" cx="882.984416" cy="162.977155" rx="27.5" ry="25"></ellipse>
+              <path d="M1003.78553,186.077653 C1050.17301,208.895365 1139.81834,215.024372 1179.43672,215.024372" id="Path-3" stroke="#2781CA" stroke-width="50" stroke-linecap="round" transform="translate(1091.611126, 200.551013) rotate(-8.000000) translate(-1091.611126, -200.551013) "></path>
+              <path d="M455.563831,359.711191 C484.233394,362.290225 520.250213,354.051866 542.758603,342.445893" id="Path-3-Copy" stroke="#2781CA" stroke-width="50" stroke-linecap="round"></path>
+            </g>
+          </g>
+        </svg>
       </div>
 
-      <div class="control-group">
-        <le-button variant="outlined" color="danger" onclick="resetContent()">Reset to Default</le-button>
+      <!-- Optional: smart title handoff based on page content -->
+      <h4 slot="title" style="margin: 0;"><le-current-heading selector=".demo-section h2"></le-current-heading></h4>
+
+      <div slot="end" style="display:flex; gap: 8px;">
+        <div class="control-group">
+          <le-button id="btn-mode-default" mode="default" variant="outlined" selected="true" color="primary" onclick="setMode('default', event)">Default</le-button>
+          <le-button id="btn-mode-admin" mode="default" variant="outlined" color="primary" onclick="setMode('admin', event)">Admin</le-button>
+        </div>
       </div>
-    </div>
+
+      <le-collapse collapse-on-header-shrink>
+        <div class="controls" mode="default">
+          <div class="control-group">
+            <span>Theme:</span>
+            <le-button id="btn-theme-default" variant="solid" selected onclick="setTheme('default')" theme="default">Default</le-button>
+            <le-button id="btn-theme-dark" variant="solid" onclick="setTheme('dark')" theme="dark">Dark</le-button>
+            <le-button id="btn-theme-gradient" variant="solid" onclick="setTheme('gradient')" theme="gradient">Gradient</le-button>
+            <le-button id="btn-theme-minimal" variant="solid" onclick="setTheme('minimal')" theme="minimal">Minimal</le-button>
+            <le-button id="btn-theme-warm" variant="solid" onclick="setTheme('warm')" theme="warm">Warm</le-button>
+          </div>
+
+          <div class="control-group">
+            <le-button variant="outlined" color="danger" onclick="resetContent()">Reset to Default</le-button>
+          </div>
+        </div>
+      </le-collapse>
+    </le-header>
+
+    <!-- Reserve space for fixed headers (place anywhere you need)
+    <le-header-placeholder></le-header-placeholder> -->
 
     <!-- Editable content container - contents stored in localStorage -->
     <div id="editable-content"></div>
@@ -124,61 +164,36 @@
     <!-- Default content template (used when localStorage is empty) -->
     <template id="default-content">
       <div class="demo-section">
-        <h2>Web Page Header (le-web-page-header)</h2>
-        <p>
-          Scroll down: header hides. Scroll up: header reveals. When the page title scrolls away, the header shows a compact title.
-        </p>
-
-        <le-web-page-header
-          id="demo-web-page-header"
-          mode="fixed"
-          reveal="reveal"
-          shrink="shrink"
-          shrink-offset="24"
-          smart-title
-          style="
-            --le-web-page-header-bg: var(--le-color-surface);
-            --le-web-page-header-shadow: var(--le-shadow-sm);
-            --le-web-page-header-border: 1px solid var(--le-color-border);
-            --le-web-page-header-max-width: 1200px;
-            --le-web-page-header-fixed-offset: var(--le-space-lg);
-          "
-        >
-          <div slot="start" style="display:flex; align-items:center; gap: 8px;">
-            <le-tag>LE</le-tag>
-            <le-text variant="label">le-kit</le-text>
+        <h2>Collapse Component</h2>
+        <p>Components that can collapse and expand with smooth animations.</p>
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <div style="display: flex; align-items: baseline; gap: var(--le-space-sm); margin-bottom: var(--le-space-sm);">
+              <label>Basic Collapse</label>
+              <le-button variant="outlined" onclick="toggleCollapse('demo-collapse-basic')">Toggle Content</le-button>
+            </div>
+            <le-collapse id="demo-collapse-basic">
+              <div>
+                <p>This is the collapsible content. It can contain any HTML elements, including text, images, and other components.</p>
+                <p>Click the button above to toggle the visibility of this content with a smooth animation.</p>
+              </div>
+            </le-collapse>
           </div>
 
-          <le-text slot="title" variant="h4">Landing</le-text>
-
-          <div slot="end" style="display:flex; gap: 8px;">
-            <le-button variant="outlined" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">Top</le-button>
-            <le-button variant="solid" color="primary" onclick="leAlert('Action clicked', { title: 'Header' })">Action</le-button>
-          </div>
-
-          <div style="padding: var(--le-space-sm) 0; display:flex; gap: 8px; flex-wrap: wrap; align-items:center;">
-            <le-text variant="small">Demo controls:</le-text>
-            <le-button variant="outlined" onclick="toggleHeaderProp('mode', ['fixed','static'])">Toggle fixed/static</le-button>
-            <le-button variant="outlined" onclick="toggleHeaderProp('reveal', ['reveal','none'])">Toggle reveal</le-button>
-            <le-button variant="outlined" onclick="toggleHeaderProp('shrink', ['shrink','none'])">Toggle shrink</le-button>
-            <le-button variant="outlined" onclick="toggleHeaderBool('smartTitle')">Toggle smart title</le-button>
-          </div>
-          <div style="padding-bottom: var(--le-space-sm);">
-            <le-text id="header-state" variant="small"></le-text>
-          </div>
-        </le-web-page-header>
-
-        <div class="text-slot-demo" style="margin-top: var(--le-space-md);">
-          <label>Scroll area (title sentinel):</label>
-          <div style="padding: var(--le-space-md); background: var(--le-color-surface); border-radius: var(--le-radius-md); border: 1px solid var(--le-color-border);">
-            <h1 id="page-title" style="margin-top: 0;">Landing</h1>
-            <p>
-              This title is observed by the demo script. When it scrolls out of view, the header switches to the compact title.
-            </p>
-            <div style="height: 900px;"></div>
-            <h2>More content</h2>
-            <p>Keep scrolling to see reveal/shrink behavior.</p>
-            <div style="height: 900px;"></div>
+          <div class="text-slot-demo">
+            <div style="display: flex; align-items: baseline; gap: var(--le-space-sm); margin-bottom: var(--le-space-sm);">
+              <label>Scroll down and start closed</label>
+              <le-button variant="outlined" onclick="toggleCollapse('demo-collapse-scroll')">Toggle Content</le-button>
+            </div>
+            <le-collapse id="demo-collapse-scroll" scroll-down no-fading open="false">
+              <div>
+                <p>This collapse component should slide up and fade away when toggled.</p>
+                <p>Starting point is when the component is open.</p>
+                <p>Here we have some more text, so we can better see what is happening.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+              </div>
+            </le-collapse>
           </div>
         </div>
       </div>
@@ -979,39 +994,6 @@ console.log(greeting);</le-text>
       }
 
       // ============================================
-      // Web Page Header demo helpers
-      // ============================================
-      function getDemoHeader() {
-        return document.getElementById('demo-web-page-header');
-      }
-
-      function toggleHeaderProp(attrName, values) {
-        const header = getDemoHeader();
-        if (!header) return;
-        const current = header.getAttribute(attrName) || '';
-        const next = current === values[0] ? values[1] : values[0];
-        header.setAttribute(attrName, next);
-      }
-
-      function toggleHeaderBool(attrName) {
-        const header = getDemoHeader();
-        if (!header) return;
-        if (header.hasAttribute(attrName)) header.removeAttribute(attrName);
-        else header.setAttribute(attrName, '');
-      }
-
-      function setupHeaderStateDebug() {
-        const header = getDemoHeader();
-        const out = document.getElementById('header-state');
-        if (!header || !out) return;
-
-        header.addEventListener('leWebPageHeaderState', (e) => {
-          const d = e.detail || {};
-          out.textContent = `mode=${header.getAttribute('mode')} reveal=${header.getAttribute('reveal')} shrink=${header.getAttribute('shrink')} smartTitle=${header.hasAttribute('smart-title')} | y=${Math.round(d.y || 0)} dir=${d.direction} revealed=${d.revealed} shrunk=${d.shrunk}`;
-        });
-      }
-
-      // ============================================
       // Popup Demo Functions
       // ============================================
       
@@ -1064,37 +1046,6 @@ console.log(greeting);</le-text>
 
       // Initialize on page load
       initContent();
-
-      // ============================================
-      // Web Page Header demo: title handoff
-      // ============================================
-      function setupHeaderTitleObserver() {
-        const titleEl = document.getElementById('page-title');
-        if (!titleEl) return;
-
-        // Provide initial compact title
-        window.dispatchEvent(new CustomEvent('leWebPageTitleChange', { detail: { title: titleEl.textContent?.trim() || '' } }));
-
-        if (!('IntersectionObserver' in window)) return;
-
-        const observer = new IntersectionObserver(
-          (entries) => {
-            const entry = entries[0];
-            const visible = !!entry?.isIntersecting;
-            window.dispatchEvent(new CustomEvent('leWebPageTitleVisibility', { detail: { visible } }));
-          },
-          {
-            root: null,
-            threshold: 0.25,
-          },
-        );
-
-        observer.observe(titleEl);
-      }
-
-      // The content is injected into #editable-content, so run after initContent.
-      setupHeaderTitleObserver();
-      setupHeaderStateDebug();
 
       document.getElementById('demo-combobox').options = [
         { label: 'JavaScript', value: 'js', description: 'Dynamic scripting language' },
@@ -1229,6 +1180,13 @@ console.log(greeting);</le-text>
       document.getElementById('demo-segmented-md').options = segmentOptions;
       document.getElementById('demo-segmented-lg').options = segmentOptions;
       document.getElementById('demo-segmented-full').options = segmentOptions;
+
+      function toggleCollapse(id, open) {
+        const collapse = document.getElementById(id);
+        if (collapse) {
+          collapse.open = open ?? !collapse.open;
+        }
+      }
     </script>
   </body>
 </html>

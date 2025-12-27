@@ -131,6 +131,7 @@ export class LeComponent {
    * e.g., 'le-card' -> 'Card'
    */
   private formatDisplayName(tagName: string): string {
+    if (!tagName || typeof tagName !== 'string') return 'unknown';
     return tagName
       .replace(/^le-/, '') // Remove 'le-' prefix
       .split('-')

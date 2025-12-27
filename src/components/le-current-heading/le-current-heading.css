@@ -9,4 +9,5 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--le-current-heading-color, var(--le-color-text-primary));
 }

@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+:host([sticky]) {
+  position: sticky;
+  top: var(--le-scroll-progress-sticky-top, 0);
+  z-index: var(--le-scroll-progress-z, calc(var(--le-header-z, 1000) + 1));
+}
+:host([fixed]) {
+  position: fixed;
+  top: var(--le-scroll-progress-fixed-top, 0);
+  left: var(--le-scroll-progress-fixed-left, 0);
+  right: var(--le-scroll-progress-fixed-right, 0);
+  z-index: var(--le-scroll-progress-z, calc(var(--le-header-z, 1000) + 1));
+}
+
+.track {
+  width: 100%;
+  height: var(--le-scroll-progress-height, 4px);
+  background: var(--le-scroll-progress-bg, transparent);
+}
+
+.fill {
+  height: 100%; 
+  width: 0;
+  background: var(--le-scroll-progress-fill, var(--le-color-primary, currentColor));
+  border-radius: var(--le-scroll-progress-border-radius, 2px);
+  transition: width var(--le-transition-fast, 120ms linear);
+}

@@ -101,9 +101,9 @@ A flexible button component with multiple variants and states.
 
 ## Events
 
-| Event   | Description                                                                                                                     | Type                        |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `click` | Emitted when the button is clicked. This is a custom event that wraps the native click but ensures the target is the le-button. | `CustomEvent<PointerEvent>` |
+| Event   | Description                                                                                                                     | Type                      |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `click` | Emitted when the button is clicked. This is a custom event that wraps the native click but ensures the target is the le-button. | `CustomEvent<MouseEvent>` |
 
 
 ## Slots

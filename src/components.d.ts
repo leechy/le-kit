@@ -1790,7 +1790,7 @@ declare global {
         new (): HTMLLeBoxElement;
     };
     interface HTMLLeButtonElementEventMap {
-        "click": PointerEvent;
+        "click": MouseEvent;
     }
     /**
      * A flexible button component with multiple variants and states.
@@ -2767,7 +2767,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the button is clicked. This is a custom event that wraps the native click but ensures the target is the le-button.
          */
-        "onClick"?: (event: LeButtonCustomEvent<PointerEvent>) => void;
+        "onClick"?: (event: LeButtonCustomEvent<MouseEvent>) => void;
         /**
           * Whether the button is in a selected/active state
           * @default false

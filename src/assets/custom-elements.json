@@ -768,7 +768,7 @@
             {
               "name": "click",
               "type": {
-                "text": "EventEmitter<PointerEvent>"
+                "text": "EventEmitter<MouseEvent>"
               },
               "description": "Emitted when the button is clicked.\nThis is a custom event that wraps the native click but ensures the target is the le-button."
             }

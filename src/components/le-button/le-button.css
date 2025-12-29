@@ -62,7 +62,7 @@
 }
 
 .le-button-container:active:not(:disabled) {
-  box-shadow: inset 0 0 6px var(--le-color-shadow);
+  box-shadow: inset 0 0 5px color-mix(in srgb, var(--_btn-bg) 50%, transparent);
 }
 
 .le-button-container:focus-visible {
@@ -88,7 +88,7 @@
  * =========================================== */
 
 /* Primary (default) */
-:host > le-component.color-primary {
+:host(.color-primary) {
   --_btn-bg: var(--le-color-primary);
   --_btn-bg-hover: var(--le-color-primary-dark);
   --_btn-color: var(--le-button-color);
@@ -96,7 +96,7 @@
 }
 
 /* Secondary */
-:host > le-component.color-secondary {
+:host(.color-secondary) {
   --_btn-bg: var(--le-color-secondary);
   --_btn-bg-hover: var(--le-color-secondary-dark);
   --_btn-color: var(--le-color-secondary-contrast);
@@ -104,7 +104,7 @@
 }
 
 /* Success */
-:host > le-component.color-success {
+:host(.color-success) {
   --_btn-bg: var(--le-color-success);
   --_btn-bg-hover: var(--le-color-success-dark);
   --_btn-color: var(--le-color-success-contrast);
@@ -112,7 +112,7 @@
 }
 
 /* Warning */
-:host > le-component.color-warning {
+:host(.color-warning) {
   --_btn-bg: var(--le-color-warning);
   --_btn-bg-hover: var(--le-color-warning-dark);
   --_btn-color: var(--le-color-warning-contrast);
@@ -120,7 +120,7 @@
 }
 
 /* Danger */
-:host > le-component.color-danger {
+:host(.color-danger) {
   --_btn-bg: var(--le-color-danger);
   --_btn-bg-hover: var(--le-color-danger-dark);
   --_btn-color: var(--le-color-danger-contrast);
@@ -128,7 +128,7 @@
 }
 
 /* Info */
-:host > le-component.color-info {
+:host(.color-info) {
   --_btn-bg: var(--le-color-info);
   --_btn-bg-hover: var(--le-color-info-dark);
   --_btn-color: var(--le-color-info-contrast);
@@ -140,39 +140,39 @@
  * =========================================== */
 
 /* Solid (default) - already styled by color classes */
-:host > le-component.variant-solid .le-button-container {
+:host(.variant-solid) .le-button-container {
   box-shadow: var(--le-shadow-sm);
 }
 
-:host > le-component.variant-solid .le-button-container:hover:not(:disabled) {
+:host(.variant-solid) .le-button-container:hover:not(:disabled) {
   box-shadow: var(--le-shadow-md);
 }
 
 /* Outlined */
-:host > le-component.variant-outlined .le-button-container {
+:host(.variant-outlined) .le-button-container {
   background: transparent;
   color: var(--_btn-bg);
   border-color: color-mix(in srgb, var(--_btn-border-color) 33%, transparent);
 }
 
-:host > le-component.variant-outlined .le-button-container:hover:not(:disabled) {
+:host(.variant-outlined) .le-button-container:hover:not(:disabled) {
   border-color: var(--_btn-border-color);
 }
 
 /* Clear (ghost) */
-:host > le-component.variant-clear .le-button-container {
+:host(.variant-clear) .le-button-container {
   background: transparent;
   color: var(--_btn-bg);
   border-color: transparent;
 }
 
-:host > le-component.variant-clear .le-button-container:hover:not(:disabled) {
+:host(.variant-clear) .le-button-container:hover:not(:disabled) {
   background: var(--le-color-gray-100);
   border-color: transparent;
 }
 
 /* System (controls without access) */
-:host > le-component.variant-system .le-button-container {
+:host(.variant-system) .le-button-container {
   background: transparent;
   color: var(--_btn-bg-system);
   border-color: transparent;
@@ -181,14 +181,14 @@
 /* ===========================================
  * SIZES
  * =========================================== */
-:host > le-component.size-small .le-button-container {
+:host(.size-small) {
   --le-button-padding-x: 0.4rem;
   --le-button-padding-y: 0.3rem;
   --le-button-padding-top: 0.35rem;
   --le-button-font-size: var(--le-button-small-font-size, var(--le-font-size-xs));
 }
 
-:host > le-component.size-large .le-button-container {
+:host(.size-large) {
   --le-button-padding-x: 0.9rem;
   --le-button-padding-y: 0.6rem;
   --le-button-font-size: var(--le-font-size-xl);
@@ -199,39 +199,39 @@
  * =========================================== */
 
 /* Full width */
-:host > le-component.full-width {
+:host(.full-width) {
   display: block;
   width: 100%;
 }
 
 /* Selected state */
-:host > le-component.selected .le-button-container {
+:host(.selected) .le-button-container {
   box-shadow: inset 0 0 4px var(--le-color-shadow);
 }
 
-:host > le-component.variant-outlined.selected .le-button-container,
-:host > le-component.variant-clear.selected .le-button-container {
+:host(.variant-outlined.selected) .le-button-container,
+:host(.variant-clear.selected) .le-button-container {
   background: var(--_btn-bg);
   color: var(--_btn-color);
 }
 
 /* Icon only */
-:host > le-component.icon-only .le-button-container {
+:host(.icon-only) .le-button-container {
   padding: 0.5rem;
   padding-bottom: 0.6rem;
   aspect-ratio: var(--le-button-icon-aspect-ratio, 1);
 }
 
-:host > le-component.icon-only.size-small .le-button-container {
+:host(.icon-only.size-small) .le-button-container {
   padding: var(--le-button-small-padding, 0.25rem);
 }
 
-:host > le-component.icon-only.size-large .le-button-container {
+:host(.icon-only.size-large) .le-button-container {
   padding: 0.75rem;
 }
 
 /* Hide content in icon-only mode */
-:host > le-component.icon-only .content {
+:host(.icon-only) .content {
   display: none;
 }
 

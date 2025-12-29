@@ -1,4 +1,4 @@
-import { Component, Prop, h, Element, Fragment, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, h, Element, Fragment, Event, EventEmitter, Host } from '@stencil/core';
 import { classnames } from '../../utils/utils';
 
 /**
@@ -109,9 +109,9 @@ export class LeButton {
    * Emitted when the button is clicked.
    * This is a custom event that wraps the native click but ensures the target is the le-button.
    */
-  @Event({ eventName: 'click' }) leClick: EventEmitter<PointerEvent>;
+  @Event({ eventName: 'click' }) leClick: EventEmitter<MouseEvent>;
 
-  private handleClick = (event: PointerEvent) => {
+  private handleClick = (event: MouseEvent) => {
     // We stop the internal button click from bubbling up
     event.stopPropagation();
 
@@ -125,42 +125,64 @@ export class LeButton {
   };
 
   render() {
-    const classes = classnames(`variant-${this.variant}`, `color-${this.color}`, `size-${this.size}`, {
-      'selected': this.selected,
-      'full-width': this.fullWidth,
-      'icon-only': this.iconOnly,
-      'disabled': this.disabled,
-    });
+    const classes = classnames(
+      `variant-${this.variant}`,
+      `color-${this.color}`,
+      `size-${this.size}`,
+      {
+        'selected': this.selected,
+        'full-width': this.fullWidth,
+        'icon-only': this.iconOnly,
+        'disabled': this.disabled,
+      },
+    );
 
     const TagType = this.href ? 'a' : 'button';
-    const attrs = this.href ? { href: this.href, target: this.target, role: 'button' } : { type: this.type, disabled: this.disabled };
+    const attrs = this.href
+      ? { href: this.href, target: this.target, role: 'button' }
+      : { type: this.type, disabled: this.disabled };
 
     return (
-      <le-component component="le-button" hostClass={classes}>
-        <TagType class={classnames('le-button-container', `le-button-align-${this.align}`)} part="button" {...attrs} onClick={this.handleClick}>
-          {this.iconOnly !== undefined ? (
-            <slot name="icon-only">{typeof this.iconOnly === 'string' ? this.iconOnly : null}</slot>
-          ) : (
-            <Fragment>
-              <span class="le-button-label">
-                {this.iconStart && (
-                  <span class="icon-start" part="icon-start">
-                    {this.iconStart}
+      <Host class={classes}>
+        <le-component component="le-button">
+          <TagType
+            class={classnames('le-button-container', `le-button-align-${this.align}`)}
+            part="button"
+            {...attrs}
+            onClick={this.handleClick}
+          >
+            {this.iconOnly !== undefined ? (
+              <slot name="icon-only">
+                {typeof this.iconOnly === 'string' ? this.iconOnly : null}
+              </slot>
+            ) : (
+              <Fragment>
+                <span class="le-button-label">
+                  {this.iconStart && (
+                    <span class="icon-start" part="icon-start">
+                      {this.iconStart}
+                    </span>
+                  )}
+                  <le-slot
+                    name=""
+                    description="Button text"
+                    type="text"
+                    class="content"
+                    part="content"
+                  >
+                    <slot></slot>
+                  </le-slot>
+                </span>
+                {this.iconEnd && (
+                  <span class="icon-end" part="icon-end">
+                    {this.iconEnd}
                   </span>
                 )}
-                <le-slot name="" description="Button text" type="text" class="content" part="content">
-                  <slot></slot>
-                </le-slot>
-              </span>
-              {this.iconEnd && (
-                <span class="icon-end" part="icon-end">
-                  {this.iconEnd}
-                </span>
-              )}
-            </Fragment>
-          )}
-        </TagType>
-      </le-component>
+              </Fragment>
+            )}
+          </TagType>
+        </le-component>
+      </Host>
     );
   }
 }

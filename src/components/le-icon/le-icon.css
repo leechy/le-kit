@@ -1,0 +1,13 @@
+:host {
+  display: inline-block;
+
+  width: var(--le-icon-size, var(--le-size-4));
+  height: var(--le-icon-size, var(--le-size-4));
+
+  color: var(--le-icon-color, var(--le-color-text-primary));
+}
+
+:host svg {
+  display: block;
+  fill: currentColor;
+}

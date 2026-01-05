@@ -55,8 +55,8 @@ export const config: Config = {
           dest: 'src/components/assets/custom-elements.json',
         },
         {
-          src: '../src/assets/custom-elements.json',
-          dest: './build/assets/custom-elements.json',
+          src: '../src/assets',
+          dest: './build/assets',
         },
       ],
     },

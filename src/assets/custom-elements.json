@@ -3103,6 +3103,163 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-icon/le-icon.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LeIcon",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "null",
+              "description": "Name of the icon to display. Corresponds to a JSON file in the assets folder.\nFor example, \"search\" will load the \"search.json\" file."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "number"
+              },
+              "default": "16",
+              "description": "Size of the icon in pixels. Default is 16."
+            },
+            {
+              "kind": "field",
+              "name": "iconData",
+              "type": {
+                "text": "any"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "visible",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "loadIconData",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "intersectionObserver",
+              "type": {
+                "text": "IntersectionObserver"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "waitUntilVisible",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "callback",
+                  "type": {
+                    "text": "() => void"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderSVGContent",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "children",
+                  "optional": true,
+                  "type": {
+                    "text": "any[]"
+                  }
+                }
+              ],
+              "description": "Renders the SVG content out of a JSON data in a format:\n{ \"viewBox\": \"...\", children: [{ \"tag\": \"g\", \"\"children\": [ ... ], ...attrs }, ...] }",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "fieldName": "name",
+              "default": "null",
+              "description": "Name of the icon to display. Corresponds to a JSON file in the assets folder.\nFor example, \"search\" will load the \"search.json\" file.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "16",
+              "description": "Size of the icon in pixels. Default is 16.",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-icon",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeIcon",
+          "declaration": {
+            "name": "LeIcon",
+            "module": "src/components/le-icon/le-icon.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-icon",
+          "declaration": {
+            "name": "LeIcon",
+            "module": "src/components/le-icon/le-icon.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-multiselect/le-multiselect.tsx",
       "declarations": [
         {
@@ -3562,6 +3719,594 @@
           "declaration": {
             "name": "LeMultiselect",
             "module": "src/components/le-multiselect/le-multiselect.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-navigation/le-navigation.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Navigation component with vertical (tree) and horizontal (menu) layouts.\n\n- Accepts items as `LeOption[]` or a JSON string.\n- Supports hierarchical items via `children`.\n- Supports persisted expansion via `open` on items.",
+          "name": "LeNavigation",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "items",
+              "type": {
+                "text": "LeOption[] | string"
+              },
+              "default": "[]",
+              "description": "Navigation items.\nCan be passed as an array or JSON string (same pattern as le-select)."
+            },
+            {
+              "kind": "field",
+              "name": "orientation",
+              "type": {
+                "text": "'vertical' | 'horizontal'"
+              },
+              "default": "'vertical'",
+              "description": "Layout orientation."
+            },
+            {
+              "kind": "field",
+              "name": "wrap",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Horizontal wrapping behavior.\nIf false, overflow behavior depends on `overflowMode`."
+            },
+            {
+              "kind": "field",
+              "name": "overflowMode",
+              "type": {
+                "text": "'more' | 'hamburger'"
+              },
+              "default": "'more'",
+              "description": "Overflow behavior for horizontal, non-wrapping menus.\n- more: moves overflow items into a \"More\" popover\n- hamburger: turns the whole nav into a hamburger popover"
+            },
+            {
+              "kind": "field",
+              "name": "searchable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Enables a search input for the vertical navigation."
+            },
+            {
+              "kind": "field",
+              "name": "searchPlaceholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Search...'",
+              "description": "Placeholder text for the search input."
+            },
+            {
+              "kind": "field",
+              "name": "emptyText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'No results found'",
+              "description": "Text shown when no items match the filter."
+            },
+            {
+              "kind": "field",
+              "name": "submenuSearchable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether submenu popovers should include a filter input."
+            },
+            {
+              "kind": "field",
+              "name": "searchQuery",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "openState",
+              "type": {
+                "text": "Record<string, boolean>"
+              },
+              "privacy": "private",
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "overflowIds",
+              "type": {
+                "text": "string[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "hamburgerActive",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "submenuQueries",
+              "type": {
+                "text": "Record<string, string>"
+              },
+              "privacy": "private",
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "navContainerEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "topItemEls",
+              "type": {
+                "text": "Map<string, HTMLElement>"
+              },
+              "privacy": "private",
+              "default": "new Map()"
+            },
+            {
+              "kind": "field",
+              "name": "popoverRefs",
+              "type": {
+                "text": "Map<string, HTMLLePopoverElement>"
+              },
+              "privacy": "private",
+              "default": "new Map()"
+            },
+            {
+              "kind": "field",
+              "name": "moreTriggerEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "resizeObserver",
+              "type": {
+                "text": "ResizeObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "instanceId",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleLayoutInputsChange"
+            },
+            {
+              "kind": "method",
+              "name": "setupResizeObserver",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "observeContainer",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "el",
+                  "optional": true,
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "scheduleOverflowRecalc",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "parsedItems",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "getItemId",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "path",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getChildItems",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "LeOption[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isOpen",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "id",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setOpen",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "id",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "open",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "matchesQuery",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "option",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "query",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "filterTree",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "LeOption[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "items",
+                  "type": {
+                    "text": "LeOption[]"
+                  }
+                },
+                {
+                  "name": "query",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "pathPrefix",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "autoOpen",
+                  "type": {
+                    "text": "Set<string>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleItemSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleToggle",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSearchInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSubmenuSearchInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getTopLevelIds",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "items",
+                  "type": {
+                    "text": "LeOption[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "computeOverflow",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderHorizontalMeasureItem",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderVerticalList",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "items",
+                  "type": {
+                    "text": "LeOption[]"
+                  }
+                },
+                {
+                  "name": "{\n      depth,\n      pathPrefix,\n      autoOpenIds,\n      searchable,\n      searchQuery,\n      searchPlaceholder,\n      emptyText,\n      submenuId,\n    }",
+                  "type": {
+                    "text": "VerticalListRenderOptions"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderHorizontalItem",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderHorizontal",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "items",
+              "fieldName": "items",
+              "default": "[]",
+              "description": "Navigation items.\nCan be passed as an array or JSON string (same pattern as le-select).",
+              "type": {
+                "text": "LeOption[] | string"
+              }
+            },
+            {
+              "name": "orientation",
+              "fieldName": "orientation",
+              "default": "'vertical'",
+              "description": "Layout orientation.",
+              "type": {
+                "text": "'vertical' | 'horizontal'"
+              }
+            },
+            {
+              "name": "wrap",
+              "fieldName": "wrap",
+              "default": "true",
+              "description": "Horizontal wrapping behavior.\nIf false, overflow behavior depends on `overflowMode`.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "overflow-mode",
+              "fieldName": "overflowMode",
+              "default": "'more'",
+              "description": "Overflow behavior for horizontal, non-wrapping menus.\n- more: moves overflow items into a \"More\" popover\n- hamburger: turns the whole nav into a hamburger popover",
+              "type": {
+                "text": "'more' | 'hamburger'"
+              }
+            },
+            {
+              "name": "searchable",
+              "fieldName": "searchable",
+              "default": "false",
+              "description": "Enables a search input for the vertical navigation.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "search-placeholder",
+              "fieldName": "searchPlaceholder",
+              "default": "'Search...'",
+              "description": "Placeholder text for the search input.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "empty-text",
+              "fieldName": "emptyText",
+              "default": "'No results found'",
+              "description": "Text shown when no items match the filter.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "submenu-searchable",
+              "fieldName": "submenuSearchable",
+              "default": "false",
+              "description": "Whether submenu popovers should include a filter input.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-navigation",
+          "events": [
+            {
+              "name": "leNavItemSelect",
+              "type": {
+                "text": "EventEmitter<LeNavigationItemSelectDetail>"
+              },
+              "description": "Fired when a navigation item is activated.\n\nThis event is cancelable. Call `event.preventDefault()` to prevent\ndefault browser navigation and implement custom routing."
+            },
+            {
+              "name": "leNavItemToggle",
+              "type": {
+                "text": "EventEmitter<LeNavigationItemToggleDetail>"
+              },
+              "description": "Fired when a tree branch is toggled."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeNavigation",
+          "declaration": {
+            "name": "LeNavigation",
+            "module": "src/components/le-navigation/le-navigation.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-navigation",
+          "declaration": {
+            "name": "LeNavigation",
+            "module": "src/components/le-navigation/le-navigation.tsx"
           }
         }
       ]
@@ -7821,233 +8566,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-tab-panel/le-tab-panel.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A tab panel component used as a child of le-tabs.\n\nEach le-tab-panel defines both the tab button label and the panel content.\nThe parent le-tabs component automatically reads these panels and creates\nthe tab interface.",
-          "name": "LeTabPanel",
-          "slots": [
-            {
-              "description": "Default slot for panel content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLLeTabPanelElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "description": "The label displayed in the tab button."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "The value used to identify this tab.\nDefaults to the label if not provided."
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class."
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Icon displayed at the end of the tab button."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether this tab is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "lazy",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive."
-            },
-            {
-              "kind": "field",
-              "name": "active",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Internal: Whether this panel is currently active (set by parent le-tabs)"
-            },
-            {
-              "kind": "field",
-              "name": "hasBeenActive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Internal: Track if panel has ever been activated (for lazy rendering)"
-            },
-            {
-              "kind": "method",
-              "name": "activeChanged",
-              "parameters": [
-                {
-                  "name": "isActive",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getValue",
-              "return": {
-                "type": {
-                  "text": "Promise<string>"
-                }
-              },
-              "description": "Get the effective value (value or label as fallback)"
-            },
-            {
-              "kind": "method",
-              "name": "getTabConfig",
-              "return": {
-                "type": {
-                  "text": "Promise<{\n    label: string;\n    value: string;\n    iconStart?: string;\n    iconEnd?: string;\n    disabled: boolean;\n  }>"
-                }
-              },
-              "description": "Get tab configuration for parent component"
-            },
-            {
-              "kind": "method",
-              "name": "setActive",
-              "parameters": [
-                {
-                  "name": "isActive",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ],
-              "description": "Set the active state (called by parent le-tabs)"
-            },
-            {
-              "kind": "method",
-              "name": "shouldRenderContent",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Check if panel should render content"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "The label displayed in the tab button.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value used to identify this tab.\nDefaults to the label if not provided.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "icon-start",
-              "fieldName": "iconStart",
-              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "icon-end",
-              "fieldName": "iconEnd",
-              "description": "Icon displayed at the end of the tab button.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether this tab is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "lazy",
-              "fieldName": "lazy",
-              "default": "false",
-              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-tab-panel",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeTabPanel",
-          "declaration": {
-            "name": "LeTabPanel",
-            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-tab-panel",
-          "declaration": {
-            "name": "LeTabPanel",
-            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-tabs/le-tabs.tsx",
       "declarations": [
         {
@@ -8453,6 +8971,233 @@
           "declaration": {
             "name": "LeTabs",
             "module": "src/components/le-tabs/le-tabs.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-tab-panel/le-tab-panel.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A tab panel component used as a child of le-tabs.\n\nEach le-tab-panel defines both the tab button label and the panel content.\nThe parent le-tabs component automatically reads these panels and creates\nthe tab interface.",
+          "name": "LeTabPanel",
+          "slots": [
+            {
+              "description": "Default slot for panel content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLLeTabPanelElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "The label displayed in the tab button."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The value used to identify this tab.\nDefaults to the label if not provided."
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class."
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Icon displayed at the end of the tab button."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this tab is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "lazy",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive."
+            },
+            {
+              "kind": "field",
+              "name": "active",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Internal: Whether this panel is currently active (set by parent le-tabs)"
+            },
+            {
+              "kind": "field",
+              "name": "hasBeenActive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Internal: Track if panel has ever been activated (for lazy rendering)"
+            },
+            {
+              "kind": "method",
+              "name": "activeChanged",
+              "parameters": [
+                {
+                  "name": "isActive",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getValue",
+              "return": {
+                "type": {
+                  "text": "Promise<string>"
+                }
+              },
+              "description": "Get the effective value (value or label as fallback)"
+            },
+            {
+              "kind": "method",
+              "name": "getTabConfig",
+              "return": {
+                "type": {
+                  "text": "Promise<{\n    label: string;\n    value: string;\n    iconStart?: string;\n    iconEnd?: string;\n    disabled: boolean;\n  }>"
+                }
+              },
+              "description": "Get tab configuration for parent component"
+            },
+            {
+              "kind": "method",
+              "name": "setActive",
+              "parameters": [
+                {
+                  "name": "isActive",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "Set the active state (called by parent le-tabs)"
+            },
+            {
+              "kind": "method",
+              "name": "shouldRenderContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Check if panel should render content"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "The label displayed in the tab button.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value used to identify this tab.\nDefaults to the label if not provided.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-end",
+              "fieldName": "iconEnd",
+              "description": "Icon displayed at the end of the tab button.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether this tab is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "lazy",
+              "fieldName": "lazy",
+              "default": "false",
+              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-tab-panel",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeTabPanel",
+          "declaration": {
+            "name": "LeTabPanel",
+            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-tab-panel",
+          "declaration": {
+            "name": "LeTabPanel",
+            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
           }
         }
       ]

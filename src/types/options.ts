@@ -106,6 +106,12 @@ export interface LeOption {
   children?: LeOption[];
 
   /**
+   * Whether a hierarchical option is expanded (open).
+   * Used by tree-like components (e.g., navigation).
+   */
+  open?: boolean;
+
+  /**
    * Group label for categorizing options in flat lists.
    * Options with the same group value are visually grouped together.
    */

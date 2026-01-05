@@ -1,0 +1,323 @@
+:host {
+  display: block;
+
+  --le-nav-radius: var(--le-radius-md);
+  --le-nav-gap: var(--le-spacing-2);
+  --le-nav-item-padding-x: var(--le-spacing-1);
+  --le-nav-item-padding-y: var(--le-spacing-2);
+  --le-nav-item-gap: var(--le-spacing-2);
+
+  --le-nav-color: var(--le-color-text-primary);
+  --le-nav-muted: var(--le-color-text-secondary);
+  --le-nav-hover-bg: var(--le-color-gray-100);
+  --le-nav-selected-bg: var(--le-color-primary);
+  --le-nav-selected-color: var(--le-color-primary-contrast);
+}
+
+/* ==========================================
+ * Vertical navigation
+ * ========================================== */
+
+.nav-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: var(--le-nav-gap);
+}
+
+.nav-search {
+  width: 100%;
+}
+
+.nav-search-input {
+  --le-input-radius: var(--le-radius-md);
+}
+
+.nav-empty {
+  padding: var(--le-spacing-2);
+  color: var(--le-nav-muted);
+  font-size: var(--le-font-size-sm);
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--le-spacing-1);
+}
+
+.nav-row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--le-spacing-1);
+  border-radius: var(--le-nav-radius);
+}
+
+.nav-row:hover {
+  background: var(--le-nav-hover-bg);
+}
+
+.nav-toggle,
+.nav-toggle-spacer {
+  box-sizing: border-box;
+  width: var(--le-spacing-4);
+  min-width: var(--le-spacing-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--le-nav-radius);
+  color: inherit;
+}
+
+.nav-toggle {
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.4;
+}
+
+.nav-toggle:hover:not(:disabled) {
+  opacity: 1;
+}
+
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+.nav-chevron {
+  display: inline-block;
+  transition: transform var(--le-transition-fast);
+}
+
+.nav-chevron svg {
+  display: block;
+  width: var(--le-spacing-4);
+  height: var(--le-spacing-4);
+}
+
+.nav-node > div > button > .nav-chevron {
+  transform: rotate(-90deg);
+}
+.nav-node.open > div > button > .nav-chevron {
+  transform: rotate(0deg);
+}
+
+.nav-item {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--le-nav-item-gap);
+  padding: var(--le-nav-item-padding-y) var(--le-nav-item-padding-x) var(--le-nav-item-padding-y) 0;
+  border-radius: var(--le-nav-radius);
+  border: 1px solid transparent;
+  background: transparent;
+  text-decoration: none;
+  color: var(--le-nav-color);
+  font-family: var(--le-font-family-base);
+  font-size: var(--le-font-size-md);
+  line-height: var(--le-line-height-tight);
+  cursor: pointer;
+}
+
+.nav-item:focus-visible {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+
+.nav-node.selected > .nav-row {
+  background: var(--le-nav-selected-bg);
+  color: var(--le-nav-selected-color);
+}
+.nav-node.selected > .nav-row > .nav-item {
+  color: inherit;
+}
+
+.nav-node.disabled > .nav-row > .nav-item {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.nav-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-description {
+  color: color-mix(in srgb, var(--le-nav-muted) 90%, transparent);
+  font-size: var(--le-font-size-sm);
+  line-height: var(--le-line-height-tight);
+}
+
+.nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-icon-end {
+  margin-left: auto;
+}
+
+.nav-children {
+  margin-top: var(--le-spacing-1);
+}
+
+/* ==========================================
+ * Horizontal navigation
+ * ========================================== */
+
+.nav-horizontal {
+  display: flex;
+  align-items: center;
+  gap: var(--le-spacing-2);
+}
+
+.nav-horizontal-shell {
+  position: relative;
+}
+
+.nav-horizontal-measure {
+  position: absolute;
+  left: -10000px;
+  top: -10000px;
+  visibility: hidden;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: var(--le-spacing-2);
+  flex-wrap: wrap;
+}
+
+.nav-horizontal.wrap {
+  flex-wrap: wrap;
+}
+
+.nav-horizontal.nowrap {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.h-item {
+  display: flex;
+  align-items: center;
+}
+
+.h-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--le-spacing-2);
+  padding: var(--le-spacing-2) var(--le-spacing-3);
+  border-radius: var(--le-nav-radius);
+  border: 1px solid transparent;
+  background: transparent;
+  text-decoration: none;
+  color: var(--le-nav-color);
+  font-family: var(--le-font-family-base);
+  font-size: var(--le-font-size-md);
+  cursor: pointer;
+}
+
+.h-link:hover {
+  background: var(--le-nav-hover-bg);
+}
+
+.h-link:focus-visible {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+
+.h-link.disabled,
+.h-trigger.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.h-link.selected,
+.h-trigger.selected {
+  background: var(--le-nav-selected-bg);
+  color: var(--le-nav-selected-color);
+}
+
+.h-label {
+  white-space: nowrap;
+}
+
+.h-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--le-spacing-1);
+  border-radius: var(--le-nav-radius);
+}
+
+.h-submenu-toggle {
+  width: var(--le-spacing-3);
+  height: var(--le-spacing-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--le-nav-radius);
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+}
+
+.h-submenu-toggle:hover {
+  background: var(--le-nav-hover-bg);
+}
+
+.more-trigger-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.more-trigger-wrap.is-measure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.more-trigger-wrap.is-visible {
+  position: static;
+  visibility: visible;
+}
+
+.overflow-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--le-spacing-2);
+  padding: var(--le-spacing-2) var(--le-spacing-3);
+  border-radius: var(--le-nav-radius);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--le-nav-color);
+  cursor: pointer;
+  font-family: var(--le-font-family-base);
+  font-size: var(--le-font-size-md);
+}
+
+.overflow-trigger:hover {
+  background: var(--le-nav-hover-bg);
+}
+
+.overflow-trigger:focus-visible {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+
+/* Popover list container */
+le-popover::part(content) {
+  padding: var(--le-spacing-1);
+}

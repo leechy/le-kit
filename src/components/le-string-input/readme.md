@@ -60,6 +60,7 @@ A text input component with support for labels, descriptions, icons, and externa
  - [le-combobox](../le-combobox)
  - [le-component](../le-component)
  - [le-multiselect](../le-multiselect)
+ - [le-navigation](../le-navigation)
  - [le-select](../le-select)
  - [le-slot](../le-slot)
 
@@ -86,6 +87,7 @@ graph TD;
   le-popup --> le-component
   le-combobox --> le-string-input
   le-multiselect --> le-string-input
+  le-navigation --> le-string-input
   style le-string-input fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

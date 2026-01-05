@@ -6,9 +6,11 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
+import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
+export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export namespace Components {
@@ -277,6 +279,11 @@ export namespace Components {
      */
     interface LeCollapse {
         /**
+          * Since Stencil boolean props default to `false` when the attribute is missing. instead of `open` defaulting to `true`, using a `closed` prop.
+          * @default false
+         */
+        "closed": boolean;
+        /**
           * If true, collapse/expand based on the nearest header shrink event.
           * @default false
          */
@@ -286,11 +293,6 @@ export namespace Components {
           * @default false
          */
         "noFading": boolean;
-        /**
-          * Whether the content should be shown.
-          * @default true
-         */
-        "open": boolean;
         /**
           * Whether the content should scroll down from the top when open.
           * @default false
@@ -604,6 +606,18 @@ export namespace Components {
      */
     interface LeHeaderPlaceholder {
     }
+    interface LeIcon {
+        /**
+          * Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file.
+          * @default null
+         */
+        "name": string;
+        /**
+          * Size of the icon in pixels. Default is 16.
+          * @default 16
+         */
+        "size": number;
+    }
     /**
      * A multiselect component for selecting multiple options.
      * Displays selected items as tags with optional search filtering.
@@ -708,6 +722,56 @@ export namespace Components {
           * @default []
          */
         "value": LeOptionValue[];
+    }
+    /**
+     * Navigation component with vertical (tree) and horizontal (menu) layouts.
+     * - Accepts items as `LeOption[]` or a JSON string.
+     * - Supports hierarchical items via `children`.
+     * - Supports persisted expansion via `open` on items.
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface LeNavigation {
+        /**
+          * Text shown when no items match the filter.
+          * @default 'No results found'
+         */
+        "emptyText": string;
+        /**
+          * Navigation items. Can be passed as an array or JSON string (same pattern as le-select).
+          * @default []
+         */
+        "items": LeOption[] | string;
+        /**
+          * Layout orientation.
+          * @default 'vertical'
+         */
+        "orientation": 'vertical' | 'horizontal';
+        /**
+          * Overflow behavior for horizontal, non-wrapping menus. - more: moves overflow items into a "More" popover - hamburger: turns the whole nav into a hamburger popover
+          * @default 'more'
+         */
+        "overflowMode": 'more' | 'hamburger';
+        /**
+          * Placeholder text for the search input.
+          * @default 'Search...'
+         */
+        "searchPlaceholder": string;
+        /**
+          * Enables a search input for the vertical navigation.
+          * @default false
+         */
+        "searchable": boolean;
+        /**
+          * Whether submenu popovers should include a filter input.
+          * @default false
+         */
+        "submenuSearchable": boolean;
+        /**
+          * Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`.
+          * @default true
+         */
+        "wrap": boolean;
     }
     /**
      * A number input component with validation, keyboard controls, and custom spinners.
@@ -1726,6 +1790,10 @@ export interface LeMultiselectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeMultiselectElement;
 }
+export interface LeNavigationCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeNavigationElement;
+}
 export interface LeNumberInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeNumberInputElement;
@@ -2065,6 +2133,12 @@ declare global {
         prototype: HTMLLeHeaderPlaceholderElement;
         new (): HTMLLeHeaderPlaceholderElement;
     };
+    interface HTMLLeIconElement extends Components.LeIcon, HTMLStencilElement {
+    }
+    var HTMLLeIconElement: {
+        prototype: HTMLLeIconElement;
+        new (): HTMLLeIconElement;
+    };
     interface HTMLLeMultiselectElementEventMap {
         "leChange": LeMultiOptionSelectDetail;
         "leOpen": void;
@@ -2111,6 +2185,32 @@ declare global {
     var HTMLLeMultiselectElement: {
         prototype: HTMLLeMultiselectElement;
         new (): HTMLLeMultiselectElement;
+    };
+    interface HTMLLeNavigationElementEventMap {
+        "leNavItemSelect": LeNavigationItemSelectDetail;
+        "leNavItemToggle": LeNavigationItemToggleDetail;
+    }
+    /**
+     * Navigation component with vertical (tree) and horizontal (menu) layouts.
+     * - Accepts items as `LeOption[]` or a JSON string.
+     * - Supports hierarchical items via `children`.
+     * - Supports persisted expansion via `open` on items.
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface HTMLLeNavigationElement extends Components.LeNavigation, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeNavigationElementEventMap>(type: K, listener: (this: HTMLLeNavigationElement, ev: LeNavigationCustomEvent<HTMLLeNavigationElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeNavigationElementEventMap>(type: K, listener: (this: HTMLLeNavigationElement, ev: LeNavigationCustomEvent<HTMLLeNavigationElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeNavigationElement: {
+        prototype: HTMLLeNavigationElement;
+        new (): HTMLLeNavigationElement;
     };
     interface HTMLLeNumberInputElementEventMap {
         "leChange": { value: number; name: string; externalId: string; isValid: boolean };
@@ -2578,7 +2678,9 @@ declare global {
         "le-dropdown-base": HTMLLeDropdownBaseElement;
         "le-header": HTMLLeHeaderElement;
         "le-header-placeholder": HTMLLeHeaderPlaceholderElement;
+        "le-icon": HTMLLeIconElement;
         "le-multiselect": HTMLLeMultiselectElement;
+        "le-navigation": HTMLLeNavigationElement;
         "le-number-input": HTMLLeNumberInputElement;
         "le-popover": HTMLLePopoverElement;
         "le-popup": HTMLLePopupElement;
@@ -2872,6 +2974,11 @@ declare namespace LocalJSX {
      */
     interface LeCollapse {
         /**
+          * Since Stencil boolean props default to `false` when the attribute is missing. instead of `open` defaulting to `true`, using a `closed` prop.
+          * @default false
+         */
+        "closed"?: boolean;
+        /**
           * If true, collapse/expand based on the nearest header shrink event.
           * @default false
          */
@@ -2881,11 +2988,6 @@ declare namespace LocalJSX {
           * @default false
          */
         "noFading"?: boolean;
-        /**
-          * Whether the content should be shown.
-          * @default true
-         */
-        "open"?: boolean;
         /**
           * Whether the content should scroll down from the top when open.
           * @default false
@@ -3220,6 +3322,18 @@ declare namespace LocalJSX {
      */
     interface LeHeaderPlaceholder {
     }
+    interface LeIcon {
+        /**
+          * Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file.
+          * @default null
+         */
+        "name"?: string;
+        /**
+          * Size of the icon in pixels. Default is 16.
+          * @default 16
+         */
+        "size"?: number;
+    }
     /**
      * A multiselect component for selecting multiple options.
      * Displays selected items as tags with optional search filtering.
@@ -3324,6 +3438,64 @@ declare namespace LocalJSX {
           * @default []
          */
         "value"?: LeOptionValue[];
+    }
+    /**
+     * Navigation component with vertical (tree) and horizontal (menu) layouts.
+     * - Accepts items as `LeOption[]` or a JSON string.
+     * - Supports hierarchical items via `children`.
+     * - Supports persisted expansion via `open` on items.
+     * @cmsEditable true
+     * @cmsCategory Navigation
+     */
+    interface LeNavigation {
+        /**
+          * Text shown when no items match the filter.
+          * @default 'No results found'
+         */
+        "emptyText"?: string;
+        /**
+          * Navigation items. Can be passed as an array or JSON string (same pattern as le-select).
+          * @default []
+         */
+        "items"?: LeOption[] | string;
+        /**
+          * Fired when a navigation item is activated.  This event is cancelable. Call `event.preventDefault()` to prevent default browser navigation and implement custom routing.
+         */
+        "onLeNavItemSelect"?: (event: LeNavigationCustomEvent<LeNavigationItemSelectDetail>) => void;
+        /**
+          * Fired when a tree branch is toggled.
+         */
+        "onLeNavItemToggle"?: (event: LeNavigationCustomEvent<LeNavigationItemToggleDetail>) => void;
+        /**
+          * Layout orientation.
+          * @default 'vertical'
+         */
+        "orientation"?: 'vertical' | 'horizontal';
+        /**
+          * Overflow behavior for horizontal, non-wrapping menus. - more: moves overflow items into a "More" popover - hamburger: turns the whole nav into a hamburger popover
+          * @default 'more'
+         */
+        "overflowMode"?: 'more' | 'hamburger';
+        /**
+          * Placeholder text for the search input.
+          * @default 'Search...'
+         */
+        "searchPlaceholder"?: string;
+        /**
+          * Enables a search input for the vertical navigation.
+          * @default false
+         */
+        "searchable"?: boolean;
+        /**
+          * Whether submenu popovers should include a filter input.
+          * @default false
+         */
+        "submenuSearchable"?: boolean;
+        /**
+          * Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`.
+          * @default true
+         */
+        "wrap"?: boolean;
     }
     /**
      * A number input component with validation, keyboard controls, and custom spinners.
@@ -4365,7 +4537,9 @@ declare namespace LocalJSX {
         "le-dropdown-base": LeDropdownBase;
         "le-header": LeHeader;
         "le-header-placeholder": LeHeaderPlaceholder;
+        "le-icon": LeIcon;
         "le-multiselect": LeMultiselect;
+        "le-navigation": LeNavigation;
         "le-number-input": LeNumberInput;
         "le-popover": LePopover;
         "le-popup": LePopup;
@@ -4561,6 +4735,7 @@ declare module "@stencil/core" {
              * @cmsInternal true
              */
             "le-header-placeholder": LocalJSX.LeHeaderPlaceholder & JSXBase.HTMLAttributes<HTMLLeHeaderPlaceholderElement>;
+            "le-icon": LocalJSX.LeIcon & JSXBase.HTMLAttributes<HTMLLeIconElement>;
             /**
              * A multiselect component for selecting multiple options.
              * Displays selected items as tags with optional search filtering.
@@ -4590,6 +4765,15 @@ declare module "@stencil/core" {
              * ```
              */
             "le-multiselect": LocalJSX.LeMultiselect & JSXBase.HTMLAttributes<HTMLLeMultiselectElement>;
+            /**
+             * Navigation component with vertical (tree) and horizontal (menu) layouts.
+             * - Accepts items as `LeOption[]` or a JSON string.
+             * - Supports hierarchical items via `children`.
+             * - Supports persisted expansion via `open` on items.
+             * @cmsEditable true
+             * @cmsCategory Navigation
+             */
+            "le-navigation": LocalJSX.LeNavigation & JSXBase.HTMLAttributes<HTMLLeNavigationElement>;
             /**
              * A number input component with validation, keyboard controls, and custom spinners.
              * @cssprop --le-input-bg - Input background color

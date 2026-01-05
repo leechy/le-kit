@@ -163,6 +163,72 @@
 
     <!-- Default content template (used when localStorage is empty) -->
     <template id="default-content">
+
+      <div class="demo-section">
+        <h2>Navigation Component</h2>
+        <p>Vertical tree navigation (with search) and horizontal navigation with overflow handling.</p>
+
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>Vertical navigation (search + tree)</label>
+            <div style="display: grid; gap: var(--le-space-sm);">
+              <le-navigation
+                id="demo-nav-router"
+                orientation="vertical"
+                searchable
+                search-placeholder="Search pages..."
+              ></le-navigation>
+              <p style="margin: 0; font-size: var(--le-font-size-sm);">Router interception demo (click items above):</p>
+              <div
+                id="demo-nav-route-output"
+                style="padding: var(--le-space-sm); background: var(--le-color-surface-alt); border-radius: var(--le-radius-md);"
+              >
+                (no navigation yet)
+              </div>
+            </div>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Horizontal navigation (wrap)</label>
+            <div style="display: grid; gap: var(--le-space-sm);">
+              <div style="border: 1px dashed var(--le-color-border); border-radius: var(--le-radius-md); padding: var(--le-space-sm);">
+                <le-navigation
+                  id="demo-nav-horizontal-wrap"
+                  orientation="horizontal"
+                  wrap="true"
+                ></le-navigation>
+              </div>
+              <p style="margin: 0; font-size: var(--le-font-size-sm);">Items wrap when space is tight.</p>
+            </div>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Horizontal navigation (no wrap + overflow)</label>
+
+              <div style="max-width: 520px; border: 1px dashed var(--le-color-border); border-radius: var(--le-radius-md); padding: var(--le-space-sm);">
+                <le-navigation
+                  id="demo-nav-horizontal-overflow"
+                  orientation="horizontal"
+                  wrap="false"
+                  overflow-mode="more"
+                  submenu-searchable="false"
+                ></le-navigation>
+              </div>
+
+              <div style="max-width: 520px; border: 1px dashed var(--le-color-border); border-radius: var(--le-radius-md); padding: var(--le-space-sm);">
+                <le-navigation
+                  id="demo-nav-horizontal-hamburger"
+                  orientation="horizontal"
+                  wrap="false"
+                  overflow-mode="hamburger"
+                ></le-navigation>
+              </div>
+
+              <p style="margin: 0; font-size: var(--le-font-size-sm);">Top example uses “More” overflow. Bottom example collapses to a hamburger.</p>
+          </div>
+        </div>
+      </div>
+      
       <div class="demo-section">
         <h2>Collapse Component</h2>
         <p>Components that can collapse and expand with smooth animations.</p>
@@ -185,7 +251,7 @@
               <label>Scroll down and start closed</label>
               <le-button variant="outlined" onclick="toggleCollapse('demo-collapse-scroll')">Toggle Content</le-button>
             </div>
-            <le-collapse id="demo-collapse-scroll" scroll-down no-fading open="false">
+            <le-collapse id="demo-collapse-scroll" scroll-down no-fading closed="true">
               <div>
                 <p>This collapse component should slide up and fade away when toggled.</p>
                 <p>Starting point is when the component is open.</p>
@@ -948,7 +1014,31 @@ console.log(greeting);</le-text>
           localStorage.removeItem(STORAGE_KEY);
           contentContainer.innerHTML = defaultTemplate.innerHTML;
           console.log('Content reset to default');
+          wireNavigationDemo();
         }
+      }
+
+      function wireNavigationDemo() {
+        const nav = document.getElementById('demo-nav-router');
+        const output = document.getElementById('demo-nav-route-output');
+        if (!nav) return;
+
+        // Avoid double-binding if content is re-rendered.
+        if (nav.__leNavDemoBound) return;
+        nav.__leNavDemoBound = true;
+
+        nav.addEventListener('leNavItemSelect', (event) => {
+          // Stencil emits a CustomEvent with { item, id, href, originalEvent }
+          const href = event.detail?.href;
+          if (!href) return;
+
+          // Simulate client-side routing.
+          event.preventDefault();
+
+          if (output) {
+            output.textContent = `Intercepted navigation to ${href}`;
+          }
+        });
       }
 
       // Listen for changes from le-slot components
@@ -1046,6 +1136,7 @@ console.log(greeting);</le-text>
 
       // Initialize on page load
       initContent();
+      wireNavigationDemo();
 
       document.getElementById('demo-combobox').options = [
         { label: 'JavaScript', value: 'js', description: 'Dynamic scripting language' },
@@ -1184,9 +1275,77 @@ console.log(greeting);</le-text>
       function toggleCollapse(id, open) {
         const collapse = document.getElementById(id);
         if (collapse) {
-          collapse.open = open ?? !collapse.open;
+          collapse.closed = open ?? !collapse.closed;
         }
       }
+
+      document.getElementById('demo-nav-router').items = [
+        { label: "Home", href: "#home", iconStart: "🏠" },
+        { 
+          label: "Documentation",
+          iconStart: "📚",
+          open: true,
+          children:[
+            { label: "Getting started", href: "#docs-start", iconStart: "🚀" },
+            {
+              label: "Components",
+              href: "#docs-components",
+              iconStart: "🧩", 
+              selected: true, children:[
+                { label: "Buttons", href: "#docs-buttons" },
+                { label: "Navigation", href: "#docs-navigation" }
+              ]
+            },
+            { label: "Changelog (disabled)", href: "#docs-changelog", iconStart: "📝", disabled: true }
+          ]
+        },
+        { label: "Settings", href: "#settings", iconStart: "⚙️" }
+      ];
+
+      document.getElementById('demo-nav-horizontal-wrap').items = [
+        {"label":"Overview","href":"#overview"},
+        {"label":"Products","href":"#products"},
+        {"label":"Pricing","href":"#pricing"},
+        {"label":"Company","href":"#company"},
+        {"label":"Blog","href":"#blog"},
+        {"label":"Support","href":"#support"},
+        {"label":"Contact","href":"#contact"}
+      ];
+
+      document.getElementById('demo-nav-horizontal-overflow').items = [
+        {"label":"Home","href":"#home"},
+        {"label":"Features","href":"#features"},
+        {"label":"Solutions","children":[
+          {"label":"For teams","href":"#solutions-teams"},
+          {"label":"For agencies","href":"#solutions-agencies"},
+          {"label":"For enterprises","href":"#solutions-enterprises"},
+          {"label":"By industry","href":"#solutions-industry"}
+        ]},
+        {"label":"Docs","href":"#docs"},
+        {"label":"API","href":"#api"},
+        {"label":"Changelog","href":"#changelog"},
+        {"label":"Blog","href":"#blog"},
+        {"label":"Community","href":"#community"},
+        {"label":"About","href":"#about"},
+        {"label":"Contact","href":"#contact"}
+      ];
+
+      document.getElementById('demo-nav-horizontal-hamburger').items = [
+        {"label":"Home","href":"#home"},
+        {"label":"Features","href":"#features"},
+        {"label":"Solutions","children":[
+          {"label":"For teams","href":"#solutions-teams"},
+          {"label":"For agencies","href":"#solutions-agencies"},
+          {"label":"For enterprises","href":"#solutions-enterprises"}
+        ]},
+        {"label":"Docs","href":"#docs"},
+        {"label":"API","href":"#api"},
+        {"label":"Changelog","href":"#changelog"},
+        {"label":"Blog","href":"#blog"},
+        {"label":"Community","href":"#community"},
+        {"label":"About","href":"#about"},
+        {"label":"Contact","href":"#contact"}
+      ];
     </script>
   </body>
 </html>

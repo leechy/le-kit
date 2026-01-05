@@ -58,6 +58,7 @@ render() {
  - [le-combobox](../le-combobox)
  - [le-header](../le-header)
  - [le-multiselect](../le-multiselect)
+ - [le-navigation](../le-navigation)
  - [le-number-input](../le-number-input)
  - [le-popup](../le-popup)
  - [le-segmented-control](../le-segmented-control)
@@ -104,6 +105,7 @@ graph TD;
   le-combobox --> le-component
   le-header --> le-component
   le-multiselect --> le-component
+  le-navigation --> le-component
   le-number-input --> le-component
   le-segmented-control --> le-component
   le-stack --> le-component

@@ -64,7 +64,7 @@ export class LeNavigation {
   /**
    * Layout orientation.
    */
-  @Prop({ reflect: true }) orientation: 'vertical' | 'horizontal' = 'vertical';
+  @Prop({ reflect: true }) orientation: 'vertical' | 'horizontal' = 'horizontal';
 
   /**
    * Horizontal wrapping behavior.
@@ -78,6 +78,11 @@ export class LeNavigation {
    * - hamburger: turns the whole nav into a hamburger popover
    */
   @Prop({ reflect: true }) overflowMode: 'more' | 'hamburger' = 'more';
+
+  /**
+   * Active url for automatic selection.
+   */
+  @Prop() activeUrl: string = '';
 
   /**
    * Enables a search input for the vertical navigation.
@@ -378,7 +383,9 @@ export class LeNavigation {
     }
 
     if (itemEls.length === 0) {
-      if (this.overflowIds.length) this.overflowIds = [];
+      if (!this.overflowIds || this.overflowIds.length) {
+        this.overflowIds = [];
+      }
       return;
     }
 
@@ -393,7 +400,9 @@ export class LeNavigation {
     });
 
     if (overflowSet.size === 0) {
-      if (this.overflowIds.length) this.overflowIds = [];
+      if (!this.overflowIds || this.overflowIds.length) {
+        this.overflowIds = [];
+      }
       return;
     }
 
@@ -543,7 +552,7 @@ export class LeNavigation {
                 <li
                   class={classnames('nav-node', {
                     'disabled': item.disabled,
-                    'selected': item.selected,
+                    'selected': item.selected || (this.activeUrl && item.href === this.activeUrl),
                     open,
                     'has-children': hasChildren,
                   })}
@@ -632,7 +641,7 @@ export class LeNavigation {
           <TagType
             class={classnames('h-link', {
               disabled: item.disabled,
-              selected: item.selected,
+              selected: item.selected || (this.activeUrl && item.href === this.activeUrl),
             })}
             {...attrs}
             aria-disabled={item.disabled ? 'true' : undefined}
@@ -674,7 +683,7 @@ export class LeNavigation {
             slot="trigger"
             class={classnames('h-trigger', {
               disabled: item.disabled,
-              selected: item.selected,
+              selected: item.selected || (this.activeUrl && item.href === this.activeUrl),
             })}
             role="menuitem"
             aria-disabled={item.disabled ? 'true' : undefined}

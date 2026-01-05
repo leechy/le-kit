@@ -1,6 +1,6 @@
 {
   "name": "le-kit",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Themable web components library with CMS admin mode support",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",

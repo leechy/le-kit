@@ -26,8 +26,11 @@ export type LeCollapseAnimation = 'fade' | 'collapse' | 'fade-collapse';
 export class LeCollapse {
   @Element() el: HTMLElement;
 
-  /** Whether the content should be shown. */
-  @Prop({ mutable: true, reflect: true }) open: boolean = true;
+  /**
+   * Since Stencil boolean props default to `false` when the attribute is missing.
+   * instead of `open` defaulting to `true`, using a `closed` prop.
+   */
+  @Prop({ mutable: true, reflect: true }) closed: boolean = false;
 
   /** Whether the content should scroll down from the top when open. */
   @Prop({ attribute: 'scroll-down', reflect: true }) scrollDown: boolean = false;
@@ -51,14 +54,6 @@ export class LeCollapse {
 
   @State() private headerShrunk: boolean = false;
 
-  componentWillLoad() {
-    // Stencil boolean props default to `false` when the attribute is missing.
-    // For this component, the desired default is open=true.
-    if (!this.el.hasAttribute('open')) {
-      this.open = true;
-    }
-  }
-
   componentDidLoad() {
     this.applyOpenState();
   }
@@ -74,7 +69,7 @@ export class LeCollapse {
   }
 
   private shouldBeOpen() {
-    if (!this.open) return false;
+    if (this.closed) return false;
     if (this.collapseOnHeaderShrink && this.headerShrunk) return false;
     return true;
   }
@@ -88,7 +83,7 @@ export class LeCollapse {
     return (
       <Host data-open={this.shouldBeOpen() ? 'true' : 'false'}>
         <le-component component="le-collapse">
-          <div class="region" part="region">
+          <div class={{ 'region': true, 'scroll-down': this.scrollDown }} part="region">
             <slot></slot>
           </div>
         </le-component>

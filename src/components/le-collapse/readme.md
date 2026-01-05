@@ -14,12 +14,12 @@ Can optionally listen to the nearest `le-header` shrink events.
 
 ## Properties
 
-| Property                 | Attribute                   | Description                                                        | Type      | Default |
-| ------------------------ | --------------------------- | ------------------------------------------------------------------ | --------- | ------- |
-| `collapseOnHeaderShrink` | `collapse-on-header-shrink` | If true, collapse/expand based on the nearest header shrink event. | `boolean` | `false` |
-| `noFading`               | `no-fading`                 | Stop fading the content when collapsing/expanding.                 | `boolean` | `false` |
-| `open`                   | `open`                      | Whether the content should be shown.                               | `boolean` | `true`  |
-| `scrollDown`             | `scroll-down`               | Whether the content should scroll down from the top when open.     | `boolean` | `false` |
+| Property                 | Attribute                   | Description                                                                                                                                  | Type      | Default |
+| ------------------------ | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- |
+| `closed`                 | `closed`                    | Since Stencil boolean props default to `false` when the attribute is missing. instead of `open` defaulting to `true`, using a `closed` prop. | `boolean` | `false` |
+| `collapseOnHeaderShrink` | `collapse-on-header-shrink` | If true, collapse/expand based on the nearest header shrink event.                                                                           | `boolean` | `false` |
+| `noFading`               | `no-fading`                 | Stop fading the content when collapsing/expanding.                                                                                           | `boolean` | `false` |
+| `scrollDown`             | `scroll-down`               | Whether the content should scroll down from the top when open.                                                                               | `boolean` | `false` |
 
 
 ## Slots
@@ -37,6 +37,10 @@ Can optionally listen to the nearest `le-header` shrink events.
 
 
 ## Dependencies
+
+### Used by
+
+ - [le-navigation](../le-navigation)
 
 ### Depends on
 
@@ -69,6 +73,7 @@ graph TD;
   le-popup --> le-slot
   le-popup --> le-button
   le-popup --> le-component
+  le-navigation --> le-collapse
   style le-collapse fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

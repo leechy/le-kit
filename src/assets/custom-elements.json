@@ -835,12 +835,12 @@
             },
             {
               "kind": "field",
-              "name": "open",
+              "name": "closed",
               "type": {
                 "text": "boolean"
               },
-              "default": "true",
-              "description": "Whether the content should be shown."
+              "default": "false",
+              "description": "Since Stencil boolean props default to `false` when the attribute is missing.\ninstead of `open` defaulting to `true`, using a `closed` prop."
             },
             {
               "kind": "field",
@@ -918,10 +918,10 @@
           ],
           "attributes": [
             {
-              "name": "open",
-              "fieldName": "open",
-              "default": "true",
-              "description": "Whether the content should be shown.",
+              "name": "closed",
+              "fieldName": "closed",
+              "default": "false",
+              "description": "Since Stencil boolean props default to `false` when the attribute is missing.\ninstead of `open` defaulting to `true`, using a `closed` prop.",
               "type": {
                 "text": "boolean"
               }

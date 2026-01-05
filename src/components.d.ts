@@ -733,18 +733,33 @@ export namespace Components {
      */
     interface LeNavigation {
         /**
+          * Active url for automatic selection.
+          * @default ''
+         */
+        "activeUrl": string;
+        /**
           * Text shown when no items match the filter.
           * @default 'No results found'
          */
         "emptyText": string;
+        /**
+          * Alignment of the hamburger trigger within the row.
+          * @default 'start'
+         */
+        "hamburgerAlign": 'start' | 'end';
         /**
           * Navigation items. Can be passed as an array or JSON string (same pattern as le-select).
           * @default []
          */
         "items": LeOption[] | string;
         /**
+          * Minimum number of visible top-level items required to use the "More" overflow. If fewer would be visible, the navigation falls back to hamburger.
+          * @default 2
+         */
+        "minVisibleItemsForMore": number;
+        /**
           * Layout orientation.
-          * @default 'vertical'
+          * @default 'horizontal'
          */
         "orientation": 'vertical' | 'horizontal';
         /**
@@ -3449,15 +3464,30 @@ declare namespace LocalJSX {
      */
     interface LeNavigation {
         /**
+          * Active url for automatic selection.
+          * @default ''
+         */
+        "activeUrl"?: string;
+        /**
           * Text shown when no items match the filter.
           * @default 'No results found'
          */
         "emptyText"?: string;
         /**
+          * Alignment of the hamburger trigger within the row.
+          * @default 'start'
+         */
+        "hamburgerAlign"?: 'start' | 'end';
+        /**
           * Navigation items. Can be passed as an array or JSON string (same pattern as le-select).
           * @default []
          */
         "items"?: LeOption[] | string;
+        /**
+          * Minimum number of visible top-level items required to use the "More" overflow. If fewer would be visible, the navigation falls back to hamburger.
+          * @default 2
+         */
+        "minVisibleItemsForMore"?: number;
         /**
           * Fired when a navigation item is activated.  This event is cancelable. Call `event.preventDefault()` to prevent default browser navigation and implement custom routing.
          */
@@ -3468,7 +3498,7 @@ declare namespace LocalJSX {
         "onLeNavItemToggle"?: (event: LeNavigationCustomEvent<LeNavigationItemToggleDetail>) => void;
         /**
           * Layout orientation.
-          * @default 'vertical'
+          * @default 'horizontal'
          */
         "orientation"?: 'vertical' | 'horizontal';
         /**

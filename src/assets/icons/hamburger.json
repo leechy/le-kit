@@ -1,0 +1,14 @@
+{
+  "viewBox": "0 0 16 16",
+  "children": [
+    {
+      "tag": "path",
+      "d": "M3 4h10 M3 8h10 M3 12h10",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "2",
+      "stroke-linecap": "round",
+      "children": []
+    }
+  ]
+}

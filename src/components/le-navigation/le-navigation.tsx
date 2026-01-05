@@ -35,6 +35,7 @@ interface VerticalListRenderOptions {
   searchPlaceholder?: string;
   emptyText?: string;
   submenuId?: string;
+  closePopover?: () => void;
 }
 
 /**
@@ -43,6 +44,9 @@ interface VerticalListRenderOptions {
  * - Accepts items as `LeOption[]` or a JSON string.
  * - Supports hierarchical items via `children`.
  * - Supports persisted expansion via `open` on items.
+ *
+ * @slot hamburger-trigger - Custom trigger contents for the hamburger button
+ * @slot more-trigger - Custom trigger contents for the "More" button
  *
  * @cmsEditable true
  * @cmsCategory Navigation
@@ -78,6 +82,17 @@ export class LeNavigation {
    * - hamburger: turns the whole nav into a hamburger popover
    */
   @Prop({ reflect: true }) overflowMode: 'more' | 'hamburger' = 'more';
+
+  /**
+   * Minimum number of visible top-level items required to use the "More" overflow.
+   * If fewer would be visible, the navigation falls back to hamburger.
+   */
+  @Prop() minVisibleItemsForMore: number = 2;
+
+  /**
+   * Alignment of the hamburger trigger within the row.
+   */
+  @Prop({ reflect: true }) hamburgerAlign: 'start' | 'end' = 'start';
 
   /**
    * Active url for automatic selection.
@@ -125,6 +140,8 @@ export class LeNavigation {
 
   @State() private hamburgerActive: boolean = false;
 
+  @State() private fallbackHamburger: boolean = false;
+
   @State() private submenuQueries: Record<string, string> = {};
 
   private navContainerEl?: HTMLElement;
@@ -136,9 +153,28 @@ export class LeNavigation {
 
   private popoverRefs: Map<string, HTMLLePopoverElement> = new Map();
 
+  private moreTriggerEl?: HTMLElement;
+
+  private hamburgerPopoverEl?: HTMLLePopoverElement;
+  private morePopoverEl?: HTMLLePopoverElement;
+
   private resizeObserver?: ResizeObserver;
 
   private instanceId: string = generateId('le-nav');
+
+  private partFromOptionPart(base: string, part?: string): string {
+    const raw = (part ?? '').trim();
+    if (!raw) return base;
+
+    const tokens = raw
+      .split(/\s+/)
+      .map(t => t.replace(/[^a-zA-Z0-9_-]/g, ''))
+      .filter(Boolean);
+
+    if (tokens.length === 0) return base;
+
+    return [base, ...tokens.map(t => `${base}-${t}`)].join(' ');
+  }
 
   @Watch('items')
   @Watch('orientation')
@@ -333,6 +369,7 @@ export class LeNavigation {
     if (this.orientation !== 'horizontal' || this.wrap) {
       if (this.overflowIds.length) this.overflowIds = [];
       if (this.hamburgerActive) this.hamburgerActive = false;
+      if (this.fallbackHamburger) this.fallbackHamburger = false;
       return;
     }
 
@@ -351,23 +388,58 @@ export class LeNavigation {
         this.hamburgerActive = shouldHamburger;
       }
       if (this.overflowIds.length) this.overflowIds = [];
+      if (this.fallbackHamburger) this.fallbackHamburger = false;
       return;
     }
 
     // overflowMode === 'more'
-    this.computeOverflowMoreByWrap(availableWidth);
+    if (this.hamburgerActive) this.hamburgerActive = false;
+
+    const computedOverflow = this.computeOverflowMoreByWrap(availableWidth);
+    if (!computedOverflow) return;
+
+    // Fallback to hamburger when "More" would leave too few items visible
+    // or when the trigger itself cannot fit the row.
+    const visibleCount = this.parsedItems.length - computedOverflow.length;
+    const moreWidth = this.moreTriggerEl?.getBoundingClientRect().width ?? 0;
+
+    const minVisible = Math.max(0, Number(this.minVisibleItemsForMore) || 0);
+    const shouldFallback =
+      (computedOverflow.length > 0 && visibleCount < minVisible) ||
+      (moreWidth > 0 && moreWidth > availableWidth);
+
+    if (shouldFallback !== this.fallbackHamburger) {
+      this.fallbackHamburger = shouldFallback;
+    }
+
+    const nextOverflow = shouldFallback ? [] : computedOverflow;
+    const same =
+      nextOverflow.length === this.overflowIds.length &&
+      nextOverflow.every((v, i) => v === this.overflowIds[i]);
+    if (!same) {
+      this.overflowIds = nextOverflow;
+    }
   }
 
-  private computeOverflowMoreByWrap(availableWidth: number) {
+  private computeOverflowMoreByWrap(availableWidth: number): string[] | null {
     const container = this.navContainerEl;
     const measure = this.measureEl;
     const measureMore = this.measureMoreEl;
     const items = this.parsedItems;
 
-    if (!container || !measure) return;
+    if (!container || !measure) return null;
 
     // Ensure measurement container matches visible container width.
     measure.style.width = `${availableWidth}px`;
+
+    // Keep the measured "More" width aligned with the real trigger width (supports slotted content).
+    const realMoreWidth = this.moreTriggerEl?.getBoundingClientRect().width;
+    if (measureMore && realMoreWidth && realMoreWidth > 0) {
+      const btn = measureMore.querySelector<HTMLElement>('button');
+      if (btn) {
+        btn.style.width = `${realMoreWidth}px`;
+      }
+    }
 
     const allIds = this.getTopLevelIds(items);
     const itemEls = allIds
@@ -383,10 +455,7 @@ export class LeNavigation {
     }
 
     if (itemEls.length === 0) {
-      if (!this.overflowIds || this.overflowIds.length) {
-        this.overflowIds = [];
-      }
-      return;
+      return [];
     }
 
     const firstRowTop = Math.min(...itemEls.map(el => el.offsetTop));
@@ -400,10 +469,7 @@ export class LeNavigation {
     });
 
     if (overflowSet.size === 0) {
-      if (!this.overflowIds || this.overflowIds.length) {
-        this.overflowIds = [];
-      }
-      return;
+      return [];
     }
 
     // Pass 2: show "More" and iteratively move items into overflow until "More" fits on row 1.
@@ -438,13 +504,7 @@ export class LeNavigation {
 
     const overflowIds = allIds.filter(id => overflowSet.has(id));
 
-    const same =
-      overflowIds.length === this.overflowIds.length &&
-      overflowIds.every((v, i) => v === this.overflowIds[i]);
-
-    if (!same) {
-      this.overflowIds = overflowIds;
-    }
+    return overflowIds;
   }
 
   private renderHorizontalMeasureItem(item: LeOption, index: number) {
@@ -488,7 +548,7 @@ export class LeNavigation {
             <span class="h-label">{item.label}</span>
           </span>
           <span class="h-submenu-toggle" aria-hidden="true">
-            <span class="nav-chevron">▼</span>
+            <le-icon name="chevron-down" />
           </span>
         </span>
       </div>
@@ -506,6 +566,7 @@ export class LeNavigation {
       searchPlaceholder,
       emptyText,
       submenuId,
+      closePopover,
     }: VerticalListRenderOptions,
   ) {
     const query = searchQuery ?? '';
@@ -548,6 +609,8 @@ export class LeNavigation {
                   ? { href: item.href, role: 'treeitem' }
                   : { type: 'button', role: 'treeitem' };
 
+              const itemPart = this.partFromOptionPart('item', item.part);
+
               return (
                 <li
                   class={classnames('nav-node', {
@@ -577,6 +640,7 @@ export class LeNavigation {
 
                     <TagType
                       class="nav-item"
+                      part={itemPart}
                       {...attrs}
                       aria-disabled={item.disabled ? 'true' : undefined}
                       onClick={(e: MouseEvent) => {
@@ -584,6 +648,11 @@ export class LeNavigation {
                         this.handleItemSelect(e, item, id);
                         if (!item.href && hasChildren && !item.disabled) {
                           this.handleToggle(e, item, id);
+                          return;
+                        }
+
+                        if (!item.disabled && closePopover) {
+                          closePopover();
                         }
                       }}
                     >
@@ -612,6 +681,8 @@ export class LeNavigation {
                         depth: depth + 1,
                         pathPrefix: path,
                         autoOpenIds: openFromSearch,
+                        submenuId,
+                        closePopover,
                       })}
                     </le-collapse>
                   )}
@@ -636,6 +707,8 @@ export class LeNavigation {
           ? { href: item.href, role: 'menuitem' }
           : { type: 'button', role: 'menuitem' };
 
+      const itemPart = this.partFromOptionPart('item', item.part);
+
       return (
         <div class="h-item">
           <TagType
@@ -643,6 +716,7 @@ export class LeNavigation {
               disabled: item.disabled,
               selected: item.selected || (this.activeUrl && item.href === this.activeUrl),
             })}
+            part={itemPart}
             {...attrs}
             aria-disabled={item.disabled ? 'true' : undefined}
             onClick={(e: MouseEvent) => this.handleItemSelect(e, item, id)}
@@ -665,6 +739,8 @@ export class LeNavigation {
 
     const submenuId = id;
 
+    const itemPart = this.partFromOptionPart('item', item.part);
+
     return (
       <div class="h-item">
         <le-popover
@@ -685,6 +761,7 @@ export class LeNavigation {
               disabled: item.disabled,
               selected: item.selected || (this.activeUrl && item.href === this.activeUrl),
             })}
+            part={itemPart}
             role="menuitem"
             aria-disabled={item.disabled ? 'true' : undefined}
             onClick={(e: MouseEvent) => {
@@ -694,6 +771,7 @@ export class LeNavigation {
 
               if (item.href) {
                 this.handleItemSelect(e, item, id);
+                this.popoverRefs.get(submenuId)?.hide();
               } else {
                 this.popoverRefs.get(submenuId)?.toggle();
               }
@@ -714,6 +792,9 @@ export class LeNavigation {
                   </span>
                 )}
                 <span class="h-label">{item.label}</span>
+                <span class="nav-chevron" aria-hidden="true">
+                  <le-icon name="chevron-down" />
+                </span>
               </a>
             ) : (
               <button
@@ -731,24 +812,11 @@ export class LeNavigation {
                   </span>
                 )}
                 <span class="h-label">{item.label}</span>
+                <span class="nav-chevron" aria-hidden="true">
+                  <le-icon name="chevron-down" />
+                </span>
               </button>
             )}
-
-            <button
-              type="button"
-              class="h-submenu-toggle"
-              aria-label="Open submenu"
-              onClick={(e: MouseEvent) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (item.disabled) return;
-                this.popoverRefs.get(submenuId)?.toggle();
-              }}
-            >
-              <span class="nav-chevron" aria-hidden="true">
-                <le-icon name="chevron-down" />
-              </span>
-            </button>
           </div>
 
           <div class="popover-menu">
@@ -760,6 +828,7 @@ export class LeNavigation {
               searchPlaceholder: this.searchPlaceholder,
               emptyText: this.emptyText,
               submenuId,
+              closePopover: () => this.popoverRefs.get(submenuId)?.hide(),
             })}
           </div>
         </le-popover>
@@ -780,8 +849,13 @@ export class LeNavigation {
       }
     });
 
-    // Hamburger mode: show a single trigger if anything overflows.
-    if (!this.wrap && this.overflowMode === 'hamburger' && this.hamburgerActive) {
+    const showHamburger =
+      !this.wrap &&
+      ((this.overflowMode === 'hamburger' && this.hamburgerActive) ||
+        (this.overflowMode === 'more' && this.fallbackHamburger));
+
+    // Hamburger mode: show a single trigger if anything overflows (or when forced for "more").
+    if (showHamburger) {
       return (
         <div class="nav-horizontal-shell">
           <div
@@ -805,7 +879,9 @@ export class LeNavigation {
           </div>
 
           <div
-            class="nav-horizontal"
+            class={classnames('nav-horizontal', {
+              'hamburger-align-end': this.hamburgerAlign === 'end',
+            })}
             ref={el => {
               this.navContainerEl = el as HTMLElement;
               this.setupResizeObserver();
@@ -813,6 +889,9 @@ export class LeNavigation {
             }}
           >
             <le-popover
+              ref={el => {
+                this.hamburgerPopoverEl = el as HTMLLePopoverElement;
+              }}
               mode="default"
               showClose={false}
               closeOnClickOutside={true}
@@ -821,11 +900,23 @@ export class LeNavigation {
               align="end"
               minWidth="260px"
             >
-              <button slot="trigger" type="button" class="overflow-trigger" aria-label="Open menu">
-                ☰
+              <button
+                slot="trigger"
+                type="button"
+                class="overflow-trigger"
+                part="hamburger-trigger"
+                aria-label="Open menu"
+              >
+                <slot name="hamburger-trigger">
+                  <le-icon name="hamburger" />
+                </slot>
               </button>
               <div class="popover-menu">
-                {this.renderVerticalList(items, { depth: 0, pathPrefix: '' })}
+                {this.renderVerticalList(items, {
+                  depth: 0,
+                  pathPrefix: '',
+                  closePopover: () => this.hamburgerPopoverEl?.hide(),
+                })}
               </div>
             </le-popover>
           </div>
@@ -852,7 +943,7 @@ export class LeNavigation {
             }}
           >
             <button type="button" class="overflow-trigger">
-              More
+              <le-icon name="ellipsis-horizontal" />
             </button>
           </div>
         </div>
@@ -883,17 +974,35 @@ export class LeNavigation {
             })}
           >
             <le-popover
+              ref={el => {
+                this.morePopoverEl = el as HTMLLePopoverElement;
+              }}
               mode="default"
               position="bottom"
               align="end"
               minWidth="260px"
               showClose={false}
             >
-              <button slot="trigger" type="button" class="overflow-trigger" aria-label="More">
-                More
+              <button
+                slot="trigger"
+                type="button"
+                class="overflow-trigger"
+                part="more-trigger"
+                aria-label="More"
+                ref={el => {
+                  if (el) this.moreTriggerEl = el as HTMLElement;
+                }}
+              >
+                <slot name="more-trigger">
+                  <le-icon name="ellipsis-horizontal" />
+                </slot>
               </button>
               <div class="popover-menu">
-                {this.renderVerticalList(overflowItems, { depth: 0, pathPrefix: '' })}
+                {this.renderVerticalList(overflowItems, {
+                  depth: 0,
+                  pathPrefix: '',
+                  closePopover: () => this.morePopoverEl?.hide(),
+                })}
               </div>
             </le-popover>
           </div>

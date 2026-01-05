@@ -112,6 +112,12 @@ export interface LeOption {
   open?: boolean;
 
   /**
+   * Optional part tokens for styling from outside shadow DOM.
+   * Components may map this to `part` attributes (e.g. `item item-accent`).
+   */
+  part?: string;
+
+  /**
    * Group label for categorizing options in flat lists.
    * Options with the same group value are visually grouped together.
    */

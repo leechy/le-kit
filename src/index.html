@@ -89,6 +89,15 @@
         color: var(--le-color-text-secondary);
         font-size: var(--le-font-size-sm);
       }
+
+      /* le-navigation ::part() demo (driven by item.part) */
+      #demo-nav-router::part(item-accent) {
+        color: var(--le-color-primary);
+      }
+
+      #demo-nav-horizontal-overflow::part(item-emphasis) {
+        font-weight: var(--le-font-weight-semibold);
+      }
     </style>
   </head>
   <body>
@@ -211,8 +220,13 @@
                   orientation="horizontal"
                   wrap="false"
                   overflow-mode="more"
+                  hamburger-align="end"
+                  min-visible-items-for-more="2"
                   submenu-searchable="false"
-                ></le-navigation>
+                >
+                  <span slot="more-trigger"><le-icon name="ellipsis-horizontal"></le-icon></span>
+                  <span slot="hamburger-trigger"><le-icon name="hamburger"></le-icon></span>
+                </le-navigation>
               </div>
 
               <div style="max-width: 520px; border: 1px dashed var(--le-color-border); border-radius: var(--le-radius-md); padding: var(--le-space-sm);">
@@ -221,7 +235,10 @@
                   orientation="horizontal"
                   wrap="false"
                   overflow-mode="hamburger"
-                ></le-navigation>
+                  hamburger-align="end"
+                >
+                  <span slot="hamburger-trigger"><le-icon name="hamburger"></le-icon></span>
+                </le-navigation>
               </div>
 
               <p style="margin: 0; font-size: var(--le-font-size-sm);">Top example uses “More” overflow. Bottom example collapses to a hamburger.</p>
@@ -1284,6 +1301,7 @@ console.log(greeting);</le-text>
         { 
           label: "Documentation",
           iconStart: "📚",
+          part: "accent",
           open: true,
           children:[
             { label: "Getting started", href: "#docs-start", iconStart: "🚀" },
@@ -1291,9 +1309,10 @@ console.log(greeting);</le-text>
               label: "Components",
               href: "#docs-components",
               iconStart: "🧩", 
-              selected: true, children:[
-                { label: "Buttons", href: "#docs-buttons" },
-                { label: "Navigation", href: "#docs-navigation" }
+              selected: true,
+              children:[
+                { label: "Buttons", href: "#docs-buttons", part: "emphasis" },
+                { label: "Navigation", href: "#docs-navigation", part: "emphasis" }
               ]
             },
             { label: "Changelog (disabled)", href: "#docs-changelog", iconStart: "📝", disabled: true }
@@ -1322,7 +1341,7 @@ console.log(greeting);</le-text>
           {"label":"By industry","href":"#solutions-industry"}
         ]},
         {"label":"Docs","href":"#docs"},
-        {"label":"API","href":"#api"},
+        {"label":"API","href":"#api","part":"emphasis"},
         {"label":"Changelog","href":"#changelog"},
         {"label":"Blog","href":"#blog"},
         {"label":"Community","href":"#community"},

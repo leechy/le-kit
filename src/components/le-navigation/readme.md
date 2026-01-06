@@ -58,8 +58,8 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 
 ### Depends on
 
-- [le-string-input](../le-string-input)
 - [le-icon](../le-icon)
+- [le-string-input](../le-string-input)
 - [le-collapse](../le-collapse)
 - [le-popover](../le-popover)
 - [le-component](../le-component)
@@ -67,8 +67,8 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 ### Graph
 ```mermaid
 graph TD;
-  le-navigation --> le-string-input
   le-navigation --> le-icon
+  le-navigation --> le-string-input
   le-navigation --> le-collapse
   le-navigation --> le-popover
   le-navigation --> le-component

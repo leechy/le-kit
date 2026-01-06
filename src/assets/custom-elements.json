@@ -1113,477 +1113,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-checkbox/le-checkbox.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
-          "name": "LeCheckbox",
-          "cssProperties": [
-            {
-              "description": "Size of the checkbox input",
-              "name": "--le-checkbox-size"
-            },
-            {
-              "description": "Color of the checkbox when checked",
-              "name": "--le-checkbox-color"
-            },
-            {
-              "description": "Color of the label text",
-              "name": "--le-checkbox-label-color"
-            },
-            {
-              "description": "Color of the description text",
-              "name": "--le-checkbox-desc-color"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The label text for the checkbox",
-              "name": ""
-            },
-            {
-              "description": "Additional description text displayed below the label",
-              "name": "description"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is checked"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is disabled"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "description": "The name of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "description": "The value of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "externalId",
-              "type": {
-                "text": "string"
-              },
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
-            },
-            {
-              "kind": "field",
-              "name": "handleChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "checked",
-              "fieldName": "checked",
-              "default": "false",
-              "description": "Whether the checkbox is checked",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the checkbox is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "The name of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "external-id",
-              "fieldName": "externalId",
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-checkbox",
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
-              },
-              "description": "Emitted when the checked state changes"
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCheckbox",
-          "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-checkbox",
-          "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-component/le-component.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Component wrapper for admin mode editing.\n\nThis component is used internally by other components to provide admin-mode\nediting capabilities. It wraps the component's rendered output and shows\na settings popover for editing properties.\n\nIn default mode, it acts as a simple passthrough (display: contents).\nIn admin mode, it shows a border, component name header, and settings popover.\n\nThe host element is found automatically by traversing up through the shadow DOM.\n\nUsage inside a component's render method:\n```tsx\nrender() {\n  return (\n    <le-component component=\"le-card\">\n      <Host>...</Host>\n    </le-component>\n  );\n}\n```",
-          "name": "LeComponent",
-          "slots": [
-            {
-              "description": "The component's rendered content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "component",
-              "type": {
-                "text": "string"
-              },
-              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name."
-            },
-            {
-              "kind": "field",
-              "name": "displayName",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name."
-            },
-            {
-              "kind": "field",
-              "name": "hostClass",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes."
-            },
-            {
-              "kind": "field",
-              "name": "hostStyle",
-              "type": {
-                "text": "{ [key: string]: string } | undefined"
-              },
-              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties)."
-            },
-            {
-              "kind": "field",
-              "name": "hostElement",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private",
-              "description": "Reference to the host element (found automatically from parent)"
-            },
-            {
-              "kind": "field",
-              "name": "adminMode",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Internal state to track admin mode"
-            },
-            {
-              "kind": "field",
-              "name": "componentMeta",
-              "type": {
-                "text": "ComponentMetadata | null"
-              },
-              "privacy": "private",
-              "default": "null",
-              "description": "Component metadata loaded from Custom Elements Manifest"
-            },
-            {
-              "kind": "field",
-              "name": "propertyValues",
-              "type": {
-                "text": "Record<string, any>"
-              },
-              "privacy": "private",
-              "default": "{}",
-              "description": "Current property values of the host component"
-            },
-            {
-              "kind": "field",
-              "name": "disconnectModeObserver",
-              "type": {
-                "text": "() => void | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "findHostElement",
-              "privacy": "private",
-              "description": "Find the host element by traversing up through shadow DOM"
-            },
-            {
-              "kind": "method",
-              "name": "formatDisplayName",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "tagName",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Formats a tag name into a display name\ne.g., 'le-card' -> 'Card'"
-            },
-            {
-              "kind": "method",
-              "name": "loadComponentMetadata",
-              "privacy": "private",
-              "description": "Load component metadata from the Custom Elements Manifest"
-            },
-            {
-              "kind": "method",
-              "name": "isInternalAttribute",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "name",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Check if an attribute is internal (should not be shown in editor)"
-            },
-            {
-              "kind": "method",
-              "name": "readPropertyValues",
-              "privacy": "private",
-              "description": "Read current property values from the host element"
-            },
-            {
-              "kind": "method",
-              "name": "parseAttributeValue",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "any"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "string | null"
-                  }
-                },
-                {
-                  "name": "type",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Parse an attribute value based on its type"
-            },
-            {
-              "kind": "method",
-              "name": "handlePropertyChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "attrName",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "type",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Handle property value changes from the editor"
-            },
-            {
-              "kind": "method",
-              "name": "deleteComponent",
-              "privacy": "private",
-              "description": "Delete this component from the DOM"
-            },
-            {
-              "kind": "method",
-              "name": "renderPropertyEditor",
-              "privacy": "private",
-              "description": "Render the property editor form"
-            },
-            {
-              "kind": "method",
-              "name": "renderPropertyField",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "attr",
-                  "type": {
-                    "text": "AttributeMetadata"
-                  }
-                }
-              ],
-              "description": "Render a single property field based on its type"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "component",
-              "fieldName": "component",
-              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "display-name",
-              "fieldName": "displayName",
-              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "host-class",
-              "fieldName": "hostClass",
-              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "host-style",
-              "fieldName": "hostStyle",
-              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties).",
-              "type": {
-                "text": "{ [key: string]: string }"
-              }
-            }
-          ],
-          "tagName": "le-component",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeComponent",
-          "declaration": {
-            "name": "LeComponent",
-            "module": "src/components/le-component/le-component.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-component",
-          "declaration": {
-            "name": "LeComponent",
-            "module": "src/components/le-component/le-component.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-combobox/le-combobox.tsx",
       "declarations": [
         {
@@ -1988,6 +1517,477 @@
           "declaration": {
             "name": "LeCombobox",
             "module": "src/components/le-combobox/le-combobox.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-component/le-component.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Component wrapper for admin mode editing.\n\nThis component is used internally by other components to provide admin-mode\nediting capabilities. It wraps the component's rendered output and shows\na settings popover for editing properties.\n\nIn default mode, it acts as a simple passthrough (display: contents).\nIn admin mode, it shows a border, component name header, and settings popover.\n\nThe host element is found automatically by traversing up through the shadow DOM.\n\nUsage inside a component's render method:\n```tsx\nrender() {\n  return (\n    <le-component component=\"le-card\">\n      <Host>...</Host>\n    </le-component>\n  );\n}\n```",
+          "name": "LeComponent",
+          "slots": [
+            {
+              "description": "The component's rendered content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "component",
+              "type": {
+                "text": "string"
+              },
+              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name."
+            },
+            {
+              "kind": "field",
+              "name": "displayName",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name."
+            },
+            {
+              "kind": "field",
+              "name": "hostClass",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes."
+            },
+            {
+              "kind": "field",
+              "name": "hostStyle",
+              "type": {
+                "text": "{ [key: string]: string } | undefined"
+              },
+              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties)."
+            },
+            {
+              "kind": "field",
+              "name": "hostElement",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private",
+              "description": "Reference to the host element (found automatically from parent)"
+            },
+            {
+              "kind": "field",
+              "name": "adminMode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Internal state to track admin mode"
+            },
+            {
+              "kind": "field",
+              "name": "componentMeta",
+              "type": {
+                "text": "ComponentMetadata | null"
+              },
+              "privacy": "private",
+              "default": "null",
+              "description": "Component metadata loaded from Custom Elements Manifest"
+            },
+            {
+              "kind": "field",
+              "name": "propertyValues",
+              "type": {
+                "text": "Record<string, any>"
+              },
+              "privacy": "private",
+              "default": "{}",
+              "description": "Current property values of the host component"
+            },
+            {
+              "kind": "field",
+              "name": "disconnectModeObserver",
+              "type": {
+                "text": "() => void | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "findHostElement",
+              "privacy": "private",
+              "description": "Find the host element by traversing up through shadow DOM"
+            },
+            {
+              "kind": "method",
+              "name": "formatDisplayName",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "tagName",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Formats a tag name into a display name\ne.g., 'le-card' -> 'Card'"
+            },
+            {
+              "kind": "method",
+              "name": "loadComponentMetadata",
+              "privacy": "private",
+              "description": "Load component metadata from the Custom Elements Manifest"
+            },
+            {
+              "kind": "method",
+              "name": "isInternalAttribute",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Check if an attribute is internal (should not be shown in editor)"
+            },
+            {
+              "kind": "method",
+              "name": "readPropertyValues",
+              "privacy": "private",
+              "description": "Read current property values from the host element"
+            },
+            {
+              "kind": "method",
+              "name": "parseAttributeValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "any"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string | null"
+                  }
+                },
+                {
+                  "name": "type",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Parse an attribute value based on its type"
+            },
+            {
+              "kind": "method",
+              "name": "handlePropertyChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "attrName",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "type",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Handle property value changes from the editor"
+            },
+            {
+              "kind": "method",
+              "name": "deleteComponent",
+              "privacy": "private",
+              "description": "Delete this component from the DOM"
+            },
+            {
+              "kind": "method",
+              "name": "renderPropertyEditor",
+              "privacy": "private",
+              "description": "Render the property editor form"
+            },
+            {
+              "kind": "method",
+              "name": "renderPropertyField",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "attr",
+                  "type": {
+                    "text": "AttributeMetadata"
+                  }
+                }
+              ],
+              "description": "Render a single property field based on its type"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "component",
+              "fieldName": "component",
+              "description": "The tag name of the component (e.g., 'le-card').\nUsed to look up property metadata and display the component name.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "display-name",
+              "fieldName": "displayName",
+              "description": "Optional display name for the component.\nIf not provided, the tag name will be formatted as the display name.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "host-class",
+              "fieldName": "hostClass",
+              "description": "Classes to apply to the host element.\nAllows parent components to pass their styling classes.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "host-style",
+              "fieldName": "hostStyle",
+              "description": "Inline styles to apply to the host element.\nAllows parent components to pass dynamic styles (e.g., flex properties).",
+              "type": {
+                "text": "{ [key: string]: string }"
+              }
+            }
+          ],
+          "tagName": "le-component",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeComponent",
+          "declaration": {
+            "name": "LeComponent",
+            "module": "src/components/le-component/le-component.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-component",
+          "declaration": {
+            "name": "LeComponent",
+            "module": "src/components/le-component/le-component.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-checkbox/le-checkbox.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
+          "name": "LeCheckbox",
+          "cssProperties": [
+            {
+              "description": "Size of the checkbox input",
+              "name": "--le-checkbox-size"
+            },
+            {
+              "description": "Color of the checkbox when checked",
+              "name": "--le-checkbox-color"
+            },
+            {
+              "description": "Color of the label text",
+              "name": "--le-checkbox-label-color"
+            },
+            {
+              "description": "Color of the description text",
+              "name": "--le-checkbox-desc-color"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The label text for the checkbox",
+              "name": ""
+            },
+            {
+              "description": "Additional description text displayed below the label",
+              "name": "description"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is checked"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The value of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "externalId",
+              "type": {
+                "text": "string"
+              },
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
+            },
+            {
+              "kind": "field",
+              "name": "handleChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "checked",
+              "fieldName": "checked",
+              "default": "false",
+              "description": "Whether the checkbox is checked",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the checkbox is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "The name of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "external-id",
+              "fieldName": "externalId",
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-checkbox",
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
+              },
+              "description": "Emitted when the checked state changes"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCheckbox",
+          "declaration": {
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-checkbox",
+          "declaration": {
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
           }
         }
       ]

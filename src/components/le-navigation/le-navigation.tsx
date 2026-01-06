@@ -367,7 +367,7 @@ export class LeNavigation {
   private computeOverflow() {
     // Only applies to horizontal, non-wrapping navs.
     if (this.orientation !== 'horizontal' || this.wrap) {
-      if (this.overflowIds.length) this.overflowIds = [];
+      if (!this.overflowIds || this.overflowIds.length) this.overflowIds = [];
       if (this.hamburgerActive) this.hamburgerActive = false;
       if (this.fallbackHamburger) this.fallbackHamburger = false;
       return;
@@ -387,7 +387,7 @@ export class LeNavigation {
       if (shouldHamburger !== this.hamburgerActive) {
         this.hamburgerActive = shouldHamburger;
       }
-      if (this.overflowIds.length) this.overflowIds = [];
+      if (!this.overflowIds || this.overflowIds.length) this.overflowIds = [];
       if (this.fallbackHamburger) this.fallbackHamburger = false;
       return;
     }
@@ -414,7 +414,7 @@ export class LeNavigation {
 
     const nextOverflow = shouldFallback ? [] : computedOverflow;
     const same =
-      nextOverflow.length === this.overflowIds.length &&
+      nextOverflow.length === this.overflowIds?.length &&
       nextOverflow.every((v, i) => v === this.overflowIds[i]);
     if (!same) {
       this.overflowIds = nextOverflow;

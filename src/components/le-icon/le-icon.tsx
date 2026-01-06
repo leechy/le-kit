@@ -12,6 +12,7 @@ async function fetchIcon({ name }): Promise<string> {
     return iconCache[name];
   }
   if (!requestCache[name]) {
+    console.log(`Fetching icon "${name}"`, getAssetPath(`./assets/icons/${name}.json`));
     requestCache[name] = fetch(getAssetPath(`./assets/icons/${name}.json`))
       .then(resp => resp.json())
       .catch(() => {
@@ -30,6 +31,7 @@ async function fetchIcon({ name }): Promise<string> {
   tag: 'le-icon',
   styleUrl: 'le-icon.css',
   shadow: true,
+  assetsDirs: ['icons'],
 })
 export class LeIcon {
   @Element() el: HTMLElement;

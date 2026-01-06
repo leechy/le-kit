@@ -11,7 +11,7 @@ export const config: Config = {
       type: 'dist',
       esmLoaderPath: '../loader',
       copy: [
-        { src: 'themes', dest: 'dist/components/themes' },
+        { src: 'themes', dest: 'dist/themes' },
         { src: 'assets', dest: 'dist/components/assets' },
       ],
     },
@@ -19,7 +19,7 @@ export const config: Config = {
       type: 'dist-custom-elements',
       dir: 'dist/components',
       copy: [
-        { src: 'themes', dest: 'dist/components/themes' },
+        { src: 'themes', dest: 'dist/themes' },
         { src: 'assets', dest: 'dist/components/assets' },
       ],
     },
@@ -50,14 +50,7 @@ export const config: Config = {
       copy: [
         { src: 'global' },
         { src: 'themes', dest: 'build/themes' },
-        {
-          src: '../src/assets/custom-elements.json',
-          dest: 'src/components/assets/custom-elements.json',
-        },
-        {
-          src: '../src/assets',
-          dest: './build/assets',
-        },
+        { src: 'assets', dest: 'build/assets' },
       ],
     },
   ],

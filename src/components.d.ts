@@ -738,15 +738,15 @@ export namespace Components {
          */
         "activeUrl": string;
         /**
+          * Alignment of the menu items within the navigation bar.
+          * @default 'start'
+         */
+        "align": 'start' | 'end' | 'center' | 'space-between';
+        /**
           * Text shown when no items match the filter.
           * @default 'No results found'
          */
         "emptyText": string;
-        /**
-          * Alignment of the hamburger trigger within the row.
-          * @default 'start'
-         */
-        "hamburgerAlign": 'start' | 'end';
         /**
           * Navigation items. Can be passed as an array or JSON string (same pattern as le-select).
           * @default []
@@ -3469,15 +3469,15 @@ declare namespace LocalJSX {
          */
         "activeUrl"?: string;
         /**
+          * Alignment of the menu items within the navigation bar.
+          * @default 'start'
+         */
+        "align"?: 'start' | 'end' | 'center' | 'space-between';
+        /**
           * Text shown when no items match the filter.
           * @default 'No results found'
          */
         "emptyText"?: string;
-        /**
-          * Alignment of the hamburger trigger within the row.
-          * @default 'start'
-         */
-        "hamburgerAlign"?: 'start' | 'end';
         /**
           * Navigation items. Can be passed as an array or JSON string (same pattern as le-select).
           * @default []

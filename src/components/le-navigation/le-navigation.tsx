@@ -90,9 +90,9 @@ export class LeNavigation {
   @Prop() minVisibleItemsForMore: number = 2;
 
   /**
-   * Alignment of the hamburger trigger within the row.
+   * Alignment of the menu items within the navigation bar.
    */
-  @Prop({ reflect: true }) hamburgerAlign: 'start' | 'end' = 'start';
+  @Prop({ reflect: true }) align: 'start' | 'end' | 'center' | 'space-between' = 'start';
 
   /**
    * Active url for automatic selection.
@@ -880,7 +880,9 @@ export class LeNavigation {
 
           <div
             class={classnames('nav-horizontal', {
-              'hamburger-align-end': this.hamburgerAlign === 'end',
+              'align-end': this.align === 'end',
+              'align-center': this.align === 'center',
+              'align-space-between': this.align === 'space-between',
             })}
             ref={el => {
               this.navContainerEl = el as HTMLElement;
@@ -950,8 +952,11 @@ export class LeNavigation {
 
         <div
           class={classnames('nav-horizontal', {
-            wrap: this.wrap,
-            nowrap: !this.wrap,
+            'wrap': this.wrap,
+            'nowrap': !this.wrap,
+            'align-end': this.align === 'end',
+            'align-center': this.align === 'center',
+            'align-space-between': this.align === 'space-between',
           })}
           ref={el => {
             this.navContainerEl = el as HTMLElement;

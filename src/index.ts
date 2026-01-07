@@ -11,7 +11,15 @@
 export { generateId, parseCommaSeparated, slotHasContent } from './utils/utils';
 
 // Global mode and theme helpers
-export { getMode, setGlobalMode, getTheme, setGlobalTheme, configureLeKit, getLeKitConfig } from './global/app';
+export { setAssetPath } from '@stencil/core';
+export {
+  getMode,
+  setGlobalMode,
+  getTheme,
+  setGlobalTheme,
+  configureLeKit,
+  getLeKitConfig,
+} from './global/app';
 export type { LeKitMode, LeKitTheme } from './global/app';
 
 // Popup/dialog programmatic API

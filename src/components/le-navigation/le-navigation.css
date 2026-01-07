@@ -183,8 +183,16 @@
   gap: var(--le-spacing-2);
 }
 
-.nav-horizontal.hamburger-align-end {
+.nav-horizontal.align-end {
   justify-content: flex-end;
+}
+
+.nav-horizontal.align-center {
+  justify-content: center;
+}
+
+.nav-horizontal.align-space-between {
+  justify-content: space-between;
 }
 
 .nav-horizontal-shell {

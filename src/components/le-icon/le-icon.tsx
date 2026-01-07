@@ -31,7 +31,7 @@ async function fetchIcon({ name }): Promise<string> {
   tag: 'le-icon',
   styleUrl: 'le-icon.css',
   shadow: true,
-  assetsDirs: ['icons'],
+  assetsDirs: ['assets/icons'],
 })
 export class LeIcon {
   @Element() el: HTMLElement;
@@ -132,9 +132,9 @@ export class LeIcon {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
-        height={this.size}
-        width={this.size}
-        viewBox={this.iconData?.viewBox || `0 0 ${this.size} ${this.size}`}
+        height={this.size || 16}
+        width={this.size || 16}
+        viewBox={this.iconData?.viewBox || `0 0 ${this.size || 16} ${this.size || 16}`}
       >
         {this.renderSVGContent(this.iconData?.children)}
       </svg>

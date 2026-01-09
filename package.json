@@ -1,17 +1,17 @@
 {
   "name": "le-kit",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Themable web components library with CMS admin mode support",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "unpkg": "dist/le-kit/le-kit.esm.js",
+  "unpkg": "dist/le-kit/index.esm.js",
   "exports": {
     ".": {
-      "import": "./dist/le-kit/le-kit.esm.js",
-      "require": "./dist/cjs/le-kit.cjs.js",
+      "import": "./dist/le-kit/index.esm.js",
+      "require": "./dist/cjs/index.cjs.js",
       "types": "./dist/types/index.d.ts"
     },
     "./components": {

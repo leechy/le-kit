@@ -319,8 +319,8 @@ export class LeNavigation {
   };
 
   private handleBarOverflowChange = (e: CustomEvent<LeBarOverflowChangeDetail>) => {
-    this.overflowIds = e.detail.overflowingIds;
-    this.hamburgerActive = e.detail.hamburgerActive;
+    this.overflowIds = e.detail.overflowingIds || [];
+    this.hamburgerActive = e.detail.hamburgerActive || false;
   };
 
   private openOverflowPopover = () => {
@@ -626,7 +626,7 @@ export class LeNavigation {
 
   private renderOverflowPopover() {
     const items = this.parsedItems;
-    const overflowSet = new Set(this.overflowIds);
+    const overflowSet = new Set(this.overflowIds || []);
 
     // Determine which items to show in the popover
     let itemsToShow: LeOption[];
@@ -684,7 +684,7 @@ export class LeNavigation {
   private renderHorizontal() {
     const items = this.parsedItems;
     const overflowMode = this.getOverflowMode();
-    const showOverflowButton = this.overflowIds.length > 0 || this.hamburgerActive;
+    const showOverflowButton = (this.overflowIds?.length ?? 0) > 0 || this.hamburgerActive;
 
     return (
       <div class="nav-horizontal-wrapper">

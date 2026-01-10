@@ -1,0 +1,255 @@
+/**
+ * le-bar - Flexible bar with overflow handling
+ */
+
+:host {
+  display: block;
+
+  /* Spacing & sizing */
+  --le-bar-gap: var(--le-spacing-2);
+  --le-bar-padding: var(--le-spacing-2);
+  --le-bar-min-height: 2.5rem;
+
+  /* Colors */
+  --le-bar-background: transparent;
+  --le-bar-border-color: var(--le-color-border);
+  --le-bar-border-radius: var(--le-radius-md);
+
+  /* Button styling */
+  --le-bar-button-size: 2rem;
+  --le-bar-button-color: var(--le-color-text-primary);
+  --le-bar-button-hover-bg: var(--le-color-gray-100);
+  --le-bar-button-border-radius: var(--le-radius-sm);
+
+  /* Arrow styling */
+  --le-bar-arrow-size: 1.5rem;
+
+  /* Popover */
+  --le-bar-popover-min-width: 200px;
+  --le-bar-popover-gap: var(--le-spacing-1);
+}
+
+/* ============================================
+ * MAIN CONTAINER
+ * ============================================ */
+
+.bar-container {
+  display: flex;
+  align-items: center;
+  gap: var(--le-bar-gap);
+  min-height: var(--le-bar-min-height);
+  background: var(--le-bar-background);
+  border-radius: var(--le-bar-border-radius);
+  padding: var(--le-bar-padding);
+}
+
+/* Alignment variations */
+.bar-container.align-start {
+  justify-content: flex-start;
+}
+
+.bar-container.align-end .bar-items {
+  justify-content: flex-end;
+}
+
+.bar-container.align-center .bar-items {
+  justify-content: center;
+}
+
+.bar-container.align-stretch .bar-items {
+  /* justify-content: stretch; */
+  justify-content: space-evenly;
+}
+
+
+/* ============================================
+ * ITEMS CONTAINER
+ * ============================================ */
+
+.bar-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--le-bar-gap);
+  overflow: hidden;
+  min-width: 0;
+  flex: 1 1 0%;
+  position: relative;
+}
+
+/* When height is set (overflow mode), clip content */
+.bar-items[style*="height"] {
+  overflow: hidden;
+}
+
+/* Scroll mode */
+.bar-items.is-scrollable {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  /* Hide scrollbar but keep functionality */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.bar-items.is-scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+.bar-items.is-scrollable ::slotted(*) {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* Wrap mode */
+.bar-items.is-wrapping {
+  flex-wrap: wrap;
+  overflow: visible;
+  height: auto !important;
+}
+
+/* ============================================
+ * CONTROLS (arrows, buttons)
+ * ============================================ */
+
+.bar-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--le-spacing-1);
+  flex-shrink: 0;
+}
+
+.bar-controls-start {
+  order: -1;
+}
+
+.bar-controls-end {
+  order: 1;
+}
+
+/* ============================================
+ * BUTTONS (more, hamburger, all-menu)
+ * ============================================ */
+
+.bar-more-button,
+.bar-hamburger-button,
+.bar-all-menu-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--le-bar-button-size);
+  height: var(--le-bar-button-size);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--le-bar-button-color);
+  border-radius: var(--le-bar-button-border-radius);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.bar-more-button:hover,
+.bar-hamburger-button:hover,
+.bar-all-menu-button:hover {
+  background: var(--le-bar-button-hover-bg);
+}
+
+.bar-more-button:focus-visible,
+.bar-hamburger-button:focus-visible,
+.bar-all-menu-button:focus-visible {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+
+/* ============================================
+ * SCROLL ARROWS
+ * ============================================ */
+
+.bar-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--le-bar-arrow-size);
+  height: var(--le-bar-arrow-size);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--le-bar-button-color);
+  border-radius: var(--le-bar-button-border-radius);
+  cursor: pointer;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.bar-arrow:hover:not(:disabled) {
+  background: var(--le-bar-button-hover-bg);
+}
+
+.bar-arrow:focus-visible {
+  outline: 2px solid var(--le-color-focus);
+  outline-offset: 2px;
+}
+
+.bar-arrow:disabled,
+.bar-arrow.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Rotate chevron icons for arrows */
+.arrow-icon-start {
+  transform: rotate(90deg);
+}
+
+.arrow-icon-end {
+  transform: rotate(-90deg);
+}
+
+/* ============================================
+ * POPOVER TRIGGERS
+ * ============================================ */
+
+.bar-overflow-trigger,
+.bar-all-menu-trigger {
+  display: inline-flex;
+}
+
+/* ============================================
+ * POPOVER CONTENT
+ * ============================================ */
+
+.bar-popover-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--le-bar-popover-gap);
+  min-width: var(--le-bar-popover-min-width);
+  padding: var(--le-spacing-2);
+}
+
+.bar-popover-item {
+  cursor: pointer;
+}
+
+.bar-popover-item:hover {
+  background: var(--le-bar-button-hover-bg);
+  border-radius: var(--le-bar-button-border-radius);
+}
+
+/* ============================================
+ * HAMBURGER MODE - HIDE ITEMS
+ * ============================================ */
+
+:host(.hamburger-active) .bar-items {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
+/* ============================================
+ * HOST VARIANTS
+ * ============================================ */
+
+/* Remove redundant flex:1 since bar-items already has it */

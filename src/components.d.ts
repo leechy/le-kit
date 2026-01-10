@@ -5,15 +5,58 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
+export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export namespace Components {
+    /**
+     * A flexible bar component that handles overflow gracefully.
+     * Items are slotted children. The bar measures which items fit on the first
+     * row and handles overflow according to the `overflow` prop.
+     * @csspart container - The main bar container
+     * @csspart item - Individual items in the bar
+     * @csspart more-button - The "more" overflow button
+     * @csspart hamburger-button - The hamburger menu button
+     * @csspart arrow-start - The start (left) scroll arrow
+     * @csspart arrow-end - The end (right) scroll arrow
+     * @csspart all-menu-button - The "show all" menu button
+     * @csspart popover-content - The popover content wrapper
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeBar {
+        /**
+          * Alignment of items within the bar (maps to justify-content).
+          * @default 'start'
+         */
+        "alignItems": 'start' | 'end' | 'center' | 'stretch';
+        /**
+          * Show scroll arrows when overflow is "scroll".
+          * @default false
+         */
+        "arrows": boolean;
+        /**
+          * Overflow behavior when items don't fit on one row. - `more`: Overflow items appear in a "more" dropdown - `scroll`: Items scroll horizontally with optional arrows - `hamburger`: All items go into a hamburger menu if any overflow - `wrap`: Items wrap to additional rows
+          * @default 'more'
+         */
+        "overflow": 'more' | 'scroll' | 'hamburger' | 'wrap';
+        /**
+          * Force recalculation of overflow state.
+         */
+        "recalculate": () => Promise<void>;
+        /**
+          * Show an "all items" menu button. - `false`: Don't show - `true` or `'end'`: Show at end - `'start'`: Show at start
+          * @default false
+         */
+        "showAllMenu": boolean | 'start' | 'end';
+    }
     /**
      * A flexible box component for use as a flex item within le-stack.
      * `le-box` wraps content and provides flex item properties like grow, shrink,
@@ -1781,6 +1824,10 @@ export namespace Components {
         "value": number;
     }
 }
+export interface LeBarCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeBarElement;
+}
 export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeButtonElement;
@@ -1854,6 +1901,38 @@ export interface LeTagCustomEvent<T> extends CustomEvent<T> {
     target: HTMLLeTagElement;
 }
 declare global {
+    interface HTMLLeBarElementEventMap {
+        "leBarOverflowChange": LeBarOverflowChangeDetail;
+    }
+    /**
+     * A flexible bar component that handles overflow gracefully.
+     * Items are slotted children. The bar measures which items fit on the first
+     * row and handles overflow according to the `overflow` prop.
+     * @csspart container - The main bar container
+     * @csspart item - Individual items in the bar
+     * @csspart more-button - The "more" overflow button
+     * @csspart hamburger-button - The hamburger menu button
+     * @csspart arrow-start - The start (left) scroll arrow
+     * @csspart arrow-end - The end (right) scroll arrow
+     * @csspart all-menu-button - The "show all" menu button
+     * @csspart popover-content - The popover content wrapper
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeBarElement extends Components.LeBar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeBarElementEventMap>(type: K, listener: (this: HTMLLeBarElement, ev: LeBarCustomEvent<HTMLLeBarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeBarElementEventMap>(type: K, listener: (this: HTMLLeBarElement, ev: LeBarCustomEvent<HTMLLeBarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeBarElement: {
+        prototype: HTMLLeBarElement;
+        new (): HTMLLeBarElement;
+    };
     /**
      * A flexible box component for use as a flex item within le-stack.
      * `le-box` wraps content and provides flex item properties like grow, shrink,
@@ -2682,6 +2761,7 @@ declare global {
         new (): HTMLLeTurntableElement;
     };
     interface HTMLElementTagNameMap {
+        "le-bar": HTMLLeBarElement;
         "le-box": HTMLLeBoxElement;
         "le-button": HTMLLeButtonElement;
         "le-card": HTMLLeCardElement;
@@ -2716,6 +2796,47 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    /**
+     * A flexible bar component that handles overflow gracefully.
+     * Items are slotted children. The bar measures which items fit on the first
+     * row and handles overflow according to the `overflow` prop.
+     * @csspart container - The main bar container
+     * @csspart item - Individual items in the bar
+     * @csspart more-button - The "more" overflow button
+     * @csspart hamburger-button - The hamburger menu button
+     * @csspart arrow-start - The start (left) scroll arrow
+     * @csspart arrow-end - The end (right) scroll arrow
+     * @csspart all-menu-button - The "show all" menu button
+     * @csspart popover-content - The popover content wrapper
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeBar {
+        /**
+          * Alignment of items within the bar (maps to justify-content).
+          * @default 'start'
+         */
+        "alignItems"?: 'start' | 'end' | 'center' | 'stretch';
+        /**
+          * Show scroll arrows when overflow is "scroll".
+          * @default false
+         */
+        "arrows"?: boolean;
+        /**
+          * Emitted when overflow state changes.
+         */
+        "onLeBarOverflowChange"?: (event: LeBarCustomEvent<LeBarOverflowChangeDetail>) => void;
+        /**
+          * Overflow behavior when items don't fit on one row. - `more`: Overflow items appear in a "more" dropdown - `scroll`: Items scroll horizontally with optional arrows - `hamburger`: All items go into a hamburger menu if any overflow - `wrap`: Items wrap to additional rows
+          * @default 'more'
+         */
+        "overflow"?: 'more' | 'scroll' | 'hamburger' | 'wrap';
+        /**
+          * Show an "all items" menu button. - `false`: Don't show - `true` or `'end'`: Show at end - `'start'`: Show at start
+          * @default false
+         */
+        "showAllMenu"?: boolean | 'start' | 'end';
+    }
     /**
      * A flexible box component for use as a flex item within le-stack.
      * `le-box` wraps content and provides flex item properties like grow, shrink,
@@ -4556,6 +4677,7 @@ declare namespace LocalJSX {
         "value"?: number;
     }
     interface IntrinsicElements {
+        "le-bar": LeBar;
         "le-box": LeBox;
         "le-button": LeButton;
         "le-card": LeCard;
@@ -4593,6 +4715,22 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * A flexible bar component that handles overflow gracefully.
+             * Items are slotted children. The bar measures which items fit on the first
+             * row and handles overflow according to the `overflow` prop.
+             * @csspart container - The main bar container
+             * @csspart item - Individual items in the bar
+             * @csspart more-button - The "more" overflow button
+             * @csspart hamburger-button - The hamburger menu button
+             * @csspart arrow-start - The start (left) scroll arrow
+             * @csspart arrow-end - The end (right) scroll arrow
+             * @csspart all-menu-button - The "show all" menu button
+             * @csspart popover-content - The popover content wrapper
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-bar": LocalJSX.LeBar & JSXBase.HTMLAttributes<HTMLLeBarElement>;
             /**
              * A flexible box component for use as a flex item within le-stack.
              * `le-box` wraps content and provides flex item properties like grow, shrink,

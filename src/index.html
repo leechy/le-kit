@@ -220,7 +220,7 @@
                 padding: var(--le-space-sm);
                 grid-column: 1 / span 2;
               ">
-                <le-navigation
+                <!-- <le-navigation
                   id="demo-nav-horizontal-overflow"
                   orientation="horizontal"
                   wrap="false"
@@ -231,7 +231,7 @@
                 >
                   <span slot="more-trigger"><le-icon name="ellipsis-horizontal"></le-icon></span>
                   <span slot="hamburger-trigger"><le-icon name="hamburger"></le-icon></span>
-                </le-navigation>
+                </le-navigation> -->
               </div>
 
               <!-- <div style="max-width: 520px; border: 1px dashed var(--le-color-border); border-radius: var(--le-radius-md); padding: var(--le-space-sm);">
@@ -247,6 +247,80 @@
               </div> -->
 
               <p style="margin: 0; font-size: var(--le-font-size-sm);">Top example uses “More” overflow. Bottom example collapses to a hamburger.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-section">
+        <h2>Bar Component</h2>
+        <p>A flexible bar that handles overflow gracefully with multiple modes.</p>
+
+        <div class="demo-grid">
+          <div class="text-slot-demo" style="grid-column: 1 / span 2;">
+            <label>overflow="more" (default)</label>
+            <le-bar style="--le-bar-background: var(--le-color-surface-alt);">
+              <le-button variant="outlined" size="small">Item 1</le-button>
+              <le-button variant="outlined" size="small">Item 2</le-button>
+              <le-button variant="outlined" size="small">Item 3</le-button>
+              <le-button variant="outlined" size="large">Item 4</le-button>
+              <le-button variant="outlined">Item 5</le-button>
+              <le-button variant="outlined">Item 6</le-button>
+            </le-bar>
+          </div>
+
+          <div class="text-slot-demo" style="grid-column: 1 / span 2;">
+            <label>overflow="hamburger"</label>
+            <le-bar overflow="hamburger" align-items="end" style="--le-bar-background: var(--le-color-surface-alt);">
+              <le-button variant="outlined">Home</le-button>
+              <le-button variant="outlined">About</le-button>
+              <le-button variant="outlined">Services</le-button>
+              <le-button variant="outlined">Contact</le-button>
+              <le-button variant="outlined">Blog</le-button>
+            </le-bar>
+          </div>
+
+          <div class="text-slot-demo" style="grid-column: 1 / span 2;">
+            <label>overflow="scroll" with arrows</label>
+            <le-bar overflow="scroll" arrows show-all-menu="end" style="--le-bar-background: var(--le-color-surface-alt);">
+              <le-button variant="outlined">Item 1</le-button>
+              <le-button variant="outlined">Item 2</le-button>
+              <le-button variant="outlined">Item 3</le-button>
+              <le-button variant="outlined">Item 4</le-button>
+              <le-button variant="outlined">Item 5</le-button>
+              <le-button variant="outlined">Item 6</le-button>
+            </le-bar>
+          </div>
+
+          <div class="text-slot-demo" style="grid-column: 1 / span 2;">
+            <label>overflow="wrap"</label>
+            <le-bar overflow="wrap" style="--le-bar-background: var(--le-color-surface-alt);">
+              <le-tag>Tag 1</le-tag>
+              <le-tag>Tag 2</le-tag>
+              <le-tag>Tag 3</le-tag>
+              <le-tag>Tag 4</le-tag>
+              <le-tag>Tag 5</le-tag>
+              <le-tag>Another Tag</le-tag>
+            </le-bar>
+          </div>
+
+          <div class="text-slot-demo" style="grid-column: 1 / span 2;">
+            <label>With show-all-menu</label>
+            <le-bar overflow="scroll" show-all-menu="end" style="--le-bar-background: var(--le-color-surface-alt);">
+              <le-button variant="outlined">Item 1</le-button>
+              <le-button variant="outlined">Item 2</le-button>
+              <le-button variant="outlined">Item 3</le-button>
+              <le-button variant="outlined">Item 4</le-button>
+              <span slot="all-menu">???</span>
+            </le-bar>
+          </div>
+
+          <div class="text-slot-demo" style="grid-column: 1 / span 2;">
+            <label>Full width (stretch alignment)</label>
+            <le-bar overflow="more" align-items="stretch" style="--le-bar-background: var(--le-color-surface-alt);">
+              <le-button variant="outlined">Item 1</le-button>
+              <le-button variant="outlined">Item 2</le-button>
+              <le-button variant="outlined">Item 3</le-button>
+            </le-bar>
           </div>
         </div>
       </div>
@@ -1301,7 +1375,7 @@ console.log(greeting);</le-text>
         }
       }
 
-      document.getElementById('demo-nav-router').items = [
+      document.getElementById('demo-nav-router') && (document.getElementById('demo-nav-router').items = [
         { label: "Home", href: "#home", iconStart: "🏠" },
         { 
           label: "Documentation",
@@ -1324,9 +1398,9 @@ console.log(greeting);</le-text>
           ]
         },
         { label: "Settings", href: "#settings", iconStart: "⚙️" }
-      ];
+      ]);
 
-      document.getElementById('demo-nav-horizontal-wrap').items = [
+      document.getElementById('demo-nav-horizontal-wrap') && (document.getElementById('demo-nav-horizontal-wrap').items = [
         {"label":"Overview","href":"#overview"},
         {"label":"Products","href":"#products"},
         {"label":"Pricing","href":"#pricing"},
@@ -1334,9 +1408,9 @@ console.log(greeting);</le-text>
         {"label":"Blog","href":"#blog"},
         {"label":"Support","href":"#support"},
         {"label":"Contact","href":"#contact"}
-      ];
+      ]);
 
-      document.getElementById('demo-nav-horizontal-overflow').items = [
+      document.getElementById('demo-nav-horizontal-overflow') && (document.getElementById('demo-nav-horizontal-overflow').items = [
         {"label":"Home","href":"#home"},
         {"label":"Features","href":"#features"},
         {"label":"Solutions","children":[
@@ -1352,9 +1426,9 @@ console.log(greeting);</le-text>
         {"label":"Community","href":"#community"},
         {"label":"About","href":"#about"},
         {"label":"Contact","href":"#contact"}
-      ];
+      ]);
 
-      document.getElementById('demo-nav-horizontal-hamburger').items = [
+      document.getElementById('demo-nav-horizontal-hamburger') && (document.getElementById('demo-nav-horizontal-hamburger').items = [
         {"label":"Home","href":"#home"},
         {"label":"Features","href":"#features"},
         {"label":"Solutions","children":[
@@ -1369,7 +1443,7 @@ console.log(greeting);</le-text>
         {"label":"Community","href":"#community"},
         {"label":"About","href":"#about"},
         {"label":"Contact","href":"#contact"}
-      ];
+      ]);
     </script>
   </body>
 </html>

@@ -19,6 +19,7 @@ export {
   setGlobalTheme,
   configureLeKit,
   getLeKitConfig,
+  getAssetBasePath,
 } from './global/app';
 export type { LeKitMode, LeKitTheme } from './global/app';
 

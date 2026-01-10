@@ -3,20 +3,36 @@
  * https://paulcpederson.com/articles/stencil-icons/
  */
 import { Build, Component, Element, getAssetPath, h, Prop, State, Watch } from '@stencil/core';
+import { getAssetBasePath } from '../../global/app';
 
-const iconCache = {};
-const requestCache = {};
+const iconCache: Record<string, any> = {};
+const requestCache: Record<string, Promise<any>> = {};
+
+/**
+ * Get the URL for loading an icon.
+ * Uses configurable assetBasePath if set, otherwise falls back to Stencil's getAssetPath.
+ */
+function getIconUrl(name: string): string {
+  const basePath = getAssetBasePath();
+  if (basePath) {
+    // Use configured base path - normalize by removing trailing slash
+    const normalizedBase = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
+    return `${normalizedBase}/icons/${name}.json`;
+  }
+  // Fall back to Stencil's getAssetPath for local development
+  return getAssetPath(`./assets/icons/${name}.json`);
+}
 
 async function fetchIcon({ name }): Promise<string> {
   if (iconCache[name]) {
     return iconCache[name];
   }
   if (!requestCache[name]) {
-    console.log(`Fetching icon "${name}"`, getAssetPath(`./assets/icons/${name}.json`));
-    requestCache[name] = fetch(getAssetPath(`./assets/icons/${name}.json`))
+    const iconUrl = getIconUrl(name);
+    requestCache[name] = fetch(iconUrl)
       .then(resp => resp.json())
       .catch(() => {
-        console.error(`"${name}" is not a valid name`);
+        console.error(`Icon "${name}" could not be loaded from: ${iconUrl}`);
         return '';
       });
   }

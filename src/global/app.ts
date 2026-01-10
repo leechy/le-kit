@@ -51,7 +51,7 @@ export default initializeMode;
 /**
  * Helper function to get the current mode for an element.
  * Can be used programmatically in components.
- * 
+ *
  * This function traverses both regular DOM and shadow DOM boundaries
  * to find the nearest mode attribute.
  */
@@ -151,23 +151,41 @@ let leKitConfig = {
   /**
    * URL to the custom-elements.json manifest.
    * Used by admin components (le-component, le-slot) to load component metadata.
-   * 
+   *
    * Default: '/custom-elements.json' (served from app root)
-   * 
+   *
    * For apps using le-kit, you may need to:
    * 1. Copy the manifest from node_modules/le-kit/custom-elements.json to your public folder
    * 2. Or set this to point to where the manifest is served
    */
   manifestFile: '/custom-elements.json',
+
+  /**
+   * Base path for loading assets (icons, etc.).
+   *
+   * Default: '' (empty - uses Stencil's getAssetPath)
+   *
+   * When set, assets will be loaded from: `${assetBasePath}/icons/${name}.json`
+   *
+   * For apps using le-kit, you should:
+   * 1. Copy the assets from node_modules/le-kit/dist/assets to your public folder
+   * 2. Set this to point to where the assets are served (e.g., '/le-kit-assets')
+   *
+   * @example
+   * ```ts
+   * configureLeKit({ assetBasePath: '/le-kit-assets' });
+   * ```
+   */
+  assetBasePath: '',
 };
 
 /**
  * Configure le-kit global settings.
- * 
+ *
  * @example
  * ```ts
  * import { configureLeKit } from 'le-kit';
- * 
+ *
  * configureLeKit({
  *   manifestFile: 'custom-elements.json'
  * });
@@ -182,4 +200,12 @@ export function configureLeKit(config: Partial<typeof leKitConfig>): void {
  */
 export function getLeKitConfig(): typeof leKitConfig {
   return leKitConfig;
+}
+
+/**
+ * Get the configured asset base path.
+ * Used internally by components that load assets.
+ */
+export function getAssetBasePath(): string {
+  return leKitConfig.assetBasePath;
 }

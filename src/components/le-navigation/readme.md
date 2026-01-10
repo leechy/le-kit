@@ -27,7 +27,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `searchPlaceholder`      | `search-placeholder`         | Placeholder text for the search input.                                                                                                                             | `string`                                          | `'Search...'`        |
 | `searchable`             | `searchable`                 | Enables a search input for the vertical navigation.                                                                                                                | `boolean`                                         | `false`              |
 | `submenuSearchable`      | `submenu-searchable`         | Whether submenu popovers should include a filter input.                                                                                                            | `boolean`                                         | `false`              |
-| `wrap`                   | `wrap`                       | Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`.                                                                               | `boolean`                                         | `true`               |
+| `wrap`                   | `wrap`                       | Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`.                                                                               | `boolean`                                         | `false`              |
 
 
 ## Events

@@ -145,9 +145,9 @@ export function setGlobalTheme(theme: LeKitTheme): void {
 }
 
 /**
- * Global configuration for le-kit
+ * Type definition for le-kit configuration
  */
-let leKitConfig = {
+export interface LeKitConfig {
   /**
    * URL to the custom-elements.json manifest.
    * Used by admin components (le-component, le-slot) to load component metadata.
@@ -158,7 +158,7 @@ let leKitConfig = {
    * 1. Copy the manifest from node_modules/le-kit/custom-elements.json to your public folder
    * 2. Or set this to point to where the manifest is served
    */
-  manifestFile: '/custom-elements.json',
+  manifestFile: string;
 
   /**
    * Base path for loading assets (icons, etc.).
@@ -176,8 +176,27 @@ let leKitConfig = {
    * configureLeKit({ assetBasePath: '/le-kit-assets' });
    * ```
    */
-  assetBasePath: '',
-};
+  assetBasePath: string;
+}
+
+// Use a Symbol to avoid conflicts with other libraries
+const LE_KIT_CONFIG_KEY = '__leKitConfig__';
+
+/**
+ * Get the global config object, creating it if needed.
+ * Uses globalThis (window in browser) to ensure config is shared
+ * across all module bundles.
+ */
+function getGlobalConfig(): LeKitConfig {
+  const g = globalThis as any;
+  if (!g[LE_KIT_CONFIG_KEY]) {
+    g[LE_KIT_CONFIG_KEY] = {
+      manifestFile: '/custom-elements.json',
+      assetBasePath: '',
+    };
+  }
+  return g[LE_KIT_CONFIG_KEY];
+}
 
 /**
  * Configure le-kit global settings.
@@ -187,19 +206,21 @@ let leKitConfig = {
  * import { configureLeKit } from 'le-kit';
  *
  * configureLeKit({
- *   manifestFile: 'custom-elements.json'
+ *   manifestFile: 'custom-elements.json',
+ *   assetBasePath: '/le-kit-assets'
  * });
  * ```
  */
-export function configureLeKit(config: Partial<typeof leKitConfig>): void {
-  leKitConfig = { ...leKitConfig, ...config };
+export function configureLeKit(config: Partial<LeKitConfig>): void {
+  const globalConfig = getGlobalConfig();
+  Object.assign(globalConfig, config);
 }
 
 /**
  * Get the current le-kit configuration.
  */
-export function getLeKitConfig(): typeof leKitConfig {
-  return leKitConfig;
+export function getLeKitConfig(): LeKitConfig {
+  return getGlobalConfig();
 }
 
 /**
@@ -207,5 +228,5 @@ export function getLeKitConfig(): typeof leKitConfig {
  * Used internally by components that load assets.
  */
 export function getAssetBasePath(): string {
-  return leKitConfig.assetBasePath;
+  return getGlobalConfig().assetBasePath;
 }

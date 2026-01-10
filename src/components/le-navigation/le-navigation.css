@@ -14,6 +14,17 @@
   --le-nav-selected-color: var(--le-color-primary-contrast);
 }
 
+/*
+ * In horizontal nowrap mode, this component is commonly used inside flex layouts
+ * (e.g. headers). If the host shrink-wraps to its contents, enabling overflow
+ * (moving items into "More") changes the host width, which can cause oscillation
+ * between states. Make the host participate in flex sizing instead.
+ */
+:host([orientation='horizontal']:not([wrap])) {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
 /* ==========================================
  * Vertical navigation
  * ========================================== */
@@ -201,9 +212,9 @@
 
 .nav-horizontal-measure {
   position: absolute;
-  left: -10000px;
+  /* left: -10000px;
   top: -10000px;
-  visibility: hidden;
+  visibility: hidden; */
   pointer-events: none;
   display: flex;
   align-items: center;

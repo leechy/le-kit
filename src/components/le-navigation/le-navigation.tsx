@@ -512,6 +512,10 @@ export class LeNavigation {
     const children = this.getChildItems(item);
     const hasChildren = children.length > 0;
 
+    const itemPart = this.partFromOptionPart('item', item.part);
+    const selected = item.selected || (this.activeUrl && item.href === this.activeUrl);
+    const disabled = !!item.disabled;
+
     const setRef = (el?: HTMLElement) => {
       if (el) this.topItemEls.set(id, el);
     };
@@ -519,7 +523,7 @@ export class LeNavigation {
     if (!hasChildren) {
       return (
         <div class="h-item" ref={setRef} data-nav-id={id}>
-          <span class="h-link">
+          <span class={classnames('h-link', { disabled, selected })} part={itemPart} tabIndex={-1}>
             {item.iconStart && (
               <span class="nav-icon" aria-hidden="true">
                 {item.iconStart}
@@ -538,8 +542,8 @@ export class LeNavigation {
 
     return (
       <div class="h-item" ref={setRef} data-nav-id={id}>
-        <span class="h-trigger">
-          <span class="h-link">
+        <span class={classnames('h-trigger', { disabled, selected })} part={itemPart}>
+          <span class="h-link" aria-hidden="true">
             {item.iconStart && (
               <span class="nav-icon" aria-hidden="true">
                 {item.iconStart}

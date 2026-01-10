@@ -116,7 +116,7 @@ export class LeSelect {
   /**
    * Emitted when the selected value changes.
    */
-  @Event() leChange: EventEmitter<LeOptionSelectDetail>;
+  @Event({ eventName: 'change' }) leChange: EventEmitter<LeOptionSelectDetail>;
 
   /**
    * Emitted when the dropdown opens.

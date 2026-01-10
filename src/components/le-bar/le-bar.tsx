@@ -81,6 +81,13 @@ export class LeBar {
   @Prop() disablePopover: boolean = false;
 
   /**
+   * Minimum number of visible items required when using "more" overflow mode.
+   * If fewer items would be visible, the bar falls back to hamburger mode.
+   * Only applies when overflow is "more".
+   */
+  @Prop() minVisibleItems: number = 0;
+
+  /**
    * Show an "all items" menu button.
    * - `false`: Don't show
    * - `true` or `'end'`: Show at end
@@ -295,7 +302,7 @@ export class LeBar {
       }
     } else {
       // 'more' mode
-      const newOverflowingIds = new Set(overflowItems.map(i => i.id));
+      let newOverflowingIds = new Set(overflowItems.map(i => i.id));
 
       // Check if we need to make room for the "more" button
       if (newOverflowingIds.size > 0 && this.moreButtonEl) {
@@ -312,10 +319,40 @@ export class LeBar {
         }
       }
 
+      // Check if we should fallback to hamburger mode
+      // This happens when minVisibleItems is set and fewer items would be visible
+      const visibleCount = items.length - newOverflowingIds.size;
+      const shouldFallbackToHamburger =
+        this.minVisibleItems > 0 &&
+        newOverflowingIds.size > 0 &&
+        visibleCount < this.minVisibleItems;
+
+      if (shouldFallbackToHamburger) {
+        // Switch to hamburger mode - all items go into the menu
+        if (!this.hamburgerActive) {
+          this.hamburgerActive = true;
+          this.overflowingIds = new Set();
+          this.emitOverflowChange();
+        }
+
+        // Set height to show only first row
+        if (firstRowBottom > 0) {
+          this.containerHeight = firstRowBottom;
+        } else {
+          this.containerHeight = null;
+        }
+        return;
+      }
+
+      // Not falling back to hamburger - ensure hamburgerActive is false
+      if (this.hamburgerActive) {
+        this.hamburgerActive = false;
+      }
+
       // Check if overflow state changed
       const hasChanged =
-        newOverflowingIds.size !== this.overflowingIds.size ||
-        ![...newOverflowingIds].every(id => this.overflowingIds.has(id));
+        (newOverflowingIds?.size ?? 0) !== (this.overflowingIds?.size ?? 0) ||
+        ![...newOverflowingIds].every(id => this.overflowingIds?.has(id));
 
       if (hasChanged) {
         this.overflowingIds = newOverflowingIds;

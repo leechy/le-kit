@@ -48,6 +48,11 @@ export namespace Components {
          */
         "disablePopover": boolean;
         /**
+          * Minimum number of visible items required when using "more" overflow mode. If fewer items would be visible, the bar falls back to hamburger mode. Only applies when overflow is "more".
+          * @default 0
+         */
+        "minVisibleItems": number;
+        /**
           * Overflow behavior when items don't fit on one row. - `more`: Overflow items appear in a "more" dropdown - `scroll`: Items scroll horizontally with optional arrows - `hamburger`: All items go into a hamburger menu if any overflow - `wrap`: Items wrap to additional rows
           * @default 'more'
          */
@@ -832,7 +837,7 @@ export namespace Components {
         "submenuSearchable": boolean;
         /**
           * Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`.
-          * @default true
+          * @default false
          */
         "wrap": boolean;
     }
@@ -2454,7 +2459,7 @@ declare global {
         new (): HTMLLeSegmentedControlElement;
     };
     interface HTMLLeSelectElementEventMap {
-        "leChange": LeOptionSelectDetail;
+        "change": LeOptionSelectDetail;
         "leOpen": void;
         "leClose": void;
     }
@@ -2832,6 +2837,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "disablePopover"?: boolean;
+        /**
+          * Minimum number of visible items required when using "more" overflow mode. If fewer items would be visible, the bar falls back to hamburger mode. Only applies when overflow is "more".
+          * @default 0
+         */
+        "minVisibleItems"?: number;
         /**
           * Emitted when overflow state changes.
          */
@@ -3654,7 +3664,7 @@ declare namespace LocalJSX {
         "submenuSearchable"?: boolean;
         /**
           * Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`.
-          * @default true
+          * @default false
          */
         "wrap"?: boolean;
     }
@@ -4036,7 +4046,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the selected value changes.
          */
-        "onLeChange"?: (event: LeSelectCustomEvent<LeOptionSelectDetail>) => void;
+        "onChange"?: (event: LeSelectCustomEvent<LeOptionSelectDetail>) => void;
         /**
           * Emitted when the dropdown closes.
          */

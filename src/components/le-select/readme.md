@@ -29,11 +29,11 @@ A select dropdown component for single selection.
 
 ## Events
 
-| Event      | Description                              | Type                                |
-| ---------- | ---------------------------------------- | ----------------------------------- |
-| `leChange` | Emitted when the selected value changes. | `CustomEvent<LeOptionSelectDetail>` |
-| `leClose`  | Emitted when the dropdown closes.        | `CustomEvent<void>`                 |
-| `leOpen`   | Emitted when the dropdown opens.         | `CustomEvent<void>`                 |
+| Event     | Description                              | Type                                |
+| --------- | ---------------------------------------- | ----------------------------------- |
+| `change`  | Emitted when the selected value changes. | `CustomEvent<LeOptionSelectDetail>` |
+| `leClose` | Emitted when the dropdown closes.        | `CustomEvent<void>`                 |
+| `leOpen`  | Emitted when the dropdown opens.         | `CustomEvent<void>`                 |
 
 
 ## Methods

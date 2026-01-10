@@ -150,11 +150,24 @@
         <div class="controls" mode="default">
           <div class="control-group">
             <span>Theme:</span>
-            <le-button id="btn-theme-default" variant="solid" selected onclick="setTheme('default')" theme="default">Default</le-button>
-            <le-button id="btn-theme-dark" variant="solid" onclick="setTheme('dark')" theme="dark">Dark</le-button>
-            <le-button id="btn-theme-gradient" variant="solid" onclick="setTheme('gradient')" theme="gradient">Gradient</le-button>
-            <le-button id="btn-theme-minimal" variant="solid" onclick="setTheme('minimal')" theme="minimal">Minimal</le-button>
-            <le-button id="btn-theme-warm" variant="solid" onclick="setTheme('warm')" theme="warm">Warm</le-button>
+            <!-- <le-select
+              id="current-theme"
+              value="default"
+              placeholder="Choose theme"
+              options="[{ label: 'Default', value: 'default' }]"
+              onchange="(evt) => { console.log(evt) }"
+            ></le-select> -->
+            <!-- <le-bar min-visible-items="2" overflow="more">
+              <le-button id="btn-theme-default" variant="solid" selected onclick="setTheme('default')" theme="default">Default</le-button>
+              <le-button id="btn-theme-dark" variant="solid" onclick="setTheme('dark')" theme="dark">Dark</le-button>
+              <le-button id="btn-theme-gradient" variant="solid" onclick="setTheme('gradient')" theme="gradient">Gradient</le-button>
+              <le-button id="btn-theme-minimal" variant="solid" onclick="setTheme('minimal')" theme="minimal">Minimal</le-button>
+              <le-button id="btn-theme-warm" variant="solid" onclick="setTheme('warm')" theme="warm">Warm</le-button>
+            </le-bar> -->
+            <le-navigation 
+              id="themes-navigation"
+              overflow-mode="more"
+            ></le-navigation>
           </div>
 
           <div class="control-group">
@@ -226,7 +239,7 @@
                   wrap="false"
                   overflow-mode="more"
                   hamburger-align="end"
-                  min-visible-items-for-more="2"
+                  min-visible-items-for-more="5"
                   submenu-searchable="false"
                 >
                   <span slot="more-trigger"><le-icon name="ellipsis-horizontal"></le-icon></span>
@@ -234,7 +247,7 @@
                 </le-navigation>
               </div>
 
-              <div style="max-width: 520px; border: 1px dashed var(--le-color-border); border-radius: var(--le-radius-md); padding: var(--le-space-sm);">
+              <div style="border: 1px dashed var(--le-color-border); border-radius: var(--le-radius-md); padding: var(--le-space-sm);">
                 <le-navigation
                   id="demo-nav-horizontal-hamburger"
                   orientation="horizontal"
@@ -1163,9 +1176,27 @@ console.log(greeting);</le-text>
         
         console.log('Mode changed to:', mode);
       }
+
+      if (document.getElementById('themes-navigation')) {
+        document.getElementById('themes-navigation').items = [
+          { label: 'Default', value: 'default' },
+          { label: 'Dark', value: 'dark' },
+          { label: 'Gradient', value: 'gradient' },
+          { label: 'Minimal', value: 'minimal' },
+          { label: 'Warm', value: 'warm' },
+        ];
+        document.getElementById('themes-navigation').addEventListener('leNavItemSelect', (event) => {
+          const theme = event.detail?.item?.value;
+          if (theme) {
+            setTheme(theme);
+          }
+        });
+      }
       
       function setTheme(theme) {
         document.documentElement.setAttribute('theme', theme);
+
+        document.getElementById('current-theme') && (document.getElementById('current-theme').value = theme);
         
         // Update button states - toggle 'selected' attribute
         document.querySelectorAll('[id^="btn-theme-"]').forEach(btn => {

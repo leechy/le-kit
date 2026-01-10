@@ -75,7 +75,7 @@ export class LeNavigation {
    * Horizontal wrapping behavior.
    * If false, overflow behavior depends on `overflowMode`.
    */
-  @Prop({ reflect: true }) wrap: boolean = true;
+  @Prop({ reflect: true }) wrap: boolean = false;
 
   /**
    * Overflow behavior for horizontal, non-wrapping menus.
@@ -697,6 +697,7 @@ export class LeNavigation {
           overflow={overflowMode}
           alignItems={this.getBarAlignment()}
           disablePopover={true}
+          minVisibleItems={this.minVisibleItemsForMore}
           onLeBarOverflowChange={this.handleBarOverflowChange}
         >
           {items.map((item, index) => this.renderHorizontalItem(item, index))}

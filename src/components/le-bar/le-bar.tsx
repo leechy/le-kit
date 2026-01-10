@@ -323,7 +323,7 @@ export class LeBar {
       }
 
       // Set container height to show only first row
-      if (newOverflowingIds.size > 0 && firstRowBottom > 0) {
+      if ((newOverflowingIds?.size ?? 0) > 0 && firstRowBottom > 0) {
         this.containerHeight = firstRowBottom;
       } else {
         this.containerHeight = null;
@@ -333,7 +333,7 @@ export class LeBar {
 
   private emitOverflowChange() {
     this.leBarOverflowChange.emit({
-      overflowingIds: [...this.overflowingIds],
+      overflowingIds: [...(this.overflowingIds ?? [])],
       hamburgerActive: this.hamburgerActive,
     });
   }
@@ -564,14 +564,14 @@ export class LeBar {
         id: this.getItemId(item, index),
         item,
       }));
-    } else if (this.overflow === 'more' && this.overflowingIds.size > 0) {
+    } else if (this.overflow === 'more' && (this.overflowingIds?.size ?? 0) > 0) {
       // Show only overflowing items
       itemsToShow = items
         .map((item, index) => ({
           id: this.getItemId(item, index),
           item,
         }))
-        .filter(({ id }) => this.overflowingIds.has(id));
+        .filter(({ id }) => this.overflowingIds?.has(id));
     }
 
     if (itemsToShow.length === 0) return null;
@@ -628,7 +628,7 @@ export class LeBar {
   render() {
     const showOverflowButton =
       !this.disablePopover &&
-      ((this.overflow === 'more' && this.overflowingIds.size > 0) ||
+      ((this.overflow === 'more' && (this.overflowingIds?.size ?? 0) > 0) ||
         (this.overflow === 'hamburger' && this.hamburgerActive));
 
     const containerStyle: { [key: string]: string } = {};
@@ -650,7 +650,7 @@ export class LeBar {
           'overflow-hamburger': this.overflow === 'hamburger',
           'overflow-wrap': this.overflow === 'wrap',
           'hamburger-active': this.hamburgerActive,
-          'has-overflow': this.overflowingIds.size > 0 || this.hamburgerActive,
+          'has-overflow': (this.overflowingIds?.size ?? 0) > 0 || this.hamburgerActive,
         })}
       >
         <div

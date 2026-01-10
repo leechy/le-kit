@@ -43,6 +43,11 @@ export namespace Components {
          */
         "arrows": boolean;
         /**
+          * Disable the internal overflow popover. When true, the bar still detects overflow and hides items, but doesn't render its own popover. Use this when providing custom overflow handling via the leBarOverflowChange event.
+          * @default false
+         */
+        "disablePopover": boolean;
+        /**
           * Overflow behavior when items don't fit on one row. - `more`: Overflow items appear in a "more" dropdown - `scroll`: Items scroll horizontally with optional arrows - `hamburger`: All items go into a hamburger menu if any overflow - `wrap`: Items wrap to additional rows
           * @default 'more'
          */
@@ -2822,6 +2827,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "arrows"?: boolean;
+        /**
+          * Disable the internal overflow popover. When true, the bar still detects overflow and hides items, but doesn't render its own popover. Use this when providing custom overflow handling via the leBarOverflowChange event.
+          * @default false
+         */
+        "disablePopover"?: boolean;
         /**
           * Emitted when overflow state changes.
          */

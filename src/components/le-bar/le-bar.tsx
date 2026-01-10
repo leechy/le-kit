@@ -73,6 +73,14 @@ export class LeBar {
   @Prop() arrows: boolean = false;
 
   /**
+   * Disable the internal overflow popover.
+   * When true, the bar still detects overflow and hides items,
+   * but doesn't render its own popover. Use this when providing
+   * custom overflow handling via the leBarOverflowChange event.
+   */
+  @Prop() disablePopover: boolean = false;
+
+  /**
    * Show an "all items" menu button.
    * - `false`: Don't show
    * - `true` or `'end'`: Show at end
@@ -619,8 +627,9 @@ export class LeBar {
 
   render() {
     const showOverflowButton =
-      (this.overflow === 'more' && this.overflowingIds.size > 0) ||
-      (this.overflow === 'hamburger' && this.hamburgerActive);
+      !this.disablePopover &&
+      ((this.overflow === 'more' && this.overflowingIds.size > 0) ||
+        (this.overflow === 'hamburger' && this.hamburgerActive));
 
     const containerStyle: { [key: string]: string } = {};
     if (

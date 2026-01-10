@@ -102,6 +102,7 @@ Type: `Promise<void>`
 
 ### Used by
 
+ - [le-bar](../le-bar)
  - [le-component](../le-component)
  - [le-dropdown-base](../le-dropdown-base)
  - [le-navigation](../le-navigation)
@@ -110,6 +111,7 @@ Type: `Promise<void>`
 ### Graph
 ```mermaid
 graph TD;
+  le-bar --> le-popover
   le-component --> le-popover
   le-dropdown-base --> le-popover
   le-navigation --> le-popover

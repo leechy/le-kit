@@ -185,50 +185,31 @@
 }
 
 /* ==========================================
- * Horizontal navigation
+ * Horizontal navigation (using le-bar)
  * ========================================== */
 
-.nav-horizontal {
+.nav-horizontal-wrapper {
   display: flex;
   align-items: center;
   gap: var(--le-spacing-2);
 }
 
-.nav-horizontal.align-end {
-  justify-content: flex-end;
+.nav-bar {
+  flex: 1 1 0%;
+  min-width: 0;
+  --le-bar-gap: var(--le-spacing-2);
 }
 
-.nav-horizontal.align-center {
-  justify-content: center;
+.nav-bar.align-end {
+  --le-bar-justify: flex-end;
 }
 
-.nav-horizontal.align-space-between {
-  justify-content: space-between;
+.nav-bar.align-center {
+  --le-bar-justify: center;
 }
 
-.nav-horizontal-shell {
-  position: relative;
-}
-
-.nav-horizontal-measure {
-  position: absolute;
-  /* left: -10000px;
-  top: -10000px;
-  visibility: hidden; */
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  gap: var(--le-spacing-2);
-  flex-wrap: wrap;
-}
-
-.nav-horizontal.wrap {
-  flex-wrap: wrap;
-}
-
-.nav-horizontal.nowrap {
-  flex-wrap: nowrap;
-  overflow: hidden;
+.nav-bar.align-space-between {
+  --le-bar-justify: space-between;
 }
 
 .h-item {
@@ -300,22 +281,6 @@
   background: var(--le-nav-hover-bg);
 }
 
-.more-trigger-wrap {
-  display: flex;
-  align-items: center;
-}
-
-.more-trigger-wrap.is-measure {
-  position: absolute;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.more-trigger-wrap.is-visible {
-  position: static;
-  visibility: visible;
-}
-
 .overflow-trigger {
   display: inline-flex;
   align-items: center;
@@ -338,6 +303,12 @@
 .overflow-trigger:focus-visible {
   outline: 2px solid var(--le-color-focus);
   outline-offset: 2px;
+}
+
+/* Overflow trigger wrapper in le-bar slot */
+.nav-overflow-trigger {
+  display: flex;
+  align-items: center;
 }
 
 /* Popover list container */

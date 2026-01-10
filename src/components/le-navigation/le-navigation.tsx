@@ -11,6 +11,7 @@ import {
 } from '@stencil/core';
 import { LeOption } from '../../types/options';
 import { classnames, generateId } from '../../utils/utils';
+import { LeBarOverflowChangeDetail } from '../le-bar/le-bar';
 
 export interface LeNavigationItemSelectDetail {
   item: LeOption;
@@ -136,29 +137,18 @@ export class LeNavigation {
 
   @State() private openState: Record<string, boolean> = {};
 
+  /** IDs of items currently in overflow (from le-bar) */
   @State() private overflowIds: string[] = [];
 
+  /** Whether hamburger mode is active (from le-bar) */
   @State() private hamburgerActive: boolean = false;
-
-  @State() private fallbackHamburger: boolean = false;
 
   @State() private submenuQueries: Record<string, string> = {};
 
-  private navContainerEl?: HTMLElement;
-
-  private measureEl?: HTMLElement;
-  private measureMoreEl?: HTMLElement;
-
-  private topItemEls: Map<string, HTMLElement> = new Map();
+  /** Whether the overflow popover is open */
+  @State() private overflowPopoverOpen: boolean = false;
 
   private popoverRefs: Map<string, HTMLLePopoverElement> = new Map();
-
-  private moreTriggerEl?: HTMLElement;
-
-  private hamburgerPopoverEl?: HTMLLePopoverElement;
-  private morePopoverEl?: HTMLLePopoverElement;
-
-  private resizeObserver?: ResizeObserver;
 
   private instanceId: string = generateId('le-nav');
 
@@ -181,45 +171,13 @@ export class LeNavigation {
   @Watch('wrap')
   @Watch('overflowMode')
   handleLayoutInputsChange() {
-    this.scheduleOverflowRecalc();
-  }
-
-  componentDidLoad() {
-    this.setupResizeObserver();
-    this.scheduleOverflowRecalc();
+    // Reset overflow state when layout inputs change
+    this.overflowIds = [];
+    this.hamburgerActive = false;
   }
 
   disconnectedCallback() {
-    this.resizeObserver?.disconnect();
-    this.resizeObserver = undefined;
-  }
-
-  componentDidRender() {
-    // In case refs change after render.
-    this.scheduleOverflowRecalc();
-  }
-
-  private setupResizeObserver() {
-    this.resizeObserver?.disconnect();
-
-    if (typeof ResizeObserver === 'undefined') return;
-
-    this.resizeObserver = new ResizeObserver(() => this.computeOverflow());
-    this.observeContainer(this.navContainerEl);
-  }
-
-  private observeContainer(el?: HTMLElement) {
-    if (!this.resizeObserver) return;
-    this.resizeObserver.disconnect();
-    if (el) this.resizeObserver.observe(el);
-  }
-
-  private scheduleOverflowRecalc() {
-    // Avoid work for vertical layout.
-    if (this.orientation !== 'horizontal') return;
-
-    // Ensure it runs after layout.
-    requestAnimationFrame(() => this.computeOverflow());
+    // Cleanup if needed
   }
 
   private get parsedItems(): LeOption[] {
@@ -360,204 +318,18 @@ export class LeNavigation {
     requestAnimationFrame(() => this.popoverRefs.get(submenuId)?.updatePosition());
   };
 
-  private getTopLevelIds(items: LeOption[]): string[] {
-    return items.map((item, index) => this.getItemId(item, String(index)));
-  }
+  private handleBarOverflowChange = (e: CustomEvent<LeBarOverflowChangeDetail>) => {
+    this.overflowIds = e.detail.overflowingIds;
+    this.hamburgerActive = e.detail.hamburgerActive;
+  };
 
-  private computeOverflow() {
-    // Only applies to horizontal, non-wrapping navs.
-    if (this.orientation !== 'horizontal' || this.wrap) {
-      if (!this.overflowIds || this.overflowIds.length) this.overflowIds = [];
-      if (this.hamburgerActive) this.hamburgerActive = false;
-      if (this.fallbackHamburger) this.fallbackHamburger = false;
-      return;
-    }
+  private openOverflowPopover = () => {
+    this.overflowPopoverOpen = true;
+  };
 
-    const container = this.navContainerEl;
-    if (!container) return;
-
-    const topIds = this.getTopLevelIds(this.parsedItems);
-    const widths = topIds.map(id => this.topItemEls.get(id)?.getBoundingClientRect().width ?? 0);
-
-    const totalWidth = widths.reduce((a, b) => a + b, 0);
-    const availableWidth = container.getBoundingClientRect().width;
-
-    if (this.overflowMode === 'hamburger') {
-      const shouldHamburger = totalWidth > availableWidth;
-      if (shouldHamburger !== this.hamburgerActive) {
-        this.hamburgerActive = shouldHamburger;
-      }
-      if (!this.overflowIds || this.overflowIds.length) this.overflowIds = [];
-      if (this.fallbackHamburger) this.fallbackHamburger = false;
-      return;
-    }
-
-    // overflowMode === 'more'
-    if (this.hamburgerActive) this.hamburgerActive = false;
-
-    const computedOverflow = this.computeOverflowMoreByWrap(availableWidth);
-    if (!computedOverflow) return;
-
-    // Fallback to hamburger when "More" would leave too few items visible
-    // or when the trigger itself cannot fit the row.
-    const visibleCount = this.parsedItems.length - computedOverflow.length;
-    const moreWidth = this.moreTriggerEl?.getBoundingClientRect().width ?? 0;
-
-    const minVisible = Math.max(0, Number(this.minVisibleItemsForMore) || 0);
-    const shouldFallback =
-      (computedOverflow.length > 0 && visibleCount < minVisible) ||
-      (moreWidth > 0 && moreWidth > availableWidth);
-
-    if (shouldFallback !== this.fallbackHamburger) {
-      this.fallbackHamburger = shouldFallback;
-    }
-
-    const nextOverflow = shouldFallback ? [] : computedOverflow;
-    const same =
-      nextOverflow.length === this.overflowIds?.length &&
-      nextOverflow.every((v, i) => v === this.overflowIds[i]);
-    if (!same) {
-      this.overflowIds = nextOverflow;
-    }
-  }
-
-  private computeOverflowMoreByWrap(availableWidth: number): string[] | null {
-    const container = this.navContainerEl;
-    const measure = this.measureEl;
-    const measureMore = this.measureMoreEl;
-    const items = this.parsedItems;
-
-    if (!container || !measure) return null;
-
-    // Ensure measurement container matches visible container width.
-    measure.style.width = `${availableWidth}px`;
-
-    // Keep the measured "More" width aligned with the real trigger width (supports slotted content).
-    const realMoreWidth = this.moreTriggerEl?.getBoundingClientRect().width;
-    if (measureMore && realMoreWidth && realMoreWidth > 0) {
-      const btn = measureMore.querySelector<HTMLElement>('button');
-      if (btn) {
-        btn.style.width = `${realMoreWidth}px`;
-      }
-    }
-
-    const allIds = this.getTopLevelIds(items);
-    const itemEls = allIds
-      .map(id => measure.querySelector<HTMLElement>(`[data-nav-id="${CSS.escape(id)}"]`))
-      .filter((el): el is HTMLElement => !!el);
-
-    // Reset measurement visibility.
-    itemEls.forEach(el => {
-      el.style.display = '';
-    });
-    if (measureMore) {
-      measureMore.style.display = 'none';
-    }
-
-    if (itemEls.length === 0) {
-      return [];
-    }
-
-    const firstRowTop = Math.min(...itemEls.map(el => el.offsetTop));
-    const overflowSet = new Set<string>();
-
-    // Pass 1: detect which items fall onto rows > 1 (without "More" in flow).
-    itemEls.forEach(el => {
-      const id = el.getAttribute('data-nav-id');
-      if (!id) return;
-      if (el.offsetTop > firstRowTop) overflowSet.add(id);
-    });
-
-    if (overflowSet.size === 0) {
-      return [];
-    }
-
-    // Pass 2: show "More" and iteratively move items into overflow until "More" fits on row 1.
-    if (measureMore) {
-      measureMore.style.display = '';
-    }
-
-    // Hide currently overflowing items.
-    itemEls.forEach(el => {
-      const id = el.getAttribute('data-nav-id');
-      if (!id) return;
-      if (overflowSet.has(id)) el.style.display = 'none';
-    });
-
-    const getVisibleItemEls = () => itemEls.filter(el => el.style.display !== 'none');
-
-    while (measureMore) {
-      const visible = getVisibleItemEls();
-      const rowTop = visible.length ? Math.min(...visible.map(el => el.offsetTop)) : 0;
-
-      if (measureMore.offsetTop <= rowTop) break;
-      if (visible.length === 0) break;
-
-      // Remove one last visible item and retry.
-      const last = visible[visible.length - 1];
-      const lastId = last.getAttribute('data-nav-id');
-      if (!lastId) break;
-
-      last.style.display = 'none';
-      overflowSet.add(lastId);
-    }
-
-    const overflowIds = allIds.filter(id => overflowSet.has(id));
-
-    return overflowIds;
-  }
-
-  private renderHorizontalMeasureItem(item: LeOption, index: number) {
-    const id = this.getItemId(item, String(index));
-    const children = this.getChildItems(item);
-    const hasChildren = children.length > 0;
-
-    const itemPart = this.partFromOptionPart('item', item.part);
-    const selected = item.selected || (this.activeUrl && item.href === this.activeUrl);
-    const disabled = !!item.disabled;
-
-    const setRef = (el?: HTMLElement) => {
-      if (el) this.topItemEls.set(id, el);
-    };
-
-    if (!hasChildren) {
-      return (
-        <div class="h-item" ref={setRef} data-nav-id={id}>
-          <span class={classnames('h-link', { disabled, selected })} part={itemPart} tabIndex={-1}>
-            {item.iconStart && (
-              <span class="nav-icon" aria-hidden="true">
-                {item.iconStart}
-              </span>
-            )}
-            <span class="h-label">{item.label}</span>
-            {item.iconEnd && (
-              <span class="nav-icon nav-icon-end" aria-hidden="true">
-                {item.iconEnd}
-              </span>
-            )}
-          </span>
-        </div>
-      );
-    }
-
-    return (
-      <div class="h-item" ref={setRef} data-nav-id={id}>
-        <span class={classnames('h-trigger', { disabled, selected })} part={itemPart}>
-          <span class="h-link" aria-hidden="true">
-            {item.iconStart && (
-              <span class="nav-icon" aria-hidden="true">
-                {item.iconStart}
-              </span>
-            )}
-            <span class="h-label">{item.label}</span>
-          </span>
-          <span class="h-submenu-toggle" aria-hidden="true">
-            <le-icon name="chevron-down" />
-          </span>
-        </span>
-      </div>
-    );
-  }
+  private closeOverflowPopover = () => {
+    this.overflowPopoverOpen = false;
+  };
 
   private renderVerticalList(
     items: LeOption[],
@@ -714,7 +486,7 @@ export class LeNavigation {
       const itemPart = this.partFromOptionPart('item', item.part);
 
       return (
-        <div class="h-item">
+        <div class="h-item" data-bar-id={id}>
           <TagType
             class={classnames('h-link', {
               disabled: item.disabled,
@@ -746,7 +518,7 @@ export class LeNavigation {
     const itemPart = this.partFromOptionPart('item', item.part);
 
     return (
-      <div class="h-item">
+      <div class="h-item" data-bar-id={id}>
         <le-popover
           ref={el => {
             if (el) this.popoverRefs.set(submenuId, el);
@@ -840,182 +612,98 @@ export class LeNavigation {
     );
   }
 
-  private renderHorizontal() {
-    const items = this.parsedItems;
+  private getOverflowMode(): 'more' | 'scroll' | 'hamburger' | 'wrap' {
+    if (this.wrap) return 'wrap';
+    return this.overflowMode;
+  }
 
+  private getBarAlignment(): 'start' | 'end' | 'center' | 'stretch' {
+    // Map le-navigation align to le-bar alignItems
+    // 'space-between' doesn't map directly, use 'stretch' as closest
+    if (this.align === 'space-between') return 'stretch';
+    return this.align;
+  }
+
+  private renderOverflowPopover() {
+    const items = this.parsedItems;
     const overflowSet = new Set(this.overflowIds);
 
-    const overflowItems: LeOption[] = [];
-    items.forEach((item, index) => {
-      const id = this.getItemId(item, String(index));
-      if (!this.wrap && this.overflowMode === 'more' && overflowSet.has(id)) {
-        overflowItems.push(item);
-      }
-    });
+    // Determine which items to show in the popover
+    let itemsToShow: LeOption[];
 
-    const showHamburger =
-      !this.wrap &&
-      ((this.overflowMode === 'hamburger' && this.hamburgerActive) ||
-        (this.overflowMode === 'more' && this.fallbackHamburger));
-
-    // Hamburger mode: show a single trigger if anything overflows (or when forced for "more").
-    if (showHamburger) {
-      return (
-        <div class="nav-horizontal-shell">
-          <div
-            class="nav-horizontal-measure"
-            aria-hidden="true"
-            ref={el => {
-              this.measureEl = el as HTMLElement;
-            }}
-          >
-            {items.map((item, index) => this.renderHorizontalMeasureItem(item, index))}
-            <div
-              class="h-item"
-              ref={el => {
-                this.measureMoreEl = el as HTMLElement;
-              }}
-            >
-              <button type="button" class="overflow-trigger">
-                More
-              </button>
-            </div>
-          </div>
-
-          <div
-            class={classnames('nav-horizontal', {
-              'align-end': this.align === 'end',
-              'align-center': this.align === 'center',
-              'align-space-between': this.align === 'space-between',
-            })}
-            ref={el => {
-              this.navContainerEl = el as HTMLElement;
-              this.setupResizeObserver();
-              this.observeContainer(this.navContainerEl);
-            }}
-          >
-            <le-popover
-              ref={el => {
-                this.hamburgerPopoverEl = el as HTMLLePopoverElement;
-              }}
-              mode="default"
-              showClose={false}
-              closeOnClickOutside={true}
-              closeOnEscape={true}
-              position="bottom"
-              align="end"
-              minWidth="260px"
-            >
-              <button
-                slot="trigger"
-                type="button"
-                class="overflow-trigger"
-                part="hamburger-trigger"
-                aria-label="Open menu"
-              >
-                <slot name="hamburger-trigger">
-                  <le-icon name="hamburger" />
-                </slot>
-              </button>
-              <div class="popover-menu">
-                {this.renderVerticalList(items, {
-                  depth: 0,
-                  pathPrefix: '',
-                  closePopover: () => this.hamburgerPopoverEl?.hide(),
-                })}
-              </div>
-            </le-popover>
-          </div>
-        </div>
-      );
+    if (this.hamburgerActive) {
+      // In hamburger mode, show all items
+      itemsToShow = items;
+    } else {
+      // In "more" mode, show only overflow items
+      itemsToShow = items.filter((item, index) => {
+        const id = this.getItemId(item, String(index));
+        return overflowSet.has(id);
+      });
     }
 
-    const showMore = !this.wrap && this.overflowMode === 'more' && overflowItems.length > 0;
+    if (itemsToShow.length === 0) return null;
+
+    const isHamburger = this.hamburgerActive;
 
     return (
-      <div class="nav-horizontal-shell" role="menubar">
-        <div
-          class="nav-horizontal-measure"
-          aria-hidden="true"
-          ref={el => {
-            this.measureEl = el as HTMLElement;
-          }}
+      <le-popover
+        mode="default"
+        open={this.overflowPopoverOpen}
+        showClose={false}
+        closeOnClickOutside={true}
+        closeOnEscape={true}
+        position="bottom"
+        align="end"
+        minWidth="260px"
+        onLePopoverClose={this.closeOverflowPopover}
+      >
+        <button
+          slot="trigger"
+          type="button"
+          class="overflow-trigger"
+          part={isHamburger ? 'hamburger-trigger' : 'more-trigger'}
+          aria-label={isHamburger ? 'Open menu' : 'More'}
+          onClick={this.openOverflowPopover}
         >
-          {items.map((item, index) => this.renderHorizontalMeasureItem(item, index))}
-          <div
-            class="h-item"
-            ref={el => {
-              this.measureMoreEl = el as HTMLElement;
-            }}
-          >
-            <button type="button" class="overflow-trigger">
-              <le-icon name="ellipsis-horizontal" />
-            </button>
-          </div>
+          <slot name={isHamburger ? 'hamburger-trigger' : 'more-trigger'}>
+            <le-icon name={isHamburger ? 'hamburger' : 'ellipsis-horizontal'} />
+          </slot>
+        </button>
+        <div class="popover-menu">
+          {this.renderVerticalList(itemsToShow, {
+            depth: 0,
+            pathPrefix: '',
+            closePopover: this.closeOverflowPopover,
+          })}
         </div>
+      </le-popover>
+    );
+  }
 
-        <div
-          class={classnames('nav-horizontal', {
-            'wrap': this.wrap,
-            'nowrap': !this.wrap,
+  private renderHorizontal() {
+    const items = this.parsedItems;
+    const overflowMode = this.getOverflowMode();
+    const showOverflowButton = this.overflowIds.length > 0 || this.hamburgerActive;
+
+    return (
+      <div class="nav-horizontal-wrapper">
+        <le-bar
+          class={classnames('nav-bar', {
             'align-end': this.align === 'end',
             'align-center': this.align === 'center',
             'align-space-between': this.align === 'space-between',
           })}
-          ref={el => {
-            this.navContainerEl = el as HTMLElement;
-            this.setupResizeObserver();
-            this.observeContainer(this.navContainerEl);
-          }}
+          overflow={overflowMode}
+          alignItems={this.getBarAlignment()}
+          disablePopover={true}
+          onLeBarOverflowChange={this.handleBarOverflowChange}
         >
-          {items.map((item, index) => {
-            const id = this.getItemId(item, String(index));
-            const isOverflow = !this.wrap && this.overflowMode === 'more' && overflowSet.has(id);
-            if (isOverflow) return null;
-            return this.renderHorizontalItem(item, index);
-          })}
+          {items.map((item, index) => this.renderHorizontalItem(item, index))}
+        </le-bar>
 
-          {/* Render a hidden trigger for measurement when not visible */}
-          <div
-            class={classnames('more-trigger-wrap', {
-              'is-visible': showMore,
-              'is-measure': !showMore,
-            })}
-          >
-            <le-popover
-              ref={el => {
-                this.morePopoverEl = el as HTMLLePopoverElement;
-              }}
-              mode="default"
-              position="bottom"
-              align="end"
-              minWidth="260px"
-              showClose={false}
-            >
-              <button
-                slot="trigger"
-                type="button"
-                class="overflow-trigger"
-                part="more-trigger"
-                aria-label="More"
-                ref={el => {
-                  if (el) this.moreTriggerEl = el as HTMLElement;
-                }}
-              >
-                <slot name="more-trigger">
-                  <le-icon name="ellipsis-horizontal" />
-                </slot>
-              </button>
-              <div class="popover-menu">
-                {this.renderVerticalList(overflowItems, {
-                  depth: 0,
-                  pathPrefix: '',
-                  closePopover: () => this.morePopoverEl?.hide(),
-                })}
-              </div>
-            </le-popover>
-          </div>
-        </div>
+        {/* Overflow popover - rendered outside le-bar to have full control over content */}
+        {showOverflowButton && this.renderOverflowPopover()}
       </div>
     );
   }

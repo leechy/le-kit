@@ -14,12 +14,13 @@ row and handles overflow according to the `overflow` prop.
 
 ## Properties
 
-| Property      | Attribute       | Description                                                                                                                                                                                                                                                                  | Type                                          | Default   |
-| ------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | --------- |
-| `alignItems`  | `align-items`   | Alignment of items within the bar (maps to justify-content).                                                                                                                                                                                                                 | `"center" \| "end" \| "start" \| "stretch"`   | `'start'` |
-| `arrows`      | `arrows`        | Show scroll arrows when overflow is "scroll".                                                                                                                                                                                                                                | `boolean`                                     | `false`   |
-| `overflow`    | `overflow`      | Overflow behavior when items don't fit on one row. - `more`: Overflow items appear in a "more" dropdown - `scroll`: Items scroll horizontally with optional arrows - `hamburger`: All items go into a hamburger menu if any overflow - `wrap`: Items wrap to additional rows | `"hamburger" \| "more" \| "scroll" \| "wrap"` | `'more'`  |
-| `showAllMenu` | `show-all-menu` | Show an "all items" menu button. - `false`: Don't show - `true` or `'end'`: Show at end - `'start'`: Show at start                                                                                                                                                           | `"end" \| "start" \| boolean`                 | `false`   |
+| Property         | Attribute         | Description                                                                                                                                                                                                                                                                  | Type                                          | Default   |
+| ---------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | --------- |
+| `alignItems`     | `align-items`     | Alignment of items within the bar (maps to justify-content).                                                                                                                                                                                                                 | `"center" \| "end" \| "start" \| "stretch"`   | `'start'` |
+| `arrows`         | `arrows`          | Show scroll arrows when overflow is "scroll".                                                                                                                                                                                                                                | `boolean`                                     | `false`   |
+| `disablePopover` | `disable-popover` | Disable the internal overflow popover. When true, the bar still detects overflow and hides items, but doesn't render its own popover. Use this when providing custom overflow handling via the leBarOverflowChange event.                                                    | `boolean`                                     | `false`   |
+| `overflow`       | `overflow`        | Overflow behavior when items don't fit on one row. - `more`: Overflow items appear in a "more" dropdown - `scroll`: Items scroll horizontally with optional arrows - `hamburger`: All items go into a hamburger menu if any overflow - `wrap`: Items wrap to additional rows | `"hamburger" \| "more" \| "scroll" \| "wrap"` | `'more'`  |
+| `showAllMenu`    | `show-all-menu`   | Show an "all items" menu button. - `false`: Don't show - `true` or `'end'`: Show at end - `'start'`: Show at start                                                                                                                                                           | `"end" \| "start" \| boolean`                 | `false`   |
 
 
 ## Events
@@ -69,6 +70,10 @@ Type: `Promise<void>`
 
 ## Dependencies
 
+### Used by
+
+ - [le-navigation](../le-navigation)
+
 ### Depends on
 
 - [le-icon](../le-icon)
@@ -79,6 +84,7 @@ Type: `Promise<void>`
 graph TD;
   le-bar --> le-icon
   le-bar --> le-popover
+  le-navigation --> le-bar
   style le-bar fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

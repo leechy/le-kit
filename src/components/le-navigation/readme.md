@@ -46,31 +46,25 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `"more-trigger"`      | Custom trigger contents for the "More" button    |
 
 
-## Shadow Parts
-
-| Part                  | Description |
-| --------------------- | ----------- |
-| `"hamburger-trigger"` |             |
-| `"more-trigger"`      |             |
-
-
 ## Dependencies
 
 ### Depends on
 
-- [le-icon](../le-icon)
 - [le-string-input](../le-string-input)
+- [le-icon](../le-icon)
 - [le-collapse](../le-collapse)
 - [le-popover](../le-popover)
+- [le-bar](../le-bar)
 - [le-component](../le-component)
 
 ### Graph
 ```mermaid
 graph TD;
-  le-navigation --> le-icon
   le-navigation --> le-string-input
+  le-navigation --> le-icon
   le-navigation --> le-collapse
   le-navigation --> le-popover
+  le-navigation --> le-bar
   le-navigation --> le-component
   le-string-input --> le-component
   le-string-input --> le-slot
@@ -96,6 +90,8 @@ graph TD;
   le-popup --> le-button
   le-popup --> le-component
   le-collapse --> le-component
+  le-bar --> le-icon
+  le-bar --> le-popover
   style le-navigation fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

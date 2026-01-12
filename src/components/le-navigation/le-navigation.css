@@ -3,9 +3,16 @@
 
   --le-nav-radius: var(--le-radius-md);
   --le-nav-gap: var(--le-spacing-2);
+
+  /* Vertical navigation items variables */
   --le-nav-item-padding-x: var(--le-spacing-1);
   --le-nav-item-padding-y: var(--le-spacing-2);
   --le-nav-item-gap: var(--le-spacing-2);
+
+  /* Horizontal navigation link variables */
+  --le-nav-link-padding-x: var(--le-spacing-2);
+  --le-nav-link-padding-y: var(--le-spacing-1);
+  --le-nav-link-gap: var(--le-spacing-1);
 
   --le-nav-color: var(--le-color-text-primary);
   --le-nav-muted: var(--le-color-text-secondary);
@@ -220,8 +227,8 @@
 .h-link {
   display: inline-flex;
   align-items: center;
-  gap: var(--le-spacing-2);
-  padding: var(--le-spacing-2) var(--le-spacing-3);
+  gap: var(--le-nav-link-gap);
+  padding: var(--le-nav-link-padding-y) var(--le-nav-link-padding-x);
   border-radius: var(--le-nav-radius);
   border: 1px solid transparent;
   background: transparent;

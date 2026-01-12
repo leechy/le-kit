@@ -524,6 +524,7 @@ export class LeNavigation {
             if (el) this.popoverRefs.set(submenuId, el);
           }}
           mode="default"
+          offset={8}
           showClose={false}
           closeOnClickOutside={true}
           closeOnEscape={true}
@@ -649,6 +650,7 @@ export class LeNavigation {
     return (
       <le-popover
         mode="default"
+        offset={8}
         open={this.overflowPopoverOpen}
         showClose={false}
         closeOnClickOutside={true}

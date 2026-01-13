@@ -22,7 +22,7 @@ import { observeModeChanges } from '../../utils/utils';
  */
 @Component({
   tag: 'le-text',
-  styleUrl: 'le-text.default.css',
+  styleUrl: 'le-text.css',
   shadow: true,
 })
 export class LeText {
@@ -32,7 +32,18 @@ export class LeText {
    * The semantic variant/type of text element
    * @allowedValues p | h1 | h2 | h3 | h4 | h5 | h6 | code | quote | label | small
    */
-  @Prop({ mutable: true, reflect: true }) variant: 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small' = 'p';
+  @Prop({ mutable: true, reflect: true }) variant:
+    | 'p'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'code'
+    | 'quote'
+    | 'label'
+    | 'small' = 'p';
 
   /**
    * Text alignment
@@ -95,10 +106,10 @@ export class LeText {
   private disconnectModeObserver?: () => void;
 
   connectedCallback() {
-    this.disconnectModeObserver = observeModeChanges(this.el, (mode) => {
+    this.disconnectModeObserver = observeModeChanges(this.el, mode => {
       const wasAdmin = this.adminMode;
       this.adminMode = mode === 'admin';
-      
+
       if (this.adminMode && !wasAdmin) {
         // Entering admin mode - read content from slot
         requestAnimationFrame(() => this.readSlottedContent());
@@ -126,9 +137,9 @@ export class LeText {
    */
   private readSlottedContent() {
     if (!this.slotRef) return;
-    
+
     const assignedNodes = this.slotRef.assignedNodes({ flatten: true });
-    
+
     // Collect all content from assigned nodes
     let html = '';
     assignedNodes.forEach(node => {
@@ -138,7 +149,7 @@ export class LeText {
         html += (node as Element).innerHTML || node.textContent;
       }
     });
-    
+
     this.content = html.trim();
   }
 
@@ -147,9 +158,9 @@ export class LeText {
    */
   private syncContentToSlot() {
     if (!this.editorRef) return;
-    
+
     const newContent = this.editorRef.innerHTML;
-    
+
     // Update the light DOM content
     // We need to update the actual slotted content
     const slot = this.slotRef;
@@ -206,12 +217,12 @@ export class LeText {
     // Check if focus moved to toolbar
     const relatedTarget = e.relatedTarget as HTMLElement;
     const toolbar = this.el.shadowRoot?.querySelector('.le-text-toolbar');
-    
+
     if (toolbar?.contains(relatedTarget)) {
       // Focus moved to toolbar, keep it open
       return;
     }
-    
+
     // Small delay to allow toolbar clicks to register
     setTimeout(() => {
       if (!this.el.shadowRoot?.activeElement) {
@@ -250,7 +261,7 @@ export class LeText {
    */
   private isSelectionInLink(selection: Selection): boolean {
     if (!selection.anchorNode) return false;
-    
+
     let node: Node | null = selection.anchorNode;
     while (node && node !== this.editorRef) {
       if (node.nodeName === 'A') return true;
@@ -265,10 +276,10 @@ export class LeText {
   private execCommand(command: string, value?: string) {
     // Focus the editor first
     this.editorRef?.focus();
-    
+
     // Execute the command
     document.execCommand(command, false, value);
-    
+
     // Update state
     this.handleInput();
     this.updateSelectionState();
@@ -311,7 +322,7 @@ export class LeText {
    */
   private toggleLink = (e: Event) => {
     e.preventDefault();
-    
+
     if (this.selectionState.isLink) {
       // Remove link
       this.execCommand('unlink');
@@ -338,26 +349,48 @@ export class LeText {
   private renderToolbar() {
     return (
       <div class="le-text-toolbar">
-        <select 
+        <select
           class="le-text-toolbar-select"
           onChange={this.changeVariant}
-          onMouseDown={(e) => e.preventDefault()}
+          onMouseDown={e => e.preventDefault()}
         >
-          <option value="p" selected={this.variant === 'p'}>Paragraph</option>
-          <option value="h1" selected={this.variant === 'h1'}>Heading 1</option>
-          <option value="h2" selected={this.variant === 'h2'}>Heading 2</option>
-          <option value="h3" selected={this.variant === 'h3'}>Heading 3</option>
-          <option value="h4" selected={this.variant === 'h4'}>Heading 4</option>
-          <option value="h5" selected={this.variant === 'h5'}>Heading 5</option>
-          <option value="h6" selected={this.variant === 'h6'}>Heading 6</option>
-          <option value="quote" selected={this.variant === 'quote'}>Quote</option>
-          <option value="code" selected={this.variant === 'code'}>Code</option>
-          <option value="label" selected={this.variant === 'label'}>Label</option>
-          <option value="small" selected={this.variant === 'small'}>Small</option>
+          <option value="p" selected={this.variant === 'p'}>
+            Paragraph
+          </option>
+          <option value="h1" selected={this.variant === 'h1'}>
+            Heading 1
+          </option>
+          <option value="h2" selected={this.variant === 'h2'}>
+            Heading 2
+          </option>
+          <option value="h3" selected={this.variant === 'h3'}>
+            Heading 3
+          </option>
+          <option value="h4" selected={this.variant === 'h4'}>
+            Heading 4
+          </option>
+          <option value="h5" selected={this.variant === 'h5'}>
+            Heading 5
+          </option>
+          <option value="h6" selected={this.variant === 'h6'}>
+            Heading 6
+          </option>
+          <option value="quote" selected={this.variant === 'quote'}>
+            Quote
+          </option>
+          <option value="code" selected={this.variant === 'code'}>
+            Code
+          </option>
+          <option value="label" selected={this.variant === 'label'}>
+            Label
+          </option>
+          <option value="small" selected={this.variant === 'small'}>
+            Small
+          </option>
         </select>
-        
+
         <div class="le-text-toolbar-divider"></div>
-        
+
         <button
           type="button"
           class={{ 'le-text-toolbar-btn': true, 'active': this.selectionState.isBold }}
@@ -366,7 +399,7 @@ export class LeText {
         >
           <strong>B</strong>
         </button>
-        
+
         <button
           type="button"
           class={{ 'le-text-toolbar-btn': true, 'active': this.selectionState.isItalic }}
@@ -375,7 +408,7 @@ export class LeText {
         >
           <em>I</em>
         </button>
-        
+
         <button
           type="button"
           class={{ 'le-text-toolbar-btn': true, 'active': this.selectionState.isUnderline }}
@@ -384,7 +417,7 @@ export class LeText {
         >
           <span style={{ textDecoration: 'underline' }}>U</span>
         </button>
-        
+
         <button
           type="button"
           class={{ 'le-text-toolbar-btn': true, 'active': this.selectionState.isStrikethrough }}
@@ -393,9 +426,9 @@ export class LeText {
         >
           <span style={{ textDecoration: 'line-through' }}>S</span>
         </button>
-        
+
         <div class="le-text-toolbar-divider"></div>
-        
+
         <button
           type="button"
           class={{ 'le-text-toolbar-btn': true, 'active': this.selectionState.isLink }}
@@ -428,7 +461,7 @@ export class LeText {
 
   render() {
     const Tag = this.getTag();
-    
+
     const textStyle: { [key: string]: string } = {};
     if (this.color) {
       textStyle.color = this.color;
@@ -451,13 +484,9 @@ export class LeText {
           <le-component component="le-text">
             <div class="le-text-editor-wrapper">
               {this.isFocused && this.renderToolbar()}
-              <Tag 
-                class={textClass}
-                part="text"
-                style={textStyle}
-              >
+              <Tag class={textClass} part="text" style={textStyle}>
                 <div
-                  ref={(el) => this.editorRef = el}
+                  ref={el => (this.editorRef = el)}
                   class="le-text-editor"
                   contentEditable={true}
                   onInput={this.handleInput}
@@ -470,8 +499,8 @@ export class LeText {
               </Tag>
               {/* Hidden slot to receive light DOM content */}
               <div class="hidden-slot">
-                <slot 
-                  ref={(el) => this.slotRef = el as HTMLSlotElement}
+                <slot
+                  ref={el => (this.slotRef = el as HTMLSlotElement)}
                   onSlotchange={() => this.readSlottedContent()}
                 ></slot>
               </div>
@@ -484,12 +513,8 @@ export class LeText {
     // Default mode - render semantic element with slotted content
     return (
       <Host>
-        <Tag 
-          class={textClass}
-          part="text"
-          style={textStyle}
-        >
-          <slot ref={(el) => this.slotRef = el as HTMLSlotElement}></slot>
+        <Tag class={textClass} part="text" style={textStyle}>
+          <slot ref={el => (this.slotRef = el as HTMLSlotElement)}></slot>
         </Tag>
       </Host>
     );

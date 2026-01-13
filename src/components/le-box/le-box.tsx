@@ -21,7 +21,7 @@ import { classnames } from '../../utils/utils';
  */
 @Component({
   tag: 'le-box',
-  styleUrl: 'le-box.default.css',
+  styleUrl: 'le-box.css',
   shadow: true,
 })
 export class LeBox {

@@ -27,7 +27,7 @@ import { classnames } from '../../utils/utils';
  */
 @Component({
   tag: 'le-card',
-  styleUrl: 'le-card.default.css',
+  styleUrl: 'le-card.css',
   shadow: true,
 })
 export class LeCard {

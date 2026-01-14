@@ -637,8 +637,8 @@ export class LeSidePanel {
             }}
             onClick={() => (this.open = false)}
           >
-            <slot name="close-icon">
-              <le-icon slot="icon-only" name="side-panel" />
+            <slot name="close-icon" slot="icon-only">
+              <le-icon name="side-panel" />
             </slot>
           </le-side-panel-toggle>
         ) : null}

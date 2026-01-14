@@ -972,38 +972,60 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-checkbox/le-checkbox.tsx",
+      "path": "src/components/le-card/le-card.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
-          "name": "LeCheckbox",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
           "cssProperties": [
             {
-              "description": "Size of the checkbox input",
-              "name": "--le-checkbox-size"
+              "description": "Card background color",
+              "name": "--le-card-bg"
             },
             {
-              "description": "Color of the checkbox when checked",
-              "name": "--le-checkbox-color"
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
             },
             {
-              "description": "Color of the label text",
-              "name": "--le-checkbox-label-color"
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
             },
             {
-              "description": "Color of the description text",
-              "name": "--le-checkbox-desc-color"
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
             }
           ],
           "slots": [
             {
-              "description": "The label text for the checkbox",
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
               "name": ""
             },
             {
-              "description": "Additional description text displayed below the label",
-              "name": "description"
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
             }
           ],
           "members": [
@@ -1016,50 +1038,21 @@
             },
             {
               "kind": "field",
-              "name": "checked",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the checkbox is checked"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is disabled"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "description": "The name of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "description": "The value of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "externalId",
-              "type": {
-                "text": "string"
-              },
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
-            },
-            {
-              "kind": "field",
-              "name": "handleChange",
-              "privacy": "private"
+              "description": "Whether the card is interactive (clickable)"
             },
             {
               "kind": "method",
@@ -1068,76 +1061,44 @@
           ],
           "attributes": [
             {
-              "name": "checked",
-              "fieldName": "checked",
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
               "default": "false",
-              "description": "Whether the checkbox is checked",
+              "description": "Whether the card is interactive (clickable)",
               "type": {
                 "text": "boolean"
               }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the checkbox is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "The name of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "external-id",
-              "fieldName": "externalId",
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
-              "type": {
-                "text": "string"
-              }
             }
           ],
-          "tagName": "le-checkbox",
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
-              },
-              "description": "Emitted when the checked state changes"
-            }
-          ],
+          "tagName": "le-card",
+          "events": [],
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "LeCheckbox",
+          "name": "LeCard",
           "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-checkbox",
+          "name": "le-card",
           "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
           }
         }
       ]
@@ -1488,139 +1449,6 @@
           "declaration": {
             "name": "LeButton",
             "module": "src/components/le-button/le-button.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
-          "cssProperties": [
-            {
-              "description": "Card background color",
-              "name": "--le-card-bg"
-            },
-            {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
-            },
-            {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
-              "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              }
-            },
-            {
-              "name": "interactive",
-              "fieldName": "interactive",
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-card",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCard",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-card",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
           }
         }
       ]
@@ -2513,6 +2341,178 @@
           "declaration": {
             "name": "LeCombobox",
             "module": "src/components/le-combobox/le-combobox.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-checkbox/le-checkbox.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
+          "name": "LeCheckbox",
+          "cssProperties": [
+            {
+              "description": "Size of the checkbox input",
+              "name": "--le-checkbox-size"
+            },
+            {
+              "description": "Color of the checkbox when checked",
+              "name": "--le-checkbox-color"
+            },
+            {
+              "description": "Color of the label text",
+              "name": "--le-checkbox-label-color"
+            },
+            {
+              "description": "Color of the description text",
+              "name": "--le-checkbox-desc-color"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The label text for the checkbox",
+              "name": ""
+            },
+            {
+              "description": "Additional description text displayed below the label",
+              "name": "description"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is checked"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The value of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "externalId",
+              "type": {
+                "text": "string"
+              },
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
+            },
+            {
+              "kind": "field",
+              "name": "handleChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "checked",
+              "fieldName": "checked",
+              "default": "false",
+              "description": "Whether the checkbox is checked",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the checkbox is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "The name of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "external-id",
+              "fieldName": "externalId",
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-checkbox",
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
+              },
+              "description": "Emitted when the checked state changes"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCheckbox",
+          "declaration": {
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-checkbox",
+          "declaration": {
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
           }
         }
       ]
@@ -7313,401 +7313,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-side-panel-toggle/le-side-panel-toggle.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "LeSidePanelToggle",
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "panelId",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional id used to target a specific panel."
-            },
-            {
-              "kind": "field",
-              "name": "action",
-              "type": {
-                "text": "LeSidePanelToggleAction"
-              },
-              "default": "'toggle'",
-              "description": "Action to emit. Default toggles the panel."
-            },
-            {
-              "kind": "field",
-              "name": "shortcut",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional keyboard shortcut like `Mod+B` or `Alt+N`."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disables the toggle."
-            },
-            {
-              "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "'default' | 'admin'"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'solid' | 'outlined' | 'clear' | 'system'"
-              },
-              "default": "'solid'"
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
-              },
-              "default": "'primary'"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'"
-            },
-            {
-              "kind": "field",
-              "name": "selected",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "iconOnly",
-              "type": {
-                "text": "string | Node | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string | Node | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string | Node | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "'button' | 'submit' | 'reset'"
-              },
-              "default": "'button'"
-            },
-            {
-              "kind": "field",
-              "name": "href",
-              "type": {
-                "text": "string | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "target",
-              "type": {
-                "text": "string | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'start' | 'center' | 'space-between' | 'end'"
-              },
-              "default": "'center'"
-            },
-            {
-              "kind": "field",
-              "name": "shortcutSpec",
-              "type": {
-                "text": "ShortcutSpec | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "expanded",
-              "type": {
-                "text": "boolean | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "buttonEl",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "forwardedNodes",
-              "type": {
-                "text": "ChildNode[] | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "onShortcutChanged",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "syncShortcutListener",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "getResolvedPanelId",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string | undefined"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "emitRequest",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "onDocumentKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "onPanelStateChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "syncForwardedNodesIntoButton",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "syncAriaExpanded",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "panel-id",
-              "fieldName": "panelId",
-              "description": "Optional id used to target a specific panel.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "action",
-              "fieldName": "action",
-              "default": "'toggle'",
-              "description": "Action to emit. Default toggles the panel.",
-              "type": {
-                "text": "LeSidePanelToggleAction"
-              }
-            },
-            {
-              "name": "shortcut",
-              "fieldName": "shortcut",
-              "description": "Optional keyboard shortcut like `Mod+B` or `Alt+N`.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Disables the toggle.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "mode",
-              "fieldName": "mode",
-              "type": {
-                "text": "'default' | 'admin'"
-              }
-            },
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'solid'",
-              "type": {
-                "text": "'solid' | 'outlined' | 'clear' | 'system'"
-              }
-            },
-            {
-              "name": "color",
-              "fieldName": "color",
-              "default": "'primary'",
-              "type": {
-                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "selected",
-              "fieldName": "selected",
-              "default": "false",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "icon-only",
-              "fieldName": "iconOnly",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "icon-start",
-              "fieldName": "iconStart",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "icon-end",
-              "fieldName": "iconEnd",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "type",
-              "fieldName": "type",
-              "default": "'button'",
-              "type": {
-                "text": "'button' | 'submit' | 'reset'"
-              }
-            },
-            {
-              "name": "href",
-              "fieldName": "href",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "target",
-              "fieldName": "target",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'center'",
-              "type": {
-                "text": "'start' | 'center' | 'space-between' | 'end'"
-              }
-            }
-          ],
-          "tagName": "le-side-panel-toggle",
-          "events": [
-            {
-              "name": "leSidePanelRequestToggle",
-              "type": {
-                "text": "EventEmitter<LeSidePanelRequestToggleDetail>"
-              }
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeSidePanelToggle",
-          "declaration": {
-            "name": "LeSidePanelToggle",
-            "module": "src/components/le-side-panel-toggle/le-side-panel-toggle.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-side-panel-toggle",
-          "declaration": {
-            "name": "LeSidePanelToggle",
-            "module": "src/components/le-side-panel-toggle/le-side-panel-toggle.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-side-panel/le-side-panel.tsx",
       "declarations": [
         {
@@ -8329,6 +7934,401 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-side-panel-toggle/le-side-panel-toggle.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LeSidePanelToggle",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "panelId",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional id used to target a specific panel."
+            },
+            {
+              "kind": "field",
+              "name": "action",
+              "type": {
+                "text": "LeSidePanelToggleAction"
+              },
+              "default": "'toggle'",
+              "description": "Action to emit. Default toggles the panel."
+            },
+            {
+              "kind": "field",
+              "name": "shortcut",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional keyboard shortcut like `Mod+B` or `Alt+N`."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables the toggle."
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'solid' | 'outlined' | 'clear' | 'system'"
+              },
+              "default": "'solid'"
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
+              },
+              "default": "'primary'"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'"
+            },
+            {
+              "kind": "field",
+              "name": "selected",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "iconOnly",
+              "type": {
+                "text": "string | Node | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string | Node | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string | Node | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              },
+              "default": "'button'"
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "target",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'space-between' | 'end'"
+              },
+              "default": "'center'"
+            },
+            {
+              "kind": "field",
+              "name": "shortcutSpec",
+              "type": {
+                "text": "ShortcutSpec | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "expanded",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "buttonEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "forwardedNodes",
+              "type": {
+                "text": "ChildNode[] | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "onShortcutChanged",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "syncShortcutListener",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getResolvedPanelId",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string | undefined"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "emitRequest",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "onDocumentKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "onPanelStateChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "syncForwardedNodesIntoButton",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "syncAriaExpanded",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "panel-id",
+              "fieldName": "panelId",
+              "description": "Optional id used to target a specific panel.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "action",
+              "fieldName": "action",
+              "default": "'toggle'",
+              "description": "Action to emit. Default toggles the panel.",
+              "type": {
+                "text": "LeSidePanelToggleAction"
+              }
+            },
+            {
+              "name": "shortcut",
+              "fieldName": "shortcut",
+              "description": "Optional keyboard shortcut like `Mod+B` or `Alt+N`.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Disables the toggle.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "mode",
+              "fieldName": "mode",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'solid'",
+              "type": {
+                "text": "'solid' | 'outlined' | 'clear' | 'system'"
+              }
+            },
+            {
+              "name": "color",
+              "fieldName": "color",
+              "default": "'primary'",
+              "type": {
+                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "selected",
+              "fieldName": "selected",
+              "default": "false",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "icon-only",
+              "fieldName": "iconOnly",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "icon-end",
+              "fieldName": "iconEnd",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "type",
+              "fieldName": "type",
+              "default": "'button'",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              }
+            },
+            {
+              "name": "href",
+              "fieldName": "href",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "target",
+              "fieldName": "target",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'center'",
+              "type": {
+                "text": "'start' | 'center' | 'space-between' | 'end'"
+              }
+            }
+          ],
+          "tagName": "le-side-panel-toggle",
+          "events": [
+            {
+              "name": "leSidePanelRequestToggle",
+              "type": {
+                "text": "EventEmitter<LeSidePanelRequestToggleDetail>"
+              }
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeSidePanelToggle",
+          "declaration": {
+            "name": "LeSidePanelToggle",
+            "module": "src/components/le-side-panel-toggle/le-side-panel-toggle.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-side-panel-toggle",
+          "declaration": {
+            "name": "LeSidePanelToggle",
+            "module": "src/components/le-side-panel-toggle/le-side-panel-toggle.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-slot/le-slot.tsx",
       "declarations": [
         {
@@ -8730,303 +8730,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-stack/le-stack.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible stack layout component using CSS flexbox.\n\n`le-stack` arranges its children in a row (horizontal) or column (vertical)\nwith configurable spacing, alignment, and wrapping behavior. Perfect for\ncreating responsive layouts.",
-          "name": "LeStack",
-          "cssProperties": [
-            {
-              "description": "Gap between items (defaults to var(--le-space-md))",
-              "name": "--le-stack-gap"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main stack container",
-              "name": "stack"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Default slot for stack items (le-box components recommended)",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "direction",
-              "type": {
-                "text": "'horizontal' | 'vertical'"
-              },
-              "default": "'horizontal'",
-              "description": "Direction of the stack layout"
-            },
-            {
-              "kind": "field",
-              "name": "gap",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')"
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
-              },
-              "default": "'stretch'",
-              "description": "Alignment of items on the cross axis"
-            },
-            {
-              "kind": "field",
-              "name": "justify",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
-              },
-              "default": "'start'",
-              "description": "Distribution of items on the main axis"
-            },
-            {
-              "kind": "field",
-              "name": "wrap",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether items should wrap to multiple lines"
-            },
-            {
-              "kind": "field",
-              "name": "alignContent",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
-              },
-              "default": "'stretch'",
-              "description": "Alignment of wrapped lines (only applies when wrap is true)"
-            },
-            {
-              "kind": "field",
-              "name": "reverse",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to reverse the order of items"
-            },
-            {
-              "kind": "field",
-              "name": "maxItems",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum number of items allowed in the stack (for CMS validation)"
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the stack should take full width of its container"
-            },
-            {
-              "kind": "field",
-              "name": "fullHeight",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the stack should take full height of its container"
-            },
-            {
-              "kind": "field",
-              "name": "padding",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Padding inside the stack container (CSS value)"
-            },
-            {
-              "kind": "method",
-              "name": "getFlexDirection",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getAlignItems",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getJustifyContent",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getAlignContent",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "direction",
-              "fieldName": "direction",
-              "default": "'horizontal'",
-              "description": "Direction of the stack layout",
-              "type": {
-                "text": "'horizontal' | 'vertical'"
-              }
-            },
-            {
-              "name": "gap",
-              "fieldName": "gap",
-              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'stretch'",
-              "description": "Alignment of items on the cross axis",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
-              }
-            },
-            {
-              "name": "justify",
-              "fieldName": "justify",
-              "default": "'start'",
-              "description": "Distribution of items on the main axis",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
-              }
-            },
-            {
-              "name": "wrap",
-              "fieldName": "wrap",
-              "default": "false",
-              "description": "Whether items should wrap to multiple lines",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "align-content",
-              "fieldName": "alignContent",
-              "default": "'stretch'",
-              "description": "Alignment of wrapped lines (only applies when wrap is true)",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
-              }
-            },
-            {
-              "name": "reverse",
-              "fieldName": "reverse",
-              "default": "false",
-              "description": "Whether to reverse the order of items",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "max-items",
-              "fieldName": "maxItems",
-              "description": "Maximum number of items allowed in the stack (for CMS validation)",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the stack should take full width of its container",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "full-height",
-              "fieldName": "fullHeight",
-              "default": "false",
-              "description": "Whether the stack should take full height of its container",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "padding",
-              "fieldName": "padding",
-              "description": "Padding inside the stack container (CSS value)",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-stack",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeStack",
-          "declaration": {
-            "name": "LeStack",
-            "module": "src/components/le-stack/le-stack.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-stack",
-          "declaration": {
-            "name": "LeStack",
-            "module": "src/components/le-stack/le-stack.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-string-input/le-string-input.tsx",
       "declarations": [
         {
@@ -9358,6 +9061,303 @@
           "declaration": {
             "name": "LeStringInput",
             "module": "src/components/le-string-input/le-string-input.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-stack/le-stack.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible stack layout component using CSS flexbox.\n\n`le-stack` arranges its children in a row (horizontal) or column (vertical)\nwith configurable spacing, alignment, and wrapping behavior. Perfect for\ncreating responsive layouts.",
+          "name": "LeStack",
+          "cssProperties": [
+            {
+              "description": "Gap between items (defaults to var(--le-space-md))",
+              "name": "--le-stack-gap"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main stack container",
+              "name": "stack"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Default slot for stack items (le-box components recommended)",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "direction",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'horizontal'",
+              "description": "Direction of the stack layout"
+            },
+            {
+              "kind": "field",
+              "name": "gap",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              },
+              "default": "'stretch'",
+              "description": "Alignment of items on the cross axis"
+            },
+            {
+              "kind": "field",
+              "name": "justify",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
+              },
+              "default": "'start'",
+              "description": "Distribution of items on the main axis"
+            },
+            {
+              "kind": "field",
+              "name": "wrap",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether items should wrap to multiple lines"
+            },
+            {
+              "kind": "field",
+              "name": "alignContent",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
+              },
+              "default": "'stretch'",
+              "description": "Alignment of wrapped lines (only applies when wrap is true)"
+            },
+            {
+              "kind": "field",
+              "name": "reverse",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to reverse the order of items"
+            },
+            {
+              "kind": "field",
+              "name": "maxItems",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of items allowed in the stack (for CMS validation)"
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the stack should take full width of its container"
+            },
+            {
+              "kind": "field",
+              "name": "fullHeight",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the stack should take full height of its container"
+            },
+            {
+              "kind": "field",
+              "name": "padding",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Padding inside the stack container (CSS value)"
+            },
+            {
+              "kind": "method",
+              "name": "getFlexDirection",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getAlignItems",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getJustifyContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getAlignContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "direction",
+              "fieldName": "direction",
+              "default": "'horizontal'",
+              "description": "Direction of the stack layout",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              }
+            },
+            {
+              "name": "gap",
+              "fieldName": "gap",
+              "description": "Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'stretch'",
+              "description": "Alignment of items on the cross axis",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              }
+            },
+            {
+              "name": "justify",
+              "fieldName": "justify",
+              "default": "'start'",
+              "description": "Distribution of items on the main axis",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly'"
+              }
+            },
+            {
+              "name": "wrap",
+              "fieldName": "wrap",
+              "default": "false",
+              "description": "Whether items should wrap to multiple lines",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "align-content",
+              "fieldName": "alignContent",
+              "default": "'stretch'",
+              "description": "Alignment of wrapped lines (only applies when wrap is true)",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around'"
+              }
+            },
+            {
+              "name": "reverse",
+              "fieldName": "reverse",
+              "default": "false",
+              "description": "Whether to reverse the order of items",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "max-items",
+              "fieldName": "maxItems",
+              "description": "Maximum number of items allowed in the stack (for CMS validation)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the stack should take full width of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "full-height",
+              "fieldName": "fullHeight",
+              "default": "false",
+              "description": "Whether the stack should take full height of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "padding",
+              "fieldName": "padding",
+              "description": "Padding inside the stack container (CSS value)",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-stack",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeStack",
+          "declaration": {
+            "name": "LeStack",
+            "module": "src/components/le-stack/le-stack.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-stack",
+          "declaration": {
+            "name": "LeStack",
+            "module": "src/components/le-stack/le-stack.tsx"
           }
         }
       ]
@@ -10376,374 +10376,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-text/le-text.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A text component with rich text editing capabilities in admin mode.\n\n`le-text` renders semantic text elements (headings, paragraphs, code, quotes)\nand provides a Notion-like rich text editor in admin mode with formatting\ntoolbar for bold, italic, links, and paragraph type selection.",
-          "name": "LeText",
-          "cssProperties": [
-            {
-              "description": "Text color",
-              "name": "--le-text-color"
-            },
-            {
-              "description": "Font size",
-              "name": "--le-text-font-size"
-            },
-            {
-              "description": "Line height",
-              "name": "--le-text-line-height"
-            },
-            {
-              "description": "Font weight",
-              "name": "--le-text-font-weight"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The text container element",
-              "name": "text"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Default slot for text content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "| 'p'\n    | 'h1'\n    | 'h2'\n    | 'h3'\n    | 'h4'\n    | 'h5'\n    | 'h6'\n    | 'code'\n    | 'quote'\n    | 'label'\n    | 'small'"
-              },
-              "default": "'p'",
-              "description": "The semantic variant/type of text element"
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'left' | 'center' | 'right' | 'justify'"
-              },
-              "default": "'left'",
-              "description": "Text alignment"
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Text color (CSS value or theme token)"
-            },
-            {
-              "kind": "field",
-              "name": "truncate",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the text should truncate with ellipsis"
-            },
-            {
-              "kind": "field",
-              "name": "maxLines",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum number of lines before truncating (requires truncate=true)"
-            },
-            {
-              "kind": "field",
-              "name": "adminMode",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Internal state to track admin mode"
-            },
-            {
-              "kind": "field",
-              "name": "content",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''",
-              "description": "The HTML content being edited"
-            },
-            {
-              "kind": "field",
-              "name": "isFocused",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Whether the editor is focused (shows toolbar)"
-            },
-            {
-              "kind": "field",
-              "name": "selectionState",
-              "type": {
-                "text": "SelectionState"
-              },
-              "privacy": "private",
-              "default": "{ isBold: false, isItalic: false, isUnderline: false, isStrikethrough: false, isLink: false, blockType: 'p', }",
-              "description": "Current selection state for toolbar button highlighting"
-            },
-            {
-              "kind": "field",
-              "name": "editorRef",
-              "type": {
-                "text": "HTMLDivElement | undefined"
-              },
-              "privacy": "private",
-              "description": "Reference to the contenteditable element"
-            },
-            {
-              "kind": "field",
-              "name": "slotRef",
-              "type": {
-                "text": "HTMLSlotElement | undefined"
-              },
-              "privacy": "private",
-              "description": "Reference to the slot element"
-            },
-            {
-              "kind": "field",
-              "name": "disconnectModeObserver",
-              "type": {
-                "text": "() => void | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "onVariantChange"
-            },
-            {
-              "kind": "method",
-              "name": "readSlottedContent",
-              "privacy": "private",
-              "description": "Read content from slotted elements"
-            },
-            {
-              "kind": "method",
-              "name": "syncContentToSlot",
-              "privacy": "private",
-              "description": "Sync edited content back to the slot"
-            },
-            {
-              "kind": "field",
-              "name": "handleInput",
-              "privacy": "private",
-              "description": "Handle input in the contenteditable"
-            },
-            {
-              "kind": "field",
-              "name": "handleFocus",
-              "privacy": "private",
-              "description": "Handle focus on the editor"
-            },
-            {
-              "kind": "field",
-              "name": "handleBlur",
-              "privacy": "private",
-              "description": "Handle blur on the editor"
-            },
-            {
-              "kind": "field",
-              "name": "handleSelectionChange",
-              "privacy": "private",
-              "description": "Handle selection change to update toolbar state"
-            },
-            {
-              "kind": "method",
-              "name": "updateSelectionState",
-              "privacy": "private",
-              "description": "Update the selection state for toolbar highlighting"
-            },
-            {
-              "kind": "method",
-              "name": "isSelectionInLink",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "selection",
-                  "type": {
-                    "text": "Selection"
-                  }
-                }
-              ],
-              "description": "Check if current selection is within a link"
-            },
-            {
-              "kind": "method",
-              "name": "execCommand",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "command",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "value",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Execute a formatting command"
-            },
-            {
-              "kind": "field",
-              "name": "toggleBold",
-              "privacy": "private",
-              "description": "Toggle bold formatting"
-            },
-            {
-              "kind": "field",
-              "name": "toggleItalic",
-              "privacy": "private",
-              "description": "Toggle italic formatting"
-            },
-            {
-              "kind": "field",
-              "name": "toggleUnderline",
-              "privacy": "private",
-              "description": "Toggle underline formatting"
-            },
-            {
-              "kind": "field",
-              "name": "toggleStrikethrough",
-              "privacy": "private",
-              "description": "Toggle strikethrough formatting"
-            },
-            {
-              "kind": "field",
-              "name": "toggleLink",
-              "privacy": "private",
-              "description": "Add or edit a link"
-            },
-            {
-              "kind": "field",
-              "name": "changeVariant",
-              "privacy": "private",
-              "description": "Change the block type/variant"
-            },
-            {
-              "kind": "method",
-              "name": "renderToolbar",
-              "privacy": "private",
-              "description": "Render the formatting toolbar"
-            },
-            {
-              "kind": "method",
-              "name": "getTag",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "description": "Get the semantic tag for the current variant"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'p'",
-              "description": "The semantic variant/type of text element",
-              "type": {
-                "text": "| 'p'\n    | 'h1'\n    | 'h2'\n    | 'h3'\n    | 'h4'\n    | 'h5'\n    | 'h6'\n    | 'code'\n    | 'quote'\n    | 'label'\n    | 'small'"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'left'",
-              "description": "Text alignment",
-              "type": {
-                "text": "'left' | 'center' | 'right' | 'justify'"
-              }
-            },
-            {
-              "name": "color",
-              "fieldName": "color",
-              "description": "Text color (CSS value or theme token)",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "truncate",
-              "fieldName": "truncate",
-              "default": "false",
-              "description": "Whether the text should truncate with ellipsis",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "max-lines",
-              "fieldName": "maxLines",
-              "description": "Maximum number of lines before truncating (requires truncate=true)",
-              "type": {
-                "text": "number"
-              }
-            }
-          ],
-          "tagName": "le-text",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeText",
-          "declaration": {
-            "name": "LeText",
-            "module": "src/components/le-text/le-text.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-text",
-          "declaration": {
-            "name": "LeText",
-            "module": "src/components/le-text/le-text.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-tabs/le-tabs.tsx",
       "declarations": [
         {
@@ -11333,6 +10965,374 @@
           "declaration": {
             "name": "LeTag",
             "module": "src/components/le-tag/le-tag.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-text/le-text.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A text component with rich text editing capabilities in admin mode.\n\n`le-text` renders semantic text elements (headings, paragraphs, code, quotes)\nand provides a Notion-like rich text editor in admin mode with formatting\ntoolbar for bold, italic, links, and paragraph type selection.",
+          "name": "LeText",
+          "cssProperties": [
+            {
+              "description": "Text color",
+              "name": "--le-text-color"
+            },
+            {
+              "description": "Font size",
+              "name": "--le-text-font-size"
+            },
+            {
+              "description": "Line height",
+              "name": "--le-text-line-height"
+            },
+            {
+              "description": "Font weight",
+              "name": "--le-text-font-weight"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The text container element",
+              "name": "text"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Default slot for text content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "| 'p'\n    | 'h1'\n    | 'h2'\n    | 'h3'\n    | 'h4'\n    | 'h5'\n    | 'h6'\n    | 'code'\n    | 'quote'\n    | 'label'\n    | 'small'"
+              },
+              "default": "'p'",
+              "description": "The semantic variant/type of text element"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'left' | 'center' | 'right' | 'justify'"
+              },
+              "default": "'left'",
+              "description": "Text alignment"
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Text color (CSS value or theme token)"
+            },
+            {
+              "kind": "field",
+              "name": "truncate",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the text should truncate with ellipsis"
+            },
+            {
+              "kind": "field",
+              "name": "maxLines",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of lines before truncating (requires truncate=true)"
+            },
+            {
+              "kind": "field",
+              "name": "adminMode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Internal state to track admin mode"
+            },
+            {
+              "kind": "field",
+              "name": "content",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''",
+              "description": "The HTML content being edited"
+            },
+            {
+              "kind": "field",
+              "name": "isFocused",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Whether the editor is focused (shows toolbar)"
+            },
+            {
+              "kind": "field",
+              "name": "selectionState",
+              "type": {
+                "text": "SelectionState"
+              },
+              "privacy": "private",
+              "default": "{ isBold: false, isItalic: false, isUnderline: false, isStrikethrough: false, isLink: false, blockType: 'p', }",
+              "description": "Current selection state for toolbar button highlighting"
+            },
+            {
+              "kind": "field",
+              "name": "editorRef",
+              "type": {
+                "text": "HTMLDivElement | undefined"
+              },
+              "privacy": "private",
+              "description": "Reference to the contenteditable element"
+            },
+            {
+              "kind": "field",
+              "name": "slotRef",
+              "type": {
+                "text": "HTMLSlotElement | undefined"
+              },
+              "privacy": "private",
+              "description": "Reference to the slot element"
+            },
+            {
+              "kind": "field",
+              "name": "disconnectModeObserver",
+              "type": {
+                "text": "() => void | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "onVariantChange"
+            },
+            {
+              "kind": "method",
+              "name": "readSlottedContent",
+              "privacy": "private",
+              "description": "Read content from slotted elements"
+            },
+            {
+              "kind": "method",
+              "name": "syncContentToSlot",
+              "privacy": "private",
+              "description": "Sync edited content back to the slot"
+            },
+            {
+              "kind": "field",
+              "name": "handleInput",
+              "privacy": "private",
+              "description": "Handle input in the contenteditable"
+            },
+            {
+              "kind": "field",
+              "name": "handleFocus",
+              "privacy": "private",
+              "description": "Handle focus on the editor"
+            },
+            {
+              "kind": "field",
+              "name": "handleBlur",
+              "privacy": "private",
+              "description": "Handle blur on the editor"
+            },
+            {
+              "kind": "field",
+              "name": "handleSelectionChange",
+              "privacy": "private",
+              "description": "Handle selection change to update toolbar state"
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectionState",
+              "privacy": "private",
+              "description": "Update the selection state for toolbar highlighting"
+            },
+            {
+              "kind": "method",
+              "name": "isSelectionInLink",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "selection",
+                  "type": {
+                    "text": "Selection"
+                  }
+                }
+              ],
+              "description": "Check if current selection is within a link"
+            },
+            {
+              "kind": "method",
+              "name": "execCommand",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "command",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "value",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Execute a formatting command"
+            },
+            {
+              "kind": "field",
+              "name": "toggleBold",
+              "privacy": "private",
+              "description": "Toggle bold formatting"
+            },
+            {
+              "kind": "field",
+              "name": "toggleItalic",
+              "privacy": "private",
+              "description": "Toggle italic formatting"
+            },
+            {
+              "kind": "field",
+              "name": "toggleUnderline",
+              "privacy": "private",
+              "description": "Toggle underline formatting"
+            },
+            {
+              "kind": "field",
+              "name": "toggleStrikethrough",
+              "privacy": "private",
+              "description": "Toggle strikethrough formatting"
+            },
+            {
+              "kind": "field",
+              "name": "toggleLink",
+              "privacy": "private",
+              "description": "Add or edit a link"
+            },
+            {
+              "kind": "field",
+              "name": "changeVariant",
+              "privacy": "private",
+              "description": "Change the block type/variant"
+            },
+            {
+              "kind": "method",
+              "name": "renderToolbar",
+              "privacy": "private",
+              "description": "Render the formatting toolbar"
+            },
+            {
+              "kind": "method",
+              "name": "getTag",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "description": "Get the semantic tag for the current variant"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'p'",
+              "description": "The semantic variant/type of text element",
+              "type": {
+                "text": "| 'p'\n    | 'h1'\n    | 'h2'\n    | 'h3'\n    | 'h4'\n    | 'h5'\n    | 'h6'\n    | 'code'\n    | 'quote'\n    | 'label'\n    | 'small'"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'left'",
+              "description": "Text alignment",
+              "type": {
+                "text": "'left' | 'center' | 'right' | 'justify'"
+              }
+            },
+            {
+              "name": "color",
+              "fieldName": "color",
+              "description": "Text color (CSS value or theme token)",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "truncate",
+              "fieldName": "truncate",
+              "default": "false",
+              "description": "Whether the text should truncate with ellipsis",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "max-lines",
+              "fieldName": "maxLines",
+              "description": "Maximum number of lines before truncating (requires truncate=true)",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-text",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeText",
+          "declaration": {
+            "name": "LeText",
+            "module": "src/components/le-text/le-text.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-text",
+          "declaration": {
+            "name": "LeText",
+            "module": "src/components/le-text/le-text.tsx"
           }
         }
       ]

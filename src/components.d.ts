@@ -10,11 +10,15 @@ import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValu
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
+import { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side-panel/le-side-panel";
+import { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./components/le-side-panel-toggle/le-side-panel-toggle";
 export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
+export { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side-panel/le-side-panel";
+export { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./components/le-side-panel-toggle/le-side-panel-toggle";
 export namespace Components {
     /**
      * A flexible bar component that handles overflow gracefully.
@@ -1252,6 +1256,134 @@ export namespace Components {
          */
         "variant": 'default' | 'outlined' | 'solid';
     }
+    interface LeSidePanel {
+        /**
+          * When crossing to narrow mode, automatically hide the panel (open=false).
+          * @default true
+         */
+        "autoHideOnNarrow": boolean;
+        /**
+          * When crossing to wide mode, automatically show the panel (collapsed=false).
+          * @default true
+         */
+        "autoShowOnWide": boolean;
+        /**
+          * Width breakpoint (in px or a CSS var like `--le-breakpoint-md`) below which the panel enters "narrow" mode.
+         */
+        "collapseAt"?: string;
+        /**
+          * Panel collapsed state for wide mode (fully hidden).
+          * @default false
+         */
+        "collapsed": boolean;
+        /**
+          * Maximum allowed width when resizable.
+          * @default 420
+         */
+        "maxPanelWidth": number;
+        /**
+          * Minimum allowed width when resizable.
+          * @default 220
+         */
+        "minPanelWidth": number;
+        /**
+          * Behavior when in narrow mode.
+          * @default 'overlay'
+         */
+        "narrowBehavior": LeSidePanelNarrowBehavior;
+        /**
+          * Panel open state for narrow mode. - overlay: controls modal drawer visibility - push: controls whether panel is shown (non-modal)
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Optional id used to match toggle requests. If set, the panel only responds to toggle events with the same `panelId`.
+         */
+        "panelId"?: string;
+        /**
+          * Accessible label for the panel navigation region.
+          * @default 'Navigation'
+         */
+        "panelLabel": string;
+        /**
+          * Default panel width in pixels.
+          * @default 280
+         */
+        "panelWidth": number;
+        /**
+          * When set, panel width + collapsed state are persisted in localStorage.
+         */
+        "persistKey"?: string;
+        /**
+          * Allows users to resize the panel by dragging its edge.
+          * @default false
+         */
+        "resizable": boolean;
+        /**
+          * Show a close button inside the panel (primarily used in narrow overlay mode).
+          * @default true
+         */
+        "showCloseButton": boolean;
+        /**
+          * Which side the panel is attached to.
+          * @default 'start'
+         */
+        "side": LeSidePanelSide;
+    }
+    interface LeSidePanelToggle {
+        /**
+          * Action to emit. Default toggles the panel.
+          * @default 'toggle'
+         */
+        "action": LeSidePanelToggleAction;
+        /**
+          * @default 'center'
+         */
+        "align": 'start' | 'center' | 'space-between' | 'end';
+        /**
+          * @default 'primary'
+         */
+        "color": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
+        /**
+          * Disables the toggle.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * @default false
+         */
+        "fullWidth": boolean;
+        "href"?: string;
+        "iconEnd"?: string | Node;
+        "iconOnly"?: string | Node;
+        "iconStart"?: string | Node;
+        "mode": 'default' | 'admin';
+        /**
+          * Optional id used to target a specific panel.
+         */
+        "panelId"?: string;
+        /**
+          * @default false
+         */
+        "selected": boolean;
+        /**
+          * Optional keyboard shortcut like `Mod+B` or `Alt+N`.
+         */
+        "shortcut"?: string;
+        /**
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        "target"?: string;
+        /**
+          * @default 'button'
+         */
+        "type": 'button' | 'submit' | 'reset';
+        /**
+          * @default 'solid'
+         */
+        "variant": 'solid' | 'outlined' | 'clear' | 'system';
+    }
     /**
      * Slot placeholder component for admin/CMS mode.
      * This component renders a visual placeholder for slots when in admin mode,
@@ -1821,7 +1953,17 @@ export namespace Components {
           * @allowedValues p | h1 | h2 | h3 | h4 | h5 | h6 | code | quote | label | small
           * @default 'p'
          */
-        "variant": 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small';
+        "variant": | 'p'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'code'
+    | 'quote'
+    | 'label'
+    | 'small';
     }
     interface LeTurntable {
         /**
@@ -1885,6 +2027,14 @@ export interface LeSegmentedControlCustomEvent<T> extends CustomEvent<T> {
 export interface LeSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeSelectElement;
+}
+export interface LeSidePanelCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeSidePanelElement;
+}
+export interface LeSidePanelToggleCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeSidePanelToggleElement;
 }
 export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2507,6 +2657,42 @@ declare global {
         prototype: HTMLLeSelectElement;
         new (): HTMLLeSelectElement;
     };
+    interface HTMLLeSidePanelElementEventMap {
+        "leSidePanelOpenChange": { open: boolean; panelId?: string };
+        "leSidePanelCollapsedChange": { collapsed: boolean; panelId?: string };
+        "leSidePanelWidthChange": { width: number; panelId?: string };
+    }
+    interface HTMLLeSidePanelElement extends Components.LeSidePanel, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeSidePanelElementEventMap>(type: K, listener: (this: HTMLLeSidePanelElement, ev: LeSidePanelCustomEvent<HTMLLeSidePanelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeSidePanelElementEventMap>(type: K, listener: (this: HTMLLeSidePanelElement, ev: LeSidePanelCustomEvent<HTMLLeSidePanelElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeSidePanelElement: {
+        prototype: HTMLLeSidePanelElement;
+        new (): HTMLLeSidePanelElement;
+    };
+    interface HTMLLeSidePanelToggleElementEventMap {
+        "leSidePanelRequestToggle": LeSidePanelRequestToggleDetail;
+    }
+    interface HTMLLeSidePanelToggleElement extends Components.LeSidePanelToggle, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeSidePanelToggleElementEventMap>(type: K, listener: (this: HTMLLeSidePanelToggleElement, ev: LeSidePanelToggleCustomEvent<HTMLLeSidePanelToggleElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeSidePanelToggleElementEventMap>(type: K, listener: (this: HTMLLeSidePanelToggleElement, ev: LeSidePanelToggleCustomEvent<HTMLLeSidePanelToggleElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeSidePanelToggleElement: {
+        prototype: HTMLLeSidePanelToggleElement;
+        new (): HTMLLeSidePanelToggleElement;
+    };
     interface HTMLLeSlotElementEventMap {
         "leSlotChange": { name: string; value: string; isValid: boolean };
     }
@@ -2793,6 +2979,8 @@ declare global {
         "le-scroll-progress": HTMLLeScrollProgressElement;
         "le-segmented-control": HTMLLeSegmentedControlElement;
         "le-select": HTMLLeSelectElement;
+        "le-side-panel": HTMLLeSidePanelElement;
+        "le-side-panel-toggle": HTMLLeSidePanelToggleElement;
         "le-slot": HTMLLeSlotElement;
         "le-stack": HTMLLeStackElement;
         "le-string-input": HTMLLeStringInputElement;
@@ -4095,6 +4283,138 @@ declare namespace LocalJSX {
          */
         "variant"?: 'default' | 'outlined' | 'solid';
     }
+    interface LeSidePanel {
+        /**
+          * When crossing to narrow mode, automatically hide the panel (open=false).
+          * @default true
+         */
+        "autoHideOnNarrow"?: boolean;
+        /**
+          * When crossing to wide mode, automatically show the panel (collapsed=false).
+          * @default true
+         */
+        "autoShowOnWide"?: boolean;
+        /**
+          * Width breakpoint (in px or a CSS var like `--le-breakpoint-md`) below which the panel enters "narrow" mode.
+         */
+        "collapseAt"?: string;
+        /**
+          * Panel collapsed state for wide mode (fully hidden).
+          * @default false
+         */
+        "collapsed"?: boolean;
+        /**
+          * Maximum allowed width when resizable.
+          * @default 420
+         */
+        "maxPanelWidth"?: number;
+        /**
+          * Minimum allowed width when resizable.
+          * @default 220
+         */
+        "minPanelWidth"?: number;
+        /**
+          * Behavior when in narrow mode.
+          * @default 'overlay'
+         */
+        "narrowBehavior"?: LeSidePanelNarrowBehavior;
+        "onLeSidePanelCollapsedChange"?: (event: LeSidePanelCustomEvent<{ collapsed: boolean; panelId?: string }>) => void;
+        "onLeSidePanelOpenChange"?: (event: LeSidePanelCustomEvent<{ open: boolean; panelId?: string }>) => void;
+        "onLeSidePanelWidthChange"?: (event: LeSidePanelCustomEvent<{ width: number; panelId?: string }>) => void;
+        /**
+          * Panel open state for narrow mode. - overlay: controls modal drawer visibility - push: controls whether panel is shown (non-modal)
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Optional id used to match toggle requests. If set, the panel only responds to toggle events with the same `panelId`.
+         */
+        "panelId"?: string;
+        /**
+          * Accessible label for the panel navigation region.
+          * @default 'Navigation'
+         */
+        "panelLabel"?: string;
+        /**
+          * Default panel width in pixels.
+          * @default 280
+         */
+        "panelWidth"?: number;
+        /**
+          * When set, panel width + collapsed state are persisted in localStorage.
+         */
+        "persistKey"?: string;
+        /**
+          * Allows users to resize the panel by dragging its edge.
+          * @default false
+         */
+        "resizable"?: boolean;
+        /**
+          * Show a close button inside the panel (primarily used in narrow overlay mode).
+          * @default true
+         */
+        "showCloseButton"?: boolean;
+        /**
+          * Which side the panel is attached to.
+          * @default 'start'
+         */
+        "side"?: LeSidePanelSide;
+    }
+    interface LeSidePanelToggle {
+        /**
+          * Action to emit. Default toggles the panel.
+          * @default 'toggle'
+         */
+        "action"?: LeSidePanelToggleAction;
+        /**
+          * @default 'center'
+         */
+        "align"?: 'start' | 'center' | 'space-between' | 'end';
+        /**
+          * @default 'primary'
+         */
+        "color"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
+        /**
+          * Disables the toggle.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        "href"?: string;
+        "iconEnd"?: string | Node;
+        "iconOnly"?: string | Node;
+        "iconStart"?: string | Node;
+        "mode"?: 'default' | 'admin';
+        "onLeSidePanelRequestToggle"?: (event: LeSidePanelToggleCustomEvent<LeSidePanelRequestToggleDetail>) => void;
+        /**
+          * Optional id used to target a specific panel.
+         */
+        "panelId"?: string;
+        /**
+          * @default false
+         */
+        "selected"?: boolean;
+        /**
+          * Optional keyboard shortcut like `Mod+B` or `Alt+N`.
+         */
+        "shortcut"?: string;
+        /**
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        "target"?: string;
+        /**
+          * @default 'button'
+         */
+        "type"?: 'button' | 'submit' | 'reset';
+        /**
+          * @default 'solid'
+         */
+        "variant"?: 'solid' | 'outlined' | 'clear' | 'system';
+    }
     /**
      * Slot placeholder component for admin/CMS mode.
      * This component renders a visual placeholder for slots when in admin mode,
@@ -4684,7 +5004,17 @@ declare namespace LocalJSX {
           * @allowedValues p | h1 | h2 | h3 | h4 | h5 | h6 | code | quote | label | small
           * @default 'p'
          */
-        "variant"?: 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'code' | 'quote' | 'label' | 'small';
+        "variant"?: | 'p'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'code'
+    | 'quote'
+    | 'label'
+    | 'small';
     }
     interface LeTurntable {
         /**
@@ -4719,6 +5049,8 @@ declare namespace LocalJSX {
         "le-scroll-progress": LeScrollProgress;
         "le-segmented-control": LeSegmentedControl;
         "le-select": LeSelect;
+        "le-side-panel": LeSidePanel;
+        "le-side-panel-toggle": LeSidePanelToggle;
         "le-slot": LeSlot;
         "le-stack": LeStack;
         "le-string-input": LeStringInput;
@@ -5056,6 +5388,8 @@ declare module "@stencil/core" {
              * ```
              */
             "le-select": LocalJSX.LeSelect & JSXBase.HTMLAttributes<HTMLLeSelectElement>;
+            "le-side-panel": LocalJSX.LeSidePanel & JSXBase.HTMLAttributes<HTMLLeSidePanelElement>;
+            "le-side-panel-toggle": LocalJSX.LeSidePanelToggle & JSXBase.HTMLAttributes<HTMLLeSidePanelToggleElement>;
             /**
              * Slot placeholder component for admin/CMS mode.
              * This component renders a visual placeholder for slots when in admin mode,

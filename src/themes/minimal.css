@@ -58,6 +58,7 @@
   --le-color-background: #ffffff;
   --le-color-background-secondary: #fafafa;
   --le-color-background-tertiary: #f5f5f5;
+  --le-color-backdrop: rgba(17, 24, 39, 0.15);
   
   /* Surface colors */
   --le-color-surface: #ffffff;

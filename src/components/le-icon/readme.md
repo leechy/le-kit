@@ -19,12 +19,14 @@
 
  - [le-bar](../le-bar)
  - [le-navigation](../le-navigation)
+ - [le-side-panel](../le-side-panel)
 
 ### Graph
 ```mermaid
 graph TD;
   le-bar --> le-icon
   le-navigation --> le-icon
+  le-side-panel --> le-icon
   style le-icon fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

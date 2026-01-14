@@ -98,6 +98,8 @@
       #demo-nav-horizontal-overflow::part(item-emphasis) {
         font-weight: var(--le-font-weight-semibold);
       }
+
+      /* Side panel toggles now use <le-button> directly. */
     </style>
   </head>
   <body>
@@ -185,6 +187,66 @@
 
     <!-- Default content template (used when localStorage is empty) -->
     <template id="default-content">
+
+      <div class="demo-section">
+        <h2>Side Panel</h2>
+        <p>
+          Responsive side panel (wide push layout; narrow overlay or push). Try <code>Mod+B</code> or resize the window.
+        </p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: var(--le-space-sm); align-items: center; margin-bottom: var(--le-space-md);">
+          <le-side-panel-toggle panel-id="demo-side" action="open" variant="outlined">Open</le-side-panel-toggle>
+          <le-side-panel-toggle panel-id="demo-side" action="close" variant="outlined">Close</le-side-panel-toggle>
+        </div>
+
+        <div
+          style="
+            border: 1px dashed var(--le-color-border);
+            border-radius: var(--le-radius-md);
+            height: 360px;
+            overflow: hidden;
+            background: var(--le-color-surface-alt);
+          "
+        >
+          <le-side-panel
+            panel-id="demo-side"
+            collapse-at="900"
+            narrow-behavior="overlay"
+            resizable
+            persist-key="demo-side-panel"
+            style="height: 100%; --le-side-panel-margin: var(--le-space-sm);"
+          >
+            <div slot="panel" style="display: grid; gap: var(--le-space-sm); padding: var(--le-space-sm);">
+              <le-navigation id="demo-side-panel-nav" orientation="vertical"></le-navigation>
+              <p style="margin: 0; font-size: var(--le-font-size-xs); color: var(--le-color-text-secondary);">
+                Drag the edge to resize. Width is persisted in localStorage.
+              </p>
+            </div>
+
+            <div style="padding: var(--le-space-sm);">
+              <le-side-panel-toggle
+                panel-id="demo-side"
+                action="toggle"
+                shortcut="Mod+B"
+                variant="clear"
+                icon-only="true"
+                style="
+                  --le-button-icon-only-padding: var(--le-space-xs);
+                "
+              >
+                <le-icon slot="icon-only" name="side-panel" />
+              </le-side-panel-toggle>
+            </div>
+            
+            <div style="padding: var(--le-space-sm) var(--le-space-lg);">
+              <h3 style="margin: 0 0 var(--le-space-sm) 0;">Content</h3>
+              <p style="margin: 0;">
+                This area is pushed in wide mode. In narrow mode, the panel can become an overlay drawer.
+              </p>
+            </div>
+          </le-side-panel>
+        </div>
+      </div>
 
       <div class="demo-section">
         <h2>Navigation Component</h2>
@@ -897,11 +959,11 @@ console.log(greeting);</le-text>
           <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
             <le-button full-width color="primary">Full Width Button</le-button>
             <div style="display: flex; gap: 8px;">
-              <le-button icon-only color="primary" size="small">
+              <le-button icon-only="true" color="primary" size="small">
                 <svg slot="icon-only" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
               </le-button>
               <le-button variant="clear" size="large" icon-only="⚙️"></le-button>
-              <le-button icon-only variant="outlined" color="secondary">
+              <le-button icon-only="true" variant="outlined" color="secondary">
                 <svg slot="icon-only" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
               </le-button>
               <le-button color="success" icon-start="✅">
@@ -1474,6 +1536,20 @@ console.log(greeting);</le-text>
         {"label":"Community","href":"#community"},
         {"label":"About","href":"#about"},
         {"label":"Contact","href":"#contact"}
+      ]);
+
+      document.getElementById('demo-side-panel-nav') && (document.getElementById('demo-side-panel-nav').items = [
+        { label: 'Overview', href: '#sp-overview' },
+        { label: 'Projects', href: '#sp-projects' },
+        {
+          label: 'Settings',
+          open: true,
+          children: [
+            { label: 'Profile', href: '#sp-profile' },
+            { label: 'Billing', href: '#sp-billing' },
+            { label: 'Security', href: '#sp-security' },
+          ],
+        },
       ]);
     </script>
   </body>

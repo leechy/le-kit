@@ -58,6 +58,7 @@
   --le-color-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --le-color-background-secondary: rgba(255, 255, 255, 0.1);
   --le-color-background-tertiary: rgba(255, 255, 255, 0.05);
+  --le-color-backdrop: rgba(139, 92, 246, 0.15);
   
   /* Surface colors */
   --le-color-surface: rgba(255, 255, 255, 0.95);

@@ -217,8 +217,8 @@
 
 /* Icon only */
 :host(.icon-only) .le-button-container {
-  padding: 0.5rem;
-  padding-bottom: 0.6rem;
+  padding: var(--le-button-icon-only-padding, 0.5rem);
+  padding-bottom: var(--le-button-icon-only-padding, 0.6rem);
   aspect-ratio: var(--le-button-icon-aspect-ratio, 1);
 }
 

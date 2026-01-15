@@ -132,7 +132,7 @@ export class LeSidePanel {
   @State() private responsiveReady: boolean = false;
   @State() private overlayMounted: boolean = false;
   @State() private overlayVisible: boolean = false;
-  @State() private currentWidthPx: number = this.panelWidth;
+  @State() private currentWidthPx: number;
   @State() private resizing: boolean = false;
 
   private resizeObserver?: ResizeObserver;

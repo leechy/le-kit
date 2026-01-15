@@ -1,0 +1,106 @@
+:host {
+  display: block;
+
+  --le-input-bg: var(--le-color-surface, #ffffff);
+  --le-input-color: var(--le-color-text-primary, #333333);
+  --le-input-border: var(--le-border-width, 2px) solid var(--le-color-border-input, #007bff);
+  --le-input-radius: var(--le-radius-sm, 4px);
+  --le-input-border-focus: 2px solid var(--le-color-focus);
+  --le-input-border-focus-offset: 2px;
+}
+
+.le-code-input-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.le-input-label {
+  display: block;
+  margin-bottom: var(--le-spacing-2, 0.5rem);
+  color: var(--le-text-color, inherit);
+  font-size: var(--le-font-size-sm, 0.875rem);
+  font-weight: 500;
+}
+
+.input-group {
+  position: relative;
+  display: inline-flex;
+  width: fit-content;
+}
+
+.ghost-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 10;
+  cursor: text;
+  color: transparent;
+  background: transparent;
+  caret-color: transparent;
+  border: none;
+  outline: none;
+  letter-spacing: 1em; /* Try to match boxes? */
+}
+
+.ghost-input:disabled {
+  cursor: not-allowed;
+}
+
+.visual-container {
+  display: flex;
+  gap: var(--le-spacing-2, 8px);
+  pointer-events: none; /* Let clicks pass to ghost input */
+}
+
+.code-box {
+  position: relative;
+  width: var(--le-code-box-size, 32px);
+  height: var(--le-code-box-size, 42px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--le-input-bg);
+  border: var(--le-input-border);
+  border-radius: var(--le-input-radius);
+  color: var(--le-input-color);
+  font-size: 1.2rem;
+  transition: all 0.15s ease-in-out;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.code-box.active {
+  outline: var(--le-input-border-focus);
+  outline-offset: var(--le-input-border-focus-offset);
+  z-index: 1;
+}
+
+.code-box.selected {
+  background-color: SelectedItem;
+  outline: var(--le-input-border-focus);
+  outline-offset: var(--le-input-border-focus-offset);
+}
+
+.input-group.has-error .code-box {
+  border: var(--le-input-border-error, 1px solid #ef4444);
+}
+
+.input-group.has-error .code-box.active {
+  border-width: 2px;
+}
+
+:host(.disabled) .code-box {
+  background-color: var(--le-color-disabled-bg, #f3f4f6);
+  color: var(--le-color-disabled-text, #9ca3af);
+  border-color: var(--le-color-disabled-border, #e5e7eb);
+}
+
+.le-input-description,
+:host(p) {
+  margin-top: var(--le-spacing-1, 0.25rem);
+  color: var(--le-text-muted, #6b7280);
+  font-size: var(--le-font-size-sm, 0.875rem);
+}

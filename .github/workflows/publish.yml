@@ -53,6 +53,7 @@ jobs:
           path: |
             dist/
             loader/
+            LLM_CONTEXT.md
 
   publish:
     needs: build

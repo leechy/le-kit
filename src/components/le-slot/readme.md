@@ -52,6 +52,7 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
  - [le-button](../le-button)
  - [le-card](../le-card)
  - [le-checkbox](../le-checkbox)
+ - [le-code-input](../le-code-input)
  - [le-header](../le-header)
  - [le-number-input](../le-number-input)
  - [le-popup](../le-popup)
@@ -92,6 +93,7 @@ graph TD;
   le-popup --> le-slot
   le-box --> le-slot
   le-card --> le-slot
+  le-code-input --> le-slot
   le-header --> le-slot
   le-number-input --> le-slot
   le-stack --> le-slot

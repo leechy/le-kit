@@ -92,8 +92,9 @@ src/components/le-{name}/
 ### Input Component Standard
 
 All input components (`le-string-input`, `le-number-input`, `le-code-input`, etc.) must implement:
+
 - **Props**: `name`, `value`, `label`, `disabled`, `readonly`, `error` (or `isValid`), `externalId`
-- **Events**: 
+- **Events**:
   - `leChange`: Emits `{ value, name, externalId, ... }` on commit (blur/enter)
   - `leInput`: Emits `{ value, name, externalId, ... }` on keystroke
 - **UX Patterns**:

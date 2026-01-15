@@ -54,6 +54,7 @@ render() {
  - [le-button](../le-button)
  - [le-card](../le-card)
  - [le-checkbox](../le-checkbox)
+ - [le-code-input](../le-code-input)
  - [le-collapse](../le-collapse)
  - [le-combobox](../le-combobox)
  - [le-header](../le-header)
@@ -101,6 +102,7 @@ graph TD;
   le-popup --> le-component
   le-box --> le-component
   le-card --> le-component
+  le-code-input --> le-component
   le-collapse --> le-component
   le-combobox --> le-component
   le-header --> le-component

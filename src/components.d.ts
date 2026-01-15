@@ -325,6 +325,65 @@ export namespace Components {
         "value": string;
     }
     /**
+     * A one-time code input component with individual frames for each character.
+     * Supports standard copy/paste and range selection behaviors.
+     * @cssprop --le-code-box-size - Size of each character box (default: 40px width, 48px height)
+     * @cssprop --le-input-bg - Input background color
+     * @cssprop --le-input-color - Input text color
+     * @cssprop --le-input-border - Input border style
+     * @cssprop --le-input-border-focus - Input border style when focused
+     * @cssprop --le-input-border-error - Input border style when invalid
+     * @cssprop --le-input-radius - Input border radius
+     */
+    interface LeCodeInput {
+        /**
+          * Description text displayed below the input in case there is a more complex markup, it can be provided via slot as well
+         */
+        "description"?: string;
+        /**
+          * Whether the input is disabled
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Internal validation state (can be set externally manually or via simple check)
+          * @default false
+         */
+        "error": boolean;
+        /**
+          * External ID for linking with external systems
+         */
+        "externalId": string;
+        /**
+          * Label for the input
+         */
+        "label": string;
+        /**
+          * Length of the code (number of characters)
+          * @default 6
+         */
+        "length": number;
+        /**
+          * The name of the input
+         */
+        "name": string;
+        /**
+          * Whether the input is read-only
+          * @default false
+         */
+        "readonly": boolean;
+        /**
+          * The type of code (numeric or alphanumeric) This affects the keyboard layout on mobile devices.
+          * @default 'text'
+         */
+        "type": 'text' | 'number';
+        /**
+          * The value of the input
+          * @default ''
+         */
+        "value": string;
+    }
+    /**
      * Animated show/hide wrapper.
      * Supports height collapse (auto->0) and/or fading.
      * Can optionally listen to the nearest `le-header` shrink events.
@@ -1988,6 +2047,10 @@ export interface LeCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeCheckboxElement;
 }
+export interface LeCodeInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeCodeInputElement;
+}
 export interface LeComboboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeComboboxElement;
@@ -2187,6 +2250,37 @@ declare global {
     var HTMLLeCheckboxElement: {
         prototype: HTMLLeCheckboxElement;
         new (): HTMLLeCheckboxElement;
+    };
+    interface HTMLLeCodeInputElementEventMap {
+        "leChange": { value: string; name: string; externalId: string };
+        "leInput": { value: string; name: string; externalId: string };
+        "leFocus": void;
+        "leBlur": void;
+    }
+    /**
+     * A one-time code input component with individual frames for each character.
+     * Supports standard copy/paste and range selection behaviors.
+     * @cssprop --le-code-box-size - Size of each character box (default: 40px width, 48px height)
+     * @cssprop --le-input-bg - Input background color
+     * @cssprop --le-input-color - Input text color
+     * @cssprop --le-input-border - Input border style
+     * @cssprop --le-input-border-focus - Input border style when focused
+     * @cssprop --le-input-border-error - Input border style when invalid
+     * @cssprop --le-input-radius - Input border radius
+     */
+    interface HTMLLeCodeInputElement extends Components.LeCodeInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeCodeInputElementEventMap>(type: K, listener: (this: HTMLLeCodeInputElement, ev: LeCodeInputCustomEvent<HTMLLeCodeInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeCodeInputElementEventMap>(type: K, listener: (this: HTMLLeCodeInputElement, ev: LeCodeInputCustomEvent<HTMLLeCodeInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeCodeInputElement: {
+        prototype: HTMLLeCodeInputElement;
+        new (): HTMLLeCodeInputElement;
     };
     /**
      * Animated show/hide wrapper.
@@ -2962,6 +3056,7 @@ declare global {
         "le-button": HTMLLeButtonElement;
         "le-card": HTMLLeCardElement;
         "le-checkbox": HTMLLeCheckboxElement;
+        "le-code-input": HTMLLeCodeInputElement;
         "le-collapse": HTMLLeCollapseElement;
         "le-combobox": HTMLLeComboboxElement;
         "le-component": HTMLLeComponentElement;
@@ -3303,6 +3398,81 @@ declare namespace LocalJSX {
         "onChange"?: (event: LeCheckboxCustomEvent<{ checked: boolean; value: string; name: string; externalId: string }>) => void;
         /**
           * The value of the checkbox input
+         */
+        "value"?: string;
+    }
+    /**
+     * A one-time code input component with individual frames for each character.
+     * Supports standard copy/paste and range selection behaviors.
+     * @cssprop --le-code-box-size - Size of each character box (default: 40px width, 48px height)
+     * @cssprop --le-input-bg - Input background color
+     * @cssprop --le-input-color - Input text color
+     * @cssprop --le-input-border - Input border style
+     * @cssprop --le-input-border-focus - Input border style when focused
+     * @cssprop --le-input-border-error - Input border style when invalid
+     * @cssprop --le-input-radius - Input border radius
+     */
+    interface LeCodeInput {
+        /**
+          * Description text displayed below the input in case there is a more complex markup, it can be provided via slot as well
+         */
+        "description"?: string;
+        /**
+          * Whether the input is disabled
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Internal validation state (can be set externally manually or via simple check)
+          * @default false
+         */
+        "error"?: boolean;
+        /**
+          * External ID for linking with external systems
+         */
+        "externalId"?: string;
+        /**
+          * Label for the input
+         */
+        "label"?: string;
+        /**
+          * Length of the code (number of characters)
+          * @default 6
+         */
+        "length"?: number;
+        /**
+          * The name of the input
+         */
+        "name"?: string;
+        /**
+          * Emitted when the input is blurred
+         */
+        "onLeBlur"?: (event: LeCodeInputCustomEvent<void>) => void;
+        /**
+          * Emitted when the value changes (on blur or Enter)
+         */
+        "onLeChange"?: (event: LeCodeInputCustomEvent<{ value: string; name: string; externalId: string }>) => void;
+        /**
+          * Emitted when the input is focused
+         */
+        "onLeFocus"?: (event: LeCodeInputCustomEvent<void>) => void;
+        /**
+          * Emitted when the input value changes (on keystroke)
+         */
+        "onLeInput"?: (event: LeCodeInputCustomEvent<{ value: string; name: string; externalId: string }>) => void;
+        /**
+          * Whether the input is read-only
+          * @default false
+         */
+        "readonly"?: boolean;
+        /**
+          * The type of code (numeric or alphanumeric) This affects the keyboard layout on mobile devices.
+          * @default 'text'
+         */
+        "type"?: 'text' | 'number';
+        /**
+          * The value of the input
+          * @default ''
          */
         "value"?: string;
     }
@@ -5032,6 +5202,7 @@ declare namespace LocalJSX {
         "le-button": LeButton;
         "le-card": LeCard;
         "le-checkbox": LeCheckbox;
+        "le-code-input": LeCodeInput;
         "le-collapse": LeCollapse;
         "le-combobox": LeCombobox;
         "le-component": LeComponent;
@@ -5136,6 +5307,18 @@ declare module "@stencil/core" {
              * @cssprop --le-checkbox-desc-color - Color of the description text
              */
             "le-checkbox": LocalJSX.LeCheckbox & JSXBase.HTMLAttributes<HTMLLeCheckboxElement>;
+            /**
+             * A one-time code input component with individual frames for each character.
+             * Supports standard copy/paste and range selection behaviors.
+             * @cssprop --le-code-box-size - Size of each character box (default: 40px width, 48px height)
+             * @cssprop --le-input-bg - Input background color
+             * @cssprop --le-input-color - Input text color
+             * @cssprop --le-input-border - Input border style
+             * @cssprop --le-input-border-focus - Input border style when focused
+             * @cssprop --le-input-border-error - Input border style when invalid
+             * @cssprop --le-input-radius - Input border radius
+             */
+            "le-code-input": LocalJSX.LeCodeInput & JSXBase.HTMLAttributes<HTMLLeCodeInputElement>;
             /**
              * Animated show/hide wrapper.
              * Supports height collapse (auto->0) and/or fading.

@@ -35,7 +35,7 @@
         justify-content: space-around;
       }
       .control-group {
-        padding-block: var(--le-space-sm);
+        padding-block: 0;
         display: flex;
         gap: var(--le-space-sm);
         align-items: center;
@@ -682,6 +682,11 @@
             >
               <span slot="description">Use Shift+Up for +0.1, Alt+Up for +0.001</span>
             </le-number-input>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Code Input:</label>
+            <le-code-input length="8" label="PIN" description="Enter your PIN code"></le-code-input>
           </div>
         </div>
       </div>

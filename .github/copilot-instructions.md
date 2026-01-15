@@ -83,10 +83,21 @@ The build generates multiple distribution formats:
 ```
 src/components/le-{name}/
 ├── le-{name}.tsx           # Component implementation
-├── le-{name}.default.css   # Default mode styles
-├── le-{name}.admin.css     # Admin mode styles (optional)
+├── le-{name}.css           # Component styles (standard)
+├── [le-{name}.default.css] # Default mode styles (legacy/complex)
+├── [le-{name}.admin.css]   # Admin mode styles (legacy/complex)
 └── readme.md               # Auto-generated docs
 ```
+
+### Input Component Standard
+
+All input components (`le-string-input`, `le-number-input`, `le-code-input`, etc.) must implement:
+- **Props**: `name`, `value`, `label`, `disabled`, `readonly`, `error` (or `isValid`), `externalId`
+- **Events**: 
+  - `leChange`: Emits `{ value, name, externalId, ... }` on commit (blur/enter)
+  - `leInput`: Emits `{ value, name, externalId, ... }` on keystroke
+- **UX Patterns**:
+  - **Ghost Inputs**: For complex visual inputs (like `le-code-input`), overlay a transparent native input over the visual elements to preserve native a11y, copy/paste, and mobile keyboard behaviors.
 
 ### CSS Theming
 

@@ -35,17 +35,19 @@
   },
   "files": [
     "dist/",
-    "loader/"
+    "loader/",
+    "LLM_CONTEXT.md"
   ],
   "scripts": {
     "build": "npm run build:admin",
-    "build:admin": "stencil build && cem analyze --stencil",
+    "build:admin": "stencil build && npm run analyze",
     "build:core": "node scripts/prepare-core.mjs && stencil build --config stencil.core.config.ts",
-    "start": "cem analyze --stencil && stencil build --dev --watch --serve",
+    "start": "npm run analyze && stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate",
-    "analyze": "cem analyze --stencil"
+    "analyze": "cem analyze --stencil && npm run generate:llm",
+    "generate:llm": "node scripts/generate-llm-context.mjs"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",

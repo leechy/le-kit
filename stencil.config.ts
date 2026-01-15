@@ -18,6 +18,7 @@ export const config: Config = {
     {
       type: 'dist-custom-elements',
       dir: 'dist/components',
+      externalRuntime: true,
       copy: [
         { src: 'themes', dest: 'dist/themes' },
         { src: 'assets', dest: 'dist/components/assets' },

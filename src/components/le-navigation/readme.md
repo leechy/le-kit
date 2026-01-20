@@ -48,6 +48,10 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 
 ## Dependencies
 
+### Used by
+
+ - [le-breadcrumbs](../le-breadcrumbs)
+
 ### Depends on
 
 - [le-string-input](../le-string-input)
@@ -92,6 +96,7 @@ graph TD;
   le-collapse --> le-component
   le-bar --> le-icon
   le-bar --> le-popover
+  le-breadcrumbs --> le-navigation
   style le-navigation fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

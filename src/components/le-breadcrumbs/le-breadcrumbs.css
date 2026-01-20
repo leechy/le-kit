@@ -1,0 +1,72 @@
+:host {
+  display: block;
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--le-space-xs);
+  min-width: 0;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  gap: var(--le-space-xs);
+  min-width: 0;
+  flex: 1;
+}
+
+.list.wrap {
+  flex-wrap: wrap;
+}
+
+.list.scroll {
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.list.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.item {
+  --le-button-padding-x: var(--le-spacing-2);
+  --le-button-padding-y: var(--le-spacing-1);
+}
+
+.item.current {
+  color: var(--le-color-text);
+  font-weight: var(--le-font-weight-medium);
+}
+
+.item-popover {
+  --le-popover-padding: var(--le-space-xs);
+}
+
+.separator {
+  display: inline-flex;
+  align-items: center;
+  color: var(--le-color-text-tertiary, var(--le-color-text-secondary));
+}
+
+.separator ::slotted(*) {
+  display: inline-flex;
+  align-items: center;
+}
+
+.more-trigger {
+  display: inline-flex;
+  align-items: center;
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+}
+
+.hidden-slot {
+  display: none;
+}

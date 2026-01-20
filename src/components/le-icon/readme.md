@@ -18,6 +18,7 @@
 ### Used by
 
  - [le-bar](../le-bar)
+ - [le-breadcrumbs](../le-breadcrumbs)
  - [le-navigation](../le-navigation)
  - [le-side-panel](../le-side-panel)
 
@@ -25,6 +26,7 @@
 ```mermaid
 graph TD;
   le-bar --> le-icon
+  le-breadcrumbs --> le-icon
   le-navigation --> le-icon
   le-side-panel --> le-icon
   style le-icon fill:#f9f,stroke:#333,stroke-width:4px

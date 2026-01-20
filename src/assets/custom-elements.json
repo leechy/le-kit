@@ -972,6 +972,316 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-breadcrumbs/le-breadcrumbs.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LeBreadcrumbs",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "items",
+              "type": {
+                "text": "LeOption[] | string"
+              },
+              "default": "[]",
+              "description": "Breadcrumb items (supports JSON string)."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Breadcrumbs'",
+              "description": "Accessible label for the breadcrumbs navigation."
+            },
+            {
+              "kind": "field",
+              "name": "separatorIcon",
+              "type": {
+                "text": "string"
+              },
+              "default": "'chevron-right'",
+              "description": "Separator icon name (used if no separator slot is provided)."
+            },
+            {
+              "kind": "field",
+              "name": "overflowMode",
+              "type": {
+                "text": "'collapse' | 'wrap' | 'scroll'"
+              },
+              "default": "'collapse'",
+              "description": "Overflow behavior: collapse (default), wrap, or scroll."
+            },
+            {
+              "kind": "field",
+              "name": "minVisibleItems",
+              "type": {
+                "text": "number"
+              },
+              "default": "2",
+              "description": "Minimum visible items before collapsing."
+            },
+            {
+              "kind": "field",
+              "name": "hiddenIndices",
+              "type": {
+                "text": "number[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "separatorTemplate",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "listEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "resizeObserver",
+              "type": {
+                "text": "ResizeObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "instanceId",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "recomputeQueued",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "handleInputsChange"
+            },
+            {
+              "kind": "method",
+              "name": "setupResizeObserver",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "parsedItems",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "getItemId",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleSeparatorSlotChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "scheduleOverflowRecompute",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "nextFrame",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "recomputeOverflow",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleItemClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderSeparator",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderItem",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderMore",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "hiddenItems",
+                  "type": {
+                    "text": "LeOption[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "items",
+              "fieldName": "items",
+              "default": "[]",
+              "description": "Breadcrumb items (supports JSON string).",
+              "type": {
+                "text": "LeOption[] | string"
+              }
+            },
+            {
+              "name": "label",
+              "fieldName": "label",
+              "default": "'Breadcrumbs'",
+              "description": "Accessible label for the breadcrumbs navigation.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "separator-icon",
+              "fieldName": "separatorIcon",
+              "default": "'chevron-right'",
+              "description": "Separator icon name (used if no separator slot is provided).",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "overflow-mode",
+              "fieldName": "overflowMode",
+              "default": "'collapse'",
+              "description": "Overflow behavior: collapse (default), wrap, or scroll.",
+              "type": {
+                "text": "'collapse' | 'wrap' | 'scroll'"
+              }
+            },
+            {
+              "name": "min-visible-items",
+              "fieldName": "minVisibleItems",
+              "default": "2",
+              "description": "Minimum visible items before collapsing.",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-breadcrumbs",
+          "events": [
+            {
+              "name": "leBreadcrumbSelect",
+              "type": {
+                "text": "EventEmitter<LeBreadcrumbSelectDetail>"
+              },
+              "description": "Emitted when a breadcrumb item is selected."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeBreadcrumbs",
+          "declaration": {
+            "name": "LeBreadcrumbs",
+            "module": "src/components/le-breadcrumbs/le-breadcrumbs.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-breadcrumbs",
+          "declaration": {
+            "name": "LeBreadcrumbs",
+            "module": "src/components/le-breadcrumbs/le-breadcrumbs.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-button/le-button.tsx",
       "declarations": [
         {
@@ -1322,60 +1632,38 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
+      "path": "src/components/le-checkbox/le-checkbox.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
+          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
+          "name": "LeCheckbox",
           "cssProperties": [
             {
-              "description": "Card background color",
-              "name": "--le-card-bg"
+              "description": "Size of the checkbox input",
+              "name": "--le-checkbox-size"
             },
             {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
+              "description": "Color of the checkbox when checked",
+              "name": "--le-checkbox-color"
             },
             {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
+              "description": "Color of the label text",
+              "name": "--le-checkbox-label-color"
             },
             {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
+              "description": "Color of the description text",
+              "name": "--le-checkbox-desc-color"
             }
           ],
           "slots": [
             {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
+              "description": "The label text for the checkbox",
               "name": ""
             },
             {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
+              "description": "Additional description text displayed below the label",
+              "name": "description"
             }
           ],
           "members": [
@@ -1388,21 +1676,50 @@
             },
             {
               "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
+              "name": "checked",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the card is interactive (clickable)"
+              "description": "Whether the checkbox is checked"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The value of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "externalId",
+              "type": {
+                "text": "string"
+              },
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
+            },
+            {
+              "kind": "field",
+              "name": "handleChange",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -1411,44 +1728,76 @@
           ],
           "attributes": [
             {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              }
-            },
-            {
-              "name": "interactive",
-              "fieldName": "interactive",
+              "name": "checked",
+              "fieldName": "checked",
               "default": "false",
-              "description": "Whether the card is interactive (clickable)",
+              "description": "Whether the checkbox is checked",
               "type": {
                 "text": "boolean"
               }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the checkbox is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "The name of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "external-id",
+              "fieldName": "externalId",
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
+              "type": {
+                "text": "string"
+              }
             }
           ],
-          "tagName": "le-card",
-          "events": [],
+          "tagName": "le-checkbox",
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
+              },
+              "description": "Emitted when the checked state changes"
+            }
+          ],
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "LeCard",
+          "name": "LeCheckbox",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-card",
+          "name": "le-checkbox",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
           }
         }
       ]
@@ -1826,6 +2175,139 @@
           "declaration": {
             "name": "LeCodeInput",
             "module": "src/components/le-code-input/le-code-input.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
           }
         }
       ]
@@ -2419,178 +2901,6 @@
           "declaration": {
             "name": "LeCombobox",
             "module": "src/components/le-combobox/le-combobox.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-checkbox/le-checkbox.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
-          "name": "LeCheckbox",
-          "cssProperties": [
-            {
-              "description": "Size of the checkbox input",
-              "name": "--le-checkbox-size"
-            },
-            {
-              "description": "Color of the checkbox when checked",
-              "name": "--le-checkbox-color"
-            },
-            {
-              "description": "Color of the label text",
-              "name": "--le-checkbox-label-color"
-            },
-            {
-              "description": "Color of the description text",
-              "name": "--le-checkbox-desc-color"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The label text for the checkbox",
-              "name": ""
-            },
-            {
-              "description": "Additional description text displayed below the label",
-              "name": "description"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is checked"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is disabled"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "description": "The name of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "description": "The value of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "externalId",
-              "type": {
-                "text": "string"
-              },
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
-            },
-            {
-              "kind": "field",
-              "name": "handleChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "checked",
-              "fieldName": "checked",
-              "default": "false",
-              "description": "Whether the checkbox is checked",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the checkbox is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "The name of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "external-id",
-              "fieldName": "externalId",
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-checkbox",
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
-              },
-              "description": "Emitted when the checked state changes"
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCheckbox",
-          "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-checkbox",
-          "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
           }
         }
       ]
@@ -6934,368 +7244,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-segmented-control/le-segmented-control.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A segmented control component (iOS-style toggle buttons).\n\nPerfect for toggling between a small set of related options.",
-          "name": "LeSegmentedControl",
-          "cssProperties": [
-            {
-              "description": "Background color of the control",
-              "name": "--le-segmented-bg"
-            },
-            {
-              "description": "Padding around segments",
-              "name": "--le-segmented-padding"
-            },
-            {
-              "description": "Gap between segments",
-              "name": "--le-segmented-gap"
-            },
-            {
-              "description": "Border radius of the control",
-              "name": "--le-segmented-radius"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main container",
-              "name": "container"
-            },
-            {
-              "description": "Individual segment buttons",
-              "name": "segment"
-            },
-            {
-              "description": "The currently active segment",
-              "name": "segment-active"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "containerRef",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "default": "[]",
-              "description": "Array of options for the segmented control."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "LeOptionValue | undefined"
-              },
-              "description": "The value of the currently selected option."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Size of the control."
-            },
-            {
-              "kind": "field",
-              "name": "overflow",
-              "type": {
-                "text": "'auto' | 'hidden' | 'visible' | 'scroll'"
-              },
-              "default": "'auto'",
-              "description": "Scroll behavior for overflowing tabs."
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the control should take full width."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the control is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "segmentConfigs",
-              "type": {
-                "text": "SegmentConfig[]"
-              },
-              "privacy": "private",
-              "default": "[]",
-              "description": "Internal tab configurations (built from children or tabs prop)"
-            },
-            {
-              "kind": "field",
-              "name": "focusedIndex",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "0",
-              "description": "Internal state for focused index (keyboard navigation)"
-            },
-            {
-              "kind": "field",
-              "name": "isDeclarativeMode",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Whether we're using declarative mode (le-tab children)"
-            },
-            {
-              "kind": "field",
-              "name": "mutationObserver",
-              "type": {
-                "text": "MutationObserver | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "tabsChanged"
-            },
-            {
-              "kind": "method",
-              "name": "handleSlotChange"
-            },
-            {
-              "kind": "method",
-              "name": "buildSegmentsConfigs",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "getOptionValue",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "LeOptionValue"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "option",
-                  "type": {
-                    "text": "LeOption"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getOptionIndex",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "number"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "LeOptionValue"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "selectOption",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "option",
-                  "type": {
-                    "text": "LeOption"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "handleClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "findNextEnabled",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "number"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "direction",
-                  "type": {
-                    "text": "1 | -1"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "findFirstEnabled",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "number"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "findLastEnabled",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "number"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "focusSegment",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "options",
-              "fieldName": "options",
-              "default": "[]",
-              "description": "Array of options for the segmented control.",
-              "type": {
-                "text": "LeOption[]"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value of the currently selected option.",
-              "type": {
-                "text": "LeOptionValue"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Size of the control.",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "overflow",
-              "fieldName": "overflow",
-              "default": "'auto'",
-              "description": "Scroll behavior for overflowing tabs.",
-              "type": {
-                "text": "'auto' | 'hidden' | 'visible' | 'scroll'"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the control should take full width.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the control is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-segmented-control",
-          "events": [
-            {
-              "name": "leChange",
-              "type": {
-                "text": "EventEmitter<LeOptionSelectDetail>"
-              },
-              "description": "Emitted when the selection changes."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeSegmentedControl",
-          "declaration": {
-            "name": "LeSegmentedControl",
-            "module": "src/components/le-segmented-control/le-segmented-control.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-segmented-control",
-          "declaration": {
-            "name": "LeSegmentedControl",
-            "module": "src/components/le-segmented-control/le-segmented-control.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-select/le-select.tsx",
       "declarations": [
         {
@@ -7690,6 +7638,368 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-segmented-control/le-segmented-control.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A segmented control component (iOS-style toggle buttons).\n\nPerfect for toggling between a small set of related options.",
+          "name": "LeSegmentedControl",
+          "cssProperties": [
+            {
+              "description": "Background color of the control",
+              "name": "--le-segmented-bg"
+            },
+            {
+              "description": "Padding around segments",
+              "name": "--le-segmented-padding"
+            },
+            {
+              "description": "Gap between segments",
+              "name": "--le-segmented-gap"
+            },
+            {
+              "description": "Border radius of the control",
+              "name": "--le-segmented-radius"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main container",
+              "name": "container"
+            },
+            {
+              "description": "Individual segment buttons",
+              "name": "segment"
+            },
+            {
+              "description": "The currently active segment",
+              "name": "segment-active"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "containerRef",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "default": "[]",
+              "description": "Array of options for the segmented control."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "LeOptionValue | undefined"
+              },
+              "description": "The value of the currently selected option."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Size of the control."
+            },
+            {
+              "kind": "field",
+              "name": "overflow",
+              "type": {
+                "text": "'auto' | 'hidden' | 'visible' | 'scroll'"
+              },
+              "default": "'auto'",
+              "description": "Scroll behavior for overflowing tabs."
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the control should take full width."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the control is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "segmentConfigs",
+              "type": {
+                "text": "SegmentConfig[]"
+              },
+              "privacy": "private",
+              "default": "[]",
+              "description": "Internal tab configurations (built from children or tabs prop)"
+            },
+            {
+              "kind": "field",
+              "name": "focusedIndex",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0",
+              "description": "Internal state for focused index (keyboard navigation)"
+            },
+            {
+              "kind": "field",
+              "name": "isDeclarativeMode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Whether we're using declarative mode (le-tab children)"
+            },
+            {
+              "kind": "field",
+              "name": "mutationObserver",
+              "type": {
+                "text": "MutationObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "tabsChanged"
+            },
+            {
+              "kind": "method",
+              "name": "handleSlotChange"
+            },
+            {
+              "kind": "method",
+              "name": "buildSegmentsConfigs",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getOptionValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "LeOptionValue"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "option",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getOptionIndex",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "LeOptionValue"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "selectOption",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "option",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "findNextEnabled",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "direction",
+                  "type": {
+                    "text": "1 | -1"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "findFirstEnabled",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "findLastEnabled",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "focusSegment",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "fieldName": "options",
+              "default": "[]",
+              "description": "Array of options for the segmented control.",
+              "type": {
+                "text": "LeOption[]"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value of the currently selected option.",
+              "type": {
+                "text": "LeOptionValue"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Size of the control.",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "overflow",
+              "fieldName": "overflow",
+              "default": "'auto'",
+              "description": "Scroll behavior for overflowing tabs.",
+              "type": {
+                "text": "'auto' | 'hidden' | 'visible' | 'scroll'"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the control should take full width.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the control is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-segmented-control",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeOptionSelectDetail>"
+              },
+              "description": "Emitted when the selection changes."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeSegmentedControl",
+          "declaration": {
+            "name": "LeSegmentedControl",
+            "module": "src/components/le-segmented-control/le-segmented-control.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-segmented-control",
+          "declaration": {
+            "name": "LeSegmentedControl",
+            "module": "src/components/le-segmented-control/le-segmented-control.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-side-panel/le-side-panel.tsx",
       "declarations": [
         {
@@ -7891,6 +8201,15 @@
             },
             {
               "kind": "field",
+              "name": "suppressAnimation",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
               "name": "resizeObserver",
               "type": {
                 "text": "ResizeObserver | undefined"
@@ -7920,6 +8239,15 @@
                 "text": "HTMLElement | null | undefined"
               },
               "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "firstLayoutComplete",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
             },
             {
               "kind": "field",

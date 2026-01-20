@@ -6,6 +6,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 
 - [le-bar](#le-bar)
 - [le-box](#le-box)
+- [le-breadcrumbs](#le-breadcrumbs)
 - [le-button](#le-button)
 - [le-card](#le-card)
 - [le-checkbox](#le-checkbox)
@@ -126,6 +127,27 @@ basis, and self-alignment. It can also control its internal content alignment.
 | `--le-box-bg` | Background color |
 | `--le-box-padding` | Padding inside the box |
 | `--le-box-border-radius` | Border radius |
+
+---
+
+## <le-breadcrumbs>
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `items` | `LeOption[] \| string` | `[]` | Breadcrumb items (supports JSON string). |
+| `label` | `string` | `'Breadcrumbs'` | Accessible label for the breadcrumbs navigation. |
+| `separatorIcon` | `string` | `'chevron-right'` | Separator icon name (used if no separator slot is provided). |
+| `overflowMode` | `'collapse' \| 'wrap' \| 'scroll'` | `'collapse'` | Overflow behavior: collapse (default), wrap, or scroll. |
+| `minVisibleItems` | `number` | `2` | Minimum visible items before collapsing. |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leBreadcrumbSelect` | `EventEmitter<LeBreadcrumbSelectDetail>` | Emitted when a breadcrumb item is selected. |
 
 ---
 

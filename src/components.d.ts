@@ -7,6 +7,7 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
+import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
@@ -14,6 +15,7 @@ import { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side
 import { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./components/le-side-panel-toggle/le-side-panel-toggle";
 export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
+export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
@@ -178,6 +180,33 @@ export namespace Components {
           * Width of the box (CSS value like '100px', '50%', 'auto')
          */
         "width"?: string;
+    }
+    interface LeBreadcrumbs {
+        /**
+          * Breadcrumb items (supports JSON string).
+          * @default []
+         */
+        "items": LeOption[] | string;
+        /**
+          * Accessible label for the breadcrumbs navigation.
+          * @default 'Breadcrumbs'
+         */
+        "label": string;
+        /**
+          * Minimum visible items before collapsing.
+          * @default 2
+         */
+        "minVisibleItems": number;
+        /**
+          * Overflow behavior: collapse (default), wrap, or scroll.
+          * @default 'collapse'
+         */
+        "overflowMode": 'collapse' | 'wrap' | 'scroll';
+        /**
+          * Separator icon name (used if no separator slot is provided).
+          * @default 'chevron-right'
+         */
+        "separatorIcon": string;
     }
     /**
      * A flexible button component with multiple variants and states.
@@ -2039,6 +2068,10 @@ export interface LeBarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeBarElement;
 }
+export interface LeBreadcrumbsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeBreadcrumbsElement;
+}
 export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeButtonElement;
@@ -2173,6 +2206,23 @@ declare global {
     var HTMLLeBoxElement: {
         prototype: HTMLLeBoxElement;
         new (): HTMLLeBoxElement;
+    };
+    interface HTMLLeBreadcrumbsElementEventMap {
+        "leBreadcrumbSelect": LeBreadcrumbSelectDetail;
+    }
+    interface HTMLLeBreadcrumbsElement extends Components.LeBreadcrumbs, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeBreadcrumbsElementEventMap>(type: K, listener: (this: HTMLLeBreadcrumbsElement, ev: LeBreadcrumbsCustomEvent<HTMLLeBreadcrumbsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeBreadcrumbsElementEventMap>(type: K, listener: (this: HTMLLeBreadcrumbsElement, ev: LeBreadcrumbsCustomEvent<HTMLLeBreadcrumbsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeBreadcrumbsElement: {
+        prototype: HTMLLeBreadcrumbsElement;
+        new (): HTMLLeBreadcrumbsElement;
     };
     interface HTMLLeButtonElementEventMap {
         "click": MouseEvent;
@@ -3053,6 +3103,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "le-bar": HTMLLeBarElement;
         "le-box": HTMLLeBoxElement;
+        "le-breadcrumbs": HTMLLeBreadcrumbsElement;
         "le-button": HTMLLeButtonElement;
         "le-card": HTMLLeCardElement;
         "le-checkbox": HTMLLeCheckboxElement;
@@ -3247,6 +3298,37 @@ declare namespace LocalJSX {
           * Width of the box (CSS value like '100px', '50%', 'auto')
          */
         "width"?: string;
+    }
+    interface LeBreadcrumbs {
+        /**
+          * Breadcrumb items (supports JSON string).
+          * @default []
+         */
+        "items"?: LeOption[] | string;
+        /**
+          * Accessible label for the breadcrumbs navigation.
+          * @default 'Breadcrumbs'
+         */
+        "label"?: string;
+        /**
+          * Minimum visible items before collapsing.
+          * @default 2
+         */
+        "minVisibleItems"?: number;
+        /**
+          * Emitted when a breadcrumb item is selected.
+         */
+        "onLeBreadcrumbSelect"?: (event: LeBreadcrumbsCustomEvent<LeBreadcrumbSelectDetail>) => void;
+        /**
+          * Overflow behavior: collapse (default), wrap, or scroll.
+          * @default 'collapse'
+         */
+        "overflowMode"?: 'collapse' | 'wrap' | 'scroll';
+        /**
+          * Separator icon name (used if no separator slot is provided).
+          * @default 'chevron-right'
+         */
+        "separatorIcon"?: string;
     }
     /**
      * A flexible button component with multiple variants and states.
@@ -5199,6 +5281,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "le-bar": LeBar;
         "le-box": LeBox;
+        "le-breadcrumbs": LeBreadcrumbs;
         "le-button": LeButton;
         "le-card": LeCard;
         "le-checkbox": LeCheckbox;
@@ -5267,6 +5350,7 @@ declare module "@stencil/core" {
              * @cmsCategory Layout
              */
             "le-box": LocalJSX.LeBox & JSXBase.HTMLAttributes<HTMLLeBoxElement>;
+            "le-breadcrumbs": LocalJSX.LeBreadcrumbs & JSXBase.HTMLAttributes<HTMLLeBreadcrumbsElement>;
             /**
              * A flexible button component with multiple variants and states.
              * @cssprop --le-button-bg - Button background color

@@ -128,6 +128,7 @@ A flexible button component with multiple variants and states.
 
 ### Used by
 
+ - [le-breadcrumbs](../le-breadcrumbs)
  - [le-component](../le-component)
  - [le-number-input](../le-number-input)
  - [le-popup](../le-popup)
@@ -154,6 +155,7 @@ graph TD;
   le-checkbox --> le-component
   le-checkbox --> le-slot
   le-popup --> le-button
+  le-breadcrumbs --> le-button
   le-number-input --> le-button
   le-side-panel-toggle --> le-button
   style le-button fill:#f9f,stroke:#333,stroke-width:4px

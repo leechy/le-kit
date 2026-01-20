@@ -223,19 +223,37 @@
               </p>
             </div>
 
-            <div style="padding: var(--le-space-sm);">
-              <le-side-panel-toggle
-                panel-id="demo-side"
-                action="toggle"
-                shortcut="Mod+B"
-                variant="clear"
-                icon-only="true"
-                style="
-                  --le-button-icon-only-padding: var(--le-space-xs);
-                "
+            <div style="padding: var(--le-space-sm); display: flex; align-items: center; gap: var(--le-space-sm)">
+              <le-breadcrumbs
+                label="Breadcrumbs"
+                overflow-mode="collapse"
+                items='[
+                  { "label": "Le-Kit", "href": "/", "iconStart": "🏠" },
+                  {
+                    "label": "Documentation",
+                    "children": [
+                      {"label": "Getting started", "href": "/docs"},
+                      {"label": "Components", "href": "/docs/components"}
+                    ]
+                  },
+                  {"label": "Components", "href": "/components", "selected": true}
+                ]'
+                separator-icon="chevron-left"
               >
-                <le-icon slot="icon-only" name="side-panel" />
-              </le-side-panel-toggle>
+                <le-side-panel-toggle
+                  slot="start"
+                  panel-id="demo-side"
+                  action="toggle"
+                  shortcut="Mod+B"
+                  variant="clear"
+                  icon-only="true"
+                  style="
+                    --le-button-icon-only-padding: var(--le-space-xs);
+                  "
+                >
+                  <le-icon slot="icon-only" name="side-panel" />
+                </le-side-panel-toggle>
+              </le-breadcrumbs>
             </div>
             
             <div style="padding: var(--le-space-sm) var(--le-space-lg);">

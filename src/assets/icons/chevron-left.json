@@ -2,8 +2,8 @@
   "viewBox": "0 0 16 16",
   "children": [
     {
-      "tag": "path",
-      "d": "M4 6l4 4 4-4",
+      "tag": "polyline",
+      "points": "10 12 6 8 10 4",
       "fill": "none",
       "stroke": "currentColor",
       "stroke-width": "2"

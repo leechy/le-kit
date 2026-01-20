@@ -6,6 +6,7 @@
 :host {
   display: inline-block;
   position: relative;
+  --le-popover-padding: var(--le-space-md, 12px);
 }
 
 :host([trigger-full-width]) {
@@ -151,7 +152,7 @@
    ============================================ */
 
 .le-popover-body {
-  padding: var(--le-space-md, 12px);
+  padding: var(--le-popover-padding);
 }
 
 /* ============================================

@@ -134,11 +134,14 @@ export class LeSidePanel {
   @State() private overlayVisible: boolean = false;
   @State() private currentWidthPx: number;
   @State() private resizing: boolean = false;
+  @State() private suppressAnimation: boolean = false;
 
   private resizeObserver?: ResizeObserver;
   private panelEl?: HTMLElement;
   private overlayWrapEl?: HTMLElement;
   private focusedBeforeOpen?: HTMLElement | null;
+
+  private firstLayoutComplete: boolean = false;
 
   private dragPointerId?: number;
   private dragStartX?: number;
@@ -210,7 +213,11 @@ export class LeSidePanel {
       return;
     }
     if (!this.resizing) {
-      this.currentWidthPx = clamp(this.panelWidth, this.minPanelWidth, this.maxPanelWidth);
+      this.currentWidthPx = clamp(
+        this.panelWidth || 280,
+        this.minPanelWidth || 220,
+        this.maxPanelWidth || 800,
+      );
       this.persistState();
     }
   }
@@ -390,6 +397,19 @@ export class LeSidePanel {
     }
 
     this.responsiveReady = true;
+
+    // Suppress animation on the very first successful layout
+    if (!this.firstLayoutComplete) {
+      this.suppressAnimation = true;
+      this.firstLayoutComplete = true;
+
+      setTimeout(() => {
+        // We need a timeout to ensure the paint
+        // has happened without transition
+        this.suppressAnimation = false;
+      }, 1000);
+    }
+
     const nextIsNarrow = width < collapseAtPx;
 
     const prevIsNarrow = this.isNarrow;
@@ -705,8 +725,9 @@ export class LeSidePanel {
         >
           <div
             class={{
-              inlinePanel: true,
-              hidden: !layoutHasInlinePanel,
+              'inlinePanel': true,
+              'hidden': !layoutHasInlinePanel,
+              'no-transition': this.suppressAnimation,
             }}
             aria-hidden={!layoutHasInlinePanel ? 'true' : null}
           >

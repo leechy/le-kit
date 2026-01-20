@@ -44,12 +44,20 @@
   width: 0;
 }
 
+.inlinePanel.no-transition {
+  transition: none !important;
+}
+
 .inlinePanel .panel {
   transform: translateX(0);
   opacity: 1;
   transition:
     transform var(--le-side-panel-transition, var(--le-transition-normal)),
     opacity var(--le-side-panel-transition, var(--le-transition-normal));
+}
+
+.inlinePanel.no-transition .panel {
+  transition: none !important;
 }
 
 .layout.start .inlinePanel.hidden .panel {
@@ -73,9 +81,10 @@
 
 .panel {
   position: relative;
+  margin: var(--le-side-panel-margin);
   height: 100%;
   max-height: min(calc(100% - (var(--le-side-panel-margin) * 2)), calc(100vh - (var(--le-side-panel-margin) * 2)));
-  margin: var(--le-side-panel-margin);
+  width: calc(100% - (var(--le-side-panel-margin) * 2));
   border-radius: var(--le-side-panel-border-radius);
 
   background: var(--le-color-surface, #fff);

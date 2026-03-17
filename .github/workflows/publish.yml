@@ -51,9 +51,9 @@ jobs:
         with:
           name: dist
           path: |
-            dist/
-            loader/
-            LLM_CONTEXT.md
+            packages/core/dist/
+            packages/core/loader/
+            packages/core/LLM_CONTEXT.md
 
   publish:
     needs: build
@@ -86,6 +86,7 @@ jobs:
 
       - name: Set version from release tag
         if: github.event_name == 'release'
+        working-directory: packages/core
         run: |
           VERSION="${{ github.event.release.tag_name }}"
           # Remove 'v' prefix if present
@@ -94,6 +95,7 @@ jobs:
 
       - name: Set version from input
         if: github.event_name == 'workflow_dispatch' && inputs.version != ''
+        working-directory: packages/core
         run: npm version ${{ inputs.version }} --no-git-tag-version --allow-same-version
 
       - name: Determine npm tag
@@ -108,11 +110,13 @@ jobs:
           fi
 
       - name: Publish to npm
+        working-directory: packages/core
         run: npm publish --access public --tag ${{ steps.npm-tag.outputs.tag }}
         env:
           NODE_AUTH_TOKEN: ${{ steps.setup-node.outputs.registryAuthToken }}
 
       - name: Summary
+        working-directory: packages/core
         run: |
           echo "## 📦 Published to npm" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY

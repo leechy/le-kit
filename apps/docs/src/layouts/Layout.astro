@@ -45,11 +45,7 @@ const { title } = Astro.props;
 		</le-header>
 
 		<slot />
-		<script>
-			import { defineCustomElements } from 'le-kit/loader';
-			// Explicitly set the path where Stencil should look for its dynamically loaded chunks
-			// This matches the destination we set in our vite-plugin-static-copy configuration
-			defineCustomElements(window, { resourcesUrl: '/le-kit/' });
-		</script>
+		<script type="module" src="/le-kit/le-kit/le-kit.esm.js" is:inline></script>
+		<script nomodule src="/le-kit/le-kit/le-kit.js" is:inline></script>
 	</body>
 </html>

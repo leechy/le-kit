@@ -1,0 +1,190 @@
+---
+import docs from 'le-kit/dist/docs.json';
+
+interface Props {
+	tag: string;
+}
+
+const { tag } = Astro.props;
+
+const component = docs.components.find((c: any) => c.tag === tag);
+
+if (!component) {
+  throw new Error(`Component ${tag} not found in docs.json`);
+}
+
+const props = component.props || [];
+const events = component.events || [];
+const slots = component.slots || [];
+const cssProps = (component.docsTags || [])
+  .filter((t: any) => t.name === 'cssprop')
+  .map((t: any) => {
+    // text usually formatted like "--var-name - Description"
+    const parts = t.text.split(' - ');
+    return { name: parts[0], docs: parts.slice(1).join(' - ') };
+  });
+const cssParts = component.parts || [];
+---
+
+<div class="api-tables">
+	{props.length > 0 && (
+		<section>
+			<le-text typography="h3">Properties</le-text>
+			<div class="table-wrapper">
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Type</th>
+							<th>Default</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						{props.map((prop: any) => (
+							<tr>
+								<td><code>{prop.name}</code> {prop.required && <span>*</span>}</td>
+								<td><code>{prop.type}</code></td>
+								<td>{prop.default ? <code>{prop.default}</code> : <em>-</em>}</td>
+								<td>{prop.docs}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	)}
+
+	{events.length > 0 && (
+		<section>
+			<le-text typography="h3">Events</le-text>
+			<div class="table-wrapper">
+				<table>
+					<thead>
+						<tr>
+							<th>Event</th>
+							<th>Detail</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						{events.map((event: any) => (
+							<tr>
+								<td><code>{event.event}</code></td>
+								<td><code>{event.detail}</code></td>
+								<td>{event.docs}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	)}
+
+	{slots.length > 0 && (
+		<section>
+			<le-text typography="h3">Slots</le-text>
+			<div class="table-wrapper">
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						{slots.map((slot: any) => (
+							<tr>
+								<td>{slot.name ? <code>{slot.name}</code> : <em>default</em>}</td>
+								<td>{slot.docs}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	)}
+
+	{cssProps.length > 0 && (
+		<section>
+			<le-text typography="h3">CSS Custom Properties</le-text>
+			<div class="table-wrapper">
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						{cssProps.map((prop: any) => (
+							<tr>
+								<td><code>{prop.name}</code></td>
+								<td>{prop.docs}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	)}
+  
+  {cssParts.length > 0 && (
+		<section>
+			<le-text typography="h3">CSS Shadow Parts</le-text>
+			<div class="table-wrapper">
+				<table>
+					<thead>
+						<tr>
+							<th>Part</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						{cssParts.map((part: any) => (
+							<tr>
+								<td><code>{part.name}</code></td>
+								<td>{part.docs}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	)}
+</div>
+
+<style>
+	.api-tables section {
+		margin-bottom: var(--le-spacing-xl);
+	}
+	
+	.table-wrapper {
+		overflow-x: auto;
+		margin-top: var(--le-spacing-md);
+	}
+	
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		text-align: left;
+		font-size: 0.9rem;
+	}
+	
+	th, td {
+		padding: var(--le-spacing-sm) var(--le-spacing-md);
+		border-bottom: 1px solid var(--le-color-border);
+	}
+	
+	th {
+		background-color: var(--le-color-background-offset);
+		font-weight: 600;
+	}
+	
+	code {
+		font-family: monospace;
+		padding: 2px 4px;
+		background-color: var(--le-color-background-offset);
+		border-radius: 4px;
+	}
+</style>

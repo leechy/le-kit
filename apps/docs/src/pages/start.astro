@@ -1,0 +1,15 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Get Started - le-kit">
+	<main style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+		<le-text typography="h1">Get Started</le-text>
+		<le-text typography="body-large">Install le-kit in your project. (Warning: Not yet ready for prime time!)</le-text>
+
+		<le-text typography="h2" style="margin-top: 2rem;">Manual Setup: Asset Configuration</le-text>
+		<le-text typography="body">
+			When setting up the library manually, you must copy the component assets (such as icons). Since the `le-kit` components use Stencil's `getAssetPath()` sequentially, the assets will resolve relative to the library script. You should copy the `dist/components/assets/*` folder from `node_modules/le-kit` directly into the `assets/` folder in your public directory to prevent 404s on icons.
+		</le-text>
+	</main>
+</Layout>

@@ -1,0 +1,55 @@
+---
+import 'le-kit/dist/themes/index.css';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="le-theme-light">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="le-kit documentation" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: var(--le-color-background);
+				color: var(--le-color-text);
+				font-family: var(--le-font-family-base);
+			}
+		</style>
+	</head>
+	<body>
+		<le-header>
+			<div slot="start" style="display: flex; gap: var(--le-spacing-md); align-items: center;">
+				<a href="/" style="display: flex; align-items: center; text-decoration: none;">
+					<img src="/le-kit.svg" alt="le-kit logo" style="height: 2rem;" />
+				</a>
+			</div>
+			<le-navigation slot="title">
+				<le-item label="Components" href="/components" selected={Astro.url.pathname.startsWith('/components')}></le-item>
+				<le-item label="Blueprints" href="/blueprints" selected={Astro.url.pathname.startsWith('/blueprints')}></le-item>
+				<le-item label="Blog" href="/blog" selected={Astro.url.pathname.startsWith('/blog')}></le-item>
+			</le-navigation>
+			<div slot="end">
+				<le-button variant="solid" color="primary" href="/start">Get Started</le-button>
+			</div>
+		</le-header>
+
+		<slot />
+		<script>
+			import { defineCustomElements } from 'le-kit/loader';
+			// Explicitly set the path where Stencil should look for its dynamically loaded chunks
+			// This matches the destination we set in our vite-plugin-static-copy configuration
+			defineCustomElements(window, { resourcesUrl: '/le-kit/' });
+		</script>
+	</body>
+</html>

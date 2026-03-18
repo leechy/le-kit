@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Fav Icon@1x</title>
+    <g id="Fav-Icon" stroke="none" fill="none" stroke-linecap="round">
+        <path d="M17.1009328,8.06953241 C14.2237182,13.3506518 12.4575761,21.9913268 13.3297222,29.3893773 C14.2018684,36.7874278 17.8644227,38.9535061 21.0309125,38.9535061 C24.1974023,38.9535061 30.2029105,33.7590993 31.4052888,29.3893773 C32.6076671,25.0196552 32.6076671,20.6279848 29.3423308,19.8791299 C26.0769945,19.130275 23.8172517,22.672866 23.430845,28.1663938 C23.0444384,33.6599215 27.0909938,39.4316809 31.9480232,38.9535061 C34.3578669,38.7162568 35.7378495,37.8753838 37.4506395,35.28574" id="Path" stroke="#18619D" stroke-width="5"></path>
+        <polyline id="Line" stroke="#78A7CE" stroke-width="2" stroke-linejoin="round" points="41.5 22.5008187 45.5 26.4997271 41.5 31.1663938"></polyline>
+        <polyline id="Line-Copy" stroke="#78A7CE" stroke-width="2" stroke-linejoin="round" transform="translate(4.5, 26.8336) scale(-1, 1) translate(-4.5, -26.8336)" points="2.5 22.5008187 6.5 26.4997271 2.5 31.1663938"></polyline>
+    </g>
+</svg>

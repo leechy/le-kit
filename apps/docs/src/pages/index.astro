@@ -1,0 +1,125 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Le-Kit - The Component Library">
+	<main style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+		<le-stack gap="var(--le-spacing-3xl)">
+			
+			{/* SECTION 1: HERO */}
+			<section class="hero-section" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--le-spacing-xl); padding: 4rem 0;">
+				<div style="max-width: 800px;">
+					<le-text typography="h1" style="font-size: 4rem; line-height: 1.1; margin-bottom: 2rem;">
+						The components for your next project are already cooking!
+					</le-text>
+				</div>
+				
+				<le-card variant="elevated" style="padding: 2rem; max-width: 400px; border-radius: var(--le-radius-xl);">
+					<le-stack gap="var(--le-spacing-md)" align-items="center">
+						<le-round-progress percentage="42" size="120" stroke-width="8" color="var(--le-color-primary)"></le-round-progress>
+						<le-text typography="h3">Building in progress... 42%</le-text>
+					</le-stack>
+				</le-card>
+			</section>
+
+			{/* SECTION 2: NEW COMPONENTS */}
+			<section>
+				<le-text typography="h2" style="margin-bottom: var(--le-spacing-xl); text-align: center;">Newly Added Components</le-text>
+				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--le-spacing-lg);">
+					
+					{/* Live Component Card 1 */}
+					<le-card>
+						<div slot="header" style="display: flex; justify-content: space-between; align-items: center;">
+							<le-text typography="h4">&lt;le-button&gt;</le-text>
+							<le-checkbox onchange="document.getElementById('demo-btn-wrapper').mode = this.checked ? 'admin' : 'default'">Admin Mode</le-checkbox>
+						</div>
+						<div style="padding: 2rem; display: flex; justify-content: center; background: var(--le-color-background-offset); border-radius: var(--le-radius-md);">
+							<le-component component="le-button" id="demo-btn-wrapper">
+								<le-button variant="solid" color="primary" size="large">Click Me</le-button>
+							</le-component>
+						</div>
+						<div slot="footer">
+							<le-text typography="body-small">A highly customizable button element.</le-text>
+						</div>
+					</le-card>
+
+					{/* Live Component Card 2 */}
+					<le-card>
+						<div slot="header" style="display: flex; justify-content: space-between; align-items: center;">
+							<le-text typography="h4">&lt;le-checkbox&gt;</le-text>
+							<le-checkbox onchange="document.getElementById('demo-chk-wrapper').mode = this.checked ? 'admin' : 'default'">Admin Mode</le-checkbox>
+						</div>
+						<div style="padding: 2rem; display: flex; justify-content: center; background: var(--le-color-background-offset); border-radius: var(--le-radius-md);">
+							<le-component component="le-checkbox" id="demo-chk-wrapper">
+								<le-checkbox checked>Agree to awesomeness</le-checkbox>
+							</le-component>
+						</div>
+						<div slot="footer">
+							<le-text typography="body-small">A checkbox with support for labels and descriptions.</le-text>
+						</div>
+					</le-card>
+				</div>
+			</section>
+
+			{/* SECTION 3: CORE FEATURES GRID */}
+			<section style="background: var(--le-color-background-offset); padding: 4rem 2rem; border-radius: var(--le-radius-xl); margin: 2rem -1rem;">
+				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--le-spacing-xl);">
+					<le-stack gap="var(--le-spacing-md)">
+						<le-icon name="layers" size="32" style="color: var(--le-color-primary);"></le-icon>
+						<le-text typography="h3">Framework Agnostic</le-text>
+						<le-text typography="body">Built with Stencil as standard Web Components, le-kit works flawlessly in React, Vue, Svelte, Astro, or vanilla HTML.</le-text>
+					</le-stack>
+					
+					<le-stack gap="var(--le-spacing-md)">
+						<le-icon name="tool" size="32" style="color: var(--le-color-primary);"></le-icon>
+						<le-text typography="h3">Highly Themeable</le-text>
+						<le-text typography="body">Powered entirely by CSS Custom Properties, making it incredibly easy to adapt to any brand identity instantly.</le-text>
+					</le-stack>
+					
+					<le-stack gap="var(--le-spacing-md)">
+						<le-icon name="settings" size="32" style="color: var(--le-color-primary);"></le-icon>
+						<le-text typography="h3">Targeted at the CMSs of the future</le-text>
+						<le-text typography="body">Unique "Admin Mode" wrapping and slot components allow seamless, visual editing integration out of the box.</le-text>
+					</le-stack>
+				</div>
+			</section>
+
+			{/* SECTION 4: BLOG SKELETON */}
+			<section>
+				<le-text typography="h2" style="margin-bottom: var(--le-spacing-xl);">Latest from the Blog</le-text>
+				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--le-spacing-lg);">
+					<le-card interactive>
+						<le-stack gap="var(--le-spacing-sm)">
+							<le-text typography="body-small" style="color: var(--le-color-text-muted);">March 15, 2026</le-text>
+							<le-text typography="h4">Designing an Admin-First Component Library</le-text>
+							<le-text typography="body">Why we decided to build le-kit with a native editing layer baked right into the DOM.</le-text>
+						</le-stack>
+					</le-card>
+					<le-card interactive>
+						<le-stack gap="var(--le-spacing-sm)">
+							<le-text typography="body-small" style="color: var(--le-color-text-muted);">March 10, 2026</le-text>
+							<le-text typography="h4">CSS Variables vs. Utility Classes</le-text>
+							<le-text typography="body">Our deep dive into why semantic CSS variables provide the ultimate theming experience.</le-text>
+						</le-stack>
+					</le-card>
+					<le-card interactive>
+						<le-stack gap="var(--le-spacing-sm)">
+							<le-text typography="body-small" style="color: var(--le-color-text-muted);">March 01, 2026</le-text>
+							<le-text typography="h4">Introducing &lt;le-header&gt;</le-text>
+							<le-text typography="body">A look at the complex scroll-aware behaviors built into our new header component.</le-text>
+						</le-stack>
+					</le-card>
+				</div>
+			</section>
+
+			{/* SECTION 5: CTA */}
+			<section style="text-align: center; padding: 4rem 0;">
+				<le-stack gap="var(--le-spacing-lg)" align-items="center">
+					<le-text typography="h2">Ready to try it?</le-text>
+					<le-button variant="solid" color="primary" size="large" href="/start">Get Started</le-button>
+				</le-stack>
+			</section>
+
+		</le-stack>
+	</main>
+</Layout>

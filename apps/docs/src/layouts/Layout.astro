@@ -12,7 +12,7 @@ const { title } = Astro.props;
 <html lang="en" class="le-theme-light">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="le-kit documentation" />
+		<meta name="description" content="Le-Kit Documentation" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
@@ -40,7 +40,7 @@ const { title } = Astro.props;
 				<le-item label="Blog" href="/blog" selected={Astro.url.pathname.startsWith('/blog')}></le-item>
 			</le-navigation>
 			<div slot="end">
-				<le-button variant="solid" color="primary" href="/start">Get Started</le-button>
+				<le-button variant="outline" icon-end="→" color="primary" href="/start">Get Started</le-button>
 			</div>
 		</le-header>
 

@@ -59,7 +59,7 @@ interface VerticalListRenderOptions {
   shadow: true,
 })
 export class LeNavigation {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Navigation items.
@@ -127,12 +127,12 @@ export class LeNavigation {
    * This event is cancelable. Call `event.preventDefault()` to prevent
    * default browser navigation and implement custom routing.
    */
-  @Event({ cancelable: true }) leNavItemSelect: EventEmitter<LeNavigationItemSelectDetail>;
+  @Event({ cancelable: true }) leNavItemSelect!: EventEmitter<LeNavigationItemSelectDetail>;
 
   /**
    * Fired when a tree branch is toggled.
    */
-  @Event() leNavItemToggle: EventEmitter<LeNavigationItemToggleDetail>;
+  @Event() leNavItemToggle!: EventEmitter<LeNavigationItemToggleDetail>;
 
   @State() private searchQuery: string = '';
 
@@ -150,7 +150,7 @@ export class LeNavigation {
   @State() private overflowPopoverOpen: boolean = false;
 
   @State() private declarativeItems: LeOption[] = [];
-  
+
   @State() private isDeclarativeMode: boolean = false;
 
   private popoverRefs: Map<string, HTMLLePopoverElement> = new Map();
@@ -214,15 +214,21 @@ export class LeNavigation {
 
     if (items.length > 0) {
       this.isDeclarativeMode = true;
-      this.declarativeItems = await Promise.all(items.map(async item => {
-        // Wait for the custom element to be fully initialized before calling methods
-        if ('componentOnReady' in item) {
-          await (item as any).componentOnReady();
-        } else if (item.tagName.includes('-')) {
-          await customElements.whenDefined(item.tagName.toLowerCase());
-        }
-        return item.getOption();
-      }));
+      this.declarativeItems = await Promise.all(
+        items.map(async item => {
+          // Wait for the custom element to be fully initialized before calling methods
+          if ('componentOnReady' in item) {
+            await (item as any).componentOnReady();
+          } else if (item.tagName.includes('-')) {
+            await customElements.whenDefined(item.tagName.toLowerCase());
+          }
+          const option = await item.getOption();
+          return option;
+        }),
+      ).catch(e => {
+        console.error('[le-navigation] Error building declarative items:', e);
+        return [];
+      });
     } else {
       this.isDeclarativeMode = false;
       this.declarativeItems = [];
@@ -781,7 +787,9 @@ export class LeNavigation {
         <Host>
           <le-component component="le-navigation">
             {this.renderHorizontal()}
-            <div style={{ display: 'none' }}><slot></slot></div>
+            <div style={{ display: 'none' }}>
+              <slot></slot>
+            </div>
           </le-component>
         </Host>
       );
@@ -798,7 +806,9 @@ export class LeNavigation {
             searchPlaceholder: this.searchPlaceholder,
             emptyText: this.emptyText,
           })}
-          <div style={{ display: 'none' }}><slot></slot></div>
+          <div style={{ display: 'none' }}>
+            <slot></slot>
+          </div>
         </le-component>
       </Host>
     );

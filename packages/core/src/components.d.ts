@@ -8,6 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
+import { Element } from "@stencil/core";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
@@ -16,6 +17,7 @@ import { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./compo
 export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
+export { Element } from "@stencil/core";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
@@ -762,6 +764,9 @@ export namespace Components {
           * @default 16
          */
         "size": number;
+    }
+    interface LeItem {
+        "getOption": () => Promise<{ id: string; label: string; value: string; href: string; disabled: boolean; selected: boolean; checked: boolean; open: boolean; icon: string; iconStart: string; iconEnd: string; description: string; children: Element[]; group: string; separator: boolean; }>;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -2435,6 +2440,12 @@ declare global {
         prototype: HTMLLeIconElement;
         new (): HTMLLeIconElement;
     };
+    interface HTMLLeItemElement extends Components.LeItem, HTMLStencilElement {
+    }
+    var HTMLLeItemElement: {
+        prototype: HTMLLeItemElement;
+        new (): HTMLLeItemElement;
+    };
     interface HTMLLeMultiselectElementEventMap {
         "leChange": LeMultiOptionSelectDetail;
         "leOpen": void;
@@ -2965,6 +2976,7 @@ declare global {
         "le-header": HTMLLeHeaderElement;
         "le-header-placeholder": HTMLLeHeaderPlaceholderElement;
         "le-icon": HTMLLeIconElement;
+        "le-item": HTMLLeItemElement;
         "le-multiselect": HTMLLeMultiselectElement;
         "le-navigation": HTMLLeNavigationElement;
         "le-number-input": HTMLLeNumberInputElement;
@@ -3779,6 +3791,8 @@ declare namespace LocalJSX {
           * @default 16
          */
         "size"?: number;
+    }
+    interface LeItem {
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -5409,6 +5423,7 @@ declare namespace LocalJSX {
         "le-header": Omit<LeHeader, keyof LeHeaderAttributes> & { [K in keyof LeHeader & keyof LeHeaderAttributes]?: LeHeader[K] } & { [K in keyof LeHeader & keyof LeHeaderAttributes as `attr:${K}`]?: LeHeaderAttributes[K] } & { [K in keyof LeHeader & keyof LeHeaderAttributes as `prop:${K}`]?: LeHeader[K] };
         "le-header-placeholder": LeHeaderPlaceholder;
         "le-icon": Omit<LeIcon, keyof LeIconAttributes> & { [K in keyof LeIcon & keyof LeIconAttributes]?: LeIcon[K] } & { [K in keyof LeIcon & keyof LeIconAttributes as `attr:${K}`]?: LeIconAttributes[K] } & { [K in keyof LeIcon & keyof LeIconAttributes as `prop:${K}`]?: LeIcon[K] };
+        "le-item": LeItem;
         "le-multiselect": Omit<LeMultiselect, keyof LeMultiselectAttributes> & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes]?: LeMultiselect[K] } & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes as `attr:${K}`]?: LeMultiselectAttributes[K] } & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes as `prop:${K}`]?: LeMultiselect[K] };
         "le-navigation": Omit<LeNavigation, keyof LeNavigationAttributes> & { [K in keyof LeNavigation & keyof LeNavigationAttributes]?: LeNavigation[K] } & { [K in keyof LeNavigation & keyof LeNavigationAttributes as `attr:${K}`]?: LeNavigationAttributes[K] } & { [K in keyof LeNavigation & keyof LeNavigationAttributes as `prop:${K}`]?: LeNavigation[K] };
         "le-number-input": Omit<LeNumberInput, keyof LeNumberInputAttributes> & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes]?: LeNumberInput[K] } & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes as `attr:${K}`]?: LeNumberInputAttributes[K] } & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes as `prop:${K}`]?: LeNumberInput[K] };
@@ -5637,6 +5652,7 @@ declare module "@stencil/core" {
              */
             "le-header-placeholder": LocalJSX.IntrinsicElements["le-header-placeholder"] & JSXBase.HTMLAttributes<HTMLLeHeaderPlaceholderElement>;
             "le-icon": LocalJSX.IntrinsicElements["le-icon"] & JSXBase.HTMLAttributes<HTMLLeIconElement>;
+            "le-item": LocalJSX.IntrinsicElements["le-item"] & JSXBase.HTMLAttributes<HTMLLeItemElement>;
             /**
              * A multiselect component for selecting multiple options.
              * Displays selected items as tags with optional search filtering.

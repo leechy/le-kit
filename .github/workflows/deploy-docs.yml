@@ -3,7 +3,7 @@ name: Deploy Docs to Firebase Hosting
 on:
   push:
     branches:
-      - main
+      - master
       - publish
     # Only trigger the deployment if these specific files/folders change
     paths:

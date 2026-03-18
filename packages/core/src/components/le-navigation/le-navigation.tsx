@@ -214,7 +214,15 @@ export class LeNavigation {
 
     if (items.length > 0) {
       this.isDeclarativeMode = true;
-      this.declarativeItems = await Promise.all(items.map(item => item.getOption()));
+      this.declarativeItems = await Promise.all(items.map(async item => {
+        // Wait for the custom element to be fully initialized before calling methods
+        if ('componentOnReady' in item) {
+          await (item as any).componentOnReady();
+        } else if (item.tagName.includes('-')) {
+          await customElements.whenDefined(item.tagName.toLowerCase());
+        }
+        return item.getOption();
+      }));
     } else {
       this.isDeclarativeMode = false;
       this.declarativeItems = [];

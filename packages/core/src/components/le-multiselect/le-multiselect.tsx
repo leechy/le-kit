@@ -230,7 +230,14 @@ export class LeMultiselect {
 
     if (items.length > 0) {
       this.isDeclarativeMode = true;
-      this.declarativeOptions = await Promise.all(items.map(item => item.getOption()));
+      this.declarativeOptions = await Promise.all(items.map(async item => {
+        if ('componentOnReady' in item) {
+          await (item as any).componentOnReady();
+        } else if (item.tagName.includes('-')) {
+          await customElements.whenDefined(item.tagName.toLowerCase());
+        }
+        return item.getOption();
+      }));
     } else {
       this.isDeclarativeMode = false;
       this.declarativeOptions = [];

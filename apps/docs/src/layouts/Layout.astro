@@ -2,12 +2,27 @@
 import "le-kit/dist/themes/index.css";
 import "../styles/global.css";
 import { mainNavigationItems } from "../data/navigation";
+import { readFile } from "node:fs/promises";
 
 interface Props {
   title: string;
 }
 
 const { title } = Astro.props;
+
+let coreVersion = "dev";
+try {
+  const packageJsonRaw = await readFile(
+    new URL("../../../../packages/core/package.json", import.meta.url),
+    "utf8",
+  );
+  const packageJson = JSON.parse(packageJsonRaw) as { version?: string };
+  if (packageJson.version) {
+    coreVersion = packageJson.version;
+  }
+} catch {
+  // Keep fallback for environments where the workspace file is unavailable.
+}
 ---
 
 <!doctype html>
@@ -78,7 +93,7 @@ const { title } = Astro.props;
         <a href="/">
           <img src="/le-kit.svg" alt="le-kit logo" class="header--logo" />
         </a>
-        <span class="header--version">v0.5.4</span>
+        <span class="header--version">v{coreVersion}</span>
       </div>
       <le-navigation slot="end" overflow-mode="hamburger" hamburger-align="end">
         {

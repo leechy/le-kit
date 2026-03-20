@@ -23,4 +23,7 @@ export default defineConfig({
       }),
     ],
   },
+  experimental: {
+    chromeDevtoolsWorkspace: true,
+  },
 });

@@ -1,8 +1,9 @@
 ---
-import 'le-kit/dist/themes/index.css';
+import "le-kit/dist/themes/index.css";
+import "../styles/global.css";
 
 interface Props {
-	title: string;
+  title: string;
 }
 
 const { title } = Astro.props;
@@ -10,42 +11,115 @@ const { title } = Astro.props;
 
 <!doctype html>
 <html lang="en" class="le-theme-light">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Le-Kit Documentation" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-		<style>
-			body {
-				margin: 0;
-				padding: 0;
-				background-color: var(--le-color-background);
-				color: var(--le-color-text);
-				font-family: var(--le-font-family-base);
-			}
-		</style>
-	</head>
-	<body>
-		<le-header>
-			<div slot="start" style="display: flex; gap: var(--le-spacing-md); align-items: center;">
-				<a href="/" style="display: flex; align-items: center; text-decoration: none;">
-					<img src="/le-kit.svg" alt="le-kit logo" style="height: 2rem;" />
-				</a>
-			</div>
-			<le-navigation slot="title">
-				<le-item label="Components" href="/components" selected={Astro.url.pathname.startsWith('/components')}></le-item>
-				<le-item label="Blueprints" href="/blueprints" selected={Astro.url.pathname.startsWith('/blueprints')}></le-item>
-				<le-item label="Blog" href="/blog" selected={Astro.url.pathname.startsWith('/blog')}></le-item>
-			</le-navigation>
-			<div slot="end">
-				<le-button variant="outline" icon-end="→" color="primary" href="/start">Get Started</le-button>
-			</div>
-		</le-header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Le-Kit Documentation" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <style>
+      html:not(.le-ready) body {
+        visibility: hidden;
+      }
 
-		<slot />
-		<script type="module" src="/le-kit/le-kit/le-kit.esm.js" is:inline></script>
-		<script nomodule src="/le-kit/le-kit/le-kit.js" is:inline></script>
-	</body>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--le-color-background);
+        color: var(--le-color-text);
+        font-family: var(--le-font-family-base);
+      }
+    </style>
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const show = () => root.classList.add("le-ready");
+
+        if (!("customElements" in window)) {
+          show();
+          return;
+        }
+
+        const run = async () => {
+          const tags = [...document.querySelectorAll("*")]
+            .map((el) => el.localName)
+            .filter((name) => name.startsWith("le-"));
+
+          const uniqueTags = [...new Set(tags)];
+          await Promise.all(
+            uniqueTags.map((tag) => customElements.whenDefined(tag)),
+          );
+          show();
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+              void run();
+            },
+            { once: true },
+          );
+        } else {
+          void run();
+        }
+
+        setTimeout(show, 3000);
+      })();
+    </script>
+    <script type="module" src="/le-kit/le-kit/le-kit.esm.js" is:inline></script>
+    <script nomodule src="/le-kit/le-kit/le-kit.js" is:inline></script>
+  </head>
+  <body>
+    <le-header layout="space-between" class="header" fixed>
+      <div slot="start" class="header--start">
+        <a href="/">
+          <img src="/le-kit.svg" alt="le-kit logo" class="header--logo" />
+        </a>
+        <span class="header--version">v0.5.4</span>
+      </div>
+      <le-navigation slot="end" overflow-mode="hamburger" hamburger-align="end">
+        <le-item
+          label="Components"
+          href="/components"
+          selected={Astro.url.pathname.startsWith("/components") || undefined}
+        ></le-item>
+        <le-item
+          label="Blueprints"
+          href="/blueprints"
+          selected={Astro.url.pathname.startsWith("/blueprints") || undefined}
+        ></le-item>
+        <le-item
+          label="Blog"
+          href="/blog"
+          selected={Astro.url.pathname.startsWith("/blog") || undefined}
+        ></le-item>
+        <le-item
+          label="Get Started"
+          icon-end="→"
+          part="get-started"
+          href="/start"
+          selected={Astro.url.pathname.startsWith("/start") || undefined}
+        ></le-item>
+      </le-navigation>
+      <le-button
+        href="https://github.com/leechy/le-kit"
+        target="_blank"
+        icon-only
+        variant="clear"
+        slot="end"
+        ><img
+          slot="icon-only"
+          src="/icons/github.svg"
+          alt="Go to GitHub repository"
+          width="22"
+          height="22"
+        /></le-button
+      >
+    </le-header>
+    <le-header-placeholder></le-header-placeholder>
+
+    <slot />
+  </body>
 </html>

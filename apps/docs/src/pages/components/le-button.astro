@@ -1,56 +1,72 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import ApiTable from '../../components/ApiTable.astro';
+import Layout from "../../layouts/Layout.astro";
 ---
 
 <Layout title="le-button - le-kit Documentation">
+  <main
+    style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem; display: flex; gap: 2rem;"
+  >
+    <le-side-panel
+      style="flex-shrink: 0; position: sticky; top: calc(var(--le-header-height) + 2rem); height: max-content;"
+    >
+      <le-navigation orientation="vertical">
+        <le-text typography="body-small-strong" style="padding: 0.5rem 1rem;"
+          >Foundation</le-text
+        >
+        <le-button variant="clear" align="start" fullWidth href="/"
+          >Getting Started</le-button
+        >
 
-	<main style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem; display: flex; gap: 2rem;">
-		<le-side-panel style="flex-shrink: 0; position: sticky; top: calc(var(--le-header-height) + 2rem); height: max-content;">
-			<le-navigation orientation="vertical">
-				<le-text typography="body-small-strong" style="padding: 0.5rem 1rem;">Foundation</le-text>
-				<le-button variant="clear" align="start" fullWidth href="/">Getting Started</le-button>
-				
-				<le-text typography="body-small-strong" style="padding: 0.5rem 1rem; margin-top: 1rem;">Components</le-text>
-				<le-button variant="clear" align="start" fullWidth href="/components/le-button" selected>le-button</le-button>
-			</le-navigation>
-		</le-side-panel>
-		
-		<div style="flex-grow: 1; min-width: 0;">
-			<le-stack gap="var(--le-spacing-xl)">
-				<div>
-					<le-text typography="h1">le-button</le-text>
-					<le-text typography="body-large">A flexible button component with multiple variants and states.</le-text>
-				</div>
+        <le-text
+          typography="body-small-strong"
+          style="padding: 0.5rem 1rem; margin-top: 1rem;">Components</le-text
+        >
+        <le-button
+          variant="clear"
+          align="start"
+          fullWidth
+          href="/components/le-button"
+          selected>le-button</le-button
+        >
+      </le-navigation>
+    </le-side-panel>
 
-				<le-card>
-					<div slot="header">
-						<le-text typography="h3">Examples</le-text>
-					</div>
-					<le-stack gap="var(--le-spacing-md)">
-						<div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-							<le-button variant="solid" color="primary">Solid</le-button>
-							<le-button variant="outlined" color="primary">Outlined</le-button>
-							<le-button variant="clear" color="primary">Clear</le-button>
-						</div>
-						<div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-							<le-button variant="solid" color="secondary">Secondary</le-button>
-							<le-button variant="solid" color="success">Success</le-button>
-							<le-button variant="solid" color="danger">Danger</le-button>
-						</div>
-						<div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-							<le-button size="small">Small</le-button>
-							<le-button size="medium">Medium</le-button>
-							<le-button size="large">Large</le-button>
-						</div>
-					</le-stack>
-				</le-card>
+    <div style="flex-grow: 1; min-width: 0;">
+      <le-stack gap="var(--le-spacing-xl)">
+        <div>
+          <le-text typography="h1">le-button</le-text>
+          <le-text typography="body-large"
+            >A flexible button component with multiple variants and states.</le-text
+          >
+        </div>
 
-				<div>
-					<le-text typography="h2">API Reference</le-text>
-					<ApiTable tag="le-button" />
-				</div>
-			</le-stack>
-		</div>
-	</main>
+        <le-card>
+          <div slot="header">
+            <le-text typography="h3">Examples</le-text>
+          </div>
+          <le-stack gap="var(--le-spacing-md)">
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+              <le-button variant="solid" color="primary">Solid</le-button>
+              <le-button variant="outlined" color="primary">Outlined</le-button>
+              <le-button variant="clear" color="primary">Clear</le-button>
+            </div>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+              <le-button variant="solid" color="secondary">Secondary</le-button>
+              <le-button variant="solid" color="success">Success</le-button>
+              <le-button variant="solid" color="danger">Danger</le-button>
+            </div>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+              <le-button size="small">Small</le-button>
+              <le-button size="medium">Medium</le-button>
+              <le-button size="large">Large</le-button>
+            </div>
+          </le-stack>
+        </le-card>
+
+        <div>
+          <le-text typography="h2">API Reference</le-text>
+        </div>
+      </le-stack>
+    </div>
+  </main>
 </Layout>

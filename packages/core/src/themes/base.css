@@ -79,7 +79,9 @@
   /* ============================================
    * Z-INDEX LAYERS
    * ============================================ */
-  --le-z-dropdown: 1000;
+  --le-z-content-backdrop: 990;
+  --le-z-header: 1000;
+  --le-z-dropdown: 1010;
   --le-z-sticky: 1020;
   --le-z-fixed: 1030;
   --le-z-modal-backdrop: 1040;

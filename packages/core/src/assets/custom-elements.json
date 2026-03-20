@@ -3933,7 +3933,7 @@
             },
             {
               "description": "Z-index (fixed mode)",
-              "name": "--le-header-z"
+              "name": "--le-z-header"
             }
           ],
           "cssParts": [

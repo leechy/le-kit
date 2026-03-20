@@ -703,7 +703,7 @@ export namespace Components {
      * @cssprop --le-header-height - Base height (main row)
      * @cssprop --le-header-height-condensed - Condensed height when shrunk
      * @cssprop --le-header-transition - Transition timing
-     * @cssprop --le-header-z - Z-index (fixed mode)
+     * @cssprop --le-z-header - Z-index (fixed mode)
      * @csspart header - The header container
      * @csspart inner - Inner max-width container
      * @csspart row - Main row
@@ -2416,7 +2416,7 @@ declare global {
      * @cssprop --le-header-height - Base height (main row)
      * @cssprop --le-header-height-condensed - Condensed height when shrunk
      * @cssprop --le-header-transition - Transition timing
-     * @cssprop --le-header-z - Z-index (fixed mode)
+     * @cssprop --le-z-header - Z-index (fixed mode)
      * @csspart header - The header container
      * @csspart inner - Inner max-width container
      * @csspart row - Main row
@@ -3733,7 +3733,7 @@ declare namespace LocalJSX {
      * @cssprop --le-header-height - Base height (main row)
      * @cssprop --le-header-height-condensed - Condensed height when shrunk
      * @cssprop --le-header-transition - Transition timing
-     * @cssprop --le-header-z - Z-index (fixed mode)
+     * @cssprop --le-z-header - Z-index (fixed mode)
      * @csspart header - The header container
      * @csspart inner - Inner max-width container
      * @csspart row - Main row
@@ -5675,7 +5675,7 @@ declare module "@stencil/core" {
              * @cssprop --le-header-height - Base height (main row)
              * @cssprop --le-header-height-condensed - Condensed height when shrunk
              * @cssprop --le-header-transition - Transition timing
-             * @cssprop --le-header-z - Z-index (fixed mode)
+             * @cssprop --le-z-header - Z-index (fixed mode)
              * @csspart header - The header container
              * @csspart inner - Inner max-width container
              * @csspart row - Main row

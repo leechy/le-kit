@@ -153,7 +153,7 @@
   position: absolute;
   inset: 0;
   background: var(--le-side-panel-backdrop, var(--le-default-side-panel-backdrop));
-  z-index: var(--le-z-modal-backdrop, 1040);
+  z-index: var(--le-z-content-backdrop, 990);
 
   opacity: 0;
   pointer-events: none;
@@ -169,7 +169,7 @@
 
 .overlayPanelWrap {
   position: absolute;
-  top: 0;
+  top: var(--le-side-panel-top, 0);
   bottom: 0;
   width: min(100%, var(--le-side-panel-width, var(--le-default-side-panel-width)));
 

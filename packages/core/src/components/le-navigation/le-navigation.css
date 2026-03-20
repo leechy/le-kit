@@ -10,6 +10,10 @@
   --le-nav-item-padding-y: var(--le-spacing-2);
   --le-nav-item-gap: var(--le-spacing-2);
 
+  /* Trigger items */
+  --le-default-nav-trigger-color: var(--le-color-text-secondary);
+  --le-default-nav-trigger-font-size: var(--le-font-size-sm);
+
   /* Horizontal navigation link variables */
   --le-nav-link-padding-x: var(--le-spacing-2);
   --le-nav-link-padding-y: var(--le-spacing-1);
@@ -144,6 +148,11 @@
   font-size: var(--le-font-size-md);
   line-height: var(--le-line-height-tight);
   cursor: pointer;
+}
+
+button.nav-item {
+  color: var(--le-nav-trigger-color, var(--le-default-nav-trigger-color));
+  font-size: var(--le-nav-trigger-font-size, var(--le-default-nav-trigger-font-size));
 }
 
 .nav-item:focus-visible {

@@ -26,7 +26,7 @@
   --le-default-header-gap: var(--le-space-sm);
 
   --le-default-header-transition: var(--le-transition-normal);
-  --le-header-z: 1000;
+  --le-z-header: 1000;
 }
 
 .header {
@@ -45,13 +45,13 @@
   top: var(--le-header-top-offset, var(--le-default-header-top-offset));
   left: 0;
   right: 0;
-  z-index: var(--le-header-z);
+  z-index: var(--le-z-header);
 }
 
 :host(.is-sticky) {
   position: sticky;
   top: var(--le-header-top-offset, var(--le-default-header-top-offset));
-  z-index: var(--le-header-z);
+  z-index: var(--le-z-header);
 }
 
 :host(.is-static) {

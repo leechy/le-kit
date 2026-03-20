@@ -3,10 +3,11 @@
   height: 100%;
 
   /* Default values */
-  --le-side-panel-width: 280px;
-  --le-side-panel-margin: 0px;
-  --le-side-panel-backdrop: var(--le-color-backdrop);
-  --le-side-panel-border-radius: var(--le-radius-lg);
+  --le-default-side-panel-width: 280px;
+  --le-default-side-panel-margin: 0px;
+  --le-default-side-panel-backdrop: var(--le-color-backdrop);
+  --le-default-side-panel-border-radius: var(--le-radius-lg);
+  --le-default-side-panel-transition: var(--le-transition-normal);
 }
 
 .host {
@@ -31,42 +32,55 @@
   flex-direction: row-reverse;
 }
 
-.inlinePanel {
+.inline-panel {
   flex: 0 0 auto;
-  width: var(--le-side-panel-width);
+  width: var(--le-side-panel-width, var(--le-default-side-panel-width));
   min-width: 0;
   height: 100%;
   overflow: hidden;
-  transition: width var(--le-side-panel-transition, var(--le-transition-normal));
+  transition: width var(--le-side-panel-transition, var(--le-default-side-panel-transition));
 }
 
-.inlinePanel.hidden {
+.inline-panel.sticky.under-header {
+  --le-side-panel-top: var(--le-header-height, 0);
+}
+
+.inline-panel.sticky {
+  position: sticky;
+  top: var(--le-side-panel-top, 0);
+}
+
+.inline-panel.sticky.full-height {
+  height: calc(100vh - var(--le-side-panel-top, 0));
+}
+
+.inline-panel.hidden {
   width: 0;
 }
 
-.inlinePanel.no-transition {
+.inline-panel.no-transition {
   transition: none !important;
 }
 
-.inlinePanel .panel {
+.inline-panel .panel {
   transform: translateX(0);
   opacity: 1;
   transition:
-    transform var(--le-side-panel-transition, var(--le-transition-normal)),
-    opacity var(--le-side-panel-transition, var(--le-transition-normal));
+    transform var(--le-side-panel-transition, var(--le-default-side-panel-transition)),
+    opacity var(--le-side-panel-transition, var(--le-default-side-panel-transition));
 }
 
-.inlinePanel.no-transition .panel {
+.inline-panel.no-transition .panel {
   transition: none !important;
 }
 
-.layout.start .inlinePanel.hidden .panel {
+.layout.start .inline-panel.hidden .panel {
   transform: translateX(-100%);
   opacity: 0;
   pointer-events: none;
 }
 
-.layout.end .inlinePanel.hidden .panel {
+.layout.end .inline-panel.hidden .panel {
   transform: translateX(100%);
   opacity: 0;
   pointer-events: none;
@@ -81,11 +95,11 @@
 
 .panel {
   position: relative;
-  margin: var(--le-side-panel-margin);
+  margin: var(--le-side-panel-margin, var(--le-default-side-panel-margin));
   height: 100%;
-  max-height: min(calc(100% - (var(--le-side-panel-margin) * 2)), calc(100vh - (var(--le-side-panel-margin) * 2)));
-  width: calc(100% - (var(--le-side-panel-margin) * 2));
-  border-radius: var(--le-side-panel-border-radius);
+  max-height: min(calc(100% - (var(--le-side-panel-margin, var(--le-default-side-panel-margin)) * 2)), calc(100vh - (var(--le-side-panel-margin, var(--le-default-side-panel-margin)) * 2)));
+  width: calc(100% - (var(--le-side-panel-margin, var(--le-default-side-panel-margin)) * 2));
+  border-radius: var(--le-side-panel-border-radius, var(--le-default-side-panel-border-radius));
 
   background: var(--le-color-surface, #fff);
   color: var(--le-color-text, #000);
@@ -138,12 +152,12 @@
 .overlayRoot {
   position: absolute;
   inset: 0;
-  background: var(--le-side-panel-backdrop);
+  background: var(--le-side-panel-backdrop, var(--le-default-side-panel-backdrop));
   z-index: var(--le-z-modal-backdrop, 1040);
 
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--le-side-panel-transition, var(--le-transition-normal));
+  transition: opacity var(--le-side-panel-transition, var(--le-default-side-panel-transition));
 
   height: 100%;
 }
@@ -157,7 +171,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: min(100%, var(--le-side-panel-width));
+  width: min(100%, var(--le-side-panel-width, var(--le-default-side-panel-width)));
 
   height: 100%;
 
@@ -183,20 +197,20 @@
 }
 
 .overlayPanelWrap {
-  transition: transform var(--le-side-panel-transition, var(--le-transition-normal));
+  transition: transform var(--le-side-panel-transition, var(--le-default-side-panel-transition));
 }
 
 /* Disable transitions while dragging */
 .host[data-resizing='true'] .panel,
 .host[data-resizing='true'] .overlayPanelWrap,
-.host[data-resizing='true'] .inlinePanel {
+.host[data-resizing='true'] .inline-panel {
   transition: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .overlayPanelWrap,
   .overlayRoot,
-  .inlinePanel {
+  .inline-panel {
     transition: none;
   }
 }

@@ -65,7 +65,7 @@ function parseCollapseAtPx(value?: string): number | undefined {
   shadow: true,
 })
 export class LeSidePanel {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Optional id used to match toggle requests.
@@ -81,6 +81,15 @@ export class LeSidePanel {
 
   /** Behavior when in narrow mode. */
   @Prop() narrowBehavior: LeSidePanelNarrowBehavior = 'overlay';
+
+  /** Whether the panel is sticky (remains visible when scrolling). */
+  @Prop({ mutable: true, reflect: true }) sticky: boolean = false;
+
+  /** Top offset for the sticky panel. */
+  @Prop({ mutable: true, reflect: true }) top: number | 'under-header' = 0;
+
+  /** Whether the sticky panel should stretch to full height. */
+  @Prop({ mutable: true, reflect: true }) fullHeight: boolean = false;
 
   /**
    * Panel open state for narrow mode.
@@ -120,19 +129,19 @@ export class LeSidePanel {
   @Prop() panelLabel: string = 'Navigation';
 
   @Event({ eventName: 'leSidePanelOpenChange', bubbles: true, composed: true })
-  leSidePanelOpenChange: EventEmitter<{ open: boolean; panelId?: string }>;
+  leSidePanelOpenChange!: EventEmitter<{ open: boolean; panelId?: string }>;
 
   @Event({ eventName: 'leSidePanelCollapsedChange', bubbles: true, composed: true })
-  leSidePanelCollapsedChange: EventEmitter<{ collapsed: boolean; panelId?: string }>;
+  leSidePanelCollapsedChange!: EventEmitter<{ collapsed: boolean; panelId?: string }>;
 
   @Event({ eventName: 'leSidePanelWidthChange', bubbles: true, composed: true })
-  leSidePanelWidthChange: EventEmitter<{ width: number; panelId?: string }>;
+  leSidePanelWidthChange!: EventEmitter<{ width: number; panelId?: string }>;
 
   @State() private isNarrow: boolean = false;
   @State() private responsiveReady: boolean = false;
   @State() private overlayMounted: boolean = false;
   @State() private overlayVisible: boolean = false;
-  @State() private currentWidthPx: number;
+  @State() private currentWidthPx!: number;
   @State() private resizing: boolean = false;
   @State() private suppressAnimation: boolean = false;
 
@@ -725,10 +734,19 @@ export class LeSidePanel {
         >
           <div
             class={{
-              'inlinePanel': true,
+              'inline-panel': true,
               'hidden': !layoutHasInlinePanel,
               'no-transition': this.suppressAnimation,
+              'sticky': this.sticky,
+              'under-header': this.sticky && this.top === 'under-header',
+              'full-height': this.sticky && this.fullHeight,
             }}
+            part="inline-panel"
+            style={
+              this.sticky && typeof this.top === 'number'
+                ? { '--le-side-panel-top': `${this.top}px` }
+                : undefined
+            }
             aria-hidden={!layoutHasInlinePanel ? 'true' : null}
           >
             {/* In narrow overlay mode, only the overlay should own the named slot. */}

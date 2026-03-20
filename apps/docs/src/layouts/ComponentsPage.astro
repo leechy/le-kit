@@ -1,0 +1,92 @@
+---
+import Layout from "./Layout.astro";
+import { componentsNavigationItems, type NavItem } from "../data/navigation";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+const pathname = Astro.url.pathname;
+const isComponentsIndex =
+  pathname === "/components" || pathname === "/components/";
+
+const documentTitle = isComponentsIndex
+  ? "Components - le-kit"
+  : `${title} - le-kit Documentation`;
+
+const breadcrumbItems = isComponentsIndex
+  ? [{ label: "Le-Kit", href: "/" }, { label: "Components" }]
+  : [
+      { label: "Le-Kit", href: "/" },
+      { label: "Components", href: "/components" },
+      { label: title },
+    ];
+
+const escapeAttribute = (value: string) =>
+  value
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+
+const renderNavigationItems = (items: NavItem[]): string =>
+  items
+    .map((item) => {
+      const attrs = [
+        `label="${escapeAttribute(item.label)}"`,
+        item.href ? `href="${escapeAttribute(item.href)}"` : "",
+        item.id ? `id="${escapeAttribute(item.id)}"` : "",
+        item.open ? "open" : "",
+        item.href && pathname.startsWith(item.href) ? "selected" : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      const children = item.children?.length
+        ? renderNavigationItems(item.children)
+        : "";
+      return `<le-item ${attrs}>${children}</le-item>`;
+    })
+    .join("");
+
+const navigationMarkup = renderNavigationItems(componentsNavigationItems);
+---
+
+<Layout title={documentTitle}>
+  <le-side-panel
+    panel-id="components-navigation"
+    resizable
+    persist-key="components-panel"
+    collapse-at="900"
+    narrow-behavior="overlay"
+    sticky
+    top="under-header"
+    full-height
+  >
+    <le-navigation slot="panel" orientation="vertical" activeUrl={pathname}>
+      <Fragment set:html={navigationMarkup} />
+    </le-navigation>
+
+    <div>
+      <le-breadcrumbs items={JSON.stringify(breadcrumbItems)}>
+        <le-side-panel-toggle
+          slot="start"
+          panel-id="components-navigation"
+          action="toggle"
+          shortcut="Mod+B"
+          variant="clear"
+          icon-only="true"
+          style="--le-button-icon-only-padding: var(--le-space-xs);"
+        >
+          <le-icon slot="icon-only" name="side-panel"></le-icon>
+        </le-side-panel-toggle>
+      </le-breadcrumbs>
+
+      <main style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+        <slot />
+      </main>
+    </div>
+  </le-side-panel>
+</Layout>

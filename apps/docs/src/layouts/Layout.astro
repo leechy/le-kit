@@ -1,6 +1,7 @@
 ---
 import "le-kit/dist/themes/index.css";
 import "../styles/global.css";
+import { mainNavigationItems } from "../data/navigation";
 
 interface Props {
   title: string;
@@ -80,28 +81,21 @@ const { title } = Astro.props;
         <span class="header--version">v0.5.4</span>
       </div>
       <le-navigation slot="end" overflow-mode="hamburger" hamburger-align="end">
-        <le-item
-          label="Components"
-          href="/components"
-          selected={Astro.url.pathname.startsWith("/components") || undefined}
-        ></le-item>
-        <le-item
-          label="Blueprints"
-          href="/blueprints"
-          selected={Astro.url.pathname.startsWith("/blueprints") || undefined}
-        ></le-item>
-        <le-item
-          label="Blog"
-          href="/blog"
-          selected={Astro.url.pathname.startsWith("/blog") || undefined}
-        ></le-item>
-        <le-item
-          label="Get Started"
-          icon-end="→"
-          part="get-started"
-          href="/start"
-          selected={Astro.url.pathname.startsWith("/start") || undefined}
-        ></le-item>
+        {
+          mainNavigationItems.map((item) => (
+            <le-item
+              label={item.label}
+              href={item.href}
+              icon-end={item.iconEnd}
+              part={item.part}
+              selected={
+                item.href && Astro.url.pathname.startsWith(item.href)
+                  ? true
+                  : undefined
+              }
+            />
+          ))
+        }
       </le-navigation>
       <le-button
         href="https://github.com/leechy/le-kit"

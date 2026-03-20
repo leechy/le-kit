@@ -3,6 +3,7 @@
 
   --le-nav-radius: var(--le-radius-md);
   --le-nav-gap: var(--le-spacing-2);
+  --le-default-nav-padding: var(--le-spacing-2);
 
   /* Vertical navigation items variables */
   --le-nav-item-padding-x: var(--le-spacing-1);
@@ -36,6 +37,12 @@
  * Vertical navigation
  * ========================================== */
 
+.nav-vertical-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: var(--le-nav-padding, var(--le-default-nav-padding));
+}
+
 .nav-vertical {
   display: flex;
   flex-direction: column;
@@ -51,7 +58,6 @@
 }
 
 .nav-empty {
-  padding: var(--le-spacing-2);
   color: var(--le-nav-muted);
   font-size: var(--le-font-size-sm);
 }

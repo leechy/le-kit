@@ -18,6 +18,7 @@ export interface LeNavigationItemSelectDetail {
   item: LeOption;
   id: string;
   href?: string;
+  target?: string;
   originalEvent: MouseEvent;
 }
 
@@ -159,18 +160,52 @@ export class LeNavigation {
 
   private mutationObserver?: MutationObserver;
 
-  private partFromOptionPart(base: string, part?: string): string {
-    const raw = (part ?? '').trim();
-    if (!raw) return base;
+  private renderLabel(label: string | HTMLCollection) {
+    if (label instanceof HTMLCollection) {
+      const div = document.createElement('div');
+      Array.from(label).forEach(n => div.appendChild(n.cloneNode(true)));
+      label = div.innerHTML;
+    }
+    if (typeof label === 'string' && label.includes('<')) {
+      return <span innerHTML={label}></span>;
+    }
+    return label;
+  }
 
-    const tokens = raw
+  private isItemSelected(item: LeOption): boolean {
+    return !!(item.selected || (this.activeUrl && item.href === this.activeUrl));
+  }
+
+  private partFromOptionPart(
+    base: string,
+    part?: string,
+    state?: { selected?: boolean; disabled?: boolean },
+  ): string {
+    const tokens = new Set<string>([base]);
+    const selected = !!state?.selected;
+    const disabled = !!state?.disabled;
+
+    tokens.add(selected ? `${base}-selected` : `${base}-unselected`);
+    if (disabled) tokens.add(`${base}-disabled`);
+
+    const raw = (part ?? '').trim();
+    if (!raw) return Array.from(tokens).join(' ');
+
+    const customTokens = raw
       .split(/\s+/)
       .map(t => t.replace(/[^a-zA-Z0-9_-]/g, ''))
       .filter(Boolean);
 
-    if (tokens.length === 0) return base;
+    if (customTokens.length === 0) return Array.from(tokens).join(' ');
 
-    return [base, ...tokens.map(t => `${base}-${t}`)].join(' ');
+    customTokens.forEach(t => {
+      const customBase = `${base}-${t}`;
+      tokens.add(customBase);
+      tokens.add(selected ? `${customBase}-selected` : `${customBase}-unselected`);
+      if (disabled) tokens.add(`${customBase}-disabled`);
+    });
+
+    return Array.from(tokens).join(' ');
   }
 
   @Watch('items')
@@ -341,6 +376,7 @@ export class LeNavigation {
       item,
       id,
       href: item.href,
+      target: item.target,
       originalEvent: e,
     });
 
@@ -450,16 +486,20 @@ export class LeNavigation {
               const TagType = item.href && !item.disabled ? 'a' : 'button';
               const attrs =
                 TagType === 'a'
-                  ? { href: item.href, role: 'treeitem' }
+                  ? { href: item.href, target: item.target, role: 'treeitem' }
                   : { type: 'button', role: 'treeitem' };
 
-              const itemPart = this.partFromOptionPart('item', item.part);
+              const selected = this.isItemSelected(item);
+              const itemPart = this.partFromOptionPart('item', item.part, {
+                selected,
+                disabled: item.disabled,
+              });
 
               return (
                 <li
                   class={classnames('nav-node', {
                     'disabled': item.disabled,
-                    'selected': item.selected || (this.activeUrl && item.href === this.activeUrl),
+                    'selected': selected,
                     open,
                     'has-children': hasChildren,
                   })}
@@ -483,7 +523,15 @@ export class LeNavigation {
                     )}
 
                     <TagType
-                      class="nav-item"
+                      class={classnames(
+                        'nav-item',
+                        {
+                          disabled: item.disabled,
+                          selected:
+                            item.selected || (this.activeUrl && item.href === this.activeUrl),
+                        },
+                        item.className,
+                      )}
                       part={itemPart}
                       {...attrs}
                       aria-disabled={item.disabled ? 'true' : undefined}
@@ -506,7 +554,7 @@ export class LeNavigation {
                         </span>
                       )}
                       <span class="nav-text">
-                        <span class="nav-label">{item.label}</span>
+                        <span class="nav-label">{this.renderLabel(item.label)}</span>
                         {item.description && (
                           <span class="nav-description">{item.description}</span>
                         )}
@@ -548,18 +596,26 @@ export class LeNavigation {
       const TagType = item.href && !item.disabled ? 'a' : 'button';
       const attrs =
         TagType === 'a'
-          ? { href: item.href, role: 'menuitem' }
+          ? { href: item.href, target: item.target, role: 'menuitem' }
           : { type: 'button', role: 'menuitem' };
 
-      const itemPart = this.partFromOptionPart('item', item.part);
+      const selected = this.isItemSelected(item);
+      const itemPart = this.partFromOptionPart('item', item.part, {
+        selected,
+        disabled: item.disabled,
+      });
 
       return (
         <div class="h-item" data-bar-id={id}>
           <TagType
-            class={classnames('h-link', {
-              disabled: item.disabled,
-              selected: item.selected || (this.activeUrl && item.href === this.activeUrl),
-            })}
+            class={classnames(
+              'h-link',
+              {
+                disabled: item.disabled,
+                selected,
+              },
+              item.className,
+            )}
             part={itemPart}
             {...attrs}
             aria-disabled={item.disabled ? 'true' : undefined}
@@ -570,7 +626,7 @@ export class LeNavigation {
                 {item.iconStart}
               </span>
             )}
-            <span class="h-label">{item.label}</span>
+            <span class="h-label">{this.renderLabel(item.label)}</span>
             {item.iconEnd && (
               <span class="nav-icon nav-icon-end" aria-hidden="true">
                 {item.iconEnd}
@@ -583,7 +639,11 @@ export class LeNavigation {
 
     const submenuId = id;
 
-    const itemPart = this.partFromOptionPart('item', item.part);
+    const selected = this.isItemSelected(item);
+    const itemPart = this.partFromOptionPart('item', item.part, {
+      selected,
+      disabled: item.disabled,
+    });
 
     return (
       <div class="h-item" data-bar-id={id}>
@@ -604,7 +664,7 @@ export class LeNavigation {
             slot="trigger"
             class={classnames('h-trigger', {
               disabled: item.disabled,
-              selected: item.selected || (this.activeUrl && item.href === this.activeUrl),
+              selected,
             })}
             part={itemPart}
             role="menuitem"
@@ -624,8 +684,18 @@ export class LeNavigation {
           >
             {item.href ? (
               <a
-                class="h-link"
                 href={item.href}
+                target={item.target}
+                class={classnames(
+                  'h-link',
+                  {
+                    disabled: item.disabled,
+                    selected,
+                  },
+                  item.className,
+                )}
+                part={itemPart}
+                aria-disabled={item.disabled ? 'true' : undefined}
                 onClick={(e: MouseEvent) => {
                   e.stopPropagation();
                   this.handleItemSelect(e, item, id);
@@ -636,7 +706,7 @@ export class LeNavigation {
                     {item.iconStart}
                   </span>
                 )}
-                <span class="h-label">{item.label}</span>
+                <span class="h-label">{this.renderLabel(item.label)}</span>
                 <span class="nav-chevron" aria-hidden="true">
                   <le-icon name="chevron-down" />
                 </span>
@@ -644,7 +714,14 @@ export class LeNavigation {
             ) : (
               <button
                 type="button"
-                class="h-link"
+                class={classnames(
+                  'h-link',
+                  {
+                    disabled: item.disabled,
+                    selected,
+                  },
+                  item.className,
+                )}
                 onClick={(e: MouseEvent) => {
                   e.stopPropagation();
                   if (item.disabled) return;
@@ -656,7 +733,7 @@ export class LeNavigation {
                     {item.iconStart}
                   </span>
                 )}
-                <span class="h-label">{item.label}</span>
+                <span class="h-label">{this.renderLabel(item.label)}</span>
                 <span class="nav-chevron" aria-hidden="true">
                   <le-icon name="chevron-down" />
                 </span>
@@ -798,16 +875,18 @@ export class LeNavigation {
     return (
       <Host>
         <le-component component="le-navigation">
-          {this.renderVerticalList(items, {
-            depth: 0,
-            pathPrefix: '',
-            searchable: this.searchable,
-            searchQuery: this.searchQuery,
-            searchPlaceholder: this.searchPlaceholder,
-            emptyText: this.emptyText,
-          })}
-          <div style={{ display: 'none' }}>
-            <slot></slot>
+          <div class="nav-vertical-wrapper">
+            {this.renderVerticalList(items, {
+              depth: 0,
+              pathPrefix: '',
+              searchable: this.searchable,
+              searchQuery: this.searchQuery,
+              searchPlaceholder: this.searchPlaceholder,
+              emptyText: this.emptyText,
+            })}
+            <div style={{ display: 'none' }}>
+              <slot></slot>
+            </div>
           </div>
         </le-component>
       </Host>

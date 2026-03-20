@@ -2,42 +2,47 @@
   display: block;
   width: 100%;
 
-  /* Container styles */
-  /* Offset from the top of the page (e.g. if page has top padding or another fixed bar). */
-  --le-header-top-offset: 0;
+  /* Default container styles
+   * These can be overridden by setting the corresponding CSS variables
+   * on the host element or in the global scope (e.g. :root) or as a theme variable.
+   */
 
-  --le-header-bg: var(--le-color-surface);
-  --le-header-max-width: var(--le-header-max-width, auto);
-  --le-header-margin: 0 auto;
-  --le-header-border: 1px solid var(--le-color-border);
-  --le-header-border-radius: 0px;
-  --le-header-shadow: var(--le-header-shadow, none);
+  /* Offset from the top of the page (e.g. if page has top padding or another fixed bar). */
+  --le-default-header-top-offset: 0px;
+
+  /* Wrapper styles */
+  --le-default-header-bg: var(--le-color-surface);
+  --le-default-header-max-width: auto;
+  --le-default-header-margin: 0 auto;
+  --le-default-header-border: 1px solid var(--le-color-border);
+  --le-default-header-border-radius: 0px;
+  --le-default-header-shadow: none;
 
   /* Content styles */
-  --le-header-color: var(--le-color-text);
-  --le-header-content-max-width: 800px;
-  --le-header-padding-x: var(--le-space-md);
-  --le-header-padding-y: var(--le-space-sm);
-  --le-header-gap: var(--le-space-sm);
+  --le-default-header-color: var(--le-color-text);
+  --le-default-header-content-max-width: 800px;
+  --le-default-header-padding-x: var(--le-space-md);
+  --le-default-header-padding-y: var(--le-space-sm);
+  --le-default-header-gap: var(--le-space-sm);
 
-  --le-header-transition: var(--le-transition-normal);
+  --le-default-header-transition: var(--le-transition-normal);
   --le-header-z: 1000;
 }
 
 .header {
   width: 100%;
-  max-width: var(--le-header-max-width);
-  margin: var(--le-header-margin);
-  background: var(--le-header-bg);
-  color: var(--le-header-color);
-  border-bottom: var(--le-header-border);
-  border-radius: var(--le-header-border-radius);
-  box-shadow: var(--le-header-shadow);
+  max-width: var(--le-header-max-width, var(--le-default-header-max-width));
+  margin: var(--le-header-margin, var(--le-default-header-margin));
+  background: var(--le-header-bg, var(--le-default-header-bg));
+  color: var(--le-header-color, var(--le-default-header-color));
+  border-bottom: var(--le-header-border, var(--le-default-header-border));
+  border-radius: var(--le-header-border-radius, var(--le-default-header-border-radius));
+  box-shadow: var(--le-header-shadow, var(--le-default-header-shadow));
 }
 
 :host(.is-fixed) {
   position: fixed;
-  top: var(--le-header-top-offset);
+  top: var(--le-header-top-offset, var(--le-default-header-top-offset));
   left: 0;
   right: 0;
   z-index: var(--le-header-z);
@@ -45,7 +50,7 @@
 
 :host(.is-sticky) {
   position: sticky;
-  top: var(--le-header-top-offset);
+  top: var(--le-header-top-offset, var(--le-default-header-top-offset));
   z-index: var(--le-header-z);
 }
 
@@ -54,41 +59,46 @@
 }
 
 .inner {
-  max-width: var(--le-header-content-max-width);
+  max-width: var(--le-header-content-max-width, var(--le-default-header-content-max-width));
   margin: 0 auto;
-  padding: var(--le-header-padding-y) var(--le-header-padding-x);
+  padding: var(--le-header-padding-y, var(--le-default-header-padding-y))
+    var(--le-header-padding-x, var(--le-default-header-padding-x));
 }
 
 .row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
   align-items: center;
-  gap: var(--le-header-gap);
+  gap: var(--le-header-gap, var(--le-default-header-gap));
   transition:
-    height var(--le-header-transition),
-    padding var(--le-header-transition),
-    transform var(--le-header-transition);
+    height var(--le-header-transition, var(--le-default-header-transition)),
+    padding var(--le-header-transition, var(--le-default-header-transition)),
+    transform var(--le-header-transition, var(--le-default-header-transition));
 }
 
 :host(.is-shrunk) .row {
   height: var(--le-header-height-condensed);
 }
 
+:host(.layout-space-between) .row {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* reveal behavior (sticky only) */
 :host(.is-sticky.is-hidden) {
   transform: translateY(-150%);
-  transition: transform var(--le-header-transition);
+  transition: transform var(--le-header-transition, var(--le-default-header-transition));
 }
 
 :host(.is-sticky.is-revealed) {
   transform: translateY(0);
-  transition: transform var(--le-header-transition);
+  transition: transform var(--le-header-transition, var(--le-default-header-transition));
 }
 
 .start,
 .title,
 .end {
-  min-width: 0;
   display: flex;
   align-items: center;
 }

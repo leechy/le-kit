@@ -63,7 +63,7 @@ export type LeHeaderPosition = 'static' | 'sticky' | 'fixed';
   shadow: true,
 })
 export class LeHeader {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /** Force static positioning (default). Ignored if `sticky` or `fixed` are true. */
   @Prop({ attribute: 'static', reflect: true }) isStatic: boolean = false;
@@ -96,8 +96,15 @@ export class LeHeader {
    */
   @Prop({ attribute: 'expand-on-hover', reflect: true }) expandOnHover: boolean = false;
 
+  /**
+   * Layout Type
+   * - default is three cells in the grid: start, title, end
+   * - space-between will use the start and end slots but put space between them and hide the title slot
+   */
+  @Prop({ attribute: 'layout', reflect: true }) layout?: 'default' | 'space-between' = 'default';
+
   /** Emits whenever scroll-driven state changes. */
-  @Event() leHeaderState: EventEmitter<{
+  @Event() leHeaderState!: EventEmitter<{
     y: number;
     direction: 'up' | 'down';
     revealed: boolean;
@@ -106,12 +113,11 @@ export class LeHeader {
 
   /** Emits when the header shrinks/expands (only on change). */
   @Event({ bubbles: true, composed: true })
-  leHeaderShrinkChange: EventEmitter<{ shrunk: boolean; y: number }>;
+  leHeaderShrinkChange!: EventEmitter<{ shrunk: boolean; y: number }>;
 
   /** Emits when the header hides/shows (only on change). */
   @Event({ bubbles: true, composed: true })
-  leHeaderVisibilityChange: EventEmitter<{ visible: boolean; y: number }>;
-
+  leHeaderVisibilityChange!: EventEmitter<{ visible: boolean; y: number }>;
   @State() private revealed: boolean = true;
   @State() private shrunk: boolean = false;
   @State() private placeholderHeight: number | null = null;
@@ -321,6 +327,7 @@ export class LeHeader {
       'is-revealed': this.revealed,
       'is-hidden': !this.revealed,
       'is-shrunk': this.shrunk,
+      [`layout-${this.layout}`]: true,
     });
 
     return (
@@ -357,19 +364,21 @@ export class LeHeader {
                   </le-slot>
                 </div>
 
-                <div class="title" part="title">
-                  <le-slot
-                    name="title"
-                    label="Title"
-                    description="Header title"
-                    type="text"
-                    tag="span"
-                  >
-                    <span class="title-slot" part="title">
-                      <slot name="title"></slot>
-                    </span>
-                  </le-slot>
-                </div>
+                {this.layout === 'default' && (
+                  <div class="title" part="title">
+                    <le-slot
+                      name="title"
+                      label="Title"
+                      description="Header title"
+                      type="text"
+                      tag="span"
+                    >
+                      <span class="title-slot" part="title">
+                        <slot name="title"></slot>
+                      </span>
+                    </le-slot>
+                  </div>
+                )}
 
                 <div class="end" part="end">
                   <le-slot

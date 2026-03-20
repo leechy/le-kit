@@ -129,6 +129,7 @@ export class LeHeader {
   private lastY: number = 0;
   private lastEmittedDirection: 'up' | 'down' = 'down';
   private headerEl?: HTMLElement;
+  private headerResizeObserver?: ResizeObserver;
   private shrinkSelectorEl?: Element | null;
 
   private setShrunk(next: boolean, y: number) {
@@ -139,6 +140,7 @@ export class LeHeader {
 
   componentDidLoad() {
     if (typeof window === 'undefined') return;
+    this.setupHeaderResizeObserver();
     this.lastY = window.scrollY || 0;
     this.scheduleMeasure(true);
     this.scheduleUpdate(true);
@@ -155,6 +157,9 @@ export class LeHeader {
       cancelAnimationFrame(this.measureRafId);
       this.measureRafId = null;
     }
+
+    this.headerResizeObserver?.disconnect();
+    this.headerResizeObserver = undefined;
   }
 
   @Watch('revealOnScroll')
@@ -176,6 +181,13 @@ export class LeHeader {
   protected onWindowResize() {
     this.scheduleMeasure(true);
     this.scheduleUpdate(true);
+  }
+
+  @Listen('leBarOverflowChange')
+  protected onChildLayoutChange() {
+    // Child components (like le-bar) may complete layout asynchronously.
+    // Re-measure so the placeholder tracks the final header height.
+    this.scheduleMeasure(true);
   }
 
   private getPosition(): LeHeaderPosition {
@@ -234,11 +246,27 @@ export class LeHeader {
   }
 
   private scheduleMeasure(force: boolean = false) {
-    if (this.measureRafId != null && !force) return;
+    if (this.measureRafId != null) {
+      if (!force) return;
+      cancelAnimationFrame(this.measureRafId);
+      this.measureRafId = null;
+    }
+
     this.measureRafId = requestAnimationFrame(() => {
       this.measureRafId = null;
       this.measurePlaceholderHeight();
     });
+  }
+
+  private setupHeaderResizeObserver() {
+    if (typeof ResizeObserver === 'undefined' || !this.headerEl) return;
+
+    this.headerResizeObserver?.disconnect();
+    this.headerResizeObserver = new ResizeObserver(() => {
+      this.scheduleMeasure(true);
+    });
+
+    this.headerResizeObserver.observe(this.headerEl);
   }
 
   private measurePlaceholderHeight() {
@@ -349,7 +377,13 @@ export class LeHeader {
             class="header"
             part="header"
             role="banner"
-            ref={el => (this.headerEl = el as HTMLElement)}
+            ref={el => {
+              const next = el as HTMLElement;
+              if (this.headerEl === next) return;
+              this.headerEl = next;
+              this.setupHeaderResizeObserver();
+              this.scheduleMeasure(true);
+            }}
           >
             <div class="inner" part="inner">
               <div class="row" part="row">

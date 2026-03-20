@@ -9,13 +9,13 @@ export default defineConfig({
       viteStaticCopy({
         targets: [
           {
-            // Specifically handling the monorepo structure here,
-            // end-users installing via npm will point to node_modules/le-kit/dist/*
-            src: "../../packages/core/dist/*",
-            dest: "le-kit",
+            // Copy the runtime bundle to the public path used by the docs site.
+            src: "../../packages/core/dist/le-kit/*",
+            dest: "le-kit/le-kit",
           },
           {
-            // Components use getAssetPath() which resolves to /le-kit/assets/
+            // Components use getAssetPath() which resolves relative to le-kit.esm.js,
+            // so assets must live beside the copied runtime bundle.
             src: "../../packages/core/dist/components/assets/*",
             dest: "le-kit/le-kit/assets",
           },

@@ -19,6 +19,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-header](#le-header)
 - [le-header-placeholder](#le-header-placeholder)
 - [le-icon](#le-icon)
+- [le-item](#le-item)
 - [le-multiselect](#le-multiselect)
 - [le-navigation](#le-navigation)
 - [le-number-input](#le-number-input)
@@ -592,6 +593,16 @@ The header component updates that variable when it renders.
 | `el` | `HTMLElement` |  |  |
 | `name` | `string` | `null` | Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file. |
 | `size` | `number` | `16` | Size of the icon in pixels. Default is 16. |
+
+---
+
+## <le-item>
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
 
 ---
 

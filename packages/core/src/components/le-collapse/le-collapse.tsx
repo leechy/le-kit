@@ -24,7 +24,7 @@ export type LeCollapseAnimation = 'fade' | 'collapse' | 'fade-collapse';
   shadow: true,
 })
 export class LeCollapse {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Since Stencil boolean props default to `false` when the attribute is missing.

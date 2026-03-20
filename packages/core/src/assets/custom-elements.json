@@ -1325,60 +1325,38 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
+      "path": "src/components/le-checkbox/le-checkbox.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
+          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
+          "name": "LeCheckbox",
           "cssProperties": [
             {
-              "description": "Card background color",
-              "name": "--le-card-bg"
+              "description": "Size of the checkbox input",
+              "name": "--le-checkbox-size"
             },
             {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
+              "description": "Color of the checkbox when checked",
+              "name": "--le-checkbox-color"
             },
             {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
+              "description": "Color of the label text",
+              "name": "--le-checkbox-label-color"
             },
             {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
+              "description": "Color of the description text",
+              "name": "--le-checkbox-desc-color"
             }
           ],
           "slots": [
             {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
+              "description": "The label text for the checkbox",
               "name": ""
             },
             {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
+              "description": "Additional description text displayed below the label",
+              "name": "description"
             }
           ],
           "members": [
@@ -1391,213 +1369,12 @@
             },
             {
               "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
+              "name": "checked",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the card is interactive (clickable)"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              }
-            },
-            {
-              "name": "interactive",
-              "fieldName": "interactive",
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-card",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCard",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-card",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-button/le-button.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible button component with multiple variants and states.",
-          "name": "LeButton",
-          "cssProperties": [
-            {
-              "description": "Button background color",
-              "name": "--le-button-bg"
-            },
-            {
-              "description": "Button text color",
-              "name": "--le-button-color"
-            },
-            {
-              "description": "Button border radius",
-              "name": "--le-button-border-radius"
-            },
-            {
-              "description": "Button horizontal padding",
-              "name": "--le-button-padding-x"
-            },
-            {
-              "description": "Button vertical padding",
-              "name": "--le-button-padding-y"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The native button element",
-              "name": "button"
-            },
-            {
-              "description": "The button content wrapper",
-              "name": "content"
-            },
-            {
-              "description": "The start icon slot",
-              "name": "icon-start"
-            },
-            {
-              "description": "The end icon slot",
-              "name": "icon-end"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Button text content",
-              "name": ""
-            },
-            {
-              "description": "Icon for icon-only buttons",
-              "name": "icon-only"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "'default' | 'admin'"
-              },
-              "description": "Mode of the popover should be 'default' for internal use"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'solid' | 'outlined' | 'clear' | 'system'"
-              },
-              "default": "'solid'",
-              "description": "Button variant style"
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
-              },
-              "default": "'primary'",
-              "description": "Button color theme (uses theme semantic colors)"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Button size"
-            },
-            {
-              "kind": "field",
-              "name": "selected",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is in a selected/active state"
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button takes full width of its container"
-            },
-            {
-              "kind": "field",
-              "name": "iconOnly",
-              "type": {
-                "text": "string | Node | undefined"
-              },
-              "description": "Icon only button image or emoji\nif this prop is set, the button will render only the icon slot"
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string | Node | undefined"
-              },
-              "description": "Start icon image or emoji"
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string | Node | undefined"
-              },
-              "description": "End icon image or emoji"
+              "description": "Whether the checkbox is checked"
             },
             {
               "kind": "field",
@@ -1606,45 +1383,35 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the button is disabled"
+              "description": "Whether the checkbox is disabled"
             },
             {
               "kind": "field",
-              "name": "type",
+              "name": "name",
               "type": {
-                "text": "'button' | 'submit' | 'reset'"
+                "text": "string"
               },
-              "default": "'button'",
-              "description": "The button type attribute"
+              "description": "The name of the checkbox input"
             },
             {
               "kind": "field",
-              "name": "href",
+              "name": "value",
               "type": {
-                "text": "string | undefined"
+                "text": "string"
               },
-              "description": "Optional href to make the button act as a link"
+              "description": "The value of the checkbox input"
             },
             {
               "kind": "field",
-              "name": "target",
+              "name": "externalId",
               "type": {
-                "text": "string | undefined"
+                "text": "string"
               },
-              "description": "Link target when href is set"
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
             },
             {
               "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'start' | 'center' | 'space-between' | 'end'"
-              },
-              "default": "'center'",
-              "description": "Alignment of the button label without the end icon"
-            },
-            {
-              "kind": "field",
-              "name": "handleClick",
+              "name": "handleChange",
               "privacy": "private"
             },
             {
@@ -1654,134 +1421,56 @@
           ],
           "attributes": [
             {
-              "name": "mode",
-              "fieldName": "mode",
-              "description": "Mode of the popover should be 'default' for internal use",
-              "type": {
-                "text": "'default' | 'admin'"
-              }
-            },
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'solid'",
-              "description": "Button variant style",
-              "type": {
-                "text": "'solid' | 'outlined' | 'clear' | 'system'"
-              }
-            },
-            {
-              "name": "color",
-              "fieldName": "color",
-              "default": "'primary'",
-              "description": "Button color theme (uses theme semantic colors)",
-              "type": {
-                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Button size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "selected",
-              "fieldName": "selected",
+              "name": "checked",
+              "fieldName": "checked",
               "default": "false",
-              "description": "Whether the button is in a selected/active state",
+              "description": "Whether the checkbox is checked",
               "type": {
                 "text": "boolean"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the button takes full width of its container",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "icon-only",
-              "fieldName": "iconOnly",
-              "description": "Icon only button image or emoji\nif this prop is set, the button will render only the icon slot",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "icon-start",
-              "fieldName": "iconStart",
-              "description": "Start icon image or emoji",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "icon-end",
-              "fieldName": "iconEnd",
-              "description": "End icon image or emoji",
-              "type": {
-                "text": "string | Node"
               }
             },
             {
               "name": "disabled",
               "fieldName": "disabled",
               "default": "false",
-              "description": "Whether the button is disabled",
+              "description": "Whether the checkbox is disabled",
               "type": {
                 "text": "boolean"
               }
             },
             {
-              "name": "type",
-              "fieldName": "type",
-              "default": "'button'",
-              "description": "The button type attribute",
-              "type": {
-                "text": "'button' | 'submit' | 'reset'"
-              }
-            },
-            {
-              "name": "href",
-              "fieldName": "href",
-              "description": "Optional href to make the button act as a link",
+              "name": "name",
+              "fieldName": "name",
+              "description": "The name of the checkbox input",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "target",
-              "fieldName": "target",
-              "description": "Link target when href is set",
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value of the checkbox input",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'center'",
-              "description": "Alignment of the button label without the end icon",
+              "name": "external-id",
+              "fieldName": "externalId",
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
               "type": {
-                "text": "'start' | 'center' | 'space-between' | 'end'"
+                "text": "string"
               }
             }
           ],
-          "tagName": "le-button",
+          "tagName": "le-checkbox",
           "events": [
             {
-              "name": "click",
+              "name": "change",
               "type": {
-                "text": "EventEmitter<MouseEvent>"
+                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
               },
-              "description": "Emitted when the button is clicked.\nThis is a custom event that wraps the native click but ensures the target is the le-button."
+              "description": "Emitted when the checked state changes"
             }
           ],
           "customElement": true
@@ -1790,18 +1479,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LeButton",
+          "name": "LeCheckbox",
           "declaration": {
-            "name": "LeButton",
-            "module": "src/components/le-button/le-button.tsx"
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-button",
+          "name": "le-checkbox",
           "declaration": {
-            "name": "LeButton",
-            "module": "src/components/le-button/le-button.tsx"
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
           }
         }
       ]
@@ -2368,38 +2057,60 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-checkbox/le-checkbox.tsx",
+      "path": "src/components/le-button/le-button.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
-          "name": "LeCheckbox",
+          "description": "A flexible button component with multiple variants and states.",
+          "name": "LeButton",
           "cssProperties": [
             {
-              "description": "Size of the checkbox input",
-              "name": "--le-checkbox-size"
+              "description": "Button background color",
+              "name": "--le-button-bg"
             },
             {
-              "description": "Color of the checkbox when checked",
-              "name": "--le-checkbox-color"
+              "description": "Button text color",
+              "name": "--le-button-color"
             },
             {
-              "description": "Color of the label text",
-              "name": "--le-checkbox-label-color"
+              "description": "Button border radius",
+              "name": "--le-button-border-radius"
             },
             {
-              "description": "Color of the description text",
-              "name": "--le-checkbox-desc-color"
+              "description": "Button horizontal padding",
+              "name": "--le-button-padding-x"
+            },
+            {
+              "description": "Button vertical padding",
+              "name": "--le-button-padding-y"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The native button element",
+              "name": "button"
+            },
+            {
+              "description": "The button content wrapper",
+              "name": "content"
+            },
+            {
+              "description": "The start icon slot",
+              "name": "icon-start"
+            },
+            {
+              "description": "The end icon slot",
+              "name": "icon-end"
             }
           ],
           "slots": [
             {
-              "description": "The label text for the checkbox",
+              "description": "Button text content",
               "name": ""
             },
             {
-              "description": "Additional description text displayed below the label",
-              "name": "description"
+              "description": "Icon for icon-only buttons",
+              "name": "icon-only"
             }
           ],
           "members": [
@@ -2412,12 +2123,80 @@
             },
             {
               "kind": "field",
-              "name": "checked",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin'"
+              },
+              "description": "Mode of the popover should be 'default' for internal use"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'solid' | 'outlined' | 'clear' | 'system'"
+              },
+              "default": "'solid'",
+              "description": "Button variant style"
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
+              },
+              "default": "'primary'",
+              "description": "Button color theme (uses theme semantic colors)"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Button size"
+            },
+            {
+              "kind": "field",
+              "name": "selected",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the checkbox is checked"
+              "description": "Whether the button is in a selected/active state"
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button takes full width of its container"
+            },
+            {
+              "kind": "field",
+              "name": "iconOnly",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "Icon only button image or emoji\nif this prop is set, the button will render only the icon slot"
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "Start icon image or emoji"
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "End icon image or emoji"
             },
             {
               "kind": "field",
@@ -2426,35 +2205,45 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the checkbox is disabled"
+              "description": "Whether the button is disabled"
             },
             {
               "kind": "field",
-              "name": "name",
+              "name": "type",
               "type": {
-                "text": "string"
+                "text": "'button' | 'submit' | 'reset'"
               },
-              "description": "The name of the checkbox input"
+              "default": "'button'",
+              "description": "The button type attribute"
             },
             {
               "kind": "field",
-              "name": "value",
+              "name": "href",
               "type": {
-                "text": "string"
+                "text": "string | undefined"
               },
-              "description": "The value of the checkbox input"
+              "description": "Optional href to make the button act as a link"
             },
             {
               "kind": "field",
-              "name": "externalId",
+              "name": "target",
               "type": {
-                "text": "string"
+                "text": "string | undefined"
               },
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
+              "description": "Link target when href is set"
             },
             {
               "kind": "field",
-              "name": "handleChange",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'space-between' | 'end'"
+              },
+              "default": "'center'",
+              "description": "Alignment of the button label without the end icon"
+            },
+            {
+              "kind": "field",
+              "name": "handleClick",
               "privacy": "private"
             },
             {
@@ -2464,56 +2253,134 @@
           ],
           "attributes": [
             {
-              "name": "checked",
-              "fieldName": "checked",
+              "name": "mode",
+              "fieldName": "mode",
+              "description": "Mode of the popover should be 'default' for internal use",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'solid'",
+              "description": "Button variant style",
+              "type": {
+                "text": "'solid' | 'outlined' | 'clear' | 'system'"
+              }
+            },
+            {
+              "name": "color",
+              "fieldName": "color",
+              "default": "'primary'",
+              "description": "Button color theme (uses theme semantic colors)",
+              "type": {
+                "text": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Button size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "selected",
+              "fieldName": "selected",
               "default": "false",
-              "description": "Whether the checkbox is checked",
+              "description": "Whether the button is in a selected/active state",
               "type": {
                 "text": "boolean"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the button takes full width of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "icon-only",
+              "fieldName": "iconOnly",
+              "description": "Icon only button image or emoji\nif this prop is set, the button will render only the icon slot",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "description": "Start icon image or emoji",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "icon-end",
+              "fieldName": "iconEnd",
+              "description": "End icon image or emoji",
+              "type": {
+                "text": "string | Node"
               }
             },
             {
               "name": "disabled",
               "fieldName": "disabled",
               "default": "false",
-              "description": "Whether the checkbox is disabled",
+              "description": "Whether the button is disabled",
               "type": {
                 "text": "boolean"
               }
             },
             {
-              "name": "name",
-              "fieldName": "name",
-              "description": "The name of the checkbox input",
+              "name": "type",
+              "fieldName": "type",
+              "default": "'button'",
+              "description": "The button type attribute",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              }
+            },
+            {
+              "name": "href",
+              "fieldName": "href",
+              "description": "Optional href to make the button act as a link",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value of the checkbox input",
+              "name": "target",
+              "fieldName": "target",
+              "description": "Link target when href is set",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "external-id",
-              "fieldName": "externalId",
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
+              "name": "align",
+              "fieldName": "align",
+              "default": "'center'",
+              "description": "Alignment of the button label without the end icon",
               "type": {
-                "text": "string"
+                "text": "'start' | 'center' | 'space-between' | 'end'"
               }
             }
           ],
-          "tagName": "le-checkbox",
+          "tagName": "le-button",
           "events": [
             {
-              "name": "change",
+              "name": "click",
               "type": {
-                "text": "EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>"
+                "text": "EventEmitter<MouseEvent>"
               },
-              "description": "Emitted when the checked state changes"
+              "description": "Emitted when the button is clicked.\nThis is a custom event that wraps the native click but ensures the target is the le-button."
             }
           ],
           "customElement": true
@@ -2522,18 +2389,151 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LeCheckbox",
+          "name": "LeButton",
           "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
+            "name": "LeButton",
+            "module": "src/components/le-button/le-button.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-checkbox",
+          "name": "le-button",
           "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
+            "name": "LeButton",
+            "module": "src/components/le-button/le-button.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
           }
         }
       ]
@@ -4551,8 +4551,51 @@
     {
       "kind": "javascript-module",
       "path": "src/components/le-item/le-item.tsx",
-      "declarations": [],
-      "exports": []
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LeItem",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getOption"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "tagName": "le-item",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeItem",
+          "declaration": {
+            "name": "LeItem",
+            "module": "src/components/le-item/le-item.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-item",
+          "declaration": {
+            "name": "LeItem",
+            "module": "src/components/le-item/le-item.tsx"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",
@@ -10620,233 +10663,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-tab-panel/le-tab-panel.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A tab panel component used as a child of le-tabs.\n\nEach le-tab-panel defines both the tab button label and the panel content.\nThe parent le-tabs component automatically reads these panels and creates\nthe tab interface.",
-          "name": "LeTabPanel",
-          "slots": [
-            {
-              "description": "Default slot for panel content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLLeTabPanelElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "description": "The label displayed in the tab button."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "The value used to identify this tab.\nDefaults to the label if not provided."
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class."
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Icon displayed at the end of the tab button."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether this tab is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "lazy",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive."
-            },
-            {
-              "kind": "field",
-              "name": "active",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Internal: Whether this panel is currently active (set by parent le-tabs)"
-            },
-            {
-              "kind": "field",
-              "name": "hasBeenActive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Internal: Track if panel has ever been activated (for lazy rendering)"
-            },
-            {
-              "kind": "method",
-              "name": "activeChanged",
-              "parameters": [
-                {
-                  "name": "isActive",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getValue",
-              "return": {
-                "type": {
-                  "text": "Promise<string>"
-                }
-              },
-              "description": "Get the effective value (value or label as fallback)"
-            },
-            {
-              "kind": "method",
-              "name": "getTabConfig",
-              "return": {
-                "type": {
-                  "text": "Promise<{\n    label: string;\n    value: string;\n    iconStart?: string;\n    iconEnd?: string;\n    disabled: boolean;\n  }>"
-                }
-              },
-              "description": "Get tab configuration for parent component"
-            },
-            {
-              "kind": "method",
-              "name": "setActive",
-              "parameters": [
-                {
-                  "name": "isActive",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ],
-              "description": "Set the active state (called by parent le-tabs)"
-            },
-            {
-              "kind": "method",
-              "name": "shouldRenderContent",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Check if panel should render content"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "The label displayed in the tab button.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value used to identify this tab.\nDefaults to the label if not provided.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "icon-start",
-              "fieldName": "iconStart",
-              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "icon-end",
-              "fieldName": "iconEnd",
-              "description": "Icon displayed at the end of the tab button.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether this tab is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "lazy",
-              "fieldName": "lazy",
-              "default": "false",
-              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-tab-panel",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeTabPanel",
-          "declaration": {
-            "name": "LeTabPanel",
-            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-tab-panel",
-          "declaration": {
-            "name": "LeTabPanel",
-            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-tabs/le-tabs.tsx",
       "declarations": [
         {
@@ -11252,6 +11068,233 @@
           "declaration": {
             "name": "LeTabs",
             "module": "src/components/le-tabs/le-tabs.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-tab-panel/le-tab-panel.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A tab panel component used as a child of le-tabs.\n\nEach le-tab-panel defines both the tab button label and the panel content.\nThe parent le-tabs component automatically reads these panels and creates\nthe tab interface.",
+          "name": "LeTabPanel",
+          "slots": [
+            {
+              "description": "Default slot for panel content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLLeTabPanelElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "The label displayed in the tab button."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The value used to identify this tab.\nDefaults to the label if not provided."
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class."
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Icon displayed at the end of the tab button."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this tab is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "lazy",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive."
+            },
+            {
+              "kind": "field",
+              "name": "active",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Internal: Whether this panel is currently active (set by parent le-tabs)"
+            },
+            {
+              "kind": "field",
+              "name": "hasBeenActive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Internal: Track if panel has ever been activated (for lazy rendering)"
+            },
+            {
+              "kind": "method",
+              "name": "activeChanged",
+              "parameters": [
+                {
+                  "name": "isActive",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getValue",
+              "return": {
+                "type": {
+                  "text": "Promise<string>"
+                }
+              },
+              "description": "Get the effective value (value or label as fallback)"
+            },
+            {
+              "kind": "method",
+              "name": "getTabConfig",
+              "return": {
+                "type": {
+                  "text": "Promise<{\n    label: string;\n    value: string;\n    iconStart?: string;\n    iconEnd?: string;\n    disabled: boolean;\n  }>"
+                }
+              },
+              "description": "Get tab configuration for parent component"
+            },
+            {
+              "kind": "method",
+              "name": "setActive",
+              "parameters": [
+                {
+                  "name": "isActive",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "Set the active state (called by parent le-tabs)"
+            },
+            {
+              "kind": "method",
+              "name": "shouldRenderContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Check if panel should render content"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "The label displayed in the tab button.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value used to identify this tab.\nDefaults to the label if not provided.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-end",
+              "fieldName": "iconEnd",
+              "description": "Icon displayed at the end of the tab button.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether this tab is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "lazy",
+              "fieldName": "lazy",
+              "default": "false",
+              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-tab-panel",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeTabPanel",
+          "declaration": {
+            "name": "LeTabPanel",
+            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-tab-panel",
+          "declaration": {
+            "name": "LeTabPanel",
+            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
           }
         }
       ]

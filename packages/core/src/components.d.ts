@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
-import { Element } from "@stencil/core";
+import { LeOption as LeOption1 } from "./components";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
@@ -17,7 +17,7 @@ import { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./compo
 export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
-export { Element } from "@stencil/core";
+export { LeOption as LeOption1 } from "./components";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
@@ -731,6 +731,11 @@ export namespace Components {
          */
         "isStatic": boolean;
         /**
+          * Layout Type - default is three cells in the grid: start, title, end - space-between will use the start and end slots but put space between them and hide the title slot
+          * @default 'default'
+         */
+        "layout"?: 'default' | 'space-between';
+        /**
           * Sticky-only reveal behavior (hide on scroll down, show on scroll up). - missing/false: disabled - true/empty attribute: enabled with default threshold (16) - number (as string): enabled and used as threshold
          */
         "revealOnScroll"?: string;
@@ -766,7 +771,7 @@ export namespace Components {
         "size": number;
     }
     interface LeItem {
-        "getOption": () => Promise<{ id: string; label: string; value: string; href: string; disabled: boolean; selected: boolean; checked: boolean; open: boolean; icon: string; iconStart: string; iconEnd: string; description: string; children: Element[]; group: string; separator: boolean; }>;
+        "getOption": () => Promise<LeOption1>;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -1272,6 +1277,11 @@ export namespace Components {
          */
         "collapsed": boolean;
         /**
+          * Whether the sticky panel should stretch to full height.
+          * @default false
+         */
+        "fullHeight": boolean;
+        /**
           * Maximum allowed width when resizable.
           * @default 420
          */
@@ -1324,6 +1334,16 @@ export namespace Components {
           * @default 'start'
          */
         "side": LeSidePanelSide;
+        /**
+          * Whether the panel is sticky (remains visible when scrolling).
+          * @default false
+         */
+        "sticky": boolean;
+        /**
+          * Top offset for the sticky panel.
+          * @default 0
+         */
+        "top": number | 'under-header';
     }
     interface LeSidePanelToggle {
         /**
@@ -3741,6 +3761,11 @@ declare namespace LocalJSX {
          */
         "isStatic"?: boolean;
         /**
+          * Layout Type - default is three cells in the grid: start, title, end - space-between will use the start and end slots but put space between them and hide the title slot
+          * @default 'default'
+         */
+        "layout"?: 'default' | 'space-between';
+        /**
           * Emits when the header shrinks/expands (only on change).
          */
         "onLeHeaderShrinkChange"?: (event: LeHeaderCustomEvent<{ shrunk: boolean; y: number }>) => void;
@@ -4318,6 +4343,11 @@ declare namespace LocalJSX {
          */
         "collapsed"?: boolean;
         /**
+          * Whether the sticky panel should stretch to full height.
+          * @default false
+         */
+        "fullHeight"?: boolean;
+        /**
           * Maximum allowed width when resizable.
           * @default 420
          */
@@ -4373,6 +4403,16 @@ declare namespace LocalJSX {
           * @default 'start'
          */
         "side"?: LeSidePanelSide;
+        /**
+          * Whether the panel is sticky (remains visible when scrolling).
+          * @default false
+         */
+        "sticky"?: boolean;
+        /**
+          * Top offset for the sticky panel.
+          * @default 0
+         */
+        "top"?: number | 'under-header';
     }
     interface LeSidePanelToggle {
         /**
@@ -5165,6 +5205,7 @@ declare namespace LocalJSX {
         "revealOnScroll": string;
         "shrinkOffset": string;
         "expandOnHover": boolean;
+        "layout": 'default' | 'space-between';
     }
     interface LeIconAttributes {
         "name": string;
@@ -5261,6 +5302,9 @@ declare namespace LocalJSX {
         "side": LeSidePanelSide;
         "collapseAt": string;
         "narrowBehavior": LeSidePanelNarrowBehavior;
+        "sticky": boolean;
+        "top": string;
+        "fullHeight": boolean;
         "open": boolean;
         "collapsed": boolean;
         "panelWidth": number;

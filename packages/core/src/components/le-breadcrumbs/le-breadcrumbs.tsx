@@ -13,12 +13,13 @@ import {
 } from '@stencil/core';
 import { LeOption } from '../../types/options';
 import { classnames, generateId } from '../../utils/utils';
+import { LeButtonCustomEvent } from '../..';
 
 export interface LeBreadcrumbSelectDetail {
   item: LeOption;
   id: string;
   href?: string;
-  originalEvent: MouseEvent | KeyboardEvent;
+  originalEvent: PointerEvent | LeButtonCustomEvent<MouseEvent>;
 }
 
 @Component({
@@ -27,7 +28,7 @@ export interface LeBreadcrumbSelectDetail {
   shadow: true,
 })
 export class LeBreadcrumbs {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Breadcrumb items (supports JSON string).
@@ -57,13 +58,13 @@ export class LeBreadcrumbs {
   /**
    * Emitted when a breadcrumb item is selected.
    */
-  @Event({ cancelable: true }) leBreadcrumbSelect: EventEmitter<LeBreadcrumbSelectDetail>;
+  @Event({ cancelable: true }) leBreadcrumbSelect!: EventEmitter<LeBreadcrumbSelectDetail>;
 
   @State() private hiddenIndices: number[] = [];
   @State() private separatorTemplate: string = '';
 
   @State() private declarativeItems: LeOption[] = [];
-  
+
   @State() private isDeclarativeMode: boolean = false;
 
   private listEl?: HTMLElement;
@@ -114,14 +115,16 @@ export class LeBreadcrumbs {
 
     if (items.length > 0) {
       this.isDeclarativeMode = true;
-      this.declarativeItems = await Promise.all(items.map(async item => {
-        if ('componentOnReady' in item) {
-          await (item as any).componentOnReady();
-        } else if (item.tagName.includes('-')) {
-          await customElements.whenDefined(item.tagName.toLowerCase());
-        }
-        return item.getOption();
-      }));
+      this.declarativeItems = await Promise.all(
+        items.map(async item => {
+          if ('componentOnReady' in item) {
+            await (item as any).componentOnReady();
+          } else if (item.tagName.includes('-')) {
+            await customElements.whenDefined(item.tagName.toLowerCase());
+          }
+          return item.getOption();
+        }),
+      );
     } else {
       this.isDeclarativeMode = false;
       this.declarativeItems = [];
@@ -272,7 +275,11 @@ export class LeBreadcrumbs {
     }
   }
 
-  private handleItemClick = (item: LeOption, id: string, ev: MouseEvent) => {
+  private handleItemClick = (
+    item: LeOption,
+    id: string,
+    ev: PointerEvent | LeButtonCustomEvent<MouseEvent>,
+  ) => {
     const href = (item as any).href || (item as any).url;
     this.leBreadcrumbSelect.emit({ item, id, href, originalEvent: ev });
   };

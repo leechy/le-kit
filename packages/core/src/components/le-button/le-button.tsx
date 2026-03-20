@@ -27,12 +27,12 @@ import { classnames } from '../../utils/utils';
   shadow: true,
 })
 export class LeButton {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Mode of the popover should be 'default' for internal use
    */
-  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin';
+  @Prop({ mutable: true, reflect: true }) mode!: 'default' | 'admin';
 
   /**
    * Button variant style
@@ -109,7 +109,7 @@ export class LeButton {
    * Emitted when the button is clicked.
    * This is a custom event that wraps the native click but ensures the target is the le-button.
    */
-  @Event({ eventName: 'click' }) leClick: EventEmitter<MouseEvent>;
+  @Event({ eventName: 'click' }) leClick!: EventEmitter<MouseEvent>;
 
   private handleClick = (event: MouseEvent) => {
     // We stop the internal button click from bubbling up

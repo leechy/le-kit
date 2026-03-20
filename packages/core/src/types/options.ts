@@ -134,6 +134,19 @@ export interface LeOption {
   href?: string;
 
   /**
+   * Specifies where to open the linked document (e.g., `_blank`, `_self`).
+   * Only applicable if `href` is provided.
+   */
+  target?: string;
+
+  /**
+   * CSS Class(es) to apply to the option for custom styling.
+   * This can be a single class name or multiple class names separated by spaces.
+   * Components may map this to `class` attributes on rendered elements.
+   */
+  className?: string;
+
+  /**
    * Custom data passthrough for application-specific needs.
    * This data is included in selection events.
    */

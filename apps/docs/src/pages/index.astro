@@ -1,125 +1,119 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Le-Kit - The Component Library">
-	<main style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
-		<le-stack gap="var(--le-spacing-3xl)">
-			
-			{/* SECTION 1: HERO */}
-			<section class="hero-section" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--le-spacing-xl); padding: 4rem 0;">
-				<div style="max-width: 800px;">
-					<le-text typography="h1" style="font-size: 4rem; line-height: 1.1; margin-bottom: 2rem;">
-						The components for your next project are already cooking!
-					</le-text>
-				</div>
-				
-				<le-card variant="elevated" style="padding: 2rem; max-width: 400px; border-radius: var(--le-radius-xl);">
-					<le-stack gap="var(--le-spacing-md)" align-items="center">
-						<le-round-progress percentage="42" size="120" stroke-width="8" color="var(--le-color-primary)"></le-round-progress>
-						<le-text typography="h3">Building in progress... 42%</le-text>
-					</le-stack>
-				</le-card>
-			</section>
+  <main class="bento-page">
+    <section class="bento-grid" aria-label="Bento Grid Demo">
+      <div class="tile tile-2x2 tone-1">1</div>
+      <div class="tile tile-2x1 tone-5">2</div>
+      <div class="tile tile-1x2 tone-3">3</div>
+      <div class="tile tile-2x1 tone-8">4</div>
+      <div class="tile tile-1x2 tone-3">5</div>
+      <div class="tile tile-1x2 tone-4">6</div>
+      <div class="tile tile-2x2 tone-6">7</div>
+      <div class="tile tile-1x2 tone-10">8</div>
+      <div class="tile tile-1x1 tone-11">9</div>
+      <div class="tile tile-2x1 tone-2">10</div>
+      <div class="tile tile-1x1 tone-12">11</div>
+    </section>
+  </main>
 
-			{/* SECTION 2: NEW COMPONENTS */}
-			<section>
-				<le-text typography="h2" style="margin-bottom: var(--le-spacing-xl); text-align: center;">Newly Added Components</le-text>
-				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--le-spacing-lg);">
-					
-					{/* Live Component Card 1 */}
-					<le-card>
-						<div slot="header" style="display: flex; justify-content: space-between; align-items: center;">
-							<le-text typography="h4">&lt;le-button&gt;</le-text>
-							<le-checkbox onchange="document.getElementById('demo-btn-wrapper').mode = this.checked ? 'admin' : 'default'">Admin Mode</le-checkbox>
-						</div>
-						<div style="padding: 2rem; display: flex; justify-content: center; background: var(--le-color-background-offset); border-radius: var(--le-radius-md);">
-							<le-component component="le-button" id="demo-btn-wrapper">
-								<le-button variant="solid" color="primary" size="large">Click Me</le-button>
-							</le-component>
-						</div>
-						<div slot="footer">
-							<le-text typography="body-small">A highly customizable button element.</le-text>
-						</div>
-					</le-card>
+  <style>
+    .bento-page {
+      max-width: 1250px;
+      margin: 0 auto;
+      padding: var(--le-spacing-4) var(--le-spacing-4) var(--le-spacing-8);
+    }
 
-					{/* Live Component Card 2 */}
-					<le-card>
-						<div slot="header" style="display: flex; justify-content: space-between; align-items: center;">
-							<le-text typography="h4">&lt;le-checkbox&gt;</le-text>
-							<le-checkbox onchange="document.getElementById('demo-chk-wrapper').mode = this.checked ? 'admin' : 'default'">Admin Mode</le-checkbox>
-						</div>
-						<div style="padding: 2rem; display: flex; justify-content: center; background: var(--le-color-background-offset); border-radius: var(--le-radius-md);">
-							<le-component component="le-checkbox" id="demo-chk-wrapper">
-								<le-checkbox checked>Agree to awesomeness</le-checkbox>
-							</le-component>
-						</div>
-						<div slot="footer">
-							<le-text typography="body-small">A checkbox with support for labels and descriptions.</le-text>
-						</div>
-					</le-card>
-				</div>
-			</section>
+    .bento-grid {
+      --bento-gap: 12px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(200px, 250px));
+      grid-auto-rows: 110px;
+      grid-auto-flow: dense;
+      gap: var(--bento-gap);
+      justify-content: center;
+    }
 
-			{/* SECTION 3: CORE FEATURES GRID */}
-			<section style="background: var(--le-color-background-offset); padding: 4rem 2rem; border-radius: var(--le-radius-xl); margin: 2rem -1rem;">
-				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--le-spacing-xl);">
-					<le-stack gap="var(--le-spacing-md)">
-						<le-icon name="layers" size="32" style="color: var(--le-color-primary);"></le-icon>
-						<le-text typography="h3">Framework Agnostic</le-text>
-						<le-text typography="body">Built with Stencil as standard Web Components, le-kit works flawlessly in React, Vue, Svelte, Astro, or vanilla HTML.</le-text>
-					</le-stack>
-					
-					<le-stack gap="var(--le-spacing-md)">
-						<le-icon name="tool" size="32" style="color: var(--le-color-primary);"></le-icon>
-						<le-text typography="h3">Highly Themeable</le-text>
-						<le-text typography="body">Powered entirely by CSS Custom Properties, making it incredibly easy to adapt to any brand identity instantly.</le-text>
-					</le-stack>
-					
-					<le-stack gap="var(--le-spacing-md)">
-						<le-icon name="settings" size="32" style="color: var(--le-color-primary);"></le-icon>
-						<le-text typography="h3">Targeted at the CMSs of the future</le-text>
-						<le-text typography="body">Unique "Admin Mode" wrapping and slot components allow seamless, visual editing integration out of the box.</le-text>
-					</le-stack>
-				</div>
-			</section>
+    .tile {
+      border-radius: 18px;
+      box-shadow:
+        0 1px 2px rgba(15, 23, 42, 0.14),
+        0 14px 24px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      min-width: 0;
+      min-height: 0;
+    }
 
-			{/* SECTION 4: BLOG SKELETON */}
-			<section>
-				<le-text typography="h2" style="margin-bottom: var(--le-spacing-xl);">Latest from the Blog</le-text>
-				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--le-spacing-lg);">
-					<le-card interactive>
-						<le-stack gap="var(--le-spacing-sm)">
-							<le-text typography="body-small" style="color: var(--le-color-text-muted);">March 15, 2026</le-text>
-							<le-text typography="h4">Designing an Admin-First Component Library</le-text>
-							<le-text typography="body">Why we decided to build le-kit with a native editing layer baked right into the DOM.</le-text>
-						</le-stack>
-					</le-card>
-					<le-card interactive>
-						<le-stack gap="var(--le-spacing-sm)">
-							<le-text typography="body-small" style="color: var(--le-color-text-muted);">March 10, 2026</le-text>
-							<le-text typography="h4">CSS Variables vs. Utility Classes</le-text>
-							<le-text typography="body">Our deep dive into why semantic CSS variables provide the ultimate theming experience.</le-text>
-						</le-stack>
-					</le-card>
-					<le-card interactive>
-						<le-stack gap="var(--le-spacing-sm)">
-							<le-text typography="body-small" style="color: var(--le-color-text-muted);">March 01, 2026</le-text>
-							<le-text typography="h4">Introducing &lt;le-header&gt;</le-text>
-							<le-text typography="body">A look at the complex scroll-aware behaviors built into our new header component.</le-text>
-						</le-stack>
-					</le-card>
-				</div>
-			</section>
+    .tile-2x2 {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
 
-			{/* SECTION 5: CTA */}
-			<section style="text-align: center; padding: 4rem 0;">
-				<le-stack gap="var(--le-spacing-lg)" align-items="center">
-					<le-text typography="h2">Ready to try it?</le-text>
-					<le-button variant="solid" color="primary" size="large" href="/start">Get Started</le-button>
-				</le-stack>
-			</section>
+    .tile-2x1 {
+      grid-column: span 2;
+      grid-row: span 1;
+    }
 
-		</le-stack>
-	</main>
+    .tile-1x2 {
+      grid-column: span 1;
+      grid-row: span 2;
+    }
+
+    .tone-1 {
+      background: linear-gradient(145deg, #f59e0b, #f97316);
+    }
+    .tone-2 {
+      background: linear-gradient(145deg, #22c55e, #16a34a);
+    }
+    .tone-3 {
+      background: linear-gradient(145deg, #0ea5e9, #0284c7);
+    }
+    .tone-4 {
+      background: linear-gradient(145deg, #14b8a6, #0f766e);
+    }
+    .tone-5 {
+      background: linear-gradient(145deg, #ef4444, #dc2626);
+    }
+    .tone-6 {
+      background: linear-gradient(145deg, #f43f5e, #e11d48);
+    }
+    .tone-7 {
+      background: linear-gradient(145deg, #84cc16, #65a30d);
+    }
+    .tone-8 {
+      background: linear-gradient(145deg, #06b6d4, #0891b2);
+    }
+    .tone-9 {
+      background: linear-gradient(145deg, #f97316, #ea580c);
+    }
+    .tone-10 {
+      background: linear-gradient(145deg, #10b981, #059669);
+    }
+    .tone-11 {
+      background: linear-gradient(145deg, #3b82f6, #2563eb);
+    }
+    .tone-12 {
+      background: linear-gradient(145deg, #eab308, #ca8a04);
+    }
+
+    @media (max-width: 1050px) {
+      .bento-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 750px) {
+      .bento-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 500px) {
+      .bento-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
 </Layout>

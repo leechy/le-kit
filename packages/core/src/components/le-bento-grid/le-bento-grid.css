@@ -1,0 +1,52 @@
+/**
+ * le-bento-grid styles
+ *
+ * Layout is driven by CSS custom properties so the grid can be configured
+ * either via HTML attributes (which the component writes as inline CSS vars)
+ * or directly via CSS from a stylesheet.
+ */
+
+:host {
+  display: block;
+  --le-bento-col-min: 200px;
+  --le-bento-col-max: 250px;
+  --le-bento-min-columns: 1;
+  --le-bento-max-columns: 0;
+  --le-bento-row-height: 200px;
+  --le-bento-gap: 12px;
+  --le-bento-max-width: none;
+}
+
+:host([min-columns]) {
+  min-width: calc(
+    (var(--le-bento-col-min, 200px) * var(--le-bento-min-columns, 1)) +
+      ((var(--le-bento-min-columns, 1) - 1) * var(--le-bento-gap, 12px))
+  );
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--le-bento-col-min, 200px), var(--le-bento-col-max, 250px))
+  );
+  grid-auto-rows: var(--le-bento-row-height, 110px);
+  grid-auto-flow: dense;
+  gap: var(--le-bento-gap, 12px);
+  max-width: var(--le-bento-max-width);
+  margin-inline: auto;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+:host([max-columns]) .bento-grid {
+  max-width: calc(
+    (var(--le-bento-max-columns) * var(--le-bento-col-max, 250px)) +
+      ((var(--le-bento-max-columns) - 1) * var(--le-bento-gap, 12px))
+  );
+}

@@ -273,6 +273,27 @@
       </div>
 
       <div class="demo-section">
+        <h2>Bento Grid</h2>
+        <p>Small example for <code>le-bento-grid</code> and <code>le-bento-tile</code>.</p>
+
+        <le-bento-grid
+          column-min-width="140"
+          column-max-width="180"
+          min-columns="2"
+          max-columns="5"
+          row-height="90"
+          gap="10"
+          style="--le-bento-tile-radius: 12px; --le-bento-tile-shadow: var(--le-shadow-sm);"
+        >
+          <le-bento-tile cols="2" rows="2" style="--le-bento-tile-bg: linear-gradient(145deg, #f59e0b, #f97316);"></le-bento-tile>
+          <le-bento-tile cols="2" rows="1" style="--le-bento-tile-bg: linear-gradient(145deg, #ef4444, #dc2626);"></le-bento-tile>
+          <le-bento-tile cols="1" rows="2" style="--le-bento-tile-bg: linear-gradient(145deg, #06b6d4, #0891b2);"></le-bento-tile>
+          <le-bento-tile cols="1" rows="1" style="--le-bento-tile-bg: linear-gradient(145deg, #22c55e, #16a34a);"></le-bento-tile>
+          <le-bento-tile cols="1" rows="1" style="--le-bento-tile-bg: linear-gradient(145deg, #3b82f6, #2563eb);"></le-bento-tile>
+        </le-bento-grid>
+      </div>
+
+      <div class="demo-section">
         <h2>Navigation Component</h2>
         <p>Vertical tree navigation (with search) and horizontal navigation with overflow handling.</p>
 

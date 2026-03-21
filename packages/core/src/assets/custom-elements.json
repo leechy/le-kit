@@ -529,6 +529,306 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-bento-grid/le-bento-grid.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A responsive bento-style CSS grid container.\n\n`le-bento-grid` creates a dense auto-filling grid using `auto-fill` with\n`minmax()` columns. Pair it with `le-bento-tile` children that declare\nhow many columns and rows they should span.\n\nAll sizing props can also be controlled purely via CSS custom properties —\nuseful when you want to configure from a stylesheet or a parent component.\nIf a prop is set, it writes the corresponding CSS custom property as an\ninline style (which overrides any external stylesheet value).",
+          "name": "LeBentoGrid",
+          "cssProperties": [
+            {
+              "description": "Minimum column track width (default 200px)",
+              "name": "--le-bento-col-min"
+            },
+            {
+              "description": "Maximum column track width (default 250px)",
+              "name": "--le-bento-col-max"
+            },
+            {
+              "description": "Minimum number of columns before overflow",
+              "name": "--le-bento-min-columns"
+            },
+            {
+              "description": "Maximum number of columns before wrapping",
+              "name": "--le-bento-max-columns"
+            },
+            {
+              "description": "Height of each row unit (default 110px)",
+              "name": "--le-bento-row-height"
+            },
+            {
+              "description": "Gap between tiles (default 12px)",
+              "name": "--le-bento-gap"
+            },
+            {
+              "description": "Maximum grid container width (default none)",
+              "name": "--le-bento-max-width"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The inner grid wrapper element",
+              "name": "grid"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Accepts `le-bento-tile` elements (or any block-level content)",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "columnMinWidth",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Minimum column width in pixels (maps to the `min` of CSS `minmax()`).\nControls how narrow a column can be before wrapping."
+            },
+            {
+              "kind": "field",
+              "name": "columnMaxWidth",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum column width in pixels (maps to the `max` of CSS `minmax()`).\nThe grid stops adding columns when dividing `max-width` by this value."
+            },
+            {
+              "kind": "field",
+              "name": "minColumns",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Minimum number of columns before overflow.\nSets component `min-width` as:\n`columnMinWidth * minColumns + gap * (minColumns - 1)`."
+            },
+            {
+              "kind": "field",
+              "name": "maxColumns",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of columns before the grid wraps.\n\nWhen set, this takes precedence over `maxWidth` and computes the grid's\neffective maximum width as:\n`maxColumns * columnMaxWidth + (maxColumns - 1) * gap`\n\nThis is useful when you want an explicit column cap without manually\naccounting for the gaps between tracks."
+            },
+            {
+              "kind": "field",
+              "name": "maxWidth",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum overall width of the grid in pixels.\n Ignored when `maxColumns` is set."
+            },
+            {
+              "kind": "field",
+              "name": "rowHeight",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Height of each row unit in pixels.\nA tile with `rows=\"2\"` will be `2 × rowHeight + gap` tall."
+            },
+            {
+              "kind": "field",
+              "name": "gap",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Gap between tiles in pixels."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "column-min-width",
+              "fieldName": "columnMinWidth",
+              "description": "Minimum column width in pixels (maps to the `min` of CSS `minmax()`).\nControls how narrow a column can be before wrapping.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "column-max-width",
+              "fieldName": "columnMaxWidth",
+              "description": "Maximum column width in pixels (maps to the `max` of CSS `minmax()`).\nThe grid stops adding columns when dividing `max-width` by this value.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "min-columns",
+              "fieldName": "minColumns",
+              "description": "Minimum number of columns before overflow.\nSets component `min-width` as:\n`columnMinWidth * minColumns + gap * (minColumns - 1)`.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "max-columns",
+              "fieldName": "maxColumns",
+              "description": "Maximum number of columns before the grid wraps.\n\nWhen set, this takes precedence over `maxWidth` and computes the grid's\neffective maximum width as:\n`maxColumns * columnMaxWidth + (maxColumns - 1) * gap`\n\nThis is useful when you want an explicit column cap without manually\naccounting for the gaps between tracks.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "max-width",
+              "fieldName": "maxWidth",
+              "description": "Maximum overall width of the grid in pixels.\n Ignored when `maxColumns` is set.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "row-height",
+              "fieldName": "rowHeight",
+              "description": "Height of each row unit in pixels.\nA tile with `rows=\"2\"` will be `2 × rowHeight + gap` tall.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "gap",
+              "fieldName": "gap",
+              "description": "Gap between tiles in pixels.",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-bento-grid",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeBentoGrid",
+          "declaration": {
+            "name": "LeBentoGrid",
+            "module": "src/components/le-bento-grid/le-bento-grid.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-bento-grid",
+          "declaration": {
+            "name": "LeBentoGrid",
+            "module": "src/components/le-bento-grid/le-bento-grid.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-bento-tile/le-bento-tile.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A single tile for use inside `le-bento-grid`.\n\nDeclares how many columns and rows it should span in the bento grid.\nVisual appearance (border-radius, shadow) is controlled via CSS custom\nproperties so themes can override them.",
+          "name": "LeBentoTile",
+          "cssProperties": [
+            {
+              "description": "Border radius (default: var(--le-radius-xl, 0.75rem))",
+              "name": "--le-bento-tile-radius"
+            },
+            {
+              "description": "Box shadow (default: subtle multi-layer shadow)",
+              "name": "--le-bento-tile-shadow"
+            },
+            {
+              "description": "Background color (default: transparent)",
+              "name": "--le-bento-tile-bg"
+            },
+            {
+              "description": "Inner padding (default: 0)",
+              "name": "--le-bento-tile-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The inner tile wrapper element",
+              "name": "tile"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Content displayed inside the tile",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "cols",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of grid columns this tile should span."
+            },
+            {
+              "kind": "field",
+              "name": "rows",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of grid rows this tile should span."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "cols",
+              "fieldName": "cols",
+              "default": "1",
+              "description": "Number of grid columns this tile should span.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "rows",
+              "fieldName": "rows",
+              "default": "1",
+              "description": "Number of grid rows this tile should span.",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-bento-tile",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeBentoTile",
+          "declaration": {
+            "name": "LeBentoTile",
+            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-bento-tile",
+          "declaration": {
+            "name": "LeBentoTile",
+            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-box/le-box.tsx",
       "declarations": [
         {
@@ -1497,6 +1797,139 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-code-input/le-code-input.tsx",
       "declarations": [
         {
@@ -1874,189 +2307,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-collapse/le-collapse.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Animated show/hide wrapper.\n\nSupports height collapse (auto->0) and/or fading.\nCan optionally listen to the nearest `le-header` shrink events.",
-          "name": "LeCollapse",
-          "cssProperties": [
-            {
-              "description": "Transition duration",
-              "name": "--le-collapse-duration"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "Collapsible region",
-              "name": "region"
-            },
-            {
-              "description": "Inner content",
-              "name": "content"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Content to animate",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "closed",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Since Stencil boolean props default to `false` when the attribute is missing.\ninstead of `open` defaulting to `true`, using a `closed` prop."
-            },
-            {
-              "kind": "field",
-              "name": "scrollDown",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the content should scroll down from the top when open."
-            },
-            {
-              "kind": "field",
-              "name": "noFading",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Stop fading the content when collapsing/expanding."
-            },
-            {
-              "kind": "field",
-              "name": "collapseOnHeaderShrink",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "If true, collapse/expand based on the nearest header shrink event."
-            },
-            {
-              "kind": "method",
-              "name": "handleHeaderShrink",
-              "parameters": [
-                {
-                  "name": "ev",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ],
-              "description": "Handles `leHeaderShrinkChange` events from the `le-header`.\nIn case multiple headers are present, only the nearest one in the DOM tree is used."
-            },
-            {
-              "kind": "field",
-              "name": "headerShrunk",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "method",
-              "name": "onOpenChange",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "onDrivenStateChange",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "shouldBeOpen",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "applyOpenState",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "closed",
-              "fieldName": "closed",
-              "default": "false",
-              "description": "Since Stencil boolean props default to `false` when the attribute is missing.\ninstead of `open` defaulting to `true`, using a `closed` prop.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "scroll-down",
-              "fieldName": "scrollDown",
-              "default": "false",
-              "description": "Whether the content should scroll down from the top when open.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "no-fading",
-              "fieldName": "noFading",
-              "default": "false",
-              "description": "Stop fading the content when collapsing/expanding.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "collapse-on-header-shrink",
-              "fieldName": "collapseOnHeaderShrink",
-              "default": "false",
-              "description": "If true, collapse/expand based on the nearest header shrink event.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-collapse",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCollapse",
-          "declaration": {
-            "name": "LeCollapse",
-            "module": "src/components/le-collapse/le-collapse.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-collapse",
-          "declaration": {
-            "name": "LeCollapse",
-            "module": "src/components/le-collapse/le-collapse.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-button/le-button.tsx",
       "declarations": [
         {
@@ -2407,60 +2657,32 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
+      "path": "src/components/le-collapse/le-collapse.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
+          "description": "Animated show/hide wrapper.\n\nSupports height collapse (auto->0) and/or fading.\nCan optionally listen to the nearest `le-header` shrink events.",
+          "name": "LeCollapse",
           "cssProperties": [
             {
-              "description": "Card background color",
-              "name": "--le-card-bg"
-            },
-            {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
-            },
-            {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
+              "description": "Transition duration",
+              "name": "--le-collapse-duration"
             }
           ],
           "cssParts": [
             {
-              "description": "The main card container",
-              "name": "card"
+              "description": "Collapsible region",
+              "name": "region"
             },
             {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
+              "description": "Inner content",
               "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
             }
           ],
           "slots": [
             {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
+              "description": "Content to animate",
               "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
             }
           ],
           "members": [
@@ -2473,21 +2695,81 @@
             },
             {
               "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
+              "name": "closed",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the card is interactive (clickable)"
+              "description": "Since Stencil boolean props default to `false` when the attribute is missing.\ninstead of `open` defaulting to `true`, using a `closed` prop."
+            },
+            {
+              "kind": "field",
+              "name": "scrollDown",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the content should scroll down from the top when open."
+            },
+            {
+              "kind": "field",
+              "name": "noFading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Stop fading the content when collapsing/expanding."
+            },
+            {
+              "kind": "field",
+              "name": "collapseOnHeaderShrink",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "If true, collapse/expand based on the nearest header shrink event."
+            },
+            {
+              "kind": "method",
+              "name": "handleHeaderShrink",
+              "parameters": [
+                {
+                  "name": "ev",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ],
+              "description": "Handles `leHeaderShrinkChange` events from the `le-header`.\nIn case multiple headers are present, only the nearest one in the DOM tree is used."
+            },
+            {
+              "kind": "field",
+              "name": "headerShrunk",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "onOpenChange",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "onDrivenStateChange",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "shouldBeOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "applyOpenState",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -2496,25 +2778,43 @@
           ],
           "attributes": [
             {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
+              "name": "closed",
+              "fieldName": "closed",
+              "default": "false",
+              "description": "Since Stencil boolean props default to `false` when the attribute is missing.\ninstead of `open` defaulting to `true`, using a `closed` prop.",
               "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
+                "text": "boolean"
               }
             },
             {
-              "name": "interactive",
-              "fieldName": "interactive",
+              "name": "scroll-down",
+              "fieldName": "scrollDown",
               "default": "false",
-              "description": "Whether the card is interactive (clickable)",
+              "description": "Whether the content should scroll down from the top when open.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "no-fading",
+              "fieldName": "noFading",
+              "default": "false",
+              "description": "Stop fading the content when collapsing/expanding.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "collapse-on-header-shrink",
+              "fieldName": "collapseOnHeaderShrink",
+              "default": "false",
+              "description": "If true, collapse/expand based on the nearest header shrink event.",
               "type": {
                 "text": "boolean"
               }
             }
           ],
-          "tagName": "le-card",
+          "tagName": "le-collapse",
           "events": [],
           "customElement": true
         }
@@ -2522,18 +2822,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LeCard",
+          "name": "LeCollapse",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LeCollapse",
+            "module": "src/components/le-collapse/le-collapse.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-card",
+          "name": "le-collapse",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LeCollapse",
+            "module": "src/components/le-collapse/le-collapse.tsx"
           }
         }
       ]
@@ -3880,6 +4180,50 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-header-placeholder/le-header-placeholder.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Placeholder for `le-header`.\n\nReserves space using the global CSS variable `--le-header-height`.\nThe header component updates that variable when it renders.",
+          "name": "LeHeaderPlaceholder",
+          "cssProperties": [
+            {
+              "description": "Published header height (px)",
+              "name": "--le-header-height"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "tagName": "le-header-placeholder",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeHeaderPlaceholder",
+          "declaration": {
+            "name": "LeHeaderPlaceholder",
+            "module": "src/components/le-header-placeholder/le-header-placeholder.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-header-placeholder",
+          "declaration": {
+            "name": "LeHeaderPlaceholder",
+            "module": "src/components/le-header-placeholder/le-header-placeholder.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-header/le-header.tsx",
       "declarations": [
         {
@@ -4046,6 +4390,15 @@
             },
             {
               "kind": "field",
+              "name": "layout",
+              "type": {
+                "text": "'default' | 'space-between' | undefined"
+              },
+              "default": "'default'",
+              "description": "Layout Type\n- default is three cells in the grid: start, title, end\n- space-between will use the start and end slots but put space between them and hide the title slot"
+            },
+            {
+              "kind": "field",
               "name": "revealed",
               "type": {
                 "text": "boolean"
@@ -4134,6 +4487,14 @@
             },
             {
               "kind": "field",
+              "name": "headerResizeObserver",
+              "type": {
+                "text": "ResizeObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
               "name": "shrinkSelectorEl",
               "type": {
                 "text": "Element | null | undefined"
@@ -4172,6 +4533,11 @@
             {
               "kind": "method",
               "name": "onWindowResize",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "onChildLayoutChange",
               "privacy": "protected"
             },
             {
@@ -4231,6 +4597,11 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "setupHeaderResizeObserver",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -4299,6 +4670,15 @@
               "type": {
                 "text": "boolean"
               }
+            },
+            {
+              "name": "layout",
+              "fieldName": "layout",
+              "default": "'default'",
+              "description": "Layout Type\n- default is three cells in the grid: start, title, end\n- space-between will use the start and end slots but put space between them and hide the title slot",
+              "type": {
+                "text": "'default' | 'space-between'"
+              }
             }
           ],
           "tagName": "le-header",
@@ -4343,50 +4723,6 @@
           "declaration": {
             "name": "LeHeader",
             "module": "src/components/le-header/le-header.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-header-placeholder/le-header-placeholder.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Placeholder for `le-header`.\n\nReserves space using the global CSS variable `--le-header-height`.\nThe header component updates that variable when it renders.",
-          "name": "LeHeaderPlaceholder",
-          "cssProperties": [
-            {
-              "description": "Published header height (px)",
-              "name": "--le-header-height"
-            }
-          ],
-          "members": [
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "tagName": "le-header-placeholder",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeHeaderPlaceholder",
-          "declaration": {
-            "name": "LeHeaderPlaceholder",
-            "module": "src/components/le-header-placeholder/le-header-placeholder.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-header-placeholder",
-          "declaration": {
-            "name": "LeHeaderPlaceholder",
-            "module": "src/components/le-header-placeholder/le-header-placeholder.tsx"
           }
         }
       ]
@@ -5324,6 +5660,37 @@
             },
             {
               "kind": "method",
+              "name": "renderLabel",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "label",
+                  "type": {
+                    "text": "string | HTMLCollection"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "isItemSelected",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "partFromOptionPart",
               "privacy": "private",
               "return": {
@@ -5343,6 +5710,13 @@
                   "optional": true,
                   "type": {
                     "text": "string"
+                  }
+                },
+                {
+                  "name": "state",
+                  "optional": true,
+                  "type": {
+                    "text": "{ selected?: boolean; disabled?: boolean }"
                   }
                 }
               ]
@@ -7859,6 +8233,33 @@
             },
             {
               "kind": "field",
+              "name": "sticky",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the panel is sticky (remains visible when scrolling)."
+            },
+            {
+              "kind": "field",
+              "name": "top",
+              "type": {
+                "text": "number | 'under-header'"
+              },
+              "default": "0",
+              "description": "Top offset for the sticky panel."
+            },
+            {
+              "kind": "field",
+              "name": "fullHeight",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the sticky panel should stretch to full height."
+            },
+            {
+              "kind": "field",
               "name": "open",
               "type": {
                 "text": "boolean"
@@ -8302,6 +8703,33 @@
               "description": "Behavior when in narrow mode.",
               "type": {
                 "text": "LeSidePanelNarrowBehavior"
+              }
+            },
+            {
+              "name": "sticky",
+              "fieldName": "sticky",
+              "default": "false",
+              "description": "Whether the panel is sticky (remains visible when scrolling).",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "top",
+              "fieldName": "top",
+              "default": "0",
+              "description": "Top offset for the sticky panel.",
+              "type": {
+                "text": "number | 'under-header'"
+              }
+            },
+            {
+              "name": "full-height",
+              "fieldName": "fullHeight",
+              "default": "false",
+              "description": "Whether the sticky panel should stretch to full height.",
+              "type": {
+                "text": "boolean"
               }
             },
             {
@@ -10663,6 +11091,233 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-tab-panel/le-tab-panel.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A tab panel component used as a child of le-tabs.\n\nEach le-tab-panel defines both the tab button label and the panel content.\nThe parent le-tabs component automatically reads these panels and creates\nthe tab interface.",
+          "name": "LeTabPanel",
+          "slots": [
+            {
+              "description": "Default slot for panel content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLLeTabPanelElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "The label displayed in the tab button."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The value used to identify this tab.\nDefaults to the label if not provided."
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class."
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Icon displayed at the end of the tab button."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this tab is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "lazy",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive."
+            },
+            {
+              "kind": "field",
+              "name": "active",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Internal: Whether this panel is currently active (set by parent le-tabs)"
+            },
+            {
+              "kind": "field",
+              "name": "hasBeenActive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Internal: Track if panel has ever been activated (for lazy rendering)"
+            },
+            {
+              "kind": "method",
+              "name": "activeChanged",
+              "parameters": [
+                {
+                  "name": "isActive",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getValue",
+              "return": {
+                "type": {
+                  "text": "Promise<string>"
+                }
+              },
+              "description": "Get the effective value (value or label as fallback)"
+            },
+            {
+              "kind": "method",
+              "name": "getTabConfig",
+              "return": {
+                "type": {
+                  "text": "Promise<{\n    label: string;\n    value: string;\n    iconStart?: string;\n    iconEnd?: string;\n    disabled: boolean;\n  }>"
+                }
+              },
+              "description": "Get tab configuration for parent component"
+            },
+            {
+              "kind": "method",
+              "name": "setActive",
+              "parameters": [
+                {
+                  "name": "isActive",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "Set the active state (called by parent le-tabs)"
+            },
+            {
+              "kind": "method",
+              "name": "shouldRenderContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Check if panel should render content"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "The label displayed in the tab button.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value used to identify this tab.\nDefaults to the label if not provided.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-end",
+              "fieldName": "iconEnd",
+              "description": "Icon displayed at the end of the tab button.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether this tab is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "lazy",
+              "fieldName": "lazy",
+              "default": "false",
+              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-tab-panel",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeTabPanel",
+          "declaration": {
+            "name": "LeTabPanel",
+            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-tab-panel",
+          "declaration": {
+            "name": "LeTabPanel",
+            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-tabs/le-tabs.tsx",
       "declarations": [
         {
@@ -11068,233 +11723,6 @@
           "declaration": {
             "name": "LeTabs",
             "module": "src/components/le-tabs/le-tabs.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-tab-panel/le-tab-panel.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A tab panel component used as a child of le-tabs.\n\nEach le-tab-panel defines both the tab button label and the panel content.\nThe parent le-tabs component automatically reads these panels and creates\nthe tab interface.",
-          "name": "LeTabPanel",
-          "slots": [
-            {
-              "description": "Default slot for panel content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLLeTabPanelElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "description": "The label displayed in the tab button."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "The value used to identify this tab.\nDefaults to the label if not provided."
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class."
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Icon displayed at the end of the tab button."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether this tab is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "lazy",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive."
-            },
-            {
-              "kind": "field",
-              "name": "active",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Internal: Whether this panel is currently active (set by parent le-tabs)"
-            },
-            {
-              "kind": "field",
-              "name": "hasBeenActive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Internal: Track if panel has ever been activated (for lazy rendering)"
-            },
-            {
-              "kind": "method",
-              "name": "activeChanged",
-              "parameters": [
-                {
-                  "name": "isActive",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getValue",
-              "return": {
-                "type": {
-                  "text": "Promise<string>"
-                }
-              },
-              "description": "Get the effective value (value or label as fallback)"
-            },
-            {
-              "kind": "method",
-              "name": "getTabConfig",
-              "return": {
-                "type": {
-                  "text": "Promise<{\n    label: string;\n    value: string;\n    iconStart?: string;\n    iconEnd?: string;\n    disabled: boolean;\n  }>"
-                }
-              },
-              "description": "Get tab configuration for parent component"
-            },
-            {
-              "kind": "method",
-              "name": "setActive",
-              "parameters": [
-                {
-                  "name": "isActive",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ],
-              "description": "Set the active state (called by parent le-tabs)"
-            },
-            {
-              "kind": "method",
-              "name": "shouldRenderContent",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Check if panel should render content"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "The label displayed in the tab button.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value used to identify this tab.\nDefaults to the label if not provided.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "icon-start",
-              "fieldName": "iconStart",
-              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "icon-end",
-              "fieldName": "iconEnd",
-              "description": "Icon displayed at the end of the tab button.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether this tab is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "lazy",
-              "fieldName": "lazy",
-              "default": "false",
-              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-tab-panel",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeTabPanel",
-          "declaration": {
-            "name": "LeTabPanel",
-            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-tab-panel",
-          "declaration": {
-            "name": "LeTabPanel",
-            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
           }
         }
       ]

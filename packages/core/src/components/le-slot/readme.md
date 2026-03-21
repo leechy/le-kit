@@ -48,6 +48,7 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
 
 ### Used by
 
+ - [le-bento-grid](../le-bento-grid)
  - [le-box](../le-box)
  - [le-button](../le-button)
  - [le-card](../le-card)
@@ -85,6 +86,7 @@ graph TD;
   le-checkbox --> le-slot
   le-string-input --> le-slot
   le-popup --> le-slot
+  le-bento-grid --> le-slot
   le-box --> le-slot
   le-card --> le-slot
   le-code-input --> le-slot

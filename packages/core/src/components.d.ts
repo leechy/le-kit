@@ -76,6 +76,90 @@ export namespace Components {
         "showAllMenu": boolean | 'start' | 'end';
     }
     /**
+     * A responsive bento-style CSS grid container.
+     * `le-bento-grid` creates a dense auto-filling grid using `auto-fill` with
+     * `minmax()` columns. Pair it with `le-bento-tile` children that declare
+     * how many columns and rows they should span.
+     * All sizing props can also be controlled purely via CSS custom properties —
+     * useful when you want to configure from a stylesheet or a parent component.
+     * If a prop is set, it writes the corresponding CSS custom property as an
+     * inline style (which overrides any external stylesheet value).
+     * @cssprop --le-bento-col-min - Minimum column track width (default 200px)
+     * @cssprop --le-bento-col-max - Maximum column track width (default 250px)
+     * @cssprop --le-bento-min-columns - Minimum number of columns before overflow
+     * @cssprop --le-bento-max-columns - Maximum number of columns before wrapping
+     * @cssprop --le-bento-row-height - Height of each row unit (default 110px)
+     * @cssprop --le-bento-gap - Gap between tiles (default 12px)
+     * @cssprop --le-bento-max-width - Maximum grid container width (default none)
+     * @csspart grid - The inner grid wrapper element
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeBentoGrid {
+        /**
+          * Maximum column width in pixels (maps to the `max` of CSS `minmax()`). The grid stops adding columns when dividing `max-width` by this value.
+          * @min 50
+         */
+        "columnMaxWidth"?: number;
+        /**
+          * Minimum column width in pixels (maps to the `min` of CSS `minmax()`). Controls how narrow a column can be before wrapping.
+          * @min 50
+         */
+        "columnMinWidth"?: number;
+        /**
+          * Gap between tiles in pixels.
+          * @min 0
+         */
+        "gap"?: number;
+        /**
+          * Maximum number of columns before the grid wraps.  When set, this takes precedence over `maxWidth` and computes the grid's effective maximum width as: `maxColumns * columnMaxWidth + (maxColumns - 1) * gap`  This is useful when you want an explicit column cap without manually accounting for the gaps between tracks.
+          * @min 1
+         */
+        "maxColumns"?: number;
+        /**
+          * Maximum overall width of the grid in pixels.  Ignored when `maxColumns` is set.
+          * @min 100
+         */
+        "maxWidth"?: number;
+        /**
+          * Minimum number of columns before overflow. Sets component `min-width` as: `columnMinWidth * minColumns + gap * (minColumns - 1)`.
+          * @min 1
+         */
+        "minColumns"?: number;
+        /**
+          * Height of each row unit in pixels. A tile with `rows="2"` will be `2 × rowHeight + gap` tall.
+          * @min 20
+         */
+        "rowHeight"?: number;
+    }
+    /**
+     * A single tile for use inside `le-bento-grid`.
+     * Declares how many columns and rows it should span in the bento grid.
+     * Visual appearance (border-radius, shadow) is controlled via CSS custom
+     * properties so themes can override them.
+     * @cssprop --le-bento-tile-radius - Border radius (default: var(--le-radius-xl, 0.75rem))
+     * @cssprop --le-bento-tile-shadow - Box shadow (default: subtle multi-layer shadow)
+     * @cssprop --le-bento-tile-bg - Background color (default: transparent)
+     * @cssprop --le-bento-tile-padding - Inner padding (default: 0)
+     * @csspart tile - The inner tile wrapper element
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeBentoTile {
+        /**
+          * Number of grid columns this tile should span.
+          * @min 1
+          * @default 1
+         */
+        "cols": number;
+        /**
+          * Number of grid rows this tile should span.
+          * @min 1
+          * @default 1
+         */
+        "rows": number;
+    }
+    /**
      * A flexible box component for use as a flex item within le-stack.
      * `le-box` wraps content and provides flex item properties like grow, shrink,
      * basis, and self-alignment. It can also control its internal content alignment.
@@ -2113,6 +2197,51 @@ declare global {
         new (): HTMLLeBarElement;
     };
     /**
+     * A responsive bento-style CSS grid container.
+     * `le-bento-grid` creates a dense auto-filling grid using `auto-fill` with
+     * `minmax()` columns. Pair it with `le-bento-tile` children that declare
+     * how many columns and rows they should span.
+     * All sizing props can also be controlled purely via CSS custom properties —
+     * useful when you want to configure from a stylesheet or a parent component.
+     * If a prop is set, it writes the corresponding CSS custom property as an
+     * inline style (which overrides any external stylesheet value).
+     * @cssprop --le-bento-col-min - Minimum column track width (default 200px)
+     * @cssprop --le-bento-col-max - Maximum column track width (default 250px)
+     * @cssprop --le-bento-min-columns - Minimum number of columns before overflow
+     * @cssprop --le-bento-max-columns - Maximum number of columns before wrapping
+     * @cssprop --le-bento-row-height - Height of each row unit (default 110px)
+     * @cssprop --le-bento-gap - Gap between tiles (default 12px)
+     * @cssprop --le-bento-max-width - Maximum grid container width (default none)
+     * @csspart grid - The inner grid wrapper element
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeBentoGridElement extends Components.LeBentoGrid, HTMLStencilElement {
+    }
+    var HTMLLeBentoGridElement: {
+        prototype: HTMLLeBentoGridElement;
+        new (): HTMLLeBentoGridElement;
+    };
+    /**
+     * A single tile for use inside `le-bento-grid`.
+     * Declares how many columns and rows it should span in the bento grid.
+     * Visual appearance (border-radius, shadow) is controlled via CSS custom
+     * properties so themes can override them.
+     * @cssprop --le-bento-tile-radius - Border radius (default: var(--le-radius-xl, 0.75rem))
+     * @cssprop --le-bento-tile-shadow - Box shadow (default: subtle multi-layer shadow)
+     * @cssprop --le-bento-tile-bg - Background color (default: transparent)
+     * @cssprop --le-bento-tile-padding - Inner padding (default: 0)
+     * @csspart tile - The inner tile wrapper element
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeBentoTileElement extends Components.LeBentoTile, HTMLStencilElement {
+    }
+    var HTMLLeBentoTileElement: {
+        prototype: HTMLLeBentoTileElement;
+        new (): HTMLLeBentoTileElement;
+    };
+    /**
      * A flexible box component for use as a flex item within le-stack.
      * `le-box` wraps content and provides flex item properties like grow, shrink,
      * basis, and self-alignment. It can also control its internal content alignment.
@@ -2982,6 +3111,8 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "le-bar": HTMLLeBarElement;
+        "le-bento-grid": HTMLLeBentoGridElement;
+        "le-bento-tile": HTMLLeBentoTileElement;
         "le-box": HTMLLeBoxElement;
         "le-breadcrumbs": HTMLLeBreadcrumbsElement;
         "le-button": HTMLLeButtonElement;
@@ -3072,6 +3203,90 @@ declare namespace LocalJSX {
           * @default false
          */
         "showAllMenu"?: boolean | 'start' | 'end';
+    }
+    /**
+     * A responsive bento-style CSS grid container.
+     * `le-bento-grid` creates a dense auto-filling grid using `auto-fill` with
+     * `minmax()` columns. Pair it with `le-bento-tile` children that declare
+     * how many columns and rows they should span.
+     * All sizing props can also be controlled purely via CSS custom properties —
+     * useful when you want to configure from a stylesheet or a parent component.
+     * If a prop is set, it writes the corresponding CSS custom property as an
+     * inline style (which overrides any external stylesheet value).
+     * @cssprop --le-bento-col-min - Minimum column track width (default 200px)
+     * @cssprop --le-bento-col-max - Maximum column track width (default 250px)
+     * @cssprop --le-bento-min-columns - Minimum number of columns before overflow
+     * @cssprop --le-bento-max-columns - Maximum number of columns before wrapping
+     * @cssprop --le-bento-row-height - Height of each row unit (default 110px)
+     * @cssprop --le-bento-gap - Gap between tiles (default 12px)
+     * @cssprop --le-bento-max-width - Maximum grid container width (default none)
+     * @csspart grid - The inner grid wrapper element
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeBentoGrid {
+        /**
+          * Maximum column width in pixels (maps to the `max` of CSS `minmax()`). The grid stops adding columns when dividing `max-width` by this value.
+          * @min 50
+         */
+        "columnMaxWidth"?: number;
+        /**
+          * Minimum column width in pixels (maps to the `min` of CSS `minmax()`). Controls how narrow a column can be before wrapping.
+          * @min 50
+         */
+        "columnMinWidth"?: number;
+        /**
+          * Gap between tiles in pixels.
+          * @min 0
+         */
+        "gap"?: number;
+        /**
+          * Maximum number of columns before the grid wraps.  When set, this takes precedence over `maxWidth` and computes the grid's effective maximum width as: `maxColumns * columnMaxWidth + (maxColumns - 1) * gap`  This is useful when you want an explicit column cap without manually accounting for the gaps between tracks.
+          * @min 1
+         */
+        "maxColumns"?: number;
+        /**
+          * Maximum overall width of the grid in pixels.  Ignored when `maxColumns` is set.
+          * @min 100
+         */
+        "maxWidth"?: number;
+        /**
+          * Minimum number of columns before overflow. Sets component `min-width` as: `columnMinWidth * minColumns + gap * (minColumns - 1)`.
+          * @min 1
+         */
+        "minColumns"?: number;
+        /**
+          * Height of each row unit in pixels. A tile with `rows="2"` will be `2 × rowHeight + gap` tall.
+          * @min 20
+         */
+        "rowHeight"?: number;
+    }
+    /**
+     * A single tile for use inside `le-bento-grid`.
+     * Declares how many columns and rows it should span in the bento grid.
+     * Visual appearance (border-radius, shadow) is controlled via CSS custom
+     * properties so themes can override them.
+     * @cssprop --le-bento-tile-radius - Border radius (default: var(--le-radius-xl, 0.75rem))
+     * @cssprop --le-bento-tile-shadow - Box shadow (default: subtle multi-layer shadow)
+     * @cssprop --le-bento-tile-bg - Background color (default: transparent)
+     * @cssprop --le-bento-tile-padding - Inner padding (default: 0)
+     * @csspart tile - The inner tile wrapper element
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeBentoTile {
+        /**
+          * Number of grid columns this tile should span.
+          * @min 1
+          * @default 1
+         */
+        "cols"?: number;
+        /**
+          * Number of grid rows this tile should span.
+          * @min 1
+          * @default 1
+         */
+        "rows"?: number;
     }
     /**
      * A flexible box component for use as a flex item within le-stack.
@@ -5089,6 +5304,19 @@ declare namespace LocalJSX {
         "minVisibleItems": number;
         "showAllMenu": string;
     }
+    interface LeBentoGridAttributes {
+        "columnMinWidth": number;
+        "columnMaxWidth": number;
+        "minColumns": number;
+        "maxColumns": number;
+        "maxWidth": number;
+        "rowHeight": number;
+        "gap": number;
+    }
+    interface LeBentoTileAttributes {
+        "cols": number;
+        "rows": number;
+    }
     interface LeBoxAttributes {
         "grow": number;
         "shrink": number;
@@ -5453,6 +5681,8 @@ declare namespace LocalJSX {
 
     interface IntrinsicElements {
         "le-bar": Omit<LeBar, keyof LeBarAttributes> & { [K in keyof LeBar & keyof LeBarAttributes]?: LeBar[K] } & { [K in keyof LeBar & keyof LeBarAttributes as `attr:${K}`]?: LeBarAttributes[K] } & { [K in keyof LeBar & keyof LeBarAttributes as `prop:${K}`]?: LeBar[K] };
+        "le-bento-grid": Omit<LeBentoGrid, keyof LeBentoGridAttributes> & { [K in keyof LeBentoGrid & keyof LeBentoGridAttributes]?: LeBentoGrid[K] } & { [K in keyof LeBentoGrid & keyof LeBentoGridAttributes as `attr:${K}`]?: LeBentoGridAttributes[K] } & { [K in keyof LeBentoGrid & keyof LeBentoGridAttributes as `prop:${K}`]?: LeBentoGrid[K] };
+        "le-bento-tile": Omit<LeBentoTile, keyof LeBentoTileAttributes> & { [K in keyof LeBentoTile & keyof LeBentoTileAttributes]?: LeBentoTile[K] } & { [K in keyof LeBentoTile & keyof LeBentoTileAttributes as `attr:${K}`]?: LeBentoTileAttributes[K] } & { [K in keyof LeBentoTile & keyof LeBentoTileAttributes as `prop:${K}`]?: LeBentoTile[K] };
         "le-box": Omit<LeBox, keyof LeBoxAttributes> & { [K in keyof LeBox & keyof LeBoxAttributes]?: LeBox[K] } & { [K in keyof LeBox & keyof LeBoxAttributes as `attr:${K}`]?: LeBoxAttributes[K] } & { [K in keyof LeBox & keyof LeBoxAttributes as `prop:${K}`]?: LeBox[K] };
         "le-breadcrumbs": Omit<LeBreadcrumbs, keyof LeBreadcrumbsAttributes> & { [K in keyof LeBreadcrumbs & keyof LeBreadcrumbsAttributes]?: LeBreadcrumbs[K] } & { [K in keyof LeBreadcrumbs & keyof LeBreadcrumbsAttributes as `attr:${K}`]?: LeBreadcrumbsAttributes[K] } & { [K in keyof LeBreadcrumbs & keyof LeBreadcrumbsAttributes as `prop:${K}`]?: LeBreadcrumbs[K] };
         "le-button": Omit<LeButton, keyof LeButtonAttributes> & { [K in keyof LeButton & keyof LeButtonAttributes]?: LeButton[K] } & { [K in keyof LeButton & keyof LeButtonAttributes as `attr:${K}`]?: LeButtonAttributes[K] } & { [K in keyof LeButton & keyof LeButtonAttributes as `prop:${K}`]?: LeButton[K] };
@@ -5510,6 +5740,41 @@ declare module "@stencil/core" {
              * @cmsCategory Layout
              */
             "le-bar": LocalJSX.IntrinsicElements["le-bar"] & JSXBase.HTMLAttributes<HTMLLeBarElement>;
+            /**
+             * A responsive bento-style CSS grid container.
+             * `le-bento-grid` creates a dense auto-filling grid using `auto-fill` with
+             * `minmax()` columns. Pair it with `le-bento-tile` children that declare
+             * how many columns and rows they should span.
+             * All sizing props can also be controlled purely via CSS custom properties —
+             * useful when you want to configure from a stylesheet or a parent component.
+             * If a prop is set, it writes the corresponding CSS custom property as an
+             * inline style (which overrides any external stylesheet value).
+             * @cssprop --le-bento-col-min - Minimum column track width (default 200px)
+             * @cssprop --le-bento-col-max - Maximum column track width (default 250px)
+             * @cssprop --le-bento-min-columns - Minimum number of columns before overflow
+             * @cssprop --le-bento-max-columns - Maximum number of columns before wrapping
+             * @cssprop --le-bento-row-height - Height of each row unit (default 110px)
+             * @cssprop --le-bento-gap - Gap between tiles (default 12px)
+             * @cssprop --le-bento-max-width - Maximum grid container width (default none)
+             * @csspart grid - The inner grid wrapper element
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-bento-grid": LocalJSX.IntrinsicElements["le-bento-grid"] & JSXBase.HTMLAttributes<HTMLLeBentoGridElement>;
+            /**
+             * A single tile for use inside `le-bento-grid`.
+             * Declares how many columns and rows it should span in the bento grid.
+             * Visual appearance (border-radius, shadow) is controlled via CSS custom
+             * properties so themes can override them.
+             * @cssprop --le-bento-tile-radius - Border radius (default: var(--le-radius-xl, 0.75rem))
+             * @cssprop --le-bento-tile-shadow - Box shadow (default: subtle multi-layer shadow)
+             * @cssprop --le-bento-tile-bg - Background color (default: transparent)
+             * @cssprop --le-bento-tile-padding - Inner padding (default: 0)
+             * @csspart tile - The inner tile wrapper element
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-bento-tile": LocalJSX.IntrinsicElements["le-bento-tile"] & JSXBase.HTMLAttributes<HTMLLeBentoTileElement>;
             /**
              * A flexible box component for use as a flex item within le-stack.
              * `le-box` wraps content and provides flex item properties like grow, shrink,

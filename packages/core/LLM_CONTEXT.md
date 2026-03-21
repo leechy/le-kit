@@ -5,6 +5,8 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 ## Table of Contents
 
 - [le-bar](#le-bar)
+- [le-bento-grid](#le-bento-grid)
+- [le-bento-tile](#le-bento-tile)
 - [le-box](#le-box)
 - [le-breadcrumbs](#le-breadcrumbs)
 - [le-button](#le-button)
@@ -52,32 +54,109 @@ row and handles overflow according to the `overflow` prop.
 
 ### Properties
 
-| Name              | Type                                          | Default   | Description                                                                                                                                                                                                                                                                  |
-| ----------------- | --------------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `el`              | `HTMLElement`                                 |           |                                                                                                                                                                                                                                                                              |
-| `overflow`        | `'more' \| 'scroll' \| 'hamburger' \| 'wrap'` | `'more'`  | Overflow behavior when items don't fit on one row. - `more`: Overflow items appear in a "more" dropdown - `scroll`: Items scroll horizontally with optional arrows - `hamburger`: All items go into a hamburger menu if any overflow - `wrap`: Items wrap to additional rows |
-| `alignItems`      | `'start' \| 'end' \| 'center' \| 'stretch'`   | `'start'` | Alignment of items within the bar (maps to justify-content).                                                                                                                                                                                                                 |
-| `arrows`          | `boolean`                                     | `false`   | Show scroll arrows when overflow is "scroll".                                                                                                                                                                                                                                |
-| `disablePopover`  | `boolean`                                     | `false`   | Disable the internal overflow popover. When true, the bar still detects overflow and hides items, but doesn't render its own popover. Use this when providing custom overflow handling via the leBarOverflowChange event.                                                    |
-| `minVisibleItems` | `number`                                      | `0`       | Minimum number of visible items required when using "more" overflow mode. If fewer items would be visible, the bar falls back to hamburger mode. Only applies when overflow is "more".                                                                                       |
-| `showAllMenu`     | `boolean \| 'start' \| 'end'`                 | `false`   | Show an "all items" menu button. - `false`: Don't show - `true` or `'end'`: Show at end - `'start'`: Show at start                                                                                                                                                           |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `overflow` | `'more' \| 'scroll' \| 'hamburger' \| 'wrap'` | `'more'` | Overflow behavior when items don't fit on one row. - `more`: Overflow items appear in a "more" dropdown - `scroll`: Items scroll horizontally with optional arrows - `hamburger`: All items go into a hamburger menu if any overflow - `wrap`: Items wrap to additional rows |
+| `alignItems` | `'start' \| 'end' \| 'center' \| 'stretch'` | `'start'` | Alignment of items within the bar (maps to justify-content). |
+| `arrows` | `boolean` | `false` | Show scroll arrows when overflow is "scroll". |
+| `disablePopover` | `boolean` | `false` | Disable the internal overflow popover. When true, the bar still detects overflow and hides items, but doesn't render its own popover. Use this when providing custom overflow handling via the leBarOverflowChange event. |
+| `minVisibleItems` | `number` | `0` | Minimum number of visible items required when using "more" overflow mode. If fewer items would be visible, the bar falls back to hamburger mode. Only applies when overflow is "more". |
+| `showAllMenu` | `boolean \| 'start' \| 'end'` | `false` | Show an "all items" menu button. - `false`: Don't show - `true` or `'end'`: Show at end - `'start'`: Show at start |
 
 ### Events
 
-| Event                 | Type                                      | Description                          |
-| --------------------- | ----------------------------------------- | ------------------------------------ |
+| Event | Type | Description |
+|-------|------|-------------|
 | `leBarOverflowChange` | `EventEmitter<LeBarOverflowChangeDetail>` | Emitted when overflow state changes. |
 
 ### Slots
 
-| Name            | Description                                        |
-| --------------- | -------------------------------------------------- |
-| Default         | Bar items (children will be measured for overflow) |
-| `"more"`        | Custom "more" button content                       |
-| `"hamburger"`   | Custom hamburger button content                    |
-| `"start-arrow"` | Custom left scroll arrow                           |
-| `"end-arrow"`   | Custom right scroll arrow                          |
-| `"all-menu"`    | Custom "show all" menu button                      |
+| Name | Description |
+|------|-------------|
+| Default | Bar items (children will be measured for overflow) |
+| `"more"` | Custom "more" button content |
+| `"hamburger"` | Custom hamburger button content |
+| `"start-arrow"` | Custom left scroll arrow |
+| `"end-arrow"` | Custom right scroll arrow |
+| `"all-menu"` | Custom "show all" menu button |
+
+---
+
+## <le-bento-grid>
+
+A responsive bento-style CSS grid container.
+
+`le-bento-grid` creates a dense auto-filling grid using `auto-fill` with
+`minmax()` columns. Pair it with `le-bento-tile` children that declare
+how many columns and rows they should span.
+
+All sizing props can also be controlled purely via CSS custom properties —
+useful when you want to configure from a stylesheet or a parent component.
+If a prop is set, it writes the corresponding CSS custom property as an
+inline style (which overrides any external stylesheet value).
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `columnMinWidth` | `number \| undefined` |  | Minimum column width in pixels (maps to the `min` of CSS `minmax()`). Controls how narrow a column can be before wrapping. |
+| `columnMaxWidth` | `number \| undefined` |  | Maximum column width in pixels (maps to the `max` of CSS `minmax()`). The grid stops adding columns when dividing `max-width` by this value. |
+| `minColumns` | `number \| undefined` |  | Minimum number of columns before overflow. Sets component `min-width` as: `columnMinWidth * minColumns + gap * (minColumns - 1)`. |
+| `maxColumns` | `number \| undefined` |  | Maximum number of columns before the grid wraps.  When set, this takes precedence over `maxWidth` and computes the grid's effective maximum width as: `maxColumns * columnMaxWidth + (maxColumns - 1) * gap`  This is useful when you want an explicit column cap without manually accounting for the gaps between tracks. |
+| `maxWidth` | `number \| undefined` |  | Maximum overall width of the grid in pixels.  Ignored when `maxColumns` is set. |
+| `rowHeight` | `number \| undefined` |  | Height of each row unit in pixels. A tile with `rows="2"` will be `2 × rowHeight + gap` tall. |
+| `gap` | `number \| undefined` |  | Gap between tiles in pixels. |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | Accepts `le-bento-tile` elements (or any block-level content) |
+
+### CSS Variables
+
+| Name | Description |
+|------|-------------|
+| `--le-bento-col-min` | Minimum column track width (default 200px) |
+| `--le-bento-col-max` | Maximum column track width (default 250px) |
+| `--le-bento-min-columns` | Minimum number of columns before overflow |
+| `--le-bento-max-columns` | Maximum number of columns before wrapping |
+| `--le-bento-row-height` | Height of each row unit (default 110px) |
+| `--le-bento-gap` | Gap between tiles (default 12px) |
+| `--le-bento-max-width` | Maximum grid container width (default none) |
+
+---
+
+## <le-bento-tile>
+
+A single tile for use inside `le-bento-grid`.
+
+Declares how many columns and rows it should span in the bento grid.
+Visual appearance (border-radius, shadow) is controlled via CSS custom
+properties so themes can override them.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `cols` | `number` | `1` | Number of grid columns this tile should span. |
+| `rows` | `number` | `1` | Number of grid rows this tile should span. |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | Content displayed inside the tile |
+
+### CSS Variables
+
+| Name | Description |
+|------|-------------|
+| `--le-bento-tile-radius` | Border radius (default: var(--le-radius-xl, 0.75rem)) |
+| `--le-bento-tile-shadow` | Box shadow (default: subtle multi-layer shadow) |
+| `--le-bento-tile-bg` | Background color (default: transparent) |
+| `--le-bento-tile-padding` | Inner padding (default: 0) |
 
 ---
 
@@ -90,43 +169,43 @@ basis, and self-alignment. It can also control its internal content alignment.
 
 ### Properties
 
-| Name             | Type                                                                | Default      | Description                                                                       |
-| ---------------- | ------------------------------------------------------------------- | ------------ | --------------------------------------------------------------------------------- |
-| `el`             | `HTMLElement`                                                       |              |                                                                                   |
-| `grow`           | `number`                                                            | `0`          | Flex grow factor - how much the item should grow relative to siblings             |
-| `shrink`         | `number`                                                            | `1`          | Flex shrink factor - how much the item should shrink relative to siblings         |
-| `basis`          | `string`                                                            | `'auto'`     | Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto') |
-| `width`          | `string \| undefined`                                               |              | Width of the box (CSS value like '100px', '50%', 'auto')                          |
-| `height`         | `string \| undefined`                                               |              | Height of the box (CSS value)                                                     |
-| `minWidth`       | `string \| undefined`                                               |              | Minimum width constraint                                                          |
-| `maxWidth`       | `string \| undefined`                                               |              | Maximum width constraint                                                          |
-| `minHeight`      | `string \| undefined`                                               |              | Minimum height constraint                                                         |
-| `maxHeight`      | `string \| undefined`                                               |              | Maximum height constraint                                                         |
-| `background`     | `string \| undefined`                                               |              | Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')  |
-| `borderRadius`   | `string \| undefined`                                               |              | Border radius (e.g., '8px', 'var(--le-radius-md)')                                |
-| `border`         | `string \| undefined`                                               |              | Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')        |
-| `alignSelf`      | `'auto' \| 'start' \| 'center' \| 'end' \| 'stretch' \| 'baseline'` | `'auto'`     | Self-alignment override for this item on the cross axis                           |
-| `alignContent`   | `'start' \| 'center' \| 'end' \| 'stretch'`                         | `'stretch'`  | Internal horizontal alignment of content                                          |
-| `justifyContent` | `'start' \| 'center' \| 'end' \| 'stretch'`                         | `'start'`    | Internal vertical alignment of content                                            |
-| `padding`        | `string \| undefined`                                               |              | Padding inside the box (CSS value like '8px', '1rem')                             |
-| `order`          | `number \| undefined`                                               |              | Order in the flex container (lower values come first)                             |
-| `displayFlex`    | `boolean`                                                           | `false`      | Whether to display box content as flex (for internal alignment)                   |
-| `innerDirection` | `'horizontal' \| 'vertical'`                                        | `'vertical'` | Direction of internal flex layout when displayFlex is true                        |
-| `innerGap`       | `string \| undefined`                                               |              | Gap between internal flex items when displayFlex is true                          |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `grow` | `number` | `0` | Flex grow factor - how much the item should grow relative to siblings |
+| `shrink` | `number` | `1` | Flex shrink factor - how much the item should shrink relative to siblings |
+| `basis` | `string` | `'auto'` | Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto') |
+| `width` | `string \| undefined` |  | Width of the box (CSS value like '100px', '50%', 'auto') |
+| `height` | `string \| undefined` |  | Height of the box (CSS value) |
+| `minWidth` | `string \| undefined` |  | Minimum width constraint |
+| `maxWidth` | `string \| undefined` |  | Maximum width constraint |
+| `minHeight` | `string \| undefined` |  | Minimum height constraint |
+| `maxHeight` | `string \| undefined` |  | Maximum height constraint |
+| `background` | `string \| undefined` |  | Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)') |
+| `borderRadius` | `string \| undefined` |  | Border radius (e.g., '8px', 'var(--le-radius-md)') |
+| `border` | `string \| undefined` |  | Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)') |
+| `alignSelf` | `'auto' \| 'start' \| 'center' \| 'end' \| 'stretch' \| 'baseline'` | `'auto'` | Self-alignment override for this item on the cross axis |
+| `alignContent` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'stretch'` | Internal horizontal alignment of content |
+| `justifyContent` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'start'` | Internal vertical alignment of content |
+| `padding` | `string \| undefined` |  | Padding inside the box (CSS value like '8px', '1rem') |
+| `order` | `number \| undefined` |  | Order in the flex container (lower values come first) |
+| `displayFlex` | `boolean` | `false` | Whether to display box content as flex (for internal alignment) |
+| `innerDirection` | `'horizontal' \| 'vertical'` | `'vertical'` | Direction of internal flex layout when displayFlex is true |
+| `innerGap` | `string \| undefined` |  | Gap between internal flex items when displayFlex is true |
 
 ### Slots
 
-| Name    | Description                  |
-| ------- | ---------------------------- |
+| Name | Description |
+|------|-------------|
 | Default | Default slot for box content |
 
 ### CSS Variables
 
-| Name                     | Description            |
-| ------------------------ | ---------------------- |
-| `--le-box-bg`            | Background color       |
-| `--le-box-padding`       | Padding inside the box |
-| `--le-box-border-radius` | Border radius          |
+| Name | Description |
+|------|-------------|
+| `--le-box-bg` | Background color |
+| `--le-box-padding` | Padding inside the box |
+| `--le-box-border-radius` | Border radius |
 
 ---
 
@@ -134,19 +213,19 @@ basis, and self-alignment. It can also control its internal content alignment.
 
 ### Properties
 
-| Name              | Type                               | Default           | Description                                                  |
-| ----------------- | ---------------------------------- | ----------------- | ------------------------------------------------------------ |
-| `el`              | `HTMLElement`                      |                   |                                                              |
-| `items`           | `LeOption[] \| string`             | `[]`              | Breadcrumb items (supports JSON string).                     |
-| `label`           | `string`                           | `'Breadcrumbs'`   | Accessible label for the breadcrumbs navigation.             |
-| `separatorIcon`   | `string`                           | `'chevron-right'` | Separator icon name (used if no separator slot is provided). |
-| `overflowMode`    | `'collapse' \| 'wrap' \| 'scroll'` | `'collapse'`      | Overflow behavior: collapse (default), wrap, or scroll.      |
-| `minVisibleItems` | `number`                           | `2`               | Minimum visible items before collapsing.                     |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `items` | `LeOption[] \| string` | `[]` | Breadcrumb items (supports JSON string). |
+| `label` | `string` | `'Breadcrumbs'` | Accessible label for the breadcrumbs navigation. |
+| `separatorIcon` | `string` | `'chevron-right'` | Separator icon name (used if no separator slot is provided). |
+| `overflowMode` | `'collapse' \| 'wrap' \| 'scroll'` | `'collapse'` | Overflow behavior: collapse (default), wrap, or scroll. |
+| `minVisibleItems` | `number` | `2` | Minimum visible items before collapsing. |
 
 ### Events
 
-| Event                | Type                                     | Description                                 |
-| -------------------- | ---------------------------------------- | ------------------------------------------- |
+| Event | Type | Description |
+|-------|------|-------------|
 | `leBreadcrumbSelect` | `EventEmitter<LeBreadcrumbSelectDetail>` | Emitted when a breadcrumb item is selected. |
 
 ---
@@ -157,46 +236,46 @@ A flexible button component with multiple variants and states.
 
 ### Properties
 
-| Name        | Type                                                                       | Default     | Description                                                                                    |
-| ----------- | -------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------- |
-| `el`        | `HTMLElement`                                                              |             |                                                                                                |
-| `mode`      | `'default' \| 'admin'`                                                     |             | Mode of the popover should be 'default' for internal use                                       |
-| `variant`   | `'solid' \| 'outlined' \| 'clear' \| 'system'`                             | `'solid'`   | Button variant style                                                                           |
-| `color`     | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'primary'` | Button color theme (uses theme semantic colors)                                                |
-| `size`      | `'small' \| 'medium' \| 'large'`                                           | `'medium'`  | Button size                                                                                    |
-| `selected`  | `boolean`                                                                  | `false`     | Whether the button is in a selected/active state                                               |
-| `fullWidth` | `boolean`                                                                  | `false`     | Whether the button takes full width of its container                                           |
-| `iconOnly`  | `string \| Node \| undefined`                                              |             | Icon only button image or emoji if this prop is set, the button will render only the icon slot |
-| `iconStart` | `string \| Node \| undefined`                                              |             | Start icon image or emoji                                                                      |
-| `iconEnd`   | `string \| Node \| undefined`                                              |             | End icon image or emoji                                                                        |
-| `disabled`  | `boolean`                                                                  | `false`     | Whether the button is disabled                                                                 |
-| `type`      | `'button' \| 'submit' \| 'reset'`                                          | `'button'`  | The button type attribute                                                                      |
-| `href`      | `string \| undefined`                                                      |             | Optional href to make the button act as a link                                                 |
-| `target`    | `string \| undefined`                                                      |             | Link target when href is set                                                                   |
-| `align`     | `'start' \| 'center' \| 'space-between' \| 'end'`                          | `'center'`  | Alignment of the button label without the end icon                                             |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `mode` | `'default' \| 'admin'` |  | Mode of the popover should be 'default' for internal use |
+| `variant` | `'solid' \| 'outlined' \| 'clear' \| 'system'` | `'solid'` | Button variant style |
+| `color` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'primary'` | Button color theme (uses theme semantic colors) |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Button size |
+| `selected` | `boolean` | `false` | Whether the button is in a selected/active state |
+| `fullWidth` | `boolean` | `false` | Whether the button takes full width of its container |
+| `iconOnly` | `string \| Node \| undefined` |  | Icon only button image or emoji if this prop is set, the button will render only the icon slot |
+| `iconStart` | `string \| Node \| undefined` |  | Start icon image or emoji |
+| `iconEnd` | `string \| Node \| undefined` |  | End icon image or emoji |
+| `disabled` | `boolean` | `false` | Whether the button is disabled |
+| `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | The button type attribute |
+| `href` | `string \| undefined` |  | Optional href to make the button act as a link |
+| `target` | `string \| undefined` |  | Link target when href is set |
+| `align` | `'start' \| 'center' \| 'space-between' \| 'end'` | `'center'` | Alignment of the button label without the end icon |
 
 ### Events
 
-| Event   | Type                       | Description                                                                                                                     |
-| ------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Event | Type | Description |
+|-------|------|-------------|
 | `click` | `EventEmitter<MouseEvent>` | Emitted when the button is clicked. This is a custom event that wraps the native click but ensures the target is the le-button. |
 
 ### Slots
 
-| Name          | Description                |
-| ------------- | -------------------------- |
-| Default       | Button text content        |
+| Name | Description |
+|------|-------------|
+| Default | Button text content |
 | `"icon-only"` | Icon for icon-only buttons |
 
 ### CSS Variables
 
-| Name                        | Description               |
-| --------------------------- | ------------------------- |
-| `--le-button-bg`            | Button background color   |
-| `--le-button-color`         | Button text color         |
-| `--le-button-border-radius` | Button border radius      |
-| `--le-button-padding-x`     | Button horizontal padding |
-| `--le-button-padding-y`     | Button vertical padding   |
+| Name | Description |
+|------|-------------|
+| `--le-button-bg` | Button background color |
+| `--le-button-color` | Button text color |
+| `--le-button-border-radius` | Button border radius |
+| `--le-button-padding-x` | Button horizontal padding |
+| `--le-button-padding-y` | Button vertical padding |
 
 ---
 
@@ -210,28 +289,28 @@ le-slot acts as a transparent passthrough.
 
 ### Properties
 
-| Name          | Type                                    | Default     | Description                                 |
-| ------------- | --------------------------------------- | ----------- | ------------------------------------------- |
-| `el`          | `HTMLElement`                           |             |                                             |
-| `variant`     | `'default' \| 'outlined' \| 'elevated'` | `'default'` | Card variant style                          |
-| `interactive` | `boolean`                               | `false`     | Whether the card is interactive (clickable) |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `variant` | `'default' \| 'outlined' \| 'elevated'` | `'default'` | Card variant style |
+| `interactive` | `boolean` | `false` | Whether the card is interactive (clickable) |
 
 ### Slots
 
-| Name       | Description                          |
-| ---------- | ------------------------------------ |
+| Name | Description |
+|------|-------------|
 | `"header"` | Card header content (title, actions) |
-| Default    | Default slot for main card content   |
+| Default | Default slot for main card content |
 | `"footer"` | Card footer content (buttons, links) |
 
 ### CSS Variables
 
-| Name                      | Description           |
-| ------------------------- | --------------------- |
-| `--le-card-bg`            | Card background color |
-| `--le-card-border-radius` | Card border radius    |
-| `--le-card-shadow`        | Card box shadow       |
-| `--le-card-padding`       | Card content padding  |
+| Name | Description |
+|------|-------------|
+| `--le-card-bg` | Card background color |
+| `--le-card-border-radius` | Card border radius |
+| `--le-card-shadow` | Card box shadow |
+| `--le-card-padding` | Card content padding |
 
 ---
 
@@ -241,36 +320,36 @@ A checkbox component with support for labels, descriptions, and external IDs.
 
 ### Properties
 
-| Name         | Type          | Default | Description                                                                         |
-| ------------ | ------------- | ------- | ----------------------------------------------------------------------------------- |
-| `el`         | `HTMLElement` |         |                                                                                     |
-| `checked`    | `boolean`     | `false` | Whether the checkbox is checked                                                     |
-| `disabled`   | `boolean`     | `false` | Whether the checkbox is disabled                                                    |
-| `name`       | `string`      |         | The name of the checkbox input                                                      |
-| `value`      | `string`      |         | The value of the checkbox input                                                     |
-| `externalId` | `string`      |         | External ID for linking with external systems (e.g. database ID, PDF form field ID) |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `checked` | `boolean` | `false` | Whether the checkbox is checked |
+| `disabled` | `boolean` | `false` | Whether the checkbox is disabled |
+| `name` | `string` |  | The name of the checkbox input |
+| `value` | `string` |  | The value of the checkbox input |
+| `externalId` | `string` |  | External ID for linking with external systems (e.g. database ID, PDF form field ID) |
 
 ### Events
 
-| Event    | Type                                                                                  | Description                            |
-| -------- | ------------------------------------------------------------------------------------- | -------------------------------------- |
+| Event | Type | Description |
+|-------|------|-------------|
 | `change` | `EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>` | Emitted when the checked state changes |
 
 ### Slots
 
-| Name            | Description                                           |
-| --------------- | ----------------------------------------------------- |
-| Default         | The label text for the checkbox                       |
+| Name | Description |
+|------|-------------|
+| Default | The label text for the checkbox |
 | `"description"` | Additional description text displayed below the label |
 
 ### CSS Variables
 
-| Name                        | Description                        |
-| --------------------------- | ---------------------------------- |
-| `--le-checkbox-size`        | Size of the checkbox input         |
-| `--le-checkbox-color`       | Color of the checkbox when checked |
-| `--le-checkbox-label-color` | Color of the label text            |
-| `--le-checkbox-desc-color`  | Color of the description text      |
+| Name | Description |
+|------|-------------|
+| `--le-checkbox-size` | Size of the checkbox input |
+| `--le-checkbox-color` | Color of the checkbox when checked |
+| `--le-checkbox-label-color` | Color of the label text |
+| `--le-checkbox-desc-color` | Color of the description text |
 
 ---
 
@@ -281,46 +360,46 @@ Supports standard copy/paste and range selection behaviors.
 
 ### Properties
 
-| Name          | Type                  | Default  | Description                                                                                                            |
-| ------------- | --------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `el`          | `HTMLElement`         |          |                                                                                                                        |
-| `value`       | `string`              | `''`     | The value of the input                                                                                                 |
-| `name`        | `string`              |          | The name of the input                                                                                                  |
-| `label`       | `string`              |          | Label for the input                                                                                                    |
-| `length`      | `number`              | `6`      | Length of the code (number of characters)                                                                              |
-| `description` | `string \| undefined` |          | Description text displayed below the input in case there is a more complex markup, it can be provided via slot as well |
-| `type`        | `'text' \| 'number'`  | `'text'` | The type of code (numeric or alphanumeric) This affects the keyboard layout on mobile devices.                         |
-| `disabled`    | `boolean`             | `false`  | Whether the input is disabled                                                                                          |
-| `readonly`    | `boolean`             | `false`  | Whether the input is read-only                                                                                         |
-| `externalId`  | `string`              |          | External ID for linking with external systems                                                                          |
-| `error`       | `boolean`             | `false`  | Internal validation state (can be set externally manually or via simple check)                                         |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `value` | `string` | `''` | The value of the input |
+| `name` | `string` |  | The name of the input |
+| `label` | `string` |  | Label for the input |
+| `length` | `number` | `6` | Length of the code (number of characters) |
+| `description` | `string \| undefined` |  | Description text displayed below the input in case there is a more complex markup, it can be provided via slot as well |
+| `type` | `'text' \| 'number'` | `'text'` | The type of code (numeric or alphanumeric) This affects the keyboard layout on mobile devices. |
+| `disabled` | `boolean` | `false` | Whether the input is disabled |
+| `readonly` | `boolean` | `false` | Whether the input is read-only |
+| `externalId` | `string` |  | External ID for linking with external systems |
+| `error` | `boolean` | `false` | Internal validation state (can be set externally manually or via simple check) |
 
 ### Events
 
-| Event      | Type                                                                | Description                                         |
-| ---------- | ------------------------------------------------------------------- | --------------------------------------------------- |
-| `leChange` | `EventEmitter<{ value: string; name: string; externalId: string }>` | Emitted when the value changes (on blur or Enter)   |
-| `leInput`  | `EventEmitter<{ value: string; name: string; externalId: string }>` | Emitted when the input value changes (on keystroke) |
-| `leFocus`  | `EventEmitter<void>`                                                | Emitted when the input is focused                   |
-| `leBlur`   | `EventEmitter<void>`                                                | Emitted when the input is blurred                   |
+| Event | Type | Description |
+|-------|------|-------------|
+| `leChange` | `EventEmitter<{ value: string; name: string; externalId: string }>` | Emitted when the value changes (on blur or Enter) |
+| `leInput` | `EventEmitter<{ value: string; name: string; externalId: string }>` | Emitted when the input value changes (on keystroke) |
+| `leFocus` | `EventEmitter<void>` | Emitted when the input is focused |
+| `leBlur` | `EventEmitter<void>` | Emitted when the input is blurred |
 
 ### Slots
 
-| Name            | Description                                           |
-| --------------- | ----------------------------------------------------- |
+| Name | Description |
+|------|-------------|
 | `"description"` | Additional description text displayed below the input |
 
 ### CSS Variables
 
-| Name                      | Description                                                   |
-| ------------------------- | ------------------------------------------------------------- |
-| `--le-code-box-size`      | Size of each character box (default: 40px width, 48px height) |
-| `--le-input-bg`           | Input background color                                        |
-| `--le-input-color`        | Input text color                                              |
-| `--le-input-border`       | Input border style                                            |
-| `--le-input-border-focus` | Input border style when focused                               |
-| `--le-input-border-error` | Input border style when invalid                               |
-| `--le-input-radius`       | Input border radius                                           |
+| Name | Description |
+|------|-------------|
+| `--le-code-box-size` | Size of each character box (default: 40px width, 48px height) |
+| `--le-input-bg` | Input background color |
+| `--le-input-color` | Input text color |
+| `--le-input-border` | Input border style |
+| `--le-input-border-focus` | Input border style when focused |
+| `--le-input-border-error` | Input border style when invalid |
+| `--le-input-radius` | Input border radius |
 
 ---
 
@@ -333,24 +412,24 @@ Can optionally listen to the nearest `le-header` shrink events.
 
 ### Properties
 
-| Name                     | Type          | Default | Description                                                                                                                                  |
-| ------------------------ | ------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `el`                     | `HTMLElement` |         |                                                                                                                                              |
-| `closed`                 | `boolean`     | `false` | Since Stencil boolean props default to `false` when the attribute is missing. instead of `open` defaulting to `true`, using a `closed` prop. |
-| `scrollDown`             | `boolean`     | `false` | Whether the content should scroll down from the top when open.                                                                               |
-| `noFading`               | `boolean`     | `false` | Stop fading the content when collapsing/expanding.                                                                                           |
-| `collapseOnHeaderShrink` | `boolean`     | `false` | If true, collapse/expand based on the nearest header shrink event.                                                                           |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `closed` | `boolean` | `false` | Since Stencil boolean props default to `false` when the attribute is missing. instead of `open` defaulting to `true`, using a `closed` prop. |
+| `scrollDown` | `boolean` | `false` | Whether the content should scroll down from the top when open. |
+| `noFading` | `boolean` | `false` | Stop fading the content when collapsing/expanding. |
+| `collapseOnHeaderShrink` | `boolean` | `false` | If true, collapse/expand based on the nearest header shrink event. |
 
 ### Slots
 
-| Name    | Description        |
-| ------- | ------------------ |
+| Name | Description |
+|------|-------------|
 | Default | Content to animate |
 
 ### CSS Variables
 
-| Name                     | Description         |
-| ------------------------ | ------------------- |
+| Name | Description |
+|------|-------------|
 | `--le-collapse-duration` | Transition duration |
 
 ---
@@ -364,30 +443,30 @@ filter options by typing or select from the list.
 
 ### Properties
 
-| Name              | Type                             | Default               | Description                                                      |
-| ----------------- | -------------------------------- | --------------------- | ---------------------------------------------------------------- |
-| `el`              | `HTMLElement`                    |                       |                                                                  |
-| `options`         | `LeOption[] \| string`           | `[]`                  | The options to display in the dropdown.                          |
-| `value`           | `LeOptionValue \| undefined`     |                       | The currently selected value.                                    |
-| `placeholder`     | `string`                         | `'Type to search...'` | Placeholder text for the input.                                  |
-| `disabled`        | `boolean`                        | `false`               | Whether the combobox is disabled.                                |
-| `required`        | `boolean`                        | `false`               | Whether selection is required.                                   |
-| `name`            | `string \| undefined`            |                       | Name attribute for form submission.                              |
-| `fullWidth`       | `boolean`                        | `false`               | Whether the multiselect should take full width of its container. |
-| `size`            | `'small' \| 'medium' \| 'large'` | `'medium'`            | Size variant of the combobox.                                    |
-| `allowCustom`     | `boolean`                        | `false`               | Whether to allow custom values not in the options list.          |
-| `minSearchLength` | `number`                         | `0`                   | Minimum characters before showing filtered results.              |
-| `emptyText`       | `string`                         | `'No results found'`  | Text to show when no options match the search.                   |
-| `open`            | `boolean`                        | `false`               | Whether the dropdown is currently open.                          |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `options` | `LeOption[] \| string` | `[]` | The options to display in the dropdown. |
+| `value` | `LeOptionValue \| undefined` |  | The currently selected value. |
+| `placeholder` | `string` | `'Type to search...'` | Placeholder text for the input. |
+| `disabled` | `boolean` | `false` | Whether the combobox is disabled. |
+| `required` | `boolean` | `false` | Whether selection is required. |
+| `name` | `string \| undefined` |  | Name attribute for form submission. |
+| `fullWidth` | `boolean` | `false` | Whether the multiselect should take full width of its container. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size variant of the combobox. |
+| `allowCustom` | `boolean` | `false` | Whether to allow custom values not in the options list. |
+| `minSearchLength` | `number` | `0` | Minimum characters before showing filtered results. |
+| `emptyText` | `string` | `'No results found'` | Text to show when no options match the search. |
+| `open` | `boolean` | `false` | Whether the dropdown is currently open. |
 
 ### Events
 
-| Event      | Type                                 | Description                                               |
-| ---------- | ------------------------------------ | --------------------------------------------------------- |
-| `leChange` | `EventEmitter<LeOptionSelectDetail>` | Emitted when the selected value changes.                  |
-| `leInput`  | `EventEmitter<{ value: string }>`    | Emitted when the input value changes (for custom values). |
-| `leOpen`   | `EventEmitter<void>`                 | Emitted when the dropdown opens.                          |
-| `leClose`  | `EventEmitter<void>`                 | Emitted when the dropdown closes.                         |
+| Event | Type | Description |
+|-------|------|-------------|
+| `leChange` | `EventEmitter<LeOptionSelectDetail>` | Emitted when the selected value changes. |
+| `leInput` | `EventEmitter<{ value: string }>` | Emitted when the input value changes (for custom values). |
+| `leOpen` | `EventEmitter<void>` | Emitted when the dropdown opens. |
+| `leClose` | `EventEmitter<void>` | Emitted when the dropdown closes. |
 
 ---
 
@@ -405,7 +484,6 @@ In admin mode, it shows a border, component name header, and settings popover.
 The host element is found automatically by traversing up through the shadow DOM.
 
 Usage inside a component's render method:
-
 ```tsx
 render() {
   return (
@@ -418,18 +496,18 @@ render() {
 
 ### Properties
 
-| Name          | Type                                     | Default | Description                                                                                                          |
-| ------------- | ---------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
-| `el`          | `HTMLElement`                            |         |                                                                                                                      |
-| `component`   | `string`                                 |         | The tag name of the component (e.g., 'le-card'). Used to look up property metadata and display the component name.   |
-| `displayName` | `string \| undefined`                    |         | Optional display name for the component. If not provided, the tag name will be formatted as the display name.        |
-| `hostClass`   | `string \| undefined`                    |         | Classes to apply to the host element. Allows parent components to pass their styling classes.                        |
-| `hostStyle`   | `{ [key: string]: string } \| undefined` |         | Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties). |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `component` | `string` |  | The tag name of the component (e.g., 'le-card'). Used to look up property metadata and display the component name. |
+| `displayName` | `string \| undefined` |  | Optional display name for the component. If not provided, the tag name will be formatted as the display name. |
+| `hostClass` | `string \| undefined` |  | Classes to apply to the host element. Allows parent components to pass their styling classes. |
+| `hostStyle` | `{ [key: string]: string } \| undefined` |  | Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties). |
 
 ### Slots
 
-| Name    | Description                      |
-| ------- | -------------------------------- |
+| Name | Description |
+|------|-------------|
 | Default | The component's rendered content |
 
 ---
@@ -443,15 +521,15 @@ When `selector` matches multiple elements, the title becomes the last element
 
 ### Properties
 
-| Name       | Type          | Default | Description                                                                    |
-| ---------- | ------------- | ------- | ------------------------------------------------------------------------------ |
-| `el`       | `HTMLElement` |         |                                                                                |
-| `selector` | `string`      | `''`    | CSS selector for page title/headings to watch (e.g. `.page-title`, `main h2`). |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `selector` | `string` | `''` | CSS selector for page title/headings to watch (e.g. `.page-title`, `main h2`). |
 
 ### Slots
 
-| Name    | Description                                             |
-| ------- | ------------------------------------------------------- |
+| Name | Description |
+|------|-------------|
 | Default | Optional fallback content if no watched title is active |
 
 ---
@@ -462,7 +540,6 @@ Internal dropdown base component that provides shared functionality
 for select, combobox, and multiselect components.
 
 Wraps le-popover for positioning and provides:
-
 - Option list rendering with groups
 - Keyboard navigation (↑↓, Enter, Escape, Home/End)
 - Option filtering support
@@ -470,35 +547,35 @@ Wraps le-popover for positioning and provides:
 
 ### Properties
 
-| Name                  | Type                                                        | Default        | Description                                                                                      |
-| --------------------- | ----------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------ |
-| `el`                  | `HTMLElement`                                               |                |                                                                                                  |
-| `options`             | `LeOption[]`                                                | `[]`           | The options to display in the dropdown.                                                          |
-| `value`               | `LeOptionValue \| LeOptionValue[] \| undefined`             |                | Current value(s) - single value or array for multiselect.                                        |
-| `multiple`            | `boolean`                                                   | `false`        | Whether multiple selection is allowed.                                                           |
-| `open`                | `boolean`                                                   | `false`        | Whether the dropdown is open.                                                                    |
-| `disabled`            | `boolean`                                                   | `false`        | Whether the dropdown is disabled.                                                                |
-| `filterFn`            | `(option: LeOption, query: string) => boolean \| undefined` |                | Filter function for options. Return true to include the option.                                  |
-| `filterQuery`         | `string`                                                    | `''`           | Current filter query string.                                                                     |
-| `emptyText`           | `string`                                                    | `'No options'` | Placeholder text when no options match filter.                                                   |
-| `showCheckboxes`      | `boolean`                                                   | `true`         | Whether to show checkboxes for multiselect mode.                                                 |
-| `maxHeight`           | `string`                                                    | `'300px'`      | Maximum height of the dropdown list.                                                             |
-| `width`               | `string \| undefined`                                       |                | Width of the dropdown. If not set, matches trigger width.                                        |
-| `fullWidth`           | `boolean`                                                   | `false`        | Sets the dropdown to full width of the trigger.                                                  |
-| `closeOnClickOutside` | `boolean`                                                   | `true`         | Whether to close the dropdown when clicking outside. (used to support combobox with input focus) |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `options` | `LeOption[]` | `[]` | The options to display in the dropdown. |
+| `value` | `LeOptionValue \| LeOptionValue[] \| undefined` |  | Current value(s) - single value or array for multiselect. |
+| `multiple` | `boolean` | `false` | Whether multiple selection is allowed. |
+| `open` | `boolean` | `false` | Whether the dropdown is open. |
+| `disabled` | `boolean` | `false` | Whether the dropdown is disabled. |
+| `filterFn` | `(option: LeOption, query: string) => boolean \| undefined` |  | Filter function for options. Return true to include the option. |
+| `filterQuery` | `string` | `''` | Current filter query string. |
+| `emptyText` | `string` | `'No options'` | Placeholder text when no options match filter. |
+| `showCheckboxes` | `boolean` | `true` | Whether to show checkboxes for multiselect mode. |
+| `maxHeight` | `string` | `'300px'` | Maximum height of the dropdown list. |
+| `width` | `string \| undefined` |  | Width of the dropdown. If not set, matches trigger width. |
+| `fullWidth` | `boolean` | `false` | Sets the dropdown to full width of the trigger. |
+| `closeOnClickOutside` | `boolean` | `true` | Whether to close the dropdown when clicking outside. (used to support combobox with input focus) |
 
 ### Events
 
-| Event             | Type                                 | Description                         |
-| ----------------- | ------------------------------------ | ----------------------------------- |
-| `leOptionSelect`  | `EventEmitter<LeOptionSelectDetail>` | Emitted when an option is selected. |
-| `leDropdownOpen`  | `EventEmitter<void>`                 | Emitted when the dropdown opens.    |
-| `leDropdownClose` | `EventEmitter<void>`                 | Emitted when the dropdown closes.   |
+| Event | Type | Description |
+|-------|------|-------------|
+| `leOptionSelect` | `EventEmitter<LeOptionSelectDetail>` | Emitted when an option is selected. |
+| `leDropdownOpen` | `EventEmitter<void>` | Emitted when the dropdown opens. |
+| `leDropdownClose` | `EventEmitter<void>` | Emitted when the dropdown closes. |
 
 ### Slots
 
-| Name        | Description                            |
-| ----------- | -------------------------------------- |
+| Name | Description |
+|------|-------------|
 | `"trigger"` | The element that triggers the dropdown |
 
 ---
@@ -508,13 +585,11 @@ Wraps le-popover for positioning and provides:
 A functional page header with scroll-aware behaviors.
 
 Features:
-
 - Static (default), sticky, or fixed positioning
 - Optional shrink-on-scroll behavior via `shrink-offset`
 - Optional reveal-on-scroll-up via `reveal-on-scroll` (sticky only)
 
 Slots:
-
 - `start`: left side (logo/back button)
 - `title`: centered/primary title content
 - `end`: right side actions
@@ -522,56 +597,55 @@ Slots:
 
 ### Properties
 
-| Name             | Type                  | Default | Description                                                                                                                                                                                                                                                                                   |
-| ---------------- | --------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `el`             | `HTMLElement`         |         |                                                                                                                                                                                                                                                                                               |
-| `isStatic`       | `boolean`             | `false` | Force static positioning (default). Ignored if `sticky` or `fixed` are true.                                                                                                                                                                                                                  |
-| `sticky`         | `boolean`             | `false` | Sticky positioning (in-flow). Ignored if `fixed` is true.                                                                                                                                                                                                                                     |
-| `fixed`          | `boolean`             | `false` | Fixed positioning (out-of-flow). Takes precedence over `sticky`/`static`.                                                                                                                                                                                                                     |
-| `revealOnScroll` | `string \| undefined` |         | Sticky-only reveal behavior (hide on scroll down, show on scroll up). - missing/false: disabled - true/empty attribute: enabled with default threshold (16) - number (as string): enabled and used as threshold                                                                               |
-| `shrinkOffset`   | `string \| undefined` |         | Shrink trigger. - missing/0: disabled - number (px): shrink when scrollY >= that value (but never before header height) - css var name (e.g. --foo): shrink when scrollY >= resolved var value - selector (e.g. .page-title): shrink when that element scrolls out of view above the viewport |
-| `expandOnHover`  | `boolean`             | `false` | If true, expand the header when hovered                                                                                                                                                                                                                                                       |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `isStatic` | `boolean` | `false` | Force static positioning (default). Ignored if `sticky` or `fixed` are true. |
+| `sticky` | `boolean` | `false` | Sticky positioning (in-flow). Ignored if `fixed` is true. |
+| `fixed` | `boolean` | `false` | Fixed positioning (out-of-flow). Takes precedence over `sticky`/`static`. |
+| `revealOnScroll` | `string \| undefined` |  | Sticky-only reveal behavior (hide on scroll down, show on scroll up). - missing/false: disabled - true/empty attribute: enabled with default threshold (16) - number (as string): enabled and used as threshold |
+| `shrinkOffset` | `string \| undefined` |  | Shrink trigger. - missing/0: disabled - number (px): shrink when scrollY >= that value (but never before header height) - css var name (e.g. --foo): shrink when scrollY >= resolved var value - selector (e.g. .page-title): shrink when that element scrolls out of view above the viewport |
+| `expandOnHover` | `boolean` | `false` | If true, expand the header when hovered |
+| `layout` | `'default' \| 'space-between' \| undefined` | `'default'` | Layout Type - default is three cells in the grid: start, title, end - space-between will use the start and end slots but put space between them and hide the title slot |
 
 ### Events
 
-| Event           | Type            | Description |
-| --------------- | --------------- | ----------- |
-| `leHeaderState` | `EventEmitter<{ |
-
+| Event | Type | Description |
+|-------|------|-------------|
+| `leHeaderState` | `EventEmitter<{
     y: number;
     direction: 'up' \| 'down';
     revealed: boolean;
     shrunk: boolean;
-
-}>`| Emits whenever scroll-driven state changes. |
-|`leHeaderShrinkChange`|`EventEmitter<{ shrunk: boolean; y: number }>`| Emits when the header shrinks/expands (only on change). |
-|`leHeaderVisibilityChange`|`EventEmitter<{ visible: boolean; y: number }>` | Emits when the header hides/shows (only on change). |
+  }>` | Emits whenever scroll-driven state changes. |
+| `leHeaderShrinkChange` | `EventEmitter<{ shrunk: boolean; y: number }>` | Emits when the header shrinks/expands (only on change). |
+| `leHeaderVisibilityChange` | `EventEmitter<{ visible: boolean; y: number }>` | Emits when the header hides/shows (only on change). |
 
 ### Slots
 
-| Name      | Description                    |
-| --------- | ------------------------------ |
-| `"start"` | Start area content             |
-| `"title"` | Title content                  |
-| `"end"`   | End area content               |
-| Default   | Optional secondary row content |
+| Name | Description |
+|------|-------------|
+| `"start"` | Start area content |
+| `"title"` | Title content |
+| `"end"` | End area content |
+| Default | Optional secondary row content |
 
 ### CSS Variables
 
-| Name                           | Description                  |
-| ------------------------------ | ---------------------------- |
-| `--le-header-bg`               | Background (color/gradient)  |
-| `--le-header-color`            | Text color                   |
-| `--le-header-border`           | Border (e.g. 1px solid ...)  |
-| `--le-header-shadow`           | Shadow/elevation             |
-| `--le-header-max-width`        | Inner content max width      |
-| `--le-header-padding-x`        | Horizontal padding           |
-| `--le-header-padding-y`        | Vertical padding             |
-| `--le-header-gap`              | Gap between zones            |
-| `--le-header-height`           | Base height (main row)       |
+| Name | Description |
+|------|-------------|
+| `--le-header-bg` | Background (color/gradient) |
+| `--le-header-color` | Text color |
+| `--le-header-border` | Border (e.g. 1px solid ...) |
+| `--le-header-shadow` | Shadow/elevation |
+| `--le-header-max-width` | Inner content max width |
+| `--le-header-padding-x` | Horizontal padding |
+| `--le-header-padding-y` | Vertical padding |
+| `--le-header-gap` | Gap between zones |
+| `--le-header-height` | Base height (main row) |
 | `--le-header-height-condensed` | Condensed height when shrunk |
-| `--le-header-transition`       | Transition timing            |
-| `--le-z-header`                | Z-index (fixed mode)         |
+| `--le-header-transition` | Transition timing |
+| `--le-z-header` | Z-index (fixed mode) |
 
 ---
 
@@ -584,8 +658,8 @@ The header component updates that variable when it renders.
 
 ### CSS Variables
 
-| Name                 | Description                  |
-| -------------------- | ---------------------------- |
+| Name | Description |
+|------|-------------|
 | `--le-header-height` | Published header height (px) |
 
 ---
@@ -594,11 +668,11 @@ The header component updates that variable when it renders.
 
 ### Properties
 
-| Name   | Type          | Default | Description                                                                                                                           |
-| ------ | ------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `el`   | `HTMLElement` |         |                                                                                                                                       |
-| `name` | `string`      | `null`  | Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file. |
-| `size` | `number`      | `16`    | Size of the icon in pixels. Default is 16.                                                                                            |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `name` | `string` | `null` | Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file. |
+| `size` | `number` | `16` | Size of the icon in pixels. Default is 16. |
 
 ---
 
@@ -606,9 +680,9 @@ The header component updates that variable when it renders.
 
 ### Properties
 
-| Name | Type          | Default | Description |
-| ---- | ------------- | ------- | ----------- |
-| `el` | `HTMLElement` |         |             |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
 
 ---
 
@@ -620,30 +694,30 @@ Displays selected items as tags with optional search filtering.
 
 ### Properties
 
-| Name            | Type                             | Default               | Description                                                                                                 |
-| --------------- | -------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `el`            | `HTMLElement`                    |                       |                                                                                                             |
-| `options`       | `LeOption[] \| string`           | `[]`                  | The options to display in the dropdown.                                                                     |
-| `value`         | `LeOptionValue[]`                | `[]`                  | The currently selected values.                                                                              |
-| `placeholder`   | `string`                         | `'Select options...'` | Placeholder text when no options are selected.                                                              |
-| `disabled`      | `boolean`                        | `false`               | Whether the multiselect is disabled.                                                                        |
-| `required`      | `boolean`                        | `false`               | Whether selection is required.                                                                              |
-| `name`          | `string \| undefined`            |                       | Name attribute for form submission.                                                                         |
-| `fullWidth`     | `boolean`                        | `false`               | Whether the multiselect should take full width of its container.                                            |
-| `size`          | `'small' \| 'medium' \| 'large'` | `'medium'`            | Size variant of the multiselect.                                                                            |
-| `maxSelections` | `number \| undefined`            |                       | Maximum number of selections allowed.                                                                       |
-| `showSelectAll` | `boolean \| string \| string[]`  | `false`               | Whether to show a "Select All" option. Also accepts a string or array of strings to customize the label(s). |
-| `searchable`    | `boolean`                        | `false`               | Whether the input is searchable.                                                                            |
-| `emptyText`     | `string`                         | `'No results found'`  | Text to show when no options match the search.                                                              |
-| `open`          | `boolean`                        | `false`               | Whether the dropdown is currently open.                                                                     |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `options` | `LeOption[] \| string` | `[]` | The options to display in the dropdown. |
+| `value` | `LeOptionValue[]` | `[]` | The currently selected values. |
+| `placeholder` | `string` | `'Select options...'` | Placeholder text when no options are selected. |
+| `disabled` | `boolean` | `false` | Whether the multiselect is disabled. |
+| `required` | `boolean` | `false` | Whether selection is required. |
+| `name` | `string \| undefined` |  | Name attribute for form submission. |
+| `fullWidth` | `boolean` | `false` | Whether the multiselect should take full width of its container. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size variant of the multiselect. |
+| `maxSelections` | `number \| undefined` |  | Maximum number of selections allowed. |
+| `showSelectAll` | `boolean \| string \| string[]` | `false` | Whether to show a "Select All" option. Also accepts a string or array of strings to customize the label(s). |
+| `searchable` | `boolean` | `false` | Whether the input is searchable. |
+| `emptyText` | `string` | `'No results found'` | Text to show when no options match the search. |
+| `open` | `boolean` | `false` | Whether the dropdown is currently open. |
 
 ### Events
 
-| Event      | Type                                      | Description                              |
-| ---------- | ----------------------------------------- | ---------------------------------------- |
+| Event | Type | Description |
+|-------|------|-------------|
 | `leChange` | `EventEmitter<LeMultiOptionSelectDetail>` | Emitted when the selected values change. |
-| `leOpen`   | `EventEmitter<void>`                      | Emitted when the dropdown opens.         |
-| `leClose`  | `EventEmitter<void>`                      | Emitted when the dropdown closes.        |
+| `leOpen` | `EventEmitter<void>` | Emitted when the dropdown opens. |
+| `leClose` | `EventEmitter<void>` | Emitted when the dropdown closes. |
 
 ---
 
@@ -657,34 +731,34 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 
 ### Properties
 
-| Name                     | Type                                              | Default              | Description                                                                                                                                                        |
-| ------------------------ | ------------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `el`                     | `HTMLElement`                                     |                      |                                                                                                                                                                    |
-| `items`                  | `LeOption[] \| string`                            | `[]`                 | Navigation items. Can be passed as an array or JSON string (same pattern as le-select).                                                                            |
-| `orientation`            | `'vertical' \| 'horizontal'`                      | `'horizontal'`       | Layout orientation.                                                                                                                                                |
-| `wrap`                   | `boolean`                                         | `false`              | Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`.                                                                               |
-| `overflowMode`           | `'more' \| 'hamburger'`                           | `'more'`             | Overflow behavior for horizontal, non-wrapping menus. - more: moves overflow items into a "More" popover - hamburger: turns the whole nav into a hamburger popover |
-| `minVisibleItemsForMore` | `number`                                          | `2`                  | Minimum number of visible top-level items required to use the "More" overflow. If fewer would be visible, the navigation falls back to hamburger.                  |
-| `align`                  | `'start' \| 'end' \| 'center' \| 'space-between'` | `'start'`            | Alignment of the menu items within the navigation bar.                                                                                                             |
-| `activeUrl`              | `string`                                          | `''`                 | Active url for automatic selection.                                                                                                                                |
-| `searchable`             | `boolean`                                         | `false`              | Enables a search input for the vertical navigation.                                                                                                                |
-| `searchPlaceholder`      | `string`                                          | `'Search...'`        | Placeholder text for the search input.                                                                                                                             |
-| `emptyText`              | `string`                                          | `'No results found'` | Text shown when no items match the filter.                                                                                                                         |
-| `submenuSearchable`      | `boolean`                                         | `false`              | Whether submenu popovers should include a filter input.                                                                                                            |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `items` | `LeOption[] \| string` | `[]` | Navigation items. Can be passed as an array or JSON string (same pattern as le-select). |
+| `orientation` | `'vertical' \| 'horizontal'` | `'horizontal'` | Layout orientation. |
+| `wrap` | `boolean` | `false` | Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`. |
+| `overflowMode` | `'more' \| 'hamburger'` | `'more'` | Overflow behavior for horizontal, non-wrapping menus. - more: moves overflow items into a "More" popover - hamburger: turns the whole nav into a hamburger popover |
+| `minVisibleItemsForMore` | `number` | `2` | Minimum number of visible top-level items required to use the "More" overflow. If fewer would be visible, the navigation falls back to hamburger. |
+| `align` | `'start' \| 'end' \| 'center' \| 'space-between'` | `'start'` | Alignment of the menu items within the navigation bar. |
+| `activeUrl` | `string` | `''` | Active url for automatic selection. |
+| `searchable` | `boolean` | `false` | Enables a search input for the vertical navigation. |
+| `searchPlaceholder` | `string` | `'Search...'` | Placeholder text for the search input. |
+| `emptyText` | `string` | `'No results found'` | Text shown when no items match the filter. |
+| `submenuSearchable` | `boolean` | `false` | Whether submenu popovers should include a filter input. |
 
 ### Events
 
-| Event             | Type                                         | Description                                                                                                                                                            |
-| ----------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `leNavItemSelect` | `EventEmitter<LeNavigationItemSelectDetail>` | Fired when a navigation item is activated. This event is cancelable. Call `event.preventDefault()` to prevent default browser navigation and implement custom routing. |
-| `leNavItemToggle` | `EventEmitter<LeNavigationItemToggleDetail>` | Fired when a tree branch is toggled.                                                                                                                                   |
+| Event | Type | Description |
+|-------|------|-------------|
+| `leNavItemSelect` | `EventEmitter<LeNavigationItemSelectDetail>` | Fired when a navigation item is activated.  This event is cancelable. Call `event.preventDefault()` to prevent default browser navigation and implement custom routing. |
+| `leNavItemToggle` | `EventEmitter<LeNavigationItemToggleDetail>` | Fired when a tree branch is toggled. |
 
 ### Slots
 
-| Name                  | Description                                      |
-| --------------------- | ------------------------------------------------ |
+| Name | Description |
+|------|-------------|
 | `"hamburger-trigger"` | Custom trigger contents for the hamburger button |
-| `"more-trigger"`      | Custom trigger contents for the "More" button    |
+| `"more-trigger"` | Custom trigger contents for the "More" button |
 
 ---
 
@@ -694,49 +768,49 @@ A number input component with validation, keyboard controls, and custom spinners
 
 ### Properties
 
-| Name           | Type                  | Default | Description                                   |
-| -------------- | --------------------- | ------- | --------------------------------------------- |
-| `el`           | `HTMLElement`         |         |                                               |
-| `value`        | `number`              |         | The value of the input                        |
-| `name`         | `string`              |         | The name of the input                         |
-| `label`        | `string`              |         | Label for the input                           |
-| `placeholder`  | `string`              |         | Placeholder text                              |
-| `min`          | `number \| undefined` |         | Minimum allowed value                         |
-| `max`          | `number \| undefined` |         | Maximum allowed value                         |
-| `step`         | `number`              | `1`     | Step value for increment/decrement            |
-| `required`     | `boolean`             | `false` | Whether the input is required                 |
-| `disabled`     | `boolean`             | `false` | Whether the input is disabled                 |
-| `readonly`     | `boolean`             | `false` | Whether the input is read-only                |
-| `iconStart`    | `string \| undefined` |         | Icon for the start icon                       |
-| `showSpinners` | `boolean`             | `true`  | Whether to show the spinner controls          |
-| `externalId`   | `string`              |         | External ID for linking with external systems |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `value` | `number` |  | The value of the input |
+| `name` | `string` |  | The name of the input |
+| `label` | `string` |  | Label for the input |
+| `placeholder` | `string` |  | Placeholder text |
+| `min` | `number \| undefined` |  | Minimum allowed value |
+| `max` | `number \| undefined` |  | Maximum allowed value |
+| `step` | `number` | `1` | Step value for increment/decrement |
+| `required` | `boolean` | `false` | Whether the input is required |
+| `disabled` | `boolean` | `false` | Whether the input is disabled |
+| `readonly` | `boolean` | `false` | Whether the input is read-only |
+| `iconStart` | `string \| undefined` |  | Icon for the start icon |
+| `showSpinners` | `boolean` | `true` | Whether to show the spinner controls |
+| `externalId` | `string` |  | External ID for linking with external systems |
 
 ### Events
 
-| Event      | Type                                                                                  | Description                                              |
-| ---------- | ------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `leChange` | `EventEmitter<{ value: number; name: string; externalId: string; isValid: boolean }>` | Emitted when the value changes (on blur or Enter)        |
-| `leInput`  | `EventEmitter<{ value: number; name: string; externalId: string; isValid: boolean }>` | Emitted when the input value changes (on keystroke/spin) |
+| Event | Type | Description |
+|-------|------|-------------|
+| `leChange` | `EventEmitter<{ value: number; name: string; externalId: string; isValid: boolean }>` | Emitted when the value changes (on blur or Enter) |
+| `leInput` | `EventEmitter<{ value: number; name: string; externalId: string; isValid: boolean }>` | Emitted when the input value changes (on keystroke/spin) |
 
 ### Slots
 
-| Name            | Description                                           |
-| --------------- | ----------------------------------------------------- |
-| Default         | The label text for the input                          |
+| Name | Description |
+|------|-------------|
+| Default | The label text for the input |
 | `"description"` | Additional description text displayed below the input |
-| `"icon-start"`  | Icon to display at the start of the input             |
+| `"icon-start"` | Icon to display at the start of the input |
 
 ### CSS Variables
 
-| Name                      | Description                     |
-| ------------------------- | ------------------------------- |
-| `--le-input-bg`           | Input background color          |
-| `--le-input-color`        | Input text color                |
-| `--le-input-border`       | Input border style              |
+| Name | Description |
+|------|-------------|
+| `--le-input-bg` | Input background color |
+| `--le-input-color` | Input text color |
+| `--le-input-border` | Input border style |
 | `--le-input-border-focus` | Input border style when focused |
 | `--le-input-border-error` | Input border style when invalid |
-| `--le-input-radius`       | Input border radius             |
-| `--le-input-padding`      | Input padding                   |
+| `--le-input-radius` | Input border radius |
+| `--le-input-padding` | Input padding |
 
 ---
 
@@ -749,35 +823,35 @@ and other top-layer elements. Falls back gracefully in older browsers.
 
 ### Properties
 
-| Name                  | Type                                               | Default    | Description                                                   |
-| --------------------- | -------------------------------------------------- | ---------- | ------------------------------------------------------------- |
-| `el`                  | `HTMLElement`                                      |            |                                                               |
-| `mode`                | `'default' \| 'admin'`                             |            | Mode of the popover should be 'default' for internal use      |
-| `open`                | `boolean`                                          | `false`    | Whether the popover is currently open                         |
-| `position`            | `'top' \| 'bottom' \| 'left' \| 'right' \| 'auto'` | `'bottom'` | Position of the popover relative to its trigger               |
-| `align`               | `'start' \| 'center' \| 'end'`                     | `'start'`  | Alignment of the popover                                      |
-| `popoverTitle`        | `string \| undefined`                              |            | Optional title for the popover header                         |
-| `showClose`           | `boolean`                                          | `true`     | Whether to show a close button in the header                  |
-| `closeOnClickOutside` | `boolean`                                          | `true`     | Whether clicking outside closes the popover                   |
-| `closeOnEscape`       | `boolean`                                          | `true`     | Whether pressing Escape closes the popover                    |
-| `offset`              | `number`                                           | `8`        | Offset from the trigger element (in pixels)                   |
-| `width`               | `string \| undefined`                              |            | Fixed width for the popover (e.g., '300px', '20rem')          |
-| `minWidth`            | `string \| undefined`                              | `'200px'`  | Minimum width for the popover (e.g., '200px', '15rem')        |
-| `maxWidth`            | `string \| undefined`                              |            | Maximum width for the popover (e.g., '400px', '25rem')        |
-| `triggerFullWidth`    | `boolean`                                          | `false`    | Should the popover's trigger take full width of its container |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `mode` | `'default' \| 'admin'` |  | Mode of the popover should be 'default' for internal use |
+| `open` | `boolean` | `false` | Whether the popover is currently open |
+| `position` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'auto'` | `'bottom'` | Position of the popover relative to its trigger |
+| `align` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment of the popover |
+| `popoverTitle` | `string \| undefined` |  | Optional title for the popover header |
+| `showClose` | `boolean` | `true` | Whether to show a close button in the header |
+| `closeOnClickOutside` | `boolean` | `true` | Whether clicking outside closes the popover |
+| `closeOnEscape` | `boolean` | `true` | Whether pressing Escape closes the popover |
+| `offset` | `number` | `8` | Offset from the trigger element (in pixels) |
+| `width` | `string \| undefined` |  | Fixed width for the popover (e.g., '300px', '20rem') |
+| `minWidth` | `string \| undefined` | `'200px'` | Minimum width for the popover (e.g., '200px', '15rem') |
+| `maxWidth` | `string \| undefined` |  | Maximum width for the popover (e.g., '400px', '25rem') |
+| `triggerFullWidth` | `boolean` | `false` | Should the popover's trigger take full width of its container |
 
 ### Events
 
-| Event            | Type                 | Description                     |
-| ---------------- | -------------------- | ------------------------------- |
-| `lePopoverOpen`  | `EventEmitter<void>` | Emitted when the popover opens  |
+| Event | Type | Description |
+|-------|------|-------------|
+| `lePopoverOpen` | `EventEmitter<void>` | Emitted when the popover opens |
 | `lePopoverClose` | `EventEmitter<void>` | Emitted when the popover closes |
 
 ### Slots
 
-| Name        | Description                                  |
-| ----------- | -------------------------------------------- |
-| Default     | Content to display inside the popover        |
+| Name | Description |
+|------|-------------|
+| Default | Content to display inside the popover |
 | `"trigger"` | Element that triggers the popover (optional) |
 
 ---
@@ -792,38 +866,38 @@ via leAlert(), leConfirm(), lePrompt().
 
 ### Properties
 
-| Name              | Type                  | Default     | Description                                                                             |
-| ----------------- | --------------------- | ----------- | --------------------------------------------------------------------------------------- |
-| `el`              | `HTMLElement`         |             |                                                                                         |
-| `mode`            | `LeKitMode`           | `'default'` | The mode of the Le Kit (e.g., 'default' or 'admin')                                     |
-| `open`            | `boolean`             | `false`     | Whether the popup is currently visible                                                  |
-| `type`            | `PopupType`           | `'alert'`   | Type of popup: alert (OK only), confirm (OK/Cancel), prompt (input + OK/Cancel), custom |
-| `popupTitle`      | `string \| undefined` |             | Optional title for the popup header                                                     |
-| `message`         | `string \| undefined` |             | Message text to display (for alert/confirm/prompt types)                                |
-| `modal`           | `boolean`             | `true`      | Whether the popup is modal (blocks interaction with page behind)                        |
-| `position`        | `PopupPosition`       | `'center'`  | Position of the popup on screen                                                         |
-| `confirmText`     | `string`              | `'OK'`      | Text for the confirm/OK button                                                          |
-| `cancelText`      | `string`              | `'Cancel'`  | Text for the cancel button                                                              |
-| `placeholder`     | `string`              | `''`        | Placeholder text for prompt input                                                       |
-| `defaultValue`    | `string`              | `''`        | Default value for prompt input                                                          |
-| `closeOnBackdrop` | `boolean`             | `true`      | Whether clicking the backdrop closes the popup (modal only)                             |
-| `inputValue`      | `string`              | `''`        | Internal state for prompt input value                                                   |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `mode` | `LeKitMode` | `'default'` | The mode of the Le Kit (e.g., 'default' or 'admin') |
+| `open` | `boolean` | `false` | Whether the popup is currently visible |
+| `type` | `PopupType` | `'alert'` | Type of popup: alert (OK only), confirm (OK/Cancel), prompt (input + OK/Cancel), custom |
+| `popupTitle` | `string \| undefined` |  | Optional title for the popup header |
+| `message` | `string \| undefined` |  | Message text to display (for alert/confirm/prompt types) |
+| `modal` | `boolean` | `true` | Whether the popup is modal (blocks interaction with page behind) |
+| `position` | `PopupPosition` | `'center'` | Position of the popup on screen |
+| `confirmText` | `string` | `'OK'` | Text for the confirm/OK button |
+| `cancelText` | `string` | `'Cancel'` | Text for the cancel button |
+| `placeholder` | `string` | `''` | Placeholder text for prompt input |
+| `defaultValue` | `string` | `''` | Default value for prompt input |
+| `closeOnBackdrop` | `boolean` | `true` | Whether clicking the backdrop closes the popup (modal only) |
+| `inputValue` | `string` | `''` | Internal state for prompt input value |
 
 ### Events
 
-| Event       | Type                        | Description                                                       |
-| ----------- | --------------------------- | ----------------------------------------------------------------- |
-| `leConfirm` | `EventEmitter<PopupResult>` | Emitted when the popup is confirmed (OK clicked)                  |
-| `leCancel`  | `EventEmitter<PopupResult>` | Emitted when the popup is cancelled (Cancel clicked or dismissed) |
-| `leOpen`    | `EventEmitter<void>`        | Emitted when the popup opens                                      |
-| `leClose`   | `EventEmitter<PopupResult>` | Emitted when the popup closes                                     |
+| Event | Type | Description |
+|-------|------|-------------|
+| `leConfirm` | `EventEmitter<PopupResult>` | Emitted when the popup is confirmed (OK clicked) |
+| `leCancel` | `EventEmitter<PopupResult>` | Emitted when the popup is cancelled (Cancel clicked or dismissed) |
+| `leOpen` | `EventEmitter<void>` | Emitted when the popup opens |
+| `leClose` | `EventEmitter<PopupResult>` | Emitted when the popup closes |
 
 ### Slots
 
-| Name       | Description                                      |
-| ---------- | ------------------------------------------------ |
-| Default    | Default slot for custom body content             |
-| `"header"` | Custom header content (replaces title)           |
+| Name | Description |
+|------|-------------|
+| Default | Default slot for custom body content |
+| `"header"` | Custom header content (replaces title) |
 | `"footer"` | Custom footer content (replaces default buttons) |
 
 ---
@@ -832,20 +906,18 @@ via leAlert(), leConfirm(), lePrompt().
 
 ### Properties
 
-| Name            | Type          | Default | Description |
-| --------------- | ------------- | ------- | ----------- |
-| `el`            | `HTMLElement` |         |             |
-| `value`         | `number`      | `0`     |             |
-| `padding`       | `number`      | `0`     |             |
-| `paths`         | `string`      |         |             |
-| `progressPaths` | `any[]`       |         |             |
-| `params`        | `{            |
-
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `value` | `number` | `0` |  |
+| `padding` | `number` | `0` |  |
+| `paths` | `string` |  |  |
+| `progressPaths` | `any[]` |  |  |
+| `params` | `{
     width: number;
     diameter: number;
     circumference: number;
-
-}` | | |
+  }` |  |  |
 
 ---
 
@@ -858,23 +930,23 @@ If it is a selector string, tracks progress within the matched element.
 
 ### Properties
 
-| Name                  | Type                  | Default | Description                 |
-| --------------------- | --------------------- | ------- | --------------------------- |
-| `el`                  | `HTMLElement`         |         |                             |
-| `trackScrollProgress` | `string \| undefined` |         | Boolean or selector string. |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `trackScrollProgress` | `string \| undefined` |  | Boolean or selector string. |
 
 ### CSS Variables
 
-| Name                               | Description                                                 |
-| ---------------------------------- | ----------------------------------------------------------- |
-| `--le-scroll-progress-height`      | Bar height                                                  |
-| `--le-scroll-progress-bg`          | Track background                                            |
-| `--le-scroll-progress-fill`        | Fill color                                                  |
-| `--le-scroll-progress-sticky-top`  | If sticky, stop position to parent top                      |
-| `--le-scroll-progress-fixed-top`   | If fixed, distance from window top                          |
-| `--le-scroll-progress-fixed-left`  | If fixed, distance from window left                         |
-| `--le-scroll-progress-fixed-right` | If fixed, distance from window right                        |
-| `--le-scroll-progress-z`           | Z-index of the progress bar (1001 by default, above header) |
+| Name | Description |
+|------|-------------|
+| `--le-scroll-progress-height` | Bar height |
+| `--le-scroll-progress-bg` | Track background |
+| `--le-scroll-progress-fill` | Fill color |
+| `--le-scroll-progress-sticky-top` | If sticky, stop position to parent top |
+| `--le-scroll-progress-fixed-top` | If fixed, distance from window top |
+| `--le-scroll-progress-fixed-left` | If fixed, distance from window left |
+| `--le-scroll-progress-fixed-right` | If fixed, distance from window right |
+| `--le-scroll-progress-z` | Z-index of the progress bar (1001 by default, above header) |
 
 ---
 
@@ -886,30 +958,30 @@ Perfect for toggling between a small set of related options.
 
 ### Properties
 
-| Name        | Type                                          | Default    | Description                                 |
-| ----------- | --------------------------------------------- | ---------- | ------------------------------------------- |
-| `el`        | `HTMLElement`                                 |            |                                             |
-| `options`   | `LeOption[]`                                  | `[]`       | Array of options for the segmented control. |
-| `value`     | `LeOptionValue \| undefined`                  |            | The value of the currently selected option. |
-| `size`      | `'small' \| 'medium' \| 'large'`              | `'medium'` | Size of the control.                        |
-| `overflow`  | `'auto' \| 'hidden' \| 'visible' \| 'scroll'` | `'auto'`   | Scroll behavior for overflowing tabs.       |
-| `fullWidth` | `boolean`                                     | `false`    | Whether the control should take full width. |
-| `disabled`  | `boolean`                                     | `false`    | Whether the control is disabled.            |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `options` | `LeOption[]` | `[]` | Array of options for the segmented control. |
+| `value` | `LeOptionValue \| undefined` |  | The value of the currently selected option. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size of the control. |
+| `overflow` | `'auto' \| 'hidden' \| 'visible' \| 'scroll'` | `'auto'` | Scroll behavior for overflowing tabs. |
+| `fullWidth` | `boolean` | `false` | Whether the control should take full width. |
+| `disabled` | `boolean` | `false` | Whether the control is disabled. |
 
 ### Events
 
-| Event      | Type                                 | Description                         |
-| ---------- | ------------------------------------ | ----------------------------------- |
+| Event | Type | Description |
+|-------|------|-------------|
 | `leChange` | `EventEmitter<LeOptionSelectDetail>` | Emitted when the selection changes. |
 
 ### CSS Variables
 
-| Name                     | Description                     |
-| ------------------------ | ------------------------------- |
-| `--le-segmented-bg`      | Background color of the control |
-| `--le-segmented-padding` | Padding around segments         |
-| `--le-segmented-gap`     | Gap between segments            |
-| `--le-segmented-radius`  | Border radius of the control    |
+| Name | Description |
+|------|-------------|
+| `--le-segmented-bg` | Background color of the control |
+| `--le-segmented-padding` | Padding around segments |
+| `--le-segmented-gap` | Gap between segments |
+| `--le-segmented-radius` | Border radius of the control |
 
 ---
 
@@ -917,32 +989,35 @@ Perfect for toggling between a small set of related options.
 
 ### Properties
 
-| Name               | Type                        | Default        | Description                                                                                                                       |
-| ------------------ | --------------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `el`               | `HTMLElement`               |                |                                                                                                                                   |
-| `panelId`          | `string \| undefined`       |                | Optional id used to match toggle requests. If set, the panel only responds to toggle events with the same `panelId`.              |
-| `side`             | `LeSidePanelSide`           | `'start'`      | Which side the panel is attached to.                                                                                              |
-| `collapseAt`       | `string \| undefined`       |                | Width breakpoint (in px or a CSS var like `--le-breakpoint-md`) below which the panel enters "narrow" mode.                       |
-| `narrowBehavior`   | `LeSidePanelNarrowBehavior` | `'overlay'`    | Behavior when in narrow mode.                                                                                                     |
-| `open`             | `boolean`                   | `false`        | Panel open state for narrow mode. - overlay: controls modal drawer visibility - push: controls whether panel is shown (non-modal) |
-| `collapsed`        | `boolean`                   | `false`        | Panel collapsed state for wide mode (fully hidden).                                                                               |
-| `panelWidth`       | `number`                    | `280`          | Default panel width in pixels.                                                                                                    |
-| `minPanelWidth`    | `number`                    | `220`          | Minimum allowed width when resizable.                                                                                             |
-| `maxPanelWidth`    | `number`                    | `420`          | Maximum allowed width when resizable.                                                                                             |
-| `resizable`        | `boolean`                   | `false`        | Allows users to resize the panel by dragging its edge.                                                                            |
-| `persistKey`       | `string \| undefined`       |                | When set, panel width + collapsed state are persisted in localStorage.                                                            |
-| `showCloseButton`  | `boolean`                   | `true`         | Show a close button inside the panel (primarily used in narrow overlay mode).                                                     |
-| `autoShowOnWide`   | `boolean`                   | `true`         | When crossing to wide mode, automatically show the panel (collapsed=false).                                                       |
-| `autoHideOnNarrow` | `boolean`                   | `true`         | When crossing to narrow mode, automatically hide the panel (open=false).                                                          |
-| `panelLabel`       | `string`                    | `'Navigation'` | Accessible label for the panel navigation region.                                                                                 |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `panelId` | `string \| undefined` |  | Optional id used to match toggle requests. If set, the panel only responds to toggle events with the same `panelId`. |
+| `side` | `LeSidePanelSide` | `'start'` | Which side the panel is attached to. |
+| `collapseAt` | `string \| undefined` |  | Width breakpoint (in px or a CSS var like `--le-breakpoint-md`) below which the panel enters "narrow" mode. |
+| `narrowBehavior` | `LeSidePanelNarrowBehavior` | `'overlay'` | Behavior when in narrow mode. |
+| `sticky` | `boolean` | `false` | Whether the panel is sticky (remains visible when scrolling). |
+| `top` | `number \| 'under-header'` | `0` | Top offset for the sticky panel. |
+| `fullHeight` | `boolean` | `false` | Whether the sticky panel should stretch to full height. |
+| `open` | `boolean` | `false` | Panel open state for narrow mode. - overlay: controls modal drawer visibility - push: controls whether panel is shown (non-modal) |
+| `collapsed` | `boolean` | `false` | Panel collapsed state for wide mode (fully hidden). |
+| `panelWidth` | `number` | `280` | Default panel width in pixels. |
+| `minPanelWidth` | `number` | `220` | Minimum allowed width when resizable. |
+| `maxPanelWidth` | `number` | `420` | Maximum allowed width when resizable. |
+| `resizable` | `boolean` | `false` | Allows users to resize the panel by dragging its edge. |
+| `persistKey` | `string \| undefined` |  | When set, panel width + collapsed state are persisted in localStorage. |
+| `showCloseButton` | `boolean` | `true` | Show a close button inside the panel (primarily used in narrow overlay mode). |
+| `autoShowOnWide` | `boolean` | `true` | When crossing to wide mode, automatically show the panel (collapsed=false). |
+| `autoHideOnNarrow` | `boolean` | `true` | When crossing to narrow mode, automatically hide the panel (open=false). |
+| `panelLabel` | `string` | `'Navigation'` | Accessible label for the panel navigation region. |
 
 ### Events
 
-| Event                        | Type                                                     | Description |
-| ---------------------------- | -------------------------------------------------------- | ----------- |
-| `leSidePanelOpenChange`      | `EventEmitter<{ open: boolean; panelId?: string }>`      |             |
-| `leSidePanelCollapsedChange` | `EventEmitter<{ collapsed: boolean; panelId?: string }>` |             |
-| `leSidePanelWidthChange`     | `EventEmitter<{ width: number; panelId?: string }>`      |             |
+| Event | Type | Description |
+|-------|------|-------------|
+| `leSidePanelOpenChange` | `EventEmitter<{ open: boolean; panelId?: string }>` |  |
+| `leSidePanelCollapsedChange` | `EventEmitter<{ collapsed: boolean; panelId?: string }>` |  |
+| `leSidePanelWidthChange` | `EventEmitter<{ width: number; panelId?: string }>` |  |
 
 ---
 
@@ -950,32 +1025,32 @@ Perfect for toggling between a small set of related options.
 
 ### Properties
 
-| Name        | Type                                                                       | Default     | Description                                         |
-| ----------- | -------------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `el`        | `HTMLElement`                                                              |             |                                                     |
-| `panelId`   | `string \| undefined`                                                      |             | Optional id used to target a specific panel.        |
-| `action`    | `LeSidePanelToggleAction`                                                  | `'toggle'`  | Action to emit. Default toggles the panel.          |
-| `shortcut`  | `string \| undefined`                                                      |             | Optional keyboard shortcut like `Mod+B` or `Alt+N`. |
-| `disabled`  | `boolean`                                                                  | `false`     | Disables the toggle.                                |
-| `mode`      | `'default' \| 'admin'`                                                     |             |                                                     |
-| `variant`   | `'solid' \| 'outlined' \| 'clear' \| 'system'`                             | `'solid'`   |                                                     |
-| `color`     | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'primary'` |                                                     |
-| `size`      | `'small' \| 'medium' \| 'large'`                                           | `'medium'`  |                                                     |
-| `selected`  | `boolean`                                                                  | `false`     |                                                     |
-| `fullWidth` | `boolean`                                                                  | `false`     |                                                     |
-| `iconOnly`  | `string \| Node \| undefined`                                              |             |                                                     |
-| `iconStart` | `string \| Node \| undefined`                                              |             |                                                     |
-| `iconEnd`   | `string \| Node \| undefined`                                              |             |                                                     |
-| `type`      | `'button' \| 'submit' \| 'reset'`                                          | `'button'`  |                                                     |
-| `href`      | `string \| undefined`                                                      |             |                                                     |
-| `target`    | `string \| undefined`                                                      |             |                                                     |
-| `align`     | `'start' \| 'center' \| 'space-between' \| 'end'`                          | `'center'`  |                                                     |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `panelId` | `string \| undefined` |  | Optional id used to target a specific panel. |
+| `action` | `LeSidePanelToggleAction` | `'toggle'` | Action to emit. Default toggles the panel. |
+| `shortcut` | `string \| undefined` |  | Optional keyboard shortcut like `Mod+B` or `Alt+N`. |
+| `disabled` | `boolean` | `false` | Disables the toggle. |
+| `mode` | `'default' \| 'admin'` |  |  |
+| `variant` | `'solid' \| 'outlined' \| 'clear' \| 'system'` | `'solid'` |  |
+| `color` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'primary'` |  |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` |  |
+| `selected` | `boolean` | `false` |  |
+| `fullWidth` | `boolean` | `false` |  |
+| `iconOnly` | `string \| Node \| undefined` |  |  |
+| `iconStart` | `string \| Node \| undefined` |  |  |
+| `iconEnd` | `string \| Node \| undefined` |  |  |
+| `type` | `'button' \| 'submit' \| 'reset'` | `'button'` |  |
+| `href` | `string \| undefined` |  |  |
+| `target` | `string \| undefined` |  |  |
+| `align` | `'start' \| 'center' \| 'space-between' \| 'end'` | `'center'` |  |
 
 ### Events
 
-| Event                      | Type                                           | Description |
-| -------------------------- | ---------------------------------------------- | ----------- |
-| `leSidePanelRequestToggle` | `EventEmitter<LeSidePanelRequestToggleDetail>` |             |
+| Event | Type | Description |
+|-------|------|-------------|
+| `leSidePanelRequestToggle` | `EventEmitter<LeSidePanelRequestToggleDetail>` |  |
 
 ---
 
@@ -990,30 +1065,30 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
 
 ### Properties
 
-| Name                | Type                             | Default  | Description                                                                                                                                                                |
-| ------------------- | -------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `el`                | `HTMLElement`                    |          |                                                                                                                                                                            |
-| `type`              | `'slot' \| 'text' \| 'textarea'` | `'slot'` | The type of slot content. - `slot`: Default, shows a dropzone for components (default) - `text`: Shows a single-line text input - `textarea`: Shows a multi-line text area |
-| `name`              | `string`                         | `''`     | The name of the slot this placeholder represents. Should match the slot name in the parent component.                                                                      |
-| `label`             | `string \| undefined`            |          | Label to display in admin mode. If not provided, the slot name will be used.                                                                                               |
-| `description`       | `string \| undefined`            |          | Description of what content this slot accepts. Shown in admin mode to guide content editors.                                                                               |
-| `allowedComponents` | `string \| undefined`            |          | Comma-separated list of allowed component tags for this slot. Used by CMS to filter available components.                                                                  |
-| `multiple`          | `boolean`                        | `true`   | Whether multiple components can be dropped in this slot.                                                                                                                   |
-| `required`          | `boolean`                        | `false`  | Whether this slot is required to have content.                                                                                                                             |
-| `placeholder`       | `string \| undefined`            |          | Placeholder text for text/textarea inputs in admin mode.                                                                                                                   |
-| `tag`               | `string \| undefined`            |          | The HTML tag to create when there's no slotted element. Used with type="text" or type="textarea" to auto-create elements.                                                  |
-| `slotStyle`         | `string \| undefined`            |          | CSS styles for the slot dropzone container. Useful for layouts - e.g., "flex-direction: row" for horizontal stacks. Only applies in admin mode for type="slot".            |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `type` | `'slot' \| 'text' \| 'textarea'` | `'slot'` | The type of slot content. - `slot`: Default, shows a dropzone for components (default) - `text`: Shows a single-line text input - `textarea`: Shows a multi-line text area |
+| `name` | `string` | `''` | The name of the slot this placeholder represents. Should match the slot name in the parent component. |
+| `label` | `string \| undefined` |  | Label to display in admin mode. If not provided, the slot name will be used. |
+| `description` | `string \| undefined` |  | Description of what content this slot accepts. Shown in admin mode to guide content editors. |
+| `allowedComponents` | `string \| undefined` |  | Comma-separated list of allowed component tags for this slot. Used by CMS to filter available components. |
+| `multiple` | `boolean` | `true` | Whether multiple components can be dropped in this slot. |
+| `required` | `boolean` | `false` | Whether this slot is required to have content. |
+| `placeholder` | `string \| undefined` |  | Placeholder text for text/textarea inputs in admin mode. |
+| `tag` | `string \| undefined` |  | The HTML tag to create when there's no slotted element. Used with type="text" or type="textarea" to auto-create elements. |
+| `slotStyle` | `string \| undefined` |  | CSS styles for the slot dropzone container. Useful for layouts - e.g., "flex-direction: row" for horizontal stacks. Only applies in admin mode for type="slot". |
 
 ### Events
 
-| Event          | Type                                                              | Description                                                                                                 |
-| -------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Event | Type | Description |
+|-------|------|-------------|
 | `leSlotChange` | `EventEmitter<{ name: string; value: string; isValid: boolean }>` | Emitted when text content changes in admin mode. The event detail contains the new text value and validity. |
 
 ### Slots
 
-| Name    | Description                                          |
-| ------- | ---------------------------------------------------- |
+| Name | Description |
+|------|-------------|
 | Default | Default slot for placeholder content or drop zone UI |
 
 ---
@@ -1028,31 +1103,31 @@ creating responsive layouts.
 
 ### Properties
 
-| Name           | Type                                                                                  | Default        | Description                                                            |
-| -------------- | ------------------------------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------- |
-| `el`           | `HTMLElement`                                                                         |                |                                                                        |
-| `direction`    | `'horizontal' \| 'vertical'`                                                          | `'horizontal'` | Direction of the stack layout                                          |
-| `gap`          | `string \| undefined`                                                                 |                | Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)') |
-| `align`        | `'start' \| 'center' \| 'end' \| 'stretch' \| 'baseline'`                             | `'stretch'`    | Alignment of items on the cross axis                                   |
-| `justify`      | `'start' \| 'center' \| 'end' \| 'space-between' \| 'space-around' \| 'space-evenly'` | `'start'`      | Distribution of items on the main axis                                 |
-| `wrap`         | `boolean`                                                                             | `false`        | Whether items should wrap to multiple lines                            |
-| `alignContent` | `'start' \| 'center' \| 'end' \| 'stretch' \| 'space-between' \| 'space-around'`      | `'stretch'`    | Alignment of wrapped lines (only applies when wrap is true)            |
-| `reverse`      | `boolean`                                                                             | `false`        | Whether to reverse the order of items                                  |
-| `maxItems`     | `number \| undefined`                                                                 |                | Maximum number of items allowed in the stack (for CMS validation)      |
-| `fullWidth`    | `boolean`                                                                             | `false`        | Whether the stack should take full width of its container              |
-| `fullHeight`   | `boolean`                                                                             | `false`        | Whether the stack should take full height of its container             |
-| `padding`      | `string \| undefined`                                                                 |                | Padding inside the stack container (CSS value)                         |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `direction` | `'horizontal' \| 'vertical'` | `'horizontal'` | Direction of the stack layout |
+| `gap` | `string \| undefined` |  | Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)') |
+| `align` | `'start' \| 'center' \| 'end' \| 'stretch' \| 'baseline'` | `'stretch'` | Alignment of items on the cross axis |
+| `justify` | `'start' \| 'center' \| 'end' \| 'space-between' \| 'space-around' \| 'space-evenly'` | `'start'` | Distribution of items on the main axis |
+| `wrap` | `boolean` | `false` | Whether items should wrap to multiple lines |
+| `alignContent` | `'start' \| 'center' \| 'end' \| 'stretch' \| 'space-between' \| 'space-around'` | `'stretch'` | Alignment of wrapped lines (only applies when wrap is true) |
+| `reverse` | `boolean` | `false` | Whether to reverse the order of items |
+| `maxItems` | `number \| undefined` |  | Maximum number of items allowed in the stack (for CMS validation) |
+| `fullWidth` | `boolean` | `false` | Whether the stack should take full width of its container |
+| `fullHeight` | `boolean` | `false` | Whether the stack should take full height of its container |
+| `padding` | `string \| undefined` |  | Padding inside the stack container (CSS value) |
 
 ### Slots
 
-| Name    | Description                                                  |
-| ------- | ------------------------------------------------------------ |
+| Name | Description |
+|------|-------------|
 | Default | Default slot for stack items (le-box components recommended) |
 
 ### CSS Variables
 
-| Name             | Description                                        |
-| ---------------- | -------------------------------------------------- |
+| Name | Description |
+|------|-------------|
 | `--le-stack-gap` | Gap between items (defaults to var(--le-space-md)) |
 
 ---
@@ -1063,59 +1138,57 @@ A text input component with support for labels, descriptions, icons, and externa
 
 ### Properties
 
-| Name              | Type                                                | Default  | Description                                               |
-| ----------------- | --------------------------------------------------- | -------- | --------------------------------------------------------- |
-| `el`              | `HTMLElement`                                       |          |                                                           |
-| `inputRef`        | `(el: HTMLInputElement) => void \| undefined`       |          | Pass the ref of the input element to the parent component |
-| `mode`            | `'default' \| 'admin'`                              |          | Mode of the popover should be 'default' for internal use  |
-| `value`           | `string`                                            |          | The value of the input                                    |
-| `name`            | `string`                                            |          | The name of the input                                     |
-| `type`            | `'text' \| 'email' \| 'password' \| 'tel' \| 'url'` | `'text'` | The type of the input (text, email, password, etc.)       |
-| `label`           | `string`                                            |          | Label for the input                                       |
-| `iconStart`       | `string`                                            |          | Icon for the start icon                                   |
-| `iconEnd`         | `string`                                            |          | Icon for the end icon                                     |
-| `placeholder`     | `string`                                            |          | Placeholder text                                          |
-| `hideDescription` | `boolean`                                           | `false`  | Hide description slot                                     |
-| `disabled`        | `boolean`                                           | `false`  | Whether the input is disabled                             |
-| `readonly`        | `boolean`                                           | `false`  | Whether the input is read-only                            |
-| `externalId`      | `string`                                            |          | External ID for linking with external systems             |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `inputRef` | `(el: HTMLInputElement) => void \| undefined` |  | Pass the ref of the input element to the parent component |
+| `mode` | `'default' \| 'admin'` |  | Mode of the popover should be 'default' for internal use |
+| `value` | `string` |  | The value of the input |
+| `name` | `string` |  | The name of the input |
+| `type` | `'text' \| 'email' \| 'password' \| 'tel' \| 'url'` | `'text'` | The type of the input (text, email, password, etc.) |
+| `label` | `string` |  | Label for the input |
+| `iconStart` | `string` |  | Icon for the start icon |
+| `iconEnd` | `string` |  | Icon for the end icon |
+| `placeholder` | `string` |  | Placeholder text |
+| `hideDescription` | `boolean` | `false` | Hide description slot |
+| `disabled` | `boolean` | `false` | Whether the input is disabled |
+| `readonly` | `boolean` | `false` | Whether the input is read-only |
+| `externalId` | `string` |  | External ID for linking with external systems |
 
 ### Events
 
-| Event    | Type            | Description |
-| -------- | --------------- | ----------- |
-| `change` | `EventEmitter<{ |
-
+| Event | Type | Description |
+|-------|------|-------------|
+| `change` | `EventEmitter<{
     value: string;
     name: string;
     externalId: string;
-
-}>`| Emitted when the value changes (on blur or Enter) |
-|`input`|`EventEmitter<{
-value: string;
-name: string;
-externalId: string;
-}>` | Emitted when the input value changes (on keystroke) |
+  }>` | Emitted when the value changes (on blur or Enter) |
+| `input` | `EventEmitter<{
+    value: string;
+    name: string;
+    externalId: string;
+  }>` | Emitted when the input value changes (on keystroke) |
 
 ### Slots
 
-| Name            | Description                                           |
-| --------------- | ----------------------------------------------------- |
-| Default         | The label text for the input                          |
+| Name | Description |
+|------|-------------|
+| Default | The label text for the input |
 | `"description"` | Additional description text displayed below the input |
-| `"icon-start"`  | Icon to display at the start of the input             |
-| `"icon-end"`    | Icon to display at the end of the input               |
+| `"icon-start"` | Icon to display at the start of the input |
+| `"icon-end"` | Icon to display at the end of the input |
 
 ### CSS Variables
 
-| Name                      | Description                     |
-| ------------------------- | ------------------------------- |
-| `--le-input-bg`           | Input background color          |
-| `--le-input-color`        | Input text color                |
-| `--le-input-border`       | Input border style              |
+| Name | Description |
+|------|-------------|
+| `--le-input-bg` | Input background color |
+| `--le-input-color` | Input text color |
+| `--le-input-border` | Input border style |
 | `--le-input-border-focus` | Input border style when focused |
-| `--le-input-radius`       | Input border radius             |
-| `--le-input-padding`      | Input padding                   |
+| `--le-input-radius` | Input border radius |
+| `--le-input-padding` | Input padding |
 
 ---
 
@@ -1125,49 +1198,49 @@ A flexible tab component with multiple variants and states.
 
 ### Properties
 
-| Name        | Type                                                              | Default        | Description                                                                                    |
-| ----------- | ----------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------------------------------- |
-| `el`        | `HTMLElement`                                                     |                |                                                                                                |
-| `mode`      | `'default' \| 'admin'`                                            |                | Mode of the popover should be 'default' for internal use                                       |
-| `label`     | `string \| undefined`                                             |                | Label if it is not provided via slot                                                           |
-| `value`     | `string \| undefined`                                             |                | Value of the tab, defaults to label if not provided                                            |
-| `variant`   | `'underlined' \| 'solid' \| 'pills' \| 'enclosed' \| 'icon-only'` | `'underlined'` | Tab variant style                                                                              |
-| `position`  | `'top' \| 'bottom' \| 'start' \| 'end'`                           | `'top'`        | Position of the tabs when used within a le-tabs component                                      |
-| `size`      | `'small' \| 'medium' \| 'large'`                                  | `'medium'`     | Tab size                                                                                       |
-| `focusable` | `boolean`                                                         | `true`         | Whether the tab can get focus needed for accessibility when used in custom tab implementations |
-| `selected`  | `boolean`                                                         | `false`        | Whether the tab is in a selected/active state                                                  |
-| `fullWidth` | `boolean`                                                         | `false`        | Whether the tab takes full width of its container                                              |
-| `icon`      | `string \| Node \| undefined`                                     |                | Icon only tab image or emoji if this prop is set, the tab will render only the icon slot       |
-| `showLabel` | `boolean`                                                         | `false`        | Whether to show the label when in icon-only mode                                               |
-| `iconStart` | `string \| Node \| undefined`                                     |                | Start icon image or emoji                                                                      |
-| `iconEnd`   | `string \| Node \| undefined`                                     |                | End icon image or emoji                                                                        |
-| `disabled`  | `boolean`                                                         | `false`        | Whether the tab is disabled                                                                    |
-| `href`      | `string \| undefined`                                             |                | Optional href to make the tab act as a link                                                    |
-| `target`    | `string \| undefined`                                             |                | Link target when href is set                                                                   |
-| `align`     | `'start' \| 'center' \| 'space-between' \| 'end'`                 | `'center'`     | Alignment of the tab label without the end icon                                                |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `mode` | `'default' \| 'admin'` |  | Mode of the popover should be 'default' for internal use |
+| `label` | `string \| undefined` |  | Label if it is not provided via slot |
+| `value` | `string \| undefined` |  | Value of the tab, defaults to label if not provided |
+| `variant` | `'underlined' \| 'solid' \| 'pills' \| 'enclosed' \| 'icon-only'` | `'underlined'` | Tab variant style |
+| `position` | `'top' \| 'bottom' \| 'start' \| 'end'` | `'top'` | Position of the tabs when used within a le-tabs component |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Tab size |
+| `focusable` | `boolean` | `true` | Whether the tab can get focus needed for accessibility when used in custom tab implementations |
+| `selected` | `boolean` | `false` | Whether the tab is in a selected/active state |
+| `fullWidth` | `boolean` | `false` | Whether the tab takes full width of its container |
+| `icon` | `string \| Node \| undefined` |  | Icon only tab image or emoji if this prop is set, the tab will render only the icon slot |
+| `showLabel` | `boolean` | `false` | Whether to show the label when in icon-only mode |
+| `iconStart` | `string \| Node \| undefined` |  | Start icon image or emoji |
+| `iconEnd` | `string \| Node \| undefined` |  | End icon image or emoji |
+| `disabled` | `boolean` | `false` | Whether the tab is disabled |
+| `href` | `string \| undefined` |  | Optional href to make the tab act as a link |
+| `target` | `string \| undefined` |  | Link target when href is set |
+| `align` | `'start' \| 'center' \| 'space-between' \| 'end'` | `'center'` | Alignment of the tab label without the end icon |
 
 ### Events
 
-| Event   | Type                         | Description                                                                                                               |
-| ------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Event | Type | Description |
+|-------|------|-------------|
 | `click` | `EventEmitter<PointerEvent>` | Emitted when the tab is clicked. This is a custom event that wraps the native click but ensures the target is the le-tab. |
 
 ### Slots
 
-| Name          | Description             |
-| ------------- | ----------------------- |
-| Default       | Tab text content        |
+| Name | Description |
+|------|-------------|
+| Default | Tab text content |
 | `"icon-only"` | Icon for icon-only tabs |
 
 ### CSS Variables
 
-| Name                     | Description            |
-| ------------------------ | ---------------------- |
-| `--le-tab-bg`            | Tab background color   |
-| `--le-tab-color`         | Tab text color         |
-| `--le-tab-border-radius` | Tab border radius      |
-| `--le-tab-padding-x`     | Tab horizontal padding |
-| `--le-tab-padding-y`     | Tab vertical padding   |
+| Name | Description |
+|------|-------------|
+| `--le-tab-bg` | Tab background color |
+| `--le-tab-color` | Tab text color |
+| `--le-tab-border-radius` | Tab border radius |
+| `--le-tab-padding-x` | Tab horizontal padding |
+| `--le-tab-padding-y` | Tab vertical padding |
 
 ---
 
@@ -1181,32 +1254,32 @@ use `le-tabs` instead.
 
 ### Properties
 
-| Name         | Type                             | Default    | Description                                          |
-| ------------ | -------------------------------- | ---------- | ---------------------------------------------------- |
-| `el`         | `HTMLElement`                    |            |                                                      |
-| `tabs`       | `LeOption[]`                     | `[]`       | Array of tab options defining the tabs to display.   |
-| `selected`   | `LeOptionValue \| undefined`     |            | The value of the currently selected tab.             |
-| `fullWidth`  | `boolean`                        | `true`     | Whether tabs should stretch to fill available width. |
-| `showLabels` | `boolean`                        | `false`    | Whether to show labels in icon-only mode.            |
-| `position`   | `'top' \| 'bottom'`              | `'top'`    | Position of the tab bar.                             |
-| `size`       | `'small' \| 'medium' \| 'large'` | `'medium'` | Size of the tabs.                                    |
-| `bordered`   | `boolean`                        | `true`     | Whether to show a border below the tab bar.          |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `tabs` | `LeOption[]` | `[]` | Array of tab options defining the tabs to display. |
+| `selected` | `LeOptionValue \| undefined` |  | The value of the currently selected tab. |
+| `fullWidth` | `boolean` | `true` | Whether tabs should stretch to fill available width. |
+| `showLabels` | `boolean` | `false` | Whether to show labels in icon-only mode. |
+| `position` | `'top' \| 'bottom'` | `'top'` | Position of the tab bar. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size of the tabs. |
+| `bordered` | `boolean` | `true` | Whether to show a border below the tab bar. |
 
 ### Events
 
-| Event         | Type                                 | Description                            |
-| ------------- | ------------------------------------ | -------------------------------------- |
+| Event | Type | Description |
+|-------|------|-------------|
 | `leTabChange` | `EventEmitter<LeOptionSelectDetail>` | Emitted when the selected tab changes. |
 
 ### CSS Variables
 
-| Name                           | Description                 |
-| ------------------------------ | --------------------------- |
-| `--le-tab-bar-border-color`    | Border color                |
-| `--le-tab-bar-gap`             | Gap between tabs            |
-| `--le-tab-bar-indicator-color` | Active indicator color      |
-| `--le-tab-bar-padding-x`       | Horizontal padding for tabs |
-| `--le-tab-bar-padding-y`       | Vertical padding for tabs   |
+| Name | Description |
+|------|-------------|
+| `--le-tab-bar-border-color` | Border color |
+| `--le-tab-bar-gap` | Gap between tabs |
+| `--le-tab-bar-indicator-color` | Active indicator color |
+| `--le-tab-bar-padding-x` | Horizontal padding for tabs |
+| `--le-tab-bar-padding-y` | Vertical padding for tabs |
 
 ---
 
@@ -1220,22 +1293,22 @@ the tab interface.
 
 ### Properties
 
-| Name            | Type                    | Default | Description                                                                                                                                                                                                       |
-| --------------- | ----------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `el`            | `HTMLLeTabPanelElement` |         |                                                                                                                                                                                                                   |
-| `label`         | `string`                |         | The label displayed in the tab button.                                                                                                                                                                            |
-| `value`         | `string \| undefined`   |         | The value used to identify this tab. Defaults to the label if not provided.                                                                                                                                       |
-| `iconStart`     | `string \| undefined`   |         | Icon displayed at the start of the tab button. Can be an emoji, URL, or icon class.                                                                                                                               |
-| `iconEnd`       | `string \| undefined`   |         | Icon displayed at the end of the tab button.                                                                                                                                                                      |
-| `disabled`      | `boolean`               | `false` | Whether this tab is disabled.                                                                                                                                                                                     |
-| `lazy`          | `boolean`               | `false` | Whether to render the panel content only when active (lazy loading). When true, content is not rendered until the tab is first selected. When false (default), content is always in DOM but hidden when inactive. |
-| `active`        | `boolean`               | `false` | Internal: Whether this panel is currently active (set by parent le-tabs)                                                                                                                                          |
-| `hasBeenActive` | `boolean`               | `false` | Internal: Track if panel has ever been activated (for lazy rendering)                                                                                                                                             |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLLeTabPanelElement` |  |  |
+| `label` | `string` |  | The label displayed in the tab button. |
+| `value` | `string \| undefined` |  | The value used to identify this tab. Defaults to the label if not provided. |
+| `iconStart` | `string \| undefined` |  | Icon displayed at the start of the tab button. Can be an emoji, URL, or icon class. |
+| `iconEnd` | `string \| undefined` |  | Icon displayed at the end of the tab button. |
+| `disabled` | `boolean` | `false` | Whether this tab is disabled. |
+| `lazy` | `boolean` | `false` | Whether to render the panel content only when active (lazy loading). When true, content is not rendered until the tab is first selected. When false (default), content is always in DOM but hidden when inactive. |
+| `active` | `boolean` | `false` | Internal: Whether this panel is currently active (set by parent le-tabs) |
+| `hasBeenActive` | `boolean` | `false` | Internal: Track if panel has ever been activated (for lazy rendering) |
 
 ### Slots
 
-| Name    | Description                    |
-| ------- | ------------------------------ |
+| Name | Description |
+|------|-------------|
 | Default | Default slot for panel content |
 
 ---
@@ -1245,7 +1318,6 @@ the tab interface.
 A flexible tabs component for organizing content into tabbed panels.
 
 Supports two modes:
-
 1. **Declarative**: Use `<le-tab-panel>` children to define tabs and content
 2. **Programmatic**: Use the `tabs` prop with named slots for content
 
@@ -1253,41 +1325,41 @@ Full keyboard navigation and ARIA support included.
 
 ### Properties
 
-| Name          | Type                                                              | Default        | Description                                                                                     |
-| ------------- | ----------------------------------------------------------------- | -------------- | ----------------------------------------------------------------------------------------------- |
-| `el`          | `HTMLElement`                                                     |                |                                                                                                 |
-| `tabs`        | `LeOption[]`                                                      | `[]`           | Array of tab options (programmatic mode). If le-tab-panel children exist, they take precedence. |
-| `selected`    | `LeOptionValue \| undefined`                                      |                | The value of the currently selected tab. If not provided, defaults to the first tab.            |
-| `orientation` | `'horizontal' \| 'vertical'`                                      | `'horizontal'` | Orientation of the tabs.                                                                        |
-| `position`    | `'start' \| 'end'`                                                | `'start'`      | Position of the tabs relative to the panels.                                                    |
-| `variant`     | `'underlined' \| 'solid' \| 'pills' \| 'enclosed' \| 'icon-only'` | `'underlined'` | Tab variant style.                                                                              |
-| `fullWidth`   | `boolean`                                                         | `false`        | Whether tabs should stretch to fill available width.                                            |
-| `size`        | `'small' \| 'medium' \| 'large'`                                  | `'medium'`     | Size of the tabs.                                                                               |
-| `wrap`        | `boolean`                                                         | `false`        | Wrap the tabs if they exceed container width.                                                   |
-| `overflow`    | `'auto' \| 'hidden' \| 'visible' \| 'scroll'`                     | `'auto'`       | Scroll behavior for overflowing tabs.                                                           |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `tabs` | `LeOption[]` | `[]` | Array of tab options (programmatic mode). If le-tab-panel children exist, they take precedence. |
+| `selected` | `LeOptionValue \| undefined` |  | The value of the currently selected tab. If not provided, defaults to the first tab. |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Orientation of the tabs. |
+| `position` | `'start' \| 'end'` | `'start'` | Position of the tabs relative to the panels. |
+| `variant` | `'underlined' \| 'solid' \| 'pills' \| 'enclosed' \| 'icon-only'` | `'underlined'` | Tab variant style. |
+| `fullWidth` | `boolean` | `false` | Whether tabs should stretch to fill available width. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size of the tabs. |
+| `wrap` | `boolean` | `false` | Wrap the tabs if they exceed container width. |
+| `overflow` | `'auto' \| 'hidden' \| 'visible' \| 'scroll'` | `'auto'` | Scroll behavior for overflowing tabs. |
 
 ### Events
 
-| Event         | Type                                 | Description                            |
-| ------------- | ------------------------------------ | -------------------------------------- |
+| Event | Type | Description |
+|-------|------|-------------|
 | `leTabChange` | `EventEmitter<LeOptionSelectDetail>` | Emitted when the selected tab changes. |
 
 ### Slots
 
-| Name              | Description                                               |
-| ----------------- | --------------------------------------------------------- |
-| Default           | Default slot for le-tab-panel children (declarative mode) |
-| `"panel-{value}"` | Named slots for panel content (programmatic mode)         |
+| Name | Description |
+|------|-------------|
+| Default | Default slot for le-tab-panel children (declarative mode) |
+| `"panel-{value}"` | Named slots for panel content (programmatic mode) |
 
 ### CSS Variables
 
-| Name                        | Description                        |
-| --------------------------- | ---------------------------------- |
-| `--le-tabs-border-color`    | Border color for tab list          |
-| `--le-tabs-gap`             | Gap between tabs                   |
-| `--le-tabs-indicator-color` | Active tab indicator color         |
-| `--le-tabs-padding-x`       | Horizontal padding for tab buttons |
-| `--le-tabs-padding-y`       | Vertical padding for tab buttons   |
+| Name | Description |
+|------|-------------|
+| `--le-tabs-border-color` | Border color for tab list |
+| `--le-tabs-gap` | Gap between tabs |
+| `--le-tabs-indicator-color` | Active tab indicator color |
+| `--le-tabs-padding-x` | Horizontal padding for tab buttons |
+| `--le-tabs-padding-y` | Vertical padding for tab buttons |
 
 ---
 
@@ -1297,26 +1369,26 @@ A tag/chip component for displaying labels with optional dismiss functionality.
 
 ### Properties
 
-| Name          | Type                                                           | Default     | Description                                                           |
-| ------------- | -------------------------------------------------------------- | ----------- | --------------------------------------------------------------------- |
-| `label`       | `string`                                                       |             | The text label to display in the tag.                                 |
-| `mode`        | `'default' \| 'admin'`                                         |             | Mode of the popover should be 'default' for internal use              |
-| `icon`        | `string \| undefined`                                          |             | Icon to display before the label. Can be an emoji, URL, or icon name. |
-| `dismissible` | `boolean`                                                      | `false`     | Whether the tag can be dismissed (shows close button).                |
-| `disabled`    | `boolean`                                                      | `false`     | Whether the tag is disabled.                                          |
-| `size`        | `'small' \| 'medium' \| 'large'`                               | `'medium'`  | The size of the tag.                                                  |
-| `variant`     | `'default' \| 'primary' \| 'success' \| 'warning' \| 'danger'` | `'default'` | The visual variant of the tag.                                        |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` |  | The text label to display in the tag. |
+| `mode` | `'default' \| 'admin'` |  | Mode of the popover should be 'default' for internal use |
+| `icon` | `string \| undefined` |  | Icon to display before the label. Can be an emoji, URL, or icon name. |
+| `dismissible` | `boolean` | `false` | Whether the tag can be dismissed (shows close button). |
+| `disabled` | `boolean` | `false` | Whether the tag is disabled. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | The size of the tag. |
+| `variant` | `'default' \| 'primary' \| 'success' \| 'warning' \| 'danger'` | `'default'` | The visual variant of the tag. |
 
 ### Events
 
-| Event       | Type                 | Description                                 |
-| ----------- | -------------------- | ------------------------------------------- |
+| Event | Type | Description |
+|-------|------|-------------|
 | `leDismiss` | `EventEmitter<void>` | Emitted when the dismiss button is clicked. |
 
 ### Slots
 
-| Name    | Description                                            |
-| ------- | ------------------------------------------------------ |
+| Name | Description |
+|------|-------------|
 | Default | Default slot for custom content (overrides label prop) |
 
 ---
@@ -1331,37 +1403,37 @@ toolbar for bold, italic, links, and paragraph type selection.
 
 ### Properties
 
-| Name        | Type                                         | Default                                   | Description                                                        |
-| ----------- | -------------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------ |
-| `el`        | `HTMLElement`                                |                                           |                                                                    |
-| `variant`   | `\| 'p'                                      |
-| \| 'h1'     |
-| \| 'h2'     |
-| \| 'h3'     |
-| \| 'h4'     |
-| \| 'h5'     |
-| \| 'h6'     |
-| \| 'code'   |
-| \| 'quote'  |
-| \| 'label'  |
-| \| 'small'` | `'p'`                                        | The semantic variant/type of text element |
-| `align`     | `'left' \| 'center' \| 'right' \| 'justify'` | `'left'`                                  | Text alignment                                                     |
-| `color`     | `string \| undefined`                        |                                           | Text color (CSS value or theme token)                              |
-| `truncate`  | `boolean`                                    | `false`                                   | Whether the text should truncate with ellipsis                     |
-| `maxLines`  | `number \| undefined`                        |                                           | Maximum number of lines before truncating (requires truncate=true) |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `variant` | `\| 'p'
+    \| 'h1'
+    \| 'h2'
+    \| 'h3'
+    \| 'h4'
+    \| 'h5'
+    \| 'h6'
+    \| 'code'
+    \| 'quote'
+    \| 'label'
+    \| 'small'` | `'p'` | The semantic variant/type of text element |
+| `align` | `'left' \| 'center' \| 'right' \| 'justify'` | `'left'` | Text alignment |
+| `color` | `string \| undefined` |  | Text color (CSS value or theme token) |
+| `truncate` | `boolean` | `false` | Whether the text should truncate with ellipsis |
+| `maxLines` | `number \| undefined` |  | Maximum number of lines before truncating (requires truncate=true) |
 
 ### Slots
 
-| Name    | Description                   |
-| ------- | ----------------------------- |
+| Name | Description |
+|------|-------------|
 | Default | Default slot for text content |
 
 ### CSS Variables
 
-| Name                    | Description |
-| ----------------------- | ----------- |
-| `--le-text-color`       | Text color  |
-| `--le-text-font-size`   | Font size   |
+| Name | Description |
+|------|-------------|
+| `--le-text-color` | Text color |
+| `--le-text-font-size` | Font size |
 | `--le-text-line-height` | Line height |
 | `--le-text-font-weight` | Font weight |
 
@@ -1371,17 +1443,18 @@ toolbar for bold, italic, links, and paragraph type selection.
 
 ### Properties
 
-| Name           | Type          | Default    | Description                                |
-| -------------- | ------------- | ---------- | ------------------------------------------ |
-| `el`           | `HTMLElement` |            |                                            |
-| `center`       | `string`      | `'center'` |                                            |
-| `value`        | `number`      | `0`        |                                            |
-| `rotating`     | `boolean`     | `false`    | Internal state using properties instead of |
-| `centerX`      | `number`      |            |                                            |
-| `centerY`      | `number`      |            |                                            |
-| `pageX`        | `number`      |            |                                            |
-| `pageY`        | `number`      |            |                                            |
-| `currentAngle` | `number`      | `0`        |                                            |
-| `startAngle`   | `number`      |            |                                            |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `center` | `string` | `'center'` |  |
+| `value` | `number` | `0` |  |
+| `rotating` | `boolean` | `false` | Internal state  using properties instead of |
+| `centerX` | `number` |  |  |
+| `centerY` | `number` |  |  |
+| `pageX` | `number` |  |  |
+| `pageY` | `number` |  |  |
+| `currentAngle` | `number` | `0` |  |
+| `startAngle` | `number` |  |  |
 
 ---
+

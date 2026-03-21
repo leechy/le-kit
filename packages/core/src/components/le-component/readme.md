@@ -50,6 +50,7 @@ render() {
 
 ### Used by
 
+ - [le-bento-grid](../le-bento-grid)
  - [le-box](../le-box)
  - [le-button](../le-button)
  - [le-card](../le-card)
@@ -95,6 +96,7 @@ graph TD;
   le-string-input --> le-component
   le-checkbox --> le-component
   le-popup --> le-component
+  le-bento-grid --> le-component
   le-box --> le-component
   le-card --> le-component
   le-code-input --> le-component

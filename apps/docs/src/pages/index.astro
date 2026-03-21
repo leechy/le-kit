@@ -4,116 +4,85 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout title="Le-Kit - The Component Library">
   <main class="bento-page">
-    <section class="bento-grid" aria-label="Bento Grid Demo">
-      <div class="tile tile-2x2 tone-1">1</div>
-      <div class="tile tile-2x1 tone-5">2</div>
-      <div class="tile tile-1x2 tone-3">3</div>
-      <div class="tile tile-2x1 tone-8">4</div>
-      <div class="tile tile-1x2 tone-3">5</div>
-      <div class="tile tile-1x2 tone-4">6</div>
-      <div class="tile tile-2x2 tone-6">7</div>
-      <div class="tile tile-1x2 tone-10">8</div>
-      <div class="tile tile-1x1 tone-11">9</div>
-      <div class="tile tile-2x1 tone-2">10</div>
-      <div class="tile tile-1x1 tone-12">11</div>
-    </section>
+    <le-bento-grid
+      column-min-width="160"
+      column-max-width="200"
+      min-columns="2"
+      max-columns="4"
+      row-height="160"
+      gap="8"
+      aria-label="Bento Grid Demo"
+    >
+      <le-bento-tile cols="2" rows="1" class="tone-3">
+        New component
+      </le-bento-tile>
+      <le-bento-tile cols="2" rows="2" class="tone-1">Le-Kit</le-bento-tile>
+      <le-bento-tile cols="2" rows="1" class="tone-5">
+        New component
+      </le-bento-tile>
+      <le-bento-tile cols="1" rows="2" class="tone-2">LLMs</le-bento-tile>
+      <le-bento-tile cols="2" rows="2" class="tone-6">
+        Admin mode? What's that?
+      </le-bento-tile>
+      <le-bento-tile class="tone-11">Setup Assets</le-bento-tile>
+      <le-bento-tile class="tone-12">Get Started</le-bento-tile>
+      <le-bento-tile cols="2" rows="1" class="tone-3">
+        Styling and Theming
+      </le-bento-tile>
+    </le-bento-grid>
   </main>
 
   <style>
     .bento-page {
-      max-width: 1250px;
-      margin: 0 auto;
       padding: var(--le-spacing-4) var(--le-spacing-4) var(--le-spacing-8);
     }
 
-    .bento-grid {
-      --bento-gap: 12px;
-      display: grid;
-      grid-template-columns: repeat(5, minmax(200px, 250px));
-      grid-auto-rows: 110px;
-      grid-auto-flow: dense;
-      gap: var(--bento-gap);
-      justify-content: center;
-    }
-
-    .tile {
-      border-radius: 18px;
-      box-shadow:
-        0 1px 2px rgba(15, 23, 42, 0.14),
-        0 14px 24px rgba(15, 23, 42, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      min-width: 0;
-      min-height: 0;
-    }
-
-    .tile-2x2 {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
-
-    .tile-2x1 {
-      grid-column: span 2;
-      grid-row: span 1;
-    }
-
-    .tile-1x2 {
-      grid-column: span 1;
-      grid-row: span 2;
+    /*
+      Tile background colors are set via --le-bento-tile-bg which is a CSS
+      custom property that inherits into the tile's shadow DOM.
+      Shadow and border-radius are configured globally below.
+    */
+    le-bento-grid {
+      --le-bento-tile-radius: 18px;
+      --le-bento-tile-shadow:
+        0 1px 2px rgba(15, 23, 42, 0.14), 0 14px 24px rgba(15, 23, 42, 0.08);
     }
 
     .tone-1 {
-      background: linear-gradient(145deg, #f59e0b, #f97316);
+      --le-bento-tile-bg: linear-gradient(145deg, #f59e0b, #f97316);
     }
     .tone-2 {
-      background: linear-gradient(145deg, #22c55e, #16a34a);
+      --le-bento-tile-bg: linear-gradient(145deg, #22c55e, #16a34a);
     }
     .tone-3 {
-      background: linear-gradient(145deg, #0ea5e9, #0284c7);
+      --le-bento-tile-bg: linear-gradient(145deg, #0ea5e9, #0284c7);
     }
     .tone-4 {
-      background: linear-gradient(145deg, #14b8a6, #0f766e);
+      --le-bento-tile-bg: linear-gradient(145deg, #14b8a6, #0f766e);
     }
     .tone-5 {
-      background: linear-gradient(145deg, #ef4444, #dc2626);
+      --le-bento-tile-bg: linear-gradient(145deg, #ef4444, #dc2626);
     }
     .tone-6 {
-      background: linear-gradient(145deg, #f43f5e, #e11d48);
+      --le-bento-tile-bg: linear-gradient(145deg, #f43f5e, #e11d48);
     }
     .tone-7 {
-      background: linear-gradient(145deg, #84cc16, #65a30d);
+      --le-bento-tile-bg: linear-gradient(145deg, #84cc16, #65a30d);
     }
     .tone-8 {
-      background: linear-gradient(145deg, #06b6d4, #0891b2);
+      --le-bento-tile-bg: linear-gradient(145deg, #06b6d4, #0891b2);
     }
     .tone-9 {
-      background: linear-gradient(145deg, #f97316, #ea580c);
+      --le-bento-tile-bg: linear-gradient(145deg, #f97316, #ea580c);
     }
     .tone-10 {
-      background: linear-gradient(145deg, #10b981, #059669);
+      --le-bento-tile-bg: linear-gradient(145deg, #10b981, #059669);
     }
     .tone-11 {
-      background: linear-gradient(145deg, #3b82f6, #2563eb);
+      --le-bento-tile-bg: linear-gradient(145deg, #3b82f6, #2563eb);
     }
     .tone-12 {
-      background: linear-gradient(145deg, #eab308, #ca8a04);
-    }
-
-    @media (max-width: 1050px) {
-      .bento-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 750px) {
-      .bento-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 500px) {
-      .bento-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      --le-bento-tile-bg: linear-gradient(145deg, #eab308, #ca8a04);
     }
   </style>
 </Layout>

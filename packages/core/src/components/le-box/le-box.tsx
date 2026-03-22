@@ -25,7 +25,7 @@ import { classnames } from '../../utils/utils';
   shadow: true,
 })
 export class LeBox {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Flex grow factor - how much the item should grow relative to siblings

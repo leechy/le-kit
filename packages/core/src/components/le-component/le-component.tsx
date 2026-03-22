@@ -307,8 +307,16 @@ export class LeComponent {
             full-width
             value={value ?? attr.default?.replace(/'/g, '')}
             placeholder={attr.default?.replace(/'/g, '')}
-            onChange={e => {
+            onLeChange={e => {
               const detail = (e as CustomEvent<LeOptionSelectDetail>).detail;
+              console.log(
+                'Selected option:',
+                detail,
+                'handlePropertyChange:',
+                attr.name,
+                detail?.value,
+                type,
+              );
               this.handlePropertyChange(attr.name, detail?.value, type);
             }}
           ></le-select>

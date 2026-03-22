@@ -19,6 +19,11 @@ export default defineConfig({
             src: "../../packages/core/dist/components/assets/*",
             dest: "le-kit/le-kit/assets",
           },
+          {
+            // Ensure metadata manifest is always available for admin editing UI.
+            src: "../../packages/core/src/assets/custom-elements.json",
+            dest: "le-kit/le-kit/assets",
+          },
         ],
       }),
     ],

@@ -1,10 +1,294 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+const allPosts = (
+  await getCollection("blog", ({ data }) => data.published && !data.draft)
+).sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+const monthFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  year: "numeric",
+});
+
+const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].sort(
+  (a, b) => a.localeCompare(b),
+);
+
+const allMonths = [
+  ...new Set(
+    allPosts.map(
+      (post) =>
+        `${post.data.publishDate.getUTCFullYear()}-${String(post.data.publishDate.getUTCMonth() + 1).padStart(2, "0")}`,
+    ),
+  ),
+].sort((a, b) => b.localeCompare(a));
+
+const buildFilterHref = ({ tag, month }: { tag?: string; month?: string }) => {
+  const params = new URLSearchParams();
+  if (tag) params.set("tag", tag);
+  if (month) params.set("month", month);
+  const query = params.toString();
+  return query ? `/blog?${query}` : "/blog";
+};
+
+const monthLabel = (month: string) => {
+  const [year, monthIndex] = month.split("-");
+  return monthFormatter.format(
+    new Date(Date.UTC(Number(year), Number(monthIndex) - 1, 1)),
+  );
+};
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
 ---
 
-<Layout title="Blog - le-kit">
-	<main style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
-		<le-text typography="h1">Blog</le-text>
-		<le-text typography="body-large">Read about the development of le-kit.</le-text>
-	</main>
+<Layout title="Blog - Le-Kit">
+  <le-side-panel
+    panel-id="blog-navigation"
+    resizable
+    persist-key="blog-panel"
+    collapse-at="900"
+    narrow-behavior="overlay"
+    sticky
+    top="under-header"
+    full-height
+  >
+    <le-navigation
+      slot="panel"
+      orientation="vertical"
+      activeUrl={Astro.url.pathname}
+    >
+      <le-item
+        label={`All posts (${allPosts.length})`}
+        href="/blog"
+        data-filter-all></le-item>
+
+      <le-item label="Tags" open>
+        {
+          allTags.map((tag) => (
+            <le-item
+              label={`#${tag}`}
+              href={buildFilterHref({ tag })}
+              data-filter-tag={tag}
+            />
+          ))
+        }
+      </le-item>
+
+      <le-item label="By month" open>
+        {
+          allMonths.map((month) => (
+            <le-item
+              label={monthLabel(month)}
+              href={buildFilterHref({ month })}
+              data-filter-month={month}
+            />
+          ))
+        }
+      </le-item>
+    </le-navigation>
+
+    <div>
+      <main class="blog-page">
+        <header class="blog-hero">
+          <le-breadcrumbs
+            items='[{"label":"Le-Kit","href":"/"},{"label":"Blog"}]'
+          >
+            <le-side-panel-toggle
+              slot="start"
+              panel-id="blog-navigation"
+              action="toggle"
+              shortcut="Mod+B"
+              variant="clear"
+              icon-only="true"
+              style="--le-button-icon-only-padding: var(--le-space-xs);"
+            >
+              <le-icon slot="icon-only" name="side-panel"></le-icon>
+            </le-side-panel-toggle>
+          </le-breadcrumbs>
+
+          <h1>Blog</h1>
+          <p class="blog-description">
+            Small notes, experiments, and updates about Le-Kit.
+          </p>
+        </header>
+
+        <p class="filter-caption" id="blog-filter-caption" hidden></p>
+
+        <section class="posts" aria-label="Articles list">
+          {
+            allPosts.map((post) => {
+              const postMonth = `${post.data.publishDate.getUTCFullYear()}-${String(post.data.publishDate.getUTCMonth() + 1).padStart(2, "0")}`;
+              return (
+                <article
+                  class="post-card"
+                  data-post-tags={post.data.tags.join(",").toLowerCase()}
+                  data-post-month={postMonth}
+                >
+                  <p class="post-meta">
+                    {dateFormatter.format(post.data.publishDate)}
+                  </p>
+                  <h2>
+                    <a href={`/blog/${post.id}`}>{post.data.title}</a>
+                  </h2>
+                  <p>{post.data.description}</p>
+                  <div class="post-tags">
+                    {post.data.tags.map((tag) => (
+                      <a href={buildFilterHref({ tag })}>#{tag}</a>
+                    ))}
+                  </div>
+                </article>
+              );
+            })
+          }
+        </section>
+
+        <p class="empty-state" id="blog-empty-state" hidden>
+          No posts found for this filter. <a href="/blog">Reset filter</a>
+        </p>
+      </main>
+    </div>
+  </le-side-panel>
+
+  <script is:inline>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const activeTag = params.get("tag")?.trim().toLowerCase() ?? "";
+      const activeMonth = params.get("month")?.trim() ?? "";
+
+      const cards = Array.from(document.querySelectorAll(".post-card"));
+      const captionEl = document.querySelector("#blog-filter-caption");
+      const emptyEl = document.querySelector("#blog-empty-state");
+
+      const isMatch = (card) => {
+        const tags = (card.getAttribute("data-post-tags") ?? "").split(",");
+        const month = card.getAttribute("data-post-month") ?? "";
+        const tagOk = activeTag ? tags.includes(activeTag) : true;
+        const monthOk = activeMonth ? month === activeMonth : true;
+        return tagOk && monthOk;
+      };
+
+      let visibleCount = 0;
+      for (const card of cards) {
+        const visible = isMatch(card);
+        card.toggleAttribute("hidden", !visible);
+        if (visible) visibleCount += 1;
+      }
+
+      const parts = [];
+      if (activeTag) parts.push(`tag: ${activeTag}`);
+      if (activeMonth) parts.push(`month: ${activeMonth}`);
+
+      if (captionEl) {
+        if (parts.length > 0) {
+          captionEl.hidden = false;
+          captionEl.textContent = `Showing ${visibleCount} post${visibleCount === 1 ? "" : "s"} filtered by ${parts.join(" · ")}.`;
+        } else {
+          captionEl.hidden = true;
+          captionEl.textContent = "";
+        }
+      }
+
+      if (emptyEl) {
+        emptyEl.hidden = visibleCount > 0;
+      }
+
+      const allLink = document.querySelector("[data-filter-all]");
+      allLink?.toggleAttribute("selected", !activeTag && !activeMonth);
+
+      const tagLinks = Array.from(
+        document.querySelectorAll("[data-filter-tag]"),
+      );
+      for (const link of tagLinks) {
+        const value = (
+          link.getAttribute("data-filter-tag") ?? ""
+        ).toLowerCase();
+        link.toggleAttribute("selected", activeTag === value);
+      }
+
+      const monthLinks = Array.from(
+        document.querySelectorAll("[data-filter-month]"),
+      );
+      for (const link of monthLinks) {
+        const value = link.getAttribute("data-filter-month") ?? "";
+        link.toggleAttribute("selected", activeMonth === value);
+      }
+    })();
+  </script>
+
+  <style>
+    .blog-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: var(--le-spacing-6) var(--le-spacing-4) var(--le-spacing-8);
+      display: grid;
+      gap: var(--le-spacing-5);
+    }
+
+    .blog-hero {
+      display: grid;
+      gap: var(--le-spacing-2);
+    }
+
+    .filter-caption,
+    .empty-state {
+      margin: 0;
+      font-size: var(--le-font-size-sm);
+      color: var(--le-color-text-muted);
+    }
+
+    .posts {
+      display: grid;
+      gap: var(--le-spacing-3);
+    }
+
+    .post-card {
+      background: color-mix(in srgb, var(--le-color-surface), white 24%);
+      border: 1px solid var(--le-color-border);
+      border-radius: var(--le-radius-lg);
+      padding: var(--le-spacing-4);
+      display: grid;
+      gap: var(--le-spacing-2);
+    }
+
+    .post-card[hidden] {
+      display: none;
+    }
+
+    .post-card h2,
+    .post-card p {
+      margin: 0;
+    }
+
+    .post-card h2 a {
+      color: var(--le-color-text);
+      text-decoration: none;
+    }
+
+    .post-card h2 a:hover {
+      text-decoration: underline;
+      text-decoration-color: var(--le-color-primary);
+    }
+
+    .post-meta {
+      color: var(--le-color-text-muted);
+      font-size: var(--le-font-size-sm);
+    }
+
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--le-spacing-2);
+    }
+
+    .post-tags a {
+      color: var(--le-color-primary);
+      text-decoration: none;
+      font-size: var(--le-font-size-sm);
+    }
+
+    .post-tags a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </Layout>

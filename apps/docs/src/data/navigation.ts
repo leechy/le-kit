@@ -10,7 +10,7 @@ export interface NavItem {
 
 export const mainNavigationItems: NavItem[] = [
   { label: "Components", href: "/components" },
-  { label: "Blueprints", href: "/blueprints" },
+  // { label: "Blueprints", href: "/blueprints" },
   { label: "Blog", href: "/blog" },
   {
     label: "Get Started",

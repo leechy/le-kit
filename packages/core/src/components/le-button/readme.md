@@ -132,6 +132,7 @@ A flexible button component with multiple variants and states.
  - [le-component](../le-component)
  - [le-number-input](../le-number-input)
  - [le-popup](../le-popup)
+ - [le-select](../le-select)
  - [le-side-panel-toggle](../le-side-panel-toggle)
  - [le-slot](../le-slot)
 
@@ -146,6 +147,8 @@ graph TD;
   le-button --> le-component
   le-button --> le-slot
   le-component --> le-button
+  le-select --> le-button
+  le-dropdown-base --> le-popover
   le-checkbox --> le-component
   le-checkbox --> le-slot
   le-slot --> le-button

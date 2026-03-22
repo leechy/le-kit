@@ -1340,6 +1340,89 @@ export namespace Components {
          */
         "value"?: LeOptionValue;
     }
+    /**
+     * A select dropdown component for single selection.
+     * @cmsEditable true
+     * @cmsCategory Form
+     * @example Basic select
+     * ```html
+     * <le-select
+     * placeholder="Choose an option"
+     * options='[{"label": "Option 1", "value": "1"}, {"label": "Option 2", "value": "2"}]'
+     * ></le-select>
+     * ```
+     * @example With icons
+     * ```html
+     * <le-select
+     * options='[
+     * {"label": "Apple", "value": "apple", "iconStart": "🍎"},
+     * {"label": "Banana", "value": "banana", "iconStart": "🍌"}
+     * ]'
+     * ></le-select>
+     * ```
+     * @example Grouped options
+     * ```html
+     * <le-select
+     * options='[
+     * {"label": "Apple", "value": "apple", "group": "Fruits"},
+     * {"label": "Carrot", "value": "carrot", "group": "Vegetables"}
+     * ]'
+     * ></le-select>
+     * ```
+     */
+    interface LeSelect {
+        /**
+          * Whether the select is disabled.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Closes the dropdown.
+         */
+        "hideDropdown": () => Promise<void>;
+        /**
+          * Name attribute for form submission.
+         */
+        "name"?: string;
+        /**
+          * Whether the dropdown is currently open.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * The options to display in the dropdown.
+          * @default []
+         */
+        "options": LeOption[] | string;
+        /**
+          * Placeholder text when no option is selected.
+          * @default 'Select an option'
+         */
+        "placeholder": string;
+        /**
+          * Whether selection is required.
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Opens the dropdown.
+         */
+        "showDropdown": () => Promise<void>;
+        /**
+          * Size variant of the select.
+          * @default 'medium'
+         */
+        "size": 'small' | 'medium' | 'large';
+        /**
+          * The currently selected value.
+         */
+        "value"?: LeOptionValue;
+        /**
+          * Visual variant of the select.
+          * @default 'default'
+         */
+        "variant": 'default' | 'outlined' | 'solid';
+    }
     interface LeSidePanel {
         /**
           * When crossing to narrow mode, automatically hide the panel (open=false).
@@ -2131,6 +2214,10 @@ export interface LeSegmentedControlCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeSegmentedControlElement;
 }
+export interface LeSelectCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeSelectElement;
+}
 export interface LeSidePanelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeSidePanelElement;
@@ -2810,6 +2897,55 @@ declare global {
         prototype: HTMLLeSegmentedControlElement;
         new (): HTMLLeSegmentedControlElement;
     };
+    interface HTMLLeSelectElementEventMap {
+        "leChange": LeOptionSelectDetail;
+        "leOpen": void;
+        "leClose": void;
+    }
+    /**
+     * A select dropdown component for single selection.
+     * @cmsEditable true
+     * @cmsCategory Form
+     * @example Basic select
+     * ```html
+     * <le-select
+     * placeholder="Choose an option"
+     * options='[{"label": "Option 1", "value": "1"}, {"label": "Option 2", "value": "2"}]'
+     * ></le-select>
+     * ```
+     * @example With icons
+     * ```html
+     * <le-select
+     * options='[
+     * {"label": "Apple", "value": "apple", "iconStart": "🍎"},
+     * {"label": "Banana", "value": "banana", "iconStart": "🍌"}
+     * ]'
+     * ></le-select>
+     * ```
+     * @example Grouped options
+     * ```html
+     * <le-select
+     * options='[
+     * {"label": "Apple", "value": "apple", "group": "Fruits"},
+     * {"label": "Carrot", "value": "carrot", "group": "Vegetables"}
+     * ]'
+     * ></le-select>
+     * ```
+     */
+    interface HTMLLeSelectElement extends Components.LeSelect, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeSelectElementEventMap>(type: K, listener: (this: HTMLLeSelectElement, ev: LeSelectCustomEvent<HTMLLeSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeSelectElementEventMap>(type: K, listener: (this: HTMLLeSelectElement, ev: LeSelectCustomEvent<HTMLLeSelectElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeSelectElement: {
+        prototype: HTMLLeSelectElement;
+        new (): HTMLLeSelectElement;
+    };
     interface HTMLLeSidePanelElementEventMap {
         "leSidePanelOpenChange": { open: boolean; panelId?: string };
         "leSidePanelCollapsedChange": { collapsed: boolean; panelId?: string };
@@ -3136,6 +3272,7 @@ declare global {
         "le-round-progress": HTMLLeRoundProgressElement;
         "le-scroll-progress": HTMLLeScrollProgressElement;
         "le-segmented-control": HTMLLeSegmentedControlElement;
+        "le-select": HTMLLeSelectElement;
         "le-side-panel": HTMLLeSidePanelElement;
         "le-side-panel-toggle": HTMLLeSidePanelToggleElement;
         "le-slot": HTMLLeSlotElement;
@@ -4537,6 +4674,93 @@ declare namespace LocalJSX {
          */
         "value"?: LeOptionValue;
     }
+    /**
+     * A select dropdown component for single selection.
+     * @cmsEditable true
+     * @cmsCategory Form
+     * @example Basic select
+     * ```html
+     * <le-select
+     * placeholder="Choose an option"
+     * options='[{"label": "Option 1", "value": "1"}, {"label": "Option 2", "value": "2"}]'
+     * ></le-select>
+     * ```
+     * @example With icons
+     * ```html
+     * <le-select
+     * options='[
+     * {"label": "Apple", "value": "apple", "iconStart": "🍎"},
+     * {"label": "Banana", "value": "banana", "iconStart": "🍌"}
+     * ]'
+     * ></le-select>
+     * ```
+     * @example Grouped options
+     * ```html
+     * <le-select
+     * options='[
+     * {"label": "Apple", "value": "apple", "group": "Fruits"},
+     * {"label": "Carrot", "value": "carrot", "group": "Vegetables"}
+     * ]'
+     * ></le-select>
+     * ```
+     */
+    interface LeSelect {
+        /**
+          * Whether the select is disabled.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Name attribute for form submission.
+         */
+        "name"?: string;
+        /**
+          * Emitted when the selected value changes.
+         */
+        "onLeChange"?: (event: LeSelectCustomEvent<LeOptionSelectDetail>) => void;
+        /**
+          * Emitted when the dropdown closes.
+         */
+        "onLeClose"?: (event: LeSelectCustomEvent<void>) => void;
+        /**
+          * Emitted when the dropdown opens.
+         */
+        "onLeOpen"?: (event: LeSelectCustomEvent<void>) => void;
+        /**
+          * Whether the dropdown is currently open.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * The options to display in the dropdown.
+          * @default []
+         */
+        "options"?: LeOption[] | string;
+        /**
+          * Placeholder text when no option is selected.
+          * @default 'Select an option'
+         */
+        "placeholder"?: string;
+        /**
+          * Whether selection is required.
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Size variant of the select.
+          * @default 'medium'
+         */
+        "size"?: 'small' | 'medium' | 'large';
+        /**
+          * The currently selected value.
+         */
+        "value"?: LeOptionValue;
+        /**
+          * Visual variant of the select.
+          * @default 'default'
+         */
+        "variant"?: 'default' | 'outlined' | 'solid';
+    }
     interface LeSidePanel {
         /**
           * When crossing to narrow mode, automatically hide the panel (open=false).
@@ -5525,6 +5749,17 @@ declare namespace LocalJSX {
         "fullWidth": boolean;
         "disabled": boolean;
     }
+    interface LeSelectAttributes {
+        "options": LeOption[] | string;
+        "value": string;
+        "placeholder": string;
+        "disabled": boolean;
+        "required": boolean;
+        "name": string;
+        "size": 'small' | 'medium' | 'large';
+        "variant": 'default' | 'outlined' | 'solid';
+        "open": boolean;
+    }
     interface LeSidePanelAttributes {
         "panelId": string;
         "side": LeSidePanelSide;
@@ -5706,6 +5941,7 @@ declare namespace LocalJSX {
         "le-round-progress": Omit<LeRoundProgress, keyof LeRoundProgressAttributes> & { [K in keyof LeRoundProgress & keyof LeRoundProgressAttributes]?: LeRoundProgress[K] } & { [K in keyof LeRoundProgress & keyof LeRoundProgressAttributes as `attr:${K}`]?: LeRoundProgressAttributes[K] } & { [K in keyof LeRoundProgress & keyof LeRoundProgressAttributes as `prop:${K}`]?: LeRoundProgress[K] };
         "le-scroll-progress": Omit<LeScrollProgress, keyof LeScrollProgressAttributes> & { [K in keyof LeScrollProgress & keyof LeScrollProgressAttributes]?: LeScrollProgress[K] } & { [K in keyof LeScrollProgress & keyof LeScrollProgressAttributes as `attr:${K}`]?: LeScrollProgressAttributes[K] } & { [K in keyof LeScrollProgress & keyof LeScrollProgressAttributes as `prop:${K}`]?: LeScrollProgress[K] };
         "le-segmented-control": Omit<LeSegmentedControl, keyof LeSegmentedControlAttributes> & { [K in keyof LeSegmentedControl & keyof LeSegmentedControlAttributes]?: LeSegmentedControl[K] } & { [K in keyof LeSegmentedControl & keyof LeSegmentedControlAttributes as `attr:${K}`]?: LeSegmentedControlAttributes[K] } & { [K in keyof LeSegmentedControl & keyof LeSegmentedControlAttributes as `prop:${K}`]?: LeSegmentedControl[K] };
+        "le-select": Omit<LeSelect, keyof LeSelectAttributes> & { [K in keyof LeSelect & keyof LeSelectAttributes]?: LeSelect[K] } & { [K in keyof LeSelect & keyof LeSelectAttributes as `attr:${K}`]?: LeSelectAttributes[K] } & { [K in keyof LeSelect & keyof LeSelectAttributes as `prop:${K}`]?: LeSelect[K] };
         "le-side-panel": Omit<LeSidePanel, keyof LeSidePanelAttributes> & { [K in keyof LeSidePanel & keyof LeSidePanelAttributes]?: LeSidePanel[K] } & { [K in keyof LeSidePanel & keyof LeSidePanelAttributes as `attr:${K}`]?: LeSidePanelAttributes[K] } & { [K in keyof LeSidePanel & keyof LeSidePanelAttributes as `prop:${K}`]?: LeSidePanel[K] };
         "le-side-panel-toggle": Omit<LeSidePanelToggle, keyof LeSidePanelToggleAttributes> & { [K in keyof LeSidePanelToggle & keyof LeSidePanelToggleAttributes]?: LeSidePanelToggle[K] } & { [K in keyof LeSidePanelToggle & keyof LeSidePanelToggleAttributes as `attr:${K}`]?: LeSidePanelToggleAttributes[K] } & { [K in keyof LeSidePanelToggle & keyof LeSidePanelToggleAttributes as `prop:${K}`]?: LeSidePanelToggle[K] };
         "le-slot": Omit<LeSlot, keyof LeSlotAttributes> & { [K in keyof LeSlot & keyof LeSlotAttributes]?: LeSlot[K] } & { [K in keyof LeSlot & keyof LeSlotAttributes as `attr:${K}`]?: LeSlotAttributes[K] } & { [K in keyof LeSlot & keyof LeSlotAttributes as `prop:${K}`]?: LeSlot[K] };
@@ -6063,6 +6299,37 @@ declare module "@stencil/core" {
              * @cmsCategory Form
              */
             "le-segmented-control": LocalJSX.IntrinsicElements["le-segmented-control"] & JSXBase.HTMLAttributes<HTMLLeSegmentedControlElement>;
+            /**
+             * A select dropdown component for single selection.
+             * @cmsEditable true
+             * @cmsCategory Form
+             * @example Basic select
+             * ```html
+             * <le-select
+             * placeholder="Choose an option"
+             * options='[{"label": "Option 1", "value": "1"}, {"label": "Option 2", "value": "2"}]'
+             * ></le-select>
+             * ```
+             * @example With icons
+             * ```html
+             * <le-select
+             * options='[
+             * {"label": "Apple", "value": "apple", "iconStart": "🍎"},
+             * {"label": "Banana", "value": "banana", "iconStart": "🍌"}
+             * ]'
+             * ></le-select>
+             * ```
+             * @example Grouped options
+             * ```html
+             * <le-select
+             * options='[
+             * {"label": "Apple", "value": "apple", "group": "Fruits"},
+             * {"label": "Carrot", "value": "carrot", "group": "Vegetables"}
+             * ]'
+             * ></le-select>
+             * ```
+             */
+            "le-select": LocalJSX.IntrinsicElements["le-select"] & JSXBase.HTMLAttributes<HTMLLeSelectElement>;
             "le-side-panel": LocalJSX.IntrinsicElements["le-side-panel"] & JSXBase.HTMLAttributes<HTMLLeSidePanelElement>;
             "le-side-panel-toggle": LocalJSX.IntrinsicElements["le-side-panel-toggle"] & JSXBase.HTMLAttributes<HTMLLeSidePanelToggleElement>;
             /**

@@ -90,6 +90,7 @@ Type: `Promise<void>`
 
  - [le-combobox](../le-combobox)
  - [le-multiselect](../le-multiselect)
+ - [le-select](../le-select)
 
 ### Depends on
 
@@ -101,6 +102,7 @@ graph TD;
   le-dropdown-base --> le-popover
   le-combobox --> le-dropdown-base
   le-multiselect --> le-dropdown-base
+  le-select --> le-dropdown-base
   style le-dropdown-base fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

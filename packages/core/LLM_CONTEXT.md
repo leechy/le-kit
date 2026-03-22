@@ -30,6 +30,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-round-progress](#le-round-progress)
 - [le-scroll-progress](#le-scroll-progress)
 - [le-segmented-control](#le-segmented-control)
+- [le-select](#le-select)
 - [le-side-panel](#le-side-panel)
 - [le-side-panel-toggle](#le-side-panel-toggle)
 - [le-slot](#le-slot)
@@ -982,6 +983,35 @@ Perfect for toggling between a small set of related options.
 | `--le-segmented-padding` | Padding around segments |
 | `--le-segmented-gap` | Gap between segments |
 | `--le-segmented-radius` | Border radius of the control |
+
+---
+
+## <le-select>
+
+A select dropdown component for single selection.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `options` | `LeOption[] \| string` | `[]` | The options to display in the dropdown. |
+| `value` | `LeOptionValue \| undefined` |  | The currently selected value. |
+| `placeholder` | `string` | `'Select an option'` | Placeholder text when no option is selected. |
+| `disabled` | `boolean` | `false` | Whether the select is disabled. |
+| `required` | `boolean` | `false` | Whether selection is required. |
+| `name` | `string \| undefined` |  | Name attribute for form submission. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size variant of the select. |
+| `variant` | `'default' \| 'outlined' \| 'solid'` | `'default'` | Visual variant of the select. |
+| `open` | `boolean` | `false` | Whether the dropdown is currently open. |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leChange` | `EventEmitter<LeOptionSelectDetail>` | Emitted when the selected value changes. |
+| `leOpen` | `EventEmitter<void>` | Emitted when the dropdown opens. |
+| `leClose` | `EventEmitter<void>` | Emitted when the dropdown closes. |
 
 ---
 

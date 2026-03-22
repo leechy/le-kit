@@ -64,6 +64,7 @@ render() {
  - [le-number-input](../le-number-input)
  - [le-popup](../le-popup)
  - [le-segmented-control](../le-segmented-control)
+ - [le-select](../le-select)
  - [le-stack](../le-stack)
  - [le-string-input](../le-string-input)
  - [le-tab](../le-tab)
@@ -76,6 +77,7 @@ render() {
 ### Depends on
 
 - [le-button](../le-button)
+- [le-select](../le-select)
 - [le-checkbox](../le-checkbox)
 - [le-string-input](../le-string-input)
 - [le-popover](../le-popover)
@@ -85,6 +87,7 @@ render() {
 ```mermaid
 graph TD;
   le-component --> le-button
+  le-component --> le-select
   le-component --> le-checkbox
   le-component --> le-string-input
   le-component --> le-popover
@@ -94,6 +97,8 @@ graph TD;
   le-slot --> le-button
   le-slot --> le-string-input
   le-string-input --> le-component
+  le-select --> le-component
+  le-dropdown-base --> le-popover
   le-checkbox --> le-component
   le-popup --> le-component
   le-bento-grid --> le-component

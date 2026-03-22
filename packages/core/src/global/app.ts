@@ -191,7 +191,7 @@ function getGlobalConfig(): LeKitConfig {
   const g = globalThis as any;
   if (!g[LE_KIT_CONFIG_KEY]) {
     g[LE_KIT_CONFIG_KEY] = {
-      manifestFile: '/custom-elements.json',
+      manifestFile: 'custom-elements.json',
       assetBasePath: '',
     };
   }

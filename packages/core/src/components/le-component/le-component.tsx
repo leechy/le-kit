@@ -1,8 +1,9 @@
-import { Component, Prop, State, h, Host, Element, getAssetPath } from '@stencil/core';
+import { Component, Prop, State, h, Host, Element } from '@stencil/core';
 import { classnames, observeModeChanges } from '../../utils/utils';
 import { getLeKitConfig } from '../../global/app';
 import { leConfirm } from '../le-popup/le-popup.api';
 import { LeOptionSelectDetail } from '../..';
+import { resolveManifestUrl } from '../../utils/assets';
 
 /**
  * Component wrapper for admin mode editing.
@@ -39,7 +40,7 @@ import { LeOptionSelectDetail } from '../..';
   assetsDirs: ['assets'],
 })
 export class LeComponent {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * The tag name of the component (e.g., 'le-card').
@@ -146,7 +147,7 @@ export class LeComponent {
     try {
       // Fetch the manifest from configured URL
       const { manifestFile } = getLeKitConfig();
-      const manifestFileResolved = getAssetPath(`./assets/${manifestFile}`);
+      const manifestFileResolved = resolveManifestUrl(manifestFile);
       const response = await fetch(manifestFileResolved);
       const manifest = await response.json();
 
@@ -292,10 +293,9 @@ export class LeComponent {
     const value = this.propertyValues[attr.name];
     const type = attr.type?.text || 'string';
 
-    // Check if type is a union of string literals (e.g., "'default' | 'outlined' | 'elevated'")
-    const enumMatch = type.match(/^'[^']+'/);
-    if (enumMatch) {
-      const options = type.split('|').map(opt => opt.trim().replace(/'/g, ''));
+    // Render enum-like union types as a select. Handles both single and double quotes.
+    const options = this.extractLiteralUnionOptions(type);
+    if (options.length > 0) {
       return (
         <div class="property-field">
           <label htmlFor={`prop-${attr.name}`}>
@@ -307,9 +307,10 @@ export class LeComponent {
             full-width
             value={value ?? attr.default?.replace(/'/g, '')}
             placeholder={attr.default?.replace(/'/g, '')}
-            onChange={(e: CustomEvent<LeOptionSelectDetail>) =>
-              this.handlePropertyChange(attr.name, e.detail.value, type)
-            }
+            onChange={e => {
+              const detail = (e as CustomEvent<LeOptionSelectDetail>).detail;
+              this.handlePropertyChange(attr.name, detail?.value, type);
+            }}
           ></le-select>
         </div>
       );
@@ -368,6 +369,14 @@ export class LeComponent {
         </le-string-input>
       </div>
     );
+  }
+
+  private extractLiteralUnionOptions(typeText: string): string[] {
+    const literalMatches = typeText.match(/(['"])(.*?)\1/g) || [];
+    return literalMatches
+      .map(token => token.slice(1, -1).trim())
+      .filter(Boolean)
+      .filter((value, index, arr) => arr.indexOf(value) === index);
   }
 
   render() {

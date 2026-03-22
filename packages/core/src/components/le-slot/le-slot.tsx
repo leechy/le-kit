@@ -1,6 +1,7 @@
-import { Component, Prop, State, h, Host, Element, Event, EventEmitter, getAssetPath } from '@stencil/core';
+import { Component, Prop, State, h, Host, Element, Event, EventEmitter } from '@stencil/core';
 import { classnames, observeModeChanges } from '../../utils/utils';
 import { getLeKitConfig } from '../../global/app';
+import { resolveManifestUrl } from '../../utils/assets';
 
 /**
  * Slot placeholder component for admin/CMS mode.
@@ -21,7 +22,7 @@ import { getLeKitConfig } from '../../global/app';
   shadow: true,
 })
 export class LeSlot {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * The type of slot content.
@@ -127,7 +128,7 @@ export class LeSlot {
    * Emitted when text content changes in admin mode.
    * The event detail contains the new text value and validity.
    */
-  @Event() leSlotChange: EventEmitter<{ name: string; value: string; isValid: boolean }>;
+  @Event() leSlotChange!: EventEmitter<{ name: string; value: string; isValid: boolean }>;
 
   private disconnectModeObserver?: () => void;
 
@@ -175,7 +176,9 @@ export class LeSlot {
     // For text/textarea types, we want to edit the innerHTML of slotted elements
     if (this.type === 'text' || this.type === 'textarea') {
       // Find the first element node (skip text nodes that are just whitespace)
-      const elementNode = assignedNodes.find(node => node.nodeType === Node.ELEMENT_NODE) as Element | undefined;
+      const elementNode = assignedNodes.find(node => node.nodeType === Node.ELEMENT_NODE) as
+        | Element
+        | undefined;
 
       if (elementNode) {
         // Only update textValue if slotted element changed or we don't have one yet
@@ -219,7 +222,11 @@ export class LeSlot {
 
     // Simple validation: opening tags (minus self-closing) should roughly match closing tags
     // Allow some tolerance for void elements like <br>, <img>, etc.
-    const voidElements = (html.match(/<(br|hr|img|input|meta|link|area|base|col|embed|param|source|track|wbr)[^>]*>/gi) || []).length;
+    const voidElements = (
+      html.match(
+        /<(br|hr|img|input|meta|link|area|base|col|embed|param|source|track|wbr)[^>]*>/gi,
+      ) || []
+    ).length;
 
     const effectiveOpenTags = openTags - selfClosing - voidElements;
 
@@ -253,7 +260,10 @@ export class LeSlot {
         if (!this.name && rootNode instanceof ShadowRoot) {
           const hostComponent = rootNode.host;
           Array.from(hostComponent.childNodes).forEach(node => {
-            if (node.nodeType === Node.TEXT_NODE || (node.nodeType === Node.ELEMENT_NODE && !(node as Element).hasAttribute('slot'))) {
+            if (
+              node.nodeType === Node.TEXT_NODE ||
+              (node.nodeType === Node.ELEMENT_NODE && !(node as Element).hasAttribute('slot'))
+            ) {
               node.remove();
             }
           });
@@ -316,7 +326,7 @@ export class LeSlot {
   private async loadAvailableComponents() {
     try {
       const { manifestFile } = getLeKitConfig();
-      const manifestFileResolved = getAssetPath(`./assets/${manifestFile}`);
+      const manifestFileResolved = resolveManifestUrl(manifestFile);
       const response = await fetch(manifestFileResolved);
       const manifest = await response.json();
 
@@ -327,7 +337,9 @@ export class LeSlot {
         for (const declaration of module.declarations || []) {
           if (declaration.tagName && declaration.customElement) {
             // Skip internal components (le-slot, le-component, le-popover)
-            const isInternal = ['le-slot', 'le-component', 'le-popover'].includes(declaration.tagName);
+            const isInternal = ['le-slot', 'le-component', 'le-popover'].includes(
+              declaration.tagName,
+            );
             if (isInternal) continue;
 
             // If allowedComponents is specified, filter by it
@@ -448,7 +460,15 @@ export class LeSlot {
                   onLePopoverOpen={() => (this.pickerOpen = true)}
                   onLePopoverClose={() => (this.pickerOpen = false)}
                 >
-                  <le-button type="button" class="le-slot-button" slot="trigger" variant="clear" size="small" aria-label="Add component" icon-only>
+                  <le-button
+                    type="button"
+                    class="le-slot-button"
+                    slot="trigger"
+                    variant="clear"
+                    size="small"
+                    aria-label="Add component"
+                    icon-only
+                  >
                     <span class="le-slot-add-btn" slot="icon-only">
                       +
                     </span>
@@ -466,7 +486,9 @@ export class LeSlot {
                               }}
                             >
                               <span class="le-slot-picker-name">{component.name}</span>
-                              {component.description && <span class="le-slot-picker-desc">{component.description}</span>}
+                              {component.description && (
+                                <span class="le-slot-picker-desc">{component.description}</span>
+                              )}
                             </button>
                           </li>
                         ))}
@@ -500,7 +522,10 @@ export class LeSlot {
     // are passed as le-slot's light DOM children
     const slotElement = (
       <div class="hidden-slot">
-        <slot ref={el => (this.slotRef = el as HTMLSlotElement)} onSlotchange={this.handleSlotChange}></slot>
+        <slot
+          ref={el => (this.slotRef = el as HTMLSlotElement)}
+          onSlotchange={this.handleSlotChange}
+        ></slot>
       </div>
     );
 
@@ -549,7 +574,10 @@ export class LeSlot {
         }
         return (
           <div class="le-slot-dropzone" style={dropzoneStyle}>
-            <slot ref={el => (this.slotRef = el as HTMLSlotElement)} onSlotchange={this.handleSlotChange}></slot>
+            <slot
+              ref={el => (this.slotRef = el as HTMLSlotElement)}
+              onSlotchange={this.handleSlotChange}
+            ></slot>
           </div>
         );
     }

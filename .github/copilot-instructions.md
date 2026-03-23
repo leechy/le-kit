@@ -8,7 +8,7 @@ Le-Kit is a **Stencil.js web component library** with a dual-mode system for pro
 
 ### Mode System (Critical Pattern)
 
-- **Mode inheritance** traverses both regular DOM and shadow DOM boundaries using `getMode()` in [src/global/app.ts](src/global/app.ts)
+- **Mode inheritance** traverses both regular DOM and shadow DOM boundaries using `getMode()` in [packages/core/src/global/app.ts](../packages/core/src/global/app.ts)
 - Set mode via `<html mode="admin">` or on any component: `<le-card mode="admin">`
 - Components creating mode boundaries (like `le-popover`) force `mode="default"` on children
 
@@ -36,12 +36,12 @@ render() {
 
 ### Key Internal Components
 
-- **`le-component`** ([src/components/le-component/](src/components/le-component/)): Admin mode wrapper, loads metadata from `/custom-elements.json`
-- **`le-slot`** ([src/components/le-slot/](src/components/le-slot/)): Edits slotted content via `slot.assignedNodes({ flatten: true })`
+- **`le-component`** ([packages/core/src/components/le-component/](../packages/core/src/components/le-component/)): Admin mode wrapper, loads metadata from `/custom-elements.json`
+- **`le-slot`** ([packages/core/src/components/le-slot/](../packages/core/src/components/le-slot/)): Edits slotted content via `slot.assignedNodes({ flatten: true })`
 
 ### Shadow DOM Traversal
 
-Mode detection crosses shadow boundaries using `getRootNode()`. See `observeModeChanges()` in [src/utils/utils.ts](src/utils/utils.ts).
+Mode detection crosses shadow boundaries using `getRootNode()`. See `observeModeChanges()` in [packages/core/src/utils/utils.ts](../packages/core/src/utils/utils.ts).
 
 ## Development Workflow
 
@@ -102,7 +102,7 @@ All input components (`le-string-input`, `le-number-input`, `le-code-input`, etc
 
 ### CSS Theming
 
-- [src/themes/base.css](src/themes/base.css): Design tokens (spacing, typography)
+- [packages/core/src/themes/base.css](../packages/core/src/themes/base.css): Design tokens (spacing, typography)
 - Theme files (`default.css`, `dark.css`, etc.): Color schemes via CSS custom properties
 - Component CSS properties prefixed with `--le-{component}-*`
 
@@ -138,6 +138,7 @@ Use JSDoc tags for CMS metadata:
 - `type`: `'slot'` (dropzone) | `'text'` (inline) | `'textarea'` (multiline)
 - `tag`: HTML tag to create when slot is empty (e.g., `'h3'`, `'p'`)
 - `allowed-components`: Comma-separated tags for dropzone filtering
+
 # Le-Kit Development Context
 
 > This file helps GitHub Copilot maintain context across sessions.
@@ -146,6 +147,7 @@ Use JSDoc tags for CMS metadata:
 ## Project Overview
 
 **le-kit** is a Stencil.js web component library with:
+
 - **Themeable components** via CSS custom properties
 - **Mode system**: `default` (production) and `admin` (CMS editing)
 - **Mode inheritance** traverses shadow DOM boundaries
@@ -153,6 +155,7 @@ Use JSDoc tags for CMS metadata:
 ## Key Components
 
 ### `le-component` (internal wrapper)
+
 - **Purpose**: Wraps other components to provide admin-mode editing UI
 - **Location**: `src/components/le-component/`
 - **Features**:
@@ -162,6 +165,7 @@ Use JSDoc tags for CMS metadata:
   - Finds host element via `getRootNode()` shadow DOM traversal
 
 ### `le-slot` (slot placeholder)
+
 - **Purpose**: Manages slot content editing in admin mode
 - **Location**: `src/components/le-slot/`
 - **Key Props**:
@@ -175,6 +179,7 @@ Use JSDoc tags for CMS metadata:
   - `isUpdating` flag prevents slotchange loops
 
 ### `le-card`
+
 - **Location**: `src/components/le-card/`
 - Uses `<le-component>` as root in render()
 - Header slot: `type="text" tag="h3"`
@@ -182,6 +187,7 @@ Use JSDoc tags for CMS metadata:
 - Footer slot: dropzone for buttons/links
 
 ### `le-popover`
+
 - **Location**: `src/components/le-popover/`
 - Sets `mode="default"` to create mode boundary for children
 - Auto-positioning with viewport overflow detection
@@ -189,12 +195,14 @@ Use JSDoc tags for CMS metadata:
 ## Architecture Patterns
 
 ### Mode Traversal (Shadow DOM aware)
+
 ```typescript
 // In src/global/app.ts - getMode()
 // Traverses up DOM, crossing shadow boundaries via getRootNode()
 ```
 
 ### Slot Content Flow
+
 ```
 User light DOM → le-card's <slot> → le-slot's light DOM → le-slot's internal <slot>
                                                           ↓
@@ -202,6 +210,7 @@ User light DOM → le-card's <slot> → le-slot's light DOM → le-slot's intern
 ```
 
 ### Component Structure
+
 ```tsx
 // Components use le-component as root:
 render() {
@@ -228,6 +237,7 @@ render() {
 ## Current State (Dec 4, 2025)
 
 ### Completed Features
+
 - ✅ `le-component` wrapper with property editor popover
 - ✅ Mode boundary support (popover forces default mode for children)
 - ✅ Shadow DOM traversal for mode inheritance
@@ -236,6 +246,7 @@ render() {
 - ✅ `custom-elements.json` auto-generated in prestart
 
 ### Next Steps / Ideas
+
 - [ ] Popover/editor UI design improvements
 - [ ] Add new components inside slots (component picker)
 - [ ] Drag & drop reordering in slot dropzones

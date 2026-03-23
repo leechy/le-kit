@@ -7,7 +7,7 @@ import { Component, Element, h, Prop, State, Watch } from '@stencil/core';
 })
 export class LeRoundProgress {
   // host element
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   // progress value coming from an attribute
   @Prop() value: number = 0;
@@ -26,14 +26,14 @@ export class LeRoundProgress {
 
   // the progress backgrounds can be as many as needed
   // but it should be JSON format: double quotes and strict commas
-  @Prop() paths: string;
+  @Prop({}) paths!: string;
   @Watch('paths')
   updateProgressBackgrounds(newValue: string) {
     this.progressPaths = JSON.parse(newValue);
   }
-  progressPaths: any[];
+  private progressPaths!: any[];
 
-  @State() params: {
+  @State() params!: {
     width: number;
     diameter: number;
     circumference: number;
@@ -104,9 +104,18 @@ export class LeRoundProgress {
     if (!this.progressPaths || !this.progressPaths.length) {
       return null;
     }
-    let paths = [];
+    let paths: any[] = [];
     this.progressPaths.forEach(bg => {
-      paths.push(<path class="round-progress--path" d={this.getPath()} stroke={bg.color} stroke-width={bg.width} stroke-dasharray={bg.dasharray} stroke-linecap={bg.linecap} />);
+      paths.push(
+        <path
+          class="round-progress--path"
+          d={this.getPath()}
+          stroke={bg.color}
+          stroke-width={bg.width}
+          stroke-dasharray={bg.dasharray}
+          stroke-linecap={bg.linecap}
+        />,
+      );
     });
     return (
       <svg viewBox={this.getViewBox()} class="round-progress">
@@ -120,7 +129,11 @@ export class LeRoundProgress {
       <div class="round-progress--container">
         {this.getPaths()}
         <svg viewBox={this.getViewBox()} class="round-progress round-progress--progress">
-          <path class="round-progress--circle" stroke-dasharray={this.getStrokeDashArray()} d={this.getPath()} />
+          <path
+            class="round-progress--circle"
+            stroke-dasharray={this.getStrokeDashArray()}
+            d={this.getPath()}
+          />
         </svg>
         <slot />
       </div>

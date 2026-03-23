@@ -45,7 +45,7 @@ import { buildDeclarativeOptionsFromChildren, parseOptionInput } from '../../uti
   shadow: true,
 })
 export class LeCombobox {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * The options to display in the dropdown.
@@ -110,22 +110,22 @@ export class LeCombobox {
   /**
    * Emitted when the selected value changes.
    */
-  @Event() leChange: EventEmitter<LeOptionSelectDetail>;
+  @Event() leChange!: EventEmitter<LeOptionSelectDetail>;
 
   /**
    * Emitted when the input value changes (for custom values).
    */
-  @Event() leInput: EventEmitter<{ value: string }>;
+  @Event() leInput!: EventEmitter<{ value: string }>;
 
   /**
    * Emitted when the dropdown opens.
    */
-  @Event() leOpen: EventEmitter<void>;
+  @Event() leOpen!: EventEmitter<void>;
 
   /**
    * Emitted when the dropdown closes.
    */
-  @Event() leClose: EventEmitter<void>;
+  @Event() leClose!: EventEmitter<void>;
 
   @Listen('click', { target: 'window' })
   handleWindowClick(event: MouseEvent) {

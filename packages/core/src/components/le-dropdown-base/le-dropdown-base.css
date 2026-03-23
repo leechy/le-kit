@@ -68,6 +68,7 @@ le-popover::part(content) {
   border: 1px solid transparent;
   border-radius: var(--le-dropdown-option-radius, 0.25rem);
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
   transition: background-color 0.1s ease;
 }

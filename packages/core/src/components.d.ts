@@ -755,6 +755,10 @@ export namespace Components {
          */
         "toggle": () => Promise<void>;
         /**
+          * Applies a typeahead key to focus matching option. If the dropdown is closed, it will be opened first.
+         */
+        "typeahead": (key: string) => Promise<void>;
+        /**
           * Current value(s) - single value or array for multiselect.
          */
         "value"?: LeOptionValue | LeOptionValue[];
@@ -4591,7 +4595,7 @@ declare namespace LocalJSX {
           * @default 0
          */
         "padding"?: number;
-        "paths"?: string;
+        "paths": string;
         /**
           * @default 0
          */

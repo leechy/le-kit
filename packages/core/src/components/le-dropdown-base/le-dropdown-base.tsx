@@ -34,7 +34,7 @@ import { generateId } from '../../utils/utils';
   shadow: true,
 })
 export class LeDropdownBase {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * The options to display in the dropdown.
@@ -106,17 +106,17 @@ export class LeDropdownBase {
   /**
    * Emitted when an option is selected.
    */
-  @Event() leOptionSelect: EventEmitter<LeOptionSelectDetail>;
+  @Event() leOptionSelect!: EventEmitter<LeOptionSelectDetail>;
 
   /**
    * Emitted when the dropdown opens.
    */
-  @Event() leDropdownOpen: EventEmitter<void>;
+  @Event() leDropdownOpen!: EventEmitter<void>;
 
   /**
    * Emitted when the dropdown closes.
    */
-  @Event() leDropdownClose: EventEmitter<void>;
+  @Event() leDropdownClose!: EventEmitter<void>;
 
   @State() private focusedIndex: number = -1;
   @State() private filteredOptions: LeOption[] = [];
@@ -124,6 +124,9 @@ export class LeDropdownBase {
   private popoverEl?: HTMLLePopoverElement;
   private listEl?: HTMLElement;
   private triggerWidth: number = 0;
+  private typeaheadBuffer: string = '';
+  private typeaheadResetTimer?: ReturnType<typeof setTimeout>;
+  private readonly typeaheadResetMs: number = 750;
 
   @Watch('options')
   @Watch('filterQuery')
@@ -188,6 +191,14 @@ export class LeDropdownBase {
 
   private handleKeyDown = (e: KeyboardEvent) => {
     if (!this.open) return;
+
+    // Printable keys can be handled by trigger-level logic (e.g. closed select).
+    // If so, skip duplicate processing here, but still allow prevented navigation keys.
+    if (e.defaultPrevented && this.isTypeaheadKey(e.key)) return;
+
+    // Ignore shortcuts and editable targets (e.g. combobox search input)
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (this.isEditableTarget(e.target)) return;
 
     const optionCount = this.filteredOptions.length;
 
@@ -268,8 +279,97 @@ export class LeDropdownBase {
       case 'Tab':
         this.hide();
         break;
+
+      default:
+        if (this.isTypeaheadKey(e.key)) {
+          this.handleTypeaheadKey(e.key);
+        }
+        break;
     }
   };
+
+  private isEditableTarget(target: EventTarget | null): boolean {
+    if (!(target instanceof globalThis.Element)) return false;
+
+    if (target.closest('input, textarea, [contenteditable="true"]')) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private isTypeaheadKey(key: string): boolean {
+    return key.length === 1 && key.trim().length > 0;
+  }
+
+  private normalizeText(value: string): string {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  }
+
+  private resetTypeaheadBuffer() {
+    this.typeaheadBuffer = '';
+    if (this.typeaheadResetTimer) {
+      clearTimeout(this.typeaheadResetTimer);
+      this.typeaheadResetTimer = undefined;
+    }
+  }
+
+  private scheduleTypeaheadReset() {
+    if (this.typeaheadResetTimer) {
+      clearTimeout(this.typeaheadResetTimer);
+    }
+
+    this.typeaheadResetTimer = setTimeout(() => {
+      this.typeaheadBuffer = '';
+      this.typeaheadResetTimer = undefined;
+    }, this.typeaheadResetMs);
+  }
+
+  private findTypeaheadMatchIndex(query: string): number {
+    if (!query) return -1;
+
+    const searchable = this.filteredOptions.map((option, index) => ({
+      option,
+      index,
+      label: this.normalizeText(option.label || ''),
+    }));
+
+    const enabled = searchable.filter(item => !item.option.disabled);
+    if (enabled.length === 0) return -1;
+
+    const startPosition = enabled.findIndex(item => item.index > this.focusedIndex);
+    const rotated =
+      startPosition >= 0
+        ? [...enabled.slice(startPosition), ...enabled.slice(0, startPosition)]
+        : enabled;
+
+    const fullMatch = rotated.find(item => item.label.startsWith(query));
+    if (fullMatch) return fullMatch.index;
+
+    // Native selects often cycle by first letter when the same key is repeated.
+    const repeatedChar = query.length > 1 && query.split('').every(ch => ch === query[0]);
+    if (!repeatedChar) return -1;
+
+    const singleCharMatch = rotated.find(item => item.label.startsWith(query[0]));
+    return singleCharMatch ? singleCharMatch.index : -1;
+  }
+
+  private handleTypeaheadKey(key: string) {
+    const normalizedKey = this.normalizeText(key);
+    if (!normalizedKey) return;
+
+    this.typeaheadBuffer += normalizedKey;
+    this.scheduleTypeaheadReset();
+
+    const matchIndex = this.findTypeaheadMatchIndex(this.typeaheadBuffer);
+    if (matchIndex < 0) return;
+
+    this.focusedIndex = matchIndex;
+    this.scrollToFocused();
+  }
 
   private scrollToFocused() {
     if (!this.listEl || this.focusedIndex < 0) return;
@@ -294,7 +394,10 @@ export class LeDropdownBase {
   private handlePopoverClose = () => {
     this.open = false;
     this.focusedIndex = -1;
+    this.resetTypeaheadBuffer();
     this.leDropdownClose.emit();
+
+    this.resetTypeaheadBuffer();
 
     // Remove keyboard listener
     document.removeEventListener('keydown', this.handleKeyDown);
@@ -341,6 +444,19 @@ export class LeDropdownBase {
     } else {
       await this.show();
     }
+  }
+
+  /**
+   * Applies a typeahead key to focus matching option.
+   * If the dropdown is closed, it will be opened first.
+   */
+  @Method()
+  async typeahead(key: string) {
+    if (this.disabled) return;
+    if (!this.open) {
+      await this.show();
+    }
+    this.handleTypeaheadKey(key);
   }
 
   private renderIcon(icon: string | undefined, className: string) {

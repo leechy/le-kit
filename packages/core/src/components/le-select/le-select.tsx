@@ -217,6 +217,13 @@ export class LeSelect {
     if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
       e.preventDefault();
       this.dropdownEl?.show();
+      return;
+    }
+
+    const isPrintable = e.key.length === 1 && e.key.trim().length > 0;
+    if (!e.ctrlKey && !e.metaKey && !e.altKey && isPrintable) {
+      e.preventDefault();
+      this.dropdownEl?.typeahead(e.key);
     }
   };
 

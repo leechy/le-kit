@@ -12,7 +12,12 @@ import {
   Listen,
 } from '@stencil/core';
 import { LeOption } from '../../types/options';
-import { classnames, generateId } from '../../utils/utils';
+import {
+  buildDeclarativeOptionsFromChildren,
+  classnames,
+  generateId,
+  parseOptionInput,
+} from '../../utils/utils';
 import { LeButtonCustomEvent } from '../..';
 
 export interface LeBreadcrumbSelectDetail {
@@ -109,26 +114,13 @@ export class LeBreadcrumbs {
   }
 
   private async buildDeclarativeItems() {
-    const items = Array.from(this.el.querySelectorAll(':scope > le-item')) as Array<
-      HTMLElement & { getOption: () => Promise<LeOption> }
-    >;
+    const { isDeclarativeMode, options } = await buildDeclarativeOptionsFromChildren(
+      this.el,
+      'le-breadcrumbs',
+    );
 
-    if (items.length > 0) {
-      this.isDeclarativeMode = true;
-      this.declarativeItems = await Promise.all(
-        items.map(async item => {
-          if ('componentOnReady' in item) {
-            await (item as any).componentOnReady();
-          } else if (item.tagName.includes('-')) {
-            await customElements.whenDefined(item.tagName.toLowerCase());
-          }
-          return item.getOption();
-        }),
-      );
-    } else {
-      this.isDeclarativeMode = false;
-      this.declarativeItems = [];
-    }
+    this.isDeclarativeMode = isDeclarativeMode;
+    this.declarativeItems = options;
   }
 
   @Watch('items')
@@ -149,23 +141,7 @@ export class LeBreadcrumbs {
       return this.declarativeItems;
     }
 
-    if (typeof this.items === 'string') {
-      try {
-        return JSON.parse(this.items);
-      } catch {
-        // Fallback to JS evaluation to support Unquoted/Single quoted strings (like Astro renders)
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-implied-eval
-          const fn = new Function(`return ${this.items}`);
-          const evaluated = fn();
-          return Array.isArray(evaluated) ? evaluated : [];
-        } catch (e) {
-          console.error('[le-breadcrumbs] Failed to parse items array:', e);
-          return [];
-        }
-      }
-    }
-    return Array.isArray(this.items) ? this.items : [];
+    return parseOptionInput(this.items, 'le-breadcrumbs', 'items');
   }
 
   private getItemId(item: LeOption, index: number): string {

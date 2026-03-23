@@ -8,7 +8,6 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
-import { LeOption as LeOption1 } from "./components";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
@@ -17,7 +16,6 @@ import { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./compo
 export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
-export { LeOption as LeOption1 } from "./components";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
@@ -855,7 +853,7 @@ export namespace Components {
         "size": number;
     }
     interface LeItem {
-        "getOption": () => Promise<LeOption1>;
+        "getOption": () => Promise<LeOption>;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -3288,8 +3286,6 @@ declare global {
     }
 }
 declare namespace LocalJSX {
-    type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}` | `prop:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K | `prop:${K}`]?: never } | { [P in `prop:${K}`]: PropT } & { [P in K | `attr:${K}`]?: never };
-
     /**
      * A flexible bar component that handles overflow gracefully.
      * Items are slotted children. The bar measures which items fit on the first
@@ -5519,441 +5515,46 @@ declare namespace LocalJSX {
          */
         "value"?: number;
     }
-
-    interface LeBarAttributes {
-        "overflow": 'more' | 'scroll' | 'hamburger' | 'wrap';
-        "alignItems": 'start' | 'end' | 'center' | 'stretch';
-        "arrows": boolean;
-        "disablePopover": boolean;
-        "minVisibleItems": number;
-        "showAllMenu": string;
-    }
-    interface LeBentoGridAttributes {
-        "columnMinWidth": number;
-        "columnMaxWidth": number;
-        "minColumns": number;
-        "maxColumns": number;
-        "maxWidth": number;
-        "rowHeight": number;
-        "gap": number;
-    }
-    interface LeBentoTileAttributes {
-        "cols": number;
-        "rows": number;
-    }
-    interface LeBoxAttributes {
-        "grow": number;
-        "shrink": number;
-        "basis": string;
-        "width": string;
-        "height": string;
-        "minWidth": string;
-        "maxWidth": string;
-        "minHeight": string;
-        "maxHeight": string;
-        "background": string;
-        "borderRadius": string;
-        "border": string;
-        "alignSelf": 'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline';
-        "alignContent": 'start' | 'center' | 'end' | 'stretch';
-        "justifyContent": 'start' | 'center' | 'end' | 'stretch';
-        "padding": string;
-        "order": number;
-        "displayFlex": boolean;
-        "innerDirection": 'horizontal' | 'vertical';
-        "innerGap": string;
-    }
-    interface LeBreadcrumbsAttributes {
-        "items": LeOption[] | string;
-        "label": string;
-        "separatorIcon": string;
-        "overflowMode": 'collapse' | 'wrap' | 'scroll';
-        "minVisibleItems": number;
-    }
-    interface LeButtonAttributes {
-        "mode": 'default' | 'admin';
-        "variant": 'solid' | 'outlined' | 'clear' | 'system';
-        "color": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
-        "size": 'small' | 'medium' | 'large';
-        "selected": boolean;
-        "fullWidth": boolean;
-        "iconOnly": string | Node;
-        "iconStart": string | Node;
-        "iconEnd": string | Node;
-        "disabled": boolean;
-        "type": 'button' | 'submit' | 'reset';
-        "href": string;
-        "target": string;
-        "align": 'start' | 'center' | 'space-between' | 'end';
-    }
-    interface LeCardAttributes {
-        "variant": 'default' | 'outlined' | 'elevated';
-        "interactive": boolean;
-    }
-    interface LeCheckboxAttributes {
-        "checked": boolean;
-        "disabled": boolean;
-        "name": string;
-        "value": string;
-        "externalId": string;
-    }
-    interface LeCodeInputAttributes {
-        "value": string;
-        "name": string;
-        "label": string;
-        "length": number;
-        "description": string;
-        "type": 'text' | 'number';
-        "disabled": boolean;
-        "readonly": boolean;
-        "externalId": string;
-        "error": boolean;
-    }
-    interface LeCollapseAttributes {
-        "closed": boolean;
-        "scrollDown": boolean;
-        "noFading": boolean;
-        "collapseOnHeaderShrink": boolean;
-    }
-    interface LeComboboxAttributes {
-        "options": LeOption[] | string;
-        "value": string;
-        "placeholder": string;
-        "disabled": boolean;
-        "required": boolean;
-        "name": string;
-        "fullWidth": boolean;
-        "size": 'small' | 'medium' | 'large';
-        "allowCustom": boolean;
-        "minSearchLength": number;
-        "emptyText": string;
-        "open": boolean;
-    }
-    interface LeComponentAttributes {
-        "component": string;
-        "displayName": string;
-        "hostClass": string;
-    }
-    interface LeCurrentHeadingAttributes {
-        "selector": string;
-    }
-    interface LeDropdownBaseAttributes {
-        "value": string;
-        "multiple": boolean;
-        "open": boolean;
-        "disabled": boolean;
-        "filterQuery": string;
-        "emptyText": string;
-        "showCheckboxes": boolean;
-        "maxHeight": string;
-        "width": string;
-        "fullWidth": boolean;
-        "closeOnClickOutside": boolean;
-    }
-    interface LeHeaderAttributes {
-        "isStatic": boolean;
-        "sticky": boolean;
-        "fixed": boolean;
-        "revealOnScroll": string;
-        "shrinkOffset": string;
-        "expandOnHover": boolean;
-        "layout": 'default' | 'space-between';
-    }
-    interface LeIconAttributes {
-        "name": string;
-        "size": number;
-    }
-    interface LeMultiselectAttributes {
-        "options": LeOption[] | string;
-        "placeholder": string;
-        "disabled": boolean;
-        "required": boolean;
-        "name": string;
-        "fullWidth": boolean;
-        "size": 'small' | 'medium' | 'large';
-        "maxSelections": number;
-        "showSelectAll": string;
-        "searchable": boolean;
-        "emptyText": string;
-        "open": boolean;
-    }
-    interface LeNavigationAttributes {
-        "items": LeOption[] | string;
-        "orientation": 'vertical' | 'horizontal';
-        "wrap": boolean;
-        "overflowMode": 'more' | 'hamburger';
-        "minVisibleItemsForMore": number;
-        "align": 'start' | 'end' | 'center' | 'space-between';
-        "activeUrl": string;
-        "searchable": boolean;
-        "searchPlaceholder": string;
-        "emptyText": string;
-        "submenuSearchable": boolean;
-    }
-    interface LeNumberInputAttributes {
-        "value": number;
-        "name": string;
-        "label": string;
-        "placeholder": string;
-        "min": number;
-        "max": number;
-        "step": number;
-        "required": boolean;
-        "disabled": boolean;
-        "readonly": boolean;
-        "iconStart": string;
-        "showSpinners": boolean;
-        "externalId": string;
-    }
-    interface LePopoverAttributes {
-        "mode": 'default' | 'admin';
-        "open": boolean;
-        "position": 'top' | 'bottom' | 'left' | 'right' | 'auto';
-        "align": 'start' | 'center' | 'end';
-        "popoverTitle": string;
-        "showClose": boolean;
-        "closeOnClickOutside": boolean;
-        "closeOnEscape": boolean;
-        "offset": number;
-        "width": string;
-        "minWidth": string;
-        "maxWidth": string;
-        "triggerFullWidth": boolean;
-    }
-    interface LePopupAttributes {
-        "mode": LeKitMode;
-        "open": boolean;
-        "type": PopupType;
-        "popupTitle": string;
-        "message": string;
-        "modal": boolean;
-        "position": PopupPosition;
-        "confirmText": string;
-        "cancelText": string;
-        "placeholder": string;
-        "defaultValue": string;
-        "closeOnBackdrop": boolean;
-    }
-    interface LeRoundProgressAttributes {
-        "value": number;
-        "padding": number;
-        "paths": string;
-    }
-    interface LeScrollProgressAttributes {
-        "trackScrollProgress": string;
-    }
-    interface LeSegmentedControlAttributes {
-        "value": string;
-        "size": 'small' | 'medium' | 'large';
-        "overflow": 'auto' | 'hidden' | 'visible' | 'scroll';
-        "fullWidth": boolean;
-        "disabled": boolean;
-    }
-    interface LeSelectAttributes {
-        "options": LeOption[] | string;
-        "value": string;
-        "placeholder": string;
-        "disabled": boolean;
-        "required": boolean;
-        "name": string;
-        "size": 'small' | 'medium' | 'large';
-        "variant": 'default' | 'outlined' | 'solid';
-        "open": boolean;
-    }
-    interface LeSidePanelAttributes {
-        "panelId": string;
-        "side": LeSidePanelSide;
-        "collapseAt": string;
-        "narrowBehavior": LeSidePanelNarrowBehavior;
-        "sticky": boolean;
-        "top": string;
-        "fullHeight": boolean;
-        "open": boolean;
-        "collapsed": boolean;
-        "panelWidth": number;
-        "minPanelWidth": number;
-        "maxPanelWidth": number;
-        "resizable": boolean;
-        "persistKey": string;
-        "showCloseButton": boolean;
-        "autoShowOnWide": boolean;
-        "autoHideOnNarrow": boolean;
-        "panelLabel": string;
-    }
-    interface LeSidePanelToggleAttributes {
-        "panelId": string;
-        "action": LeSidePanelToggleAction;
-        "shortcut": string;
-        "disabled": boolean;
-        "mode": 'default' | 'admin';
-        "variant": 'solid' | 'outlined' | 'clear' | 'system';
-        "color": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
-        "size": 'small' | 'medium' | 'large';
-        "selected": boolean;
-        "fullWidth": boolean;
-        "iconOnly": string | Node;
-        "iconStart": string | Node;
-        "iconEnd": string | Node;
-        "type": 'button' | 'submit' | 'reset';
-        "href": string;
-        "target": string;
-        "align": 'start' | 'center' | 'space-between' | 'end';
-    }
-    interface LeSlotAttributes {
-        "type": 'slot' | 'text' | 'textarea';
-        "name": string;
-        "label": string;
-        "description": string;
-        "allowedComponents": string;
-        "multiple": boolean;
-        "required": boolean;
-        "placeholder": string;
-        "tag": string;
-        "slotStyle": string;
-    }
-    interface LeStackAttributes {
-        "direction": 'horizontal' | 'vertical';
-        "gap": string;
-        "align": 'start' | 'center' | 'end' | 'stretch' | 'baseline';
-        "justify": 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly';
-        "wrap": boolean;
-        "alignContent": 'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around';
-        "reverse": boolean;
-        "maxItems": number;
-        "fullWidth": boolean;
-        "fullHeight": boolean;
-        "padding": string;
-    }
-    interface LeStringInputAttributes {
-        "mode": 'default' | 'admin';
-        "value": string;
-        "name": string;
-        "type": 'text' | 'email' | 'password' | 'tel' | 'url';
-        "label": string;
-        "iconStart": string;
-        "iconEnd": string;
-        "placeholder": string;
-        "hideDescription": boolean;
-        "disabled": boolean;
-        "readonly": boolean;
-        "externalId": string;
-    }
-    interface LeTabAttributes {
-        "mode": 'default' | 'admin';
-        "label": string;
-        "value": string;
-        "variant": 'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only';
-        "position": 'top' | 'bottom' | 'start' | 'end';
-        "size": 'small' | 'medium' | 'large';
-        "focusable": boolean;
-        "selected": boolean;
-        "fullWidth": boolean;
-        "icon": string | Node;
-        "showLabel": boolean;
-        "iconStart": string | Node;
-        "iconEnd": string | Node;
-        "disabled": boolean;
-        "href": string;
-        "target": string;
-        "align": 'start' | 'center' | 'space-between' | 'end';
-    }
-    interface LeTabBarAttributes {
-        "selected": string;
-        "fullWidth": boolean;
-        "showLabels": boolean;
-        "position": 'top' | 'bottom';
-        "size": 'small' | 'medium' | 'large';
-        "bordered": boolean;
-    }
-    interface LeTabPanelAttributes {
-        "label": string;
-        "value": string;
-        "iconStart": string;
-        "iconEnd": string;
-        "disabled": boolean;
-        "lazy": boolean;
-    }
-    interface LeTabsAttributes {
-        "selected": string;
-        "orientation": 'horizontal' | 'vertical';
-        "position": 'start' | 'end';
-        "variant": 'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only';
-        "fullWidth": boolean;
-        "size": 'small' | 'medium' | 'large';
-        "wrap": boolean;
-        "overflow": 'auto' | 'hidden' | 'visible' | 'scroll';
-    }
-    interface LeTagAttributes {
-        "label": string;
-        "mode": 'default' | 'admin';
-        "icon": string;
-        "dismissible": boolean;
-        "disabled": boolean;
-        "size": 'small' | 'medium' | 'large';
-        "variant": 'default' | 'primary' | 'success' | 'warning' | 'danger';
-    }
-    interface LeTextAttributes {
-        "variant": | 'p'
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'h4'
-    | 'h5'
-    | 'h6'
-    | 'code'
-    | 'quote'
-    | 'label'
-    | 'small';
-        "align": 'left' | 'center' | 'right' | 'justify';
-        "color": string;
-        "truncate": boolean;
-        "maxLines": number;
-    }
-    interface LeTurntableAttributes {
-        "center": string;
-        "value": number;
-    }
-
     interface IntrinsicElements {
-        "le-bar": Omit<LeBar, keyof LeBarAttributes> & { [K in keyof LeBar & keyof LeBarAttributes]?: LeBar[K] } & { [K in keyof LeBar & keyof LeBarAttributes as `attr:${K}`]?: LeBarAttributes[K] } & { [K in keyof LeBar & keyof LeBarAttributes as `prop:${K}`]?: LeBar[K] };
-        "le-bento-grid": Omit<LeBentoGrid, keyof LeBentoGridAttributes> & { [K in keyof LeBentoGrid & keyof LeBentoGridAttributes]?: LeBentoGrid[K] } & { [K in keyof LeBentoGrid & keyof LeBentoGridAttributes as `attr:${K}`]?: LeBentoGridAttributes[K] } & { [K in keyof LeBentoGrid & keyof LeBentoGridAttributes as `prop:${K}`]?: LeBentoGrid[K] };
-        "le-bento-tile": Omit<LeBentoTile, keyof LeBentoTileAttributes> & { [K in keyof LeBentoTile & keyof LeBentoTileAttributes]?: LeBentoTile[K] } & { [K in keyof LeBentoTile & keyof LeBentoTileAttributes as `attr:${K}`]?: LeBentoTileAttributes[K] } & { [K in keyof LeBentoTile & keyof LeBentoTileAttributes as `prop:${K}`]?: LeBentoTile[K] };
-        "le-box": Omit<LeBox, keyof LeBoxAttributes> & { [K in keyof LeBox & keyof LeBoxAttributes]?: LeBox[K] } & { [K in keyof LeBox & keyof LeBoxAttributes as `attr:${K}`]?: LeBoxAttributes[K] } & { [K in keyof LeBox & keyof LeBoxAttributes as `prop:${K}`]?: LeBox[K] };
-        "le-breadcrumbs": Omit<LeBreadcrumbs, keyof LeBreadcrumbsAttributes> & { [K in keyof LeBreadcrumbs & keyof LeBreadcrumbsAttributes]?: LeBreadcrumbs[K] } & { [K in keyof LeBreadcrumbs & keyof LeBreadcrumbsAttributes as `attr:${K}`]?: LeBreadcrumbsAttributes[K] } & { [K in keyof LeBreadcrumbs & keyof LeBreadcrumbsAttributes as `prop:${K}`]?: LeBreadcrumbs[K] };
-        "le-button": Omit<LeButton, keyof LeButtonAttributes> & { [K in keyof LeButton & keyof LeButtonAttributes]?: LeButton[K] } & { [K in keyof LeButton & keyof LeButtonAttributes as `attr:${K}`]?: LeButtonAttributes[K] } & { [K in keyof LeButton & keyof LeButtonAttributes as `prop:${K}`]?: LeButton[K] };
-        "le-card": Omit<LeCard, keyof LeCardAttributes> & { [K in keyof LeCard & keyof LeCardAttributes]?: LeCard[K] } & { [K in keyof LeCard & keyof LeCardAttributes as `attr:${K}`]?: LeCardAttributes[K] } & { [K in keyof LeCard & keyof LeCardAttributes as `prop:${K}`]?: LeCard[K] };
-        "le-checkbox": Omit<LeCheckbox, keyof LeCheckboxAttributes> & { [K in keyof LeCheckbox & keyof LeCheckboxAttributes]?: LeCheckbox[K] } & { [K in keyof LeCheckbox & keyof LeCheckboxAttributes as `attr:${K}`]?: LeCheckboxAttributes[K] } & { [K in keyof LeCheckbox & keyof LeCheckboxAttributes as `prop:${K}`]?: LeCheckbox[K] };
-        "le-code-input": Omit<LeCodeInput, keyof LeCodeInputAttributes> & { [K in keyof LeCodeInput & keyof LeCodeInputAttributes]?: LeCodeInput[K] } & { [K in keyof LeCodeInput & keyof LeCodeInputAttributes as `attr:${K}`]?: LeCodeInputAttributes[K] } & { [K in keyof LeCodeInput & keyof LeCodeInputAttributes as `prop:${K}`]?: LeCodeInput[K] };
-        "le-collapse": Omit<LeCollapse, keyof LeCollapseAttributes> & { [K in keyof LeCollapse & keyof LeCollapseAttributes]?: LeCollapse[K] } & { [K in keyof LeCollapse & keyof LeCollapseAttributes as `attr:${K}`]?: LeCollapseAttributes[K] } & { [K in keyof LeCollapse & keyof LeCollapseAttributes as `prop:${K}`]?: LeCollapse[K] };
-        "le-combobox": Omit<LeCombobox, keyof LeComboboxAttributes> & { [K in keyof LeCombobox & keyof LeComboboxAttributes]?: LeCombobox[K] } & { [K in keyof LeCombobox & keyof LeComboboxAttributes as `attr:${K}`]?: LeComboboxAttributes[K] } & { [K in keyof LeCombobox & keyof LeComboboxAttributes as `prop:${K}`]?: LeCombobox[K] };
-        "le-component": Omit<LeComponent, keyof LeComponentAttributes> & { [K in keyof LeComponent & keyof LeComponentAttributes]?: LeComponent[K] } & { [K in keyof LeComponent & keyof LeComponentAttributes as `attr:${K}`]?: LeComponentAttributes[K] } & { [K in keyof LeComponent & keyof LeComponentAttributes as `prop:${K}`]?: LeComponent[K] } & OneOf<"component", LeComponent["component"], LeComponentAttributes["component"]>;
-        "le-current-heading": Omit<LeCurrentHeading, keyof LeCurrentHeadingAttributes> & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes]?: LeCurrentHeading[K] } & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes as `attr:${K}`]?: LeCurrentHeadingAttributes[K] } & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes as `prop:${K}`]?: LeCurrentHeading[K] };
-        "le-dropdown-base": Omit<LeDropdownBase, keyof LeDropdownBaseAttributes> & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes]?: LeDropdownBase[K] } & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes as `attr:${K}`]?: LeDropdownBaseAttributes[K] } & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes as `prop:${K}`]?: LeDropdownBase[K] };
-        "le-header": Omit<LeHeader, keyof LeHeaderAttributes> & { [K in keyof LeHeader & keyof LeHeaderAttributes]?: LeHeader[K] } & { [K in keyof LeHeader & keyof LeHeaderAttributes as `attr:${K}`]?: LeHeaderAttributes[K] } & { [K in keyof LeHeader & keyof LeHeaderAttributes as `prop:${K}`]?: LeHeader[K] };
+        "le-bar": LeBar;
+        "le-bento-grid": LeBentoGrid;
+        "le-bento-tile": LeBentoTile;
+        "le-box": LeBox;
+        "le-breadcrumbs": LeBreadcrumbs;
+        "le-button": LeButton;
+        "le-card": LeCard;
+        "le-checkbox": LeCheckbox;
+        "le-code-input": LeCodeInput;
+        "le-collapse": LeCollapse;
+        "le-combobox": LeCombobox;
+        "le-component": LeComponent;
+        "le-current-heading": LeCurrentHeading;
+        "le-dropdown-base": LeDropdownBase;
+        "le-header": LeHeader;
         "le-header-placeholder": LeHeaderPlaceholder;
-        "le-icon": Omit<LeIcon, keyof LeIconAttributes> & { [K in keyof LeIcon & keyof LeIconAttributes]?: LeIcon[K] } & { [K in keyof LeIcon & keyof LeIconAttributes as `attr:${K}`]?: LeIconAttributes[K] } & { [K in keyof LeIcon & keyof LeIconAttributes as `prop:${K}`]?: LeIcon[K] };
+        "le-icon": LeIcon;
         "le-item": LeItem;
-        "le-multiselect": Omit<LeMultiselect, keyof LeMultiselectAttributes> & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes]?: LeMultiselect[K] } & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes as `attr:${K}`]?: LeMultiselectAttributes[K] } & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes as `prop:${K}`]?: LeMultiselect[K] };
-        "le-navigation": Omit<LeNavigation, keyof LeNavigationAttributes> & { [K in keyof LeNavigation & keyof LeNavigationAttributes]?: LeNavigation[K] } & { [K in keyof LeNavigation & keyof LeNavigationAttributes as `attr:${K}`]?: LeNavigationAttributes[K] } & { [K in keyof LeNavigation & keyof LeNavigationAttributes as `prop:${K}`]?: LeNavigation[K] };
-        "le-number-input": Omit<LeNumberInput, keyof LeNumberInputAttributes> & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes]?: LeNumberInput[K] } & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes as `attr:${K}`]?: LeNumberInputAttributes[K] } & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes as `prop:${K}`]?: LeNumberInput[K] };
-        "le-popover": Omit<LePopover, keyof LePopoverAttributes> & { [K in keyof LePopover & keyof LePopoverAttributes]?: LePopover[K] } & { [K in keyof LePopover & keyof LePopoverAttributes as `attr:${K}`]?: LePopoverAttributes[K] } & { [K in keyof LePopover & keyof LePopoverAttributes as `prop:${K}`]?: LePopover[K] };
-        "le-popup": Omit<LePopup, keyof LePopupAttributes> & { [K in keyof LePopup & keyof LePopupAttributes]?: LePopup[K] } & { [K in keyof LePopup & keyof LePopupAttributes as `attr:${K}`]?: LePopupAttributes[K] } & { [K in keyof LePopup & keyof LePopupAttributes as `prop:${K}`]?: LePopup[K] };
-        "le-round-progress": Omit<LeRoundProgress, keyof LeRoundProgressAttributes> & { [K in keyof LeRoundProgress & keyof LeRoundProgressAttributes]?: LeRoundProgress[K] } & { [K in keyof LeRoundProgress & keyof LeRoundProgressAttributes as `attr:${K}`]?: LeRoundProgressAttributes[K] } & { [K in keyof LeRoundProgress & keyof LeRoundProgressAttributes as `prop:${K}`]?: LeRoundProgress[K] };
-        "le-scroll-progress": Omit<LeScrollProgress, keyof LeScrollProgressAttributes> & { [K in keyof LeScrollProgress & keyof LeScrollProgressAttributes]?: LeScrollProgress[K] } & { [K in keyof LeScrollProgress & keyof LeScrollProgressAttributes as `attr:${K}`]?: LeScrollProgressAttributes[K] } & { [K in keyof LeScrollProgress & keyof LeScrollProgressAttributes as `prop:${K}`]?: LeScrollProgress[K] };
-        "le-segmented-control": Omit<LeSegmentedControl, keyof LeSegmentedControlAttributes> & { [K in keyof LeSegmentedControl & keyof LeSegmentedControlAttributes]?: LeSegmentedControl[K] } & { [K in keyof LeSegmentedControl & keyof LeSegmentedControlAttributes as `attr:${K}`]?: LeSegmentedControlAttributes[K] } & { [K in keyof LeSegmentedControl & keyof LeSegmentedControlAttributes as `prop:${K}`]?: LeSegmentedControl[K] };
-        "le-select": Omit<LeSelect, keyof LeSelectAttributes> & { [K in keyof LeSelect & keyof LeSelectAttributes]?: LeSelect[K] } & { [K in keyof LeSelect & keyof LeSelectAttributes as `attr:${K}`]?: LeSelectAttributes[K] } & { [K in keyof LeSelect & keyof LeSelectAttributes as `prop:${K}`]?: LeSelect[K] };
-        "le-side-panel": Omit<LeSidePanel, keyof LeSidePanelAttributes> & { [K in keyof LeSidePanel & keyof LeSidePanelAttributes]?: LeSidePanel[K] } & { [K in keyof LeSidePanel & keyof LeSidePanelAttributes as `attr:${K}`]?: LeSidePanelAttributes[K] } & { [K in keyof LeSidePanel & keyof LeSidePanelAttributes as `prop:${K}`]?: LeSidePanel[K] };
-        "le-side-panel-toggle": Omit<LeSidePanelToggle, keyof LeSidePanelToggleAttributes> & { [K in keyof LeSidePanelToggle & keyof LeSidePanelToggleAttributes]?: LeSidePanelToggle[K] } & { [K in keyof LeSidePanelToggle & keyof LeSidePanelToggleAttributes as `attr:${K}`]?: LeSidePanelToggleAttributes[K] } & { [K in keyof LeSidePanelToggle & keyof LeSidePanelToggleAttributes as `prop:${K}`]?: LeSidePanelToggle[K] };
-        "le-slot": Omit<LeSlot, keyof LeSlotAttributes> & { [K in keyof LeSlot & keyof LeSlotAttributes]?: LeSlot[K] } & { [K in keyof LeSlot & keyof LeSlotAttributes as `attr:${K}`]?: LeSlotAttributes[K] } & { [K in keyof LeSlot & keyof LeSlotAttributes as `prop:${K}`]?: LeSlot[K] };
-        "le-stack": Omit<LeStack, keyof LeStackAttributes> & { [K in keyof LeStack & keyof LeStackAttributes]?: LeStack[K] } & { [K in keyof LeStack & keyof LeStackAttributes as `attr:${K}`]?: LeStackAttributes[K] } & { [K in keyof LeStack & keyof LeStackAttributes as `prop:${K}`]?: LeStack[K] };
-        "le-string-input": Omit<LeStringInput, keyof LeStringInputAttributes> & { [K in keyof LeStringInput & keyof LeStringInputAttributes]?: LeStringInput[K] } & { [K in keyof LeStringInput & keyof LeStringInputAttributes as `attr:${K}`]?: LeStringInputAttributes[K] } & { [K in keyof LeStringInput & keyof LeStringInputAttributes as `prop:${K}`]?: LeStringInput[K] };
-        "le-tab": Omit<LeTab, keyof LeTabAttributes> & { [K in keyof LeTab & keyof LeTabAttributes]?: LeTab[K] } & { [K in keyof LeTab & keyof LeTabAttributes as `attr:${K}`]?: LeTabAttributes[K] } & { [K in keyof LeTab & keyof LeTabAttributes as `prop:${K}`]?: LeTab[K] };
-        "le-tab-bar": Omit<LeTabBar, keyof LeTabBarAttributes> & { [K in keyof LeTabBar & keyof LeTabBarAttributes]?: LeTabBar[K] } & { [K in keyof LeTabBar & keyof LeTabBarAttributes as `attr:${K}`]?: LeTabBarAttributes[K] } & { [K in keyof LeTabBar & keyof LeTabBarAttributes as `prop:${K}`]?: LeTabBar[K] };
-        "le-tab-panel": Omit<LeTabPanel, keyof LeTabPanelAttributes> & { [K in keyof LeTabPanel & keyof LeTabPanelAttributes]?: LeTabPanel[K] } & { [K in keyof LeTabPanel & keyof LeTabPanelAttributes as `attr:${K}`]?: LeTabPanelAttributes[K] } & { [K in keyof LeTabPanel & keyof LeTabPanelAttributes as `prop:${K}`]?: LeTabPanel[K] } & OneOf<"label", LeTabPanel["label"], LeTabPanelAttributes["label"]>;
-        "le-tabs": Omit<LeTabs, keyof LeTabsAttributes> & { [K in keyof LeTabs & keyof LeTabsAttributes]?: LeTabs[K] } & { [K in keyof LeTabs & keyof LeTabsAttributes as `attr:${K}`]?: LeTabsAttributes[K] } & { [K in keyof LeTabs & keyof LeTabsAttributes as `prop:${K}`]?: LeTabs[K] };
-        "le-tag": Omit<LeTag, keyof LeTagAttributes> & { [K in keyof LeTag & keyof LeTagAttributes]?: LeTag[K] } & { [K in keyof LeTag & keyof LeTagAttributes as `attr:${K}`]?: LeTagAttributes[K] } & { [K in keyof LeTag & keyof LeTagAttributes as `prop:${K}`]?: LeTag[K] };
-        "le-text": Omit<LeText, keyof LeTextAttributes> & { [K in keyof LeText & keyof LeTextAttributes]?: LeText[K] } & { [K in keyof LeText & keyof LeTextAttributes as `attr:${K}`]?: LeTextAttributes[K] } & { [K in keyof LeText & keyof LeTextAttributes as `prop:${K}`]?: LeText[K] };
-        "le-turntable": Omit<LeTurntable, keyof LeTurntableAttributes> & { [K in keyof LeTurntable & keyof LeTurntableAttributes]?: LeTurntable[K] } & { [K in keyof LeTurntable & keyof LeTurntableAttributes as `attr:${K}`]?: LeTurntableAttributes[K] } & { [K in keyof LeTurntable & keyof LeTurntableAttributes as `prop:${K}`]?: LeTurntable[K] };
+        "le-multiselect": LeMultiselect;
+        "le-navigation": LeNavigation;
+        "le-number-input": LeNumberInput;
+        "le-popover": LePopover;
+        "le-popup": LePopup;
+        "le-round-progress": LeRoundProgress;
+        "le-scroll-progress": LeScrollProgress;
+        "le-segmented-control": LeSegmentedControl;
+        "le-select": LeSelect;
+        "le-side-panel": LeSidePanel;
+        "le-side-panel-toggle": LeSidePanelToggle;
+        "le-slot": LeSlot;
+        "le-stack": LeStack;
+        "le-string-input": LeStringInput;
+        "le-tab": LeTab;
+        "le-tab-bar": LeTabBar;
+        "le-tab-panel": LeTabPanel;
+        "le-tabs": LeTabs;
+        "le-tag": LeTag;
+        "le-text": LeText;
+        "le-turntable": LeTurntable;
     }
 }
 export { LocalJSX as JSX };
@@ -5975,7 +5576,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Layout
              */
-            "le-bar": LocalJSX.IntrinsicElements["le-bar"] & JSXBase.HTMLAttributes<HTMLLeBarElement>;
+            "le-bar": LocalJSX.LeBar & JSXBase.HTMLAttributes<HTMLLeBarElement>;
             /**
              * A responsive bento-style CSS grid container.
              * `le-bento-grid` creates a dense auto-filling grid using `auto-fill` with
@@ -5996,7 +5597,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Layout
              */
-            "le-bento-grid": LocalJSX.IntrinsicElements["le-bento-grid"] & JSXBase.HTMLAttributes<HTMLLeBentoGridElement>;
+            "le-bento-grid": LocalJSX.LeBentoGrid & JSXBase.HTMLAttributes<HTMLLeBentoGridElement>;
             /**
              * A single tile for use inside `le-bento-grid`.
              * Declares how many columns and rows it should span in the bento grid.
@@ -6010,7 +5611,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Layout
              */
-            "le-bento-tile": LocalJSX.IntrinsicElements["le-bento-tile"] & JSXBase.HTMLAttributes<HTMLLeBentoTileElement>;
+            "le-bento-tile": LocalJSX.LeBentoTile & JSXBase.HTMLAttributes<HTMLLeBentoTileElement>;
             /**
              * A flexible box component for use as a flex item within le-stack.
              * `le-box` wraps content and provides flex item properties like grow, shrink,
@@ -6023,8 +5624,8 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Layout
              */
-            "le-box": LocalJSX.IntrinsicElements["le-box"] & JSXBase.HTMLAttributes<HTMLLeBoxElement>;
-            "le-breadcrumbs": LocalJSX.IntrinsicElements["le-breadcrumbs"] & JSXBase.HTMLAttributes<HTMLLeBreadcrumbsElement>;
+            "le-box": LocalJSX.LeBox & JSXBase.HTMLAttributes<HTMLLeBoxElement>;
+            "le-breadcrumbs": LocalJSX.LeBreadcrumbs & JSXBase.HTMLAttributes<HTMLLeBreadcrumbsElement>;
             /**
              * A flexible button component with multiple variants and states.
              * @cssprop --le-button-bg - Button background color
@@ -6039,7 +5640,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Actions
              */
-            "le-button": LocalJSX.IntrinsicElements["le-button"] & JSXBase.HTMLAttributes<HTMLLeButtonElement>;
+            "le-button": LocalJSX.LeButton & JSXBase.HTMLAttributes<HTMLLeButtonElement>;
             /**
              * A flexible card component with header, content, and footer slots.
              * The card uses le-slot wrappers for each slot area. In admin mode,
@@ -6056,7 +5657,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Layout
              */
-            "le-card": LocalJSX.IntrinsicElements["le-card"] & JSXBase.HTMLAttributes<HTMLLeCardElement>;
+            "le-card": LocalJSX.LeCard & JSXBase.HTMLAttributes<HTMLLeCardElement>;
             /**
              * A checkbox component with support for labels, descriptions, and external IDs.
              * @cssprop --le-checkbox-size - Size of the checkbox input
@@ -6064,7 +5665,7 @@ declare module "@stencil/core" {
              * @cssprop --le-checkbox-label-color - Color of the label text
              * @cssprop --le-checkbox-desc-color - Color of the description text
              */
-            "le-checkbox": LocalJSX.IntrinsicElements["le-checkbox"] & JSXBase.HTMLAttributes<HTMLLeCheckboxElement>;
+            "le-checkbox": LocalJSX.LeCheckbox & JSXBase.HTMLAttributes<HTMLLeCheckboxElement>;
             /**
              * A one-time code input component with individual frames for each character.
              * Supports standard copy/paste and range selection behaviors.
@@ -6076,7 +5677,7 @@ declare module "@stencil/core" {
              * @cssprop --le-input-border-error - Input border style when invalid
              * @cssprop --le-input-radius - Input border radius
              */
-            "le-code-input": LocalJSX.IntrinsicElements["le-code-input"] & JSXBase.HTMLAttributes<HTMLLeCodeInputElement>;
+            "le-code-input": LocalJSX.LeCodeInput & JSXBase.HTMLAttributes<HTMLLeCodeInputElement>;
             /**
              * Animated show/hide wrapper.
              * Supports height collapse (auto->0) and/or fading.
@@ -6087,7 +5688,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Layout
              */
-            "le-collapse": LocalJSX.IntrinsicElements["le-collapse"] & JSXBase.HTMLAttributes<HTMLLeCollapseElement>;
+            "le-collapse": LocalJSX.LeCollapse & JSXBase.HTMLAttributes<HTMLLeCollapseElement>;
             /**
              * A combobox component with searchable dropdown.
              * Combines a text input with a dropdown list, allowing users to
@@ -6110,7 +5711,7 @@ declare module "@stencil/core" {
              * ></le-combobox>
              * ```
              */
-            "le-combobox": LocalJSX.IntrinsicElements["le-combobox"] & JSXBase.HTMLAttributes<HTMLLeComboboxElement>;
+            "le-combobox": LocalJSX.LeCombobox & JSXBase.HTMLAttributes<HTMLLeComboboxElement>;
             /**
              * Component wrapper for admin mode editing.
              * This component is used internally by other components to provide admin-mode
@@ -6132,7 +5733,7 @@ declare module "@stencil/core" {
              * @cmsInternal true
              * @cmsCategory System
              */
-            "le-component": LocalJSX.IntrinsicElements["le-component"] & JSXBase.HTMLAttributes<HTMLLeComponentElement>;
+            "le-component": LocalJSX.LeComponent & JSXBase.HTMLAttributes<HTMLLeComponentElement>;
             /**
              * Shows a "smart" header title based on what has scrolled out of view.
              * When `selector` matches multiple elements, the title becomes the last element
@@ -6141,7 +5742,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Layout
              */
-            "le-current-heading": LocalJSX.IntrinsicElements["le-current-heading"] & JSXBase.HTMLAttributes<HTMLLeCurrentHeadingElement>;
+            "le-current-heading": LocalJSX.LeCurrentHeading & JSXBase.HTMLAttributes<HTMLLeCurrentHeadingElement>;
             /**
              * Internal dropdown base component that provides shared functionality
              * for select, combobox, and multiselect components.
@@ -6153,7 +5754,7 @@ declare module "@stencil/core" {
              * @cmsInternal true
              * @cmsCategory System
              */
-            "le-dropdown-base": LocalJSX.IntrinsicElements["le-dropdown-base"] & JSXBase.HTMLAttributes<HTMLLeDropdownBaseElement>;
+            "le-dropdown-base": LocalJSX.LeDropdownBase & JSXBase.HTMLAttributes<HTMLLeDropdownBaseElement>;
             /**
              * A functional page header with scroll-aware behaviors.
              * Features:
@@ -6187,7 +5788,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Layout
              */
-            "le-header": LocalJSX.IntrinsicElements["le-header"] & JSXBase.HTMLAttributes<HTMLLeHeaderElement>;
+            "le-header": LocalJSX.LeHeader & JSXBase.HTMLAttributes<HTMLLeHeaderElement>;
             /**
              * Placeholder for `le-header`.
              * Reserves space using the global CSS variable `--le-header-height`.
@@ -6195,9 +5796,9 @@ declare module "@stencil/core" {
              * @cssprop --le-header-height - Published header height (px)
              * @cmsInternal true
              */
-            "le-header-placeholder": LocalJSX.IntrinsicElements["le-header-placeholder"] & JSXBase.HTMLAttributes<HTMLLeHeaderPlaceholderElement>;
-            "le-icon": LocalJSX.IntrinsicElements["le-icon"] & JSXBase.HTMLAttributes<HTMLLeIconElement>;
-            "le-item": LocalJSX.IntrinsicElements["le-item"] & JSXBase.HTMLAttributes<HTMLLeItemElement>;
+            "le-header-placeholder": LocalJSX.LeHeaderPlaceholder & JSXBase.HTMLAttributes<HTMLLeHeaderPlaceholderElement>;
+            "le-icon": LocalJSX.LeIcon & JSXBase.HTMLAttributes<HTMLLeIconElement>;
+            "le-item": LocalJSX.LeItem & JSXBase.HTMLAttributes<HTMLLeItemElement>;
             /**
              * A multiselect component for selecting multiple options.
              * Displays selected items as tags with optional search filtering.
@@ -6226,7 +5827,7 @@ declare module "@stencil/core" {
              * ></le-multiselect>
              * ```
              */
-            "le-multiselect": LocalJSX.IntrinsicElements["le-multiselect"] & JSXBase.HTMLAttributes<HTMLLeMultiselectElement>;
+            "le-multiselect": LocalJSX.LeMultiselect & JSXBase.HTMLAttributes<HTMLLeMultiselectElement>;
             /**
              * Navigation component with vertical (tree) and horizontal (menu) layouts.
              * - Accepts items as `LeOption[]` or a JSON string.
@@ -6235,7 +5836,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Navigation
              */
-            "le-navigation": LocalJSX.IntrinsicElements["le-navigation"] & JSXBase.HTMLAttributes<HTMLLeNavigationElement>;
+            "le-navigation": LocalJSX.LeNavigation & JSXBase.HTMLAttributes<HTMLLeNavigationElement>;
             /**
              * A number input component with validation, keyboard controls, and custom spinners.
              * @cssprop --le-input-bg - Input background color
@@ -6246,7 +5847,7 @@ declare module "@stencil/core" {
              * @cssprop --le-input-radius - Input border radius
              * @cssprop --le-input-padding - Input padding
              */
-            "le-number-input": LocalJSX.IntrinsicElements["le-number-input"] & JSXBase.HTMLAttributes<HTMLLeNumberInputElement>;
+            "le-number-input": LocalJSX.LeNumberInput & JSXBase.HTMLAttributes<HTMLLeNumberInputElement>;
             /**
              * A popover component for displaying floating content.
              * Uses the native HTML Popover API for proper layering with dialogs
@@ -6256,7 +5857,7 @@ declare module "@stencil/core" {
              * @cmsInternal true
              * @cmsCategory System
              */
-            "le-popover": LocalJSX.IntrinsicElements["le-popover"] & JSXBase.HTMLAttributes<HTMLLePopoverElement>;
+            "le-popover": LocalJSX.LePopover & JSXBase.HTMLAttributes<HTMLLePopoverElement>;
             /**
              * A flexible popup/dialog component for alerts, confirms, prompts, and custom content.
              * Uses the native HTML <dialog> element for proper modal behavior, accessibility,
@@ -6265,8 +5866,8 @@ declare module "@stencil/core" {
              * @cmsInternal true
              * @cmsCategory System
              */
-            "le-popup": LocalJSX.IntrinsicElements["le-popup"] & JSXBase.HTMLAttributes<HTMLLePopupElement>;
-            "le-round-progress": LocalJSX.IntrinsicElements["le-round-progress"] & JSXBase.HTMLAttributes<HTMLLeRoundProgressElement>;
+            "le-popup": LocalJSX.LePopup & JSXBase.HTMLAttributes<HTMLLePopupElement>;
+            "le-round-progress": LocalJSX.LeRoundProgress & JSXBase.HTMLAttributes<HTMLLeRoundProgressElement>;
             /**
              * Displays scroll progress as a simple bar.
              * If `track-scroll-progress` is present without a value, tracks the full document.
@@ -6284,7 +5885,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Layout
              */
-            "le-scroll-progress": LocalJSX.IntrinsicElements["le-scroll-progress"] & JSXBase.HTMLAttributes<HTMLLeScrollProgressElement>;
+            "le-scroll-progress": LocalJSX.LeScrollProgress & JSXBase.HTMLAttributes<HTMLLeScrollProgressElement>;
             /**
              * A segmented control component (iOS-style toggle buttons).
              * Perfect for toggling between a small set of related options.
@@ -6298,7 +5899,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Form
              */
-            "le-segmented-control": LocalJSX.IntrinsicElements["le-segmented-control"] & JSXBase.HTMLAttributes<HTMLLeSegmentedControlElement>;
+            "le-segmented-control": LocalJSX.LeSegmentedControl & JSXBase.HTMLAttributes<HTMLLeSegmentedControlElement>;
             /**
              * A select dropdown component for single selection.
              * @cmsEditable true
@@ -6329,9 +5930,9 @@ declare module "@stencil/core" {
              * ></le-select>
              * ```
              */
-            "le-select": LocalJSX.IntrinsicElements["le-select"] & JSXBase.HTMLAttributes<HTMLLeSelectElement>;
-            "le-side-panel": LocalJSX.IntrinsicElements["le-side-panel"] & JSXBase.HTMLAttributes<HTMLLeSidePanelElement>;
-            "le-side-panel-toggle": LocalJSX.IntrinsicElements["le-side-panel-toggle"] & JSXBase.HTMLAttributes<HTMLLeSidePanelToggleElement>;
+            "le-select": LocalJSX.LeSelect & JSXBase.HTMLAttributes<HTMLLeSelectElement>;
+            "le-side-panel": LocalJSX.LeSidePanel & JSXBase.HTMLAttributes<HTMLLeSidePanelElement>;
+            "le-side-panel-toggle": LocalJSX.LeSidePanelToggle & JSXBase.HTMLAttributes<HTMLLeSidePanelToggleElement>;
             /**
              * Slot placeholder component for admin/CMS mode.
              * This component renders a visual placeholder for slots when in admin mode,
@@ -6340,7 +5941,7 @@ declare module "@stencil/core" {
              * @cmsInternal true
              * @cmsCategory System
              */
-            "le-slot": LocalJSX.IntrinsicElements["le-slot"] & JSXBase.HTMLAttributes<HTMLLeSlotElement>;
+            "le-slot": LocalJSX.LeSlot & JSXBase.HTMLAttributes<HTMLLeSlotElement>;
             /**
              * A flexible stack layout component using CSS flexbox.
              * `le-stack` arranges its children in a row (horizontal) or column (vertical)
@@ -6351,7 +5952,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Layout
              */
-            "le-stack": LocalJSX.IntrinsicElements["le-stack"] & JSXBase.HTMLAttributes<HTMLLeStackElement>;
+            "le-stack": LocalJSX.LeStack & JSXBase.HTMLAttributes<HTMLLeStackElement>;
             /**
              * A text input component with support for labels, descriptions, icons, and external IDs.
              * @cssprop --le-input-bg - Input background color
@@ -6361,7 +5962,7 @@ declare module "@stencil/core" {
              * @cssprop --le-input-radius - Input border radius
              * @cssprop --le-input-padding - Input padding
              */
-            "le-string-input": LocalJSX.IntrinsicElements["le-string-input"] & JSXBase.HTMLAttributes<HTMLLeStringInputElement>;
+            "le-string-input": LocalJSX.LeStringInput & JSXBase.HTMLAttributes<HTMLLeStringInputElement>;
             /**
              * A flexible tab component with multiple variants and states.
              * @cssprop --le-tab-bg - Tab background color
@@ -6376,7 +5977,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Actions
              */
-            "le-tab": LocalJSX.IntrinsicElements["le-tab"] & JSXBase.HTMLAttributes<HTMLLeTabElement>;
+            "le-tab": LocalJSX.LeTab & JSXBase.HTMLAttributes<HTMLLeTabElement>;
             /**
              * A presentational tab bar component without panels.
              * Use this for navigation/routing scenarios where you manage the content
@@ -6393,7 +5994,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Navigation
              */
-            "le-tab-bar": LocalJSX.IntrinsicElements["le-tab-bar"] & JSXBase.HTMLAttributes<HTMLLeTabBarElement>;
+            "le-tab-bar": LocalJSX.LeTabBar & JSXBase.HTMLAttributes<HTMLLeTabBarElement>;
             /**
              * A tab panel component used as a child of le-tabs.
              * Each le-tab-panel defines both the tab button label and the panel content.
@@ -6402,7 +6003,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Navigation
              */
-            "le-tab-panel": LocalJSX.IntrinsicElements["le-tab-panel"] & JSXBase.HTMLAttributes<HTMLLeTabPanelElement>;
+            "le-tab-panel": LocalJSX.LeTabPanel & JSXBase.HTMLAttributes<HTMLLeTabPanelElement>;
             /**
              * A flexible tabs component for organizing content into tabbed panels.
              * Supports two modes:
@@ -6422,7 +6023,7 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Navigation
              */
-            "le-tabs": LocalJSX.IntrinsicElements["le-tabs"] & JSXBase.HTMLAttributes<HTMLLeTabsElement>;
+            "le-tabs": LocalJSX.LeTabs & JSXBase.HTMLAttributes<HTMLLeTabsElement>;
             /**
              * A tag/chip component for displaying labels with optional dismiss functionality.
              * @cmsEditable false
@@ -6454,7 +6055,7 @@ declare module "@stencil/core" {
              * <le-tag label="Danger" variant="danger"></le-tag>
              * ```
              */
-            "le-tag": LocalJSX.IntrinsicElements["le-tag"] & JSXBase.HTMLAttributes<HTMLLeTagElement>;
+            "le-tag": LocalJSX.LeTag & JSXBase.HTMLAttributes<HTMLLeTagElement>;
             /**
              * A text component with rich text editing capabilities in admin mode.
              * `le-text` renders semantic text elements (headings, paragraphs, code, quotes)
@@ -6468,8 +6069,8 @@ declare module "@stencil/core" {
              * @cmsEditable true
              * @cmsCategory Content
              */
-            "le-text": LocalJSX.IntrinsicElements["le-text"] & JSXBase.HTMLAttributes<HTMLLeTextElement>;
-            "le-turntable": LocalJSX.IntrinsicElements["le-turntable"] & JSXBase.HTMLAttributes<HTMLLeTurntableElement>;
+            "le-text": LocalJSX.LeText & JSXBase.HTMLAttributes<HTMLLeTextElement>;
+            "le-turntable": LocalJSX.LeTurntable & JSXBase.HTMLAttributes<HTMLLeTurntableElement>;
         }
     }
 }

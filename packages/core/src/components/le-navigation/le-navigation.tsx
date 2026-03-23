@@ -11,7 +11,12 @@ import {
   Listen,
 } from '@stencil/core';
 import { LeOption } from '../../types/options';
-import { classnames, generateId } from '../../utils/utils';
+import {
+  buildDeclarativeOptionsFromChildren,
+  classnames,
+  generateId,
+  parseOptionInput,
+} from '../../utils/utils';
 import { LeBarOverflowChangeDetail } from '../le-bar/le-bar';
 
 export interface LeNavigationItemSelectDetail {
@@ -243,31 +248,13 @@ export class LeNavigation {
   }
 
   private async buildDeclarativeItems() {
-    const items = Array.from(this.el.querySelectorAll(':scope > le-item')) as Array<
-      HTMLElement & { getOption: () => Promise<LeOption> }
-    >;
+    const { isDeclarativeMode, options } = await buildDeclarativeOptionsFromChildren(
+      this.el,
+      'le-navigation',
+    );
 
-    if (items.length > 0) {
-      this.isDeclarativeMode = true;
-      this.declarativeItems = await Promise.all(
-        items.map(async item => {
-          // Wait for the custom element to be fully initialized before calling methods
-          if ('componentOnReady' in item) {
-            await (item as any).componentOnReady();
-          } else if (item.tagName.includes('-')) {
-            await customElements.whenDefined(item.tagName.toLowerCase());
-          }
-          const option = await item.getOption();
-          return option;
-        }),
-      ).catch(e => {
-        console.error('[le-navigation] Error building declarative items:', e);
-        return [];
-      });
-    } else {
-      this.isDeclarativeMode = false;
-      this.declarativeItems = [];
-    }
+    this.isDeclarativeMode = isDeclarativeMode;
+    this.declarativeItems = options;
   }
 
   private get parsedItems(): LeOption[] {
@@ -275,24 +262,7 @@ export class LeNavigation {
       return this.declarativeItems;
     }
 
-    if (typeof this.items === 'string') {
-      try {
-        return JSON.parse(this.items);
-      } catch {
-        // Fallback to JS evaluation to support Unquoted/Single quoted strings (like Astro renders)
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-implied-eval
-          const fn = new Function(`return ${this.items}`);
-          const evaluated = fn();
-          return Array.isArray(evaluated) ? evaluated : [];
-        } catch (e) {
-          console.error('[le-navigation] Failed to parse items array:', e);
-          return [];
-        }
-      }
-    }
-
-    return Array.isArray(this.items) ? this.items : [];
+    return parseOptionInput(this.items, 'le-navigation', 'items');
   }
 
   private getItemId(item: LeOption, path: string): string {

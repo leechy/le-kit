@@ -3,6 +3,65 @@
  */
 
 import { getMode } from '../global/app';
+import type { LeOption } from '../types/options';
+
+function getItemLabel(item: HTMLElement): string {
+  if (item.hasAttribute('label')) {
+    return item.getAttribute('label') || '';
+  }
+
+  const text = Array.from(item.childNodes)
+    .filter(node => !(node instanceof HTMLElement && node.tagName.toLowerCase() === 'le-item'))
+    .map(node => node.textContent || '')
+    .join('')
+    .trim();
+
+  return text;
+}
+
+export function parseOptionFromItemElement(item: HTMLElement): LeOption {
+  const id = item.getAttribute('id') || '';
+  const label = getItemLabel(item);
+  const value = item.getAttribute('value') || label;
+  const href = item.getAttribute('href') || '';
+  const target = item.getAttribute('target') || '';
+  const part = item.getAttribute('part') || '';
+  const className = item.getAttribute('class') || '';
+  const disabled = item.hasAttribute('disabled');
+  const selected = item.hasAttribute('selected');
+  const checked = item.hasAttribute('checked');
+  const open = item.hasAttribute('open');
+  const icon = item.getAttribute('icon') || '';
+  const iconStart = item.getAttribute('icon-start') || '';
+  const iconEnd = item.getAttribute('icon-end') || '';
+  const description = item.getAttribute('description') || '';
+  const children = Array.from(item.children)
+    .filter(child => child.tagName.toLowerCase() === 'le-item')
+    .map(child => parseOptionFromItemElement(child as HTMLElement));
+  const group = item.getAttribute('group') || '';
+  const separator = item.getAttribute('separator') as 'before' | 'after' | undefined;
+
+  return {
+    id,
+    label,
+    value,
+    href,
+    target,
+    part,
+    className,
+    disabled,
+    selected,
+    checked,
+    open,
+    icon,
+    iconStart,
+    iconEnd,
+    description,
+    children,
+    group,
+    separator,
+  } as LeOption;
+}
 
 /**
  * Generates a unique ID for component instances
@@ -33,38 +92,35 @@ export function slotHasContent(el: HTMLElement, slotName: string = ''): boolean 
 /**
  * Sets up a MutationObserver to track mode changes on ancestor elements.
  * Returns a cleanup function to disconnect the observer.
- * 
+ *
  * If the element or any ancestor has an explicit `mode` attribute, that creates
  * a "mode boundary" - the mode is determined from that point, not from further up.
  * This allows components like le-popover to force default mode for their children.
- * 
+ *
  * @param el - The component's host element
  * @param callback - Function to call when mode changes, receives the new mode
  * @returns Cleanup function to disconnect the observer
- * 
+ *
  * @example
  * ```tsx
  * export class MyComponent {
  *   @Element() el: HTMLElement;
  *   @State() adminMode: boolean = false;
  *   private disconnectModeObserver?: () => void;
- * 
+ *
  *   connectedCallback() {
  *     this.disconnectModeObserver = observeModeChanges(this.el, (mode) => {
  *       this.adminMode = mode === 'admin';
  *     });
  *   }
- * 
+ *
  *   disconnectedCallback() {
  *     this.disconnectModeObserver?.();
  *   }
  * }
  * ```
  */
-export function observeModeChanges(
-  el: HTMLElement,
-  callback: (mode: string) => void
-): () => void {
+export function observeModeChanges(el: HTMLElement, callback: (mode: string) => void): () => void {
   // Call immediately with current mode
   callback(getMode(el));
 
@@ -124,7 +180,7 @@ export function observeModeChanges(
 
 /**
  * Combines multiple class names into a single string, filtering out falsy values.
- * 
+ *
  * @param classes - arguments of class names, undefined, arrays, objects with boolean values and nested combinations of these
  * @returns Combined class names string
  */
@@ -148,4 +204,66 @@ export function classnames(...classes: any[]): string {
   });
 
   return result.join(' ');
+}
+
+/**
+ * Parses a `LeOption[] | string` input.
+ *
+ * Supports JSON and a JS expression fallback for server-rendered strings
+ * that may use single quotes or unquoted keys.
+ */
+export function parseOptionInput(
+  input: LeOption[] | string,
+  context: string,
+  inputName: 'items' | 'options' = 'options',
+): LeOption[] {
+  if (typeof input === 'string') {
+    try {
+      return JSON.parse(input);
+    } catch {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-implied-eval
+        const fn = new Function(`return ${input}`);
+        const evaluated = fn();
+        return Array.isArray(evaluated) ? evaluated : [];
+      } catch (e) {
+        console.error(`[${context}] Failed to parse ${inputName} array:`, e);
+        return [];
+      }
+    }
+  }
+
+  return Array.isArray(input) ? input : [];
+}
+
+/**
+ * Reads top-level `<le-item>` children and resolves them into `LeOption[]`.
+ */
+export async function buildDeclarativeOptionsFromChildren(
+  host: HTMLElement,
+  context: string,
+): Promise<{ isDeclarativeMode: boolean; options: LeOption[] }> {
+  const items = Array.from(host.querySelectorAll(':scope > le-item')) as HTMLElement[];
+
+  if (items.length === 0) {
+    return {
+      isDeclarativeMode: false,
+      options: [],
+    };
+  }
+
+  try {
+    const options = items.map(item => parseOptionFromItemElement(item));
+
+    return {
+      isDeclarativeMode: true,
+      options,
+    };
+  } catch (e) {
+    console.error(`[${context}] Error building declarative items:`, e);
+    return {
+      isDeclarativeMode: false,
+      options: [],
+    };
+  }
 }

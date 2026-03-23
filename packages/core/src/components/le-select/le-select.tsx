@@ -7,9 +7,11 @@ import {
   Method,
   Element,
   Watch,
+  Listen,
   h,
 } from '@stencil/core';
 import { LeOption, LeOptionValue, LeOptionSelectDetail } from '../../types/options';
+import { buildDeclarativeOptionsFromChildren, parseOptionInput } from '../../utils/utils';
 
 /**
  * A select dropdown component for single selection.
@@ -115,7 +117,13 @@ export class LeSelect {
 
   @State() private selectedOption?: LeOption;
 
+  @State() private declarativeOptions: LeOption[] = [];
+
+  @State() private isDeclarativeMode: boolean = false;
+
   private dropdownEl?: HTMLLeDropdownBaseElement;
+
+  private mutationObserver?: MutationObserver;
 
   @Watch('value')
   handleValueChange() {
@@ -127,19 +135,50 @@ export class LeSelect {
     this.updateSelectedOption();
   }
 
-  componentWillLoad() {
+  async componentWillLoad() {
+    await this.syncDeclarativeOptionsAndSelection();
+  }
+
+  connectedCallback() {
+    this.mutationObserver = new MutationObserver(() => {
+      void this.syncDeclarativeOptionsAndSelection();
+    });
+    this.mutationObserver.observe(this.el, {
+      childList: true,
+      subtree: true,
+    });
+  }
+
+  disconnectedCallback() {
+    this.mutationObserver?.disconnect();
+  }
+
+  @Listen('slotchange')
+  handleSlotChange() {
+    void this.syncDeclarativeOptionsAndSelection();
+  }
+
+  private async syncDeclarativeOptionsAndSelection() {
+    await this.buildDeclarativeOptions();
     this.updateSelectedOption();
   }
 
+  private async buildDeclarativeOptions() {
+    const { isDeclarativeMode, options } = await buildDeclarativeOptionsFromChildren(
+      this.el,
+      'le-select',
+    );
+
+    this.isDeclarativeMode = isDeclarativeMode;
+    this.declarativeOptions = options;
+  }
+
   private get parsedOptions(): LeOption[] {
-    if (typeof this.options === 'string') {
-      try {
-        return JSON.parse(this.options);
-      } catch {
-        return [];
-      }
+    if (this.isDeclarativeMode) {
+      return this.declarativeOptions;
     }
-    return this.options;
+
+    return parseOptionInput(this.options, 'le-select', 'options');
   }
 
   private updateSelectedOption() {
@@ -262,6 +301,10 @@ export class LeSelect {
             </span>
           </le-button>
         </le-dropdown-base>
+
+        <div class="hidden-slot-container">
+          <slot></slot>
+        </div>
 
         {/* Hidden input for form submission */}
         {this.name && <input type="hidden" name={this.name} value={this.value?.toString() ?? ''} />}

@@ -119,3 +119,7 @@ le-button.is-open::part(icon-end) {
 .search-input {
   --le-input-radius: var(--le-radius-md);
 }
+
+.hidden-slot-container {
+  display: none;
+}

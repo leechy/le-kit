@@ -16,6 +16,7 @@ import {
   LeMultiOptionSelectDetail,
   LeOptionSelectDetail,
 } from '../../types/options';
+import { buildDeclarativeOptionsFromChildren, parseOptionInput } from '../../utils/utils';
 
 /**
  * A multiselect component for selecting multiple options.
@@ -56,7 +57,7 @@ import {
   shadow: true,
 })
 export class LeMultiselect {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * The options to display in the dropdown.
@@ -133,23 +134,23 @@ export class LeMultiselect {
   /**
    * Emitted when the selected values change.
    */
-  @Event() leChange: EventEmitter<LeMultiOptionSelectDetail>;
+  @Event() leChange!: EventEmitter<LeMultiOptionSelectDetail>;
 
   /**
    * Emitted when the dropdown opens.
    */
-  @Event() leOpen: EventEmitter<void>;
+  @Event() leOpen!: EventEmitter<void>;
 
   /**
    * Emitted when the dropdown closes.
    */
-  @Event() leClose: EventEmitter<void>;
+  @Event() leClose!: EventEmitter<void>;
 
   @State() private selectedOptions: LeOption[] = [];
   @State() private searchQuery: string = '';
 
   @State() private declarativeOptions: LeOption[] = [];
-  
+
   @State() private isDeclarativeMode: boolean = false;
 
   private dropdownEl?: HTMLLeDropdownBaseElement;
@@ -224,24 +225,13 @@ export class LeMultiselect {
   }
 
   private async buildDeclarativeOptions() {
-    const items = Array.from(this.el.querySelectorAll(':scope > le-item')) as Array<
-      HTMLElement & { getOption: () => Promise<LeOption> }
-    >;
+    const { isDeclarativeMode, options } = await buildDeclarativeOptionsFromChildren(
+      this.el,
+      'le-multiselect',
+    );
 
-    if (items.length > 0) {
-      this.isDeclarativeMode = true;
-      this.declarativeOptions = await Promise.all(items.map(async item => {
-        if ('componentOnReady' in item) {
-          await (item as any).componentOnReady();
-        } else if (item.tagName.includes('-')) {
-          await customElements.whenDefined(item.tagName.toLowerCase());
-        }
-        return item.getOption();
-      }));
-    } else {
-      this.isDeclarativeMode = false;
-      this.declarativeOptions = [];
-    }
+    this.isDeclarativeMode = isDeclarativeMode;
+    this.declarativeOptions = options;
   }
 
   private get parsedOptions(): LeOption[] {
@@ -249,23 +239,7 @@ export class LeMultiselect {
       return this.declarativeOptions;
     }
 
-    if (typeof this.options === 'string') {
-      try {
-        return JSON.parse(this.options);
-      } catch {
-        // Fallback to JS evaluation to support Unquoted/Single quoted strings (like Astro renders)
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-implied-eval
-          const fn = new Function(`return ${this.options}`);
-          const evaluated = fn();
-          return Array.isArray(evaluated) ? evaluated : [];
-        } catch (e) {
-          console.error('[le-multiselect] Failed to parse options array:', e);
-          return [];
-        }
-      }
-    }
-    return Array.isArray(this.options) ? this.options : [];
+    return parseOptionInput(this.options, 'le-multiselect', 'options');
   }
 
   private get effectiveOptions(): LeOption[] {
@@ -544,8 +518,10 @@ export class LeMultiselect {
         {atMaxSelections && (
           <span class="multiselect-status">Maximum {this.maxSelections} selections</span>
         )}
-        
-        <div style={{ display: 'none' }}><slot></slot></div>
+
+        <div style={{ display: 'none' }}>
+          <slot></slot>
+        </div>
       </le-component>
     );
   }

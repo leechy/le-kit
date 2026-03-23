@@ -46,7 +46,7 @@ export interface PopupResult {
   shadow: true,
 })
 export class LePopup {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * The mode of the Le Kit (e.g., 'default' or 'admin')
@@ -116,22 +116,22 @@ export class LePopup {
   /**
    * Emitted when the popup is confirmed (OK clicked)
    */
-  @Event() leConfirm: EventEmitter<PopupResult>;
+  @Event() leConfirm!: EventEmitter<PopupResult>;
 
   /**
    * Emitted when the popup is cancelled (Cancel clicked or dismissed)
    */
-  @Event() leCancel: EventEmitter<PopupResult>;
+  @Event() leCancel?: EventEmitter<PopupResult>;
 
   /**
    * Emitted when the popup opens
    */
-  @Event() leOpen: EventEmitter<void>;
+  @Event() leOpen?: EventEmitter<void>;
 
   /**
    * Emitted when the popup closes
    */
-  @Event() leClose: EventEmitter<PopupResult>;
+  @Event() leClose!: EventEmitter<PopupResult>;
 
   private dialogEl?: HTMLDialogElement;
   private inputEl?: HTMLInputElement;
@@ -175,7 +175,7 @@ export class LePopup {
             this.dialogEl.show();
           }
 
-          this.leOpen.emit();
+          this.leOpen?.emit();
 
           // Focus input for prompt type
           if (this.type === 'prompt' && this.inputEl) {
@@ -221,7 +221,7 @@ export class LePopup {
       confirmed: false,
       value: undefined,
     };
-    this.leCancel.emit(result);
+    this.leCancel?.emit(result);
     this.hide(false);
   };
 

@@ -19,7 +19,7 @@ import { Component, Element, h, Host, Listen, Prop, State, Watch } from '@stenci
   shadow: true,
 })
 export class LeCurrentHeading {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /** CSS selector for page title/headings to watch (e.g. `.page-title`, `main h2`). */
   @Prop({ attribute: 'selector' }) selector: string = '';

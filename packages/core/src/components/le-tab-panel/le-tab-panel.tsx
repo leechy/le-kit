@@ -18,7 +18,7 @@ import { Component, Prop, h, Element, State, Watch, Method } from '@stencil/core
   shadow: true,
 })
 export class LeTabPanel {
-  @Element() el: HTMLLeTabPanelElement;
+  @Element() el!: HTMLLeTabPanelElement;
 
   /**
    * The label displayed in the tab button.

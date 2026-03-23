@@ -36,12 +36,12 @@ const openPopoverStack: HTMLElement[] = [];
   shadow: true,
 })
 export class LePopover {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Mode of the popover should be 'default' for internal use
    */
-  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin';
+  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin' = 'default';
 
   /**
    * Whether the popover is currently open
@@ -106,12 +106,12 @@ export class LePopover {
   /**
    * Emitted when the popover opens
    */
-  @Event() lePopoverOpen: EventEmitter<void>;
+  @Event() lePopoverOpen?: EventEmitter<void>;
 
   /**
    * Emitted when the popover closes
    */
-  @Event() lePopoverClose: EventEmitter<void>;
+  @Event() lePopoverClose?: EventEmitter<void>;
 
   /**
    * Method to update the popover position from a parent component
@@ -287,7 +287,7 @@ export class LePopover {
     this.addDismissListeners();
     this.addScrollListeners();
     this._updatePosition();
-    this.lePopoverOpen.emit();
+    this.lePopoverOpen?.emit();
   }
 
   private handleClosed() {
@@ -299,7 +299,7 @@ export class LePopover {
     const index = openPopoverStack.indexOf(this.el);
     if (index >= 0) openPopoverStack.splice(index, 1);
 
-    this.lePopoverClose.emit();
+    this.lePopoverClose?.emit();
   }
 
   private handlePopoverToggle = (event: ToggleEvent) => {

@@ -54,7 +54,7 @@ interface TabConfig {
   shadow: true,
 })
 export class LeTabs {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Array of tab options (programmatic mode).
@@ -126,7 +126,7 @@ export class LeTabs {
   /**
    * Emitted when the selected tab changes.
    */
-  @Event() leTabChange: EventEmitter<LeOptionSelectDetail>;
+  @Event() leTabChange?: EventEmitter<LeOptionSelectDetail>;
 
   private mutationObserver?: MutationObserver;
 
@@ -240,7 +240,7 @@ export class LeTabs {
     if (config.disabled) return;
 
     this.selected = config.value;
-    this.leTabChange.emit({
+    this.leTabChange?.emit({
       value: config.value,
       option: {
         label: config.label,
@@ -363,8 +363,8 @@ export class LeTabs {
       this.orientation === 'vertical'
         ? this.position
         : this.position === 'start'
-        ? 'top'
-        : 'bottom';
+          ? 'top'
+          : 'bottom';
 
     return (
       <le-component component="le-tabs" hostClass={classnames(classes)}>

@@ -23,7 +23,7 @@ import { classnames } from '../../utils/utils';
   shadow: true,
 })
 export class LeStack {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Direction of the stack layout
@@ -46,7 +46,8 @@ export class LeStack {
    * Distribution of items on the main axis
    * @allowedValues start | center | end | space-between | space-around | space-evenly
    */
-  @Prop() justify: 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly' = 'start';
+  @Prop() justify: 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly' =
+    'start';
 
   /**
    * Whether items should wrap to multiple lines
@@ -57,7 +58,8 @@ export class LeStack {
    * Alignment of wrapped lines (only applies when wrap is true)
    * @allowedValues start | center | end | stretch | space-between | space-around
    */
-  @Prop() alignContent: 'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around' = 'stretch';
+  @Prop() alignContent: 'start' | 'center' | 'end' | 'stretch' | 'space-between' | 'space-around' =
+    'stretch';
 
   /**
    * Whether to reverse the order of items
@@ -103,9 +105,9 @@ export class LeStack {
 
   private getJustifyContent(): string {
     const justifyMap: Record<string, string> = {
-      start: 'flex-start',
-      center: 'center',
-      end: 'flex-end',
+      'start': 'flex-start',
+      'center': 'center',
+      'end': 'flex-end',
       'space-between': 'space-between',
       'space-around': 'space-around',
       'space-evenly': 'space-evenly',
@@ -115,10 +117,10 @@ export class LeStack {
 
   private getAlignContent(): string {
     const alignContentMap: Record<string, string> = {
-      start: 'flex-start',
-      center: 'center',
-      end: 'flex-end',
-      stretch: 'stretch',
+      'start': 'flex-start',
+      'center': 'center',
+      'end': 'flex-end',
+      'stretch': 'stretch',
       'space-between': 'space-between',
       'space-around': 'space-around',
     };
@@ -154,15 +156,12 @@ export class LeStack {
     //   style.height = '100%';
     // }
 
-    const hostClass = classnames(
-      `direction-${this.direction}`,
-      {
-        'wrap': this.wrap,
-        'reverse': this.reverse,
-        'full-width': this.fullWidth,
-        'full-height': this.fullHeight,
-      }
-    );
+    const hostClass = classnames(`direction-${this.direction}`, {
+      'wrap': this.wrap,
+      'reverse': this.reverse,
+      'full-width': this.fullWidth,
+      'full-height': this.fullHeight,
+    });
 
     // Slot style for admin mode - make items display in the same direction
     const slotStyle = `display: flex; flex-direction: ${this.getFlexDirection()}; gap: ${this.gap || 'var(--le-space-md)'}; flex-wrap: ${this.wrap ? 'wrap' : 'nowrap'}; justify-content: ${this.getJustifyContent()}; align-items: ${this.getAlignItems()};`;

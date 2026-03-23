@@ -18,7 +18,7 @@ import { classnames } from '../../utils/utils';
   shadow: true,
 })
 export class LeCheckbox {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Whether the checkbox is checked
@@ -33,22 +33,27 @@ export class LeCheckbox {
   /**
    * The name of the checkbox input
    */
-  @Prop() name: string;
+  @Prop() name?: string;
 
   /**
    * The value of the checkbox input
    */
-  @Prop() value: string;
+  @Prop() value?: string;
 
   /**
    * External ID for linking with external systems (e.g. database ID, PDF form field ID)
    */
-  @Prop() externalId: string;
+  @Prop() externalId?: string;
 
   /**
    * Emitted when the checked state changes
    */
-  @Event({ eventName: 'change' }) leChange: EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>;
+  @Event({ eventName: 'change' }) leChange!: EventEmitter<{
+    checked: boolean;
+    value?: string;
+    name?: string;
+    externalId?: string;
+  }>;
 
   private handleChange = (event: Event) => {
     // We stop the internal button click from bubbling up
@@ -65,13 +70,13 @@ export class LeCheckbox {
       checked: this.checked,
       value: this.value,
       name: this.name,
-      externalId: this.externalId
+      externalId: this.externalId,
     });
   };
 
   render() {
     return (
-      <le-component component="le-checkbox" hostClass={classnames({ 'disabled': this.disabled })}>
+      <le-component component="le-checkbox" hostClass={classnames({ disabled: this.disabled })}>
         <div class="le-checkbox-wrapper">
           <label class="le-checkbox-label">
             <span class="le-checkbox-input">
@@ -90,7 +95,7 @@ export class LeCheckbox {
               </le-slot>
             </span>
           </label>
-          
+
           <div class="le-checkbox-description">
             <le-slot name="description" type="text" tag="div" label="Description">
               <slot name="description"></slot>

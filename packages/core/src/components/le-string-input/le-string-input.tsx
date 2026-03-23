@@ -22,7 +22,7 @@ import { classnames } from '../../utils/utils';
   shadow: true,
 })
 export class LeStringInput {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Pass the ref of the input element to the parent component
@@ -32,17 +32,17 @@ export class LeStringInput {
   /**
    * Mode of the popover should be 'default' for internal use
    */
-  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin';
+  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin' = 'default';
 
   /**
    * The value of the input
    */
-  @Prop({ mutable: true, reflect: true }) value: string;
+  @Prop({ mutable: true, reflect: true }) value?: string;
 
   /**
    * The name of the input
    */
-  @Prop() name: string;
+  @Prop() name?: string;
 
   /**
    * The type of the input (text, email, password, etc.)
@@ -52,22 +52,22 @@ export class LeStringInput {
   /**
    * Label for the input
    */
-  @Prop() label: string;
+  @Prop() label?: string;
 
   /**
    * Icon for the start icon
    */
-  @Prop() iconStart: string;
+  @Prop() iconStart?: string;
 
   /**
    * Icon for the end icon
    */
-  @Prop() iconEnd: string;
+  @Prop() iconEnd?: string;
 
   /**
    * Placeholder text
    */
-  @Prop() placeholder: string;
+  @Prop() placeholder?: string;
 
   /**
    * Hide description slot
@@ -87,30 +87,30 @@ export class LeStringInput {
   /**
    * External ID for linking with external systems
    */
-  @Prop() externalId: string;
+  @Prop() externalId?: string;
 
   /**
    * Emitted when the value changes (on blur or Enter)
    */
-  @Event({ eventName: 'change' }) leChange: EventEmitter<{
-    value: string;
-    name: string;
-    externalId: string;
+  @Event({ eventName: 'change' }) leChange?: EventEmitter<{
+    value?: string;
+    name?: string;
+    externalId?: string;
   }>;
 
   /**
    * Emitted when the input value changes (on keystroke)
    */
-  @Event({ eventName: 'input' }) leInput: EventEmitter<{
-    value: string;
-    name: string;
-    externalId: string;
+  @Event({ eventName: 'input' }) leInput?: EventEmitter<{
+    value?: string;
+    name?: string;
+    externalId?: string;
   }>;
 
   private handleInput = (ev: Event) => {
     const input = ev.target as HTMLInputElement;
     this.value = input.value;
-    this.leInput.emit({
+    this.leInput?.emit({
       value: this.value,
       name: this.name,
       externalId: this.externalId,
@@ -120,7 +120,7 @@ export class LeStringInput {
   private handleChange = (ev: Event) => {
     const input = ev.target as HTMLInputElement;
     this.value = input.value;
-    this.leChange.emit({
+    this.leChange?.emit({
       value: this.value,
       name: this.name,
       externalId: this.externalId,
@@ -145,7 +145,7 @@ export class LeStringInput {
             {this.iconStart && <span class="icon-start">{this.iconStart}</span>}
             <input
               ref={el => {
-                if (this.inputRef) {
+                if (this.inputRef && el) {
                   this.inputRef(el);
                 }
               }}

@@ -52,7 +52,7 @@ interface TabConfig {
   shadow: true,
 })
 export class LeSegmentedControl {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   private containerRef?: HTMLElement;
 
@@ -106,7 +106,7 @@ export class LeSegmentedControl {
   /**
    * Emitted when the selection changes.
    */
-  @Event() leChange: EventEmitter<LeOptionSelectDetail>;
+  @Event() leChange?: EventEmitter<LeOptionSelectDetail>;
 
   private mutationObserver?: MutationObserver;
 
@@ -225,7 +225,7 @@ export class LeSegmentedControl {
       this.focusedIndex = index;
     }
 
-    this.leChange.emit({ value, option });
+    this.leChange?.emit({ value, option });
   }
 
   private handleClick = (option: LeOption) => {

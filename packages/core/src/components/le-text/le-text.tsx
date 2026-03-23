@@ -26,7 +26,7 @@ import { observeModeChanges } from '../../utils/utils';
   shadow: true,
 })
 export class LeText {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * The semantic variant/type of text element

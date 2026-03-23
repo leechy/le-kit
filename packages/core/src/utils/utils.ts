@@ -104,7 +104,7 @@ export function slotHasContent(el: HTMLElement, slotName: string = ''): boolean 
  * @example
  * ```tsx
  * export class MyComponent {
- *   @Element() el: HTMLElement;
+ *   @Element() el!: HTMLElement;
  *   @State() adminMode: boolean = false;
  *   private disconnectModeObserver?: () => void;
  *

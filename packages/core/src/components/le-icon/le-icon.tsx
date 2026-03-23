@@ -23,7 +23,7 @@ function getIconUrl(name: string): string {
   return getAssetPath(`./assets/icons/${name}.json`);
 }
 
-async function fetchIcon({ name }): Promise<string> {
+async function fetchIcon({ name }: { name: string }): Promise<string> {
   if (iconCache[name]) {
     return iconCache[name];
   }
@@ -50,13 +50,13 @@ async function fetchIcon({ name }): Promise<string> {
   assetsDirs: ['assets/icons'],
 })
 export class LeIcon {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Name of the icon to display. Corresponds to a JSON file in the assets folder.
    * For example, "search" will load the "search.json" file.
    */
-  @Prop() name: string = null;
+  @Prop() name?: string = undefined;
 
   /**
    * Size of the icon in pixels. Default is 16.
@@ -77,7 +77,7 @@ export class LeIcon {
     this.iconData = await fetchIcon({ name });
   }
 
-  private intersectionObserver: IntersectionObserver;
+  private intersectionObserver?: IntersectionObserver;
 
   connectedCallback(): void {
     this.waitUntilVisible(() => {
@@ -89,7 +89,7 @@ export class LeIcon {
   disconnectedCallback(): void {
     if (this.intersectionObserver) {
       this.intersectionObserver.disconnect();
-      this.intersectionObserver = null;
+      this.intersectionObserver = undefined;
     }
   }
 
@@ -111,8 +111,8 @@ export class LeIcon {
       entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            this.intersectionObserver.disconnect();
-            this.intersectionObserver = null;
+            this.intersectionObserver?.disconnect();
+            this.intersectionObserver = undefined;
             callback();
           }
         });
@@ -134,7 +134,7 @@ export class LeIcon {
       return null;
     }
 
-    const createElement = node => {
+    const createElement = (node: any) => {
       const { tag, children, ...attrs } = node;
       return h(tag, attrs, children ? children.map(createElement) : null);
     };

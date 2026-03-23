@@ -46,7 +46,7 @@ interface TabConfig {
   shadow: true,
 })
 export class LeTabBar {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Array of tab options defining the tabs to display.
@@ -103,7 +103,7 @@ export class LeTabBar {
   /**
    * Emitted when the selected tab changes.
    */
-  @Event() leTabChange: EventEmitter<LeOptionSelectDetail>;
+  @Event() leTabChange?: EventEmitter<LeOptionSelectDetail>;
 
   private mutationObserver?: MutationObserver;
 
@@ -223,7 +223,7 @@ export class LeTabBar {
 
     const value = this.getTabValue(tab);
     this.selected = value;
-    this.leTabChange.emit({ value, option: tab });
+    this.leTabChange?.emit({ value, option: tab });
   }
 
   private handleTabClick = (tab: LeOption) => {

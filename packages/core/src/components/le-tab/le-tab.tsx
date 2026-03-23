@@ -37,12 +37,12 @@ import { classnames } from '../../utils/utils';
   shadow: true,
 })
 export class LeTab {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Mode of the popover should be 'default' for internal use
    */
-  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin';
+  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin' = 'default';
 
   /**
    * Label if it is not provided via slot
@@ -135,9 +135,9 @@ export class LeTab {
    */
   @Method()
   async getTabConfig(): Promise<{
-    label: string;
-    value: string;
-    icon: string | Node;
+    label?: string;
+    value?: string;
+    icon?: string | Node;
     iconStart?: string | Node;
     iconEnd?: string | Node;
     disabled: boolean;
@@ -156,7 +156,7 @@ export class LeTab {
    * Emitted when the tab is clicked.
    * This is a custom event that wraps the native click but ensures the target is the le-tab.
    */
-  @Event({ eventName: 'click' }) leClick: EventEmitter<PointerEvent>;
+  @Event({ eventName: 'click' }) leClick?: EventEmitter<PointerEvent>;
 
   private handleClick = (event: PointerEvent) => {
     // We stop the internal button click from bubbling up
@@ -168,7 +168,7 @@ export class LeTab {
     }
 
     // And emit our own click event from the host element
-    this.leClick.emit(event);
+    this.leClick?.emit(event);
   };
 
   render() {

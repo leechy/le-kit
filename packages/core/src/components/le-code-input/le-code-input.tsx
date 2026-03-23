@@ -21,7 +21,7 @@ import { classnames } from '../../utils/utils';
   shadow: true,
 })
 export class LeCodeInput {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * The value of the input
@@ -31,12 +31,12 @@ export class LeCodeInput {
   /**
    * The name of the input
    */
-  @Prop() name: string;
+  @Prop() name?: string;
 
   /**
    * Label for the input
    */
-  @Prop() label: string;
+  @Prop() label?: string;
 
   /**
    * Length of the code (number of characters)
@@ -69,7 +69,7 @@ export class LeCodeInput {
   /**
    * External ID for linking with external systems
    */
-  @Prop() externalId: string;
+  @Prop() externalId?: string;
 
   /**
    * Internal validation state (can be set externally manually or via simple check)
@@ -79,22 +79,22 @@ export class LeCodeInput {
   /**
    * Emitted when the value changes (on blur or Enter)
    */
-  @Event() leChange: EventEmitter<{ value: string; name: string; externalId: string }>;
+  @Event() leChange?: EventEmitter<{ value: string; name?: string; externalId?: string }>;
 
   /**
    * Emitted when the input value changes (on keystroke)
    */
-  @Event() leInput: EventEmitter<{ value: string; name: string; externalId: string }>;
+  @Event() leInput?: EventEmitter<{ value: string; name?: string; externalId?: string }>;
 
   /**
    * Emitted when the input is focused
    */
-  @Event() leFocus: EventEmitter<void>;
+  @Event() leFocus?: EventEmitter<void>;
 
   /**
    * Emitted when the input is blurred
    */
-  @Event() leBlur: EventEmitter<void>;
+  @Event() leBlur?: EventEmitter<void>;
 
   @State() private isFocused: boolean = false;
   @State() private selectionStart: number = 0;
@@ -128,7 +128,7 @@ export class LeCodeInput {
     this.value = val;
     this.updateSelection(input);
 
-    this.leInput.emit({
+    this.leInput?.emit({
       value: this.value,
       name: this.name,
       externalId: this.externalId,
@@ -136,7 +136,7 @@ export class LeCodeInput {
   };
 
   private handleChange = () => {
-    this.leChange.emit({
+    this.leChange?.emit({
       value: this.value,
       name: this.name,
       externalId: this.externalId,
@@ -154,12 +154,12 @@ export class LeCodeInput {
       this.updateSelection(input);
     });
 
-    this.leFocus.emit();
+    this.leFocus?.emit();
   };
 
   private handleBlur = () => {
     this.isFocused = false;
-    this.leBlur.emit();
+    this.leBlur?.emit();
     // Trigger change on blur
     this.handleChange();
   };

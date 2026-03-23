@@ -51,7 +51,7 @@ export interface LeBarOverflowChangeDetail {
   shadow: true,
 })
 export class LeBar {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Overflow behavior when items don't fit on one row.
@@ -98,7 +98,7 @@ export class LeBar {
   /**
    * Emitted when overflow state changes.
    */
-  @Event() leBarOverflowChange: EventEmitter<LeBarOverflowChangeDetail>;
+  @Event() leBarOverflowChange?: EventEmitter<LeBarOverflowChangeDetail>;
 
   /** Whether the hamburger/more popover is open */
   @State() private popoverOpen: boolean = false;
@@ -369,7 +369,7 @@ export class LeBar {
   }
 
   private emitOverflowChange() {
-    this.leBarOverflowChange.emit({
+    this.leBarOverflowChange?.emit({
       overflowingIds: [...(this.overflowingIds ?? [])],
       hamburgerActive: this.hamburgerActive,
     });

@@ -22,27 +22,27 @@ import { classnames } from '../../utils/utils';
   shadow: true,
 })
 export class LeNumberInput {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * The value of the input
    */
-  @Prop({ mutable: true, reflect: true }) value: number;
+  @Prop({ mutable: true, reflect: true }) value?: number;
 
   /**
    * The name of the input
    */
-  @Prop() name: string;
+  @Prop() name?: string;
 
   /**
    * Label for the input
    */
-  @Prop() label: string;
+  @Prop() label?: string;
 
   /**
    * Placeholder text
    */
-  @Prop() placeholder: string;
+  @Prop() placeholder?: string;
 
   /**
    * Minimum allowed value
@@ -87,7 +87,7 @@ export class LeNumberInput {
   /**
    * External ID for linking with external systems
    */
-  @Prop() externalId: string;
+  @Prop() externalId?: string;
 
   /**
    * Internal validation state
@@ -98,12 +98,22 @@ export class LeNumberInput {
   /**
    * Emitted when the value changes (on blur or Enter)
    */
-  @Event() leChange: EventEmitter<{ value: number; name: string; externalId: string; isValid: boolean }>;
+  @Event() leChange?: EventEmitter<{
+    value?: number;
+    name?: string;
+    externalId?: string;
+    isValid: boolean;
+  }>;
 
   /**
    * Emitted when the input value changes (on keystroke/spin)
    */
-  @Event() leInput: EventEmitter<{ value: number; name: string; externalId: string; isValid: boolean }>;
+  @Event() leInput?: EventEmitter<{
+    value?: number;
+    name?: string;
+    externalId?: string;
+    isValid: boolean;
+  }>;
 
   @Watch('value')
   valueChanged() {
@@ -135,30 +145,30 @@ export class LeNumberInput {
   }
 
   private emitChange() {
-    this.leChange.emit({
+    this.leChange?.emit({
       value: this.value,
       name: this.name,
       externalId: this.externalId,
-      isValid: this.isValid
+      isValid: this.isValid,
     });
   }
 
   private emitInput() {
-    this.leInput.emit({
+    this.leInput?.emit({
       value: this.value,
       name: this.name,
       externalId: this.externalId,
-      isValid: this.isValid
+      isValid: this.isValid,
     });
   }
 
   private updateValue(newValue: number) {
     if (this.disabled || this.readonly) return;
-    
+
     // Round to avoid floating point errors
     const precision = this.step.toString().split('.')[1]?.length || 0;
     const rounded = parseFloat(newValue.toFixed(precision));
-    
+
     this.value = rounded;
     this.validate();
     this.emitInput();
@@ -167,13 +177,13 @@ export class LeNumberInput {
   private handleInput = (ev: Event) => {
     const input = ev.target as HTMLInputElement;
     const val = parseFloat(input.value);
-    
+
     if (input.value === '') {
       this.value = undefined;
     } else if (!isNaN(val)) {
       this.value = val;
     }
-    
+
     this.validate();
     this.emitInput();
   };
@@ -194,10 +204,10 @@ export class LeNumberInput {
 
     if (ev.key === 'ArrowUp') {
       ev.preventDefault();
-      this.updateValue(current + (this.step * multiplier));
+      this.updateValue(current + this.step * multiplier);
     } else if (ev.key === 'ArrowDown') {
       ev.preventDefault();
-      this.updateValue(current - (this.step * multiplier));
+      this.updateValue(current - this.step * multiplier);
     }
   };
 
@@ -208,7 +218,7 @@ export class LeNumberInput {
 
     ev.preventDefault();
     const current = this.value || 0;
-    
+
     if (ev.deltaY < 0) {
       this.updateValue(current + this.step);
     } else {
@@ -233,17 +243,17 @@ export class LeNumberInput {
 
   render() {
     return (
-      <le-component component="le-number-input" hostClass={classnames({ 'disabled': this.disabled })}>
+      <le-component component="le-number-input" hostClass={classnames({ disabled: this.disabled })}>
         <div class="le-input-wrapper">
           {this.label && (
-            <label class="le-input-label" htmlFor={this.name}>{this.label}</label>
+            <label class="le-input-label" htmlFor={this.name}>
+              {this.label}
+            </label>
           )}
-          
+
           <div class={classnames('le-input-container', { 'has-error': !this.isValid })}>
-            {this.iconStart && (
-              <span class="icon-start">{this.iconStart}</span>
-            )}
-            
+            {this.iconStart && <span class="icon-start">{this.iconStart}</span>}
+
             <input
               id={this.name}
               type="number"
@@ -261,29 +271,37 @@ export class LeNumberInput {
               onKeyDown={this.handleKeyDown}
               onWheel={this.handleWheel}
             />
-            
+
             {this.showSpinners && (
               <div class="le-input-controls">
                 <le-button
                   mode="default"
-                  variant="clear" 
+                  variant="clear"
                   size="small"
                   icon-only
-                  class="le-input-control-btn" 
+                  class="le-input-control-btn"
                   onClick={this.increment}
-                  disabled={this.disabled || this.readonly || (this.max !== undefined && this.value >= this.max)}
+                  disabled={
+                    this.disabled ||
+                    this.readonly ||
+                    (this.max !== undefined && this.value !== undefined && this.value >= this.max)
+                  }
                   tabindex="-1"
                 >
                   <span slot="icon-only">↑</span>
                 </le-button>
                 <le-button
                   mode="default"
-                  variant="clear" 
-                  size="small" 
-                  icon-only 
-                  class="le-input-control-btn" 
+                  variant="clear"
+                  size="small"
+                  icon-only
+                  class="le-input-control-btn"
                   onClick={this.decrement}
-                  disabled={this.disabled || this.readonly || (this.min !== undefined && this.value <= this.min)}
+                  disabled={
+                    this.disabled ||
+                    this.readonly ||
+                    (this.min !== undefined && this.value !== undefined && this.value <= this.min)
+                  }
                   tabindex="-1"
                 >
                   <span slot="icon-only">↓</span>

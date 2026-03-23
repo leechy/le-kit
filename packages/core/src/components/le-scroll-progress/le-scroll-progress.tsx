@@ -27,7 +27,7 @@ import { Component, Element, h, Host, Listen, Prop, State, Watch } from '@stenci
   shadow: true,
 })
 export class LeScrollProgress {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /** Boolean or selector string. */
   @Prop({ attribute: 'track-scroll-progress', reflect: true }) trackScrollProgress?: string;

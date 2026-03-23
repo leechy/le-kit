@@ -31,7 +31,7 @@ import { classnames } from '../../utils/utils';
   shadow: true,
 })
 export class LeCard {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /**
    * Card variant style
@@ -46,7 +46,10 @@ export class LeCard {
 
   render() {
     return (
-      <le-component component="le-card" hostClass={classnames(`variant-${this.variant}`, { 'interactive': this.interactive })}>
+      <le-component
+        component="le-card"
+        hostClass={classnames(`variant-${this.variant}`, { interactive: this.interactive })}
+      >
         <div class="card" part="card">
           <div class="card-header" part="header">
             <le-slot name="header" label="Header" description="Card title" type="text" tag="h3">
@@ -55,13 +58,25 @@ export class LeCard {
           </div>
 
           <div class="card-content" part="content">
-            <le-slot name="" label="Content" description="Card content" type="textarea" tag="p" required>
+            <le-slot
+              name=""
+              label="Content"
+              description="Card content"
+              type="textarea"
+              tag="p"
+              required
+            >
               <slot></slot>
             </le-slot>
           </div>
 
           <div class="card-footer" part="footer">
-            <le-slot name="footer" label="Footer" description="Card footer with actions" allowed-components="le-button,le-link">
+            <le-slot
+              name="footer"
+              label="Footer"
+              description="Card footer with actions"
+              allowed-components="le-button,le-link"
+            >
               <slot name="footer"></slot>
             </le-slot>
           </div>

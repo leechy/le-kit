@@ -72,7 +72,7 @@ function isEditableTarget(target: EventTarget | null): boolean {
   shadow: true,
 })
 export class LeSidePanelToggle {
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   /** Optional id used to target a specific panel. */
   @Prop() panelId?: string;
@@ -87,7 +87,7 @@ export class LeSidePanelToggle {
   @Prop() disabled: boolean = false;
 
   // Pass-through props for le-button
-  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin';
+  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin' = 'default';
   @Prop() variant: 'solid' | 'outlined' | 'clear' | 'system' = 'solid';
   @Prop() color: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' = 'primary';
   @Prop() size: 'small' | 'medium' | 'large' = 'medium';
@@ -106,7 +106,7 @@ export class LeSidePanelToggle {
     bubbles: true,
     composed: true,
   })
-  leSidePanelRequestToggle: EventEmitter<LeSidePanelRequestToggleDetail>;
+  leSidePanelRequestToggle!: EventEmitter<LeSidePanelRequestToggleDetail>;
 
   private shortcutSpec?: ShortcutSpec;
   private expanded: boolean | undefined;

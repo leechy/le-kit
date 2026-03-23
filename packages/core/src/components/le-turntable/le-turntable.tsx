@@ -7,7 +7,7 @@ import { Component, Element, Prop, Listen, h, Watch } from '@stencil/core';
 })
 export class LeTurntable {
   // host element
-  @Element() el: HTMLElement;
+  @Element() el!: HTMLElement;
 
   // transform origin
   // gets the same values as transform-origin css property
@@ -17,7 +17,7 @@ export class LeTurntable {
   @Prop() value: number = 0;
 
   @Watch('value')
-  updateValue(newValue) {
+  updateValue(newValue: string) {
     if (!this.rotating) {
       this.currentAngle = parseFloat(newValue);
       this.setAngle(this.currentAngle);
@@ -36,16 +36,16 @@ export class LeTurntable {
   rotating = false;
 
   // coordinates of the transform origin in pixels
-  centerX: number;
-  centerY: number;
+  centerX?: number;
+  centerY?: number;
 
   // element page (body?) offset in pixels
-  pageX: number;
-  pageY: number;
+  pageX?: number;
+  pageY?: number;
 
   currentAngle: number = 0;
   // angle at the start of the drag
-  startAngle: number;
+  startAngle?: number;
 
   /**
    * Event listeners
@@ -76,7 +76,7 @@ export class LeTurntable {
   handleMouseMove(evt: MouseEvent) {
     if (this.rotating) {
       // calc angle update and rotate element
-      this.setAngle(this.currentAngle + (this.getAngle(evt.pageX, evt.pageY) - this.startAngle));
+      this.setAngle(this.currentAngle + (this.getAngle(evt.pageX, evt.pageY) - this.startAngle!));
       return false;
     }
   }
@@ -84,7 +84,7 @@ export class LeTurntable {
   @Listen('mouseup', { target: 'window' })
   handleMouseUp(evt: MouseEvent) {
     if (this.rotating) {
-      const angle = this.currentAngle + (this.getAngle(evt.pageX, evt.pageY) - this.startAngle);
+      const angle = this.currentAngle + (this.getAngle(evt.pageX, evt.pageY) - this.startAngle!);
       this.setAngle(angle);
       this.currentAngle = angle;
       this.rotating = false;
@@ -126,8 +126,12 @@ export class LeTurntable {
       .transformOrigin.split(' ')
       .map(val => Math.round(parseFloat(val)));
     // page offset
-    let t = null;
-    const scrollContainer = ((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollLeft === 'number' ? t : document.body;
+    let t: Element | null = null;
+    const scrollContainer =
+      ((t = document.documentElement) || (t = document.body.parentNode as Element)) &&
+      typeof (t as Element).scrollLeft === 'number'
+        ? (t as Element)
+        : document.body;
     const clientRects = this.el.getBoundingClientRect();
     this.pageX = Math.round(clientRects.left + scrollContainer.scrollLeft);
     this.pageY = Math.round(clientRects.top + scrollContainer.scrollTop);
@@ -140,13 +144,13 @@ export class LeTurntable {
    * @param {number} posY  vertical mouse position
    */
   getAngle(posX: number, posY: number) {
-    const x = posX - this.pageX - this.centerX;
-    const y = posY - this.pageY - this.centerY;
+    const x = posX - this.pageX! - this.centerX!;
+    const y = posY - this.pageY! - this.centerY!;
     const angle = Math.round(((Math.atan2(y, x) * 180) / Math.PI) * 100) / 100;
     return angle;
   }
 
-  setAngle(angle) {
+  setAngle(angle: number) {
     this.el.style.transform = `rotate(${angle}deg)`;
   }
 

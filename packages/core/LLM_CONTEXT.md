@@ -913,7 +913,6 @@ via leAlert(), leConfirm(), lePrompt().
 | `value` | `number` | `0` |  |
 | `padding` | `number` | `0` |  |
 | `paths` | `string` |  |  |
-| `progressPaths` | `any[]` |  |  |
 | `params` | `{
     width: number;
     diameter: number;

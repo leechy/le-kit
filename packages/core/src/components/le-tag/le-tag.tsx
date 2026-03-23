@@ -48,12 +48,12 @@ export class LeTag {
   /**
    * The text label to display in the tag.
    */
-  @Prop() label: string;
+  @Prop() label?: string;
 
   /**
    * Mode of the popover should be 'default' for internal use
    */
-  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin';
+  @Prop({ mutable: true, reflect: true }) mode?: 'default' | 'admin';
 
   /**
    * Icon to display before the label.
@@ -79,17 +79,18 @@ export class LeTag {
   /**
    * The visual variant of the tag.
    */
-  @Prop({ reflect: true }) variant: 'default' | 'primary' | 'success' | 'warning' | 'danger' = 'default';
+  @Prop({ reflect: true }) variant: 'default' | 'primary' | 'success' | 'warning' | 'danger' =
+    'default';
 
   /**
    * Emitted when the dismiss button is clicked.
    */
-  @Event() leDismiss: EventEmitter<void>;
+  @Event() leDismiss?: EventEmitter<void>;
 
   private handleDismiss = (e: MouseEvent) => {
     e.stopPropagation();
     if (!this.disabled) {
-      this.leDismiss.emit();
+      this.leDismiss?.emit();
     }
   };
 
@@ -116,7 +117,13 @@ export class LeTag {
             </le-slot>
           </span>
           {this.dismissible && (
-            <button type="button" class="tag-dismiss" onClick={this.handleDismiss} disabled={this.disabled} aria-label="Remove">
+            <button
+              type="button"
+              class="tag-dismiss"
+              onClick={this.handleDismiss}
+              disabled={this.disabled}
+              aria-label="Remove"
+            >
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M4 4l8 8M12 4l-8 8" />
               </svg>

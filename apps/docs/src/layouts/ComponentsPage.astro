@@ -4,9 +4,10 @@ import { componentsNavigationItems, type NavItem } from "../data/navigation";
 
 interface Props {
   title: string;
+  pageType?: string;
 }
 
-const { title } = Astro.props;
+const { title, pageType } = Astro.props;
 
 const pathname = Astro.url.pathname;
 const isComponentsIndex =
@@ -84,9 +85,15 @@ const navigationMarkup = renderNavigationItems(componentsNavigationItems);
         </le-side-panel-toggle>
       </le-breadcrumbs>
 
-      <article>
-        <slot />
-      </article>
+      {pageType === "index" ? (
+        <main class="bento-page">
+          <slot />
+        </main>
+      ) : (
+        <article>
+          <slot />
+        </article>
+      )}
     </div>
   </le-side-panel>
 
@@ -107,7 +114,8 @@ const navigationMarkup = renderNavigationItems(componentsNavigationItems);
       }
     }
 
-    article {
+    article,
+    .bento-page {
       max-width: 1024px;
       margin: var(--le-spacing-4) auto;
       padding: 0 1rem;

@@ -138,7 +138,7 @@ h3 {
 }
 
 @media (min-width: 900px) {
-  article {
+  article:not(.bento-grid) {
     h1 { text-indent: calc(-1 * var(--le-spacing-8)); }
     h2 { text-indent: calc(-1 * var(--le-spacing-6)); }
     h3 { text-indent: calc(-1 * var(--le-spacing-4)); }
@@ -203,5 +203,63 @@ pre {
   code {
     font-weight: 500;
     font-size: inherit;
+  }
+}
+
+/* Bento Grids and tiles */
+le-bento-grid {
+  --le-bento-tile-radius: 0;
+  --le-bento-tile-shadow: none;
+}
+
+le-bento-tile {
+  border: 2px solid var(--le-color-border);
+}
+
+.bento-page {
+  padding: var(--le-spacing-4) var(--le-spacing-4) var(--le-spacing-8);
+}
+
+.bento-tile,
+.bento-tile:any-link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-decoration: none;
+  color: var(--le-color-text-primary);
+
+  background-color: color-mix(in srgb, var(--le-color-primary) 20%, transparent);
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--le-color-surface) 42%, transparent);
+  }
+}
+
+.bento-tile-type {
+  display: inline-block;
+  padding: var(--le-spacing-1) var(--le-spacing-2);
+  border-right: 1px solid var(--le-color-border);
+  border-bottom: 1px solid var(--le-color-border);
+
+  font-size: var(--le-font-size-sm);
+  font-family: var(--le-font-family-mono);
+  font-weight: 600;
+  color: var(--le-color-border);
+
+  text-transform: uppercase;
+  margin-bottom: var(--le-spacing-2);
+}
+
+.bento-tile-content {
+  padding: var(--le-spacing-3);
+
+  h3 {
+    margin: 0;
+  }
+  p {
+    margin: var(--le-spacing-2) 0 0;
+    font-size: var(--le-font-size-md);
   }
 }

@@ -11,12 +11,12 @@ import Layout from "../layouts/Layout.astro";
       max-columns="6"
       row-height="160"
       gap="16"
-      aria-label="Bento Grid Demo"
+      aria-label="Featured components and documentation sections"
     >
       <le-bento-tile cols="2" rows="1">
-        <a class="tile" href="/components/le-select">
-          <div class="tile-type">Featured component</div>
-          <div class="tile-content">
+        <a class="bento-tile" href="/components/le-select">
+          <div class="bento-tile-type">Featured component</div>
+          <div class="bento-tile-content">
             <h3>&lt;le-select&gt;</h3>
             <p>The default dropdown finally gets typeahead capabilities.</p>
           </div>
@@ -32,20 +32,46 @@ import Layout from "../layouts/Layout.astro";
         </le-card>
       </le-bento-tile>
       <le-bento-tile cols="2" rows="1">
-        <a class="tile" href="/components/le-bento-grid">
-          <div class="tile-type">New component</div>
-          <div class="tile-content">
+        <a class="bento-tile" href="/components/le-bento-grid">
+          <div class="bento-tile-type">New component</div>
+          <div class="bento-tile-content">
             <h3>&lt;le-bento-grid&gt;</h3>
             <p>What you see, right now, is what you get!</p>
           </div>
         </a>
       </le-bento-tile>
-      <le-bento-tile cols="1" rows="2" class="tone-2">LLMs</le-bento-tile>
+      <le-bento-tile cols="1" rows="2">
+        <a class="bento-tile" href="/docs/llms">
+          <div class="bento-tile-type">Artificial?</div>
+          <div class="bento-tile-content">
+            <h3>We maybe have a prompt for ya?!?</h3>
+            <p>Check out how to tell the LLMs to use Le-Kit components when generating UI code.</p>
+          </div>
+        </a>
+      </le-bento-tile>
       <le-bento-tile cols="2" rows="2" class="tone-6">
         Admin mode? What's that?
       </le-bento-tile>
-      <le-bento-tile class="tone-11">Setup Assets</le-bento-tile>
-      <le-bento-tile class="tone-12">Get Started</le-bento-tile>
+      <le-bento-tile>
+        <a class="bento-tile" href="/docs/assets">
+          <div class="bento-tile-content">
+            It's can be still tricky with this library!
+          </div>
+          <div class="bento-tile-content">
+            <h3>Setup Assets</h3>
+          </div>
+        </a>
+      </le-bento-tile>
+      <le-bento-tile class="tone-1">
+        <a class="bento-tile" href="/docs/start">
+          <div class="bento-tile-content">
+            <h3>Get Started <le-icon name="arrow-right" /></h3>
+          </div>
+          <div class="bento-tile-content">
+            <p>If you want to experiment with these components, start here.</p>
+          </div>
+        </a>
+      </le-bento-tile>
       <le-bento-tile cols="2" rows="1" class="tone-3">
         Styling and Theming
       </le-bento-tile>
@@ -53,66 +79,6 @@ import Layout from "../layouts/Layout.astro";
   </main>
 
   <style>
-    .bento-page {
-      padding: var(--le-spacing-4) var(--le-spacing-4) var(--le-spacing-8);
-    }
-
-    /*
-      Tile background colors are set via --le-bento-tile-bg which is a CSS
-      custom property that inherits into the tile's shadow DOM.
-      Shadow and border-radius are configured globally below.
-    */
-    le-bento-grid {
-      --le-bento-tile-radius: 0;
-      --le-bento-tile-shadow: none;
-    }
-
-    le-bento-tile {
-      border: 2px solid var(--le-color-border);
-      // background-color: var(--le-color-surface);
-    }
-
-    .tile {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      align-items: flex-start;
-      justify-content: space-between;
-      text-decoration: none;
-      color: var(--le-color-text-primary);
-
-      &:hover {
-        background-color: color-mix(in srgb, var(--le-color-surface) 42%, transparent);
-      }
-    }
-
-    .tile-type {
-      display: inline-block;
-      padding: var(--le-spacing-1) var(--le-spacing-2);
-      border-right: 1px solid var(--le-color-border);
-      border-bottom: 1px solid var(--le-color-border);
-
-      font-size: var(--le-font-size-sm);
-      font-family: var(--le-font-family-mono);
-      font-weight: 600;
-      color: var(--le-color-border);
-
-      text-transform: uppercase;
-      margin-bottom: var(--le-spacing-2);
-    }
-
-    .tile-content {
-      padding: var(--le-spacing-3);
-
-      h3 {
-        margin: 0;
-      }
-      p {
-        margin: var(--le-spacing-2) 0 0;
-        font-size: var(--le-font-size-md);
-      }
-    }
-
     .tone-1 {
       --le-bento-tile-bg: linear-gradient(145deg, #f59e0b, #f97316);
     }

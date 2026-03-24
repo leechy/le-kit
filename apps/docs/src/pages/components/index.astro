@@ -2,29 +2,169 @@
 import ComponentsPage from "../../layouts/ComponentsPage.astro";
 ---
 
-<ComponentsPage title="Components">
-  <le-stack gap="var(--le-spacing-xl)">
-    <div>
-      <le-text typography="h1">Components</le-text>
-      <le-text typography="body-large"
-        >Browse the le-kit component library.</le-text
-      >
-    </div>
+<ComponentsPage title="Components" pageType="index">
+  <h1>Le-Kit Components</h1>
+  <p>
+    Here you can find documentation for most of the components in the Le-Kit library.<br />
+    Use the side navigation to browse layout, form, overlay, admin, and legacy components.
+  </p>
 
-    <le-card>
-      <div slot="header">
-        <le-text typography="h3">Explore by Category</le-text>
-      </div>
-      <le-stack gap="var(--le-spacing-md)">
-        <le-text typography="body"
-          >Use the side navigation to browse layout, form, overlay, admin, and
-          legacy components.</le-text
-        >
-        <le-text typography="body"
-          >Each component page can now share the same layout, breadcrumbs, and
-          navigation structure.</le-text
-        >
-      </le-stack>
-    </le-card>
-  </le-stack>
+  <h3>It's a Work in Progress</h3>
+  <p>I have to warn you, that this is really early stage for the library, and most of the components will change a lot before the 1.0 release. But if you want to check out the current state of the library, or if you want to contribute, feel free to explore the code and open issues or pull requests.</p>
+
+  <le-bento-grid
+    column-min-width="220"
+    column-max-width="243"
+    min-columns="2"
+    max-columns="6"
+    row-height="160"
+    gap="16"
+    aria-label="Le-Kit components"
+  >
+    <le-bento-tile cols="2" rows="1">
+      <a class="bento-tile" href="/components/le-select">
+        <div class="bento-tile-type">Featured component</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-select&gt;</h3>
+          <p>The default dropdown finally gets typeahead capabilities.</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile cols="2" rows="1">
+      <a class="bento-tile" href="/components/le-tabs">
+        <div class="bento-tile-type">Featured component</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-tabs&gt;</h3>
+          <p>Horizontal and vertical, with icons and lazy, tabs can be anything.</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile>
+      <a class="bento-tile" href="/components/le-button">
+        <div class="bento-tile-type">Form Control</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-button&gt;</h3>
+          <p>There's nothing more boring and more fun than a button.</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile cols="2" rows="2">
+      <a class="bento-tile" href="/components/le-popover">
+        <div class="bento-tile-type">Universal dependency</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-popover&gt;</h3>
+          <p>
+            Rise above the rest without portals and z-indexes from space.<br />
+            You can use it alone, or... with every floating panel in the library.
+          </p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile>
+      <a class="bento-tile" href="/components/le-text-input">
+        <div class="bento-tile-type">Form Control</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-text-input&gt;</h3>
+          <p>The text part of the king of form controls.</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile>
+      <a class="bento-tile" href="/components/le-checkbox">
+        <div class="bento-tile-type">Form Control</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-checkbox&gt;</h3>
+          <p>The checkbox is by far the user's most favorite form control.</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile>
+      <a class="bento-tile" href="/components/le-bar">
+        <div class="bento-tile-type">Layout component</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-bar&gt;</h3>
+          <p>Special component, that is watching if something wraps.</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile>
+      <a class="bento-tile" href="/components/le-turntable">
+        <div class="bento-tile-type">Legacy idea</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-turntable&gt;</h3>
+          <p>Someday this will turn into an amazing knob control.</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile cols="2">
+      <a class="bento-tile" href="/components/le-code-input">
+        <div class="bento-tile-type">Form Control</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-code-input&gt;</h3>
+          <p>Beautifully crafted code input component.</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile>
+      <a class="bento-tile" href="/components/le-tag">
+        <div class="bento-tile-type">Labeling</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-tag&gt;</h3>
+          <p>If you need to label something, or select an item in a filter.</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile cols="2">
+      <a class="bento-tile" href="/components/le-navigation">
+        <div class="bento-tile-type">Lists and Links</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-navigation&gt;</h3>
+          <p>When you need to show what you have and<br />dream about sending the users in any direction.</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile cols="2">
+      <a class="bento-tile" href="/components/le-side-panel">
+        <div class="bento-tile-type">Layout component</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-side-panel&gt;</h3>
+          <p>Panel or drawer, whatever you are calling it. Important is that it hides when there is no space for it.</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile>
+      <a class="bento-tile" href="/components/le-component">
+        <div class="bento-tile-type">Admin Mode</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-component&gt;</h3>
+          <p>Show me the insides of the components.</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile cols="2">
+      <a class="bento-tile" href="/components/le-scroll-progress">
+        <div class="bento-tile-type">Navigation</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-scroll-progress&gt;</h3>
+          <p>Don't understand why is this needed, when you have scrollbars?<br />But people like it. A lot!</p>
+        </div>
+      </a>
+    </le-bento-tile>
+    <le-bento-tile>
+      <a class="bento-tile" href="/components/le-slot">
+        <div class="bento-tile-type">Admin Mode</div>
+        <div class="bento-tile-content">
+          <h3>&lt;le-slot&gt;</h3>
+          <p>The second "admin" component. Not the less important one!</p>
+        </div>
+      </a>
+    </le-bento-tile>
+  </le-bento-grid>
+
+  <style>
+    le-bento-grid::part(grid) {
+      margin: var(--le-spacing-6) 0;
+      justify-content: start;
+    }
+  </style>
 </ComponentsPage>

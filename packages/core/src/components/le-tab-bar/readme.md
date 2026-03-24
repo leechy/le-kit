@@ -20,7 +20,7 @@ use `le-tabs` instead.
 | `bordered`   | `bordered`    | Whether to show a border below the tab bar.          | `boolean`                        | `true`      |
 | `fullWidth`  | `full-width`  | Whether tabs should stretch to fill available width. | `boolean`                        | `true`      |
 | `position`   | `position`    | Position of the tab bar.                             | `"bottom" \| "top"`              | `'top'`     |
-| `selected`   | `selected`    | The value of the currently selected tab.             | `number \| string`               | `undefined` |
+| `selected`   | `selected`    | The value of the currently selected tab.             | `number \| string \| undefined`  | `undefined` |
 | `showLabels` | `show-labels` | Whether to show labels in icon-only mode.            | `boolean`                        | `false`     |
 | `size`       | `size`        | Size of the tabs.                                    | `"large" \| "medium" \| "small"` | `'medium'`  |
 | `tabs`       | --            | Array of tab options defining the tabs to display.   | `LeOption[]`                     | `[]`        |

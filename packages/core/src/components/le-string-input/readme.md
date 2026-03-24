@@ -14,26 +14,26 @@ A text input component with support for labels, descriptions, icons, and externa
 | Property          | Attribute          | Description                                               | Type                                                | Default     |
 | ----------------- | ------------------ | --------------------------------------------------------- | --------------------------------------------------- | ----------- |
 | `disabled`        | `disabled`         | Whether the input is disabled                             | `boolean`                                           | `false`     |
-| `externalId`      | `external-id`      | External ID for linking with external systems             | `string`                                            | `undefined` |
+| `externalId`      | `external-id`      | External ID for linking with external systems             | `string \| undefined`                               | `undefined` |
 | `hideDescription` | `hide-description` | Hide description slot                                     | `boolean`                                           | `false`     |
-| `iconEnd`         | `icon-end`         | Icon for the end icon                                     | `string`                                            | `undefined` |
-| `iconStart`       | `icon-start`       | Icon for the start icon                                   | `string`                                            | `undefined` |
-| `inputRef`        | --                 | Pass the ref of the input element to the parent component | `(el: HTMLInputElement) => void`                    | `undefined` |
-| `label`           | `label`            | Label for the input                                       | `string`                                            | `undefined` |
-| `mode`            | `mode`             | Mode of the popover should be 'default' for internal use  | `"admin" \| "default"`                              | `undefined` |
-| `name`            | `name`             | The name of the input                                     | `string`                                            | `undefined` |
-| `placeholder`     | `placeholder`      | Placeholder text                                          | `string`                                            | `undefined` |
+| `iconEnd`         | `icon-end`         | Icon for the end icon                                     | `string \| undefined`                               | `undefined` |
+| `iconStart`       | `icon-start`       | Icon for the start icon                                   | `string \| undefined`                               | `undefined` |
+| `inputRef`        | --                 | Pass the ref of the input element to the parent component | `((el: HTMLInputElement) => void) \| undefined`     | `undefined` |
+| `label`           | `label`            | Label for the input                                       | `string \| undefined`                               | `undefined` |
+| `mode`            | `mode`             | Mode of the popover should be 'default' for internal use  | `"admin" \| "default"`                              | `'default'` |
+| `name`            | `name`             | The name of the input                                     | `string \| undefined`                               | `undefined` |
+| `placeholder`     | `placeholder`      | Placeholder text                                          | `string \| undefined`                               | `undefined` |
 | `readonly`        | `readonly`         | Whether the input is read-only                            | `boolean`                                           | `false`     |
 | `type`            | `type`             | The type of the input (text, email, password, etc.)       | `"email" \| "password" \| "tel" \| "text" \| "url"` | `'text'`    |
-| `value`           | `value`            | The value of the input                                    | `string`                                            | `undefined` |
+| `value`           | `value`            | The value of the input                                    | `string \| undefined`                               | `undefined` |
 
 
 ## Events
 
-| Event    | Description                                         | Type                                                                |
-| -------- | --------------------------------------------------- | ------------------------------------------------------------------- |
-| `change` | Emitted when the value changes (on blur or Enter)   | `CustomEvent<{ value: string; name: string; externalId: string; }>` |
-| `input`  | Emitted when the input value changes (on keystroke) | `CustomEvent<{ value: string; name: string; externalId: string; }>` |
+| Event    | Description                                         | Type                                                                                                          |
+| -------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `change` | Emitted when the value changes (on blur or Enter)   | `CustomEvent<{ value?: string \| undefined; name?: string \| undefined; externalId?: string \| undefined; }>` |
+| `input`  | Emitted when the input value changes (on keystroke) | `CustomEvent<{ value?: string \| undefined; name?: string \| undefined; externalId?: string \| undefined; }>` |
 
 
 ## Slots

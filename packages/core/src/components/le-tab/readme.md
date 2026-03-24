@@ -87,18 +87,18 @@ A flexible tab component with multiple variants and states.
 | `disabled`  | `disabled`   | Whether the tab is disabled                                                                    | `boolean`                                                         | `false`        |
 | `focusable` | `focusable`  | Whether the tab can get focus needed for accessibility when used in custom tab implementations | `boolean`                                                         | `true`         |
 | `fullWidth` | `full-width` | Whether the tab takes full width of its container                                              | `boolean`                                                         | `false`        |
-| `href`      | `href`       | Optional href to make the tab act as a link                                                    | `string`                                                          | `undefined`    |
-| `icon`      | `icon`       | Icon only tab image or emoji if this prop is set, the tab will render only the icon slot       | `Node \| string`                                                  | `undefined`    |
-| `iconEnd`   | `icon-end`   | End icon image or emoji                                                                        | `Node \| string`                                                  | `undefined`    |
-| `iconStart` | `icon-start` | Start icon image or emoji                                                                      | `Node \| string`                                                  | `undefined`    |
-| `label`     | `label`      | Label if it is not provided via slot                                                           | `string`                                                          | `undefined`    |
-| `mode`      | `mode`       | Mode of the popover should be 'default' for internal use                                       | `"admin" \| "default"`                                            | `undefined`    |
+| `href`      | `href`       | Optional href to make the tab act as a link                                                    | `string \| undefined`                                             | `undefined`    |
+| `icon`      | `icon`       | Icon only tab image or emoji if this prop is set, the tab will render only the icon slot       | `Node \| string \| undefined`                                     | `undefined`    |
+| `iconEnd`   | `icon-end`   | End icon image or emoji                                                                        | `Node \| string \| undefined`                                     | `undefined`    |
+| `iconStart` | `icon-start` | Start icon image or emoji                                                                      | `Node \| string \| undefined`                                     | `undefined`    |
+| `label`     | `label`      | Label if it is not provided via slot                                                           | `string \| undefined`                                             | `undefined`    |
+| `mode`      | `mode`       | Mode of the popover should be 'default' for internal use                                       | `"admin" \| "default"`                                            | `'default'`    |
 | `position`  | `position`   | Position of the tabs when used within a le-tabs component                                      | `"bottom" \| "end" \| "start" \| "top"`                           | `'top'`        |
 | `selected`  | `selected`   | Whether the tab is in a selected/active state                                                  | `boolean`                                                         | `false`        |
 | `showLabel` | `show-label` | Whether to show the label when in icon-only mode                                               | `boolean`                                                         | `false`        |
 | `size`      | `size`       | Tab size                                                                                       | `"large" \| "medium" \| "small"`                                  | `'medium'`     |
-| `target`    | `target`     | Link target when href is set                                                                   | `string`                                                          | `undefined`    |
-| `value`     | `value`      | Value of the tab, defaults to label if not provided                                            | `string`                                                          | `undefined`    |
+| `target`    | `target`     | Link target when href is set                                                                   | `string \| undefined`                                             | `undefined`    |
+| `value`     | `value`      | Value of the tab, defaults to label if not provided                                            | `string \| undefined`                                             | `undefined`    |
 | `variant`   | `variant`    | Tab variant style                                                                              | `"enclosed" \| "icon-only" \| "pills" \| "solid" \| "underlined"` | `'underlined'` |
 
 
@@ -111,13 +111,13 @@ A flexible tab component with multiple variants and states.
 
 ## Methods
 
-### `getTabConfig() => Promise<{ label: string; value: string; icon: string | Node; iconStart?: string | Node; iconEnd?: string | Node; disabled: boolean; }>`
+### `getTabConfig() => Promise<{ label?: string; value?: string; icon?: string | Node; iconStart?: string | Node; iconEnd?: string | Node; disabled: boolean; }>`
 
 Get tab configuration for parent component
 
 #### Returns
 
-Type: `Promise<{ label: string; value: string; icon: string | Node; iconStart?: string | Node; iconEnd?: string | Node; disabled: boolean; }>`
+Type: `Promise<{ label?: string | undefined; value?: string | undefined; icon?: string | Node | undefined; iconStart?: string | Node | undefined; iconEnd?: string | Node | undefined; disabled: boolean; }>`
 
 
 

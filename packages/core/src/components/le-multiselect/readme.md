@@ -18,8 +18,8 @@ Displays selected items as tags with optional search filtering.
 | `disabled`      | `disabled`        | Whether the multiselect is disabled.                                                                        | `boolean`                        | `false`               |
 | `emptyText`     | `empty-text`      | Text to show when no options match the search.                                                              | `string`                         | `'No results found'`  |
 | `fullWidth`     | `full-width`      | Whether the multiselect should take full width of its container.                                            | `boolean`                        | `false`               |
-| `maxSelections` | `max-selections`  | Maximum number of selections allowed.                                                                       | `number`                         | `undefined`           |
-| `name`          | `name`            | Name attribute for form submission.                                                                         | `string`                         | `undefined`           |
+| `maxSelections` | `max-selections`  | Maximum number of selections allowed.                                                                       | `number \| undefined`            | `undefined`           |
+| `name`          | `name`            | Name attribute for form submission.                                                                         | `string \| undefined`            | `undefined`           |
 | `open`          | `open`            | Whether the dropdown is currently open.                                                                     | `boolean`                        | `false`               |
 | `options`       | `options`         | The options to display in the dropdown.                                                                     | `LeOption[] \| string`           | `[]`                  |
 | `placeholder`   | `placeholder`     | Placeholder text when no options are selected.                                                              | `string`                         | `'Select options...'` |

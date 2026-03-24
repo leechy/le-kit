@@ -31,12 +31,12 @@ render() {
 
 ## Properties
 
-| Property                 | Attribute      | Description                                                                                                          | Type                         | Default     |
-| ------------------------ | -------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------------- | ----------- |
-| `component` _(required)_ | `component`    | The tag name of the component (e.g., 'le-card'). Used to look up property metadata and display the component name.   | `string`                     | `undefined` |
-| `displayName`            | `display-name` | Optional display name for the component. If not provided, the tag name will be formatted as the display name.        | `string`                     | `undefined` |
-| `hostClass`              | `host-class`   | Classes to apply to the host element. Allows parent components to pass their styling classes.                        | `string`                     | `undefined` |
-| `hostStyle`              | --             | Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties). | `{ [key: string]: string; }` | `undefined` |
+| Property                 | Attribute      | Description                                                                                                          | Type                                      | Default     |
+| ------------------------ | -------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ----------- |
+| `component` _(required)_ | `component`    | The tag name of the component (e.g., 'le-card'). Used to look up property metadata and display the component name.   | `string`                                  | `undefined` |
+| `displayName`            | `display-name` | Optional display name for the component. If not provided, the tag name will be formatted as the display name.        | `string \| undefined`                     | `undefined` |
+| `hostClass`              | `host-class`   | Classes to apply to the host element. Allows parent components to pass their styling classes.                        | `string \| undefined`                     | `undefined` |
+| `hostStyle`              | --             | Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties). | `undefined \| { [key: string]: string; }` | `undefined` |
 
 
 ## Slots

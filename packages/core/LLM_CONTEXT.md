@@ -69,7 +69,7 @@ row and handles overflow according to the `overflow` prop.
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `leBarOverflowChange` | `EventEmitter<LeBarOverflowChangeDetail>` | Emitted when overflow state changes. |
+| `leBarOverflowChange` | `EventEmitter<LeBarOverflowChangeDetail> \| undefined` | Emitted when overflow state changes. |
 
 ### Slots
 
@@ -326,15 +326,20 @@ A checkbox component with support for labels, descriptions, and external IDs.
 | `el` | `HTMLElement` |  |  |
 | `checked` | `boolean` | `false` | Whether the checkbox is checked |
 | `disabled` | `boolean` | `false` | Whether the checkbox is disabled |
-| `name` | `string` |  | The name of the checkbox input |
-| `value` | `string` |  | The value of the checkbox input |
-| `externalId` | `string` |  | External ID for linking with external systems (e.g. database ID, PDF form field ID) |
+| `name` | `string \| undefined` |  | The name of the checkbox input |
+| `value` | `string \| undefined` |  | The value of the checkbox input |
+| `externalId` | `string \| undefined` |  | External ID for linking with external systems (e.g. database ID, PDF form field ID) |
 
 ### Events
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `change` | `EventEmitter<{ checked: boolean; value: string; name: string; externalId: string }>` | Emitted when the checked state changes |
+| `change` | `EventEmitter<{
+    checked: boolean;
+    value?: string;
+    name?: string;
+    externalId?: string;
+  }>` | Emitted when the checked state changes |
 
 ### Slots
 
@@ -365,24 +370,24 @@ Supports standard copy/paste and range selection behaviors.
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
 | `value` | `string` | `''` | The value of the input |
-| `name` | `string` |  | The name of the input |
-| `label` | `string` |  | Label for the input |
+| `name` | `string \| undefined` |  | The name of the input |
+| `label` | `string \| undefined` |  | Label for the input |
 | `length` | `number` | `6` | Length of the code (number of characters) |
 | `description` | `string \| undefined` |  | Description text displayed below the input in case there is a more complex markup, it can be provided via slot as well |
 | `type` | `'text' \| 'number'` | `'text'` | The type of code (numeric or alphanumeric) This affects the keyboard layout on mobile devices. |
 | `disabled` | `boolean` | `false` | Whether the input is disabled |
 | `readonly` | `boolean` | `false` | Whether the input is read-only |
-| `externalId` | `string` |  | External ID for linking with external systems |
+| `externalId` | `string \| undefined` |  | External ID for linking with external systems |
 | `error` | `boolean` | `false` | Internal validation state (can be set externally manually or via simple check) |
 
 ### Events
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `leChange` | `EventEmitter<{ value: string; name: string; externalId: string }>` | Emitted when the value changes (on blur or Enter) |
-| `leInput` | `EventEmitter<{ value: string; name: string; externalId: string }>` | Emitted when the input value changes (on keystroke) |
-| `leFocus` | `EventEmitter<void>` | Emitted when the input is focused |
-| `leBlur` | `EventEmitter<void>` | Emitted when the input is blurred |
+| `leChange` | `EventEmitter<{ value: string; name?: string; externalId?: string }> \| undefined` | Emitted when the value changes (on blur or Enter) |
+| `leInput` | `EventEmitter<{ value: string; name?: string; externalId?: string }> \| undefined` | Emitted when the input value changes (on keystroke) |
+| `leFocus` | `EventEmitter<void> \| undefined` | Emitted when the input is focused |
+| `leBlur` | `EventEmitter<void> \| undefined` | Emitted when the input is blurred |
 
 ### Slots
 
@@ -672,7 +677,7 @@ The header component updates that variable when it renders.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
-| `name` | `string` | `null` | Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file. |
+| `name` | `string \| undefined` | `undefined` | Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file. |
 | `size` | `number` | `16` | Size of the icon in pixels. Default is 16. |
 
 ---
@@ -772,10 +777,10 @@ A number input component with validation, keyboard controls, and custom spinners
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
-| `value` | `number` |  | The value of the input |
-| `name` | `string` |  | The name of the input |
-| `label` | `string` |  | Label for the input |
-| `placeholder` | `string` |  | Placeholder text |
+| `value` | `number \| undefined` |  | The value of the input |
+| `name` | `string \| undefined` |  | The name of the input |
+| `label` | `string \| undefined` |  | Label for the input |
+| `placeholder` | `string \| undefined` |  | Placeholder text |
 | `min` | `number \| undefined` |  | Minimum allowed value |
 | `max` | `number \| undefined` |  | Maximum allowed value |
 | `step` | `number` | `1` | Step value for increment/decrement |
@@ -784,14 +789,24 @@ A number input component with validation, keyboard controls, and custom spinners
 | `readonly` | `boolean` | `false` | Whether the input is read-only |
 | `iconStart` | `string \| undefined` |  | Icon for the start icon |
 | `showSpinners` | `boolean` | `true` | Whether to show the spinner controls |
-| `externalId` | `string` |  | External ID for linking with external systems |
+| `externalId` | `string \| undefined` |  | External ID for linking with external systems |
 
 ### Events
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `leChange` | `EventEmitter<{ value: number; name: string; externalId: string; isValid: boolean }>` | Emitted when the value changes (on blur or Enter) |
-| `leInput` | `EventEmitter<{ value: number; name: string; externalId: string; isValid: boolean }>` | Emitted when the input value changes (on keystroke/spin) |
+| `leChange` | `EventEmitter<{
+    value?: number;
+    name?: string;
+    externalId?: string;
+    isValid: boolean;
+  }> \| undefined` | Emitted when the value changes (on blur or Enter) |
+| `leInput` | `EventEmitter<{
+    value?: number;
+    name?: string;
+    externalId?: string;
+    isValid: boolean;
+  }> \| undefined` | Emitted when the input value changes (on keystroke/spin) |
 
 ### Slots
 
@@ -827,7 +842,7 @@ and other top-layer elements. Falls back gracefully in older browsers.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
-| `mode` | `'default' \| 'admin'` |  | Mode of the popover should be 'default' for internal use |
+| `mode` | `'default' \| 'admin'` | `'default'` | Mode of the popover should be 'default' for internal use |
 | `open` | `boolean` | `false` | Whether the popover is currently open |
 | `position` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'auto'` | `'bottom'` | Position of the popover relative to its trigger |
 | `align` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment of the popover |
@@ -845,8 +860,8 @@ and other top-layer elements. Falls back gracefully in older browsers.
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `lePopoverOpen` | `EventEmitter<void>` | Emitted when the popover opens |
-| `lePopoverClose` | `EventEmitter<void>` | Emitted when the popover closes |
+| `lePopoverOpen` | `EventEmitter<void> \| undefined` | Emitted when the popover opens |
+| `lePopoverClose` | `EventEmitter<void> \| undefined` | Emitted when the popover closes |
 
 ### Slots
 
@@ -889,8 +904,8 @@ via leAlert(), leConfirm(), lePrompt().
 | Event | Type | Description |
 |-------|------|-------------|
 | `leConfirm` | `EventEmitter<PopupResult>` | Emitted when the popup is confirmed (OK clicked) |
-| `leCancel` | `EventEmitter<PopupResult>` | Emitted when the popup is cancelled (Cancel clicked or dismissed) |
-| `leOpen` | `EventEmitter<void>` | Emitted when the popup opens |
+| `leCancel` | `EventEmitter<PopupResult> \| undefined` | Emitted when the popup is cancelled (Cancel clicked or dismissed) |
+| `leOpen` | `EventEmitter<void> \| undefined` | Emitted when the popup opens |
 | `leClose` | `EventEmitter<PopupResult>` | Emitted when the popup closes |
 
 ### Slots
@@ -972,7 +987,7 @@ Perfect for toggling between a small set of related options.
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `leChange` | `EventEmitter<LeOptionSelectDetail>` | Emitted when the selection changes. |
+| `leChange` | `EventEmitter<LeOptionSelectDetail> \| undefined` | Emitted when the selection changes. |
 
 ### CSS Variables
 
@@ -1008,9 +1023,9 @@ A select dropdown component for single selection.
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `leChange` | `EventEmitter<LeOptionSelectDetail>` | Emitted when the selected value changes. |
-| `leOpen` | `EventEmitter<void>` | Emitted when the dropdown opens. |
-| `leClose` | `EventEmitter<void>` | Emitted when the dropdown closes. |
+| `leChange` | `EventEmitter<LeOptionSelectDetail> \| undefined` | Emitted when the selected value changes. |
+| `leOpen` | `EventEmitter<void> \| undefined` | Emitted when the dropdown opens. |
+| `leClose` | `EventEmitter<void> \| undefined` | Emitted when the dropdown closes. |
 
 ---
 
@@ -1061,7 +1076,7 @@ A select dropdown component for single selection.
 | `action` | `LeSidePanelToggleAction` | `'toggle'` | Action to emit. Default toggles the panel. |
 | `shortcut` | `string \| undefined` |  | Optional keyboard shortcut like `Mod+B` or `Alt+N`. |
 | `disabled` | `boolean` | `false` | Disables the toggle. |
-| `mode` | `'default' \| 'admin'` |  |  |
+| `mode` | `'default' \| 'admin'` | `'default'` |  |
 | `variant` | `'solid' \| 'outlined' \| 'clear' \| 'system'` | `'solid'` |  |
 | `color` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'primary'` |  |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` |  |
@@ -1171,33 +1186,33 @@ A text input component with support for labels, descriptions, icons, and externa
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
 | `inputRef` | `(el: HTMLInputElement) => void \| undefined` |  | Pass the ref of the input element to the parent component |
-| `mode` | `'default' \| 'admin'` |  | Mode of the popover should be 'default' for internal use |
-| `value` | `string` |  | The value of the input |
-| `name` | `string` |  | The name of the input |
+| `mode` | `'default' \| 'admin'` | `'default'` | Mode of the popover should be 'default' for internal use |
+| `value` | `string \| undefined` |  | The value of the input |
+| `name` | `string \| undefined` |  | The name of the input |
 | `type` | `'text' \| 'email' \| 'password' \| 'tel' \| 'url'` | `'text'` | The type of the input (text, email, password, etc.) |
-| `label` | `string` |  | Label for the input |
-| `iconStart` | `string` |  | Icon for the start icon |
-| `iconEnd` | `string` |  | Icon for the end icon |
-| `placeholder` | `string` |  | Placeholder text |
+| `label` | `string \| undefined` |  | Label for the input |
+| `iconStart` | `string \| undefined` |  | Icon for the start icon |
+| `iconEnd` | `string \| undefined` |  | Icon for the end icon |
+| `placeholder` | `string \| undefined` |  | Placeholder text |
 | `hideDescription` | `boolean` | `false` | Hide description slot |
 | `disabled` | `boolean` | `false` | Whether the input is disabled |
 | `readonly` | `boolean` | `false` | Whether the input is read-only |
-| `externalId` | `string` |  | External ID for linking with external systems |
+| `externalId` | `string \| undefined` |  | External ID for linking with external systems |
 
 ### Events
 
 | Event | Type | Description |
 |-------|------|-------------|
 | `change` | `EventEmitter<{
-    value: string;
-    name: string;
-    externalId: string;
-  }>` | Emitted when the value changes (on blur or Enter) |
+    value?: string;
+    name?: string;
+    externalId?: string;
+  }> \| undefined` | Emitted when the value changes (on blur or Enter) |
 | `input` | `EventEmitter<{
-    value: string;
-    name: string;
-    externalId: string;
-  }>` | Emitted when the input value changes (on keystroke) |
+    value?: string;
+    name?: string;
+    externalId?: string;
+  }> \| undefined` | Emitted when the input value changes (on keystroke) |
 
 ### Slots
 
@@ -1230,7 +1245,7 @@ A flexible tab component with multiple variants and states.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
-| `mode` | `'default' \| 'admin'` |  | Mode of the popover should be 'default' for internal use |
+| `mode` | `'default' \| 'admin'` | `'default'` | Mode of the popover should be 'default' for internal use |
 | `label` | `string \| undefined` |  | Label if it is not provided via slot |
 | `value` | `string \| undefined` |  | Value of the tab, defaults to label if not provided |
 | `variant` | `'underlined' \| 'solid' \| 'pills' \| 'enclosed' \| 'icon-only'` | `'underlined'` | Tab variant style |
@@ -1252,7 +1267,7 @@ A flexible tab component with multiple variants and states.
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `click` | `EventEmitter<PointerEvent>` | Emitted when the tab is clicked. This is a custom event that wraps the native click but ensures the target is the le-tab. |
+| `click` | `EventEmitter<PointerEvent> \| undefined` | Emitted when the tab is clicked. This is a custom event that wraps the native click but ensures the target is the le-tab. |
 
 ### Slots
 
@@ -1298,7 +1313,7 @@ use `le-tabs` instead.
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `leTabChange` | `EventEmitter<LeOptionSelectDetail>` | Emitted when the selected tab changes. |
+| `leTabChange` | `EventEmitter<LeOptionSelectDetail> \| undefined` | Emitted when the selected tab changes. |
 
 ### CSS Variables
 
@@ -1371,7 +1386,7 @@ Full keyboard navigation and ARIA support included.
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `leTabChange` | `EventEmitter<LeOptionSelectDetail>` | Emitted when the selected tab changes. |
+| `leTabChange` | `EventEmitter<LeOptionSelectDetail> \| undefined` | Emitted when the selected tab changes. |
 
 ### Slots
 
@@ -1400,8 +1415,8 @@ A tag/chip component for displaying labels with optional dismiss functionality.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `label` | `string` |  | The text label to display in the tag. |
-| `mode` | `'default' \| 'admin'` |  | Mode of the popover should be 'default' for internal use |
+| `label` | `string \| undefined` |  | The text label to display in the tag. |
+| `mode` | `'default' \| 'admin' \| undefined` |  | Mode of the popover should be 'default' for internal use |
 | `icon` | `string \| undefined` |  | Icon to display before the label. Can be an emoji, URL, or icon name. |
 | `dismissible` | `boolean` | `false` | Whether the tag can be dismissed (shows close button). |
 | `disabled` | `boolean` | `false` | Whether the tag is disabled. |
@@ -1412,7 +1427,7 @@ A tag/chip component for displaying labels with optional dismiss functionality.
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `leDismiss` | `EventEmitter<void>` | Emitted when the dismiss button is clicked. |
+| `leDismiss` | `EventEmitter<void> \| undefined` | Emitted when the dismiss button is clicked. |
 
 ### Slots
 
@@ -1478,12 +1493,12 @@ toolbar for bold, italic, links, and paragraph type selection.
 | `center` | `string` | `'center'` |  |
 | `value` | `number` | `0` |  |
 | `rotating` | `boolean` | `false` | Internal state  using properties instead of |
-| `centerX` | `number` |  |  |
-| `centerY` | `number` |  |  |
-| `pageX` | `number` |  |  |
-| `pageY` | `number` |  |  |
+| `centerX` | `number \| undefined` |  |  |
+| `centerY` | `number \| undefined` |  |  |
+| `pageX` | `number \| undefined` |  |  |
+| `pageY` | `number \| undefined` |  |  |
 | `currentAngle` | `number` | `0` |  |
-| `startAngle` | `number` |  |  |
+| `startAngle` | `number \| undefined` |  |  |
 
 ---
 

@@ -15,14 +15,14 @@ the tab interface.
 
 ## Properties
 
-| Property             | Attribute    | Description                                                                                                                                                                                                       | Type      | Default     |
-| -------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------- |
-| `disabled`           | `disabled`   | Whether this tab is disabled.                                                                                                                                                                                     | `boolean` | `false`     |
-| `iconEnd`            | `icon-end`   | Icon displayed at the end of the tab button.                                                                                                                                                                      | `string`  | `undefined` |
-| `iconStart`          | `icon-start` | Icon displayed at the start of the tab button. Can be an emoji, URL, or icon class.                                                                                                                               | `string`  | `undefined` |
-| `label` _(required)_ | `label`      | The label displayed in the tab button.                                                                                                                                                                            | `string`  | `undefined` |
-| `lazy`               | `lazy`       | Whether to render the panel content only when active (lazy loading). When true, content is not rendered until the tab is first selected. When false (default), content is always in DOM but hidden when inactive. | `boolean` | `false`     |
-| `value`              | `value`      | The value used to identify this tab. Defaults to the label if not provided.                                                                                                                                       | `string`  | `undefined` |
+| Property             | Attribute    | Description                                                                                                                                                                                                       | Type                  | Default     |
+| -------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
+| `disabled`           | `disabled`   | Whether this tab is disabled.                                                                                                                                                                                     | `boolean`             | `false`     |
+| `iconEnd`            | `icon-end`   | Icon displayed at the end of the tab button.                                                                                                                                                                      | `string \| undefined` | `undefined` |
+| `iconStart`          | `icon-start` | Icon displayed at the start of the tab button. Can be an emoji, URL, or icon class.                                                                                                                               | `string \| undefined` | `undefined` |
+| `label` _(required)_ | `label`      | The label displayed in the tab button.                                                                                                                                                                            | `string`              | `undefined` |
+| `lazy`               | `lazy`       | Whether to render the panel content only when active (lazy loading). When true, content is not rendered until the tab is first selected. When false (default), content is always in DOM but hidden when inactive. | `boolean`             | `false`     |
+| `value`              | `value`      | The value used to identify this tab. Defaults to the label if not provided.                                                                                                                                       | `string \| undefined` | `undefined` |
 
 
 ## Methods
@@ -33,7 +33,7 @@ Get tab configuration for parent component
 
 #### Returns
 
-Type: `Promise<{ label: string; value: string; iconStart?: string; iconEnd?: string; disabled: boolean; }>`
+Type: `Promise<{ label: string; value: string; iconStart?: string | undefined; iconEnd?: string | undefined; disabled: boolean; }>`
 
 
 

@@ -18,8 +18,8 @@ toolbar for bold, italic, links, and paragraph type selection.
 | Property   | Attribute   | Description                                                        | Type                                                                                             | Default     |
 | ---------- | ----------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ----------- |
 | `align`    | `align`     | Text alignment                                                     | `"center" \| "justify" \| "left" \| "right"`                                                     | `'left'`    |
-| `color`    | `color`     | Text color (CSS value or theme token)                              | `string`                                                                                         | `undefined` |
-| `maxLines` | `max-lines` | Maximum number of lines before truncating (requires truncate=true) | `number`                                                                                         | `undefined` |
+| `color`    | `color`     | Text color (CSS value or theme token)                              | `string \| undefined`                                                                            | `undefined` |
+| `maxLines` | `max-lines` | Maximum number of lines before truncating (requires truncate=true) | `number \| undefined`                                                                            | `undefined` |
 | `truncate` | `truncate`  | Whether the text should truncate with ellipsis                     | `boolean`                                                                                        | `false`     |
 | `variant`  | `variant`   | The semantic variant/type of text element                          | `"code" \| "h1" \| "h2" \| "h3" \| "h4" \| "h5" \| "h6" \| "label" \| "p" \| "quote" \| "small"` | `'p'`       |
 

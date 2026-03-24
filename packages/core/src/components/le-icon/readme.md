@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property | Attribute | Description                                                                                                                           | Type     | Default |
-| -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- |
-| `name`   | `name`    | Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file. | `string` | `null`  |
-| `size`   | `size`    | Size of the icon in pixels. Default is 16.                                                                                            | `number` | `16`    |
+| Property | Attribute | Description                                                                                                                           | Type                  | Default     |
+| -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
+| `name`   | `name`    | Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file. | `string \| undefined` | `undefined` |
+| `size`   | `size`    | Size of the icon in pixels. Default is 16.                                                                                            | `number`              | `16`        |
 
 
 ## Dependencies

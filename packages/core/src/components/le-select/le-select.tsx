@@ -103,17 +103,17 @@ export class LeSelect {
   /**
    * Emitted when the selected value changes.
    */
-  @Event() leChange!: EventEmitter<LeOptionSelectDetail>;
+  @Event() leChange?: EventEmitter<LeOptionSelectDetail>;
 
   /**
    * Emitted when the dropdown opens.
    */
-  @Event() leOpen!: EventEmitter<void>;
+  @Event() leOpen?: EventEmitter<void>;
 
   /**
    * Emitted when the dropdown closes.
    */
-  @Event() leClose!: EventEmitter<void>;
+  @Event() leClose?: EventEmitter<void>;
 
   @State() private selectedOption?: LeOption;
 
@@ -192,17 +192,17 @@ export class LeSelect {
   private handleOptionSelect = (e: CustomEvent<LeOptionSelectDetail>) => {
     this.value = e.detail.value;
     this.selectedOption = e.detail.option;
-    this.leChange.emit(e.detail);
+    this.leChange?.emit(e.detail);
   };
 
   private handleDropdownOpen = () => {
     this.open = true;
-    this.leOpen.emit();
+    this.leOpen?.emit();
   };
 
   private handleDropdownClose = () => {
     this.open = false;
-    this.leClose.emit();
+    this.leClose?.emit();
   };
 
   private handleTriggerClick = () => {

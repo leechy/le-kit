@@ -15,9 +15,9 @@ A tag/chip component for displaying labels with optional dismiss functionality.
 | ------------- | ------------- | --------------------------------------------------------------------- | -------------------------------------------------------------- | ----------- |
 | `disabled`    | `disabled`    | Whether the tag is disabled.                                          | `boolean`                                                      | `false`     |
 | `dismissible` | `dismissible` | Whether the tag can be dismissed (shows close button).                | `boolean`                                                      | `false`     |
-| `icon`        | `icon`        | Icon to display before the label. Can be an emoji, URL, or icon name. | `string`                                                       | `undefined` |
-| `label`       | `label`       | The text label to display in the tag.                                 | `string`                                                       | `undefined` |
-| `mode`        | `mode`        | Mode of the popover should be 'default' for internal use              | `"admin" \| "default"`                                         | `undefined` |
+| `icon`        | `icon`        | Icon to display before the label. Can be an emoji, URL, or icon name. | `string \| undefined`                                          | `undefined` |
+| `label`       | `label`       | The text label to display in the tag.                                 | `string \| undefined`                                          | `undefined` |
+| `mode`        | `mode`        | Mode of the popover should be 'default' for internal use              | `"admin" \| "default" \| undefined`                            | `undefined` |
 | `size`        | `size`        | The size of the tag.                                                  | `"large" \| "medium" \| "small"`                               | `'medium'`  |
 | `variant`     | `variant`     | The visual variant of the tag.                                        | `"danger" \| "default" \| "primary" \| "success" \| "warning"` | `'default'` |
 

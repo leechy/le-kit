@@ -11,29 +11,26 @@ A select dropdown component for single selection.
 
 ## Properties
 
-| Property      | Attribute     | Description                                                 | Type                                 | Default              |
-| ------------- | ------------- | ----------------------------------------------------------- | ------------------------------------ | -------------------- |
-| `disabled`    | `disabled`    | Whether the select is disabled.                             | `boolean`                            | `false`              |
-| `emptyText`   | `empty-text`  | Text to show when no options match the search.              | `string`                             | `'No results found'` |
-| `fullWidth`   | `full-width`  | Whether the select should take full width of its container. | `boolean`                            | `false`              |
-| `name`        | `name`        | Name attribute for form submission.                         | `string`                             | `undefined`          |
-| `open`        | `open`        | Whether the dropdown is currently open.                     | `boolean`                            | `false`              |
-| `options`     | `options`     | The options to display in the dropdown.                     | `LeOption[] \| string`               | `[]`                 |
-| `placeholder` | `placeholder` | Placeholder text when no option is selected.                | `string`                             | `'Select an option'` |
-| `required`    | `required`    | Whether selection is required.                              | `boolean`                            | `false`              |
-| `searchable`  | `searchable`  | Whether the input is searchable.                            | `boolean`                            | `false`              |
-| `size`        | `size`        | Size variant of the select.                                 | `"large" \| "medium" \| "small"`     | `'medium'`           |
-| `value`       | `value`       | The currently selected value.                               | `number \| string`                   | `undefined`          |
-| `variant`     | `variant`     | Visual variant of the select.                               | `"default" \| "outlined" \| "solid"` | `'default'`          |
+| Property      | Attribute     | Description                                  | Type                                 | Default              |
+| ------------- | ------------- | -------------------------------------------- | ------------------------------------ | -------------------- |
+| `disabled`    | `disabled`    | Whether the select is disabled.              | `boolean`                            | `false`              |
+| `name`        | `name`        | Name attribute for form submission.          | `string \| undefined`                | `undefined`          |
+| `open`        | `open`        | Whether the dropdown is currently open.      | `boolean`                            | `false`              |
+| `options`     | `options`     | The options to display in the dropdown.      | `LeOption[] \| string`               | `[]`                 |
+| `placeholder` | `placeholder` | Placeholder text when no option is selected. | `string`                             | `'Select an option'` |
+| `required`    | `required`    | Whether selection is required.               | `boolean`                            | `false`              |
+| `size`        | `size`        | Size variant of the select.                  | `"large" \| "medium" \| "small"`     | `'medium'`           |
+| `value`       | `value`       | The currently selected value.                | `number \| string \| undefined`      | `undefined`          |
+| `variant`     | `variant`     | Visual variant of the select.                | `"default" \| "outlined" \| "solid"` | `'default'`          |
 
 
 ## Events
 
-| Event     | Description                              | Type                                |
-| --------- | ---------------------------------------- | ----------------------------------- |
-| `change`  | Emitted when the selected value changes. | `CustomEvent<LeOptionSelectDetail>` |
-| `leClose` | Emitted when the dropdown closes.        | `CustomEvent<void>`                 |
-| `leOpen`  | Emitted when the dropdown opens.         | `CustomEvent<void>`                 |
+| Event      | Description                              | Type                                |
+| ---------- | ---------------------------------------- | ----------------------------------- |
+| `leChange` | Emitted when the selected value changes. | `CustomEvent<LeOptionSelectDetail>` |
+| `leClose`  | Emitted when the dropdown closes.        | `CustomEvent<void>`                 |
+| `leOpen`   | Emitted when the dropdown opens.         | `CustomEvent<void>`                 |
 
 
 ## Methods

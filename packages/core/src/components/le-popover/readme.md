@@ -19,16 +19,16 @@ and other top-layer elements. Falls back gracefully in older browsers.
 | `align`               | `align`                  | Alignment of the popover                                      | `"center" \| "end" \| "start"`                     | `'start'`   |
 | `closeOnClickOutside` | `close-on-click-outside` | Whether clicking outside closes the popover                   | `boolean`                                          | `true`      |
 | `closeOnEscape`       | `close-on-escape`        | Whether pressing Escape closes the popover                    | `boolean`                                          | `true`      |
-| `maxWidth`            | `max-width`              | Maximum width for the popover (e.g., '400px', '25rem')        | `string`                                           | `undefined` |
-| `minWidth`            | `min-width`              | Minimum width for the popover (e.g., '200px', '15rem')        | `string`                                           | `'200px'`   |
-| `mode`                | `mode`                   | Mode of the popover should be 'default' for internal use      | `"admin" \| "default"`                             | `undefined` |
+| `maxWidth`            | `max-width`              | Maximum width for the popover (e.g., '400px', '25rem')        | `string \| undefined`                              | `undefined` |
+| `minWidth`            | `min-width`              | Minimum width for the popover (e.g., '200px', '15rem')        | `string \| undefined`                              | `'200px'`   |
+| `mode`                | `mode`                   | Mode of the popover should be 'default' for internal use      | `"admin" \| "default"`                             | `'default'` |
 | `offset`              | `offset`                 | Offset from the trigger element (in pixels)                   | `number`                                           | `8`         |
 | `open`                | `open`                   | Whether the popover is currently open                         | `boolean`                                          | `false`     |
-| `popoverTitle`        | `popover-title`          | Optional title for the popover header                         | `string`                                           | `undefined` |
+| `popoverTitle`        | `popover-title`          | Optional title for the popover header                         | `string \| undefined`                              | `undefined` |
 | `position`            | `position`               | Position of the popover relative to its trigger               | `"auto" \| "bottom" \| "left" \| "right" \| "top"` | `'bottom'`  |
 | `showClose`           | `show-close`             | Whether to show a close button in the header                  | `boolean`                                          | `true`      |
 | `triggerFullWidth`    | `trigger-full-width`     | Should the popover's trigger take full width of its container | `boolean`                                          | `false`     |
-| `width`               | `width`                  | Fixed width for the popover (e.g., '300px', '20rem')          | `string`                                           | `undefined` |
+| `width`               | `width`                  | Fixed width for the popover (e.g., '300px', '20rem')          | `string \| undefined`                              | `undefined` |
 
 
 ## Events

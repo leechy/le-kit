@@ -20,7 +20,7 @@ Perfect for toggling between a small set of related options.
 | `options`   | --           | Array of options for the segmented control. | `LeOption[]`                                  | `[]`        |
 | `overflow`  | `overflow`   | Scroll behavior for overflowing tabs.       | `"auto" \| "hidden" \| "scroll" \| "visible"` | `'auto'`    |
 | `size`      | `size`       | Size of the control.                        | `"large" \| "medium" \| "small"`              | `'medium'`  |
-| `value`     | `value`      | The value of the currently selected option. | `number \| string`                            | `undefined` |
+| `value`     | `value`      | The value of the currently selected option. | `number \| string \| undefined`               | `undefined` |
 
 
 ## Events

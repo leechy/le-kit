@@ -18,24 +18,24 @@ basis, and self-alignment. It can also control its internal content alignment.
 | ---------------- | ----------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ------------ |
 | `alignContent`   | `align-content`   | Internal horizontal alignment of content                                          | `"center" \| "end" \| "start" \| "stretch"`                         | `'stretch'`  |
 | `alignSelf`      | `align-self`      | Self-alignment override for this item on the cross axis                           | `"auto" \| "baseline" \| "center" \| "end" \| "start" \| "stretch"` | `'auto'`     |
-| `background`     | `background`      | Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')  | `string`                                                            | `undefined`  |
+| `background`     | `background`      | Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')  | `string \| undefined`                                               | `undefined`  |
 | `basis`          | `basis`           | Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto') | `string`                                                            | `'auto'`     |
-| `border`         | `border`          | Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')        | `string`                                                            | `undefined`  |
-| `borderRadius`   | `border-radius`   | Border radius (e.g., '8px', 'var(--le-radius-md)')                                | `string`                                                            | `undefined`  |
+| `border`         | `border`          | Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')        | `string \| undefined`                                               | `undefined`  |
+| `borderRadius`   | `border-radius`   | Border radius (e.g., '8px', 'var(--le-radius-md)')                                | `string \| undefined`                                               | `undefined`  |
 | `displayFlex`    | `display-flex`    | Whether to display box content as flex (for internal alignment)                   | `boolean`                                                           | `false`      |
 | `grow`           | `grow`            | Flex grow factor - how much the item should grow relative to siblings             | `number`                                                            | `0`          |
-| `height`         | `height`          | Height of the box (CSS value)                                                     | `string`                                                            | `undefined`  |
+| `height`         | `height`          | Height of the box (CSS value)                                                     | `string \| undefined`                                               | `undefined`  |
 | `innerDirection` | `inner-direction` | Direction of internal flex layout when displayFlex is true                        | `"horizontal" \| "vertical"`                                        | `'vertical'` |
-| `innerGap`       | `inner-gap`       | Gap between internal flex items when displayFlex is true                          | `string`                                                            | `undefined`  |
+| `innerGap`       | `inner-gap`       | Gap between internal flex items when displayFlex is true                          | `string \| undefined`                                               | `undefined`  |
 | `justifyContent` | `justify-content` | Internal vertical alignment of content                                            | `"center" \| "end" \| "start" \| "stretch"`                         | `'start'`    |
-| `maxHeight`      | `max-height`      | Maximum height constraint                                                         | `string`                                                            | `undefined`  |
-| `maxWidth`       | `max-width`       | Maximum width constraint                                                          | `string`                                                            | `undefined`  |
-| `minHeight`      | `min-height`      | Minimum height constraint                                                         | `string`                                                            | `undefined`  |
-| `minWidth`       | `min-width`       | Minimum width constraint                                                          | `string`                                                            | `undefined`  |
-| `order`          | `order`           | Order in the flex container (lower values come first)                             | `number`                                                            | `undefined`  |
-| `padding`        | `padding`         | Padding inside the box (CSS value like '8px', '1rem')                             | `string`                                                            | `undefined`  |
+| `maxHeight`      | `max-height`      | Maximum height constraint                                                         | `string \| undefined`                                               | `undefined`  |
+| `maxWidth`       | `max-width`       | Maximum width constraint                                                          | `string \| undefined`                                               | `undefined`  |
+| `minHeight`      | `min-height`      | Minimum height constraint                                                         | `string \| undefined`                                               | `undefined`  |
+| `minWidth`       | `min-width`       | Minimum width constraint                                                          | `string \| undefined`                                               | `undefined`  |
+| `order`          | `order`           | Order in the flex container (lower values come first)                             | `number \| undefined`                                               | `undefined`  |
+| `padding`        | `padding`         | Padding inside the box (CSS value like '8px', '1rem')                             | `string \| undefined`                                               | `undefined`  |
 | `shrink`         | `shrink`          | Flex shrink factor - how much the item should shrink relative to siblings         | `number`                                                            | `1`          |
-| `width`          | `width`           | Width of the box (CSS value like '100px', '50%', 'auto')                          | `string`                                                            | `undefined`  |
+| `width`          | `width`           | Width of the box (CSS value like '100px', '50%', 'auto')                          | `string \| undefined`                                               | `undefined`  |
 
 
 ## Slots

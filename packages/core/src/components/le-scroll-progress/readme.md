@@ -14,9 +14,9 @@ If it is a selector string, tracks progress within the matched element.
 
 ## Properties
 
-| Property              | Attribute               | Description                 | Type     | Default     |
-| --------------------- | ----------------------- | --------------------------- | -------- | ----------- |
-| `trackScrollProgress` | `track-scroll-progress` | Boolean or selector string. | `string` | `undefined` |
+| Property              | Attribute               | Description                 | Type                  | Default     |
+| --------------------- | ----------------------- | --------------------------- | --------------------- | ----------- |
+| `trackScrollProgress` | `track-scroll-progress` | Boolean or selector string. | `string \| undefined` | `undefined` |
 
 
 ## Shadow Parts

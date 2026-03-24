@@ -21,13 +21,13 @@ filter options by typing or select from the list.
 | `emptyText`       | `empty-text`        | Text to show when no options match the search.                   | `string`                         | `'No results found'`  |
 | `fullWidth`       | `full-width`        | Whether the multiselect should take full width of its container. | `boolean`                        | `false`               |
 | `minSearchLength` | `min-search-length` | Minimum characters before showing filtered results.              | `number`                         | `0`                   |
-| `name`            | `name`              | Name attribute for form submission.                              | `string`                         | `undefined`           |
+| `name`            | `name`              | Name attribute for form submission.                              | `string \| undefined`            | `undefined`           |
 | `open`            | `open`              | Whether the dropdown is currently open.                          | `boolean`                        | `false`               |
 | `options`         | `options`           | The options to display in the dropdown.                          | `LeOption[] \| string`           | `[]`                  |
 | `placeholder`     | `placeholder`       | Placeholder text for the input.                                  | `string`                         | `'Type to search...'` |
 | `required`        | `required`          | Whether selection is required.                                   | `boolean`                        | `false`               |
 | `size`            | `size`              | Size variant of the combobox.                                    | `"large" \| "medium" \| "small"` | `'medium'`            |
-| `value`           | `value`             | The currently selected value.                                    | `number \| string`               | `undefined`           |
+| `value`           | `value`             | The currently selected value.                                    | `number \| string \| undefined`  | `undefined`           |
 
 
 ## Events

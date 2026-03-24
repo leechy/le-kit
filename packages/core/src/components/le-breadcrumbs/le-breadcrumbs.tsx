@@ -334,7 +334,7 @@ export class LeBreadcrumbs {
 
     return (
       <le-popover position="bottom" align="start" show-close="false">
-        <button slot="trigger" class="more-trigger" type="button" aria-haspopup="menu">
+        <button slot="trigger" class="more-trigger" type="button" aria-haspopup="menu" title="More">
           <slot name="more-trigger">
             <le-icon name="ellipsis-horizontal" />
           </slot>

@@ -22,10 +22,10 @@ creating responsive layouts.
 | `direction`    | `direction`     | Direction of the stack layout                                          | `"horizontal" \| "vertical"`                                                          | `'horizontal'` |
 | `fullHeight`   | `full-height`   | Whether the stack should take full height of its container             | `boolean`                                                                             | `false`        |
 | `fullWidth`    | `full-width`    | Whether the stack should take full width of its container              | `boolean`                                                                             | `false`        |
-| `gap`          | `gap`           | Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)') | `string`                                                                              | `undefined`    |
+| `gap`          | `gap`           | Gap between items (CSS value like '8px', '1rem', 'var(--le-space-md)') | `string \| undefined`                                                                 | `undefined`    |
 | `justify`      | `justify`       | Distribution of items on the main axis                                 | `"center" \| "end" \| "space-around" \| "space-between" \| "space-evenly" \| "start"` | `'start'`      |
-| `maxItems`     | `max-items`     | Maximum number of items allowed in the stack (for CMS validation)      | `number`                                                                              | `undefined`    |
-| `padding`      | `padding`       | Padding inside the stack container (CSS value)                         | `string`                                                                              | `undefined`    |
+| `maxItems`     | `max-items`     | Maximum number of items allowed in the stack (for CMS validation)      | `number \| undefined`                                                                 | `undefined`    |
+| `padding`      | `padding`       | Padding inside the stack container (CSS value)                         | `string \| undefined`                                                                 | `undefined`    |
 | `reverse`      | `reverse`       | Whether to reverse the order of items                                  | `boolean`                                                                             | `false`        |
 | `wrap`         | `wrap`          | Whether items should wrap to multiple lines                            | `boolean`                                                                             | `false`        |
 

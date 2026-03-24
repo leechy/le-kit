@@ -11,20 +11,20 @@ A checkbox component with support for labels, descriptions, and external IDs.
 
 ## Properties
 
-| Property     | Attribute     | Description                                                                         | Type      | Default     |
-| ------------ | ------------- | ----------------------------------------------------------------------------------- | --------- | ----------- |
-| `checked`    | `checked`     | Whether the checkbox is checked                                                     | `boolean` | `false`     |
-| `disabled`   | `disabled`    | Whether the checkbox is disabled                                                    | `boolean` | `false`     |
-| `externalId` | `external-id` | External ID for linking with external systems (e.g. database ID, PDF form field ID) | `string`  | `undefined` |
-| `name`       | `name`        | The name of the checkbox input                                                      | `string`  | `undefined` |
-| `value`      | `value`       | The value of the checkbox input                                                     | `string`  | `undefined` |
+| Property     | Attribute     | Description                                                                         | Type                  | Default     |
+| ------------ | ------------- | ----------------------------------------------------------------------------------- | --------------------- | ----------- |
+| `checked`    | `checked`     | Whether the checkbox is checked                                                     | `boolean`             | `false`     |
+| `disabled`   | `disabled`    | Whether the checkbox is disabled                                                    | `boolean`             | `false`     |
+| `externalId` | `external-id` | External ID for linking with external systems (e.g. database ID, PDF form field ID) | `string \| undefined` | `undefined` |
+| `name`       | `name`        | The name of the checkbox input                                                      | `string \| undefined` | `undefined` |
+| `value`      | `value`       | The value of the checkbox input                                                     | `string \| undefined` | `undefined` |
 
 
 ## Events
 
-| Event    | Description                            | Type                                                                                  |
-| -------- | -------------------------------------- | ------------------------------------------------------------------------------------- |
-| `change` | Emitted when the checked state changes | `CustomEvent<{ checked: boolean; value: string; name: string; externalId: string; }>` |
+| Event    | Description                            | Type                                                                                                                            |
+| -------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `change` | Emitted when the checked state changes | `CustomEvent<{ checked: boolean; value?: string \| undefined; name?: string \| undefined; externalId?: string \| undefined; }>` |
 
 
 ## Slots

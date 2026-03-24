@@ -1,0 +1,38 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-popover">
+  <h1>&lt;le-popover&gt;</h1>
+  <p>Floating content container built on the native Popover API with configurable trigger and positioning.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <le-popover popover-title="Popover title" position="bottom" align="start">
+      <le-button slot="trigger">Open popover</le-button>
+      <p style="margin: 0;">This is popover content.</p>
+    </le-popover>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-popover position="bottom" align="center" show-close>
+  <le-button slot="trigger">Toggle</le-button>
+  <p>Popover body</p>
+</le-popover>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>open</code>, <code>position</code>, <code>align</code>, <code>offset</code></li>
+    <li><code>popover-title</code>, <code>show-close</code></li>
+    <li><code>close-on-click-outside</code>, <code>close-on-escape</code></li>
+    <li><code>width</code>, <code>min-width</code>, <code>max-width</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>lePopoverOpen</code></li>
+    <li><code>lePopoverClose</code></li>
+  </ul>
+</ComponentsPage>

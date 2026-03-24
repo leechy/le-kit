@@ -1,0 +1,35 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-component">
+  <h1>&lt;le-component&gt;</h1>
+  <p>Internal admin wrapper used by editable components. It adds visual framing and settings behavior in admin mode.</p>
+
+  <h2><a href="#usage" id="usage">Usage</a></h2>
+  <p>This is generally used by component authors, not by app developers directly.</p>
+
+  <div class="component-example">
+    <le-component component="demo-component" display-name="Demo wrapper">
+      <div style="border: 1px dashed var(--le-color-border); padding: 0.75rem;">Wrapped content</div>
+    </le-component>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-component component="le-card" host-class="variant-default">
+  <div>Editable internals</div>
+</le-component>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>component</code></li>
+    <li><code>display-name</code></li>
+    <li><code>host-class</code></li>
+    <li><code>host-style</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <p>No custom events are listed in the current manifest.</p>
+</ComponentsPage>

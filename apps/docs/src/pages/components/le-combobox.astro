@@ -1,0 +1,38 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-combobox">
+  <h1>&lt;le-combobox&gt;</h1>
+  <p>Searchable single-select dropdown that combines text input and option picking.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <le-combobox
+      style="width: 320px;"
+      placeholder="Search country"
+      options='[{"label":"United States","value":"US"},{"label":"Germany","value":"DE"},{"label":"Japan","value":"JP"},{"label":"Brazil","value":"BR"}]'
+    ></le-combobox>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-combobox
+  options='[{"label":"Apple","value":"apple"}]'
+  placeholder="Pick one"
+></le-combobox>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>options</code>, <code>value</code>, <code>placeholder</code>, <code>name</code></li>
+    <li><code>disabled</code>, <code>required</code>, <code>full-width</code>, <code>size</code></li>
+    <li><code>allow-custom</code>, <code>min-search-length</code>, <code>empty-text</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>leChange</code>, <code>leInput</code></li>
+    <li><code>leOpen</code>, <code>leClose</code></li>
+  </ul>
+</ComponentsPage>

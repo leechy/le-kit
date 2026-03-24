@@ -1,0 +1,39 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-multiselect">
+  <h1>&lt;le-multiselect&gt;</h1>
+  <p>Multi-select dropdown that supports searching and renders selected items as tags.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <le-multiselect
+      style="width: 360px;"
+      placeholder="Select technologies"
+      options='[{"label":"TypeScript","value":"ts"},{"label":"Astro","value":"astro"},{"label":"Stencil","value":"stencil"},{"label":"Node.js","value":"node"}]'
+    ></le-multiselect>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-multiselect
+  name="skills"
+  max-selections="3"
+  options='[{"label":"A","value":"a"},{"label":"B","value":"b"}]'
+></le-multiselect>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>options</code>, <code>value</code>, <code>placeholder</code>, <code>name</code></li>
+    <li><code>disabled</code>, <code>required</code>, <code>full-width</code>, <code>size</code></li>
+    <li><code>max-selections</code>, <code>show-select-all</code>, <code>searchable</code>, <code>empty-text</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>leChange</code></li>
+    <li><code>leOpen</code>, <code>leClose</code></li>
+  </ul>
+</ComponentsPage>

@@ -1,0 +1,42 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-header">
+  <h1>&lt;le-header&gt;</h1>
+  <p>A functional page header with optional sticky, fixed, and scroll-aware behavior.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <le-header sticky style="position: relative; z-index: 1;">
+      <span slot="start">Back</span>
+      <span slot="title">Page title</span>
+      <le-button slot="end" size="small">Action</le-button>
+    </le-header>
+    <le-header-placeholder></le-header-placeholder>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-header sticky shrink-offset="80">
+  <span slot="title">My page</span>
+</le-header>
+<le-header-placeholder></le-header-placeholder>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>sticky</code>, <code>fixed</code>, <code>static</code></li>
+    <li><code>reveal-on-scroll</code></li>
+    <li><code>shrink-offset</code></li>
+    <li><code>expand-on-hover</code></li>
+    <li><code>layout</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>leHeaderState</code></li>
+    <li><code>leHeaderShrinkChange</code></li>
+    <li><code>leHeaderVisibilityChange</code></li>
+  </ul>
+</ComponentsPage>

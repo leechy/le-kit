@@ -1,0 +1,31 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-round-progress">
+  <h1>&lt;le-round-progress&gt;</h1>
+  <p>Legacy circular progress visualization component.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <div style="display: flex; gap: 1rem; align-items: center;">
+      <le-round-progress value="35"></le-round-progress>
+      <le-round-progress value="72"></le-round-progress>
+    </div>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-round-progress value="65" padding="8"></le-round-progress>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>value</code></li>
+    <li><code>padding</code></li>
+    <li><code>paths</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <p>No custom events are listed in the current manifest.</p>
+</ComponentsPage>

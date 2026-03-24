@@ -1,0 +1,32 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-tab">
+  <h1>&lt;le-tab&gt;</h1>
+  <p>Standalone tab item used by tab containers and custom navigation patterns.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <div style="display: flex; gap: 0.5rem;">
+      <le-tab label="Overview" value="overview" selected></le-tab>
+      <le-tab label="Usage" value="usage"></le-tab>
+      <le-tab label="Examples" value="examples"></le-tab>
+    </div>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-tab label="Settings" value="settings" icon-start="gear"></le-tab>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>label</code>, <code>value</code>, <code>selected</code>, <code>disabled</code></li>
+    <li><code>variant</code>, <code>position</code>, <code>size</code>, <code>full-width</code></li>
+    <li><code>icon-start</code>, <code>icon-end</code>, <code>href</code>, <code>target</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <p>Standard click behavior is exposed through the native <code>click</code> event.</p>
+</ComponentsPage>

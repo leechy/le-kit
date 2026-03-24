@@ -1,0 +1,36 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-tab-bar">
+  <h1>&lt;le-tab-bar&gt;</h1>
+  <p>Presentational tab strip for routing scenarios where panel content is rendered elsewhere.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <le-tab-bar
+      selected="docs"
+      tabs='[{"label":"Docs","value":"docs"},{"label":"Examples","value":"examples"},{"label":"API","value":"api"}]'
+    ></le-tab-bar>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-tab-bar
+  tabs='[{"label":"Home","value":"home"},{"label":"Settings","value":"settings"}]'
+  selected="home"
+></le-tab-bar>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>tabs</code>, <code>selected</code></li>
+    <li><code>full-width</code>, <code>show-labels</code>, <code>bordered</code></li>
+    <li><code>position</code>, <code>size</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>leTabChange</code></li>
+  </ul>
+</ComponentsPage>

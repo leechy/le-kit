@@ -1,0 +1,38 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-navigation">
+  <h1>&lt;le-navigation&gt;</h1>
+  <p>Tree or menu navigation component with nested items, active URL support, and optional search.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <le-navigation
+      items='[{"label":"Overview","href":"#"},{"label":"Guides","children":[{"label":"Start","href":"#"},{"label":"Advanced","href":"#"}]}]'
+      searchable
+      style="display: block; border: 1px solid var(--le-color-border); padding: 0.5rem;"
+    ></le-navigation>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-navigation
+  orientation="vertical"
+  items='[{"label":"Home","href":"/"}]'
+></le-navigation>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>items</code>, <code>orientation</code>, <code>wrap</code></li>
+    <li><code>overflow-mode</code>, <code>min-visible-items-for-more</code>, <code>align</code></li>
+    <li><code>active-url</code>, <code>searchable</code>, <code>search-placeholder</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>leNavItemSelect</code></li>
+    <li><code>leNavItemToggle</code></li>
+  </ul>
+</ComponentsPage>

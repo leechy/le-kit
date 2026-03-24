@@ -1,0 +1,39 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-text-input">
+  <h1>&lt;le-text-input&gt;</h1>
+  <p>This docs route exists because navigation references <code>le-text-input</code>.</p>
+  <p><i>The currently implemented component tag in the library is <code>&lt;le-string-input&gt;</code>.</i></p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <div style="display: grid; gap: 0.75rem; max-width: 420px;">
+      <le-string-input label="Your name" name="name" placeholder="Ada Lovelace"></le-string-input>
+      <le-string-input label="With icon" icon-start="user" placeholder="Username"></le-string-input>
+    </div>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-string-input
+  name="email"
+  label="Email"
+  placeholder="name@example.com"
+></le-string-input>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>value</code>, <code>name</code>, <code>label</code>, <code>placeholder</code></li>
+    <li><code>description</code>, <code>disabled</code>, <code>readonly</code></li>
+    <li><code>icon-start</code>, <code>external-id</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>leChange</code></li>
+    <li><code>leInput</code></li>
+  </ul>
+</ComponentsPage>

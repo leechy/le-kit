@@ -1,0 +1,35 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-breadcrumbs">
+  <h1>&lt;le-breadcrumbs&gt;</h1>
+  <p>Shows hierarchical navigation paths and can collapse long trails using overflow behavior.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <le-breadcrumbs
+      items='[{"label":"Docs","href":"#"},{"label":"Components","href":"#"},{"label":"Select","href":"#"}]'
+    ></le-breadcrumbs>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-breadcrumbs
+  overflow-mode="collapse"
+  items='[{"label":"A"},{"label":"B"},{"label":"C"}]'
+></le-breadcrumbs>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>items</code>, <code>label</code></li>
+    <li><code>separator-icon</code></li>
+    <li><code>overflow-mode</code>, <code>min-visible-items</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>leBreadcrumbSelect</code></li>
+  </ul>
+</ComponentsPage>

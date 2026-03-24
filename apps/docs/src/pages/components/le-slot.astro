@@ -1,0 +1,37 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-slot">
+  <h1>&lt;le-slot&gt;</h1>
+  <p>Internal slot placeholder used in admin/CMS mode for inline editing and content drop zones.</p>
+
+  <h2><a href="#usage" id="usage">Usage</a></h2>
+  <p>This component is intended for component authors building editable components.</p>
+
+  <div class="component-example">
+    <le-slot name="header" type="text" tag="h3">
+      <span slot="header">Editable header</span>
+    </le-slot>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-slot name="content" type="textarea" tag="p">
+  <slot name="content"></slot>
+</le-slot>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>type</code>, <code>name</code>, <code>tag</code></li>
+    <li><code>label</code>, <code>description</code>, <code>placeholder</code></li>
+    <li><code>allowed-components</code>, <code>multiple</code>, <code>required</code></li>
+    <li><code>slot-style</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>leSlotChange</code></li>
+  </ul>
+</ComponentsPage>

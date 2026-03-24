@@ -1,0 +1,39 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-side-panel">
+  <h1>&lt;le-side-panel&gt;</h1>
+  <p>Responsive side panel layout for app shells, navigation, and tools.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <le-side-panel panel-id="docs-demo" side="left" open panel-width="260" style="height: 220px; border: 1px solid var(--le-color-border);">
+      <div slot="panel" style="padding: 0.75rem;">Panel content (navigation, filters, tools)</div>
+      <div style="padding: 0.75rem;">Main content area</div>
+    </le-side-panel>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-side-panel panel-id="main" side="left" open collapse-at="900">
+  <div slot="panel">Sidebar</div>
+  <main>Main content</main>
+</le-side-panel>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>panel-id</code>, <code>side</code>, <code>collapse-at</code></li>
+    <li><code>open</code>, <code>collapsed</code></li>
+    <li><code>panel-width</code>, <code>min-panel-width</code>, <code>max-panel-width</code></li>
+    <li><code>resizable</code>, <code>persist-key</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>leSidePanelOpenChange</code></li>
+    <li><code>leSidePanelCollapsedChange</code></li>
+    <li><code>leSidePanelWidthChange</code></li>
+  </ul>
+</ComponentsPage>

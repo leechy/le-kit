@@ -1,0 +1,37 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-popup">
+  <h1>&lt;le-popup&gt;</h1>
+  <p>Dialog/popup component based on native <code>&lt;dialog&gt;</code>, suitable for confirm, prompt, or custom content flows.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <le-popup open popup-title="Delete item" message="This action cannot be undone." type="confirm"></le-popup>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-popup
+  type="prompt"
+  popup-title="Project name"
+  placeholder="Enter name"
+  open
+></le-popup>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>open</code>, <code>type</code>, <code>popup-title</code>, <code>message</code></li>
+    <li><code>modal</code>, <code>position</code></li>
+    <li><code>confirm-text</code>, <code>cancel-text</code></li>
+    <li><code>placeholder</code>, <code>default-value</code>, <code>close-on-backdrop</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>leConfirm</code>, <code>leCancel</code></li>
+    <li><code>leOpen</code>, <code>leClose</code></li>
+  </ul>
+</ComponentsPage>

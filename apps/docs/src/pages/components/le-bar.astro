@@ -1,0 +1,40 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-bar">
+  <h1>&lt;le-bar&gt;</h1>
+  <p>A flexible horizontal container that can move overflowing items into menus or other overflow modes.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <le-bar overflow="more" style="display: block; border: 1px solid var(--le-color-border); padding: 0.5rem;">
+      <le-button size="small">Home</le-button>
+      <le-button size="small">Products</le-button>
+      <le-button size="small">Pricing</le-button>
+      <le-button size="small">Company</le-button>
+      <le-button size="small">Careers</le-button>
+      <le-button size="small">Blog</le-button>
+    </le-bar>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-bar overflow="more" min-visible-items="2" show-all-menu="end">
+  <le-button>Item 1</le-button>
+  <le-button>Item 2</le-button>
+  <le-button>Item 3</le-button>
+</le-bar>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>overflow</code>, <code>align-items</code>, <code>arrows</code></li>
+    <li><code>disable-popover</code>, <code>min-visible-items</code>, <code>show-all-menu</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>leBarOverflowChange</code></li>
+  </ul>
+</ComponentsPage>

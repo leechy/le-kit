@@ -1,0 +1,40 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-tabs">
+  <h1>&lt;le-tabs&gt;</h1>
+  <p>Tab container for organizing content into panels, with keyboard navigation and multiple layouts.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <le-tabs selected="overview" style="display: block;">
+      <le-tab-panel label="Overview" value="overview">
+        <p>Overview panel content.</p>
+      </le-tab-panel>
+      <le-tab-panel label="API" value="api">
+        <p>API panel content.</p>
+      </le-tab-panel>
+    </le-tabs>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-tabs selected="a">
+  <le-tab-panel label="A" value="a">Panel A</le-tab-panel>
+  <le-tab-panel label="B" value="b">Panel B</le-tab-panel>
+</le-tabs>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>tabs</code>, <code>selected</code>, <code>orientation</code></li>
+    <li><code>position</code>, <code>variant</code>, <code>full-width</code></li>
+    <li><code>size</code>, <code>wrap</code>, <code>overflow</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <ul>
+    <li><code>leTabChange</code></li>
+  </ul>
+</ComponentsPage>

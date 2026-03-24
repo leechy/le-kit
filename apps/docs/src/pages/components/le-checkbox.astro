@@ -1,0 +1,32 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-checkbox">
+  <h1>&lt;le-checkbox&gt;</h1>
+  <p>Checkbox control with support for form submission, disabled state, and external IDs.</p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <div class="component-example">
+    <div style="display: grid; gap: 0.5rem;">
+      <le-checkbox name="terms" value="yes">Accept terms</le-checkbox>
+      <le-checkbox checked>Already selected</le-checkbox>
+      <le-checkbox disabled>Disabled option</le-checkbox>
+    </div>
+  </div>
+
+  <CodeBlock language="html" code={`
+<le-checkbox name="newsletter" value="yes">Subscribe</le-checkbox>`}
+  />
+
+  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
+  <ul>
+    <li><code>checked</code>, <code>disabled</code></li>
+    <li><code>name</code>, <code>value</code></li>
+    <li><code>external-id</code></li>
+  </ul>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <p>Uses native-style <code>change</code> event behavior.</p>
+</ComponentsPage>

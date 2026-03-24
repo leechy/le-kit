@@ -1,13 +1,34 @@
 :root {
-  --le-color-background: #90bfee;
+  --le-color-primary: #18619D;
+  --le-color-primary-dark: #082742;
+  --le-color-background: #97c8f8;
   --le-header-content-max-width: 100vw;
   --le-header-padding-y: 0;
-  --le-color-surface: #e8f0f7cc;
+  --le-color-surface: #e8f0f7aa;
   --le-side-panel-margin: var(--le-spacing-2);
+  --le-font-family-base: "Sofia Sans Semi Condensed Variable", sans-serif;
+  --le-font-family-mono: "Fira Code Variable", monospace;
+  --le-font-family-display: "Sour Gummy Variable", sans-serif;
+  --le-color-border: #ffffffcc;
+  --le-color-focus: #0088ff96;
+  --le-color-border-hover: #0088ff96;
+
+  /* Custom colors */
+  --background-lines-color: rgba(255, 255, 255, 0.2);
+  --background-lines-grid-size: 16px;
+  
+  /* Code highlighting colors (Shiki github-light theme) */
+  --code-keyword: #d73a49;
+  --code-string: #032f62;
+  --code-function: #6f42c1;
+  --code-variable: #24292e;
+  --code-comment: #6a737d;
 }
 
 .header {
   --le-button-icon-only-padding: 0.1rem;
+
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 
   le-navigation::part(item) {
@@ -44,4 +65,143 @@
 .header--version {
   font-size: var(--le-font-size-sm);
   color: var(--le-color-text-disabled);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  color: var(--le-color-text-primary);
+
+  background-color: var(--le-color-background);
+  background-image: 
+    linear-gradient(var(--background-lines-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--background-lines-color) 1px, transparent 1px);
+  background-size: var(--background-lines-grid-size) var(--background-lines-grid-size);
+  background-position: top center;
+}
+
+.component-example {
+  margin: var(--le-spacing-4) 0 var(--le-spacing-8);
+  padding: var(--le-spacing-4);
+  border: 2px solid var(--le-color-border);
+  background-color: var(--le-color-surface);
+  min-height: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &:has(+ .code-block) {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+
+  + .code-block pre {
+    margin-top: 0;
+  }
+
+  * {
+    --le-color-surface: #fff;
+  }
+}
+
+
+/* Global styles for the documentation site */
+
+/* Typography */
+body {
+  font-family: var(--le-font-family-base);
+  font-size: calc(var(--background-lines-grid-size) * 1.2);
+}
+
+h1, h2, h3 {
+  font-family: var(--le-font-family-display);
+  line-height: 1;
+  scroll-margin-top: calc(var(--le-header-height) + var(--le-spacing-4));
+  margin-bottom: var(--le-spacing-4);
+}
+
+h1 {
+  font-size: 4rem;
+  margin-top: var(--le-spacing-6);
+}
+
+h2 {
+  font-size: 2rem;
+  margin-top: var(--le-spacing-8);
+}
+
+h3 {
+  font-size: 1.6rem;
+  margin-top: var(--le-spacing-8);
+}
+
+@media (min-width: 900px) {
+  article {
+    h1 { text-indent: calc(-1 * var(--le-spacing-8)); }
+    h2 { text-indent: calc(-1 * var(--le-spacing-6)); }
+    h3 { text-indent: calc(-1 * var(--le-spacing-4)); }
+  }
+}
+
+p {
+  margin-top: var(--le-spacing-2);
+  margin-bottom: var(--le-spacing-3);
+  line-height: 1.6;
+}
+
+a:any-link {
+  color: var(--le-color-primary);
+
+  &:hover {
+    color: var(--le-color-primary-dark);
+  }
+}
+
+/* Link that is an anchor */
+a[id] {
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover::before {
+    position: absolute;
+    left: calc(var(--le-spacing-2) * -1);
+    content: "§";
+    color: var(--le-color-primary);
+  }
+}
+
+code {
+  font-family: var(--le-font-family-mono);
+  font-weight: 600;
+  font-size: 0.95em;
+  letter-spacing: -1px;
+  color: var(--le-color-primary);
+}
+
+p code {
+  white-space: nowrap;
+}
+
+pre {
+  overflow-x: auto;
+  margin: var(--le-spacing-4) 0;
+  padding: var(--le-spacing-3);
+  border: 2px solid var(--le-color-border);
+  border-radius: 0;
+
+  font-family: var(--le-font-family-mono);
+  font-size: var(--le-font-size-md);
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  line-height: 1.4;
+  background-color: #213553 !important; /* Override background from AstroCode */
+
+  code {
+    font-weight: 500;
+    font-size: inherit;
+  }
 }

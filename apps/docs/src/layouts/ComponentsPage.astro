@@ -69,7 +69,7 @@ const navigationMarkup = renderNavigationItems(componentsNavigationItems);
       <Fragment set:html={navigationMarkup} />
     </le-navigation>
 
-    <div>
+    <div class="content">
       <le-breadcrumbs items={JSON.stringify(breadcrumbItems)}>
         <le-side-panel-toggle
           slot="start"
@@ -78,15 +78,39 @@ const navigationMarkup = renderNavigationItems(componentsNavigationItems);
           shortcut="Mod+B"
           variant="clear"
           icon-only="true"
-          style="--le-button-icon-only-padding: var(--le-space-xs);"
+          style="--le-button-icon-only-padding: var(--le-spacing-1);"
         >
           <le-icon slot="icon-only" name="side-panel"></le-icon>
         </le-side-panel-toggle>
       </le-breadcrumbs>
 
-      <main style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+      <article>
         <slot />
-      </main>
+      </article>
     </div>
   </le-side-panel>
+
+  <style>
+    le-breadcrumbs {
+      margin: var(--le-spacing-4) var(--le-spacing-2);
+      position: sticky;
+      top: calc(var(--le-header-height) + var(--le-spacing-4));
+      z-index: 1;
+    }
+
+    @media (min-width: 900px) {
+      le-breadcrumbs {
+        margin: var(--le-spacing-4) 0 var(--le-spacing-4) calc(-1 * var(--le-spacing-4));
+      }
+      .content {
+        padding: 0 0 0 var(--le-spacing-4);
+      }
+    }
+
+    article {
+      max-width: 1024px;
+      margin: var(--le-spacing-4) auto;
+      padding: 0 1rem;
+    }
+  </style>
 </Layout>

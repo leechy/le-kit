@@ -4,6 +4,10 @@ import "../styles/global.css";
 import { mainNavigationItems } from "../data/navigation";
 import { readFile } from "node:fs/promises";
 
+import '@fontsource-variable/sour-gummy/wght.css';
+import '@fontsource-variable/fira-code/wght.css';
+import '@fontsource-variable/sofia-sans-semi-condensed/wght.css'
+
 interface Props {
   title: string;
 }
@@ -37,14 +41,6 @@ try {
     <style>
       html:not(.le-ready) body {
         visibility: hidden;
-      }
-
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: var(--le-color-background);
-        color: var(--le-color-text);
-        font-family: var(--le-font-family-base);
       }
     </style>
     <script is:inline>

@@ -1,0 +1,56 @@
+---
+import DocsPage from "../../layouts/DocsPage.astro";
+---
+
+<DocsPage title="Documentation" pageType="index">
+  <h1 class="indent">Le-Kit Documentation</h1>
+  <p>
+    Welcome to the documentation for Le-Kit, a library of web components designed to help your users to easily build consistent and accessible user interfaces. Here you'll find guides and examples to help you get started with using Le-Kit in your projects.
+  </p>
+
+  <h3 class="indent">It's a Work in Progress!</h3>
+  <p>I have to warn you, that this is really early stage for the library. The installation process, the way you should copy the required assets, the way you should structure the styles for your project, and the API of the components are all definitely going to change.</p>
+  <p>Feel free to participate and provide feedback or contribute to the project in the GitHub repo:</p>
+
+  <p style="text-align: center; margin: 2rem;">
+    <a href="https://github.com/leechy/le-kit" target="_blank" rel="noopener">
+      <img
+        slot="icon-only"
+        src="/icons/github.svg"
+        alt="Go to GitHub repository"
+        width="22"
+        height="22"
+        style="vertical-align: middle; margin: 0 8px 3px 0;"
+      />Le-Kit: The CMS-compatible component library
+    </a>
+  </p>
+
+  <h2 class="indent"><a href="#missions" id="missions">Missions</a></h2>
+  <p>Currently this library is an experiment, exploring the idea of components that can be edited inside a contenteditable area, and that can be used in a wide variety of contexts, from static sites to dynamic web applications, and even in CMSs.</p>
+
+  <p>As a secondary mission, this is an attempt to organize thoughts and ideas about how to build a component library in 2024, and to share the learnings with the community. I hope that this project can be a source of inspiration and discussion about many "ethernal" topics like splitting the layout and content, how to maintain the visual style through different contexts, and how to create a seamless user experience.</p>
+
+  <p>Let's not put aside the ideas for components acting as universal scaffolds and app layouts, that keep track of the applications tate, manage the navigation and tools and, at the same time, are highly adaptable and responsive, transforming from mobile-only approaches to desktop-bound ones, and that can be used in a wide variety of contexts, from static sites to dynamic web applications, and even in CMSs.</p>
+
+  <p>And the last but not least, this is a playground for me to experiment with new technologies and approaches, and to have fun building something that I hope can be useful for others.</p>
+
+
+  <h2 class="indent"><a href="#goals" id="goals">Goals</a></h2>
+  <p>A short list of the near goals for the project:</p>
+
+  <h3 class="indent"><a href="#components" id="components">Components</a></h3>
+  <p>Building a solid set of components, big enough to cover the most common use cases.</p>
+  <p>During the process, a lot of focus will be put on the process how to create components, that are fast, responsive, accessible, easily styled, and that can serve to fulfill the missions. Also, with a good methodology, we aim to ensure that the components are maintainable and new ones are easy to add.</p>
+
+  <h3 class="indent"><a href="#library" id="library">Usable Library</a></h3>
+  <p>right now, it's really hard to install and use the library in a real project. Just after we have a good set of components, we will focus on making the library usable, easy to install and working with different frameworks and environments. Frameworks support initially will be limited, since web components are a second class citizens for most of the frameworks, but we aim to expand it over time.</p>
+
+  <h3 class="indent"><a href="#dx" id="dx">Dev Experience</a></h3>
+  <p>To make the library popular, the developers must be happy. To make a developer happy, the library should cover most of the tricky use cases, and should be easy to use and customize. Easy.</p>
+
+  <p>First, the components should be easy to use. They should work out of the box. Bug-free, and fast issue response time.</p>
+  <p>Second, the components should be easy to customize. Theming support, CSS variables, and a good documentation with examples and guides.</p>
+  <p>Third, the library should be clear to the LLMs, so that they can generate code using the components, and so that they can help developers to use the library in the best way.</p>
+  <p>And of course, the library should be fun to use and to contribute to.</p>
+
+</DocsPage>

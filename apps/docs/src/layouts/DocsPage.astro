@@ -1,0 +1,124 @@
+---
+import Layout from "./Layout.astro";
+import { docsNavigationItems, type NavItem } from "../data/navigation";
+
+interface Props {
+  title: string;
+  pageType?: string;
+}
+
+const { title, pageType } = Astro.props;
+
+const pathname = Astro.url.pathname;
+const isDocsIndex =
+  pathname === "/docs" || pathname === "/docs/";
+
+const documentTitle = isDocsIndex
+  ? "Documentation - le-kit"
+  : `${title} - le-kit Documentation`;
+
+const breadcrumbItems = isDocsIndex
+  ? [{ label: "Le-Kit", href: "/" }, { label: "Documentation" }]
+  : [
+      { label: "Le-Kit", href: "/" },
+      { label: "Documentation", href: "/docs" },
+      { label: title },
+    ];
+
+const escapeAttribute = (value: string) =>
+  value
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+
+const renderNavigationItems = (items: NavItem[]): string =>
+  items
+    .map((item) => {
+      const attrs = [
+        `label="${escapeAttribute(item.label)}"`,
+        item.href ? `href="${escapeAttribute(item.href)}"` : "",
+        item.id ? `id="${escapeAttribute(item.id)}"` : "",
+        item.open ? "open" : "",
+        item.href && pathname.startsWith(item.href) ? "selected" : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      const children = item.children?.length
+        ? renderNavigationItems(item.children)
+        : "";
+      return `<le-item ${attrs}>${children}</le-item>`;
+    })
+    .join("");
+
+const navigationMarkup = renderNavigationItems(docsNavigationItems);
+---
+
+<Layout title={documentTitle}>
+  <le-side-panel
+    panel-id="docs-navigation"
+    resizable
+    persist-key="docs-panel"
+    collapse-at="900"
+    narrow-behavior="overlay"
+    sticky
+    top="under-header"
+    full-height
+  >
+    <le-navigation slot="panel" orientation="vertical" activeUrl={pathname}>
+      <Fragment set:html={navigationMarkup} />
+    </le-navigation>
+
+    <div class="content">
+      <le-breadcrumbs items={JSON.stringify(breadcrumbItems)}>
+        <le-side-panel-toggle
+          slot="start"
+          panel-id="docs-navigation"
+          action="toggle"
+          shortcut="Mod+B"
+          variant="clear"
+          icon-only="true"
+          style="--le-button-icon-only-padding: var(--le-spacing-1);"
+        >
+          <le-icon slot="icon-only" name="side-panel"></le-icon>
+        </le-side-panel-toggle>
+      </le-breadcrumbs>
+
+      {pageType === "index" ? (
+        <main class="bento-page">
+          <slot />
+        </main>
+      ) : (
+        <article>
+          <slot />
+        </article>
+      )}
+    </div>
+  </le-side-panel>
+
+  <style>
+    le-breadcrumbs {
+      margin: var(--le-spacing-4) var(--le-spacing-2);
+      position: sticky;
+      top: calc(var(--le-header-height) + var(--le-spacing-4));
+      z-index: 1;
+    }
+
+    @media (min-width: 900px) {
+      le-breadcrumbs {
+        margin: var(--le-spacing-4) 0 var(--le-spacing-4) calc(-1 * var(--le-spacing-4));
+      }
+      .content {
+        padding: 0 0 0 var(--le-spacing-4);
+      }
+    }
+
+    article,
+    .bento-page {
+      max-width: 1024px;
+      margin: var(--le-spacing-4) auto;
+      padding: 0 1rem;
+    }
+  </style>
+</Layout>

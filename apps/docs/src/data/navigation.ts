@@ -21,6 +21,29 @@ export const mainNavigationItems: NavItem[] = [
   },
 ];
 
+export const docsNavigationItems: NavItem[] = [
+  {
+    label: 'Getting Started',
+    id: 'getting-started',
+    open: true,
+    children: [
+      { label: 'Installation', href: '/docs/start' },
+      { label: 'Assets Setup', href: '/docs/assets' },
+    ],
+  },
+  {
+    label: 'Core Concepts',
+    id: 'core-concepts',
+    open: true,
+    children: [
+      { label: 'Admin Mode', href: '/docs/admin-mode' },
+      { label: 'Styling & Theming', href: '/docs/theming' },
+    ],
+  },
+  { label: 'Contributing', href: '/docs/contributing' },
+  { label: 'Changelog', href: '/docs/changelog' },
+];
+
 export const componentsNavigationItems: NavItem[] = [
   {
     label: 'Layout & Navigation',

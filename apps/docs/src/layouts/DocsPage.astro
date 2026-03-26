@@ -10,8 +10,7 @@ interface Props {
 const { title, pageType } = Astro.props;
 
 const pathname = Astro.url.pathname;
-const isDocsIndex =
-  pathname === "/docs" || pathname === "/docs/";
+const isDocsIndex = pathname === "/docs" || pathname === "/docs/";
 
 const documentTitle = isDocsIndex
   ? "Documentation - le-kit"
@@ -71,7 +70,10 @@ const navigationMarkup = renderNavigationItems(docsNavigationItems);
     </le-navigation>
 
     <div class="content">
-      <le-breadcrumbs items={JSON.stringify(breadcrumbItems)}>
+      <le-breadcrumbs
+        items={JSON.stringify(breadcrumbItems)}
+        class="site-navigation"
+      >
         <le-side-panel-toggle
           slot="start"
           panel-id="docs-navigation"
@@ -85,30 +87,22 @@ const navigationMarkup = renderNavigationItems(docsNavigationItems);
         </le-side-panel-toggle>
       </le-breadcrumbs>
 
-      {pageType === "index" ? (
-        <main class="bento-page">
-          <slot />
-        </main>
-      ) : (
-        <article>
-          <slot />
-        </article>
-      )}
+      {
+        pageType === "index" ? (
+          <main class="bento-page">
+            <slot />
+          </main>
+        ) : (
+          <article>
+            <slot />
+          </article>
+        )
+      }
     </div>
   </le-side-panel>
 
   <style>
-    le-breadcrumbs {
-      margin: var(--le-spacing-4) var(--le-spacing-2);
-      position: sticky;
-      top: calc(var(--le-header-height) + var(--le-spacing-4));
-      z-index: 1;
-    }
-
     @media (min-width: 900px) {
-      le-breadcrumbs {
-        margin: var(--le-spacing-4) 0 var(--le-spacing-4) calc(-1 * var(--le-spacing-4));
-      }
       .content {
         padding: 0 0 0 var(--le-spacing-4);
       }

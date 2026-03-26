@@ -4,15 +4,13 @@
 
 :host {
   display: contents;
-  --le-tab-panel-radius: var(--le-radius-md);
-  --le-tab-panel-padding: var(--le-spacing-4);
 }
 
 .tab-panel {
   margin-top: 4px;
   display: none;
-  border-radius: var(--le-tab-panel-radius);
-  padding: var(--le-tab-panel-padding);
+  border-radius: var(--le-tab-panel-radius, var(--le-radius-md));
+  padding: var(--le-tab-panel-padding, var(--le-spacing-4));
 }
 
 .tab-panel.active {

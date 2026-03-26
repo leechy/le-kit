@@ -3,7 +3,7 @@
 }
 
 .breadcrumbs {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: var(--le-space-xs);
   min-width: 0;

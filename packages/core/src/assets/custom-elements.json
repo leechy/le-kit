@@ -723,60 +723,272 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-bento-tile/le-bento-tile.tsx",
+      "path": "src/components/le-breadcrumbs/le-breadcrumbs.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A single tile for use inside `le-bento-grid`.\n\nDeclares how many columns and rows it should span in the bento grid.\nVisual appearance (border-radius, shadow) is controlled via CSS custom\nproperties so themes can override them.",
-          "name": "LeBentoTile",
-          "cssProperties": [
-            {
-              "description": "Border radius (default: var(--le-radius-xl, 0.75rem))",
-              "name": "--le-bento-tile-radius"
-            },
-            {
-              "description": "Box shadow (default: subtle multi-layer shadow)",
-              "name": "--le-bento-tile-shadow"
-            },
-            {
-              "description": "Background color (default: transparent)",
-              "name": "--le-bento-tile-bg"
-            },
-            {
-              "description": "Inner padding (default: 0)",
-              "name": "--le-bento-tile-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The inner tile wrapper element",
-              "name": "tile"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Content displayed inside the tile",
-              "name": ""
-            }
-          ],
+          "description": "",
+          "name": "LeBreadcrumbs",
           "members": [
             {
               "kind": "field",
-              "name": "cols",
+              "name": "el",
               "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Number of grid columns this tile should span."
+                "text": "HTMLElement"
+              }
             },
             {
               "kind": "field",
-              "name": "rows",
+              "name": "items",
+              "type": {
+                "text": "LeOption[] | string"
+              },
+              "default": "[]",
+              "description": "Breadcrumb items (supports JSON string)."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Breadcrumbs'",
+              "description": "Accessible label for the breadcrumbs navigation."
+            },
+            {
+              "kind": "field",
+              "name": "separatorIcon",
+              "type": {
+                "text": "string"
+              },
+              "default": "'chevron-right'",
+              "description": "Separator icon name (used if no separator slot is provided)."
+            },
+            {
+              "kind": "field",
+              "name": "overflowMode",
+              "type": {
+                "text": "'collapse' | 'wrap' | 'scroll'"
+              },
+              "default": "'collapse'",
+              "description": "Overflow behavior: collapse (default), wrap, or scroll."
+            },
+            {
+              "kind": "field",
+              "name": "minVisibleItems",
               "type": {
                 "text": "number"
               },
-              "default": "1",
-              "description": "Number of grid rows this tile should span."
+              "default": "2",
+              "description": "Minimum visible items before collapsing."
+            },
+            {
+              "kind": "field",
+              "name": "hiddenIndices",
+              "type": {
+                "text": "number[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "separatorTemplate",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "declarativeItems",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "isDeclarativeMode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "listEl",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "resizeObserver",
+              "type": {
+                "text": "ResizeObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "instanceId",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "recomputeQueued",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "mutationObserver",
+              "type": {
+                "text": "MutationObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleGeneralSlotChange",
+              "parameters": [
+                {
+                  "name": "ev",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildDeclarativeItems",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleInputsChange"
+            },
+            {
+              "kind": "method",
+              "name": "setupResizeObserver",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "parsedItems",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "getItemId",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleSeparatorSlotChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "scheduleOverflowRecompute",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "nextFrame",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "recomputeOverflow",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleItemClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderSeparator",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderItem",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "LeOption"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderMore",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "hiddenItems",
+                  "type": {
+                    "text": "LeOption[]"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -785,44 +997,79 @@
           ],
           "attributes": [
             {
-              "name": "cols",
-              "fieldName": "cols",
-              "default": "1",
-              "description": "Number of grid columns this tile should span.",
+              "name": "items",
+              "fieldName": "items",
+              "default": "[]",
+              "description": "Breadcrumb items (supports JSON string).",
               "type": {
-                "text": "number"
+                "text": "LeOption[] | string"
               }
             },
             {
-              "name": "rows",
-              "fieldName": "rows",
-              "default": "1",
-              "description": "Number of grid rows this tile should span.",
+              "name": "label",
+              "fieldName": "label",
+              "default": "'Breadcrumbs'",
+              "description": "Accessible label for the breadcrumbs navigation.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "separator-icon",
+              "fieldName": "separatorIcon",
+              "default": "'chevron-right'",
+              "description": "Separator icon name (used if no separator slot is provided).",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "overflow-mode",
+              "fieldName": "overflowMode",
+              "default": "'collapse'",
+              "description": "Overflow behavior: collapse (default), wrap, or scroll.",
+              "type": {
+                "text": "'collapse' | 'wrap' | 'scroll'"
+              }
+            },
+            {
+              "name": "min-visible-items",
+              "fieldName": "minVisibleItems",
+              "default": "2",
+              "description": "Minimum visible items before collapsing.",
               "type": {
                 "text": "number"
               }
             }
           ],
-          "tagName": "le-bento-tile",
-          "events": [],
+          "tagName": "le-breadcrumbs",
+          "events": [
+            {
+              "name": "leBreadcrumbSelect",
+              "type": {
+                "text": "EventEmitter<LeBreadcrumbSelectDetail>"
+              },
+              "description": "Emitted when a breadcrumb item is selected."
+            }
+          ],
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "LeBentoTile",
+          "name": "LeBreadcrumbs",
           "declaration": {
-            "name": "LeBentoTile",
-            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+            "name": "LeBreadcrumbs",
+            "module": "src/components/le-breadcrumbs/le-breadcrumbs.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-bento-tile",
+          "name": "le-breadcrumbs",
           "declaration": {
-            "name": "LeBentoTile",
-            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+            "name": "LeBreadcrumbs",
+            "module": "src/components/le-breadcrumbs/le-breadcrumbs.tsx"
           }
         }
       ]
@@ -1272,12 +1519,168 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-breadcrumbs/le-breadcrumbs.tsx",
+      "path": "src/components/le-bento-tile/le-bento-tile.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "",
-          "name": "LeBreadcrumbs",
+          "description": "A single tile for use inside `le-bento-grid`.\n\nDeclares how many columns and rows it should span in the bento grid.\nVisual appearance (border-radius, shadow) is controlled via CSS custom\nproperties so themes can override them.",
+          "name": "LeBentoTile",
+          "cssProperties": [
+            {
+              "description": "Border radius (default: var(--le-radius-xl, 0.75rem))",
+              "name": "--le-bento-tile-radius"
+            },
+            {
+              "description": "Box shadow (default: subtle multi-layer shadow)",
+              "name": "--le-bento-tile-shadow"
+            },
+            {
+              "description": "Background color (default: transparent)",
+              "name": "--le-bento-tile-bg"
+            },
+            {
+              "description": "Inner padding (default: 0)",
+              "name": "--le-bento-tile-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The inner tile wrapper element",
+              "name": "tile"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Content displayed inside the tile",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "cols",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of grid columns this tile should span."
+            },
+            {
+              "kind": "field",
+              "name": "rows",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of grid rows this tile should span."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "cols",
+              "fieldName": "cols",
+              "default": "1",
+              "description": "Number of grid columns this tile should span.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "rows",
+              "fieldName": "rows",
+              "default": "1",
+              "description": "Number of grid rows this tile should span.",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-bento-tile",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeBentoTile",
+          "declaration": {
+            "name": "LeBentoTile",
+            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-bento-tile",
+          "declaration": {
+            "name": "LeBentoTile",
+            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -1288,256 +1691,21 @@
             },
             {
               "kind": "field",
-              "name": "items",
+              "name": "variant",
               "type": {
-                "text": "LeOption[] | string"
+                "text": "'default' | 'outlined' | 'elevated'"
               },
-              "default": "[]",
-              "description": "Breadcrumb items (supports JSON string)."
+              "default": "'default'",
+              "description": "Card variant style"
             },
             {
               "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Breadcrumbs'",
-              "description": "Accessible label for the breadcrumbs navigation."
-            },
-            {
-              "kind": "field",
-              "name": "separatorIcon",
-              "type": {
-                "text": "string"
-              },
-              "default": "'chevron-right'",
-              "description": "Separator icon name (used if no separator slot is provided)."
-            },
-            {
-              "kind": "field",
-              "name": "overflowMode",
-              "type": {
-                "text": "'collapse' | 'wrap' | 'scroll'"
-              },
-              "default": "'collapse'",
-              "description": "Overflow behavior: collapse (default), wrap, or scroll."
-            },
-            {
-              "kind": "field",
-              "name": "minVisibleItems",
-              "type": {
-                "text": "number"
-              },
-              "default": "2",
-              "description": "Minimum visible items before collapsing."
-            },
-            {
-              "kind": "field",
-              "name": "hiddenIndices",
-              "type": {
-                "text": "number[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "separatorTemplate",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "declarativeItems",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "isDeclarativeMode",
+              "name": "interactive",
               "type": {
                 "text": "boolean"
               },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "listEl",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "resizeObserver",
-              "type": {
-                "text": "ResizeObserver | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "instanceId",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "recomputeQueued",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "mutationObserver",
-              "type": {
-                "text": "MutationObserver | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleGeneralSlotChange",
-              "parameters": [
-                {
-                  "name": "ev",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildDeclarativeItems",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleInputsChange"
-            },
-            {
-              "kind": "method",
-              "name": "setupResizeObserver",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "parsedItems",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "getItemId",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "item",
-                  "type": {
-                    "text": "LeOption"
-                  }
-                },
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "handleSeparatorSlotChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "scheduleOverflowRecompute",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "nextFrame",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "Promise<void>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "recomputeOverflow",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleItemClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "renderSeparator",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "renderItem",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "item",
-                  "type": {
-                    "text": "LeOption"
-                  }
-                },
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "renderMore",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "hiddenItems",
-                  "type": {
-                    "text": "LeOption[]"
-                  }
-                }
-              ]
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
             },
             {
               "kind": "method",
@@ -1546,59 +1714,196 @@
           ],
           "attributes": [
             {
-              "name": "items",
-              "fieldName": "items",
-              "default": "[]",
-              "description": "Breadcrumb items (supports JSON string).",
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
               "type": {
-                "text": "LeOption[] | string"
+                "text": "'default' | 'outlined' | 'elevated'"
               }
             },
             {
-              "name": "label",
-              "fieldName": "label",
-              "default": "'Breadcrumbs'",
-              "description": "Accessible label for the breadcrumbs navigation.",
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
               "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "separator-icon",
-              "fieldName": "separatorIcon",
-              "default": "'chevron-right'",
-              "description": "Separator icon name (used if no separator slot is provided).",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "overflow-mode",
-              "fieldName": "overflowMode",
-              "default": "'collapse'",
-              "description": "Overflow behavior: collapse (default), wrap, or scroll.",
-              "type": {
-                "text": "'collapse' | 'wrap' | 'scroll'"
-              }
-            },
-            {
-              "name": "min-visible-items",
-              "fieldName": "minVisibleItems",
-              "default": "2",
-              "description": "Minimum visible items before collapsing.",
-              "type": {
-                "text": "number"
+                "text": "boolean"
               }
             }
           ],
-          "tagName": "le-breadcrumbs",
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-checkbox/le-checkbox.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
+          "name": "LeCheckbox",
+          "cssProperties": [
+            {
+              "description": "Size of the checkbox input",
+              "name": "--le-checkbox-size"
+            },
+            {
+              "description": "Color of the checkbox when checked",
+              "name": "--le-checkbox-color"
+            },
+            {
+              "description": "Color of the label text",
+              "name": "--le-checkbox-label-color"
+            },
+            {
+              "description": "Color of the description text",
+              "name": "--le-checkbox-desc-color"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The label text for the checkbox",
+              "name": ""
+            },
+            {
+              "description": "Additional description text displayed below the label",
+              "name": "description"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is checked"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The name of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The value of the checkbox input"
+            },
+            {
+              "kind": "field",
+              "name": "externalId",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
+            },
+            {
+              "kind": "field",
+              "name": "handleChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "checked",
+              "fieldName": "checked",
+              "default": "false",
+              "description": "Whether the checkbox is checked",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the checkbox is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "The name of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value of the checkbox input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "external-id",
+              "fieldName": "externalId",
+              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-checkbox",
           "events": [
             {
-              "name": "leBreadcrumbSelect",
+              "name": "change",
               "type": {
-                "text": "EventEmitter<LeBreadcrumbSelectDetail>"
+                "text": "EventEmitter<{\n    checked: boolean;\n    value?: string;\n    name?: string;\n    externalId?: string;\n  }>"
               },
-              "description": "Emitted when a breadcrumb item is selected."
+              "description": "Emitted when the checked state changes"
             }
           ],
           "customElement": true
@@ -1607,18 +1912,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LeBreadcrumbs",
+          "name": "LeCheckbox",
           "declaration": {
-            "name": "LeBreadcrumbs",
-            "module": "src/components/le-breadcrumbs/le-breadcrumbs.tsx"
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-breadcrumbs",
+          "name": "le-checkbox",
           "declaration": {
-            "name": "LeBreadcrumbs",
-            "module": "src/components/le-breadcrumbs/le-breadcrumbs.tsx"
+            "name": "LeCheckbox",
+            "module": "src/components/le-checkbox/le-checkbox.tsx"
           }
         }
       ]
@@ -1688,6 +1993,41 @@
               "type": {
                 "text": "HTMLElement"
               }
+            },
+            {
+              "kind": "field",
+              "name": "hasIconStartSlot",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "hasIconEndSlot",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "hasIconOnlySlot",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "disconnectSlotObserver",
+              "type": {
+                "text": "() => void | undefined"
+              },
+              "privacy": "private"
             },
             {
               "kind": "field",
@@ -1969,311 +2309,6 @@
           "declaration": {
             "name": "LeButton",
             "module": "src/components/le-button/le-button.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-checkbox/le-checkbox.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A checkbox component with support for labels, descriptions, and external IDs.",
-          "name": "LeCheckbox",
-          "cssProperties": [
-            {
-              "description": "Size of the checkbox input",
-              "name": "--le-checkbox-size"
-            },
-            {
-              "description": "Color of the checkbox when checked",
-              "name": "--le-checkbox-color"
-            },
-            {
-              "description": "Color of the label text",
-              "name": "--le-checkbox-label-color"
-            },
-            {
-              "description": "Color of the description text",
-              "name": "--le-checkbox-desc-color"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The label text for the checkbox",
-              "name": ""
-            },
-            {
-              "description": "Additional description text displayed below the label",
-              "name": "description"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is checked"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is disabled"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "The name of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "The value of the checkbox input"
-            },
-            {
-              "kind": "field",
-              "name": "externalId",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)"
-            },
-            {
-              "kind": "field",
-              "name": "handleChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "checked",
-              "fieldName": "checked",
-              "default": "false",
-              "description": "Whether the checkbox is checked",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the checkbox is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "The name of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The value of the checkbox input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "external-id",
-              "fieldName": "externalId",
-              "description": "External ID for linking with external systems (e.g. database ID, PDF form field ID)",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-checkbox",
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "EventEmitter<{\n    checked: boolean;\n    value?: string;\n    name?: string;\n    externalId?: string;\n  }>"
-              },
-              "description": "Emitted when the checked state changes"
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCheckbox",
-          "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-checkbox",
-          "declaration": {
-            "name": "LeCheckbox",
-            "module": "src/components/le-checkbox/le-checkbox.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
-          "cssProperties": [
-            {
-              "description": "Card background color",
-              "name": "--le-card-bg"
-            },
-            {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
-            },
-            {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
-              "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              }
-            },
-            {
-              "name": "interactive",
-              "fieldName": "interactive",
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-card",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCard",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-card",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
           }
         }
       ]
@@ -5088,6 +5123,506 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-multiselect/le-multiselect.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A multiselect component for selecting multiple options.\n\nDisplays selected items as tags with optional search filtering.",
+          "name": "LeMultiselect",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "LeOption[] | string"
+              },
+              "default": "[]",
+              "description": "The options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "LeOptionValue[]"
+              },
+              "default": "[]",
+              "description": "The currently selected values."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Select options...'",
+              "description": "Placeholder text when no options are selected."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the multiselect is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether selection is required."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the multiselect should take full width of its container."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Size variant of the multiselect."
+            },
+            {
+              "kind": "field",
+              "name": "maxSelections",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of selections allowed."
+            },
+            {
+              "kind": "field",
+              "name": "selectAllLabel",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "'Select All'",
+              "description": "Labels for the \"Select All\" option."
+            },
+            {
+              "kind": "field",
+              "name": "deselectAllLabel",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "'Deselect All'"
+            },
+            {
+              "kind": "field",
+              "name": "showSelectAll",
+              "type": {
+                "text": "boolean | string | string[]"
+              },
+              "default": "false",
+              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s)."
+            },
+            {
+              "kind": "field",
+              "name": "searchable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is searchable."
+            },
+            {
+              "kind": "field",
+              "name": "emptyText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dropdown is currently open."
+            },
+            {
+              "kind": "field",
+              "name": "selectedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "searchQuery",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "declarativeOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "isDeclarativeMode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "dropdownEl",
+              "type": {
+                "text": "HTMLLeDropdownBaseElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "inputEl",
+              "type": {
+                "text": "HTMLInputElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "mutationObserver",
+              "type": {
+                "text": "MutationObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleOptionsChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleShowSelectAllChange",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "boolean | string | string[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleSlotChange"
+            },
+            {
+              "kind": "method",
+              "name": "buildDeclarativeOptions",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "parsedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "effectiveOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectedOptions",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "filterOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOptionSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "emitChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTagDismiss",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleSearchInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleClearAll",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "showDropdown",
+              "description": "Opens the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "hideDropdown",
+              "description": "Closes the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "clearSelection",
+              "description": "Clears all selections."
+            },
+            {
+              "kind": "method",
+              "name": "renderTags",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "fieldName": "options",
+              "default": "[]",
+              "description": "The options to display in the dropdown.",
+              "type": {
+                "text": "LeOption[] | string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "default": "[]",
+              "description": "The currently selected values.",
+              "type": {
+                "text": "LeOptionValue[]"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "'Select options...'",
+              "description": "Placeholder text when no options are selected.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the multiselect is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether selection is required.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "Name attribute for form submission.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the multiselect should take full width of its container.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Size variant of the multiselect.",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "max-selections",
+              "fieldName": "maxSelections",
+              "description": "Maximum number of selections allowed.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "show-select-all",
+              "fieldName": "showSelectAll",
+              "default": "false",
+              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s).",
+              "type": {
+                "text": "boolean | string | string[]"
+              }
+            },
+            {
+              "name": "searchable",
+              "fieldName": "searchable",
+              "default": "false",
+              "description": "Whether the input is searchable.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "empty-text",
+              "fieldName": "emptyText",
+              "default": "'No results found'",
+              "description": "Text to show when no options match the search.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the dropdown is currently open.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-multiselect",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeMultiOptionSelectDetail>"
+              },
+              "description": "Emitted when the selected values change."
+            },
+            {
+              "name": "leOpen",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown opens."
+            },
+            {
+              "name": "leClose",
+              "type": {
+                "text": "EventEmitter<void>"
+              },
+              "description": "Emitted when the dropdown closes."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeMultiselect",
+          "declaration": {
+            "name": "LeMultiselect",
+            "module": "src/components/le-multiselect/le-multiselect.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-multiselect",
+          "declaration": {
+            "name": "LeMultiselect",
+            "module": "src/components/le-multiselect/le-multiselect.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-navigation/le-navigation.tsx",
       "declarations": [
         {
@@ -5785,506 +6320,6 @@
           "declaration": {
             "name": "LeNavigation",
             "module": "src/components/le-navigation/le-navigation.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-multiselect/le-multiselect.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A multiselect component for selecting multiple options.\n\nDisplays selected items as tags with optional search filtering.",
-          "name": "LeMultiselect",
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "LeOption[] | string"
-              },
-              "default": "[]",
-              "description": "The options to display in the dropdown."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "LeOptionValue[]"
-              },
-              "default": "[]",
-              "description": "The currently selected values."
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Select options...'",
-              "description": "Placeholder text when no options are selected."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the multiselect is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether selection is required."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Name attribute for form submission."
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the multiselect should take full width of its container."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Size variant of the multiselect."
-            },
-            {
-              "kind": "field",
-              "name": "maxSelections",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum number of selections allowed."
-            },
-            {
-              "kind": "field",
-              "name": "selectAllLabel",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "'Select All'",
-              "description": "Labels for the \"Select All\" option."
-            },
-            {
-              "kind": "field",
-              "name": "deselectAllLabel",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "'Deselect All'"
-            },
-            {
-              "kind": "field",
-              "name": "showSelectAll",
-              "type": {
-                "text": "boolean | string | string[]"
-              },
-              "default": "false",
-              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s)."
-            },
-            {
-              "kind": "field",
-              "name": "searchable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the input is searchable."
-            },
-            {
-              "kind": "field",
-              "name": "emptyText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'No results found'",
-              "description": "Text to show when no options match the search."
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the dropdown is currently open."
-            },
-            {
-              "kind": "field",
-              "name": "selectedOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "searchQuery",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "declarativeOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "isDeclarativeMode",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "dropdownEl",
-              "type": {
-                "text": "HTMLLeDropdownBaseElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "inputEl",
-              "type": {
-                "text": "HTMLInputElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "mutationObserver",
-              "type": {
-                "text": "MutationObserver | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleValueChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleOptionsChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleShowSelectAllChange",
-              "parameters": [
-                {
-                  "name": "newValue",
-                  "type": {
-                    "text": "boolean | string | string[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleSlotChange"
-            },
-            {
-              "kind": "method",
-              "name": "buildDeclarativeOptions",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "parsedOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "effectiveOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "updateSelectedOptions",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "filterOption",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleOptionSelect",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "emitChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDropdownOpen",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDropdownClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTagDismiss",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleSearchInput",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleClearAll",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "showDropdown",
-              "description": "Opens the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "hideDropdown",
-              "description": "Closes the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "clearSelection",
-              "description": "Clears all selections."
-            },
-            {
-              "kind": "method",
-              "name": "renderTags",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "options",
-              "fieldName": "options",
-              "default": "[]",
-              "description": "The options to display in the dropdown.",
-              "type": {
-                "text": "LeOption[] | string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "default": "[]",
-              "description": "The currently selected values.",
-              "type": {
-                "text": "LeOptionValue[]"
-              }
-            },
-            {
-              "name": "placeholder",
-              "fieldName": "placeholder",
-              "default": "'Select options...'",
-              "description": "Placeholder text when no options are selected.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the multiselect is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "required",
-              "fieldName": "required",
-              "default": "false",
-              "description": "Whether selection is required.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "Name attribute for form submission.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the multiselect should take full width of its container.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Size variant of the multiselect.",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "max-selections",
-              "fieldName": "maxSelections",
-              "description": "Maximum number of selections allowed.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "show-select-all",
-              "fieldName": "showSelectAll",
-              "default": "false",
-              "description": "Whether to show a \"Select All\" option.\nAlso accepts a string or array of strings to customize the label(s).",
-              "type": {
-                "text": "boolean | string | string[]"
-              }
-            },
-            {
-              "name": "searchable",
-              "fieldName": "searchable",
-              "default": "false",
-              "description": "Whether the input is searchable.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "empty-text",
-              "fieldName": "emptyText",
-              "default": "'No results found'",
-              "description": "Text to show when no options match the search.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "open",
-              "fieldName": "open",
-              "default": "false",
-              "description": "Whether the dropdown is currently open.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-multiselect",
-          "events": [
-            {
-              "name": "leChange",
-              "type": {
-                "text": "EventEmitter<LeMultiOptionSelectDetail>"
-              },
-              "description": "Emitted when the selected values change."
-            },
-            {
-              "name": "leOpen",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dropdown opens."
-            },
-            {
-              "name": "leClose",
-              "type": {
-                "text": "EventEmitter<void>"
-              },
-              "description": "Emitted when the dropdown closes."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeMultiselect",
-          "declaration": {
-            "name": "LeMultiselect",
-            "module": "src/components/le-multiselect/le-multiselect.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-multiselect",
-          "declaration": {
-            "name": "LeMultiselect",
-            "module": "src/components/le-multiselect/le-multiselect.tsx"
           }
         }
       ]
@@ -7197,6 +7232,172 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-round-progress/le-round-progress.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LeRoundProgress",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "method",
+              "name": "updateValue",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "padding",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "method",
+              "name": "updatePadding",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "paths",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "updateProgressBackgrounds",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "progressPaths",
+              "type": {
+                "text": "any[]"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "params",
+              "type": {
+                "text": "{\n    width: number;\n    diameter: number;\n    circumference: number;\n  }"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "calcParams"
+            },
+            {
+              "kind": "method",
+              "name": "getViewBox",
+              "description": "Returns the viewPath attribute value for the SVG\nbased on the width of the parent element"
+            },
+            {
+              "kind": "method",
+              "name": "getPath",
+              "description": "Returns the circular path for the progress stroke\nand additional paths in the background"
+            },
+            {
+              "kind": "method",
+              "name": "getStrokeDashArray"
+            },
+            {
+              "kind": "method",
+              "name": "getPaths"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "fieldName": "value",
+              "default": "0",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "padding",
+              "fieldName": "padding",
+              "default": "0",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "paths",
+              "fieldName": "paths",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-round-progress",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeRoundProgress",
+          "declaration": {
+            "name": "LeRoundProgress",
+            "module": "src/components/le-round-progress/le-round-progress.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-round-progress",
+          "declaration": {
+            "name": "LeRoundProgress",
+            "module": "src/components/le-round-progress/le-round-progress.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-popup/le-popup.tsx",
       "declarations": [
         {
@@ -7619,12 +7820,56 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-round-progress/le-round-progress.tsx",
+      "path": "src/components/le-scroll-progress/le-scroll-progress.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "",
-          "name": "LeRoundProgress",
+          "description": "Displays scroll progress as a simple bar.\n\nIf `track-scroll-progress` is present without a value, tracks the full document.\nIf it is a selector string, tracks progress within the matched element.",
+          "name": "LeScrollProgress",
+          "cssProperties": [
+            {
+              "description": "Bar height",
+              "name": "--le-scroll-progress-height"
+            },
+            {
+              "description": "Track background",
+              "name": "--le-scroll-progress-bg"
+            },
+            {
+              "description": "Fill color",
+              "name": "--le-scroll-progress-fill"
+            },
+            {
+              "description": "If sticky, stop position to parent top",
+              "name": "--le-scroll-progress-sticky-top"
+            },
+            {
+              "description": "If fixed, distance from window top",
+              "name": "--le-scroll-progress-fixed-top"
+            },
+            {
+              "description": "If fixed, distance from window left",
+              "name": "--le-scroll-progress-fixed-left"
+            },
+            {
+              "description": "If fixed, distance from window right",
+              "name": "--le-scroll-progress-fixed-right"
+            },
+            {
+              "description": "Z-index of the progress bar (1001 by default, above header)",
+              "name": "--le-scroll-progress-z"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "Outer track",
+              "name": "track"
+            },
+            {
+              "description": "Inner fill",
+              "name": "fill"
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -7635,99 +7880,90 @@
             },
             {
               "kind": "field",
-              "name": "value",
+              "name": "trackScrollProgress",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Boolean or selector string."
+            },
+            {
+              "kind": "field",
+              "name": "progress",
               "type": {
                 "text": "number"
               },
+              "privacy": "private",
               "default": "0"
             },
             {
-              "kind": "method",
-              "name": "updateValue",
-              "parameters": [
-                {
-                  "name": "newValue",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
               "kind": "field",
-              "name": "padding",
+              "name": "rafId",
               "type": {
-                "text": "number"
+                "text": "number | null"
               },
-              "default": "0"
-            },
-            {
-              "kind": "method",
-              "name": "updatePadding",
-              "parameters": [
-                {
-                  "name": "newValue",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
+              "privacy": "private",
+              "default": "null"
             },
             {
               "kind": "field",
-              "name": "paths",
+              "name": "targetEl",
               "type": {
-                "text": "string"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "updateProgressBackgrounds",
-              "parameters": [
-                {
-                  "name": "newValue",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "progressPaths",
-              "type": {
-                "text": "any[]"
+                "text": "Element | null"
               },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "method",
+              "name": "onTrackChange",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "onScroll",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "onResize",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "scheduleUpdate",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "force",
+                  "default": "false",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "resolveTarget",
               "privacy": "private"
             },
             {
-              "kind": "field",
-              "name": "params",
-              "type": {
-                "text": "{\n    width: number;\n    diameter: number;\n    circumference: number;\n  }"
-              }
+              "kind": "method",
+              "name": "clamp01",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "n",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
-              "name": "calcParams"
-            },
-            {
-              "kind": "method",
-              "name": "getViewBox",
-              "description": "Returns the viewPath attribute value for the SVG\nbased on the width of the parent element"
-            },
-            {
-              "kind": "method",
-              "name": "getPath",
-              "description": "Returns the circular path for the progress stroke\nand additional paths in the background"
-            },
-            {
-              "kind": "method",
-              "name": "getStrokeDashArray"
-            },
-            {
-              "kind": "method",
-              "name": "getPaths"
+              "name": "updateProgress",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -7736,30 +7972,15 @@
           ],
           "attributes": [
             {
-              "name": "value",
-              "fieldName": "value",
-              "default": "0",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "padding",
-              "fieldName": "padding",
-              "default": "0",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "paths",
-              "fieldName": "paths",
+              "name": "track-scroll-progress",
+              "fieldName": "trackScrollProgress",
+              "description": "Boolean or selector string.",
               "type": {
                 "text": "string"
               }
             }
           ],
-          "tagName": "le-round-progress",
+          "tagName": "le-scroll-progress",
           "events": [],
           "customElement": true
         }
@@ -7767,18 +7988,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LeRoundProgress",
+          "name": "LeScrollProgress",
           "declaration": {
-            "name": "LeRoundProgress",
-            "module": "src/components/le-round-progress/le-round-progress.tsx"
+            "name": "LeScrollProgress",
+            "module": "src/components/le-scroll-progress/le-scroll-progress.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-round-progress",
+          "name": "le-scroll-progress",
           "declaration": {
-            "name": "LeRoundProgress",
-            "module": "src/components/le-round-progress/le-round-progress.tsx"
+            "name": "LeScrollProgress",
+            "module": "src/components/le-scroll-progress/le-scroll-progress.tsx"
           }
         }
       ]
@@ -8494,192 +8715,6 @@
           "declaration": {
             "name": "LeSelect",
             "module": "src/components/le-select/le-select.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-scroll-progress/le-scroll-progress.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Displays scroll progress as a simple bar.\n\nIf `track-scroll-progress` is present without a value, tracks the full document.\nIf it is a selector string, tracks progress within the matched element.",
-          "name": "LeScrollProgress",
-          "cssProperties": [
-            {
-              "description": "Bar height",
-              "name": "--le-scroll-progress-height"
-            },
-            {
-              "description": "Track background",
-              "name": "--le-scroll-progress-bg"
-            },
-            {
-              "description": "Fill color",
-              "name": "--le-scroll-progress-fill"
-            },
-            {
-              "description": "If sticky, stop position to parent top",
-              "name": "--le-scroll-progress-sticky-top"
-            },
-            {
-              "description": "If fixed, distance from window top",
-              "name": "--le-scroll-progress-fixed-top"
-            },
-            {
-              "description": "If fixed, distance from window left",
-              "name": "--le-scroll-progress-fixed-left"
-            },
-            {
-              "description": "If fixed, distance from window right",
-              "name": "--le-scroll-progress-fixed-right"
-            },
-            {
-              "description": "Z-index of the progress bar (1001 by default, above header)",
-              "name": "--le-scroll-progress-z"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "Outer track",
-              "name": "track"
-            },
-            {
-              "description": "Inner fill",
-              "name": "fill"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "trackScrollProgress",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Boolean or selector string."
-            },
-            {
-              "kind": "field",
-              "name": "progress",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "rafId",
-              "type": {
-                "text": "number | null"
-              },
-              "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "targetEl",
-              "type": {
-                "text": "Element | null"
-              },
-              "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "method",
-              "name": "onTrackChange",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "onScroll",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "onResize",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "scheduleUpdate",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "force",
-                  "default": "false",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "resolveTarget",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "clamp01",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "n",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "updateProgress",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "track-scroll-progress",
-              "fieldName": "trackScrollProgress",
-              "description": "Boolean or selector string.",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-scroll-progress",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeScrollProgress",
-          "declaration": {
-            "name": "LeScrollProgress",
-            "module": "src/components/le-scroll-progress/le-scroll-progress.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-scroll-progress",
-          "declaration": {
-            "name": "LeScrollProgress",
-            "module": "src/components/le-scroll-progress/le-scroll-progress.tsx"
           }
         }
       ]

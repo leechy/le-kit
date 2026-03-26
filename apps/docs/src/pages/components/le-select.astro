@@ -8,84 +8,149 @@ import countriesList from "../../data/countries.ts";
   <h1>&lt;le-select&gt;</h1>
   <p>The simplest dropdown component in the <a href="#@options">library</a>.</p>
 
-  <p>Basically it replaces the default HTML <code>&lt;select&gt;</code> element. It is in the library to provide the theming support, a normal HTML select cannot provide.</p>
-  
-  <p>If you need more capabilities, consider using one of the other components we have:</p>
+  <p>
+    Basically it replaces the default HTML <code>&lt;select&gt;</code> element. It
+    is in the library to provide the theming support, a normal HTML select cannot
+    provide.
+  </p>
+
+  <p>
+    If you need more capabilities, consider using one of the other components we
+    have:
+  </p>
   <ul>
-    <li><code><a href="/components/le-combobox">&lt;le-combobox&gt;</a></code> — basically a text input with a dropdown with filtered options</li>
-    <li><code><a href="/components/le-multiselect">&lt;le-multiselect&gt;</a></code> — selecting multiple items from a dropdown</li>
+    <li>
+      <code><a href="/components/le-combobox">&lt;le-combobox&gt;</a></code> — basically
+      a text input with a dropdown with filtered options
+    </li>
+    <li>
+      <code
+        ><a href="/components/le-multiselect">&lt;le-multiselect&gt;</a></code
+      > — selecting multiple items from a dropdown
+    </li>
   </ul>
 
   <h2><a href="#whats-new" id="whats-new">What's new?</a></h2>
   <p>
-    A missing feature was typeahead capabilities. Now you can start typing to select the closest match.
-    <code>le-select</code> is keeping track of the whole keystroke, and not just the last character.
-    You can try and find your country in this example, after the select opens or gets focused.
+    A missing feature was typeahead capabilities. Now you can start typing to
+    select the closest match.
+    <code>le-select</code> is keeping track of the whole keystroke, and not just the
+    last character. You can try and find your country in this example, after the select
+    opens or gets focused.
   </p>
-  <p><i>Note: focusing <code>&lt;le-select&gt;</code> does not open the virtual keyboard on mobile devices,
-    for search capabilities on mobile, please use <code><a href="/components/le-combobox">&lt;le-combobox&gt;</a></code> component.</i></p>
+  <p>
+    <i
+      >Note: focusing <code>&lt;le-select&gt;</code> does not open the virtual keyboard
+      on mobile devices, for search capabilities on mobile, please use <code
+        ><a href="/components/le-combobox">&lt;le-combobox&gt;</a></code
+      > component.</i
+    >
+  </p>
 
   <div class="component-example">
-    <le-select style="width: 300px;" placeholder="Select a country" options={JSON.stringify(countriesList)}></le-select>
+    <le-select
+      style="width: 300px;"
+      placeholder="Select a country"
+      options={JSON.stringify(countriesList)}></le-select>
   </div>
 
   <h2><a href="#properties" id="properties">Properties / Attributes</a></h2>
 
   <h3><a href="#@options" id="@options"><code>@options</code></a></h3>
-  <p>The <code>options</code> property accepts the items that should be available in the dropdown.</p>
-  <p>1. In case it is used with a JS frawork that supports passing data as properties, it can be passed as an array of objects</p>
+  <p>
+    The <code>options</code> property accepts the items that should be available in
+    the dropdown.
+  </p>
+  <p>
+    1. In case it is used with a JS frawork that supports passing data as
+    properties, it can be passed as an array of objects
+  </p>
 
-  <CodeBlock language="jsx" code={`
+  <CodeBlock
+    language="jsx"
+    code={`
 <le-select placeholder="Select a country" options={countriesList} />`}
   />
 
-  <p>2. When using with plain HTML, the options should be passed as a JSON string.</p>
-  
-  <CodeBlock language="html" code={`
+  <p>
+    2. When using with plain HTML, the options should be passed as a JSON
+    string.
+  </p>
+
+  <CodeBlock
+    language="html"
+    code={`
 <le-select placeholder="Select a country" options='${JSON.stringify(countriesList.slice(0, 5))}'></le-select>`}
   />
 
-  <p>3. Alternatively, options can be provided via <code>&lt;le-item&gt;</code> children. <a href="#children">See below</a></p>
-
+  <p>
+    3. Alternatively, options can be provided via <code>&lt;le-item&gt;</code> children.
+    <a href="#children">See below</a>
+  </p>
 
   <h3><a href="#@value" id="@value"><code>@value</code></a></h3>
-  <p>Currently selected value. Can be used to set the initial value of the select or to read the current value.</p>
+  <p>
+    Currently selected value. Can be used to set the initial value of the select
+    or to read the current value.
+  </p>
 
   <div class="component-example">
-    <le-select style="width: 300px;" value="US" placeholder="Select a country" options={JSON.stringify(countriesList.slice(0, 5))}></le-select>
+    <le-select
+      style="width: 300px;"
+      value="US"
+      placeholder="Select a country"
+      options={JSON.stringify(countriesList.slice(0, 5))}></le-select>
   </div>
-  <CodeBlock language="jsx" code={`
+  <CodeBlock
+    language="jsx"
+    code={`
 <le-select disabled placeholder="Select a country" options=${JSON.stringify(countriesList.slice(0, 5))} />`}
   />
 
-
-  <h3><a href="#@placeholder" id="@placeholder"><code>@placeholder</code></a></h3>
+  <h3>
+    <a href="#@placeholder" id="@placeholder"><code>@placeholder</code></a>
+  </h3>
   <p>Placeholder text to show when no value is selected.</p>
   <p>You can see examples of placeholder usage in the previous examples.</p>
 
-
   <h3><a href="#@disabled" id="@disabled"><code>@disabled</code></a></h3>
-  <p>Disables the select when the attribute is present (HTML) or is set to true (frameworks).</p>
+  <p>
+    Disables the select when the attribute is present (HTML) or is set to true
+    (frameworks).
+  </p>
 
   <div class="component-example">
-    <le-select disabled style="width: 300px;" placeholder="Select a country" options={JSON.stringify(countriesList.slice(0, 5))}></le-select>
+    <le-select
+      disabled
+      style="width: 300px;"
+      placeholder="Select a country"
+      options={JSON.stringify(countriesList.slice(0, 5))}></le-select>
   </div>
-  <CodeBlock language="jsx" code={`
+  <CodeBlock
+    language="jsx"
+    code={`
 <le-select disabled placeholder="Select a country" options=${JSON.stringify(countriesList.slice(0, 5))} />`}
   />
 
-
   <h3><a href="#@name" id="@name"><code>@name</code></a></h3>
   <p>Name of the select, used when submitting a form.</p>
-  <p>If the name is set, the component is creating a hidden input with the same name and the current value, so it works with form submissions.</p>
+  <p>
+    If the name is set, the component is creating a hidden input with the same
+    name and the current value, so it works with form submissions.
+  </p>
 
-  <CodeBlock language="jsx" code={`
+  <CodeBlock
+    language="jsx"
+    code={`
 <le-select name="country" placeholder="Select a country" options=${JSON.stringify(countriesList.slice(0, 5))} />`}
   />
 
-
   <h3><a href="#@size" id="@size"><code>@size</code></a></h3>
-  <p>Since <code>&lt;le-select&gt;</code> is based on <code>&lt;le-button&gt;</code>, it supports the same size options:</p>
+  <p>
+    Since <code>&lt;le-select&gt;</code> is based on <code
+      >&lt;le-button&gt;</code
+    >, it supports the same size options:
+  </p>
   <ul>
     <li><code>small</code></li>
     <li><code>medium</code> (default)</li>
@@ -93,18 +158,31 @@ import countriesList from "../../data/countries.ts";
   </ul>
 
   <div class="component-example">
-    <le-select size="small" style="width: 300px;" placeholder="Select a small country" options={JSON.stringify(countriesList.slice(0, 5))}></le-select>
-    <le-select size="medium" style="width: 300px;" placeholder="Select a medium country" options={JSON.stringify(countriesList.slice(5, 10))}></le-select>
-    <le-select size="large" style="width: 300px;" placeholder="Select a large country" options={JSON.stringify(countriesList.slice(10, 15))}></le-select>
+    <le-select
+      size="small"
+      style="width: 300px;"
+      placeholder="Select a small country"
+      options={JSON.stringify(countriesList.slice(0, 5))}></le-select>
+    <le-select
+      size="medium"
+      style="width: 300px;"
+      placeholder="Select a medium country"
+      options={JSON.stringify(countriesList.slice(5, 10))}></le-select>
+    <le-select
+      size="large"
+      style="width: 300px;"
+      placeholder="Select a large country"
+      options={JSON.stringify(countriesList.slice(10, 15))}></le-select>
   </div>
-  <CodeBlock language="jsx" code={`
+  <CodeBlock
+    language="jsx"
+    code={`
 <le-select size="small" placeholder="Select a small country" options=${JSON.stringify(countriesList.slice(0, 5))} />
 <le-select size="medium" placeholder="Select a medium country" options=${JSON.stringify(countriesList.slice(5, 10))} />
 <le-select size="large" placeholder="Select a large country" options=${JSON.stringify(countriesList.slice(10, 15))} />`}
   />
 
-
-<!--
+  <!--
   <h3><a href="#@variant" id="@variant"><code>@variant</code></a></h3>
   <p>As with the size, the select supports the same variants as the button:</p>
   <ul>
@@ -124,37 +202,51 @@ import countriesList from "../../data/countries.ts";
   />
 -->
 
-
   <h2><a class="anchor" href="#slots" id="slots">Slots</a></h2>
   <p>No slots are available for <code>&lt;le-select&gt;</code>.</p>
-  <p>Any content placed inside will be hidden, except for the options provided via the <code>&lt;le-item&gt;</code> children. <a href="#children">See below</a></p>
-
+  <p>
+    Any content placed inside will be hidden, except for the options provided
+    via the <code>&lt;le-item&gt;</code> children. <a href="#children"
+      >See below</a
+    >
+  </p>
 
   <h2><a class="anchor" href="#events" id="events">Events</a></h2>
   <p>Event documentation for le-select.</p>
 
-
-  <h3><a href="#leChange" id="change"><code>leChange</code></a></h3>
+  <h3><a href="#leChange" id="leChange"><code>leChange</code></a></h3>
   <p>Fired when the selected value changes.</p>
-  <p>The event detail contains the new value, and the option element that was selected:</p>
+  <p>
+    The event detail contains the new value, and the option element that was
+    selected:
+  </p>
 
-  <CodeBlock language="js" code={`
+  <CodeBlock
+    language="js"
+    code={`
 import type { LeOption } from "le-kit";
 
 event.detail: {
   value: string;
   option: LeOption;
 };
-  `}/>
+  `}
+  />
 
-  <p>Important is that the event is named <code>leChange</code> (not just <code>change</code>) to avoid conflicts with the native change event of the hidden input. It is possible, that in the future that will be changed, to create components more compatible with native form behavior.</p>
+  <p>
+    Important is that the event is named <code>leChange</code> (not just <code
+      >change</code
+    >) to avoid conflicts with the native change event of the hidden input. It
+    is possible, that in the future that will be changed, to create components
+    more compatible with native form behavior.
+  </p>
 
   <div class="component-example">
     <script>
       (() => {
         const select = document.getElementById("le-change-select");
         const show = () => {
-          select.addEventListener("leChange", (event) => {
+          select?.addEventListener("leChange", (event: any) => {
             alert(`Selected value: ${event.detail.value}`);
           });
         };
@@ -173,42 +265,60 @@ event.detail: {
       })();
     </script>
 
-    <le-select id="le-change-select" style="width: 300px;" placeholder="Select a country" options={JSON.stringify(countriesList.slice(0, 5))}></le-select>
+    <le-select
+      id="le-change-select"
+      style="width: 300px;"
+      placeholder="Select a country"
+      options={JSON.stringify(countriesList.slice(0, 5))}></le-select>
   </div>
-  <CodeBlock language="jsx" code={`
+  <CodeBlock
+    language="jsx"
+    code={`
 const select = document.getElementById("le-change-select");
 select.addEventListener("leChange", (event) => {
   alert(\`Selected value: \${event.detail.value}\`);
-});
-  `}/>
+});`}
+  />
 
-  <p>Currently, you can subscribe to the event using the attribute only from frameworks, that support HTML Custom Components natively:</p>
+  <p>
+    Currently, you can subscribe to the event using the attribute only from
+    frameworks, that support HTML Custom Components natively:
+  </p>
 
-  <CodeBlock language="jsx" code={`
+  <CodeBlock
+    language="jsx"
+    code={`
 <le-select onLeChange="alert(\`Selected value: \${event.detail.value}\`)" placeholder="..." options="..."></le-select>
-  `}/>
-
+  `}
+  />
 
   <h3><a href="#leOpen" id="open"><code>leOpen</code></a></h3>
   <p>Fired when the dropdown opens. Used internally for now.</p>
 
-
   <h3><a href="#leClose" id="close"><code>leClose</code></a></h3>
   <p>Fired when the dropdown closes. Used internally for now.</p>
 
-
   <h2><a class="anchor" href="#children" id="children">Children</a></h2>
   <p>
-    Using with plain HTML, there are two ways to provide options: via the <code>options</code>
-    attribute or by using <code><a href="/components/le-item">&lt;le-item&gt;</a></code> children.
+    Using with plain HTML, there are two ways to provide options: via the <code
+      >options</code
+    >
+    attribute or by using <code
+      ><a href="/components/le-item">&lt;le-item&gt;</a></code
+    > children.
   </p>
-  <p>Here's an example of using <code><a href="/components/le-item">&lt;le-item&gt;</a></code> children to provide options:</p>
-  <CodeBlock language="html" code={`
+  <p>
+    Here's an example of using <code
+      ><a href="/components/le-item">&lt;le-item&gt;</a></code
+    > children to provide options:
+  </p>
+  <CodeBlock
+    language="html"
+    code={`
 <le-select placeholder="Select a country">
   <le-item value="usa">United States</le-item>
   <le-item value="canada">Canada</le-item>
   <le-item value="mexico">Mexico</le-item>
-</le-select>`}/>
-
-
+</le-select>`}
+  />
 </ComponentsPage>

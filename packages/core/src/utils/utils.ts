@@ -89,6 +89,86 @@ export function slotHasContent(el: HTMLElement, slotName: string = ''): boolean 
   return el.querySelector(selector) !== null;
 }
 
+export type SlotPresenceMap = Record<string, boolean>;
+
+/**
+ * Observes assigned-node presence for named slots in a component's shadow DOM.
+ *
+ * This is useful when CSS alone cannot reliably detect slot occupancy.
+ */
+export function observeNamedSlotPresence(
+  host: HTMLElement,
+  slotNames: string[],
+  onChange: (presence: SlotPresenceMap) => void,
+): () => void {
+  const slotListeners = new Map<HTMLSlotElement, EventListener>();
+
+  const hasAssignedContent = (slot: HTMLSlotElement): boolean => {
+    return slot.assignedNodes({ flatten: true }).some(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        return (node.textContent || '').trim().length > 0;
+      }
+      return true;
+    });
+  };
+
+  const emitState = () => {
+    const root = host.shadowRoot;
+    const presence: SlotPresenceMap = {};
+
+    for (const slotName of slotNames) {
+      const selector = slotName ? `slot[name="${slotName}"]` : 'slot:not([name])';
+      const slot = root?.querySelector(selector) as HTMLSlotElement | null;
+      presence[slotName] = !!slot && hasAssignedContent(slot);
+    }
+
+    onChange(presence);
+  };
+
+  const bindSlotListeners = () => {
+    const root = host.shadowRoot;
+    if (!root) return;
+
+    for (const [slot, listener] of slotListeners) {
+      slot.removeEventListener('slotchange', listener);
+    }
+    slotListeners.clear();
+
+    for (const slotName of slotNames) {
+      const selector = slotName ? `slot[name="${slotName}"]` : 'slot:not([name])';
+      const slot = root.querySelector(selector) as HTMLSlotElement | null;
+      if (!slot) continue;
+
+      const listener = () => emitState();
+      slot.addEventListener('slotchange', listener);
+      slotListeners.set(slot, listener);
+    }
+
+    emitState();
+  };
+
+  bindSlotListeners();
+
+  const shadowObserver = new MutationObserver(() => {
+    bindSlotListeners();
+  });
+
+  if (host.shadowRoot) {
+    shadowObserver.observe(host.shadowRoot, {
+      childList: true,
+      subtree: true,
+    });
+  }
+
+  return () => {
+    shadowObserver.disconnect();
+    for (const [slot, listener] of slotListeners) {
+      slot.removeEventListener('slotchange', listener);
+    }
+    slotListeners.clear();
+  };
+}
+
 /**
  * Sets up a MutationObserver to track mode changes on ancestor elements.
  * Returns a cleanup function to disconnect the observer.

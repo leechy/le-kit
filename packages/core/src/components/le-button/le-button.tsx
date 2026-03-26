@@ -1,5 +1,15 @@
-import { Component, Prop, h, Element, Fragment, Event, EventEmitter, Host } from '@stencil/core';
-import { classnames } from '../../utils/utils';
+import {
+  Component,
+  Prop,
+  h,
+  Element,
+  Fragment,
+  Event,
+  EventEmitter,
+  Host,
+  State,
+} from '@stencil/core';
+import { classnames, observeNamedSlotPresence } from '../../utils/utils';
 
 /**
  * A flexible button component with multiple variants and states.
@@ -28,6 +38,12 @@ import { classnames } from '../../utils/utils';
 })
 export class LeButton {
   @Element() el!: HTMLElement;
+
+  @State() private hasIconStartSlot: boolean = false;
+  @State() private hasIconEndSlot: boolean = false;
+  @State() private hasIconOnlySlot: boolean = false;
+
+  private disconnectSlotObserver?: () => void;
 
   /**
    * Mode of the popover should be 'default' for internal use
@@ -124,7 +140,27 @@ export class LeButton {
     this.leClick.emit(event);
   };
 
+  componentDidLoad() {
+    this.disconnectSlotObserver = observeNamedSlotPresence(
+      this.el,
+      ['icon-start', 'icon-end', 'icon-only'],
+      presence => {
+        this.hasIconStartSlot = !!presence['icon-start'];
+        this.hasIconEndSlot = !!presence['icon-end'];
+        this.hasIconOnlySlot = !!presence['icon-only'];
+      },
+    );
+  }
+
+  disconnectedCallback() {
+    this.disconnectSlotObserver?.();
+  }
+
   render() {
+    const hasIconOnly = this.iconOnly !== undefined || this.hasIconOnlySlot;
+    const hasIconStart = this.iconStart !== undefined || this.hasIconStartSlot;
+    const hasIconEnd = this.iconEnd !== undefined || this.hasIconEndSlot;
+
     const classes = classnames(
       `variant-${this.variant}`,
       `color-${this.color}`,
@@ -132,7 +168,7 @@ export class LeButton {
       {
         'selected': this.selected,
         'full-width': this.fullWidth,
-        'icon-only': this.iconOnly,
+        'icon-only': hasIconOnly,
         'disabled': this.disabled,
       },
     );
@@ -151,18 +187,20 @@ export class LeButton {
             {...attrs}
             onClick={this.handleClick}
           >
-            {this.iconOnly !== undefined ? (
+            <span class={classnames('icon-only', { 'is-visible': hasIconOnly })} part="icon-only">
               <slot name="icon-only">
                 {typeof this.iconOnly === 'string' ? this.iconOnly : null}
               </slot>
-            ) : (
+            </span>
+            {!hasIconOnly && (
               <Fragment>
                 <span class="le-button-label">
-                  {this.iconStart && (
-                    <span class="icon-start" part="icon-start">
-                      {this.iconStart}
-                    </span>
-                  )}
+                  <span
+                    class={classnames('icon-start', { 'is-visible': hasIconStart })}
+                    part="icon-start"
+                  >
+                    <slot name="icon-start">{this.iconStart}</slot>
+                  </span>
                   <le-slot
                     name=""
                     description="Button text"
@@ -173,11 +211,9 @@ export class LeButton {
                     <slot></slot>
                   </le-slot>
                 </span>
-                {this.iconEnd && (
-                  <span class="icon-end" part="icon-end">
-                    {this.iconEnd}
-                  </span>
-                )}
+                <span class={classnames('icon-end', { 'is-visible': hasIconEnd })} part="icon-end">
+                  <slot name="icon-end">{this.iconEnd}</slot>
+                </span>
               </Fragment>
             )}
           </TagType>

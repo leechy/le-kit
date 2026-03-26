@@ -121,6 +121,7 @@ A flexible button component with multiple variants and states.
 | `"button"`     |             |
 | `"content"`    |             |
 | `"icon-end"`   |             |
+| `"icon-only"`  |             |
 | `"icon-start"` |             |
 
 

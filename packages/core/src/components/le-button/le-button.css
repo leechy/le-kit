@@ -218,7 +218,7 @@
 /* Icon only */
 :host(.icon-only) .le-button-container {
   padding: var(--le-button-icon-only-padding, 0.5rem);
-  padding-bottom: var(--le-button-icon-only-padding, 0.6rem);
+  /* padding-bottom: var(--le-button-icon-only-padding, 0.6rem); */
   aspect-ratio: var(--le-button-icon-aspect-ratio, 1);
 }
 
@@ -252,15 +252,20 @@
 .icon-start,
 .icon-only,
 .icon-end {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
 }
 
-.icon-start:empty,
-.icon-only:empty,
-.icon-end:empty {
-  display: none;
+.icon-start.is-visible,
+.icon-only.is-visible,
+.icon-end.is-visible {
+  display: flex;
+}
+
+span.icon-only.is-visible {
+  width: calc(1.1em);
+  line-height: 0.5em;
 }
 
 ::slotted([slot="icon-start"]),

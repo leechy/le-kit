@@ -429,6 +429,11 @@ export namespace Components {
          */
         "externalId"?: string;
         /**
+          * The ID of the checkbox input. This is used for linking the label to the input for accessibility. In case there is no ID provided, a random one will be generated internally.
+          * @default `le-checkbox-${Math.random().toString(36).substring(2, 9)}`
+         */
+        "id": string;
+        /**
           * The name of the checkbox input
          */
         "name"?: string;
@@ -3728,6 +3733,11 @@ declare namespace LocalJSX {
          */
         "externalId"?: string;
         /**
+          * The ID of the checkbox input. This is used for linking the label to the input for accessibility. In case there is no ID provided, a random one will be generated internally.
+          * @default `le-checkbox-${Math.random().toString(36).substring(2, 9)}`
+         */
+        "id"?: string;
+        /**
           * The name of the checkbox input
          */
         "name"?: string;
@@ -5635,6 +5645,7 @@ declare namespace LocalJSX {
         "interactive": boolean;
     }
     interface LeCheckboxAttributes {
+        "id": string;
         "checked": boolean;
         "disabled": boolean;
         "name": string;

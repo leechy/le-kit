@@ -324,6 +324,7 @@ A checkbox component with support for labels, descriptions, and external IDs.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
+| `id` | `string` | ``le-checkbox-${Math.random().toString(36).substring(2, 9)}`` | The ID of the checkbox input. This is used for linking the label to the input for accessibility. In case there is no ID provided, a random one will be generated internally. |
 | `checked` | `boolean` | `false` | Whether the checkbox is checked |
 | `disabled` | `boolean` | `false` | Whether the checkbox is disabled |
 | `name` | `string \| undefined` |  | The name of the checkbox input |

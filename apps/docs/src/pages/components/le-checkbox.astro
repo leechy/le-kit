@@ -1,32 +1,117 @@
 ---
-import ComponentsPage from "../../layouts/ComponentsPage.astro";
-import CodeBlock from "../../components/CodeBlock.astro";
+import ComponentsPage from '../../layouts/ComponentsPage.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
 ---
 
 <ComponentsPage title="le-checkbox">
   <h1>&lt;le-checkbox&gt;</h1>
-  <p>Checkbox control with support for form submission, disabled state, and external IDs.</p>
+  <p>Checkbox with label and description! And not much else.</p>
 
-  <h2><a href="#examples" id="examples">Examples</a></h2>
+  <h2><a class="anchor" href="#example" id="example">Usage</a></h2>
+  <p>
+    You can use it in any html form, just like a normal checkbox. The extra here is that you are getting label, aligned
+    correctly with the checkbox, and an optional description.
+  </p>
   <div class="component-example">
     <div style="display: grid; gap: 0.5rem;">
-      <le-checkbox name="terms" value="yes">Accept terms</le-checkbox>
-      <le-checkbox checked>Already selected</le-checkbox>
-      <le-checkbox disabled>Disabled option</le-checkbox>
+      <le-checkbox name="terms" value="agree">
+        I have read and agree to the <a href="/terms">terms and conditions</a>.
+        <div slot="description">You must accept the terms and conditions to proceed.</div>
+      </le-checkbox>
     </div>
   </div>
-
-  <CodeBlock language="html" code={`
-<le-checkbox name="newsletter" value="yes">Subscribe</le-checkbox>`}
+  <CodeBlock
+    language="html"
+    code={`
+<le-checkbox name="terms" value="agree">
+  I have read and agree to the <a href="/terms">terms and conditions</a>.
+  <div slot="description">You must accept the terms and conditions to proceed.</div>
+</le-checkbox>`}
   />
 
-  <h2><a href="#properties" id="properties">Common Properties / Attributes</a></h2>
-  <ul>
-    <li><code>checked</code>, <code>disabled</code></li>
-    <li><code>name</code>, <code>value</code></li>
-    <li><code>external-id</code></li>
-  </ul>
+  <h2><a class="anchor" href="#properties" id="properties">Properties</a></h2>
 
-  <h2><a href="#events" id="events">Events</a></h2>
-  <p>Uses native-style <code>change</code> event behavior.</p>
+  <h3><a class="anchor" href="#@name" id="@name"><code>@name</code></a></h3>
+  <p>If you want the checkbox to be part of a form, you can use the <code>name</code> attribute.</p>
+
+  <h3><a class="anchor" href="#@value" id="@value"><code>@value</code></a></h3>
+  <p>The value that will be submitted with the form when the checkbox is checked.</p>
+
+  <h3><a class="anchor" href="#@checked" id="@checked"><code>@checked</code></a></h3>
+  <p>Whether the checkbox is <i>initially</i> checked or not.</p>
+
+  <div class="component-example">
+    <le-checkbox name="subscribe" value="yes" checked> Subscribe to newsletter </le-checkbox>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-checkbox name="subscribe" value="yes" checked> Subscribe to newsletter </le-checkbox>`}
+  />
+
+  <h3><a class="anchor" href="#@disabled" id="@disabled"><code>@disabled</code></a></h3>
+  <p>Whether the checkbox is disabled or not.</p>
+
+  <div class="component-example">
+    <le-checkbox name="option" value="1" disabled>Disabled option</le-checkbox>
+    <le-checkbox name="option" value="2" checked disabled>Disabled checked option</le-checkbox>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-checkbox name="option" value="1" disabled> Disabled option </le-checkbox>
+<le-checkbox name="option" value="2" checked disabled>Disabled checked option</le-checkbox>`}
+  />
+
+  <h2><a class="anchor" href="#slots" id="slots">Slots</a></h2>
+  <h3><a class="anchor" href="#default-slot" id="default-slot">Default slot</a></h3>
+  <p>
+    The default slot is used for the label of the checkbox. You can put any HTML content here, and it will be aligned
+    correctly with the checkbox.
+  </p>
+
+  <h3><a class="anchor" href="#description-slot" id="description-slot"><code>description</code></a></h3>
+  <p>
+    The description slot is used for the description of the checkbox. It is displayed below the label, and is styled
+    with a smaller font size and a different color.
+  </p>
+
+  <p>Example is available on the very top of this page.</p>
+
+  <h2><a class="anchor" href="#events" id="events">Events</a></h2>
+
+  <h3><a class="anchor" href="#change" id="change"><code>change</code></a></h3>
+  <p>Uses native-style <code>onchange</code> event behavior.</p>
+  <p>
+    When the checkbox state changes, a <code>change</code> event is emitted with the following details:
+    <ul>
+      <li><code>checked</code>: boolean indicating whether the checkbox is now checked or not.</li>
+      <li><code>value</code>: the value of the checkbox (from the <code>value</code> attribute).</li>
+      <li><code>name</code>: the name of the checkbox (from the <code>name</code> attribute).</li>
+    </ul>
+  </p>
+  <p>It can be used with the <code>onchange</code> attribute in HTML, or with an event listener in JavaScript.</p>
+
+  <div class="component-example">
+    <div style="display: grid; gap: 0.5rem;">
+      <le-checkbox
+        name="check"
+        value="works"
+        onchange="alert(`Checkbox state was changed: ${JSON.stringify(event.detail)}`)"
+      >
+        Check the box to see the event details in an alert.
+      </le-checkbox>
+    </div>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-checkbox
+  name="check"
+  value="works"
+  onchange="alert(\`Checkbox state was changed: \${event.detail}\`)"
+>
+  Check the box to see the event details in an alert.
+</le-checkbox>`}
+  />
 </ComponentsPage>

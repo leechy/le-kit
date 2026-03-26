@@ -21,6 +21,12 @@ export class LeCheckbox {
   @Element() el!: HTMLElement;
 
   /**
+   * The ID of the checkbox input. This is used for linking the label to the input for accessibility.
+   * In case there is no ID provided, a random one will be generated internally.
+   */
+  @Prop() id: string = `le-checkbox-${Math.random().toString(36).substring(2, 9)}`;
+
+  /**
    * Whether the checkbox is checked
    */
   @Prop({ mutable: true, reflect: true }) checked: boolean = false;
@@ -78,9 +84,10 @@ export class LeCheckbox {
     return (
       <le-component component="le-checkbox" hostClass={classnames({ disabled: this.disabled })}>
         <div class="le-checkbox-wrapper">
-          <label class="le-checkbox-label">
+          <label class="le-checkbox-label" htmlFor={this.id}>
             <span class="le-checkbox-input">
               <input
+                id={this.id}
                 type="checkbox"
                 name={this.name}
                 value={this.value}

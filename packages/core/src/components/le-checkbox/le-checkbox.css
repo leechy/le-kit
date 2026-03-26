@@ -19,6 +19,7 @@
   align-items: flex-start;
   gap: 8px;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -31,12 +32,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 1.4em;
 }
 
 input[type="checkbox"] {
-  appearance: none;
   -webkit-appearance: none;
+  appearance: none;
   width: var(--le-checkbox-size);
   height: var(--le-checkbox-size);
   border: var(--le-border-width, 2px) solid var(--le-checkbox-color);
@@ -77,7 +77,6 @@ input[type="checkbox"]:focus-visible {
   flex: 1;
   flex-wrap: wrap;
   color: var(--le-checkbox-label-color);
-  line-height: 1.5;
   text-align: start;
 }
 

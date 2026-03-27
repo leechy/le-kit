@@ -124,6 +124,8 @@ graph TD;
   le-checkbox --> le-component
   le-checkbox --> le-slot
   le-string-input --> le-component
+  le-string-input --> le-button
+  le-string-input --> le-icon
   le-string-input --> le-slot
   style le-popup fill:#f9f,stroke:#333,stroke-width:4px
 ```

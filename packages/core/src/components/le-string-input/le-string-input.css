@@ -9,6 +9,10 @@
   --le-input-label-color: var(--le-color-text-primary, #333333);
   --le-input-desc-color: var(--le-color-text-secondary, #666666);
   --le-input-placeholder-color: #999999;
+  --le-input-autofill-bg: var(--le-input-bg);
+  --le-input-autofill-color: var(--le-input-color);
+  --le-input-autofill-container-bg: var(--le-input-bg);
+  --le-input-autofill-container-border: var(--le-input-border);
 }
 
 .le-input-wrapper {
@@ -18,21 +22,26 @@
 }
 
 .le-input-label {
-  display: block;
+  display: none;
   font-size: 0.9em;
   font-weight: 500;
   color: var(--le-input-label-color);
   margin-bottom: 2px;
 }
 
+.le-input-label.is-visible {
+  display: block;
+}
+
 .le-input-container {
   position: relative;
   display: flex;
   align-items: center;
+  gap: 2px;
   background: var(--le-input-bg);
   border: var(--le-input-border);
   border-radius: var(--le-input-radius);
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background-color 0.2s;
 }
 
 .le-input-container:focus-within {
@@ -64,20 +73,44 @@ input::placeholder {
   color: var(--le-input-placeholder-color);
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--le-input-autofill-color);
+  box-shadow: 0 0 0 1000px var(--le-input-autofill-bg) inset;
+  caret-color: var(--le-input-autofill-color);
+}
+
+.le-input-container:has(input:-webkit-autofill) {
+  background: var(--le-input-autofill-container-bg);
+  border: var(--le-input-autofill-container-border);
+}
+
 .icon-start, .icon-end {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
   color: var(--le-input-desc-color);
 }
 
+.icon-start.is-visible,
+.icon-end.is-visible {
+  display: flex;
+  padding: 0 4px;
+}
+
+le-button {
+  display: flex;
+  flex: 0 0 auto;
+}
+
 .le-input-description {
+  display: none;
   font-size: 0.85em;
   color: var(--le-input-desc-color);
   margin-top: 2px;
 }
 
-.le-input-description::has(le-slot > slot[name=description]:empty) {
-  display: none;
+.le-input-description.is-visible {
+  display: block;
 }

@@ -9,7 +9,7 @@ import {
   Host,
   State,
 } from '@stencil/core';
-import { classnames, observeNamedSlotPresence } from '../../utils/utils';
+import { classnames, observeNamedSlotPresence, slotHasContent } from '../../utils/utils';
 
 /**
  * A flexible button component with multiple variants and states.
@@ -140,7 +140,11 @@ export class LeButton {
     this.leClick.emit(event);
   };
 
-  componentDidLoad() {
+  private initSlotObserver() {
+    if (this.disconnectSlotObserver) {
+      return;
+    }
+
     this.disconnectSlotObserver = observeNamedSlotPresence(
       this.el,
       ['icon-start', 'icon-end', 'icon-only'],
@@ -150,6 +154,20 @@ export class LeButton {
         this.hasIconOnlySlot = !!presence['icon-only'];
       },
     );
+  }
+
+  componentWillLoad() {
+    // Seed slot presence before first render to avoid componentDidLoad state-change warnings.
+    this.hasIconStartSlot = slotHasContent(this.el, 'icon-start');
+    this.hasIconEndSlot = slotHasContent(this.el, 'icon-end');
+    this.hasIconOnlySlot = slotHasContent(this.el, 'icon-only');
+
+    this.initSlotObserver();
+  }
+
+  componentDidLoad() {
+    // Fallback in case shadow DOM was not ready during componentWillLoad.
+    this.initSlotObserver();
   }
 
   disconnectedCallback() {

@@ -81,6 +81,8 @@ graph TD;
   le-slot --> le-button
   le-slot --> le-string-input
   le-string-input --> le-component
+  le-string-input --> le-button
+  le-string-input --> le-icon
   le-string-input --> le-slot
   le-checkbox --> le-component
   le-checkbox --> le-slot

@@ -1,10 +1,10 @@
-import { Component, Prop, Event, EventEmitter, h, Element } from '@stencil/core';
-import { classnames } from '../../utils/utils';
+import { Component, Prop, Event, EventEmitter, h, Element, State } from '@stencil/core';
+import { classnames, observeNamedSlotPresence, slotHasContent } from '../../utils/utils';
 
 /**
  * A text input component with support for labels, descriptions, icons, and external IDs.
  *
- * @slot - The label text for the input
+ * @slot label - The label content for the input
  * @slot description - Additional description text displayed below the input
  * @slot icon-start - Icon to display at the start of the input
  * @slot icon-end - Icon to display at the end of the input
@@ -24,6 +24,12 @@ import { classnames } from '../../utils/utils';
 export class LeStringInput {
   @Element() el!: HTMLElement;
 
+  @State() private hasLabelSlot: boolean = false;
+  @State() private hasIconStartSlot: boolean = false;
+  @State() private hasIconEndSlot: boolean = false;
+  @State() private hasDescriptionSlot: boolean = false;
+
+  private disconnectSlotObserver?: () => void;
   private inputEl?: HTMLInputElement;
 
   /**
@@ -49,12 +55,17 @@ export class LeStringInput {
   /**
    * The type of the input (text, email, password, etc.)
    */
-  @Prop() type: 'text' | 'email' | 'password' | 'tel' | 'url' = 'text';
+  @Prop() type: 'text' | 'email' | 'password' | 'search' | 'tel' | 'url' = 'text';
 
   /**
    * Label for the input
    */
   @Prop() label?: string;
+
+  /**
+   * Description text displayed below the input
+   */
+  @Prop() description?: string;
 
   /**
    * Icon for the start icon
@@ -99,7 +110,6 @@ export class LeStringInput {
   /**
    * Emitted when the value changes (on blur or Enter)
    */
-  @Event({ eventName: 'change' }) leChange?: EventEmitter<{
   @Event() leChange?: EventEmitter<{
     value?: string;
     name?: string;
@@ -109,7 +119,6 @@ export class LeStringInput {
   /**
    * Emitted when the input value changes (on keystroke)
    */
-  @Event({ eventName: 'input' }) leInput?: EventEmitter<{
   @Event() leInput?: EventEmitter<{
     value?: string;
     name?: string;
@@ -167,20 +176,64 @@ export class LeStringInput {
       return;
     }
 
+    this.disconnectSlotObserver = observeNamedSlotPresence(
+      this.el,
+      ['label', 'icon-start', 'icon-end', 'description'],
+      presence => {
+        this.hasLabelSlot = !!presence['label'];
+        this.hasIconStartSlot = !!presence['icon-start'];
+        this.hasIconEndSlot = !!presence['icon-end'];
+        this.hasDescriptionSlot = !!presence['description'];
+      },
+    );
+  }
+
+  componentWillLoad() {
+    // Seed slot presence before first render to avoid componentDidLoad state-change warnings.
+    this.hasLabelSlot = slotHasContent(this.el, 'label');
+    this.hasIconStartSlot = slotHasContent(this.el, 'icon-start');
+    this.hasIconEndSlot = slotHasContent(this.el, 'icon-end');
+    this.hasDescriptionSlot = slotHasContent(this.el, 'description');
+
+    // Start observing as early as possible.
+    this.initSlotObserver();
+  }
+
+  componentDidLoad() {
+    // Fallback in case shadow DOM was not ready during componentWillLoad.
+    this.initSlotObserver();
+  }
+
+  disconnectedCallback() {
+    this.disconnectSlotObserver?.();
+  }
+
   render() {
+    const hasLabel = this.label !== undefined || this.hasLabelSlot;
+    const hasIconStart = this.iconStart !== undefined || this.hasIconStartSlot;
+    const hasIconEnd = this.iconEnd !== undefined || this.hasIconEndSlot;
+    const hasDescription = this.description !== undefined || this.hasDescriptionSlot;
+    const hasValue = !!this.value;
+    const showClearButton = this.clearable && hasValue;
+
     return (
       <le-component component="le-string-input" hostClass={classnames({ disabled: this.disabled })}>
         <div class="le-input-wrapper">
-          {this.label && (
-            <label class="le-input-label" htmlFor={this.name}>
-              {this.label}
-            </label>
-          )}
+          <label
+            class={classnames('le-input-label', { 'is-visible': hasLabel })}
+            htmlFor={this.name}
+          >
+            <slot name="label">{this.label}</slot>
+          </label>
 
           <div class="le-input-container" part="container">
-            {this.iconStart && <span class="icon-start">{this.iconStart}</span>}
+            <span class={classnames('icon-start', { 'is-visible': hasIconStart })}>
+              <slot name="icon-start">{this.iconStart}</slot>
+            </span>
             <input
               ref={el => {
+                this.inputEl = el ?? undefined;
+
                 if (this.inputRef && el) {
                   this.inputRef(el);
                 }
@@ -190,13 +243,13 @@ export class LeStringInput {
               name={this.name}
               value={this.value}
               placeholder={this.placeholder}
+              autocomplete={this.autocomplete}
               disabled={this.disabled}
               readOnly={this.readonly}
               onInput={this.handleInput}
               onChange={this.handleChange}
               onClick={this.handleClick}
             />
-            {this.iconEnd && <span class="icon-end">{this.iconEnd}</span>}
             {showClearButton && (
               <le-button
                 variant="clear"
@@ -207,15 +260,16 @@ export class LeStringInput {
                 <le-icon name="clear" slot="icon-only"></le-icon>
               </le-button>
             )}
+            <span class={classnames('icon-end', { 'is-visible': hasIconEnd })}>
+              <slot name="icon-end">{this.iconEnd}</slot>
+            </span>
           </div>
 
-          {!this.hideDescription && (
-            <div class="le-input-description">
-              <le-slot name="description" type="text" tag="p" label="Description">
-                <slot name="description"></slot>
-              </le-slot>
-            </div>
-          )}
+          <div class={classnames('le-input-description', { 'is-visible': hasDescription })}>
+            <le-slot name="description" type="text" tag="p" label="Description">
+              <slot name="description">{this.description}</slot>
+            </le-slot>
+          </div>
         </div>
       </le-component>
     );

@@ -19,7 +19,6 @@
    ============================================ */
 
 .le-popover-trigger {
-  display: inline-flex;
   cursor: pointer;
 }
 

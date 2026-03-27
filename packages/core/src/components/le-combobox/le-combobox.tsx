@@ -355,7 +355,6 @@ export class LeCombobox {
           <div slot="trigger" class={{ 'combobox-trigger': true, 'is-open': this.open }}>
             <le-string-input
               mode="default"
-              hideDescription={true}
               inputRef={el => (this.inputEl = el)}
               type="text"
               class="combobox-input"
@@ -365,7 +364,6 @@ export class LeCombobox {
               aria-haspopup="listbox"
               aria-expanded={this.open ? 'true' : 'false'}
               aria-autocomplete="list"
-              onInput={this.handleInputChange}
               onLeInput={this.handleInputChange}
               onFocus={this.handleInputFocus}
               onKeyDown={this.handleInputKeyDown}

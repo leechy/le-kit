@@ -1714,6 +1714,19 @@ export namespace Components {
      */
     interface LeStringInput {
         /**
+          * Native autocomplete attribute forwarded to the input
+         */
+        "autocomplete"?: string;
+        /**
+          * Whether the input can be cleared with a built-in clear button
+          * @default false
+         */
+        "clearable": boolean;
+        /**
+          * Description text displayed below the input
+         */
+        "description"?: string;
+        /**
           * Whether the input is disabled
           * @default false
          */
@@ -1722,11 +1735,6 @@ export namespace Components {
           * External ID for linking with external systems
          */
         "externalId"?: string;
-        /**
-          * Hide description slot
-          * @default false
-         */
-        "hideDescription": boolean;
         /**
           * Icon for the end icon
          */
@@ -1765,7 +1773,7 @@ export namespace Components {
           * The type of the input (text, email, password, etc.)
           * @default 'text'
          */
-        "type": 'text' | 'email' | 'password' | 'tel' | 'url';
+        "type": 'text' | 'email' | 'password' | 'search' | 'tel' | 'url';
         /**
           * The value of the input
          */
@@ -3052,12 +3060,12 @@ declare global {
         new (): HTMLLeStackElement;
     };
     interface HTMLLeStringInputElementEventMap {
-        "change": {
+        "leChange": {
     value?: string;
     name?: string;
     externalId?: string;
   };
-        "input": {
+        "leInput": {
     value?: string;
     name?: string;
     externalId?: string;
@@ -5101,6 +5109,19 @@ declare namespace LocalJSX {
      */
     interface LeStringInput {
         /**
+          * Native autocomplete attribute forwarded to the input
+         */
+        "autocomplete"?: string;
+        /**
+          * Whether the input can be cleared with a built-in clear button
+          * @default false
+         */
+        "clearable"?: boolean;
+        /**
+          * Description text displayed below the input
+         */
+        "description"?: string;
+        /**
           * Whether the input is disabled
           * @default false
          */
@@ -5109,11 +5130,6 @@ declare namespace LocalJSX {
           * External ID for linking with external systems
          */
         "externalId"?: string;
-        /**
-          * Hide description slot
-          * @default false
-         */
-        "hideDescription"?: boolean;
         /**
           * Icon for the end icon
          */
@@ -5142,7 +5158,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the value changes (on blur or Enter)
          */
-        "onChange"?: (event: LeStringInputCustomEvent<{
+        "onLeChange"?: (event: LeStringInputCustomEvent<{
     value?: string;
     name?: string;
     externalId?: string;
@@ -5150,7 +5166,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the input value changes (on keystroke)
          */
-        "onInput"?: (event: LeStringInputCustomEvent<{
+        "onLeInput"?: (event: LeStringInputCustomEvent<{
     value?: string;
     name?: string;
     externalId?: string;
@@ -5168,7 +5184,7 @@ declare namespace LocalJSX {
           * The type of the input (text, email, password, etc.)
           * @default 'text'
          */
-        "type"?: 'text' | 'email' | 'password' | 'tel' | 'url';
+        "type"?: 'text' | 'email' | 'password' | 'search' | 'tel' | 'url';
         /**
           * The value of the input
          */
@@ -5883,12 +5899,14 @@ declare namespace LocalJSX {
         "mode": 'default' | 'admin';
         "value": string;
         "name": string;
-        "type": 'text' | 'email' | 'password' | 'tel' | 'url';
+        "type": 'text' | 'email' | 'password' | 'search' | 'tel' | 'url';
         "label": string;
+        "description": string;
         "iconStart": string;
         "iconEnd": string;
         "placeholder": string;
-        "hideDescription": boolean;
+        "clearable": boolean;
+        "autocomplete": string;
         "disabled": boolean;
         "readonly": boolean;
         "externalId": string;

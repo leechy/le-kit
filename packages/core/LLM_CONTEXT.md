@@ -1190,12 +1190,14 @@ A text input component with support for labels, descriptions, icons, and externa
 | `mode` | `'default' \| 'admin'` | `'default'` | Mode of the popover should be 'default' for internal use |
 | `value` | `string \| undefined` |  | The value of the input |
 | `name` | `string \| undefined` |  | The name of the input |
-| `type` | `'text' \| 'email' \| 'password' \| 'tel' \| 'url'` | `'text'` | The type of the input (text, email, password, etc.) |
+| `type` | `'text' \| 'email' \| 'password' \| 'search' \| 'tel' \| 'url'` | `'text'` | The type of the input (text, email, password, etc.) |
 | `label` | `string \| undefined` |  | Label for the input |
+| `description` | `string \| undefined` |  | Description text displayed below the input |
 | `iconStart` | `string \| undefined` |  | Icon for the start icon |
 | `iconEnd` | `string \| undefined` |  | Icon for the end icon |
 | `placeholder` | `string \| undefined` |  | Placeholder text |
-| `hideDescription` | `boolean` | `false` | Hide description slot |
+| `clearable` | `boolean` | `false` | Whether the input can be cleared with a built-in clear button |
+| `autocomplete` | `string \| undefined` |  | Native autocomplete attribute forwarded to the input |
 | `disabled` | `boolean` | `false` | Whether the input is disabled |
 | `readonly` | `boolean` | `false` | Whether the input is read-only |
 | `externalId` | `string \| undefined` |  | External ID for linking with external systems |
@@ -1204,12 +1206,12 @@ A text input component with support for labels, descriptions, icons, and externa
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `change` | `EventEmitter<{
+| `leChange` | `EventEmitter<{
     value?: string;
     name?: string;
     externalId?: string;
   }> \| undefined` | Emitted when the value changes (on blur or Enter) |
-| `input` | `EventEmitter<{
+| `leInput` | `EventEmitter<{
     value?: string;
     name?: string;
     externalId?: string;
@@ -1219,7 +1221,7 @@ A text input component with support for labels, descriptions, icons, and externa
 
 | Name | Description |
 |------|-------------|
-| Default | The label text for the input |
+| `"label"` | The label content for the input |
 | `"description"` | Additional description text displayed below the input |
 | `"icon-start"` | Icon to display at the start of the input |
 | `"icon-end"` | Icon to display at the end of the input |

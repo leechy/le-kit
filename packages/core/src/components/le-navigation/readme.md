@@ -71,6 +71,8 @@ graph TD;
   le-navigation --> le-bar
   le-navigation --> le-component
   le-string-input --> le-component
+  le-string-input --> le-button
+  le-string-input --> le-icon
   le-string-input --> le-slot
   le-component --> le-button
   le-component --> le-select

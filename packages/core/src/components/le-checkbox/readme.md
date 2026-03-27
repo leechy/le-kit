@@ -11,13 +11,14 @@ A checkbox component with support for labels, descriptions, and external IDs.
 
 ## Properties
 
-| Property     | Attribute     | Description                                                                         | Type                  | Default     |
-| ------------ | ------------- | ----------------------------------------------------------------------------------- | --------------------- | ----------- |
-| `checked`    | `checked`     | Whether the checkbox is checked                                                     | `boolean`             | `false`     |
-| `disabled`   | `disabled`    | Whether the checkbox is disabled                                                    | `boolean`             | `false`     |
-| `externalId` | `external-id` | External ID for linking with external systems (e.g. database ID, PDF form field ID) | `string \| undefined` | `undefined` |
-| `name`       | `name`        | The name of the checkbox input                                                      | `string \| undefined` | `undefined` |
-| `value`      | `value`       | The value of the checkbox input                                                     | `string \| undefined` | `undefined` |
+| Property     | Attribute     | Description                                                                                                                                                                  | Type                  | Default                                                           |
+| ------------ | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------------------------------------------------------------- |
+| `checked`    | `checked`     | Whether the checkbox is checked                                                                                                                                              | `boolean`             | `false`                                                           |
+| `disabled`   | `disabled`    | Whether the checkbox is disabled                                                                                                                                             | `boolean`             | `false`                                                           |
+| `externalId` | `external-id` | External ID for linking with external systems (e.g. database ID, PDF form field ID)                                                                                          | `string \| undefined` | `undefined`                                                       |
+| `id`         | `id`          | The ID of the checkbox input. This is used for linking the label to the input for accessibility. In case there is no ID provided, a random one will be generated internally. | `string`              | `` `le-checkbox-${Math.random().toString(36).substring(2, 9)}` `` |
+| `name`       | `name`        | The name of the checkbox input                                                                                                                                               | `string \| undefined` | `undefined`                                                       |
+| `value`      | `value`       | The value of the checkbox input                                                                                                                                              | `string \| undefined` | `undefined`                                                       |
 
 
 ## Events
@@ -58,6 +59,8 @@ graph TD;
   le-slot --> le-button
   le-slot --> le-string-input
   le-string-input --> le-component
+  le-string-input --> le-button
+  le-string-input --> le-icon
   le-string-input --> le-slot
   le-select --> le-component
   le-select --> le-dropdown-base

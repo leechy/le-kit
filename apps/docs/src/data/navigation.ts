@@ -46,6 +46,35 @@ export const docsNavigationItems: NavItem[] = [
 
 export const componentsNavigationItems: NavItem[] = [
   {
+    label: 'Form Controls',
+    id: 'form-controls',
+    open: true,
+    children: [
+      { label: 'Button', href: '/components/le-button' },
+      { label: 'Checkbox', href: '/components/le-checkbox' },
+      {
+        label: 'Inputs',
+        id: 'form-inputs',
+        open: true,
+        children: [
+          { label: 'String Input', href: '/components/le-string-input' },
+          { label: 'Number Input', href: '/components/le-number-input' },
+          { label: 'Code Input', href: '/components/le-code-input' },
+        ],
+      },
+      {
+        label: 'Dropdowns',
+        id: 'form-dropdowns',
+        open: true,
+        children: [
+          { label: 'Select', href: '/components/le-select' },
+          { label: 'Combo Box', href: '/components/le-combobox' },
+          { label: 'Multi Select', href: '/components/le-multiselect' },
+        ],
+      },
+    ],
+  },
+  {
     label: 'Layout & Navigation',
     id: 'layout-navigation',
     open: true,
@@ -72,35 +101,6 @@ export const componentsNavigationItems: NavItem[] = [
         ],
       },
       { label: 'Breadcrumbs', href: '/components/le-breadcrumbs' },
-    ],
-  },
-  {
-    label: 'Form Controls',
-    id: 'form-controls',
-    open: true,
-    children: [
-      { label: 'Button', href: '/components/le-button' },
-      { label: 'Checkbox', href: '/components/le-checkbox' },
-      {
-        label: 'Inputs',
-        id: 'form-inputs',
-        open: true,
-        children: [
-          { label: 'Text Input', href: '/components/le-text-input' },
-          { label: 'Number Input', href: '/components/le-number-input' },
-          { label: 'Code Input', href: '/components/le-code-input' },
-        ],
-      },
-      {
-        label: 'Dropdowns',
-        id: 'form-dropdowns',
-        open: true,
-        children: [
-          { label: 'Select', href: '/components/le-select' },
-          { label: 'Combo Box', href: '/components/le-combobox' },
-          { label: 'Multi Select', href: '/components/le-multiselect' },
-        ],
-      },
     ],
   },
   {

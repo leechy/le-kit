@@ -1,0 +1,323 @@
+---
+import ComponentsPage from '../../layouts/ComponentsPage.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<ComponentsPage title="le-string-input">
+  <h1>&lt;le-string-input&gt;</h1>
+  <p>
+    The idea behind having separate string, number, date, etc. inputs is to provide different views and controls for
+    each type of data. At the end, internally, they all map to a common HTML input handling mechanism.
+  </p>
+
+  <p>String input is targeted for single string textual data.</p>
+
+  <h2><a href="#Usage" id="Usage">Usage</a></h2>
+  <div class="component-example">
+    <le-string-input label="Present yourself" icon-start="🤷" placeholder="Username">
+      <div slot="description">Hint: your email is not your username!</div>
+      <div slot="icon-end">🏷️</div>
+    </le-string-input>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-string-input label="Present yourself" icon-start="🤷" placeholder="Username">
+  <div slot="description">Hint: your email is not your username!</div>
+  <div slot="icon-end">🏷️</div>
+</le-string-input>
+`}
+  />
+
+  <h2><a class="anchor" href="#properties" id="properties">Properties</a></h2>
+
+  <h3><a class="anchor" href="#@value" id="@value"><code>@value</code></a></h3>
+  <p>The current value of the input. If omitted, then the input is empty.</p>
+  <div class="component-example">
+    <le-string-input label="Present yourself" value="Le-Kit"></le-string-input>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-string-input value="Le-Kit"></le-string-input>
+`}
+  />
+
+  <h3><a class="anchor" href="#@name" id="@name"><code>@name</code></a></h3>
+  <p>If you want the input to be part of a form, you can use the <code>name</code> attribute.</p>
+
+  <h3><a class="anchor" href="#@type" id="@type"><code>@type</code></a></h3>
+  <p>
+    Defines the type of the input, which can affect the virtual keyboard on mobile devices and some built-in validation.
+  </p>
+  <p>Possible values:</p>
+  <uL>
+    <li><code>text</code> (default)</li>
+    <li><code>email</code></li>
+    <li><code>password</code></li>
+    <li><code>search</code></li>
+    <li><code>tel</code></li>
+    <li><code>url</code></li>
+  </uL>
+  <div class="component-example">
+    <le-string-input label="Password" type="password"></le-string-input>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-string-input label="Password" type="password"></le-string-input>
+`}
+  />
+
+  <h3><a class="anchor" href="#@placeholder" id="@placeholder"><code>@placeholder</code></a></h3>
+  <p>
+    Placeholder text for the input — text that is displayed inside the input when it is empty. Often it is used instead
+    of the label, which is not helpful to the user, since it disappears when the user starts typing, but helps to save
+    space, especially on mobile devices.
+  </p>
+  <div class="component-example">
+    <le-string-input placeholder="Enter your username"></le-string-input>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-string-input placeholder="Enter your username"></le-string-input>
+`}
+  />
+
+  <h3><a class="anchor" href="#@clearable" id="@clearable"><code>@clearable</code></a></h3>
+  <p>Whether the input can be cleared with a built-in clear button.</p>
+  <p>
+    Warning: currently the button increases the width of the input, during the typing. Use it when the input has a fixed
+    width (or bound container).
+  </p>
+  <div class="component-example" style="gap: var(--le-spacing-4);">
+    <le-string-input label="Free width" clearable></le-string-input>
+    <le-string-input label="Fixed width" clearable style="width: 300px;"></le-string-input>
+    <div style="width: 300px;">
+      <le-string-input label="Within a container" clearable></le-string-input>
+    </div>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-string-input label="Free width" clearable></le-string-input>
+<le-string-input label="Fixed width" clearable style="width: 300px;"></le-string-input>
+<div style="width: 300px;">
+  <le-string-input label="Within a container" clearable></le-string-input>
+</div>
+`}
+  />
+
+  <h3><a class="anchor" href="#@readonly" id="@readonly"><code>@readonly</code></a></h3>
+  <p>
+    Whether the input is read-only. The input can be selected and the value will be sent to the server when the form is
+    submitted, but the user cannot modify the value.
+  </p>
+  <div class="component-example">
+    <le-string-input label="Read-only input" value="Can't change me" readonly></le-string-input>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-string-input label="Read-only input" value="Can't change me" readonly></le-string-input>
+`}
+  />
+
+  <h3><a class="anchor" href="#@disabled" id="@disabled"><code>@disabled</code></a></h3>
+  <p>
+    Whether the input is disabled. The input will not be submitted with the form, and the user cannot interact with it.
+  </p>
+  <div class="component-example">
+    <le-string-input label="Disabled input" value="Can't interact with me" disabled></le-string-input>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-string-input label="Disabled input" value="Can't interact with me" disabled></le-string-input>
+`}
+  />
+
+  <h2><a class="anchor" href="#properties-or-slots" id="properties-or-slots">Properties or Slots</a></h2>
+  <p>
+    There are a few properties that can be set both as properties and as slots. This is important when you want to set
+    another component inside the
+    <code>le-string-input</code>, and here we're talking about icons, label, and descriptions. The thing is that when
+    playing with frameworks sometimes it's easier to set them as properties, but when using the component in plain HTML,
+    it's easier to set them as a slot. So you can choose the way that works best for you.
+  </p>
+
+  <h3>
+    <a class="anchor" href="#icon-start" id="icon-start"><code>icon-start</code></a>
+  </h3>
+  <p>An icon at the beginning of the input.</p>
+
+  <h3>
+    <a class="anchor" href="#icon-end" id="icon-end"><code>icon-end</code></a>
+  </h3>
+  <p>
+    An icon at the end of the input. Use it as a slot if you have to have, a dropdown with some other actions, for
+    example.
+  </p>
+
+  <h3>
+    <a class="anchor" href="#label" id="label"><code>label</code></a>
+  </h3>
+  <p>A label for the input. Shown above the input field.</p>
+
+  <h3>
+    <a class="anchor" href="#description" id="description"><code>description</code></a>
+  </h3>
+  <p>
+    A description for the input. Shown below the input field. Use it as a slot if you have to set some link or other
+    HTML content.
+  </p>
+
+  <p>
+    In the following example you can see how to use properties and slots, and even a small demo, how to use the other
+    components to insert a popover at the end of the input.
+  </p>
+
+  <div class="component-example" style="gap: var(--le-spacing-4);">
+    <le-string-input label="With properties" icon-start="👤" icon-end="✅" description="This is a description"
+    ></le-string-input>
+    <le-string-input>
+      <div slot="label">With slots</div>
+      <div slot="icon-start">👤</div>
+      <div slot="icon-end">
+        <le-popover placement="bottom" align="end" show-close="false">
+          <le-button slot="trigger" variant="clear" size="small">
+            <le-icon slot="icon-only" name="ellipsis-vertical"></le-icon>
+          </le-button>
+          <div style="width: 200px; text-align: start;">
+            This is a popover content. You can put any content here, even another input.
+          </div>
+        </le-popover>
+      </div>
+      <div slot="description">This is a description</div>
+    </le-string-input>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-string-input
+  label="With properties"
+  icon-start="👤"
+  icon-end="✅"
+  description="This is a description"
+></le-string-input>
+<le-string-input>
+  <div slot="label">With slots</div>
+  <div slot="icon-start">👤</div>
+  <div slot="icon-end">
+    <le-popover placement="bottom" align="end" show-close="false">
+      <le-button slot="trigger" variant="clear" size="small">
+        <le-icon slot="icon-only" name="ellipsis-vertical"></le-icon>
+      </le-button>
+      <div style="width: 200px; text-align: start;">
+        This is a popover content. You can put any content here, even another input.
+      </div>
+    </le-popover>
+  </div>
+  <div slot="description">This is a description</div>
+</le-string-input>
+`}
+  />
+
+  <h2><a class="anchor" href="#events" id="events">Events</a></h2>
+  <p>
+    Uses custom event names. You can subscribe to these events using the standard event listener syntax. In some
+    frameworks you will be able to subscribe to the changes via the <code>on</code> prefix: <code>onLeChange</code>, <code
+      >onLeInput</code
+    >, etc.
+  </p>
+
+  <p>The format of the details data available in the event is as follows:</p>
+  <CodeBlock
+    language="json"
+    code={`
+{
+  value?: string;
+  name?: string;
+  externalId?: string;
+}`}
+  />
+
+  <h3><a class="anchor" href="#lechange" id="lechange"><code>leChange</code></a></h3>
+  <p>Fires if the value of the input changes, every time the input loses its focus.</p>
+  <p>Type in something in the input and press Tab or click outside the input to trigger the event.</p>
+
+  <div class="component-example">
+    <script>
+      (() => {
+        const input = document.getElementById('le-change-input');
+        const show = () => {
+          input?.addEventListener('leChange', (event: any) => {
+            alert(`Change event details: ${JSON.stringify(event.detail)}`);
+          });
+        };
+
+        if (document.readyState === 'loading') {
+          document.addEventListener(
+            'DOMContentLoaded',
+            () => {
+              void show();
+            },
+            { once: true },
+          );
+        } else {
+          void show();
+        }
+      })();
+    </script>
+    <le-string-input id="le-change-input" label="Type something and leave the input"></le-string-input>
+  </div>
+  <CodeBlock
+    language="js"
+    code={`
+const input = document.getElementById("le-change-input");
+input.addEventListener("leChange", (event) => {
+  alert(\`Change event details: \${event.detail}\`);
+});
+`}
+  />
+
+  <h3><a class="anchor" href="#leinput" id="leinput"><code>leInput</code></a></h3>
+  <p>Fires every time the value of the input changes. On every keystroke.</p>
+  <p>Example below will use the console as an example, since alerts would be too intrusive.</p>
+
+  <div class="component-example">
+    <script>
+      (() => {
+        const input = document.getElementById('le-input');
+        const show = () => {
+          input?.addEventListener('leInput', (event: any) => {
+            console.log(`Input event details: ${JSON.stringify(event.detail)}`);
+          });
+        };
+
+        if (document.readyState === 'loading') {
+          document.addEventListener(
+            'DOMContentLoaded',
+            () => {
+              void show();
+            },
+            { once: true },
+          );
+        } else {
+          void show();
+        }
+      })();
+    </script>
+    <le-string-input id="le-input" label="Type something"></le-string-input>
+  </div>
+  <CodeBlock
+    language="js"
+    code={`
+const input = document.getElementById("le-input");
+input.addEventListener("leInput", (event) => {
+  console.log(\`Input event details: \${event.detail}\`);
+});
+`}
+  />
+</ComponentsPage>

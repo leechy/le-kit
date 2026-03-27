@@ -41,12 +41,18 @@
   background: var(--le-input-bg);
   border: var(--le-input-border);
   border-radius: var(--le-input-radius);
-  transition: border-color 0.2s, background-color 0.2s;
+  outline: 0 solid transparent;
+  outline-offset: 0;
+  transition:
+    border-color var(--le-transition-fast) var(--le-transition-easing),
+    background-color var(--le-transition-fast) var(--le-transition-easing),
+    outline var(--le-transition-fast) var(--le-transition-easing),
+    outline-offset var(--le-transition-fast) var(--le-transition-easing);
 }
 
 .le-input-container:focus-within {
-  outline: 2px solid var(--le-color-focus);
-  outline-offset: 2px;
+  outline: var(--le-input-border-focus);
+  outline-offset: var(--le-input-border-focus-offset, 2px);
 }
 
 

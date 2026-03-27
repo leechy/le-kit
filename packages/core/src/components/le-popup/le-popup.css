@@ -166,8 +166,8 @@
   border: 1px solid var(--le-color-border, #e0e0e0);
   border-radius: var(--le-radius-md, 8px);
   outline: none;
-  transition: border-color var(--le-transition-fast, 0.15s ease),
-              box-shadow var(--le-transition-fast, 0.15s ease);
+  transition: border-color var(--le-transition-fast, 0.15s) var(--le-transition-easing, ease),
+              box-shadow var(--le-transition-fast, 0.15s) var(--le-transition-easing, ease);
   box-sizing: border-box;
 }
 

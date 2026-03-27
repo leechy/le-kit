@@ -83,7 +83,9 @@
 
   /* Focus ring */
   --le-color-focus: rgba(77, 166, 255, 0.15);
-  
+  --le-input-border-focus: 2px solid var(--le-color-focus);
+  --le-input-border-focus-offset: 2px;
+
   /* Border radius - same as default */
   --le-radius-none: 0;
   --le-radius-sm: 0.125rem;

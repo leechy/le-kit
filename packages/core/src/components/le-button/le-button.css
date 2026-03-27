@@ -13,7 +13,7 @@
   --le-button-small-padding: 0.25rem;
   --le-button-font-size: var(--le-font-size-md);
   --le-button-font-weight: var(--le-font-weight-medium);
-  --le-button-transition: var(--le-transition-fast);
+  --le-button-transition: var(--le-transition-fast) var(--le-transition-easing, ease-in-out);
   --le-transition-easing: ease-in-out;
   --le-button-icon-aspect-ratio: 1;
   --le-button-color: var(--le-color-primary-contrast);
@@ -48,12 +48,16 @@
   font-weight: var(--le-button-font-weight);
   line-height: var(--le-line-height-tight);
   text-decoration: none;
+  outline: 0 solid transparent;
+  outline-offset: 0;
   cursor: pointer;
-  transition: 
-    background-color var(--le-button-transition) var(--le-transition-easing),
-    border-color var(--le-button-transition) var(--le-transition-easing),
-    box-shadow var(--le-button-transition) var(--le-transition-easing),
-    transform var(--le-button-transition) var(--le-transition-easing);
+  transition:
+    background-color var(--le-button-transition),
+    border-color var(--le-button-transition),
+    box-shadow var(--le-button-transition),
+    transform var(--le-button-transition),
+    outline var(--le-button-transition),
+    outline-offset var(--le-button-transition);
 }
 
 .le-button-container:hover:not(:disabled) {
@@ -66,8 +70,8 @@
 }
 
 .le-button-container:focus-visible {
-  outline: 2px solid var(--le-color-focus);
-  outline-offset: 2px;
+  outline: var(--le-input-border-focus);
+  outline-offset: var(--le-input-border-focus-offset, 2px);
 }
 
 .le-button-container:disabled {

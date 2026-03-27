@@ -68,7 +68,10 @@
   color: var(--le-input-color);
   font-size: 1.2rem;
   transition: all 0.15s ease-in-out;
+  outline: 0 solid transparent;
+  outline-offset: 0;
   box-sizing: border-box;
+  -webkit-user-select: none;
   user-select: none;
 }
 

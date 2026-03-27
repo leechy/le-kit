@@ -117,7 +117,7 @@
 
 .nav-chevron {
   display: inline-block;
-  transition: transform var(--le-transition-fast);
+  transition: transform var(--le-transition-fast) var(--le-transition-easing, ease);
 }
 
 .nav-chevron svg {

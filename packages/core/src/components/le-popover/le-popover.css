@@ -40,7 +40,7 @@
   color: var(--le-color-text-secondary, #666);
   font-size: 16px;
   cursor: pointer;
-  transition: all var(--le-transition-fast, 0.15s ease);
+  transition: all var(--le-transition-fast, 0.15s) var(--le-transition-easing, ease);
 }
 
 .le-popover-default-trigger:hover {

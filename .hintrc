@@ -5,7 +5,10 @@
   "browserslist": [
     "defaults",
     "not ie 11",
-    "not chrome <= 109"
+    "not and_ff <= 147",
+    "not chrome <= 112",
+    "not firefox <= 147",
+    "not samsung <= 29"
   ],
   "hints": {
     "axe/aria": "off",

@@ -25,5 +25,5 @@
   width: 0;
   background: var(--le-scroll-progress-fill, var(--le-color-primary, currentColor));
   border-radius: var(--le-scroll-progress-border-radius, 2px);
-  transition: width var(--le-transition-fast, 120ms linear);
+  transition: width var(--le-transition-fast) var(--le-transition-easing, ease);
 }

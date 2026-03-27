@@ -3,6 +3,7 @@ import 'le-kit/dist/themes/index.css';
 import '../styles/global.css';
 import { mainNavigationItems } from '../data/navigation';
 import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 
 import '@fontsource-variable/sour-gummy/wght.css';
 import '@fontsource-variable/jetbrains-mono/wght.css';
@@ -16,10 +17,27 @@ const { title } = Astro.props;
 
 let coreVersion = 'dev';
 try {
-  const packageJsonRaw = await readFile(new URL('../../../../packages/core/package.json', import.meta.url), 'utf8');
-  const packageJson = JSON.parse(packageJsonRaw) as { version?: string };
-  if (packageJson.version) {
-    coreVersion = packageJson.version;
+  const packageJsonCandidates = [
+    // Monorepo default when building from apps/docs
+    resolve(process.cwd(), '../../packages/core/package.json'),
+    // Monorepo root fallback
+    resolve(process.cwd(), 'packages/core/package.json'),
+    // Source-relative fallback for local tooling
+    new URL('../../../../packages/core/package.json', import.meta.url),
+  ];
+
+  for (const candidate of packageJsonCandidates) {
+    try {
+      const packageJsonRaw = await readFile(candidate, 'utf8');
+      const packageJson = JSON.parse(packageJsonRaw) as { version?: string };
+
+      if (packageJson.version) {
+        coreVersion = packageJson.version;
+        break;
+      }
+    } catch {
+      // Try next candidate path.
+    }
   }
 } catch {
   // Keep fallback for environments where the workspace file is unavailable.

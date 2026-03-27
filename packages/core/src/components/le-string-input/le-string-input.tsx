@@ -24,6 +24,8 @@ import { classnames } from '../../utils/utils';
 export class LeStringInput {
   @Element() el!: HTMLElement;
 
+  private inputEl?: HTMLInputElement;
+
   /**
    * Pass the ref of the input element to the parent component
    */
@@ -70,9 +72,14 @@ export class LeStringInput {
   @Prop() placeholder?: string;
 
   /**
-   * Hide description slot
+   * Whether the input can be cleared with a built-in clear button
    */
-  @Prop() hideDescription: boolean = false;
+  @Prop() clearable: boolean = false;
+
+  /**
+   * Native autocomplete attribute forwarded to the input
+   */
+  @Prop() autocomplete?: string;
 
   /**
    * Whether the input is disabled
@@ -133,6 +140,33 @@ export class LeStringInput {
     ev.stopPropagation();
   };
 
+  private handleClear = () => {
+    if (this.disabled || this.readonly || !this.value) {
+      return;
+    }
+
+    this.value = '';
+
+    if (this.inputEl) {
+      this.inputEl.value = '';
+      this.inputEl.focus();
+    }
+
+    const payload = {
+      value: this.value,
+      name: this.name,
+      externalId: this.externalId,
+    };
+
+    this.leInput?.emit(payload);
+    this.leChange?.emit(payload);
+  };
+
+  private initSlotObserver() {
+    if (this.disconnectSlotObserver) {
+      return;
+    }
+
   render() {
     return (
       <le-component component="le-string-input" hostClass={classnames({ disabled: this.disabled })}>
@@ -163,6 +197,16 @@ export class LeStringInput {
               onClick={this.handleClick}
             />
             {this.iconEnd && <span class="icon-end">{this.iconEnd}</span>}
+            {showClearButton && (
+              <le-button
+                variant="clear"
+                size="small"
+                iconOnly=""
+                onClick={() => this.handleClear()}
+              >
+                <le-icon name="clear" slot="icon-only"></le-icon>
+              </le-button>
+            )}
           </div>
 
           {!this.hideDescription && (

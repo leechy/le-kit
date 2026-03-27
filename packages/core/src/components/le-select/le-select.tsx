@@ -288,7 +288,7 @@ export class LeSelect {
             iconStart={
               hasValue && this.selectedOption?.iconStart
                 ? this.renderIcon(this.selectedOption.iconStart)
-                : null
+                : undefined
             }
             iconEnd={
               <svg

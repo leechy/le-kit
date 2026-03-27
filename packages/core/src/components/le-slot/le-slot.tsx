@@ -537,7 +537,7 @@ export class LeSlot {
               mode="default"
               value={this.textValue}
               placeholder={this.placeholder || `Enter ${this.label || this.name || 'text'}...`}
-              onChange={this.handleTextInput}
+              onLeChange={this.handleTextInput}
               // required={this.required}
             ></le-string-input>
             {slotElement}

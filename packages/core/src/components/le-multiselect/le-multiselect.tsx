@@ -502,7 +502,7 @@ export class LeMultiselect {
                 class="search-input"
                 placeholder="Search..."
                 value={this.searchQuery}
-                onInput={this.handleSearchInput}
+                onLeInput={this.handleSearchInput}
               />
             </div>
           )}

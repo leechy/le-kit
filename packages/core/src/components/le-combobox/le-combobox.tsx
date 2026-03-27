@@ -366,6 +366,7 @@ export class LeCombobox {
               aria-expanded={this.open ? 'true' : 'false'}
               aria-autocomplete="list"
               onInput={this.handleInputChange}
+              onLeInput={this.handleInputChange}
               onFocus={this.handleInputFocus}
               onKeyDown={this.handleInputKeyDown}
             />

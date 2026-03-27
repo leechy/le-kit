@@ -93,6 +93,7 @@ export class LeStringInput {
    * Emitted when the value changes (on blur or Enter)
    */
   @Event({ eventName: 'change' }) leChange?: EventEmitter<{
+  @Event() leChange?: EventEmitter<{
     value?: string;
     name?: string;
     externalId?: string;
@@ -102,6 +103,7 @@ export class LeStringInput {
    * Emitted when the input value changes (on keystroke)
    */
   @Event({ eventName: 'input' }) leInput?: EventEmitter<{
+  @Event() leInput?: EventEmitter<{
     value?: string;
     name?: string;
     externalId?: string;

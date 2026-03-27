@@ -371,7 +371,7 @@ export class LeComponent {
           label={attr.name}
           value={value ?? ''}
           placeholder={attr.default?.replace(/'/g, '')}
-          onChange={(e: any) => this.handlePropertyChange(attr.name, e.detail.value, type)}
+          onLeChange={(e: any) => this.handlePropertyChange(attr.name, e.detail.value, type)}
         >
           <span slot="description">{attr.description}</span>
         </le-string-input>

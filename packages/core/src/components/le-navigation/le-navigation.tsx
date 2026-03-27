@@ -433,7 +433,7 @@ export class LeNavigation {
               class="nav-search-input"
               placeholder={searchPlaceholder ?? 'Search...'}
               value={query}
-              onInput={(e: Event) =>
+              onLeInput={(e: Event) =>
                 submenuId ? this.handleSubmenuSearchInput(submenuId, e) : this.handleSearchInput(e)
               }
             />

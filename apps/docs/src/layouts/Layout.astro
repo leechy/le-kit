@@ -1,12 +1,12 @@
 ---
-import "le-kit/dist/themes/index.css";
-import "../styles/global.css";
-import { mainNavigationItems } from "../data/navigation";
-import { readFile } from "node:fs/promises";
+import 'le-kit/dist/themes/index.css';
+import '../styles/global.css';
+import { mainNavigationItems } from '../data/navigation';
+import { readFile } from 'node:fs/promises';
 
 import '@fontsource-variable/sour-gummy/wght.css';
-import '@fontsource-variable/fira-code/wght.css';
-import '@fontsource-variable/sofia-sans-semi-condensed/wght.css'
+import '@fontsource-variable/jetbrains-mono/wght.css';
+import '@fontsource-variable/sofia-sans-semi-condensed/wght.css';
 
 interface Props {
   title: string;
@@ -14,12 +14,9 @@ interface Props {
 
 const { title } = Astro.props;
 
-let coreVersion = "dev";
+let coreVersion = 'dev';
 try {
-  const packageJsonRaw = await readFile(
-    new URL("../../../../packages/core/package.json", import.meta.url),
-    "utf8",
-  );
+  const packageJsonRaw = await readFile(new URL('../../../../packages/core/package.json', import.meta.url), 'utf8');
   const packageJson = JSON.parse(packageJsonRaw) as { version?: string };
   if (packageJson.version) {
     coreVersion = packageJson.version;
@@ -46,28 +43,26 @@ try {
     <script is:inline>
       (() => {
         const root = document.documentElement;
-        const show = () => root.classList.add("le-ready");
+        const show = () => root.classList.add('le-ready');
 
-        if (!("customElements" in window)) {
+        if (!('customElements' in window)) {
           show();
           return;
         }
 
         const run = async () => {
-          const tags = [...document.querySelectorAll("*")]
+          const tags = [...document.querySelectorAll('*')]
             .map((el) => el.localName)
-            .filter((name) => name.startsWith("le-"));
+            .filter((name) => name.startsWith('le-'));
 
           const uniqueTags = [...new Set(tags)];
-          await Promise.all(
-            uniqueTags.map((tag) => customElements.whenDefined(tag)),
-          );
+          await Promise.all(uniqueTags.map((tag) => customElements.whenDefined(tag)));
           show();
         };
 
-        if (document.readyState === "loading") {
+        if (document.readyState === 'loading') {
           document.addEventListener(
-            "DOMContentLoaded",
+            'DOMContentLoaded',
             () => {
               void run();
             },
@@ -99,21 +94,12 @@ try {
               href={item.href}
               icon-end={item.iconEnd}
               part={item.part}
-              selected={
-                item.href && Astro.url.pathname.startsWith(item.href)
-                  ? true
-                  : undefined
-              }
+              selected={item.href && Astro.url.pathname.startsWith(item.href) ? true : undefined}
             />
           ))
         }
       </le-navigation>
-      <le-button
-        href="https://github.com/leechy/le-kit"
-        target="_blank"
-        icon-only
-        variant="clear"
-        slot="end"
+      <le-button href="https://github.com/leechy/le-kit" target="_blank" icon-only variant="clear" slot="end"
         ><img
           slot="icon-only"
           src="/icons/github.svg"

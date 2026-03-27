@@ -7,7 +7,7 @@
   --le-color-surface: #e8f0f7aa;
   --le-side-panel-margin: var(--le-spacing-2);
   --le-font-family-base: "Sofia Sans Semi Condensed Variable", sans-serif;
-  --le-font-family-mono: "Fira Code Variable", monospace;
+  --le-font-family-mono: "JetBrains Mono Variable", monospace;
   --le-font-family-display: "Sour Gummy Variable", sans-serif;
   --le-color-border: #ffffffcc;
   --le-color-focus: #0088ff96;
@@ -92,6 +92,7 @@ le-breadcrumbs.site-navigation {
   z-index: 1;
   top: calc(var(--le-header-height) + var(--le-spacing-4));
   margin: var(--le-spacing-4) var(--le-spacing-2);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
 
   @media (min-width: 900px) {

@@ -9,7 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@fontsource-variable/fira-code": "^5.2.7",
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@fontsource-variable/sofia-sans-semi-condensed": "^5.2.8",
     "@fontsource-variable/sour-gummy": "^5.2.8",
     "astro": "^6.0.0",

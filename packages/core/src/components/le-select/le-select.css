@@ -42,13 +42,19 @@
   background: var(--le-select-bg, var(--le-color-surface, #fff));
   border-radius: var(--le-select-border-radius);
   cursor: pointer;
-  text-align: left;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  text-align: start;
+  outline: 0 solid transparent;
+  outline-offset: 0;
+  transition:
+    border-color var(--le-transition-fast)  ease,
+    box-shadow var(--le-transition-fast)  ease,
+    outline var(--le-transition-fast) var(--le-transition-easing, ease-in-out),
+    outline-offset var(--le-transition-fast) var(--le-transition-easing, ease-in-out);
 }
 
 .select-trigger:focus {
-  outline: 2px solid var(--le-color-focus);
-  outline-offset: 2px;
+  outline: var(--le-input-border-focus);
+  outline-offset: var(--le-input-border-focus-offset);
 }
 
 /* Placeholder state */

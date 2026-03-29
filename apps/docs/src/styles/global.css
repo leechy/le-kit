@@ -269,11 +269,11 @@ le-bento-tile {
   text-decoration: none;
   color: var(--le-color-text-primary);
 
-  background-color: color-mix(in srgb, var(--le-color-primary) 20%, transparent);
-
-  &:hover {
-    background-color: color-mix(in srgb, var(--le-color-surface) 42%, transparent);
-  }
+  background-color: color-mix(in srgb, var(--le-color-primary) 15%, transparent);
+}
+.bento-tile:any-link:hover,
+.tile-link-anchor:hover {
+  background-color: color-mix(in srgb, var(--le-color-surface) 30%, transparent);
 }
 
 .bento-tile-type {
@@ -289,6 +289,18 @@ le-bento-tile {
 
   text-transform: uppercase;
   margin-bottom: var(--le-spacing-2);
+}
+
+.bento-tile-demo {
+  padding: 0 12px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+.bento-tile-demo-container {
+  display: inline-block;
+  --le-color-surface: #e0f3f8;
 }
 
 .bento-tile-content {

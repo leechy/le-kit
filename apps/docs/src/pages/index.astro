@@ -1,8 +1,9 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from '../layouts/Layout.astro';
+import TileLink from '../components/TileLink.astro';
 ---
 
-<Layout title="Le-Kit - The Component Library">
+<Layout title="Le-Kit - The Editable Components Library (concept)">
   <main class="bento-page">
     <le-bento-grid
       column-min-width="160"
@@ -14,22 +15,35 @@ import Layout from "../layouts/Layout.astro";
       aria-label="Featured components and documentation sections"
     >
       <le-bento-tile cols="2" rows="1">
-        <a class="bento-tile" href="/components/le-select">
+        <TileLink class="bento-tile" href="/components/le-select">
           <div class="bento-tile-type">Featured component</div>
+          <div class="bento-tile-demo">
+            <div class="bento-tile-demo-container">
+              <le-select placeholder="Choose a component" value="/components/le-select">
+                <le-item value="/components/le-button" label="le-button"></le-item>
+                <le-item value="/components/le-input" label="le-input"></le-item>
+                <le-item value="/components/le-checkbox" label="le-checkbox"></le-item>
+                <le-item value="/components/le-select" label="le-select" selected></le-item>
+                <le-item value="/components/le-tag" label="le-tag"></le-item>
+              </le-select>
+            </div>
+          </div>
           <div class="bento-tile-content">
             <h3>&lt;le-select&gt;</h3>
             <p>The default dropdown finally gets typeahead capabilities.</p>
           </div>
-        </a>
+        </TileLink>
       </le-bento-tile>
       <le-bento-tile cols="2" rows="2">
-        <le-card>
-          <h1><img slot="header" src="/le-kit.svg" alt="le-kit logo" style="width: 50%;" /></h1>
-          <div>
-            <h2>The components for your next project</h2>
-            <code>Status: NOT_READY_FOR_PRODUCTION</code>
+        <div class="bento-tile tone-0">
+          <div class="bento-tile-content">
+            <code>Status: CONCEPT</code>
+            <h1><img slot="header" src="/le-kit.svg" alt="Le-Kit logo" style="width: 50%;" /></h1>
           </div>
-        </le-card>
+          <div class="bento-tile-content">
+            <h2>The components you can change on the fly</h2>
+          </div>
+        </div>
       </le-bento-tile>
       <le-bento-tile cols="2" rows="1">
         <a class="bento-tile" href="/components/le-bento-grid">
@@ -49,38 +63,35 @@ import Layout from "../layouts/Layout.astro";
           </div>
         </a>
       </le-bento-tile>
-      <le-bento-tile cols="2" rows="2" class="tone-6">
-        Admin mode? What's that?
-      </le-bento-tile>
+      <le-bento-tile cols="2" rows="2" class="tone-6"> Admin mode? What's that? </le-bento-tile>
       <le-bento-tile>
         <a class="bento-tile" href="/docs/assets">
-          <div class="bento-tile-content">
-            It's can be still tricky with this library!
-          </div>
+          <div class="bento-tile-content">It's can be still tricky with this library!</div>
           <div class="bento-tile-content">
             <h3>Setup Assets</h3>
           </div>
         </a>
       </le-bento-tile>
-      <le-bento-tile class="tone-1">
-        <a class="bento-tile" href="/docs/start">
+      <le-bento-tile>
+        <a class="bento-tile tone-1" href="/docs/start">
           <div class="bento-tile-content">
-            <h3>Get Started <le-icon name="arrow-right" /></h3>
+            <h3>Get Started <le-icon name="arrow-right"></le-icon></h3>
           </div>
           <div class="bento-tile-content">
             <p>If you want to experiment with these components, start here.</p>
           </div>
         </a>
       </le-bento-tile>
-      <le-bento-tile cols="2" rows="1" class="tone-3">
-        Styling and Theming
-      </le-bento-tile>
+      <le-bento-tile cols="2" rows="1" class="tone-3"> Styling and Theming </le-bento-tile>
     </le-bento-grid>
   </main>
 
   <style>
+    .tone-0 {
+      background: linear-gradient(145deg, #e4eff4, #c1d8e2);
+    }
     .tone-1 {
-      --le-bento-tile-bg: linear-gradient(145deg, #f59e0b, #f97316);
+      background: linear-gradient(145deg, #f59e0b, #f97316);
     }
     .tone-2 {
       --le-bento-tile-bg: linear-gradient(145deg, #22c55e, #16a34a);

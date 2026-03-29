@@ -1,0 +1,48 @@
+---
+interface Props {
+  href: string;
+  class?: string;
+  target?: string;
+  rel?: string;
+  ariaLabel?: string;
+}
+
+const { href, class: className, target, rel, ariaLabel } = Astro.props;
+const linkRel = target === '_blank' ? (rel ?? 'noopener noreferrer') : rel;
+---
+
+<!--
+  Overlay link pattern:
+  - The <a> is stretched to cover the whole container via position:absolute, z-index:0
+  - Slotted content sits in a relative wrapper at z-index:1
+  - Interactive elements (buttons, selects, etc.) naturally absorb pointer events
+    without any JS needed, since they sit above the link layer.
+  - Add data-no-tile-nav to any region you want to block navigation from.
+-->
+<div class:list={['tile-link-root', className]}>
+  <a class="tile-link-anchor" href={href} target={target} rel={linkRel} aria-label={ariaLabel} tabindex="0"></a>
+  <div class="tile-link-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .tile-link-root {
+    position: relative;
+  }
+
+  .tile-link-anchor {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    /* visually hidden but fully accessible as a link */
+    display: block;
+  }
+
+  .tile-link-content {
+    position: relative;
+    z-index: 1;
+    /* fill the parent so the tile content lays out normally */
+    display: contents;
+  }
+</style>

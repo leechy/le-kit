@@ -242,7 +242,13 @@ A flexible button component with multiple variants and states.
 | `el` | `HTMLElement` |  |  |
 | `mode` | `'default' \| 'admin'` |  | Mode of the popover should be 'default' for internal use |
 | `variant` | `'solid' \| 'outlined' \| 'clear' \| 'system'` | `'solid'` | Button variant style |
-| `color` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'primary'` | Button color theme (uses theme semantic colors) |
+| `color` | `\| 'primary'
+    \| 'secondary'
+    \| 'success'
+    \| 'warning'
+    \| 'danger'
+    \| 'info'
+    \| 'transparent'` | `'primary'` | Button color theme (uses theme semantic colors) |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Button size |
 | `selected` | `boolean` | `false` | Whether the button is in a selected/active state |
 | `fullWidth` | `boolean` | `false` | Whether the button takes full width of its container |
@@ -1424,7 +1430,13 @@ A tag/chip component for displaying labels with optional dismiss functionality.
 | `dismissible` | `boolean` | `false` | Whether the tag can be dismissed (shows close button). |
 | `disabled` | `boolean` | `false` | Whether the tag is disabled. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | The size of the tag. |
-| `variant` | `'default' \| 'primary' \| 'success' \| 'warning' \| 'danger'` | `'default'` | The visual variant of the tag. |
+| `color` | `\| 'default'
+    \| 'primary'
+    \| 'success'
+    \| 'warning'
+    \| 'danger'
+    \| 'secondary'
+    \| 'info'` | `'default'` | The color of the tag. |
 
 ### Events
 

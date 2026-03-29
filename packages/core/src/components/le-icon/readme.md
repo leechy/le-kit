@@ -22,6 +22,7 @@
  - [le-navigation](../le-navigation)
  - [le-side-panel](../le-side-panel)
  - [le-string-input](../le-string-input)
+ - [le-tag](../le-tag)
 
 ### Graph
 ```mermaid
@@ -31,6 +32,7 @@ graph TD;
   le-navigation --> le-icon
   le-side-panel --> le-icon
   le-string-input --> le-icon
+  le-tag --> le-icon
   style le-icon fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

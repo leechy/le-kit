@@ -99,6 +99,14 @@
   --_btn-border-color: var(--le-color-primary);
 }
 
+/* Transparent (no background, for use in contexts like popups) */
+:host(.color-transparent) {
+  --_btn-bg: transparent;
+  --_btn-bg-hover: transparent;
+  --_btn-color: var(--le-button-color);
+  --_btn-border-color: transparent;
+}
+
 /* Secondary */
 :host(.color-secondary) {
   --_btn-bg: var(--le-color-secondary);

@@ -60,7 +60,14 @@ export class LeButton {
    * Button color theme (uses theme semantic colors)
    * @allowedValues primary | secondary | success | warning | danger | info
    */
-  @Prop() color: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' = 'primary';
+  @Prop() color:
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'info'
+    | 'transparent' = 'primary';
 
   /**
    * Button size

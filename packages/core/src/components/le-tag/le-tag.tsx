@@ -1,4 +1,5 @@
 import { Component, Prop, Event, EventEmitter, h } from '@stencil/core';
+import { classnames } from '../../utils/utils';
 
 /**
  * A tag/chip component for displaying labels with optional dismiss functionality.
@@ -30,13 +31,13 @@ import { Component, Prop, Event, EventEmitter, h } from '@stencil/core';
  * <le-tag label="Large" size="large"></le-tag>
  * ```
  *
- * @example Different variants
+ * @example Different colors
  * ```html
- * <le-tag label="Default" variant="default"></le-tag>
- * <le-tag label="Primary" variant="primary"></le-tag>
- * <le-tag label="Success" variant="success"></le-tag>
- * <le-tag label="Warning" variant="warning"></le-tag>
- * <le-tag label="Danger" variant="danger"></le-tag>
+ * <le-tag label="Default" color="default"></le-tag>
+ * <le-tag label="Primary" color="primary"></le-tag>
+ * <le-tag label="Success" color="success"></le-tag>
+ * <le-tag label="Warning" color="warning"></le-tag>
+ * <le-tag label="Danger" color="danger"></le-tag>
  * ```
  */
 @Component({
@@ -77,17 +78,23 @@ export class LeTag {
   @Prop({ reflect: true }) size: 'small' | 'medium' | 'large' = 'medium';
 
   /**
-   * The visual variant of the tag.
+   * The color of the tag.
    */
-  @Prop({ reflect: true }) variant: 'default' | 'primary' | 'success' | 'warning' | 'danger' =
-    'default';
+  @Prop({ reflect: true }) color:
+    | 'default'
+    | 'primary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'secondary'
+    | 'info' = 'default';
 
   /**
    * Emitted when the dismiss button is clicked.
    */
   @Event() leDismiss?: EventEmitter<void>;
 
-  private handleDismiss = (e: MouseEvent) => {
+  private handleDismiss = (e: Event) => {
     e.stopPropagation();
     if (!this.disabled) {
       this.leDismiss?.emit();
@@ -109,7 +116,11 @@ export class LeTag {
   render() {
     return (
       <le-component component="le-tag">
-        <span class="tag">
+        <span
+          class={classnames('tag', {
+            'tag-dismissible': this.dismissible,
+          })}
+        >
           {this.renderIcon()}
           <span class="tag-label">
             <le-slot name="" tag="span" type="text">
@@ -117,17 +128,21 @@ export class LeTag {
             </le-slot>
           </span>
           {this.dismissible && (
-            <button
+            <le-button
               type="button"
+              variant="clear"
               class="tag-dismiss"
               onClick={this.handleDismiss}
               disabled={this.disabled}
               aria-label="Remove"
+              color={this.color !== 'default' ? this.color : 'transparent'}
             >
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 4l8 8M12 4l-8 8" />
-              </svg>
-            </button>
+              <le-icon
+                slot="icon-only"
+                name="clear"
+                size={this.size === 'small' ? 12 : this.size === 'large' ? 16 : 14}
+              ></le-icon>
+            </le-button>
           )}
         </span>
       </le-component>

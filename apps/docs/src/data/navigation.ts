@@ -101,6 +101,7 @@ export const componentsNavigationItems: NavItem[] = [
         ],
       },
       { label: 'Breadcrumbs', href: '/components/le-breadcrumbs' },
+      { label: 'Tag', href: '/components/le-tag' },
     ],
   },
   {

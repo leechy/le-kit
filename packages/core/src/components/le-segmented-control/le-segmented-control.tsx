@@ -11,6 +11,7 @@ import {
   Host,
 } from '@stencil/core';
 import { LeOption, LeOptionValue, LeOptionSelectDetail } from '../../types/options';
+import { buildDeclarativeOptionsFromChildren, parseOptionInput } from '../../utils/utils';
 
 interface SegmentConfig {
   label: string;
@@ -18,15 +19,6 @@ interface SegmentConfig {
   iconStart?: string;
   iconEnd?: string;
   disabled: boolean;
-}
-
-interface TabConfig {
-  label: string;
-  value: string;
-  iconStart?: string;
-  iconEnd?: string;
-  disabled: boolean;
-  panel?: HTMLElement & { setActive: (active: boolean) => Promise<void> };
 }
 
 /**
@@ -59,7 +51,7 @@ export class LeSegmentedControl {
   /**
    * Array of options for the segmented control.
    */
-  @Prop() options: LeOption[] = [];
+  @Prop() options: LeOption[] | string = [];
 
   /**
    * The value of the currently selected option.
@@ -89,7 +81,7 @@ export class LeSegmentedControl {
   @Prop() disabled: boolean = false;
 
   /**
-   * Internal tab configurations (built from children or tabs prop)
+   * Internal segment configurations built from declarative items or options prop.
    */
   @State() private segmentConfigs: SegmentConfig[] = [];
 
@@ -99,9 +91,11 @@ export class LeSegmentedControl {
   @State() private focusedIndex: number = 0;
 
   /**
-   * Whether we're using declarative mode (le-tab children)
+   * Whether we're using declarative mode (le-item children)
    */
   @State() private isDeclarativeMode: boolean = false;
+
+  @State() private declarativeOptions: LeOption[] = [];
 
   /**
    * Emitted when the selection changes.
@@ -111,37 +105,23 @@ export class LeSegmentedControl {
   private mutationObserver?: MutationObserver;
 
   @Watch('options')
-  tabsChanged() {
-    if (!this.isDeclarativeMode) {
-      this.buildSegmentsConfigs();
-    }
+  handleOptionsChange() {
+    void this.syncDeclarativeOptionsAndSegments();
   }
 
   @Listen('slotchange')
   handleSlotChange() {
-    this.buildSegmentsConfigs();
+    void this.syncDeclarativeOptionsAndSegments();
   }
 
-  componentWillLoad() {
-    this.buildSegmentsConfigs();
-    if (this.value === undefined && this.options.length > 0) {
-      const firstEnabled = this.options.find(opt => !opt.disabled);
-      if (firstEnabled) {
-        this.value = this.getOptionValue(firstEnabled);
-      }
-    }
-    if (this.value !== undefined) {
-      const index = this.getOptionIndex(this.value);
-      if (index >= 0) {
-        this.focusedIndex = index;
-      }
-    }
+  async componentWillLoad() {
+    await this.syncDeclarativeOptionsAndSegments();
   }
 
   connectedCallback() {
     // Watch for dynamic changes to children
     this.mutationObserver = new MutationObserver(() => {
-      this.buildSegmentsConfigs();
+      void this.syncDeclarativeOptionsAndSegments();
     });
     this.mutationObserver.observe(this.el, {
       attributes: true,
@@ -154,39 +134,37 @@ export class LeSegmentedControl {
     this.mutationObserver?.disconnect();
   }
 
-  private async buildSegmentsConfigs() {
-    // Check for le-tab children
-    const segments = Array.from(this.el.querySelectorAll(':scope > le-tab')) as Array<
-      HTMLElement & {
-        getTabConfig: () => Promise<TabConfig>;
-        setActive: (active: boolean) => Promise<void>;
-      }
-    >;
+  private async syncDeclarativeOptionsAndSegments() {
+    await this.buildDeclarativeOptions();
+    this.buildSegmentsConfigs();
+  }
 
-    if (segments.length > 0) {
-      // Declarative mode - build from children
-      this.isDeclarativeMode = true;
-      const configs: TabConfig[] = [];
+  private async buildDeclarativeOptions() {
+    const { isDeclarativeMode, options } = await buildDeclarativeOptionsFromChildren(
+      this.el,
+      'le-segmented-control',
+    );
 
-      for (const segment of segments) {
-        const config = await segment.getTabConfig();
-        configs.push({ ...config });
-      }
+    this.isDeclarativeMode = isDeclarativeMode;
+    this.declarativeOptions = options;
+  }
 
-      this.segmentConfigs = configs;
-    } else if (this.options.length > 0) {
-      // Programmatic mode - use options prop
-      this.isDeclarativeMode = false;
-      this.segmentConfigs = this.options.map(option => ({
-        label: option.label,
-        value: (option.value !== undefined ? option.value : option.label) as string,
-        iconStart: option.iconStart,
-        iconEnd: option.iconEnd,
-        disabled: option.disabled ?? false,
-      }));
-    } else {
-      this.segmentConfigs = [];
+  private get parsedOptions(): LeOption[] {
+    if (this.isDeclarativeMode) {
+      return this.declarativeOptions;
     }
+
+    return parseOptionInput(this.options, 'le-segmented-control', 'options');
+  }
+
+  private buildSegmentsConfigs() {
+    this.segmentConfigs = this.parsedOptions.map(option => ({
+      label: option.label,
+      value: String(this.getOptionValue(option)),
+      iconStart: option.iconStart,
+      iconEnd: option.iconEnd,
+      disabled: option.disabled ?? false,
+    }));
 
     // Set default selected
     if (this.value === undefined && this.segmentConfigs.length > 0) {
@@ -207,10 +185,6 @@ export class LeSegmentedControl {
 
   private getOptionValue(option: LeOption): LeOptionValue {
     return option.value !== undefined ? option.value : option.label;
-  }
-
-  private getOptionIndex(value: LeOptionValue): number {
-    return this.options.findIndex(opt => this.getOptionValue(opt) === value);
   }
 
   private selectOption(option: LeOption) {
@@ -308,7 +282,7 @@ export class LeSegmentedControl {
     const { segmentConfigs, value, size, fullWidth, disabled } = this;
 
     const classes = {
-      'le-segmented-control': true,
+      'le-segmented-control-wrapper': true,
       [`size-${size}`]: true,
       [`overflow-${this.overflow}`]: true,
       'full-width': fullWidth,

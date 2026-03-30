@@ -1336,7 +1336,7 @@ export namespace Components {
           * Array of options for the segmented control.
           * @default []
          */
-        "options": LeOption[];
+        "options": LeOption[] | string;
         /**
           * Scroll behavior for overflowing tabs.
           * @allowedValues auto | hidden | visible | scroll
@@ -4731,7 +4731,7 @@ declare namespace LocalJSX {
           * Array of options for the segmented control.
           * @default []
          */
-        "options"?: LeOption[];
+        "options"?: LeOption[] | string;
         /**
           * Scroll behavior for overflowing tabs.
           * @allowedValues auto | hidden | visible | scroll
@@ -5844,6 +5844,7 @@ declare namespace LocalJSX {
         "trackScrollProgress": string;
     }
     interface LeSegmentedControlAttributes {
+        "options": LeOption[] | string;
         "value": string;
         "size": 'small' | 'medium' | 'large';
         "overflow": 'auto' | 'hidden' | 'visible' | 'scroll';

@@ -983,7 +983,7 @@ Perfect for toggling between a small set of related options.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
-| `options` | `LeOption[]` | `[]` | Array of options for the segmented control. |
+| `options` | `LeOption[] \| string` | `[]` | Array of options for the segmented control. |
 | `value` | `LeOptionValue \| undefined` |  | The value of the currently selected option. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size of the control. |
 | `overflow` | `'auto' \| 'hidden' \| 'visible' \| 'scroll'` | `'auto'` | Scroll behavior for overflowing tabs. |

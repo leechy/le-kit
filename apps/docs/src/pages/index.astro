@@ -84,6 +84,56 @@ import TileLink from '../components/TileLink.astro';
       </le-bento-tile>
       <le-bento-tile cols="2" rows="1" class="tone-3"> Styling and Theming </le-bento-tile>
     </le-bento-grid>
+
+    <section class="home-section">
+      <h2>To Admin or not to Admin?</h2>
+      <p>
+        With this library, we're exploring the interfaces to edit complex components, and in theory — any custom HTML
+        element.
+      </p>
+      <p>As an example of what we're talking about, try toggling the admin mode:</p>
+      <p>
+        <le-segmented-control value="default" id="admin-mode-toggle">
+          <le-item value="default" label="Default mode"></le-item>
+          <le-item value="admin" label="Admin mode"></le-item>
+        </le-segmented-control>
+      </p>
+      <p>
+        ... then press the cog in the top right corner of the component and change the tabs orientation to vertical.
+      </p>
+
+      <div class="component-example">
+        <div id="content-to-edit" style="width: 80%; max-width: 800px;">
+          <le-tabs variant="enclosed" full-width>
+            <le-tab-panel label="Day" value="day">Today's schedule and events</le-tab-panel>
+            <le-tab-panel label="Week" value="week">Weekly calendar view</le-tab-panel>
+            <le-tab-panel label="Month" value="month">Monthly overview</le-tab-panel>
+          </le-tabs>
+        </div>
+      </div>
+
+      <script>
+        (() => {
+          const adminToggle = document.getElementById('admin-mode-toggle') as HTMLInputElement | null;
+          const show = () => {
+            adminToggle?.addEventListener('leChange', (event: any) => {
+              document.getElementById('content-to-edit')?.setAttribute('mode', event.detail.value);
+            });
+          };
+          if (document.readyState === 'loading') {
+            document.addEventListener(
+              'DOMContentLoaded',
+              () => {
+                void show();
+              },
+              { once: true },
+            );
+          } else {
+            void show();
+          }
+        })();
+      </script>
+    </section>
   </main>
 
   <style>

@@ -314,3 +314,14 @@ le-bento-tile {
     font-size: var(--le-font-size-md);
   }
 }
+
+.home-section {
+  margin: var(--le-spacing-8) auto;
+  max-width: 1200px;
+  padding: 0 75px;
+
+  > h2,
+  > p {
+    text-align: center;
+  }
+}

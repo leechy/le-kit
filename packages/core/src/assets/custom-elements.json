@@ -723,112 +723,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-bento-tile/le-bento-tile.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A single tile for use inside `le-bento-grid`.\n\nDeclares how many columns and rows it should span in the bento grid.\nVisual appearance (border-radius, shadow) is controlled via CSS custom\nproperties so themes can override them.",
-          "name": "LeBentoTile",
-          "cssProperties": [
-            {
-              "description": "Border radius (default: var(--le-radius-xl, 0.75rem))",
-              "name": "--le-bento-tile-radius"
-            },
-            {
-              "description": "Box shadow (default: subtle multi-layer shadow)",
-              "name": "--le-bento-tile-shadow"
-            },
-            {
-              "description": "Background color (default: transparent)",
-              "name": "--le-bento-tile-bg"
-            },
-            {
-              "description": "Inner padding (default: 0)",
-              "name": "--le-bento-tile-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The inner tile wrapper element",
-              "name": "tile"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Content displayed inside the tile",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "cols",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Number of grid columns this tile should span."
-            },
-            {
-              "kind": "field",
-              "name": "rows",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Number of grid rows this tile should span."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "cols",
-              "fieldName": "cols",
-              "default": "1",
-              "description": "Number of grid columns this tile should span.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "rows",
-              "fieldName": "rows",
-              "default": "1",
-              "description": "Number of grid rows this tile should span.",
-              "type": {
-                "text": "number"
-              }
-            }
-          ],
-          "tagName": "le-bento-tile",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeBentoTile",
-          "declaration": {
-            "name": "LeBentoTile",
-            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-bento-tile",
-          "declaration": {
-            "name": "LeBentoTile",
-            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-box/le-box.tsx",
       "declarations": [
         {
@@ -1272,6 +1166,635 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-bento-tile/le-bento-tile.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A single tile for use inside `le-bento-grid`.\n\nDeclares how many columns and rows it should span in the bento grid.\nVisual appearance (border-radius, shadow) is controlled via CSS custom\nproperties so themes can override them.",
+          "name": "LeBentoTile",
+          "cssProperties": [
+            {
+              "description": "Border radius (default: var(--le-radius-xl, 0.75rem))",
+              "name": "--le-bento-tile-radius"
+            },
+            {
+              "description": "Box shadow (default: subtle multi-layer shadow)",
+              "name": "--le-bento-tile-shadow"
+            },
+            {
+              "description": "Background color (default: transparent)",
+              "name": "--le-bento-tile-bg"
+            },
+            {
+              "description": "Inner padding (default: 0)",
+              "name": "--le-bento-tile-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The inner tile wrapper element",
+              "name": "tile"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Content displayed inside the tile",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "cols",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of grid columns this tile should span."
+            },
+            {
+              "kind": "field",
+              "name": "rows",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of grid rows this tile should span."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "cols",
+              "fieldName": "cols",
+              "default": "1",
+              "description": "Number of grid columns this tile should span.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "rows",
+              "fieldName": "rows",
+              "default": "1",
+              "description": "Number of grid rows this tile should span.",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-bento-tile",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeBentoTile",
+          "declaration": {
+            "name": "LeBentoTile",
+            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-bento-tile",
+          "declaration": {
+            "name": "LeBentoTile",
+            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-button/le-button.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible button component with multiple variants and states.",
+          "name": "LeButton",
+          "cssProperties": [
+            {
+              "description": "Button background color",
+              "name": "--le-button-bg"
+            },
+            {
+              "description": "Button text color",
+              "name": "--le-button-color"
+            },
+            {
+              "description": "Button border radius",
+              "name": "--le-button-border-radius"
+            },
+            {
+              "description": "Button horizontal padding",
+              "name": "--le-button-padding-x"
+            },
+            {
+              "description": "Button vertical padding",
+              "name": "--le-button-padding-y"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The native button element",
+              "name": "button"
+            },
+            {
+              "description": "The button content wrapper",
+              "name": "content"
+            },
+            {
+              "description": "The start icon slot",
+              "name": "icon-start"
+            },
+            {
+              "description": "The end icon slot",
+              "name": "icon-end"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Button text content",
+              "name": ""
+            },
+            {
+              "description": "Icon for icon-only buttons",
+              "name": "icon-only"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "hasIconStartSlot",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "hasIconEndSlot",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "hasIconOnlySlot",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "disconnectSlotObserver",
+              "type": {
+                "text": "() => void | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin' | undefined"
+              },
+              "description": "Mode of the popover should be 'default' for internal use"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'solid' | 'outlined' | 'clear' | 'system'"
+              },
+              "default": "'solid'",
+              "description": "Button variant style"
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "| 'primary'\n    | 'secondary'\n    | 'success'\n    | 'warning'\n    | 'danger'\n    | 'info'\n    | 'transparent'"
+              },
+              "default": "'primary'",
+              "description": "Button color theme (uses theme semantic colors)"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Button size"
+            },
+            {
+              "kind": "field",
+              "name": "selected",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is in a selected/active state"
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button takes full width of its container"
+            },
+            {
+              "kind": "field",
+              "name": "iconOnly",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "Icon only button image or emoji\nif this prop is set, the button will render only the icon slot"
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "Start icon image or emoji"
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "End icon image or emoji"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              },
+              "default": "'button'",
+              "description": "The button type attribute"
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional href to make the button act as a link"
+            },
+            {
+              "kind": "field",
+              "name": "target",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Link target when href is set"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'space-between' | 'end'"
+              },
+              "default": "'center'",
+              "description": "Alignment of the button label without the end icon"
+            },
+            {
+              "kind": "field",
+              "name": "handleClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "initSlotObserver",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "mode",
+              "fieldName": "mode",
+              "description": "Mode of the popover should be 'default' for internal use",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'solid'",
+              "description": "Button variant style",
+              "type": {
+                "text": "'solid' | 'outlined' | 'clear' | 'system'"
+              }
+            },
+            {
+              "name": "color",
+              "fieldName": "color",
+              "default": "'primary'",
+              "description": "Button color theme (uses theme semantic colors)",
+              "type": {
+                "text": "| 'primary'\n    | 'secondary'\n    | 'success'\n    | 'warning'\n    | 'danger'\n    | 'info'\n    | 'transparent'"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Button size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "selected",
+              "fieldName": "selected",
+              "default": "false",
+              "description": "Whether the button is in a selected/active state",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the button takes full width of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "icon-only",
+              "fieldName": "iconOnly",
+              "description": "Icon only button image or emoji\nif this prop is set, the button will render only the icon slot",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "description": "Start icon image or emoji",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "icon-end",
+              "fieldName": "iconEnd",
+              "description": "End icon image or emoji",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the button is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "type",
+              "fieldName": "type",
+              "default": "'button'",
+              "description": "The button type attribute",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              }
+            },
+            {
+              "name": "href",
+              "fieldName": "href",
+              "description": "Optional href to make the button act as a link",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "target",
+              "fieldName": "target",
+              "description": "Link target when href is set",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'center'",
+              "description": "Alignment of the button label without the end icon",
+              "type": {
+                "text": "'start' | 'center' | 'space-between' | 'end'"
+              }
+            }
+          ],
+          "tagName": "le-button",
+          "events": [
+            {
+              "name": "click",
+              "type": {
+                "text": "EventEmitter<MouseEvent>"
+              },
+              "description": "Emitted when the button is clicked.\nThis is a custom event that wraps the native click but ensures the target is the le-button."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeButton",
+          "declaration": {
+            "name": "LeButton",
+            "module": "src/components/le-button/le-button.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-button",
+          "declaration": {
+            "name": "LeButton",
+            "module": "src/components/le-button/le-button.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-breadcrumbs/le-breadcrumbs.tsx",
       "declarations": [
         {
@@ -1619,529 +2142,6 @@
           "declaration": {
             "name": "LeBreadcrumbs",
             "module": "src/components/le-breadcrumbs/le-breadcrumbs.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
-          "cssProperties": [
-            {
-              "description": "Card background color",
-              "name": "--le-card-bg"
-            },
-            {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
-            },
-            {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
-              "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              }
-            },
-            {
-              "name": "interactive",
-              "fieldName": "interactive",
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-card",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCard",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-card",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-button/le-button.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible button component with multiple variants and states.",
-          "name": "LeButton",
-          "cssProperties": [
-            {
-              "description": "Button background color",
-              "name": "--le-button-bg"
-            },
-            {
-              "description": "Button text color",
-              "name": "--le-button-color"
-            },
-            {
-              "description": "Button border radius",
-              "name": "--le-button-border-radius"
-            },
-            {
-              "description": "Button horizontal padding",
-              "name": "--le-button-padding-x"
-            },
-            {
-              "description": "Button vertical padding",
-              "name": "--le-button-padding-y"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The native button element",
-              "name": "button"
-            },
-            {
-              "description": "The button content wrapper",
-              "name": "content"
-            },
-            {
-              "description": "The start icon slot",
-              "name": "icon-start"
-            },
-            {
-              "description": "The end icon slot",
-              "name": "icon-end"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Button text content",
-              "name": ""
-            },
-            {
-              "description": "Icon for icon-only buttons",
-              "name": "icon-only"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "hasIconStartSlot",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "hasIconEndSlot",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "hasIconOnlySlot",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "disconnectSlotObserver",
-              "type": {
-                "text": "() => void | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "'default' | 'admin'"
-              },
-              "description": "Mode of the popover should be 'default' for internal use"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'solid' | 'outlined' | 'clear' | 'system'"
-              },
-              "default": "'solid'",
-              "description": "Button variant style"
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "| 'primary'\n    | 'secondary'\n    | 'success'\n    | 'warning'\n    | 'danger'\n    | 'info'\n    | 'transparent'"
-              },
-              "default": "'primary'",
-              "description": "Button color theme (uses theme semantic colors)"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Button size"
-            },
-            {
-              "kind": "field",
-              "name": "selected",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is in a selected/active state"
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button takes full width of its container"
-            },
-            {
-              "kind": "field",
-              "name": "iconOnly",
-              "type": {
-                "text": "string | Node | undefined"
-              },
-              "description": "Icon only button image or emoji\nif this prop is set, the button will render only the icon slot"
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string | Node | undefined"
-              },
-              "description": "Start icon image or emoji"
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string | Node | undefined"
-              },
-              "description": "End icon image or emoji"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is disabled"
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "'button' | 'submit' | 'reset'"
-              },
-              "default": "'button'",
-              "description": "The button type attribute"
-            },
-            {
-              "kind": "field",
-              "name": "href",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional href to make the button act as a link"
-            },
-            {
-              "kind": "field",
-              "name": "target",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Link target when href is set"
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'start' | 'center' | 'space-between' | 'end'"
-              },
-              "default": "'center'",
-              "description": "Alignment of the button label without the end icon"
-            },
-            {
-              "kind": "field",
-              "name": "handleClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "initSlotObserver",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "mode",
-              "fieldName": "mode",
-              "description": "Mode of the popover should be 'default' for internal use",
-              "type": {
-                "text": "'default' | 'admin'"
-              }
-            },
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'solid'",
-              "description": "Button variant style",
-              "type": {
-                "text": "'solid' | 'outlined' | 'clear' | 'system'"
-              }
-            },
-            {
-              "name": "color",
-              "fieldName": "color",
-              "default": "'primary'",
-              "description": "Button color theme (uses theme semantic colors)",
-              "type": {
-                "text": "| 'primary'\n    | 'secondary'\n    | 'success'\n    | 'warning'\n    | 'danger'\n    | 'info'\n    | 'transparent'"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Button size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "selected",
-              "fieldName": "selected",
-              "default": "false",
-              "description": "Whether the button is in a selected/active state",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the button takes full width of its container",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "icon-only",
-              "fieldName": "iconOnly",
-              "description": "Icon only button image or emoji\nif this prop is set, the button will render only the icon slot",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "icon-start",
-              "fieldName": "iconStart",
-              "description": "Start icon image or emoji",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "icon-end",
-              "fieldName": "iconEnd",
-              "description": "End icon image or emoji",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the button is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "type",
-              "fieldName": "type",
-              "default": "'button'",
-              "description": "The button type attribute",
-              "type": {
-                "text": "'button' | 'submit' | 'reset'"
-              }
-            },
-            {
-              "name": "href",
-              "fieldName": "href",
-              "description": "Optional href to make the button act as a link",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "target",
-              "fieldName": "target",
-              "description": "Link target when href is set",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'center'",
-              "description": "Alignment of the button label without the end icon",
-              "type": {
-                "text": "'start' | 'center' | 'space-between' | 'end'"
-              }
-            }
-          ],
-          "tagName": "le-button",
-          "events": [
-            {
-              "name": "click",
-              "type": {
-                "text": "EventEmitter<MouseEvent>"
-              },
-              "description": "Emitted when the button is clicked.\nThis is a custom event that wraps the native click but ensures the target is the le-button."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeButton",
-          "declaration": {
-            "name": "LeButton",
-            "module": "src/components/le-button/le-button.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-button",
-          "declaration": {
-            "name": "LeButton",
-            "module": "src/components/le-button/le-button.tsx"
           }
         }
       ]
@@ -10664,9 +10664,8 @@
               "kind": "field",
               "name": "mode",
               "type": {
-                "text": "'default' | 'admin'"
+                "text": "'default' | 'admin' | undefined"
               },
-              "default": "'default'",
               "description": "Mode of the popover should be 'default' for internal use"
             },
             {
@@ -10819,7 +10818,6 @@
             {
               "name": "mode",
               "fieldName": "mode",
-              "default": "'default'",
               "description": "Mode of the popover should be 'default' for internal use",
               "type": {
                 "text": "'default' | 'admin'"

@@ -240,7 +240,7 @@ A flexible button component with multiple variants and states.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
-| `mode` | `'default' \| 'admin'` |  | Mode of the popover should be 'default' for internal use |
+| `mode` | `'default' \| 'admin' \| undefined` |  | Mode of the popover should be 'default' for internal use |
 | `variant` | `'solid' \| 'outlined' \| 'clear' \| 'system'` | `'solid'` | Button variant style |
 | `color` | `\| 'primary'
     \| 'secondary'
@@ -1193,7 +1193,7 @@ A text input component with support for labels, descriptions, icons, and externa
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
 | `inputRef` | `(el: HTMLInputElement) => void \| undefined` |  | Pass the ref of the input element to the parent component |
-| `mode` | `'default' \| 'admin'` | `'default'` | Mode of the popover should be 'default' for internal use |
+| `mode` | `'default' \| 'admin' \| undefined` |  | Mode of the popover should be 'default' for internal use |
 | `value` | `string \| undefined` |  | The value of the input |
 | `name` | `string \| undefined` |  | The name of the input |
 | `type` | `'text' \| 'email' \| 'password' \| 'search' \| 'tel' \| 'url'` | `'text'` | The type of the input (text, email, password, etc.) |

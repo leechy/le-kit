@@ -354,7 +354,7 @@ export namespace Components {
         /**
           * Mode of the popover should be 'default' for internal use
          */
-        "mode": 'default' | 'admin';
+        "mode"?: 'default' | 'admin';
         /**
           * Whether the button is in a selected/active state
           * @default false
@@ -1759,9 +1759,8 @@ export namespace Components {
         "label"?: string;
         /**
           * Mode of the popover should be 'default' for internal use
-          * @default 'default'
          */
-        "mode": 'default' | 'admin';
+        "mode"?: 'default' | 'admin';
         /**
           * The name of the input
          */
@@ -5166,7 +5165,6 @@ declare namespace LocalJSX {
         "label"?: string;
         /**
           * Mode of the popover should be 'default' for internal use
-          * @default 'default'
          */
         "mode"?: 'default' | 'admin';
         /**

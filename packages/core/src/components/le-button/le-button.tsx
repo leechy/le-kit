@@ -48,7 +48,7 @@ export class LeButton {
   /**
    * Mode of the popover should be 'default' for internal use
    */
-  @Prop({ mutable: true, reflect: true }) mode!: 'default' | 'admin';
+  @Prop({ mutable: true, reflect: true }) mode?: 'default' | 'admin';
 
   /**
    * Button variant style

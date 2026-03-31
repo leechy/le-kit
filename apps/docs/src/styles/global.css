@@ -316,9 +316,9 @@ le-bento-tile {
 }
 
 .home-section {
-  margin: var(--le-spacing-8) auto;
+  margin: 4rem auto;
   max-width: 1200px;
-  padding: 0 75px;
+  padding: 0 50px;
 
   > h2,
   > p {

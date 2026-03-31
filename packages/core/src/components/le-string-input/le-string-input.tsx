@@ -40,7 +40,7 @@ export class LeStringInput {
   /**
    * Mode of the popover should be 'default' for internal use
    */
-  @Prop({ mutable: true, reflect: true }) mode: 'default' | 'admin' = 'default';
+  @Prop({ mutable: true, reflect: true }) mode?: 'default' | 'admin';
 
   /**
    * The value of the input

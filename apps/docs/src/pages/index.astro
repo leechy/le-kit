@@ -103,11 +103,43 @@ import TileLink from '../components/TileLink.astro';
       </p>
 
       <div class="component-example">
-        <div id="content-to-edit" style="width: 80%; max-width: 800px;">
-          <le-tabs variant="enclosed" full-width>
-            <le-tab-panel label="Day" value="day">Today's schedule and events</le-tab-panel>
-            <le-tab-panel label="Week" value="week">Weekly calendar view</le-tab-panel>
-            <le-tab-panel label="Month" value="month">Monthly overview</le-tab-panel>
+        <div id="content-to-edit" style="width: 80%; max-width: 600px;">
+          <le-tabs variant="underlined">
+            <le-tab-panel label="Sign In" value="sign-in">
+              <form>
+                <le-stack gap="12" direction="vertical">
+                  <le-string-input name="login" label="Login" description="Should be your email"></le-string-input>
+                  <le-string-input name="password" label="Password" type="password"></le-string-input>
+                  <le-button>Sign In</le-button>
+                </le-stack>
+              </form>
+            </le-tab-panel>
+            <le-tab-panel label="Sign Up" value="sign-up">
+              <form>
+                <le-stack gap="12" direction="vertical">
+                  <le-string-input name="login" label="Login" description="Use your email"></le-string-input>
+                  <le-string-input
+                    name="password"
+                    label="Password"
+                    type="password"
+                    description="8 chars minimum. Numbers are required."></le-string-input>
+                  <le-string-input
+                    name="confirm-password"
+                    label="Confirm Password"
+                    type="password"
+                    description="Re-enter your password"></le-string-input>
+                  <le-button>Sign Up</le-button>
+                </le-stack>
+              </form>
+            </le-tab-panel>
+            <le-tab-panel label="Password Reset" value="password-reset">
+              <form>
+                <le-stack gap="12" direction="vertical">
+                  <le-string-input name="email" label="Email" description="Enter your email"></le-string-input>
+                  <le-button>Reset Password</le-button>
+                </le-stack>
+              </form>
+            </le-tab-panel>
           </le-tabs>
         </div>
       </div>

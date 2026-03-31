@@ -325,3 +325,36 @@ le-bento-tile {
     text-align: center;
   }
 }
+
+.site-content {
+  min-height: 100vh;
+}
+
+.site-footer {
+  margin-top: var(--le-spacing-10);
+  padding: var(--le-spacing-4) var(--le-spacing-4) var(--le-spacing-8);
+  border-top: 2px solid var(--le-color-border);
+  background: color-mix(in srgb, var(--le-color-surface) 70%, transparent);
+  text-align: center;
+
+  div {
+    max-width: 1200px;
+    padding: 0 50px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--le-font-size-sm);
+    color: var(--le-color-text-primary);
+
+    span {
+      white-space: nowrap;
+    }
+  }
+}
+
+.site-footer a:any-link {
+  margin-inline-start: var(--le-spacing-2);
+}

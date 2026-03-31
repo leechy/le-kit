@@ -1,0 +1,77 @@
+---
+import DocsPage from '../../layouts/DocsPage.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<DocsPage title="Contributing">
+  <h1 class="indent">Contributing</h1>
+  <p>
+    Contributions are welcome. If you want to fix bugs, improve DX, add tests, or propose new components, please open an
+    issue or send a pull request.
+  </p>
+
+  <h2 class="indent">
+    <a href="#workflow" id="workflow">Preferred workflow</a>
+  </h2>
+  <ol>
+    <li>Fork the repository on GitHub.</li>
+    <li>Create a branch for your change.</li>
+    <li>Make focused commits with clear messages.</li>
+    <li>Run tests and build locally.</li>
+    <li>Open a pull request with a short explanation of what changed and why.</li>
+  </ol>
+
+  <CodeBlock
+    language="bash"
+    title="Typical local flow"
+    code={'git clone https://github.com/<your-user>/le-kit.git\ncd le-kit\nnpm install\n\n# core package\ncd packages/core\nnpm test\nnpm run build'}
+  />
+
+  <h2 class="indent">
+    <a href="#pull-requests" id="pull-requests">Pull request expectations</a>
+  </h2>
+  <p>To keep reviews fast and productive, please try to:</p>
+  <ul>
+    <li>Keep PRs scoped to one topic (bugfix, feature, or refactor).</li>
+    <li>Include before/after behavior in the PR description.</li>
+    <li>Update docs when public behavior changes.</li>
+    <li>Add or update tests for the changed behavior.</li>
+  </ul>
+
+  <h2 class="indent">
+    <a href="#testing" id="testing">Testing help is especially valuable</a>
+  </h2>
+  <p>One of the most important areas for contributions is testing quality across components and themes.</p>
+  <p>High-impact testing contributions include:</p>
+  <ul>
+    <li>Unit tests for component logic and edge cases.</li>
+    <li>End-to-end tests with a headless browser to validate user interactions.</li>
+    <li>Theme checks to ensure components render correctly with different theme variables.</li>
+    <li>
+      Integration tests that verify components work together (for example, popovers, slots, navigation, and form
+      controls in one flow).
+    </li>
+  </ul>
+
+  <CodeBlock language="bash" title="Run tests" code={'cd packages/core\nnpm test'} />
+
+  <h2 class="indent">
+    <a href="#new-components" id="new-components">Ideas for new components</a>
+  </h2>
+  <p>
+    New component ideas are welcome. If you have a proposal, open an issue with a short spec: problem to solve, expected
+    API, accessibility considerations, and a simple usage example.
+  </p>
+  <p>
+    Good proposals are small, practical, and align with Le-Kit's goals: themeable components, strong interaction
+    behavior, and compatibility with admin-mode editing.
+  </p>
+
+  <h2 class="indent">
+    <a href="#communication" id="communication">Communication</a>
+  </h2>
+  <p>
+    Not sure where to start? Open an issue and ask. Even small contributions are useful, and feedback on docs, examples,
+    and test coverage is always appreciated.
+  </p>
+</DocsPage>

@@ -36,12 +36,12 @@ export const docsNavigationItems: NavItem[] = [
     id: 'core-concepts',
     open: true,
     children: [
-      { label: 'Admin Mode', href: '/docs/admin-mode' },
+      // { label: 'Admin Mode', href: '/docs/admin-mode' },
       { label: 'Styling & Theming', href: '/docs/theming' },
     ],
   },
   { label: 'Contributing', href: '/docs/contributing' },
-  { label: 'Changelog', href: '/docs/changelog' },
+  // { label: 'Changelog', href: '/docs/changelog' },
 ];
 
 export const componentsNavigationItems: NavItem[] = [

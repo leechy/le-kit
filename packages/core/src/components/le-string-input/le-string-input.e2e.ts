@@ -1,3 +1,4 @@
+import { describe, it } from '@jest/globals';
 import { newE2EPage } from '@stencil/core/testing';
 
 describe('le-string-input e2e', () => {
@@ -54,8 +55,10 @@ describe('le-string-input e2e', () => {
     await page.focus('#before');
     await page.keyboard.press('Tab');
 
-    const activeTag = await page.evaluate(
-      () => (document.activeElement?.shadowRoot?.activeElement ?? document.activeElement)?.tagName.toLowerCase(),
+    const activeTag = await page.evaluate(() =>
+      (
+        document.activeElement?.shadowRoot?.activeElement ?? document.activeElement
+      )?.tagName.toLowerCase(),
     );
     expect(activeTag).toBe('input');
   });
@@ -70,7 +73,9 @@ describe('le-string-input e2e', () => {
 
   it('input is readonly when readonly prop is set', async () => {
     const page = await newE2EPage();
-    await page.setContent('<le-string-input readonly name="title" value="fixed"></le-string-input>');
+    await page.setContent(
+      '<le-string-input readonly name="title" value="fixed"></le-string-input>',
+    );
 
     const input = await page.find('le-string-input >>> input');
     expect(await input.getProperty('readOnly')).toBe(true);

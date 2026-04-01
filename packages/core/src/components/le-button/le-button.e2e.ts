@@ -1,3 +1,4 @@
+import { describe, it } from '@jest/globals';
 import { newE2EPage } from '@stencil/core/testing';
 
 describe('le-button e2e', () => {

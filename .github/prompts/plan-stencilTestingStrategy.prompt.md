@@ -20,6 +20,15 @@ Completed files:
 - packages/core/src/components/le-string-input/le-string-input.spec.tsx — 7 passing spec tests
 
 Total: 21 tests passing (incl. utils.spec.ts), 0 failing.
+- packages/core/src/components/le-button/le-button.e2e.ts — 6 passing e2e tests
+- packages/core/src/components/le-string-input/le-string-input.e2e.ts — 6 passing e2e tests
+
+Last updated: April 1, 2026. Sprint 0 complete. Sprint 1 complete (spec + e2e). Total: 33 tests passing, 0 failing.
+
+E2E notes (carry forward to all suites):
+- Keyboard tests must target shadow-DOM native elements via `>>>` selector, not the host element.
+- `toHaveReceivedEventDetail` requires exact objects; `undefined` props are dropped during Puppeteer JSON serialization — omit them from expected detail objects.
+- In headless Chromium, Enter on a text input fires native `change` (different from real desktop browser behavior).
 
 ## Sprint 0 (Kickoff, 1-2 days) ✅
 
@@ -35,6 +44,7 @@ Exit criteria
 1. [x] At least one component has stable spec coverage with repeated local passes.
 
 ## Sprint 1 (Week 1) — spec tier complete, e2e + visual pending
+## Sprint 1 (Week 1) ✅
 
 Goal: lock down foundational interactions and admin-related regressions.
 
@@ -42,6 +52,7 @@ le-button
 
 1. [x] Spec: host classes (variant/color/size), icon-only mode, anchor mode, click emission, disabled guard.
 2. [ ] E2E: keyboard activation, disabled interaction block, link mode behavior.
+2. [x] E2E: keyboard activation (Enter/Space via inner shadow button), disabled click block, anchor mode, Tab focus and disabled skip.
 3. [ ] Visual: baseline matrix for key variants and states.
 
 le-string-input
@@ -49,12 +60,14 @@ le-string-input
 1. [x] Spec: leInput vs leChange timing, clearable behavior, slot presence logic.
 2. [x] Spec: admin-mode integration regression checks.
 3. [ ] E2E: focus/blur and keyboard commit paths.
+3. [x] E2E: leInput on keystrokes, leChange on Tab-blur and Enter, focus delegation to inner input, disabled/readonly forwarding.
 4. [ ] Visual: label/input/description token-driven states.
 
 Exit criteria
 
 1. [x] le-button + le-string-input specs are stable and green.
 2. [ ] e2e paths stable for both components.
+2. [x] e2e paths stable for both components.
 
 ## Sprint 2 (Week 2)
 
@@ -121,9 +134,9 @@ Exit criteria
 
 ## Immediate Next Steps
 
-**Sprint 1 finish line** (pick up from here next session):
+**Sprint 2** (next session):
 
-1. [ ] le-button e2e: keyboard activation and disabled interaction block.
-2. [ ] le-string-input e2e: focus/blur and keyboard commit paths.
-
-**Then Sprint 2:** 3. [ ] le-code-input spec: paste distribution, selection, auto-advance, backspace, truncation. 4. [ ] le-select spec: value sync, option source mode, open/close events, disabled.
+1. [ ] le-code-input spec: paste distribution, selection, auto-advance, backspace, truncation.
+2. [ ] le-code-input e2e: realistic typing and paste sequences.
+3. [ ] le-select spec: value sync, option source mode, open/close events, disabled.
+4. [ ] le-select e2e: keyboard matrix (ArrowUp, ArrowDown, Home, End, Enter, Escape) and popover behavior.

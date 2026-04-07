@@ -1,0 +1,25 @@
+{
+  "viewBox": "0 0 16 16",
+  "children": [
+    {
+      "tag": "line",
+      "x1": "3.5",
+      "y1": "8",
+      "x2": "12.5",
+      "y2": "8",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "2"
+    },
+    {
+      "tag": "line",
+      "x1": "8",
+      "y1": "3.5",
+      "x2": "8",
+      "y2": "12.5",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "2"
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { Config } from '@stencil/core';
 
 export const config: Config = {
@@ -56,5 +57,8 @@ export const config: Config = {
   ],
   testing: {
     browserHeadless: 'shell',
+    screenshotConnector: join(__dirname, '../../node_modules/@stencil/core/screenshot/local-connector.js'),
+    pixelmatchThreshold: 0.1,
+    waitBeforeScreenshot: 20,
   },
 };

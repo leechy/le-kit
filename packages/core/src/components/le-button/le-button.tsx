@@ -48,7 +48,7 @@ export class LeButton {
   /**
    * Mode of the popover should be 'default' for internal use
    */
-  @Prop({ mutable: true, reflect: true }) mode!: 'default' | 'admin';
+  @Prop({ mutable: true, reflect: true }) mode?: 'default' | 'admin';
 
   /**
    * Button variant style
@@ -60,7 +60,14 @@ export class LeButton {
    * Button color theme (uses theme semantic colors)
    * @allowedValues primary | secondary | success | warning | danger | info
    */
-  @Prop() color: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' = 'primary';
+  @Prop() color:
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'info'
+    | 'transparent' = 'primary';
 
   /**
    * Button size

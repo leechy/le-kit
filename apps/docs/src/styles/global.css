@@ -269,11 +269,11 @@ le-bento-tile {
   text-decoration: none;
   color: var(--le-color-text-primary);
 
-  background-color: color-mix(in srgb, var(--le-color-primary) 20%, transparent);
-
-  &:hover {
-    background-color: color-mix(in srgb, var(--le-color-surface) 42%, transparent);
-  }
+  background-color: color-mix(in srgb, var(--le-color-primary) 15%, transparent);
+}
+.bento-tile:any-link:hover,
+.tile-link-anchor:hover {
+  background-color: color-mix(in srgb, var(--le-color-surface) 30%, transparent);
 }
 
 .bento-tile-type {
@@ -291,6 +291,18 @@ le-bento-tile {
   margin-bottom: var(--le-spacing-2);
 }
 
+.bento-tile-demo {
+  padding: 0 12px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+.bento-tile-demo-container {
+  display: inline-block;
+  --le-color-surface: #e0f3f8;
+}
+
 .bento-tile-content {
   padding: var(--le-spacing-3);
 
@@ -301,4 +313,48 @@ le-bento-tile {
     margin: var(--le-spacing-2) 0 0;
     font-size: var(--le-font-size-md);
   }
+}
+
+.home-section {
+  margin: 4rem auto;
+  max-width: 1200px;
+  padding: 0 50px;
+
+  > h2,
+  > p {
+    text-align: center;
+  }
+}
+
+.site-content {
+  min-height: 100vh;
+}
+
+.site-footer {
+  margin-top: var(--le-spacing-10);
+  padding: var(--le-spacing-4) var(--le-spacing-4) var(--le-spacing-8);
+  border-top: 2px solid var(--le-color-border);
+  background: color-mix(in srgb, var(--le-color-surface) 70%, transparent);
+  text-align: center;
+
+  div {
+    max-width: 1200px;
+    padding: 0 50px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--le-font-size-sm);
+    color: var(--le-color-text-primary);
+
+    span {
+      white-space: nowrap;
+    }
+  }
+}
+
+.site-footer a:any-link {
+  margin-inline-start: var(--le-spacing-2);
 }

@@ -1,0 +1,195 @@
+---
+import DocsPage from '../../layouts/DocsPage.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<DocsPage title="Styling & Theming">
+  <h1 class="indent">Styling &amp; Theming</h1>
+  <p>
+    Le-Kit is designed to be style-agnostic at its core. All visual decisions — colors, spacing, radii, typography —
+    flow through CSS custom properties, so they can be overridden globally, per-theme, or per-element without touching
+    the component source.
+  </p>
+
+  <h2 class="indent">
+    <a href="#tokens" id="tokens">Design tokens</a>
+  </h2>
+  <p>The library ships two CSS layers that you import together:</p>
+  <ul>
+    <li>
+      <strong>base.css</strong> — structural tokens: spacing scale, typography, border radii, transitions, and z-index layers.
+      These rarely differ between themes.
+    </li>
+    <li>
+      <strong>theme file</strong> — color tokens for a specific look:
+      <code>default.css</code>, <code>dark.css</code>, <code>warm.css</code>, and so on.
+    </li>
+  </ul>
+
+  <CodeBlock
+    language="css"
+    title="Minimal import"
+    code={`@import 'le-kit/dist/themes/base.css';
+@import 'le-kit/dist/themes/default.css';`}
+  />
+
+  <p>
+    Setting a theme on the <code>&lt;html&gt;</code> element activates it for every component on the page. You can also scope
+    a theme to any subtree:
+  </p>
+
+  <CodeBlock
+    language="html"
+    code={`<!-- whole page uses dark theme -->
+<html theme="dark">
+
+<!-- or just a section -->
+<section theme="dark">
+  <le-card>...</le-card>
+</section>`}
+  />
+
+  <h2 class="indent">
+    <a href="#per-component" id="per-component">Per-component CSS variables</a>
+  </h2>
+  <p>
+    Each component exposes its own set of custom properties that fall back to the global tokens. For example, <code
+      >&lt;le-button&gt;</code
+    > uses:
+  </p>
+
+  <CodeBlock
+    language="css"
+    code={`:host {
+  --le-button-border-radius: var(--le-radius-md);
+  --le-button-padding-x:     var(--le-spacing-3);
+  --le-button-padding-y:     var(--le-spacing-1);
+  --le-button-font-size:     var(--le-font-size-md);
+  --le-button-color:         var(--le-color-primary-contrast);
+  /* … */
+}`}
+  />
+
+  <p>
+    You can override any of these from the outside — either globally or scoped to a specific context — without breaking
+    the fallback chain:
+  </p>
+
+  <CodeBlock
+    language="css"
+    code={`/* Round every button */
+le-button {
+  --le-button-border-radius: var(--le-radius-full);
+}
+
+/* Override only inside a specific component */
+.hero le-button {
+  --le-button-font-size: var(--le-font-size-lg);
+}`}
+  />
+
+  <h2 class="indent">
+    <a href="#parts" id="parts">CSS parts</a>
+  </h2>
+  <p>
+    For cases where custom properties are not enough, components expose internal elements via the
+    <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/::part" target="_blank" rel="noopener"
+      ><code>::part()</code></a
+    > pseudo-element, giving you direct access to shadow DOM nodes from the outside.
+  </p>
+
+  <CodeBlock
+    language="css"
+    code={`/* Style the inner container of le-string-input */
+le-string-input::part(container) {
+  border-style: dashed;
+}`}
+  />
+
+  <p>Available parts for each component are listed on their individual documentation pages.</p>
+
+  <h2 class="indent">
+    <a href="#approach" id="approach">Open design question</a>
+  </h2>
+  <p>
+    The right strategy for the variable system is still an open question and an active area of thought for the project.
+    There are two main approaches, each with real trade-offs:
+  </p>
+
+  <h3 class="indent">Option A — per-component variables</h3>
+  <p>Every fine-grained value gets its own prefixed variable. Themes set them all explicitly.</p>
+  <CodeBlock
+    language="css"
+    code={`:root {
+  --le-border-color:        #999;
+  --le-button-border-color: #333;
+  --le-input-border-color:  #666;
+  /* one variable per component per property */
+}`}
+  />
+  <p>
+    <strong>Pros:</strong> maximum control; you can tune anything without side-effects.
+    <br />
+    <strong>Cons:</strong> lots of variables to maintain; easy for themes to drift visually because nothing enforces consistency.
+  </p>
+
+  <h3 class="indent">Option B — shared variables, locally reassigned</h3>
+  <p>
+    A small set of semantic tokens is used everywhere. To diverge, you reassign the shared token for a specific scope.
+  </p>
+  <CodeBlock
+    language="css"
+    code={`:root {
+  --le-border-color: #999;
+}
+
+/* Make buttons use a stronger border, keeping other components intact */
+le-button {
+  --le-border-color: #333;
+}`}
+  />
+  <p>
+    <strong>Pros:</strong> fewer variables; design consistency is easier to enforce because components share tokens by default.
+    <br />
+    <strong>Cons:</strong> reassigning a shared token in a wide scope can cause unexpected visual changes in nested components.
+  </p>
+
+  <h3 class="indent">Current approach</h3>
+  <p>
+    Le-Kit currently uses a hybrid: global semantic tokens in
+    <code>base.css</code> and the theme files, with component-local variables that fall back to those tokens. This means you
+    can override at whichever level makes sense. The right balance — how many levels, how granular, how much fallback chaining
+    — is still being worked out, and feedback from real use cases is welcome.
+  </p>
+
+  <h2 class="indent">
+    <a href="#custom-theme" id="custom-theme">Creating a custom theme</a>
+  </h2>
+  <p>
+    Copy any of the existing theme files and change the selector. You only need to redeclare the tokens you want to
+    change — the rest falls through to the base.
+  </p>
+
+  <CodeBlock
+    language="css"
+    title="my-theme.css"
+    code={`/* Import base tokens first */
+@import 'le-kit/dist/themes/base.css';
+
+[theme="my-theme"] {
+  --le-color-primary:          #7c3aed;
+  --le-color-primary-light:    #a78bfa;
+  --le-color-primary-dark:     #5b21b6;
+  --le-color-primary-contrast: #ffffff;
+
+  /* override only what you need */
+}`}
+  />
+
+  <CodeBlock
+    language="html"
+    code={`<html theme="my-theme">
+  <!-- every le-kit component now uses your colors -->
+</html>`}
+  />
+</DocsPage>

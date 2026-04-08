@@ -90,6 +90,8 @@ graph TD;
   le-multiselect --> le-string-input
   le-tag --> le-component
   le-tag --> le-slot
+  le-tag --> le-button
+  le-tag --> le-icon
   le-component --> le-button
   le-component --> le-select
   le-component --> le-checkbox

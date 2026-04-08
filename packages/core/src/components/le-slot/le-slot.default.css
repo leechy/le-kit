@@ -43,10 +43,14 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 2px dashed var(--le-slot-border-color);
+  border: 2px dotted var(--le-admin-border-color, #90caf9);
   border-radius: 4px;
   background: var(--le-slot-bg-color);
   margin: 4px 0;
+}
+
+:host(.admin-mode) .le-slot-container:hover {
+  border-color: var(--le-admin-border-hover, #42a5f5);
 }
 
 :host(.admin-mode) .le-slot-header {

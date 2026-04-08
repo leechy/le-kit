@@ -4,6 +4,9 @@ src-core/
 www/
 loader/
 
+# Screenshot generated diff viewer (baselines in screenshot/images/ and screenshot/builds/ ARE committed)
+packages/core/screenshot/compare.html
+
 *~
 *.sw[mnpcod]
 *.log

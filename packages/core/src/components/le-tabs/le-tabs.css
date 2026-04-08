@@ -56,6 +56,7 @@
 }
 
 .orientation-vertical .tablist {
+  flex: 1;
   flex-direction: column;
   border-right: 1px solid var(--le-tabs-border-color);
   min-width: 150px;
@@ -135,6 +136,7 @@
 }
 
 .orientation-vertical .panels {
+  flex: 3;
   padding-left: var(--le-spacing-4);
 }
 

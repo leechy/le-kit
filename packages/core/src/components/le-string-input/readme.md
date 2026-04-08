@@ -22,7 +22,7 @@ A text input component with support for labels, descriptions, icons, and externa
 | `iconStart`    | `icon-start`   | Icon for the start icon                                       | `string \| undefined`                                           | `undefined` |
 | `inputRef`     | --             | Pass the ref of the input element to the parent component     | `((el: HTMLInputElement) => void) \| undefined`                 | `undefined` |
 | `label`        | `label`        | Label for the input                                           | `string \| undefined`                                           | `undefined` |
-| `mode`         | `mode`         | Mode of the popover should be 'default' for internal use      | `"admin" \| "default"`                                          | `'default'` |
+| `mode`         | `mode`         | Mode of the popover should be 'default' for internal use      | `"admin" \| "default" \| undefined`                             | `undefined` |
 | `name`         | `name`         | The name of the input                                         | `string \| undefined`                                           | `undefined` |
 | `placeholder`  | `placeholder`  | Placeholder text                                              | `string \| undefined`                                           | `undefined` |
 | `readonly`     | `readonly`     | Whether the input is read-only                                | `boolean`                                                       | `false`     |

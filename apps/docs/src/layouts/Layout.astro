@@ -14,6 +14,7 @@ interface Props {
 }
 
 const { title } = Astro.props;
+const currentYear = new Date().getFullYear();
 
 let coreVersion = 'dev';
 try {
@@ -127,8 +128,19 @@ try {
         /></le-button
       >
     </le-header>
-    <le-header-placeholder></le-header-placeholder>
+    <div class="site-content">
+      <le-header-placeholder></le-header-placeholder>
 
-    <slot />
+      <slot />
+    </div>
+    <footer class="site-footer">
+      <div>
+        <span>&copy; 2025-{currentYear} Andrey Lechev (Leechy)</span>
+        <span>
+          <a href="/terms"><em>Terms &amp; Conditions</em></a>
+          <a href="/privacy"><em>Privacy Policy</em></a>
+        </span>
+      </div>
+    </footer>
   </body>
 </html>

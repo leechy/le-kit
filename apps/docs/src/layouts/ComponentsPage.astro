@@ -1,6 +1,6 @@
 ---
-import Layout from "./Layout.astro";
-import { componentsNavigationItems, type NavItem } from "../data/navigation";
+import Layout from './Layout.astro';
+import { componentsNavigationItems, type NavItem } from '../data/navigation';
 
 interface Props {
   title: string;
@@ -10,47 +10,34 @@ interface Props {
 const { title, pageType } = Astro.props;
 
 const pathname = Astro.url.pathname;
-const isComponentsIndex =
-  pathname === "/components" || pathname === "/components/";
+const isComponentsIndex = pathname === '/components' || pathname === '/components/';
 
-const documentTitle = isComponentsIndex
-  ? "Components - le-kit"
-  : `${title} - le-kit Documentation`;
+const documentTitle = isComponentsIndex ? 'Le-Kit Components' : `<${title}> ⁃ Le-Kit Component`;
 
 const breadcrumbItems = isComponentsIndex
-  ? [{ label: "Le-Kit", href: "/" }, { label: "Components" }]
-  : [
-      { label: "Le-Kit", href: "/" },
-      { label: "Components", href: "/components" },
-      { label: title },
-    ];
+  ? [{ label: 'Le-Kit', href: '/' }, { label: 'Components' }]
+  : [{ label: 'Le-Kit', href: '/' }, { label: 'Components', href: '/components' }, { label: title }];
 
 const escapeAttribute = (value: string) =>
-  value
-    .replaceAll("&", "&amp;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
+  value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 
 const renderNavigationItems = (items: NavItem[]): string =>
   items
     .map((item) => {
       const attrs = [
         `label="${escapeAttribute(item.label)}"`,
-        item.href ? `href="${escapeAttribute(item.href)}"` : "",
-        item.id ? `id="${escapeAttribute(item.id)}"` : "",
-        item.open ? "open" : "",
-        item.href && pathname.startsWith(item.href) ? "selected" : "",
+        item.href ? `href="${escapeAttribute(item.href)}"` : '',
+        item.id ? `id="${escapeAttribute(item.id)}"` : '',
+        item.open ? 'open' : '',
+        item.href && pathname.startsWith(item.href) ? 'selected' : '',
       ]
         .filter(Boolean)
-        .join(" ");
+        .join(' ');
 
-      const children = item.children?.length
-        ? renderNavigationItems(item.children)
-        : "";
+      const children = item.children?.length ? renderNavigationItems(item.children) : '';
       return `<le-item ${attrs}>${children}</le-item>`;
     })
-    .join("");
+    .join('');
 
 const navigationMarkup = renderNavigationItems(componentsNavigationItems);
 ---
@@ -71,10 +58,7 @@ const navigationMarkup = renderNavigationItems(componentsNavigationItems);
     </le-navigation>
 
     <div class="content">
-      <le-breadcrumbs
-        items={JSON.stringify(breadcrumbItems)}
-        class="site-navigation"
-      >
+      <le-breadcrumbs items={JSON.stringify(breadcrumbItems)} class="site-navigation">
         <le-side-panel-toggle
           slot="start"
           panel-id="components-navigation"
@@ -89,7 +73,7 @@ const navigationMarkup = renderNavigationItems(componentsNavigationItems);
       </le-breadcrumbs>
 
       {
-        pageType === "index" ? (
+        pageType === 'index' ? (
           <main class="bento-page">
             <slot />
           </main>
@@ -112,8 +96,7 @@ const navigationMarkup = renderNavigationItems(componentsNavigationItems);
 
     @media (min-width: 900px) {
       le-breadcrumbs {
-        margin: var(--le-spacing-4) 0 var(--le-spacing-4)
-          calc(-1 * var(--le-spacing-4));
+        margin: var(--le-spacing-4) 0 var(--le-spacing-4) calc(-1 * var(--le-spacing-4));
       }
       .content {
         padding: 0 0 0 var(--le-spacing-4);

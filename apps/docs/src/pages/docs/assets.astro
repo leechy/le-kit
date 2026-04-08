@@ -1,0 +1,267 @@
+---
+import DocsPage from '../../layouts/DocsPage.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<DocsPage title="Assets Setup">
+  <h1 class="indent">Assets Setup</h1>
+  <p>
+    Le-Kit ships a handful of static files that must be accessible at runtime from your web server. Without them, icons
+    won't render and — if you use admin mode — the component property editor won't work.
+  </p>
+  <p>The files you need to serve are:</p>
+  <ul>
+    <li>
+      <strong>Runtime bundle</strong> — the lazy-loading JS/CSS entry points (from <code
+        >node_modules/le-kit/dist/le-kit/</code
+      >)
+    </li>
+    <li>
+      <strong>Component assets</strong> — JSON icon definitions used by
+      <code>&lt;le-icon&gt;</code> (from
+      <code>node_modules/le-kit/dist/components/assets/</code>)
+    </li>
+    <li>
+      <strong>Custom Elements Manifest</strong> — component metadata used by the admin-mode property editor (from
+      <code>node_modules/le-kit/src/assets/custom-elements.json</code>)
+    </li>
+  </ul>
+  <p>
+    The simplest approach is to copy them all into a single directory under your public root, for example <code
+      >/public/le-kit/</code
+    >. The component assets <strong>must</strong> live in an <code>assets/</code> sub-folder next to the bundle so that Stencil's
+    internal path resolver finds them automatically — no extra configuration needed in that case.
+  </p>
+
+  <h2 class="indent">
+    <a href="#structure" id="structure">Expected directory structure</a>
+  </h2>
+  <CodeBlock
+    language="text"
+    code={`public/
+└── le-kit/
+    ├── le-kit.esm.js       ← bundle entry (ES modules)
+    ├── le-kit.js           ← bundle entry (no-module fallback)
+    ├── le-kit.css          ← bundled styles
+    ├── *.entry.js          ← lazy-loaded component chunks
+    ├── assets/
+    │   ├── icons/          ← JSON icon definitions
+    │   └── custom-elements.json
+    └── …`}
+  />
+
+  <h2 class="indent">
+    <a href="#astro" id="astro">Astro</a>
+  </h2>
+  <p>
+    The easiest way in an Astro project is
+    <a href="https://www.npmjs.com/package/vite-plugin-static-copy" target="_blank" rel="noopener"
+      >vite-plugin-static-copy</a
+    >, which runs during the Vite build and dev server.
+  </p>
+
+  <CodeBlock language="bash" title="Install the plugin" code={`npm install -D vite-plugin-static-copy`} />
+
+  <CodeBlock
+    language="js"
+    title="astro.config.mjs"
+    code={`import { defineConfig } from 'astro/config';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
+
+export default defineConfig({
+  vite: {
+    plugins: [
+      viteStaticCopy({
+        targets: [
+          {
+            // Runtime bundle (JS + CSS entry points + lazy chunks)
+            src: 'node_modules/le-kit/dist/le-kit/*',
+            dest: 'le-kit',
+          },
+          {
+            // Icons — must live in assets/ next to the bundle
+            src: 'node_modules/le-kit/dist/components/assets/*',
+            dest: 'le-kit/assets',
+          },
+          {
+            // Custom Elements Manifest (required for admin mode)
+            src: 'node_modules/le-kit/src/assets/custom-elements.json',
+            dest: 'le-kit/assets',
+          },
+        ],
+      }),
+    ],
+  },
+});`}
+  />
+
+  <p>Then load the bundle in your base layout:</p>
+  <CodeBlock
+    language="html"
+    title="src/layouts/Layout.astro (inside <head>)"
+    code={`<script type="module" src="/le-kit/le-kit.esm.js"></script>
+<noscript><script src="/le-kit/le-kit.js"></script></noscript>`}
+  />
+
+  <h2 class="indent">
+    <a href="#vite" id="vite">Vite</a>
+  </h2>
+  <p>
+    The same <code>vite-plugin-static-copy</code> plugin works in any plain Vite project (Vue, Svelte, vanilla, etc.).
+  </p>
+  <CodeBlock language="bash" title="Install the plugin" code={`npm install -D vite-plugin-static-copy`} />
+  <CodeBlock
+    language="ts"
+    title="vite.config.ts"
+    code={`import { defineConfig } from 'vite';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
+
+export default defineConfig({
+  plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'node_modules/le-kit/dist/le-kit/*',
+          dest: 'le-kit',
+        },
+        {
+          src: 'node_modules/le-kit/dist/components/assets/*',
+          dest: 'le-kit/assets',
+        },
+        {
+          src: 'node_modules/le-kit/src/assets/custom-elements.json',
+          dest: 'le-kit/assets',
+        },
+      ],
+    }),
+  ],
+});`}
+  />
+
+  <p>Add the script tag to your <code>index.html</code>:</p>
+  <CodeBlock language="html" title="index.html" code={`<script type="module" src="/le-kit/le-kit.esm.js"></script>`} />
+
+  <h2 class="indent">
+    <a href="#nextjs" id="nextjs">Next.js</a>
+  </h2>
+  <p>
+    Next.js serves everything inside the <code>public/</code> folder as static files, so you can copy the assets there as
+    part of your install script. Add a <code>postinstall</code> script to your <code>package.json</code>:
+  </p>
+  <CodeBlock
+    language="json"
+    title="package.json (excerpt)"
+    code={`{
+  "scripts": {
+    "postinstall": "node scripts/copy-le-kit-assets.mjs"
+  }
+}`}
+  />
+  <CodeBlock
+    language="js"
+    title="scripts/copy-le-kit-assets.mjs"
+    code={`import { cpSync, mkdirSync } from 'node:fs';
+
+const src = new URL('../node_modules/le-kit', import.meta.url).pathname;
+const dest = new URL('../public/le-kit', import.meta.url).pathname;
+
+mkdirSync(dest + '/assets', { recursive: true });
+
+// Runtime bundle
+cpSync(src + '/dist/le-kit', dest, { recursive: true });
+
+// Icons
+cpSync(src + '/dist/components/assets', dest + '/assets', { recursive: true });
+
+// Custom Elements Manifest (admin mode)
+cpSync(src + '/src/assets/custom-elements.json', dest + '/assets/custom-elements.json', { recursive: true });
+
+console.log('Le-Kit assets copied to public/le-kit');
+  `}
+  />
+  <p>
+    Then load the bundle from your root layout (e.g.
+    <code>app/layout.tsx</code>):
+  </p>
+  <CodeBlock
+    language="tsx"
+    title="app/layout.tsx"
+    code={`export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <script type="module" src="/le-kit/le-kit.esm.js" />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}`}
+  />
+
+  <h2 class="indent">
+    <a href="#webpack" id="webpack">webpack</a>
+  </h2>
+  <p>
+    Use
+    <a href="https://webpack.js.org/plugins/copy-webpack-plugin/" target="_blank" rel="noopener">copy-webpack-plugin</a> to
+    copy the assets during the build.
+  </p>
+  <CodeBlock language="bash" title="Install the plugin" code={`npm install -D copy-webpack-plugin`} />
+  <CodeBlock
+    language="js"
+    title="webpack.config.js"
+    code={`const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
+
+const leKitSrc = path.resolve(__dirname, 'node_modules/le-kit');
+
+module.exports = {
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.join(leKitSrc, 'dist/le-kit'),
+          to: 'le-kit',
+        },
+        {
+          from: path.join(leKitSrc, 'dist/components/assets'),
+          to: 'le-kit/assets',
+        },
+        {
+          from: path.join(leKitSrc, 'src/assets/custom-elements.json'),
+          to: 'le-kit/assets/custom-elements.json',
+        },
+      ],
+    }),
+  ],
+};`}
+  />
+
+  <h2 class="indent">
+    <a href="#configure" id="configure">Custom asset paths</a>
+  </h2>
+  <p>
+    If you place the assets somewhere other than next to the bundle (for example in a CDN sub-path), you need to tell
+    Le-Kit where to find them. Call <code>configureLeKit</code>
+    <strong>before</strong> any component is rendered:
+  </p>
+  <CodeBlock
+    language="ts"
+    code={`import { configureLeKit } from 'le-kit';
+
+configureLeKit({
+  // Path prefix used when loading icons
+  assetBasePath: '/static/le-kit-assets',
+
+  // URL of the Custom Elements Manifest (admin mode only)
+  manifestFile: '/static/le-kit-assets/custom-elements.json',
+});`}
+  />
+  <p>
+    When <code>assetBasePath</code> is set, icons will be fetched from
+    <code>{`{assetBasePath}/icons/{name}.json`}</code>. When it is empty (the default), Stencil's built-in <code
+      >getAssetPath()</code
+    > is used instead, which resolves paths relative to the bundle file — so the default directory layout above works without
+    any extra configuration.
+  </p>
+</DocsPage>

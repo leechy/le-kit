@@ -17,7 +17,7 @@ Perfect for toggling between a small set of related options.
 | ----------- | ------------ | ------------------------------------------- | --------------------------------------------- | ----------- |
 | `disabled`  | `disabled`   | Whether the control is disabled.            | `boolean`                                     | `false`     |
 | `fullWidth` | `full-width` | Whether the control should take full width. | `boolean`                                     | `false`     |
-| `options`   | --           | Array of options for the segmented control. | `LeOption[]`                                  | `[]`        |
+| `options`   | `options`    | Array of options for the segmented control. | `LeOption[] \| string`                        | `[]`        |
 | `overflow`  | `overflow`   | Scroll behavior for overflowing tabs.       | `"auto" \| "hidden" \| "scroll" \| "visible"` | `'auto'`    |
 | `size`      | `size`       | Size of the control.                        | `"large" \| "medium" \| "small"`              | `'medium'`  |
 | `value`     | `value`      | The value of the currently selected option. | `number \| string \| undefined`               | `undefined` |

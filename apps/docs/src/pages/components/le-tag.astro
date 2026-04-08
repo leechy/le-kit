@@ -1,0 +1,161 @@
+---
+import ComponentsPage from '../../layouts/ComponentsPage.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<ComponentsPage title="le-tag">
+  <h1>&lt;le-tag&gt;</h1>
+  <p>
+    Small label that is used in the <a href="/components/le-multiselect"><code>&lt;le-multiselect&gt;</code></a> component.
+    and navigation.
+  </p>
+
+  <h2><a href="#Usage" id="Usage">Usage</a></h2>
+  <div class="component-example component-example-horizontal">
+    <le-tag size="small" color="secondary" dismissible>Extra Items</le-tag>
+    <le-tag icon="♥" dismissible disabled>Favorites</le-tag>
+    <le-tag size="large" color="info">Important</le-tag>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-tag size="small" color="secondary" dismissible>Extra Items</le-tag>
+<le-tag icon="♥" dismissible disabled>Favorites</le-tag>
+<le-tag size="large" color="info">Important</le-tag>`}
+  />
+
+  <h2>
+    <a class="anchor" href="#properties" id="properties">Properties / Attributes</a>
+  </h2>
+
+  <h3>
+    <a class="anchor" href="#@dismissible" id="@dismissible"><code>@dismissible</code></a>
+  </h3>
+  <p>
+    The <code>@dismissible</code> attribute allows you to make the tag dismissible, showing a close button. When the close
+    button is clicked, a <a href="#leDismiss"><code>leDismiss</code></a> event is emitted.
+  </p>
+
+  <h3><a class="anchor" href="#@icon" id="@icon"><code>@icon</code></a></h3>
+  <p>
+    The <code>@icon</code> attribute accept a character (emoji) or just a string and display it as it is.
+  </p>
+  <p>
+    In future updates, we will add support for a slot to allow using <code>&lt;le-icon&gt;</code> or custom icons.
+  </p>
+  <div class="component-example component-example-horizontal">
+    <le-tag icon="♥" dismissible>Favorites</le-tag>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-tag icon="♥" dismissible>Favorites</le-tag>
+`}
+  />
+
+  <h3><a class="anchor" href="#@disabled" id="@disabled"><code>@disabled</code></a></h3>
+  <p>
+    The <code>@disabled</code> currently renders the tag semi-transparent and in case the tag is dismissible, it disables
+    the dismiss button and does not emit the <a href="#leDismiss"><code>leDismiss</code></a> event when the dismiss button
+    is clicked.
+  </p>
+
+  <div class="component-example component-example-horizontal">
+    <le-tag dismissible disabled>Favorites</le-tag>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-tag dismissible disabled>Favorites</le-tag>
+`}
+  />
+
+  <h3><a class="anchor" href="#@color" id="@color"><code>@color</code></a></h3>
+  <p>
+    The colors are the same as buttons, except there is a <code>default</code> one, that renders the tag on a gray background
+    (by default, the color can be changed)
+  </p>
+  <div class="component-example component-example-horizontal">
+    <le-tag>Default</le-tag>
+    <le-tag color="primary">Primary</le-tag>
+    <le-tag color="secondary">Secondary</le-tag>
+    <le-tag color="success">Success</le-tag>
+    <le-tag color="warning">Warning</le-tag>
+    <le-tag color="danger">Danger</le-tag>
+    <le-tag color="info">Info</le-tag>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-tag>Default</le-tag>
+<le-tag color="primary">Primary</le-tag>
+<le-tag color="secondary">Secondary</le-tag>
+<le-tag color="success">Success</le-tag>
+<le-tag color="warning">Warning</le-tag>
+<le-tag color="danger">Danger</le-tag>
+<le-tag color="info">Info</le-tag>
+`}
+  />
+
+  <h3><a class="anchor" href="#@size" id="@size"><code>@size</code></a></h3>
+  <p>
+    The <code>@size</code> attribute allows you to set the size of the tag. The default size is medium, but you can also set
+    it to small or large.
+  </p>
+  <div class="component-example component-example-horizontal">
+    <le-tag size="small">Small</le-tag>
+    <le-tag>Medium</le-tag>
+    <le-tag size="large">Large</le-tag>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-tag size="small">Small</le-tag>
+<le-tag>Medium</le-tag>
+<le-tag size="large">Large</le-tag>
+`}
+  />
+
+  <h2><a class="anchor" href="#events" id="events">Events</a></h2>
+  <h3><a class="anchor" href="#leDismiss" id="leDismiss"><code>leDismiss</code></a> Event</h3>
+  <p>Simple event without any payload. Fires, when the dismiss button is clicked.</p>
+  <p>
+    You can subscribe to this event using <code>addEventListener</code> on the <code>&lt;le-tag&gt;</code> element. or using
+    attributes in your framework of choice.
+  </p>
+
+  <div class="component-example">
+    <script>
+      (() => {
+        const tag = document.getElementById('le-tag-to-dismiss');
+        const show = () => {
+          tag?.addEventListener('leDismiss', () => {
+            alert('Tag dismissed');
+          });
+        };
+
+        if (document.readyState === 'loading') {
+          document.addEventListener(
+            'DOMContentLoaded',
+            () => {
+              void show();
+            },
+            { once: true },
+          );
+        } else {
+          void show();
+        }
+      })();
+    </script>
+
+    <le-tag id="le-tag-to-dismiss" dismissible>Dismiss me</le-tag>
+  </div>
+  <CodeBlock
+    language="jsx"
+    code={`
+const tag = document.getElementById("le-tag-to-dismiss");
+tag.addEventListener("leDismiss", () => {
+  alert("Tag dismissed");
+});`}
+  />
+</ComponentsPage>

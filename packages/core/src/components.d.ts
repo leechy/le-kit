@@ -318,7 +318,13 @@ export namespace Components {
           * @allowedValues primary | secondary | success | warning | danger | info
           * @default 'primary'
          */
-        "color": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
+        "color": | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'info'
+    | 'transparent';
         /**
           * Whether the button is disabled
           * @default false
@@ -348,7 +354,7 @@ export namespace Components {
         /**
           * Mode of the popover should be 'default' for internal use
          */
-        "mode": 'default' | 'admin';
+        "mode"?: 'default' | 'admin';
         /**
           * Whether the button is in a selected/active state
           * @default false
@@ -1330,7 +1336,7 @@ export namespace Components {
           * Array of options for the segmented control.
           * @default []
          */
-        "options": LeOption[];
+        "options": LeOption[] | string;
         /**
           * Scroll behavior for overflowing tabs.
           * @allowedValues auto | hidden | visible | scroll
@@ -1753,9 +1759,8 @@ export namespace Components {
         "label"?: string;
         /**
           * Mode of the popover should be 'default' for internal use
-          * @default 'default'
          */
-        "mode": 'default' | 'admin';
+        "mode"?: 'default' | 'admin';
         /**
           * The name of the input
          */
@@ -2075,16 +2080,27 @@ export namespace Components {
      * <le-tag label="Medium" size="medium"></le-tag>
      * <le-tag label="Large" size="large"></le-tag>
      * ```
-     * @example Different variants
+     * @example Different colors
      * ```html
-     * <le-tag label="Default" variant="default"></le-tag>
-     * <le-tag label="Primary" variant="primary"></le-tag>
-     * <le-tag label="Success" variant="success"></le-tag>
-     * <le-tag label="Warning" variant="warning"></le-tag>
-     * <le-tag label="Danger" variant="danger"></le-tag>
+     * <le-tag label="Default" color="default"></le-tag>
+     * <le-tag label="Primary" color="primary"></le-tag>
+     * <le-tag label="Success" color="success"></le-tag>
+     * <le-tag label="Warning" color="warning"></le-tag>
+     * <le-tag label="Danger" color="danger"></le-tag>
      * ```
      */
     interface LeTag {
+        /**
+          * The color of the tag.
+          * @default 'default'
+         */
+        "color": | 'default'
+    | 'primary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'secondary'
+    | 'info';
         /**
           * Whether the tag is disabled.
           * @default false
@@ -2112,11 +2128,6 @@ export namespace Components {
           * @default 'medium'
          */
         "size": 'small' | 'medium' | 'large';
-        /**
-          * The visual variant of the tag.
-          * @default 'default'
-         */
-        "variant": 'default' | 'primary' | 'success' | 'warning' | 'danger';
     }
     /**
      * A text component with rich text editing capabilities in admin mode.
@@ -3233,13 +3244,13 @@ declare global {
      * <le-tag label="Medium" size="medium"></le-tag>
      * <le-tag label="Large" size="large"></le-tag>
      * ```
-     * @example Different variants
+     * @example Different colors
      * ```html
-     * <le-tag label="Default" variant="default"></le-tag>
-     * <le-tag label="Primary" variant="primary"></le-tag>
-     * <le-tag label="Success" variant="success"></le-tag>
-     * <le-tag label="Warning" variant="warning"></le-tag>
-     * <le-tag label="Danger" variant="danger"></le-tag>
+     * <le-tag label="Default" color="default"></le-tag>
+     * <le-tag label="Primary" color="primary"></le-tag>
+     * <le-tag label="Success" color="success"></le-tag>
+     * <le-tag label="Warning" color="warning"></le-tag>
+     * <le-tag label="Danger" color="danger"></le-tag>
      * ```
      */
     interface HTMLLeTagElement extends Components.LeTag, HTMLStencilElement {
@@ -3626,7 +3637,13 @@ declare namespace LocalJSX {
           * @allowedValues primary | secondary | success | warning | danger | info
           * @default 'primary'
          */
-        "color"?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
+        "color"?: | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'info'
+    | 'transparent';
         /**
           * Whether the button is disabled
           * @default false
@@ -4713,7 +4730,7 @@ declare namespace LocalJSX {
           * Array of options for the segmented control.
           * @default []
          */
-        "options"?: LeOption[];
+        "options"?: LeOption[] | string;
         /**
           * Scroll behavior for overflowing tabs.
           * @allowedValues auto | hidden | visible | scroll
@@ -5148,7 +5165,6 @@ declare namespace LocalJSX {
         "label"?: string;
         /**
           * Mode of the popover should be 'default' for internal use
-          * @default 'default'
          */
         "mode"?: 'default' | 'admin';
         /**
@@ -5482,16 +5498,27 @@ declare namespace LocalJSX {
      * <le-tag label="Medium" size="medium"></le-tag>
      * <le-tag label="Large" size="large"></le-tag>
      * ```
-     * @example Different variants
+     * @example Different colors
      * ```html
-     * <le-tag label="Default" variant="default"></le-tag>
-     * <le-tag label="Primary" variant="primary"></le-tag>
-     * <le-tag label="Success" variant="success"></le-tag>
-     * <le-tag label="Warning" variant="warning"></le-tag>
-     * <le-tag label="Danger" variant="danger"></le-tag>
+     * <le-tag label="Default" color="default"></le-tag>
+     * <le-tag label="Primary" color="primary"></le-tag>
+     * <le-tag label="Success" color="success"></le-tag>
+     * <le-tag label="Warning" color="warning"></le-tag>
+     * <le-tag label="Danger" color="danger"></le-tag>
      * ```
      */
     interface LeTag {
+        /**
+          * The color of the tag.
+          * @default 'default'
+         */
+        "color"?: | 'default'
+    | 'primary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'secondary'
+    | 'info';
         /**
           * Whether the tag is disabled.
           * @default false
@@ -5523,11 +5550,6 @@ declare namespace LocalJSX {
           * @default 'medium'
          */
         "size"?: 'small' | 'medium' | 'large';
-        /**
-          * The visual variant of the tag.
-          * @default 'default'
-         */
-        "variant"?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
     }
     /**
      * A text component with rich text editing capabilities in admin mode.
@@ -5643,7 +5665,13 @@ declare namespace LocalJSX {
     interface LeButtonAttributes {
         "mode": 'default' | 'admin';
         "variant": 'solid' | 'outlined' | 'clear' | 'system';
-        "color": 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
+        "color": | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'info'
+    | 'transparent';
         "size": 'small' | 'medium' | 'large';
         "selected": boolean;
         "fullWidth": boolean;
@@ -5814,6 +5842,7 @@ declare namespace LocalJSX {
         "trackScrollProgress": string;
     }
     interface LeSegmentedControlAttributes {
+        "options": LeOption[] | string;
         "value": string;
         "size": 'small' | 'medium' | 'large';
         "overflow": 'auto' | 'hidden' | 'visible' | 'scroll';
@@ -5963,7 +5992,13 @@ declare namespace LocalJSX {
         "dismissible": boolean;
         "disabled": boolean;
         "size": 'small' | 'medium' | 'large';
-        "variant": 'default' | 'primary' | 'success' | 'warning' | 'danger';
+        "color": | 'default'
+    | 'primary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'secondary'
+    | 'info';
     }
     interface LeTextAttributes {
         "variant": | 'p'
@@ -6518,13 +6553,13 @@ declare module "@stencil/core" {
              * <le-tag label="Medium" size="medium"></le-tag>
              * <le-tag label="Large" size="large"></le-tag>
              * ```
-             * @example Different variants
+             * @example Different colors
              * ```html
-             * <le-tag label="Default" variant="default"></le-tag>
-             * <le-tag label="Primary" variant="primary"></le-tag>
-             * <le-tag label="Success" variant="success"></le-tag>
-             * <le-tag label="Warning" variant="warning"></le-tag>
-             * <le-tag label="Danger" variant="danger"></le-tag>
+             * <le-tag label="Default" color="default"></le-tag>
+             * <le-tag label="Primary" color="primary"></le-tag>
+             * <le-tag label="Success" color="success"></le-tag>
+             * <le-tag label="Warning" color="warning"></le-tag>
+             * <le-tag label="Danger" color="danger"></le-tag>
              * ```
              */
             "le-tag": LocalJSX.IntrinsicElements["le-tag"] & JSXBase.HTMLAttributes<HTMLLeTagElement>;

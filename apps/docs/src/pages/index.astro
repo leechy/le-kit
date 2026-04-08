@@ -1,8 +1,9 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from '../layouts/Layout.astro';
+import TileLink from '../components/TileLink.astro';
 ---
 
-<Layout title="Le-Kit - The Component Library">
+<Layout title="Le-Kit - The Editable Components Library (concept)">
   <main class="bento-page">
     <le-bento-grid
       column-min-width="160"
@@ -14,73 +15,260 @@ import Layout from "../layouts/Layout.astro";
       aria-label="Featured components and documentation sections"
     >
       <le-bento-tile cols="2" rows="1">
-        <a class="bento-tile" href="/components/le-select">
+        <TileLink class="bento-tile" href="/components/le-select">
           <div class="bento-tile-type">Featured component</div>
+          <div class="bento-tile-demo">
+            <div class="bento-tile-demo-container">
+              <le-select
+                placeholder="Choose a component"
+                value="/components/le-select"
+                size="large"
+                style="width: 280px;"
+              >
+                <le-item value="/components/le-button" label="le-button" description="The boring stuff"></le-item>
+                <le-item value="/components/le-input" label="le-input" description="All your keystrokes..."></le-item>
+                <le-item value="/components/le-checkbox" label="le-checkbox" description="The one with the check"
+                ></le-item>
+                <le-item value="/components/le-select" label="le-select" selected description="Floating over"></le-item>
+                <le-item value="/components/le-tag" label="le-tag" description="Marking things"></le-item>
+              </le-select>
+            </div>
+          </div>
           <div class="bento-tile-content">
             <h3>&lt;le-select&gt;</h3>
             <p>The default dropdown finally gets typeahead capabilities.</p>
           </div>
-        </a>
+        </TileLink>
       </le-bento-tile>
       <le-bento-tile cols="2" rows="2">
-        <le-card>
-          <h1><img slot="header" src="/le-kit.svg" alt="le-kit logo" style="width: 50%;" /></h1>
-          <div>
-            <h2>The components for your next project</h2>
-            <code>Status: NOT_READY_FOR_PRODUCTION</code>
+        <div class="bento-tile tone-0">
+          <div class="bento-tile-content">
+            <code>Status: CONCEPT</code>
+            <h1><img slot="header" src="/le-kit.svg" alt="Le-Kit logo" style="width: 50%;" /></h1>
           </div>
-        </le-card>
+          <div class="bento-tile-content">
+            <h2>The components you can change on the fly</h2>
+          </div>
+        </div>
       </le-bento-tile>
       <le-bento-tile cols="2" rows="1">
-        <a class="bento-tile" href="/components/le-bento-grid">
-          <div class="bento-tile-type">New component</div>
-          <div class="bento-tile-content">
-            <h3>&lt;le-bento-grid&gt;</h3>
-            <p>What you see, right now, is what you get!</p>
+        <TileLink class="bento-tile" href="/components/le-code-input">
+          <div class="bento-tile-type">Featured component</div>
+          <div class="bento-tile-demo">
+            <div class="bento-tile-demo-container">
+              <le-code-input></le-code-input>
+            </div>
           </div>
-        </a>
+          <div class="bento-tile-content">
+            <h3>&lt;le-code-input&gt;</h3>
+            <p>Modernday passwords are coming by email.</p>
+          </div>
+        </TileLink>
       </le-bento-tile>
       <le-bento-tile cols="1" rows="2">
-        <a class="bento-tile" href="/docs/llms">
-          <div class="bento-tile-type">Artificial?</div>
-          <div class="bento-tile-content">
-            <h3>We maybe have a prompt for ya?!?</h3>
-            <p>Check out how to tell the LLMs to use Le-Kit components when generating UI code.</p>
+        <TileLink class="bento-tile" href="/components/le-tag">
+          <div class="bento-tile-type">Labeling</div>
+          <div class="bento-tile-demo">
+            <div class="bento-tile-demo-container" style="margin-inline-end: var(--le-spacing-4);">
+              <le-tag
+                size="large"
+                color="warning"
+                style="
+                  margin: var(--le-spacing-2) 0;
+                  transform: rotate(-5deg) translateX(-10%);
+                "
+                >Everyone</le-tag
+              ><br />
+              <le-tag
+                size="small"
+                color="danger"
+                style="
+                  margin: var(--le-spacing-2) 0;
+                  transform: rotate(2deg) translateX(10%);
+                "
+                dismissible>wants</le-tag
+              ><br />
+              <le-tag size="large" color="success" style="margin: var(--le-spacing-2) 0;">to dance!</le-tag><br />
+            </div>
           </div>
-        </a>
+          <div class="bento-tile-content">
+            <h3>&lt;le-tag&gt;</h3>
+            <p>Make fun of your content!</p>
+          </div>
+        </TileLink>
       </le-bento-tile>
-      <le-bento-tile cols="2" rows="2" class="tone-6">
-        Admin mode? What's that?
+      <le-bento-tile cols="1" rows="2">
+        <TileLink class="bento-tile" href="/components/le-popover">
+          <div class="bento-tile-type">Secret sauce</div>
+          <div class="bento-tile-demo" data-no-tile-nav>
+            <div class="bento-tile-demo-container">
+              <le-popover position="bottom" align="end" show-close popover-title="Let's test on the home page!">
+                <le-button slot="trigger" variant="outlined" size="large">
+                  <le-icon slot="icon-only" name="hamburger"></le-icon>
+                </le-button>
+                <div style="text-align: start;">
+                  <p>Is this select going<br />to pop out of the popover?</p>
+                  <le-select placeholder="Click here to open the dropdown">
+                    <le-item value="1" label="Option 1"></le-item>
+                    <le-item value="2" label="Option 2"></le-item>
+                  </le-select>
+                </div>
+              </le-popover>
+            </div>
+          </div>
+          <div class="bento-tile-content">
+            <h3>&lt;le-popover&gt;</h3>
+            <p>
+              If you have any dropdown or anything that you have to show over the rest of the content, use this
+              component.
+            </p>
+          </div>
+        </TileLink>
+      </le-bento-tile>
+      <le-bento-tile cols="1" rows="2" class="tone-2">
+        <a class="bento-tile" href="/docs/theming#custom-theme">
+          <div class="bento-tile-content">
+            <h3>How to create your own theme?</h3>
+          </div>
+          <div class="bento-tile-content">Hint: It's a mess for now, check back next month.</div>
+        </a>
       </le-bento-tile>
       <le-bento-tile>
         <a class="bento-tile" href="/docs/assets">
-          <div class="bento-tile-content">
-            It's can be still tricky with this library!
-          </div>
+          <div class="bento-tile-content">It's can be still tricky with this library!</div>
           <div class="bento-tile-content">
             <h3>Setup Assets</h3>
           </div>
         </a>
       </le-bento-tile>
-      <le-bento-tile class="tone-1">
-        <a class="bento-tile" href="/docs/start">
+      <le-bento-tile>
+        <TileLink class="bento-tile" href="/components/le-string-input">
+          <div class="bento-tile-content bento-tile-demo">
+            <div class="bento-tile-demo-container">
+              <le-string-input icon-start="✍️" placeholder="Type" clearable size="large" style="width: 140px;"
+              ></le-string-input>
+            </div>
+          </div>
           <div class="bento-tile-content">
-            <h3>Get Started <le-icon name="arrow-right" /></h3>
+            <h3>&lt;le-string-input&gt;</h3>
+            <p>Basics. Improved a bit.</p>
+          </div>
+        </TileLink>
+      </le-bento-tile>
+      <le-bento-tile>
+        <TileLink class="bento-tile" href="/components/le-button">
+          <div class="bento-tile-content bento-tile-demo">
+            <div class="bento-tile-demo-container">
+              <le-button size="large">Click me</le-button>
+            </div>
+          </div>
+          <div class="bento-tile-content">
+            <h3>&lt;le-button&gt;</h3>
+            <p>For the click lovers...</p>
+          </div>
+        </TileLink>
+      </le-bento-tile>
+      <le-bento-tile>
+        <a class="bento-tile tone-1" href="/docs/start">
+          <div class="bento-tile-content">
+            <h3>Get Started <le-icon name="arrow-right"></le-icon></h3>
           </div>
           <div class="bento-tile-content">
             <p>If you want to experiment with these components, start here.</p>
           </div>
         </a>
       </le-bento-tile>
-      <le-bento-tile cols="2" rows="1" class="tone-3">
-        Styling and Theming
-      </le-bento-tile>
     </le-bento-grid>
+
+    <section class="home-section">
+      <h2>To Admin or not to Admin?</h2>
+      <p>
+        With this library, we're exploring the interfaces to edit complex components, and in theory — any custom HTML
+        element.
+      </p>
+      <p>As an example of what we're talking about, try toggling the admin mode:</p>
+      <p>
+        <le-segmented-control value="default" id="admin-mode-toggle">
+          <le-item value="default" label="Default mode"></le-item>
+          <le-item value="admin" label="Admin mode"></le-item>
+        </le-segmented-control>
+      </p>
+      <p>
+        ... then press the cog in the top right corner of the component and change the tabs orientation to vertical.
+      </p>
+
+      <div class="component-example">
+        <div id="content-to-edit" style="max-width: 600px;">
+          <le-tabs variant="underlined">
+            <le-tab-panel label="Sign In" value="sign-in">
+              <form>
+                <le-stack gap="12" direction="vertical">
+                  <le-string-input name="login" label="Login" description="Should be your email"></le-string-input>
+                  <le-string-input name="password" label="Password" type="password"></le-string-input>
+                  <le-button>Sign In</le-button>
+                </le-stack>
+              </form>
+            </le-tab-panel>
+            <le-tab-panel label="Sign Up" value="sign-up">
+              <form>
+                <le-stack gap="12" direction="vertical">
+                  <le-string-input name="login" label="Login" description="Use your email"></le-string-input>
+                  <le-string-input
+                    name="password"
+                    label="Password"
+                    type="password"
+                    description="8 chars minimum. Numbers are required."></le-string-input>
+                  <le-string-input
+                    name="confirm-password"
+                    label="Confirm Password"
+                    type="password"
+                    description="Re-enter your password"></le-string-input>
+                  <le-button>Sign Up</le-button>
+                </le-stack>
+              </form>
+            </le-tab-panel>
+            <le-tab-panel label="Password Reset" value="password-reset">
+              <form>
+                <le-stack gap="12" direction="vertical">
+                  <le-string-input name="email" label="Email" description="Enter your email"></le-string-input>
+                  <le-button>Reset Password</le-button>
+                </le-stack>
+              </form>
+            </le-tab-panel>
+          </le-tabs>
+        </div>
+      </div>
+
+      <script>
+        (() => {
+          const adminToggle = document.getElementById('admin-mode-toggle') as HTMLInputElement | null;
+          const show = () => {
+            adminToggle?.addEventListener('leChange', (event: any) => {
+              document.getElementById('content-to-edit')?.setAttribute('mode', event.detail.value);
+            });
+          };
+          if (document.readyState === 'loading') {
+            document.addEventListener(
+              'DOMContentLoaded',
+              () => {
+                void show();
+              },
+              { once: true },
+            );
+          } else {
+            void show();
+          }
+        })();
+      </script>
+    </section>
   </main>
 
   <style>
+    .tone-0 {
+      background: linear-gradient(145deg, #e4eff4, #c1d8e2);
+    }
     .tone-1 {
-      --le-bento-tile-bg: linear-gradient(145deg, #f59e0b, #f97316);
+      background: linear-gradient(145deg, #f59e0b, #f97316);
     }
     .tone-2 {
       --le-bento-tile-bg: linear-gradient(145deg, #22c55e, #16a34a);

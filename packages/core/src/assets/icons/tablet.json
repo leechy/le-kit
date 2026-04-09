@@ -1,0 +1,16 @@
+{
+  "viewBox": "0 0 16 16",
+  "children": [
+    {
+      "tag": "rect",
+      "x": "2.55",
+      "y": "4.55",
+      "width": "10.9",
+      "height": "6.9",
+      "rx": "1",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.5"
+    }
+  ]
+}

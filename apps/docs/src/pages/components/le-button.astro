@@ -1,6 +1,6 @@
 ---
-import ComponentsPage from '../../layouts/ComponentsPage.astro';
-import CodeBlock from '../../components/CodeBlock.astro';
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
 ---
 
 <ComponentsPage title="le-button">
@@ -9,35 +9,44 @@ import CodeBlock from '../../components/CodeBlock.astro';
 
   <h2>Usage</h2>
   <p>
-    The <code>&lt;le-button&gt;</code> component is used to trigger an action or event. It can be used in various contexts,
-    such as forms, dialogs, or anywhere you need a clickable element.
+    The <code>&lt;le-button&gt;</code> component is used to trigger an action or event.
+    It can be used in various contexts, such as forms, dialogs, or anywhere you need
+    a clickable element.
   </p>
 
   <div class="component-example">
     <le-button onclick="alert('Clicked!')">Click me</le-button>
   </div>
-  <CodeBlock language="html" code={`<le-button onclick="alert('Clicked!')">Click me</le-button>`} />
+  <CodeBlock
+    language="html"
+    code={`<le-button onclick="alert('Clicked!')">Click me</le-button>`}
+  />
 
   <p>
-    The example uses the <code>onclick</code> attribute to handle the click event. But the button is acting correctly as a
-    standard HTML button. It can submit forms, be focused, and interact with other HTML elements as expected.
+    The example uses the <code>onclick</code> attribute to handle the click event.
+    But the button is acting correctly as a standard HTML button. It can submit forms,
+    be focused, and interact with other HTML elements as expected.
   </p>
 
   <h2>
-    <a class="anchor" href="#properties" id="properties">Properties / Attributes</a>
+    <a class="anchor" href="#properties" id="properties"
+      >Properties / Attributes</a
+    >
   </h2>
 
   <h3>
     <a class="anchor" href="#@variant" id="@variant"><code>@variant</code></a>
   </h3>
   <p>
-    The <code>@variant</code> attribute allows you to change the visual style of the button. It accepts the following values:
+    The <code>@variant</code> attribute allows you to change the visual style of the
+    button. It accepts the following values:
   </p>
   <ul>
     <li><code>solid</code> (default): The main call-to-action button style.</li>
     <li><code>outlined</code>: A less prominent button style.</li>
     <li>
-      <code>clear</code>: A button style with no background or border, often used for inline actions.
+      <code>clear</code>: A button style with no background or border, often
+      used for inline actions.
     </li>
   </ul>
   <div class="component-example component-example-horizontal">
@@ -48,8 +57,8 @@ import CodeBlock from '../../components/CodeBlock.astro';
 
   <h3><a class="anchor" href="#@color" id="@color"><code>@color</code></a></h3>
   <p>
-    The <code>@color</code> attribute is basically a semantic color token that you can use to indicate the purpose of the
-    button. It accepts the following values:
+    The <code>@color</code> attribute is basically a semantic color token that you
+    can use to indicate the purpose of the button. It accepts the following values:
   </p>
   <ul>
     <li><code>primary</code> (default): The primary color of your theme.</li>
@@ -82,27 +91,30 @@ import CodeBlock from '../../components/CodeBlock.astro';
   </div>
 
   <h3>
-    <a class="anchor" href="#@full-width" id="@full-width"><code>@full-width</code></a>
+    <a class="anchor" href="#@full-width" id="@full-width"
+      ><code>@full-width</code></a
+    >
   </h3>
   <p>
-    The <code>@full-width</code> attribute makes the button take the full width of its container. This can be useful for buttons
-    in forms or mobile layouts.
+    The <code>@full-width</code> attribute makes the button take the full width of
+    its container. This can be useful for buttons in forms or mobile layouts.
   </p>
   <div class="component-example">
     <le-button full-width>Full Width Button</le-button>
   </div>
 
   <h3>
-    <a class="anchor" href="#@selected" id="@selected"><code>@selected</code></a>
+    <a class="anchor" href="#@selected" id="@selected"><code>@selected</code></a
+    >
   </h3>
   <p>
-    The <code>@selected</code> attribute indicates whether the button is in a selected state. It can be used to highlight
-    the currently active button in a group of buttons.
+    The <code>@selected</code> attribute indicates whether the button is in a selected
+    state. It can be used to highlight the currently active button in a group of buttons.
   </p>
   <p>
-    Currently, the <code>@selected</code> attribute is working best when the <code>@variant</code> is set to <code
-      >outlined</code
-    >.
+    Currently, the <code>@selected</code> attribute is working best when the <code
+      >@variant</code
+    > is set to <code>outlined</code>.
   </p>
 
   <div class="component-example component-example-horizontal">
@@ -116,11 +128,12 @@ import CodeBlock from '../../components/CodeBlock.astro';
   />
 
   <h3>
-    <a class="anchor" href="#@disabled" id="@disabled"><code>@disabled</code></a>
+    <a class="anchor" href="#@disabled" id="@disabled"><code>@disabled</code></a
+    >
   </h3>
   <p>
-    The <code>@disabled</code> attribute disables the button, making it unclickable and visually indicating that it's not
-    available for interaction.
+    The <code>@disabled</code> attribute disables the button, making it unclickable
+    and visually indicating that it's not available for interaction.
   </p>
   <div class="component-example component-example-horizontal">
     <le-button disabled>Disabled</le-button>
@@ -130,45 +143,64 @@ import CodeBlock from '../../components/CodeBlock.astro';
 
   <h3><a href="#@type" id="@type"><code>@type</code></a></h3>
   <p>
-    Default type attribute from HTML button element. Only change if you need your button to submit forms. Otherwise,
-    leave it as the default.
+    Default type attribute from HTML button element. Only change if you need
+    your button to submit forms. Otherwise, leave it as the default.
   </p>
 
   <h3>
-    <a class="anchor" href="#@href" id="@href"><code>@href</code> (and <code>@target</code>)</a>
+    <a class="anchor" href="#@href" id="@href"
+      ><code>@href</code> (and <code>@target</code>)</a
+    >
   </h3>
   <p>
-    If you want to use the button as a link, you can use the <code>@href</code> (together with <code>@target</code>)
-    attribute just like in an anchor element. The button will be rendered as an anchor tag with the provided attributes,
-    and it will have all the styles and behaviors of a button.
+    If you want to use the button as a link, you can use the <code>@href</code> (together
+    with <code>@target</code>) attribute just like in an anchor element. The
+    button will be rendered as an anchor tag with the provided attributes, and
+    it will have all the styles and behaviors of a button.
   </p>
 
   <div class="component-example">
-    <le-button href="https://le-kit.dev" target="_blank">Go to Le-Kit website</le-button>
+    <le-button href="https://le-kit.dev" target="_blank"
+      >Go to Le-Kit website</le-button
+    >
   </div>
   <CodeBlock
     language="html"
     code={`<le-button href="https://le-kit.dev" target="_blank">Go to Le-Kit website</le-button>`}
   />
 
-  <h2><a class="anchor" href="#properties-or-slots" id="properties-or-slots">Properties or Slots</a></h2>
+  <h2>
+    <a class="anchor" href="#properties-or-slots" id="properties-or-slots"
+      >Properties or Slots</a>
+  </h2>
   <p>
-    There are a couple of properties that can be set as a properties and as slots. This is important when you want to
-    set another component inside the button, and here we're talking about icons. The thing is that when playing with
-    frameworks sometimes it's easier to set them as properties, but when using the component in plain HTML, it's easier
-    to set them as a slot. So you can choose the way that works best for you.
+    There are a couple of properties that can be set as a properties and as
+    slots. This is important when you want to set another component inside the
+    button, and here we're talking about icons. The thing is that when playing
+    with frameworks sometimes it's easier to set them as properties, but when
+    using the component in plain HTML, it's easier to set them as a slot. So you
+    can choose the way that works best for you.
   </p>
 
-  <p>In plain HTML you can use emoji for example, as an icon, or any other HTML element.</p>
+  <p>
+    In plain HTML you can use emoji for example, as an icon, or any other HTML
+    element.
+  </p>
 
   <h3>
-    <a class="anchor" href="#icon-start" id="icon-start"><code>icon-start</code></a>
+    <a class="anchor" href="#icon-start" id="icon-start"
+      ><code>icon-start</code></a
+    >
   </h3>
   <p>An icon at the beginning of the button.</p>
   <div class="component-example component-example-horizontal">
     <le-button icon-start="🏠">Home</le-button>
-    <le-side-panel-toggle panel-id="components-navigation" action="toggle" variant="outlined">
-      <le-icon slot="icon-start" name="side-panel"></le-icon>
+    <le-side-panel-toggle
+      panel-id="components-navigation"
+      action="toggle"
+      variant="outlined"
+    >
+      <le-icon slot="icon-start" name="side-panel-start"></le-icon>
       Toggle the Side Panel
     </le-side-panel-toggle>
   </div>
@@ -176,15 +208,17 @@ import CodeBlock from '../../components/CodeBlock.astro';
     language="html"
     code={`<le-button icon-start="🏠">Home</le-button>
 <le-button variant="outlined">
-  <le-icon slot="icon-start" name="side-panel"></le-icon>
+  <le-icon slot="icon-start" name="side-panel-start"></le-icon>
   Toggle the Side Panel
 </le-button>`}
   />
   <p>
-    <i>Note:</i> in the example above is present <a href="/components/le-side-panel-toggle"
+    <i>Note:</i> in the example above is present <a
+      href="/components/le-side-panel-toggle"
       ><code>&lt;le-side-panel-toggle&gt;</code></a
-    > component, to actually toggle the real panel. It is based on the <code>&lt;le-button&gt;</code>, so it is looking
-    exactly as it should.
+    > component, to actually toggle the real panel. It is based on the <code
+      >&lt;le-button&gt;</code
+    >, so it is looking exactly as it should.
   </p>
 
   <h3>
@@ -193,9 +227,13 @@ import CodeBlock from '../../components/CodeBlock.astro';
   <p>An icon at the beginning of the button.</p>
   <div class="component-example component-example-horizontal">
     <le-button variant="clear" icon-end="🫆">Log In</le-button>
-    <le-side-panel-toggle panel-id="components-navigation" action="toggle" variant="outlined">
+    <le-side-panel-toggle
+      panel-id="components-navigation"
+      action="toggle"
+      variant="outlined"
+    >
       Toggle the Side Panel
-      <le-icon slot="icon-end" name="side-panel"></le-icon>
+      <le-icon slot="icon-end" name="side-panel-end"></le-icon>
     </le-side-panel-toggle>
   </div>
   <CodeBlock
@@ -203,16 +241,17 @@ import CodeBlock from '../../components/CodeBlock.astro';
     code={`<le-button variant="clear" icon-end="🫆">Log In</le-button>
 <le-button variant="outlined">
   Toggle the Side Panel
-  <le-icon slot="icon-end" name="side-panel"></le-icon>
+  <le-icon slot="icon-end" name="side-panel-end"></le-icon>
 </le-button>`}
   />
 
   <h3>
-    <a class="anchor" href="#icon-only" id="icon-only"><code>icon-only</code></a>
+    <a class="anchor" href="#icon-only" id="icon-only"><code>icon-only</code></a
+    >
   </h3>
   <p>
-    If the button have to have only one icon inside, that is your parameter. If you have it, then the label will not
-    show up
+    If the button have to have only one icon inside, that is your parameter. If
+    you have it, then the label will not show up
   </p>
   <div class="component-example component-example-horizontal">
     <le-button variant="outlined" icon-only="⚙️">Label Text</le-button>
@@ -234,38 +273,46 @@ import CodeBlock from '../../components/CodeBlock.astro';
     <a class="anchor" href="#default-slot" id="default-slot">Default Slot</a>
   </h2>
   <p>
-    As you can see from the examples above, everything that is not using one of the three icon slots is shown as a label
-    of the button.
+    As you can see from the examples above, everything that is not using one of
+    the three icon slots is shown as a label of the button.
   </p>
 
   <h2><a class="anchor" href="#events" id="events">Events</a></h2>
   <p>
-    Something that we're still experimenting with is the name of the events. Here in the <code>&lt;le-button&gt;</code> we
-    are using the name that is matching the default DOM event — <code>click</code>. This is considered bad practice in
-    many articles and the Stencil.js documentation itself. There's even a linter rule against it. But... this is the
-    only way we can catch the event, not subscribing to it using JavaScript, the only way to do something with just the
-    attribute. So... experiments will continue.
+    Something that we're still experimenting with is the name of the events.
+    Here in the <code>&lt;le-button&gt;</code> we are using the name that is matching
+    the default DOM event — <code>click</code>. This is considered bad practice
+    in many articles and the Stencil.js documentation itself. There's even a
+    linter rule against it. But... this is the only way we can catch the event,
+    not subscribing to it using JavaScript, the only way to do something with
+    just the attribute. So... experiments will continue.
   </p>
 
   <h3><a class="anchor" href="#click" id="click"><code>click</code></a></h3>
-  <p>Fired when the user is clicking with the mouse or tapping with his finger on a touchscreen.</p>
   <p>
-    An example with the attribute <code>onclick</code> you can see at the top of this page. Here's how to subscribe via JavaScript:
+    Fired when the user is clicking with the mouse or tapping with his finger on
+    a touchscreen.
+  </p>
+  <p>
+    An example with the attribute <code>onclick</code> you can see at the top of this
+    page. Here's how to subscribe via JavaScript:
   </p>
 
   <div class="component-example">
     <script>
       (() => {
-        const button = document.getElementById('le-button-click');
+        const button = document.getElementById("le-button-click");
         const show = () => {
-          button?.addEventListener('click', (event: any) => {
-            alert(`Here's the intercepted click: ${JSON.stringify(event.detail)}`);
+          button?.addEventListener("click", (event: any) => {
+            alert(
+              `Here's the intercepted click: ${JSON.stringify(event.detail)}`,
+            );
           });
         };
 
-        if (document.readyState === 'loading') {
+        if (document.readyState === "loading") {
           document.addEventListener(
-            'DOMContentLoaded',
+            "DOMContentLoaded",
             () => {
               void show();
             },

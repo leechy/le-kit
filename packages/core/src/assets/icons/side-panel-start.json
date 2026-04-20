@@ -1,0 +1,28 @@
+{
+  "viewBox": "0 0 16 16",
+  "children": [
+    {
+      "tag": "rect",
+      "x": "2",
+      "y": "2.5",
+      "width": "12",
+      "height": "11",
+      "rx": "2",
+      "stroke": "currentColor",
+      "stroke-width": "1.5",
+      "stroke-linejoin": "round",
+      "fill": "none"
+    },
+    {
+      "tag": "rect",
+      "x": "3.6",
+      "y": "4.1",
+      "width": "2.9",
+      "height": "7.8",
+      "rx": "0.5",
+      "fill-opacity": "0.5",
+      "fill": "currentColor",
+      "fill-rule": "evenodd"
+    }
+  ]
+}

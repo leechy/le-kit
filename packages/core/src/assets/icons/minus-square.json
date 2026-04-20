@@ -1,0 +1,27 @@
+{
+  "viewBox": "0 0 16 16",
+  "children": [
+    {
+      "tag": "line",
+      "x1": "4.5",
+      "y1": "8",
+      "x2": "11.5",
+      "y2": "8",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "2"
+    },
+    {
+      "tag": "rect",
+      "id": "square",
+      "stroke": "currentColor",
+      "stroke-width": "1",
+      "x": "2.5",
+      "y": "2.5",
+      "width": "11",
+      "height": "11",
+      "rx": "1",
+      "fill": "none"
+    }
+  ]
+}

@@ -63,6 +63,43 @@ describe('le-string-input e2e', () => {
     expect(activeTag).toBe('input');
   });
 
+  it('disabled input is skipped in Tab order', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<button id="before">Before</button><le-string-input disabled name="title"></le-string-input><button id="after">After</button>',
+    );
+
+    await page.focus('#before');
+    await page.keyboard.press('Tab');
+
+    const activeId = await page.evaluate(() => document.activeElement?.id);
+    expect(activeId).toBe('after');
+  });
+
+  it('clearable input clears value with keyboard and emits events', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<le-string-input name="search" value="hello" clearable></le-string-input>',
+    );
+
+    const leInput = await page.spyOnEvent('leInput');
+    const leChange = await page.spyOnEvent('leChange');
+
+    const clearButton = await page.find(
+      'le-string-input >>> le-button >>> button.le-button-container',
+    );
+    await clearButton.focus();
+    await clearButton.press('Enter');
+
+    const input = await page.find('le-string-input >>> input');
+    expect(await input.getProperty('value')).toBe('');
+
+    expect(leInput).toHaveReceivedEventTimes(1);
+    expect(leChange).toHaveReceivedEventTimes(1);
+    expect(leInput).toHaveReceivedEventDetail({ value: '', name: 'search' });
+    expect(leChange).toHaveReceivedEventDetail({ value: '', name: 'search' });
+  });
+
   it('input is disabled when disabled prop is set', async () => {
     const page = await newE2EPage();
     await page.setContent('<le-string-input disabled name="title"></le-string-input>');

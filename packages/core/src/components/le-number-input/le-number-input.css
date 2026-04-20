@@ -11,6 +11,7 @@
   --le-input-placeholder-color: #999999;
   --le-input-border-error: 2px solid var(--le-color-danger, #dc3545);
   --le-input-error-color: var(--le-color-danger, #dc3545);
+  --le-input-transition: var(--le-transition-fast) var(--le-transition-easing, ease-in-out);
 }
 
 .le-input-wrapper {
@@ -34,7 +35,12 @@
   background: var(--le-input-bg);
   border: var(--le-input-border);
   border-radius: var(--le-input-radius);
-  transition: border-color 0.2s;
+  outline: 0 solid transparent;
+  outline-offset: 0;
+  transition:
+    border-color 0.2s ease,
+    outline var(--le-input-transition),
+    outline-offset var(--le-input-transition);
 }
 
 .le-input-container:focus-within {
@@ -63,7 +69,7 @@ input {
   font-family: inherit;
   font-size: inherit;
   outline: none;
-  text-align: right; /* Aligned to end */
+  text-align: end; /* Aligned to end */
   -moz-appearance: textfield; /* Remove default spinners in Firefox */
 }
 

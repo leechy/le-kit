@@ -1,6 +1,6 @@
 ---
-import Layout from './Layout.astro';
-import { docsNavigationItems, type NavItem } from '../data/navigation';
+import Layout from "./Layout.astro";
+import { docsNavigationItems, type NavItem } from "../data/navigation";
 
 interface Props {
   title: string;
@@ -10,34 +10,46 @@ interface Props {
 const { title, pageType } = Astro.props;
 
 const pathname = Astro.url.pathname;
-const isDocsIndex = pathname === '/docs' || pathname === '/docs/';
+const isDocsIndex = pathname === "/docs" || pathname === "/docs/";
 
-const documentTitle = isDocsIndex ? 'Le-Kit Documentation' : `${title} ⁃ Le-Kit Documentation`;
+const documentTitle = isDocsIndex
+  ? "Le-Kit Documentation"
+  : `${title} ⁃ Le-Kit Documentation`;
 
 const breadcrumbItems = isDocsIndex
-  ? [{ label: 'Le-Kit', href: '/' }, { label: 'Documentation' }]
-  : [{ label: 'Le-Kit', href: '/' }, { label: 'Documentation', href: '/docs' }, { label: title }];
+  ? [{ label: "Le-Kit", href: "/" }, { label: "Documentation" }]
+  : [
+      { label: "Le-Kit", href: "/" },
+      { label: "Documentation", href: "/docs" },
+      { label: title },
+    ];
 
 const escapeAttribute = (value: string) =>
-  value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+  value
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 
 const renderNavigationItems = (items: NavItem[]): string =>
   items
     .map((item) => {
       const attrs = [
         `label="${escapeAttribute(item.label)}"`,
-        item.href ? `href="${escapeAttribute(item.href)}"` : '',
-        item.id ? `id="${escapeAttribute(item.id)}"` : '',
-        item.open ? 'open' : '',
-        item.href && pathname.startsWith(item.href) ? 'selected' : '',
+        item.href ? `href="${escapeAttribute(item.href)}"` : "",
+        item.id ? `id="${escapeAttribute(item.id)}"` : "",
+        item.open ? "open" : "",
+        item.href && pathname.startsWith(item.href) ? "selected" : "",
       ]
         .filter(Boolean)
-        .join(' ');
+        .join(" ");
 
-      const children = item.children?.length ? renderNavigationItems(item.children) : '';
+      const children = item.children?.length
+        ? renderNavigationItems(item.children)
+        : "";
       return `<le-item ${attrs}>${children}</le-item>`;
     })
-    .join('');
+    .join("");
 
 const navigationMarkup = renderNavigationItems(docsNavigationItems);
 ---
@@ -58,7 +70,10 @@ const navigationMarkup = renderNavigationItems(docsNavigationItems);
     </le-navigation>
 
     <div class="content">
-      <le-breadcrumbs items={JSON.stringify(breadcrumbItems)} class="site-navigation">
+      <le-breadcrumbs
+        items={JSON.stringify(breadcrumbItems)}
+        class="site-navigation"
+      >
         <le-side-panel-toggle
           slot="start"
           panel-id="docs-navigation"
@@ -68,12 +83,12 @@ const navigationMarkup = renderNavigationItems(docsNavigationItems);
           icon-only="true"
           style="--le-button-icon-only-padding: var(--le-spacing-1);"
         >
-          <le-icon slot="icon-only" name="side-panel"></le-icon>
+          <le-icon slot="icon-only" name="side-panel-start"></le-icon>
         </le-side-panel-toggle>
       </le-breadcrumbs>
 
       {
-        pageType === 'index' ? (
+        pageType === "index" ? (
           <main class="bento-page">
             <slot />
           </main>

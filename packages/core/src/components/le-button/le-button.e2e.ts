@@ -29,6 +29,19 @@ describe('le-button e2e', () => {
     expect(clickEvent).toHaveReceivedEventTimes(1);
   });
 
+  it('does not activate with keyboard when disabled', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<le-button disabled>Disabled</le-button>');
+
+    const clickEvent = await page.spyOnEvent('click');
+
+    const innerButton = await page.find('le-button >>> button.le-button-container');
+    await innerButton.press('Enter');
+    await innerButton.press('Space');
+
+    expect(clickEvent).toHaveReceivedEventTimes(0);
+  });
+
   it('does not emit click when disabled', async () => {
     const page = await newE2EPage();
     await page.setContent('<le-button disabled>Disabled</le-button>');
@@ -50,6 +63,19 @@ describe('le-button e2e', () => {
     expect(anchor).not.toBeNull();
     expect(await anchor.getAttribute('href')).toBe('/docs');
     expect(await anchor.getAttribute('target')).toBe('_blank');
+  });
+
+  it('anchor mode activates with Enter key', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<le-button href="#docs">Docs</le-button>');
+
+    const clickEvent = await page.spyOnEvent('click');
+
+    const anchor = await page.find('le-button >>> a.le-button-container');
+    await anchor.focus();
+    await anchor.press('Enter');
+
+    expect(clickEvent).toHaveReceivedEventTimes(1);
   });
 
   it('is focusable and reachable via Tab', async () => {

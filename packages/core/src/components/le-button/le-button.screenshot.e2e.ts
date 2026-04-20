@@ -2,11 +2,16 @@ import { describe, it } from '@jest/globals';
 import { newE2EPage } from '@stencil/core/testing';
 
 const WRAPPER = `<style>body { margin: 0; padding: 24px; display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; background: var(--le-color-bg, #fff); }</style>`;
+const VIEWPORTS = {
+  sm: { width: 320, height: 100 },
+  md: { width: 400, height: 120 },
+  lg: { width: 800, height: 240 },
+};
 
 describe('le-button screenshots', () => {
   it('default (solid / primary / medium)', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 320, height: 100 });
+    await page.setViewport(VIEWPORTS.sm);
     await page.setContent(`${WRAPPER}<le-button>Click me</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
@@ -14,7 +19,7 @@ describe('le-button screenshots', () => {
 
   it('variant: outlined', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 320, height: 100 });
+    await page.setViewport(VIEWPORTS.sm);
     await page.setContent(`${WRAPPER}<le-button variant="outlined">Click me</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
@@ -22,7 +27,7 @@ describe('le-button screenshots', () => {
 
   it('variant: clear', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 320, height: 100 });
+    await page.setViewport(VIEWPORTS.sm);
     await page.setContent(`${WRAPPER}<le-button variant="clear">Click me</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
@@ -30,7 +35,7 @@ describe('le-button screenshots', () => {
 
   it('color: secondary', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 320, height: 100 });
+    await page.setViewport(VIEWPORTS.sm);
     await page.setContent(`${WRAPPER}<le-button color="secondary">Click me</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
@@ -38,7 +43,7 @@ describe('le-button screenshots', () => {
 
   it('color: danger', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 320, height: 100 });
+    await page.setViewport(VIEWPORTS.sm);
     await page.setContent(`${WRAPPER}<le-button color="danger">Click me</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
@@ -46,7 +51,7 @@ describe('le-button screenshots', () => {
 
   it('size: small', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 320, height: 100 });
+    await page.setViewport(VIEWPORTS.sm);
     await page.setContent(`${WRAPPER}<le-button size="small">Click me</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
@@ -54,7 +59,7 @@ describe('le-button screenshots', () => {
 
   it('size: large', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 320, height: 100 });
+    await page.setViewport(VIEWPORTS.sm);
     await page.setContent(`${WRAPPER}<le-button size="large">Click me</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
@@ -62,7 +67,7 @@ describe('le-button screenshots', () => {
 
   it('disabled', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 320, height: 100 });
+    await page.setViewport(VIEWPORTS.sm);
     await page.setContent(`${WRAPPER}<le-button disabled>Click me</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
@@ -70,7 +75,7 @@ describe('le-button screenshots', () => {
 
   it('selected', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 320, height: 100 });
+    await page.setViewport(VIEWPORTS.sm);
     await page.setContent(`${WRAPPER}<le-button selected>Click me</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
@@ -78,7 +83,7 @@ describe('le-button screenshots', () => {
 
   it('full-width', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 400, height: 100 });
+    await page.setViewport(VIEWPORTS.md);
     await page.setContent(`${WRAPPER}<le-button full-width>Click me</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
@@ -86,7 +91,7 @@ describe('le-button screenshots', () => {
 
   it('icon-only (via prop)', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 160, height: 100 });
+    await page.setViewport(VIEWPORTS.sm);
     await page.setContent(`${WRAPPER}<le-button icon-only="★"></le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
@@ -94,7 +99,7 @@ describe('le-button screenshots', () => {
 
   it('with icon-start', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 320, height: 100 });
+    await page.setViewport(VIEWPORTS.sm);
     await page.setContent(`${WRAPPER}<le-button icon-start="→">Save</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
@@ -102,15 +107,27 @@ describe('le-button screenshots', () => {
 
   it('with icon-end', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 320, height: 100 });
+    await page.setViewport(VIEWPORTS.sm);
     await page.setContent(`${WRAPPER}<le-button icon-end="→">Next</le-button>`);
+    await page.waitForChanges();
+    expect(await page.compareScreenshot()).toMatchScreenshot();
+  });
+
+  it('keyboard focus state', async () => {
+    const page = await newE2EPage();
+    await page.setViewport(VIEWPORTS.sm);
+    await page.setContent(`${WRAPPER}<le-button>Focus me</le-button>`);
+
+    const innerButton = await page.find('le-button >>> button.le-button-container');
+    await innerButton.focus();
+
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
   });
 
   it('variant matrix (solid / outlined / clear × primary / secondary / danger)', async () => {
     const page = await newE2EPage();
-    await page.setViewport({ width: 800, height: 240 });
+    await page.setViewport(VIEWPORTS.lg);
     await page.setContent(`
       ${WRAPPER}
       <le-button variant="solid"    color="primary">  Solid Primary</le-button>

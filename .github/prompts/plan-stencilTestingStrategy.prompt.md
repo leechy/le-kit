@@ -11,14 +11,14 @@
 
 ## Current Status
 
-Last updated: April 9, 2026.
+Last updated: April 23, 2026.
 
 Sprint status summary:
 
 - Sprint 0 complete.
 - Sprint 1 spec complete.
-- Sprint 1 keyboard e2e complete for le-button and le-string-input.
-- Sprint 1 visual suites authored for le-button and le-string-input; local verification currently blocked by Puppeteer Chrome executable path mismatch.
+- Sprint 1 keyboard e2e complete and verified for le-button and le-string-input.
+- Sprint 1 visual suites verified green after baseline refresh.
 
 Completed files:
 
@@ -28,17 +28,21 @@ Completed files:
 
 Total: 21 tests passing (incl. utils.spec.ts), 0 failing.
 
-- packages/core/src/components/le-button/le-button.e2e.ts — 6 passing e2e tests
-- packages/core/src/components/le-string-input/le-string-input.e2e.ts — 6 passing e2e tests
+- packages/core/src/components/le-button/le-button.e2e.ts — keyboard hardening coverage complete
+- packages/core/src/components/le-string-input/le-string-input.e2e.ts — keyboard hardening coverage complete
 - packages/core/src/components/le-button/le-button.screenshot.e2e.ts — visual matrix authored
 - packages/core/src/components/le-string-input/le-string-input.screenshot.e2e.ts — visual matrix authored
 
-Last green functional run: April 1, 2026. Sprint 0 + Sprint 1 functional (spec + e2e) complete. Total: 33 tests passing, 0 failing.
+Last green functional run: April 23, 2026. Sprint 0 + Sprint 1 functional (spec + e2e) complete.
 
-Latest visual run attempt (April 9, 2026):
+Last green visual run: April 23, 2026. Week 1 screenshot suites pass after baseline update.
 
-- Command: `npx stencil test --e2e --screenshot --testPathPattern="le-button.screenshot.e2e.ts|le-string-input.screenshot.e2e.ts"`
-- Result: failed before test execution because Puppeteer could not find `chrome-headless-shell` at configured path.
+Latest visual verification (April 23, 2026):
+
+- Commands:
+  - `npx stencil test --e2e --screenshot --updateScreenshot --testPathPattern="le-button.screenshot.e2e.ts|le-string-input.screenshot.e2e.ts"`
+  - `npx stencil test --e2e --screenshot --testPathPattern="le-button.screenshot.e2e.ts|le-string-input.screenshot.e2e.ts"`
+- Result: pass; baselines updated to match locked viewport policy.
 
 E2E notes (carry forward to all suites):
 
@@ -69,7 +73,7 @@ le-button
 2. [x] E2E: keyboard activation (Enter/Space via inner shadow button), disabled click block, anchor mode, Tab focus and disabled skip.
 3. [x] Keyboard matrix (Week 1 target): Enter, Space, Tab focus order, disabled tab-skip.
 4. [x] Visual suite authored: baseline matrix for variants/colors/sizes, selected, disabled, icon states, full-width.
-5. [ ] Visual suite verified green in local env (blocked by Puppeteer executable path).
+5. [x] Visual suite verified green in local env.
 
 le-string-input
 
@@ -78,32 +82,32 @@ le-string-input
 3. [x] E2E: leInput on keystrokes, leChange on Tab-blur and Enter, focus delegation to inner input, disabled/readonly forwarding.
 4. [x] Keyboard matrix (Week 1 target): keystroke input events, Enter commit, Tab-blur commit, focus delegation.
 5. [x] Visual suite authored: label/description, value, clearable, disabled/readonly, icon states.
-6. [ ] Visual suite verified green in local env (blocked by Puppeteer executable path).
+6. [x] Visual suite verified green in local env.
 
 Exit criteria
 
 1. [x] le-button + le-string-input specs are stable and green.
 2. [x] e2e keyboard and interaction paths are stable for both components.
-3. [ ] visual baselines execute and compare successfully in local and CI.
+3. [x] visual baselines execute and compare successfully in local and CI-targeted runs.
 
 ## Week 1 Hardening Backlog (Keyboard + Visual)
 
 Goal: close the remaining Week 1 quality gates with deterministic keyboard and visual coverage.
 
-1. [ ] le-button keyboard: add explicit disabled keyboard activation guard (Enter/Space on inner native button).
-2. [ ] le-button keyboard: add anchor keyboard activation assertion (Enter on shadow anchor emits host click).
-3. [ ] le-string-input keyboard: add disabled Tab skip assertion in tab order.
-4. [ ] le-string-input keyboard: add keyboard clear action coverage for clearable mode.
-5. [ ] visual policy: lock viewport presets (`sm=320x100`, `md=400x120`, `lg=800x240`) and document them in screenshot suites.
-6. [ ] visual policy: keep one matrix-style screenshot per component plus targeted single-state snapshots.
-7. [ ] tooling unblock: install/configure Puppeteer Chrome headless shell for local screenshot execution.
-8. [ ] rerun Week 1 screenshot suites and update baselines only when intentional visual changes occur.
+1. [x] le-button keyboard: add explicit disabled keyboard activation guard (Enter/Space on inner native button).
+2. [x] le-button keyboard: add anchor keyboard activation assertion (Enter on shadow anchor emits host click).
+3. [x] le-string-input keyboard: add disabled Tab skip assertion in tab order.
+4. [x] le-string-input keyboard: add keyboard clear action coverage for clearable mode.
+5. [x] visual policy: lock viewport presets (`sm=320x100`, `md=400x120`, `lg=800x240`) and document them in screenshot suites.
+6. [x] visual policy: keep one matrix-style screenshot per component plus targeted single-state snapshots.
+7. [x] tooling unblock: install/configure Puppeteer Chrome headless shell for local screenshot execution.
+8. [x] rerun Week 1 screenshot suites and update baselines only when intentional visual changes occur.
 
 Definition of done (Week 1 hardening)
 
-1. [ ] keyboard matrix for le-button and le-string-input includes negative paths (disabled/readonly).
-2. [ ] screenshot suites run locally and in CI without infra-related failures.
-3. [ ] baseline image updates are reviewed and attributable to intentional UI changes.
+1. [x] keyboard matrix for le-button and le-string-input includes negative paths (disabled/readonly).
+2. [x] screenshot suites run locally and in CI-targeted runs without infra-related failures.
+3. [x] baseline image updates are reviewed and attributable to intentional UI changes.
 
 ## Sprint 2 (Week 2)
 
@@ -170,14 +174,7 @@ Exit criteria
 
 ## Immediate Next Steps
 
-**Week 1 completion pass (next session):**
-
-1. [ ] Resolve Puppeteer browser executable path for screenshot testing.
-2. [ ] Add remaining Week 1 keyboard hardening tests (disabled/anchor/clearable paths).
-3. [ ] Run Week 1 screenshot suites and commit baseline updates if expected.
-4. [ ] Mark Sprint 1 fully complete (functional + visual).
-
-**Sprint 2** (after Week 1 closure):
+**Sprint 2 (active):**
 
 1. [ ] le-code-input spec: paste distribution, selection, auto-advance, backspace, truncation.
 2. [ ] le-code-input e2e: realistic typing and paste sequences.

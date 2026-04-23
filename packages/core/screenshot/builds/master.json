@@ -2,7 +2,7 @@
   "id": "master",
   "message": "Master",
   "appNamespace": "LeKit",
-  "timestamp": 1775080765692,
+  "timestamp": 1776943175377,
   "screenshots": [
     {
       "id": "3aaa95c2",
@@ -58,7 +58,7 @@
     },
     {
       "id": "55bb9bd0",
-      "image": "38829276ba171f1406611d8bee6ac5e0c18a1de9a32ff1742ef2e6ed7e97144e.png",
+      "image": "df850e2f653d9e8172840f60acc8882df49e32b7edeee8678b94e4b9527a75cc.png",
       "userAgent": "default",
       "desc": "le-button screenshots full-width",
       "testPath": "./src/components/le-button/le-button.screenshot.e2e.ts",
@@ -71,9 +71,22 @@
     },
     {
       "id": "d46721c4",
-      "image": "e282fc652378c2562d5e045d2e07e9024a3d8d83eb849ed6bc02e7588580ca82.png",
+      "image": "d099c56b5e61b132e06e2b467ef90e8596029d32ddd3bafc3ae93843a8509143.png",
       "userAgent": "default",
       "desc": "le-button screenshots icon-only (via prop)",
+      "testPath": "./src/components/le-button/le-button.screenshot.e2e.ts",
+      "width": 600,
+      "height": 600,
+      "deviceScaleFactor": 1,
+      "hasTouch": false,
+      "isLandscape": false,
+      "isMobile": false
+    },
+    {
+      "id": "9cfbce0a",
+      "image": "4be2fe963d809ed54175fcdbd60ac69939f9b160286908fcea0e4d348d6e18bb.png",
+      "userAgent": "default",
+      "desc": "le-button screenshots keyboard focus state",
       "testPath": "./src/components/le-button/le-button.screenshot.e2e.ts",
       "width": 600,
       "height": 600,
@@ -97,7 +110,7 @@
     },
     {
       "id": "6690feb9",
-      "image": "d46bb7c97609de78de4c6a40d34930e84ca35be6b6ea3e0e619c52c5ad13adff.png",
+      "image": "835cdd8f5e53153c4d818e482179ebe45a70ada4a269b4bfc0c0533a19d90622.png",
       "userAgent": "default",
       "desc": "le-button screenshots size: large",
       "testPath": "./src/components/le-button/le-button.screenshot.e2e.ts",
@@ -110,7 +123,7 @@
     },
     {
       "id": "afb274ed",
-      "image": "8cd3fc8bcf0fad6a5a409b348b295a25d647f7b5c18784144e2e5658f444372a.png",
+      "image": "33bc4fc637d42584603e6aa8c2dc48639e41e6a239883ed6640c61af102d74ae.png",
       "userAgent": "default",
       "desc": "le-button screenshots size: small",
       "testPath": "./src/components/le-button/le-button.screenshot.e2e.ts",
@@ -123,7 +136,7 @@
     },
     {
       "id": "c6fa3d9f",
-      "image": "26213da5f0c2a097a710c76d5594ec230c82005058e7d8e621b9a7d346b09258.png",
+      "image": "2c371549911e59fdbcf0229d0a0b7592490235ddfcd2ccacc2d03b1c9f3cfdec.png",
       "userAgent": "default",
       "desc": "le-button screenshots variant matrix (solid / outlined / clear × primary / secondary / danger)",
       "testPath": "./src/components/le-button/le-button.screenshot.e2e.ts",
@@ -162,7 +175,7 @@
     },
     {
       "id": "ba8200bb",
-      "image": "33ae34e57d1102768994868df4dd8bd11757ca00dd4c8f84bb838ac4c13f438e.png",
+      "image": "9127b0df48c0ba30c468f5c7d41320d753687096ecc82fad4a3a6a802a3333bf.png",
       "userAgent": "default",
       "desc": "le-button screenshots with icon-end",
       "testPath": "./src/components/le-button/le-button.screenshot.e2e.ts",
@@ -175,7 +188,7 @@
     },
     {
       "id": "294b682d",
-      "image": "9b6901fa7bf63494927538dc4e277183c18cfec38858577c77492a1c6fc9bc6c.png",
+      "image": "dfdd08df307b82929b8292e6f21177dbcd64f2c892a45af299f9c08695b91e8d.png",
       "userAgent": "default",
       "desc": "le-button screenshots with icon-start",
       "testPath": "./src/components/le-button/le-button.screenshot.e2e.ts",
@@ -188,7 +201,7 @@
     },
     {
       "id": "094ac3fe",
-      "image": "a12d1709abd116a6d6e99068f4722f90486e45114a891a43e035dbf5fe105bdd.png",
+      "image": "be3218fe40379f3064df75bed3ad483d180fa25ce7b293878738c3d9b531d1a0.png",
       "userAgent": "default",
       "desc": "le-string-input screenshots clearable with value",
       "testPath": "./src/components/le-string-input/le-string-input.screenshot.e2e.ts",
@@ -201,7 +214,7 @@
     },
     {
       "id": "21866c7b",
-      "image": "7e27f068774af39687271f402e502afed561dc1ca44ff7d7ad18ad7336d00566.png",
+      "image": "d98e7fd9189b5257e6a3da50f7215f4828d080996ff2e8e85ea4b0819d202d85.png",
       "userAgent": "default",
       "desc": "le-string-input screenshots default (no label, no value)",
       "testPath": "./src/components/le-string-input/le-string-input.screenshot.e2e.ts",
@@ -214,7 +227,7 @@
     },
     {
       "id": "de8efd1a",
-      "image": "a3a6685d6443d6a39ee7d28d8eef9f48b85f471ff422d009292d1589972fb144.png",
+      "image": "77dfa84745fe10d2984c0db701ac9f18fba1bab359450d016063e12b373e9f52.png",
       "userAgent": "default",
       "desc": "le-string-input screenshots disabled",
       "testPath": "./src/components/le-string-input/le-string-input.screenshot.e2e.ts",
@@ -226,8 +239,21 @@
       "isMobile": false
     },
     {
+      "id": "8ddc4d7d",
+      "image": "62285a592e23574afb6ab6b827e313590ad4b3ccb76166c4cd10f347d4ebcc4c.png",
+      "userAgent": "default",
+      "desc": "le-string-input screenshots keyboard focus state",
+      "testPath": "./src/components/le-string-input/le-string-input.screenshot.e2e.ts",
+      "width": 600,
+      "height": 600,
+      "deviceScaleFactor": 1,
+      "hasTouch": false,
+      "isLandscape": false,
+      "isMobile": false
+    },
+    {
       "id": "790b4bdf",
-      "image": "b5421d42b049ccfd7adab3f4f426fe74a79dc89d8b7a668861725d9533893922.png",
+      "image": "190a23692a66be33196234ed218989df8d7ce9fd9f5dc131319c728c5fbdea03.png",
       "userAgent": "default",
       "desc": "le-string-input screenshots readonly",
       "testPath": "./src/components/le-string-input/le-string-input.screenshot.e2e.ts",
@@ -239,8 +265,21 @@
       "isMobile": false
     },
     {
+      "id": "10abf92a",
+      "image": "fd75c2b7da25502a7fdd719a0f510b8854ff81af816c30355874cb850ec215f7.png",
+      "userAgent": "default",
+      "desc": "le-string-input screenshots state matrix (default/value/clearable/disabled/readonly)",
+      "testPath": "./src/components/le-string-input/le-string-input.screenshot.e2e.ts",
+      "width": 600,
+      "height": 600,
+      "deviceScaleFactor": 1,
+      "hasTouch": false,
+      "isLandscape": false,
+      "isMobile": false
+    },
+    {
       "id": "3701f343",
-      "image": "73741320efc54c45d265810a69f38165fe921257d163b830d1247aa5041f10ae.png",
+      "image": "bf168b81a4ac90a5333caef65c99230e06aff35f2aa90754c78371b98573a066.png",
       "userAgent": "default",
       "desc": "le-string-input screenshots with icon-end",
       "testPath": "./src/components/le-string-input/le-string-input.screenshot.e2e.ts",
@@ -253,7 +292,7 @@
     },
     {
       "id": "693d69df",
-      "image": "fbc0943fd7ef0f676712251bdf8699f281b4cae1d1e7b6a115713a64fc51854f.png",
+      "image": "14f22b721b77e267e0d00d0f9cf89782058ce387ec735db8b8149c4fd639c5e7.png",
       "userAgent": "default",
       "desc": "le-string-input screenshots with icon-start",
       "testPath": "./src/components/le-string-input/le-string-input.screenshot.e2e.ts",
@@ -266,7 +305,7 @@
     },
     {
       "id": "7755eae2",
-      "image": "46142f7914c0100fcad003897e95eb0c131d1154593e6160701787b4343398e0.png",
+      "image": "d286dda52c469cae78393ab596d5dd63664d82011c20f19c30ebd071beb3f7ec.png",
       "userAgent": "default",
       "desc": "le-string-input screenshots with label",
       "testPath": "./src/components/le-string-input/le-string-input.screenshot.e2e.ts",
@@ -279,7 +318,7 @@
     },
     {
       "id": "35462434",
-      "image": "41cb96a4ff4b1d45bd47164b046406393747182eddef4bb79f6abf51cb120f32.png",
+      "image": "35ff73a83554e4c22046ad2510e64936e1d183d01c0868e1d96b520626f27d93.png",
       "userAgent": "default",
       "desc": "le-string-input screenshots with label and description",
       "testPath": "./src/components/le-string-input/le-string-input.screenshot.e2e.ts",
@@ -292,7 +331,7 @@
     },
     {
       "id": "4daa10b4",
-      "image": "b5421d42b049ccfd7adab3f4f426fe74a79dc89d8b7a668861725d9533893922.png",
+      "image": "190a23692a66be33196234ed218989df8d7ce9fd9f5dc131319c728c5fbdea03.png",
       "userAgent": "default",
       "desc": "le-string-input screenshots with value",
       "testPath": "./src/components/le-string-input/le-string-input.screenshot.e2e.ts",

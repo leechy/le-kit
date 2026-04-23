@@ -1,0 +1,78 @@
+:host {
+  display: inline-block;
+  position: relative;
+}
+
+:host([disabled]) {
+  pointer-events: none;
+}
+
+.le-tooltip-trigger {
+  display: inline-flex;
+  width: fit-content;
+}
+
+.le-tooltip-content {
+  margin: 0;
+  padding: var(--le-tooltip-padding-y, 4px) var(--le-tooltip-padding-x, 6px);
+  border: 1px solid var(--le-tooltip-border-color, transparent);
+  border-radius: var(--le-tooltip-border-radius, var(--le-radius-md, 4px));
+
+  position: fixed;
+  inset: unset;
+  z-index: var(--le-z-tooltip, 1070);
+
+  box-sizing: border-box;
+  font-family: var(--le-font-family, var(--le-font-family-base, system-ui, -apple-system, sans-serif));
+  font-size: var(--le-tooltip-font-size, var(--le-font-size-xs, 0.75rem));
+  font-weight: var(--le-tooltip-font-weight, var(--le-font-weight-medium, 500));
+  line-height: var(--le-tooltip-line-height, 1.35);
+  box-shadow: var(--le-tooltip-shadow, 0 8px 20px rgba(0, 0, 0, 0.2));
+
+  background: var(--le-tooltip-bg, rgba(26, 27, 31, 0.96));
+  color: var(--le-tooltip-color, #ffffff);
+
+  opacity: 0;
+  transform: translateY(2px) scale(0.98);
+  transition: opacity 0.12s ease, transform 0.12s ease, display 0.12s ease allow-discrete;
+
+  pointer-events: auto;
+}
+
+.le-tooltip-content:popover-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@starting-style {
+  .le-tooltip-content:popover-open {
+    opacity: 0;
+    transform: translateY(2px) scale(0.98);
+  }
+}
+
+.le-tooltip-content[data-fallback-open="false"] {
+  display: none;
+}
+
+.le-tooltip-content[data-fallback-open="true"] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.le-tooltip-variant-default {
+  background: var(--le-tooltip-bg, rgba(26, 27, 31, 0.96));
+  color: var(--le-tooltip-color, #ffffff);
+}
+
+.le-tooltip-variant-success {
+  background: var(--le-tooltip-success-bg, var(--le-color-success, #28a745));
+  color: var(--le-tooltip-success-color, var(--le-color-success-contrast, #ffffff));
+  border-color: var(--le-tooltip-success-border, color-mix(in srgb, var(--le-color-success, #28a745) 70%, #000 30%));
+}
+
+.le-tooltip-variant-danger {
+  background: var(--le-tooltip-danger-bg, var(--le-color-danger, #dc3545));
+  color: var(--le-tooltip-danger-color, var(--le-color-danger-contrast, #ffffff));
+  border-color: var(--le-tooltip-danger-border, color-mix(in srgb, var(--le-color-danger, #dc3545) 72%, #000 28%));
+}

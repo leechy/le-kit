@@ -902,6 +902,70 @@
       </div>
 
       <div class="demo-section">
+        <h2>Tooltip Component</h2>
+        <p>Hover on desktop or long-press on touch devices. Uses top-layer popover behavior with viewport-aware positioning.</p>
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>Text tooltip (default)</label>
+            <div style="display: flex; gap: var(--le-space-sm); align-items: center; flex-wrap: wrap;">
+              <le-tooltip text="Copy to clipboard">
+                <le-button variant="outlined" size="small">Copy</le-button>
+              </le-tooltip>
+
+              <le-tooltip text="Tooltip with custom delays" show-delay="900" hide-delay="350">
+                <le-button variant="outlined" size="small">Slow tooltip</le-button>
+              </le-tooltip>
+            </div>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Slot content tooltip</label>
+            <le-tooltip placement="right" max-width="320px" show-delay="0" hide-delay="500">
+              <le-button variant="outlined" color="info">Custom content</le-button>
+              <div slot="content" style="display: grid; gap: 4px;">
+                <strong>Deploy status</strong>
+                <span>All checks passed. Production build is ready.</span>
+              </div>
+            </le-tooltip>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>Variants</label>
+            <div style="display: flex; gap: var(--le-space-sm); align-items: center; flex-wrap: wrap;">
+              <le-tooltip text="Saved successfully" placement="bottom"variant="success">
+                <le-button size="small">Success</le-button>
+              </le-tooltip>
+
+              <le-tooltip text="Deleting this cannot be undone" variant="danger">
+                <le-button size="small">Danger</le-button>
+              </le-tooltip>
+            </div>
+          </div>
+
+          <div class="text-slot-demo" style="text-align: end;">
+            <label>Auto placement near viewport edge</label>
+            <le-tooltip text="I should flip to stay visible" placement="bottom" align="start">
+              <span
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  width: 36px;
+                  height: 36px;
+                  border-radius: 9999px;
+                  border: 1px solid var(--le-color-border);
+                  background: var(--le-color-surface);
+                  cursor: default;
+                "
+              >
+                ?
+              </span>
+            </le-tooltip>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-section">
         <h2>Card Component (switch to Admin mode to see settings)</h2>
         <p>Cards now have built-in admin mode support. Click the ⚙️ to edit properties.</p>
         <div class="demo-grid">

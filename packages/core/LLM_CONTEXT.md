@@ -42,6 +42,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-tabs](#le-tabs)
 - [le-tag](#le-tag)
 - [le-text](#le-text)
+- [le-tooltip](#le-tooltip)
 - [le-turntable](#le-turntable)
 
 ---
@@ -1495,6 +1496,34 @@ toolbar for bold, italic, links, and paragraph type selection.
 | `--le-text-font-size` | Font size |
 | `--le-text-line-height` | Line height |
 | `--le-text-font-weight` | Font weight |
+
+---
+
+## <le-tooltip>
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `mode` | `LeKitMode` | `'default'` | The mode of Le Kit. |
+| `open` | `boolean` | `false` | Controls whether the tooltip is open. |
+| `text` | `string` | `''` | Tooltip text shown when no custom content slot is provided. |
+| `placement` | `TooltipPlacement` | `'auto'` | Preferred tooltip placement relative to trigger. |
+| `align` | `TooltipAlign` | `'center'` | Alignment along the cross axis for the chosen placement. |
+| `variant` | `TooltipVariant` | `'default'` | Visual variant of tooltip. |
+| `disabled` | `boolean` | `false` | Disable tooltip interactions and visibility. |
+| `showDelay` | `number` | `500` | Delay in milliseconds before showing the tooltip. |
+| `hideDelay` | `number` | `160` | Delay in milliseconds before hiding the tooltip after leaving trigger/content. |
+| `offset` | `number` | `8` | Distance in pixels between trigger and tooltip. |
+| `maxWidth` | `string` | `'280px'` | Max width of the tooltip box. |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leTooltipOpen` | `EventEmitter<void> \| undefined` | Emitted when the tooltip opens. |
+| `leTooltipClose` | `EventEmitter<void> \| undefined` | Emitted when the tooltip closes. |
 
 ---
 

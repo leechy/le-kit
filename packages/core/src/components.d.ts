@@ -2179,6 +2179,79 @@ export namespace Components {
     | 'label'
     | 'small';
     }
+    interface LeTooltip {
+        /**
+          * Alignment along the cross axis for the chosen placement.
+          * @default 'center'
+         */
+        "align": TooltipAlign;
+        /**
+          * Disable tooltip interactions and visibility.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Hides the tooltip.
+         */
+        "hide": () => Promise<void>;
+        /**
+          * Delay in milliseconds before hiding the tooltip after leaving trigger/content.
+          * @default 160
+         */
+        "hideDelay": number;
+        /**
+          * Max width of the tooltip box.
+          * @default '280px'
+         */
+        "maxWidth": string;
+        /**
+          * The mode of Le Kit.
+          * @default 'default'
+         */
+        "mode": LeKitMode;
+        /**
+          * Distance in pixels between trigger and tooltip.
+          * @default 8
+         */
+        "offset": number;
+        /**
+          * Controls whether the tooltip is open.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Preferred tooltip placement relative to trigger.
+          * @default 'auto'
+         */
+        "placement": TooltipPlacement;
+        /**
+          * Shows the tooltip.
+         */
+        "show": () => Promise<void>;
+        /**
+          * Delay in milliseconds before showing the tooltip.
+          * @default 500
+         */
+        "showDelay": number;
+        /**
+          * Tooltip text shown when no custom content slot is provided.
+          * @default ''
+         */
+        "text": string;
+        /**
+          * Toggles the tooltip.
+         */
+        "toggle": () => Promise<void>;
+        /**
+          * Updates tooltip position manually.
+         */
+        "updatePosition": () => Promise<void>;
+        /**
+          * Visual variant of tooltip.
+          * @default 'default'
+         */
+        "variant": TooltipVariant;
+    }
     interface LeTurntable {
         /**
           * @default 'center'
@@ -2281,6 +2354,10 @@ export interface LeTabsCustomEvent<T> extends CustomEvent<T> {
 export interface LeTagCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeTagElement;
+}
+export interface LeTooltipCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeTooltipElement;
 }
 declare global {
     interface HTMLLeBarElementEventMap {
@@ -3286,6 +3363,24 @@ declare global {
         prototype: HTMLLeTextElement;
         new (): HTMLLeTextElement;
     };
+    interface HTMLLeTooltipElementEventMap {
+        "leTooltipOpen": void;
+        "leTooltipClose": void;
+    }
+    interface HTMLLeTooltipElement extends Components.LeTooltip, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeTooltipElementEventMap>(type: K, listener: (this: HTMLLeTooltipElement, ev: LeTooltipCustomEvent<HTMLLeTooltipElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeTooltipElementEventMap>(type: K, listener: (this: HTMLLeTooltipElement, ev: LeTooltipCustomEvent<HTMLLeTooltipElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeTooltipElement: {
+        prototype: HTMLLeTooltipElement;
+        new (): HTMLLeTooltipElement;
+    };
     interface HTMLLeTurntableElement extends Components.LeTurntable, HTMLStencilElement {
     }
     var HTMLLeTurntableElement: {
@@ -3331,6 +3426,7 @@ declare global {
         "le-tabs": HTMLLeTabsElement;
         "le-tag": HTMLLeTagElement;
         "le-text": HTMLLeTextElement;
+        "le-tooltip": HTMLLeTooltipElement;
         "le-turntable": HTMLLeTurntableElement;
     }
 }
@@ -5601,6 +5697,71 @@ declare namespace LocalJSX {
     | 'label'
     | 'small';
     }
+    interface LeTooltip {
+        /**
+          * Alignment along the cross axis for the chosen placement.
+          * @default 'center'
+         */
+        "align"?: TooltipAlign;
+        /**
+          * Disable tooltip interactions and visibility.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Delay in milliseconds before hiding the tooltip after leaving trigger/content.
+          * @default 160
+         */
+        "hideDelay"?: number;
+        /**
+          * Max width of the tooltip box.
+          * @default '280px'
+         */
+        "maxWidth"?: string;
+        /**
+          * The mode of Le Kit.
+          * @default 'default'
+         */
+        "mode"?: LeKitMode;
+        /**
+          * Distance in pixels between trigger and tooltip.
+          * @default 8
+         */
+        "offset"?: number;
+        /**
+          * Emitted when the tooltip closes.
+         */
+        "onLeTooltipClose"?: (event: LeTooltipCustomEvent<void>) => void;
+        /**
+          * Emitted when the tooltip opens.
+         */
+        "onLeTooltipOpen"?: (event: LeTooltipCustomEvent<void>) => void;
+        /**
+          * Controls whether the tooltip is open.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Preferred tooltip placement relative to trigger.
+          * @default 'auto'
+         */
+        "placement"?: TooltipPlacement;
+        /**
+          * Delay in milliseconds before showing the tooltip.
+          * @default 500
+         */
+        "showDelay"?: number;
+        /**
+          * Tooltip text shown when no custom content slot is provided.
+          * @default ''
+         */
+        "text"?: string;
+        /**
+          * Visual variant of tooltip.
+          * @default 'default'
+         */
+        "variant"?: TooltipVariant;
+    }
     interface LeTurntable {
         /**
           * @default 'center'
@@ -6017,6 +6178,19 @@ declare namespace LocalJSX {
         "truncate": boolean;
         "maxLines": number;
     }
+    interface LeTooltipAttributes {
+        "mode": LeKitMode;
+        "open": boolean;
+        "text": string;
+        "placement": TooltipPlacement;
+        "align": TooltipAlign;
+        "variant": TooltipVariant;
+        "disabled": boolean;
+        "showDelay": number;
+        "hideDelay": number;
+        "offset": number;
+        "maxWidth": string;
+    }
     interface LeTurntableAttributes {
         "center": string;
         "value": number;
@@ -6061,6 +6235,7 @@ declare namespace LocalJSX {
         "le-tabs": Omit<LeTabs, keyof LeTabsAttributes> & { [K in keyof LeTabs & keyof LeTabsAttributes]?: LeTabs[K] } & { [K in keyof LeTabs & keyof LeTabsAttributes as `attr:${K}`]?: LeTabsAttributes[K] } & { [K in keyof LeTabs & keyof LeTabsAttributes as `prop:${K}`]?: LeTabs[K] };
         "le-tag": Omit<LeTag, keyof LeTagAttributes> & { [K in keyof LeTag & keyof LeTagAttributes]?: LeTag[K] } & { [K in keyof LeTag & keyof LeTagAttributes as `attr:${K}`]?: LeTagAttributes[K] } & { [K in keyof LeTag & keyof LeTagAttributes as `prop:${K}`]?: LeTag[K] };
         "le-text": Omit<LeText, keyof LeTextAttributes> & { [K in keyof LeText & keyof LeTextAttributes]?: LeText[K] } & { [K in keyof LeText & keyof LeTextAttributes as `attr:${K}`]?: LeTextAttributes[K] } & { [K in keyof LeText & keyof LeTextAttributes as `prop:${K}`]?: LeText[K] };
+        "le-tooltip": Omit<LeTooltip, keyof LeTooltipAttributes> & { [K in keyof LeTooltip & keyof LeTooltipAttributes]?: LeTooltip[K] } & { [K in keyof LeTooltip & keyof LeTooltipAttributes as `attr:${K}`]?: LeTooltipAttributes[K] } & { [K in keyof LeTooltip & keyof LeTooltipAttributes as `prop:${K}`]?: LeTooltip[K] };
         "le-turntable": Omit<LeTurntable, keyof LeTurntableAttributes> & { [K in keyof LeTurntable & keyof LeTurntableAttributes]?: LeTurntable[K] } & { [K in keyof LeTurntable & keyof LeTurntableAttributes as `attr:${K}`]?: LeTurntableAttributes[K] } & { [K in keyof LeTurntable & keyof LeTurntableAttributes as `prop:${K}`]?: LeTurntable[K] };
     }
 }
@@ -6577,6 +6752,7 @@ declare module "@stencil/core" {
              * @cmsCategory Content
              */
             "le-text": LocalJSX.IntrinsicElements["le-text"] & JSXBase.HTMLAttributes<HTMLLeTextElement>;
+            "le-tooltip": LocalJSX.IntrinsicElements["le-tooltip"] & JSXBase.HTMLAttributes<HTMLLeTooltipElement>;
             "le-turntable": LocalJSX.IntrinsicElements["le-turntable"] & JSXBase.HTMLAttributes<HTMLLeTurntableElement>;
         }
     }

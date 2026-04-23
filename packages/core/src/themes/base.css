@@ -29,6 +29,15 @@
   --le-spacing-12: 3rem;      /* 48px */
   --le-spacing-16: 4rem;      /* 64px */
 
+  /* Compatibility aliases (legacy names, keep during migration) */
+  --le-space-xs: var(--le-spacing-1);
+  --le-space-sm: var(--le-spacing-2);
+  --le-space-md: var(--le-spacing-4);
+  --le-space-lg: var(--le-spacing-6);
+  --le-space-xl: var(--le-spacing-8);
+  --le-space-2xl: var(--le-spacing-12);
+  --le-space-3xl: var(--le-spacing-16);
+
   /* ============================================
    * TYPOGRAPHY
    * ============================================ */
@@ -44,6 +53,10 @@
   --le-font-size-2xl: 1.5rem;     /* 24px */
   --le-font-size-3xl: 1.875rem;   /* 30px */
   --le-font-size-4xl: 2.25rem;    /* 36px */
+
+  /* Compatibility aliases (legacy names, keep during migration) */
+  --le-font-family: var(--le-font-family-base);
+  --le-font-size-2xs: 0.625rem;
   
   /* Font weights */
   --le-font-weight-normal: 400;

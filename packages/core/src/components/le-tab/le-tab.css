@@ -20,6 +20,7 @@
   --le-tab-color: var(--le-color-text-primary);
   --le-selected-tab-color: var(--le-color-primary);
   --le-selected-icon-only-tab-background: color-mix(in srgb, var(--_tab-bg) 10%, transparent);
+  --le-tab-selected-filter: none;
   
   /* Internal state variables - set by color classes */
   --_tab-bg: var(--le-color-primary);
@@ -27,6 +28,11 @@
   --_tab-bg-system: var(--le-color-black);
   --_tab-color: var(--le-tab-color);
   --_tab-border-color: var(--le-color-primary);
+}
+
+:host-context([active-context='inactive']),
+:host-context(.le-active-context-inactive) {
+  --le-tab-selected-filter: var(--le-context-selected-filter-inactive, saturate(0.55) brightness(0.92));
 }
 
 :host([full-width]) {
@@ -65,7 +71,7 @@
 }
 
 .le-tab-container:disabled {
-  opacity: 0.5;
+  opacity: var(--le-state-disabled-opacity, 0.6);
   cursor: not-allowed;
 }
 
@@ -120,6 +126,7 @@
 .le-tab-container.variant-solid.selected {
   background: var(--_tab-bg);
   color: var(--le-color-on-primary);
+  filter: var(--le-tab-selected-filter);
 }
 
 /* Pills */
@@ -131,6 +138,7 @@
 .le-tab-container.variant-pills.selected {
   background: var(--_tab-bg);
   color: var(--le-color-on-primary);
+  filter: var(--le-tab-selected-filter);
 }
 
 /* Enclosed */
@@ -143,6 +151,7 @@
 .le-tab-container.variant-enclosed.selected {
   background: var(--_tab-bg);
   color: var(--le-color-on-primary);
+  filter: var(--le-tab-selected-filter);
 }
 
 /* Icon only (used in le-tab-bar - mobile navigation) */
@@ -174,6 +183,7 @@
 }
 .le-tab-container.variant-icon-only.selected .icon {
   background: var(--le-selected-icon-only-tab-background);
+  filter: var(--le-tab-selected-filter);
 }
 .le-tab-container.variant-icon-only.size-small {
   padding: var(--le-tab-small-padding, 0.25rem);

@@ -49,6 +49,7 @@ export const config: Config = {
       type: 'www',
       serviceWorker: null, // disable service workers
       copy: [
+        { src: 'theming.html' },
         { src: 'global' },
         { src: 'themes', dest: 'build/themes' },
         { src: 'assets', dest: 'build/assets' },

@@ -5,10 +5,16 @@
 :host {
   display: block;
   --le-tabs-gap: var(--le-spacing-1);
-  --le-tabs-border-color: var(--le-border-color);
+  --le-tabs-border-color: var(--le-border-color-default, var(--le-color-border));
   --le-tabs-padding-y: var(--le-spacing-2);
   --le-tabs-padding-x: var(--le-spacing-4);
   --le-tabs-enclosed-bg: var(--le-color-background-secondary);
+  --le-tabs-context-opacity: 1;
+}
+
+:host-context([active-context='inactive']),
+:host-context(.le-active-context-inactive) {
+  --le-tabs-context-opacity: var(--le-control-group-inactive-opacity, 0.72);
 }
 
 .le-tabs {
@@ -29,6 +35,8 @@
   position: relative;
   border-radius: var(--le-radius-md);
   gap: var(--le-tabs-gap);
+  opacity: var(--le-tabs-context-opacity);
+  transition: opacity var(--le-transition-fast) var(--le-transition-easing);
 }
 .tablist.wrap-tabs {
   flex-wrap: wrap;
@@ -46,8 +54,8 @@
   overflow: scroll;
 }
 .tablist:focus {
-  outline: 2px solid var(--le-color-focus);
-  outline-offset: 2px;
+  outline: var(--le-focus-ring-width, 2px) solid var(--le-color-focus-ring, var(--le-color-focus));
+  outline-offset: var(--le-focus-ring-offset, 2px);
 }
 
 .orientation-horizontal .tablist {

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Le-Kit Theming Playground</title>
+
+    <script type="module" src="/build/le-kit.esm.js"></script>
+    <script nomodule src="/build/le-kit.js"></script>
+    <link rel="stylesheet" href="/build/le-kit.css" />
+
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      body {
+        margin: 0;
+        padding: var(--le-spacing-6);
+        font-family: var(--le-font-family, var(--le-font-family-base, system-ui, -apple-system, sans-serif));
+        background: var(--le-surface-background, var(--le-color-background));
+        color: var(--le-color-on-background, var(--le-color-text-primary));
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .page {
+        display: grid;
+        gap: var(--le-spacing-6);
+      }
+
+      .intro {
+        display: grid;
+        gap: var(--le-spacing-3);
+      }
+
+      .intro p {
+        color: var(--le-color-on-background-muted, var(--le-color-text-secondary));
+        max-width: 96ch;
+      }
+
+      .compare-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--le-spacing-5);
+      }
+
+      .pane {
+        display: grid;
+        gap: var(--le-spacing-4);
+        background: var(--le-surface-panel, var(--le-color-surface));
+        border: 1px solid var(--le-border-color-default, var(--le-color-border));
+        border-radius: var(--le-radius-xl);
+        padding: var(--le-spacing-4);
+        box-shadow: var(--le-shadow-md);
+      }
+
+      .pane-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .pane-title {
+        font-size: var(--le-font-size-lg);
+        font-weight: var(--le-font-weight-semibold);
+      }
+
+      .context-note {
+        font-size: var(--le-font-size-sm);
+        color: var(--le-color-on-background-muted, var(--le-color-text-secondary));
+      }
+
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--le-spacing-3);
+      }
+
+      .control {
+        display: grid;
+        gap: 6px;
+      }
+
+      .control label {
+        font-size: var(--le-font-size-sm);
+        color: var(--le-color-on-background-muted, var(--le-color-text-secondary));
+      }
+
+      .control select {
+        border: var(--le-border-width, 1px) solid var(--le-border-color-input, var(--le-color-border));
+        border-radius: var(--le-appearance-control-radius, var(--le-radius-md));
+        background: var(--le-surface-control, var(--le-color-surface));
+        color: var(--le-color-on-surface, var(--le-color-text-primary));
+        padding: 0.45rem 0.6rem;
+        font-size: var(--le-font-size-sm);
+      }
+
+      .preview {
+        display: grid;
+        gap: var(--le-spacing-3);
+        border: 1px dashed var(--le-border-color-muted, var(--le-color-border-light));
+        border-radius: var(--le-radius-lg);
+        padding: var(--le-spacing-3);
+        background: var(--le-surface-background-secondary, var(--le-color-background-secondary));
+      }
+
+      .surface-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--le-spacing-2);
+      }
+
+      .surface-chip {
+        border: 1px solid var(--le-border-color-default, var(--le-color-border));
+        border-radius: var(--le-appearance-control-radius, var(--le-radius-md));
+        padding: var(--le-spacing-2);
+        min-height: 52px;
+        display: grid;
+        align-content: center;
+        gap: 2px;
+      }
+
+      .surface-chip small {
+        color: var(--le-color-on-surface-muted, var(--le-color-text-secondary));
+      }
+
+      .surface-panel {
+        background: var(--le-surface-panel, var(--le-color-surface));
+      }
+
+      .surface-control {
+        background: var(--le-surface-control, var(--le-color-surface));
+      }
+
+      .surface-popup {
+        background: var(--le-surface-popup, var(--le-color-surface-elevated));
+      }
+
+      .surface-popover {
+        background: var(--le-surface-popover, var(--le-color-surface-alt));
+      }
+
+      .mini-app {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        min-height: 460px;
+        border: 1px solid var(--le-border-color-default, var(--le-color-border));
+        border-radius: calc(var(--le-appearance-control-radius, var(--le-radius-md)) + var(--le-spacing-2));
+        background: var(--le-surface-panel, var(--le-color-surface));
+        overflow: hidden;
+        box-shadow: var(--le-shadow-sm);
+      }
+
+      .mini-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: calc(var(--le-spacing-2) * var(--le-appearance-control-density, 1)) var(--le-spacing-3);
+        border-bottom: 1px solid var(--le-border-color-muted, var(--le-color-border-light));
+        background: var(--le-surface-popup, var(--le-color-surface-elevated));
+      }
+
+      .mini-brand {
+        display: grid;
+        gap: 2px;
+      }
+
+      .mini-brand strong {
+        font-size: var(--le-font-size-sm);
+      }
+
+      .mini-brand small {
+        font-size: var(--le-font-size-xs);
+        color: var(--le-color-on-background-muted, var(--le-color-text-secondary));
+      }
+
+      .mini-toolbar-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--le-spacing-2);
+      }
+
+      .mini-main {
+        display: grid;
+        grid-template-columns: 196px 1fr;
+        min-height: 0;
+      }
+
+      .mini-sidebar {
+        border-right: 1px solid var(--le-border-color-muted, var(--le-color-border-light));
+        background: var(--le-surface-popover, var(--le-color-surface-alt));
+        padding: var(--le-spacing-3) var(--le-spacing-2);
+      }
+
+      .mini-content {
+        display: grid;
+        align-content: start;
+        gap: var(--le-spacing-3);
+        padding: var(--le-spacing-3);
+        background: var(--le-surface-background, var(--le-color-background));
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--le-spacing-2);
+      }
+
+      .stat-card {
+        border: 1px solid var(--le-border-color-default, var(--le-color-border));
+        border-radius: var(--le-appearance-control-radius, var(--le-radius-md));
+        background: var(--le-surface-control, var(--le-color-surface));
+        padding: var(--le-spacing-2);
+      }
+
+      .stat-card small {
+        color: var(--le-color-on-background-muted, var(--le-color-text-secondary));
+      }
+
+      .stat-card strong {
+        display: block;
+        margin-top: 2px;
+      }
+
+      .nested-popover-content {
+        background: var(--le-surface-nested, var(--le-color-surface-alt));
+        border: 1px solid var(--le-border-color-default, var(--le-color-border));
+        border-radius: var(--le-radius-md);
+        padding: var(--le-spacing-2);
+      }
+
+      .popup-form {
+        display: grid;
+        gap: var(--le-spacing-3);
+      }
+
+      .inline-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--le-spacing-2);
+      }
+
+      .legend {
+        display: grid;
+        gap: var(--le-spacing-2);
+        background: var(--le-surface-panel, var(--le-color-surface));
+        border: 1px solid var(--le-border-color-default, var(--le-color-border));
+        border-radius: var(--le-radius-lg);
+        padding: var(--le-spacing-3);
+      }
+
+      .legend p {
+        color: var(--le-color-on-background-muted, var(--le-color-text-secondary));
+      }
+
+      .legend code {
+        background: var(--le-surface-background-tertiary, var(--le-color-background-tertiary));
+        border-radius: var(--le-radius-sm);
+        padding: 2px 6px;
+      }
+
+      @media (max-width: 1220px) {
+        .surface-strip {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 980px) {
+        .compare-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .controls {
+          grid-template-columns: 1fr;
+        }
+
+        .mini-main {
+          grid-template-columns: 1fr;
+        }
+
+        .mini-sidebar {
+          border-right: none;
+          border-bottom: 1px solid var(--le-border-color-muted, var(--le-color-border-light));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <section class="intro">
+        <h1>Le-Kit Theming Playground</h1>
+        <p>
+          This page compares two independent mini-app scopes side by side. Each side can use either attribute-based or
+          class-based API, and you can switch theme, appearance, and active context independently.
+        </p>
+      </section>
+
+      <section class="compare-grid">
+        <article class="pane" data-pane="left">
+          <div class="pane-header">
+            <h2 class="pane-title">Example A</h2>
+            <span id="left-summary" class="context-note"></span>
+          </div>
+
+          <div class="controls">
+            <div class="control">
+              <label for="left-scope">Scope API</label>
+              <select id="left-scope">
+                <option value="attribute" selected>Attribute</option>
+                <option value="class">Class</option>
+              </select>
+            </div>
+            <div class="control">
+              <label for="left-theme">Theme</label>
+              <select id="left-theme">
+                <option value="default" selected>default</option>
+                <option value="dark">dark</option>
+                <option value="minimal">minimal</option>
+                <option value="warm">warm</option>
+                <option value="gradient">gradient</option>
+              </select>
+            </div>
+            <div class="control">
+              <label for="left-appearance">Appearance</label>
+              <select id="left-appearance">
+                <option value="default" selected>default</option>
+                <option value="macos">macos</option>
+                <option value="windows">windows</option>
+                <option value="ios">ios</option>
+                <option value="android">android</option>
+              </select>
+            </div>
+            <div class="control">
+              <label for="left-context">Active Context</label>
+              <select id="left-context">
+                <option value="active" selected>active</option>
+                <option value="inactive">inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="left-preview" class="preview">
+            <div class="surface-strip">
+              <div class="surface-chip surface-panel">
+                <strong>Panel</strong>
+                <small>--le-surface-panel</small>
+              </div>
+              <div class="surface-chip surface-control">
+                <strong>Control</strong>
+                <small>--le-surface-control</small>
+              </div>
+              <div class="surface-chip surface-popup">
+                <strong>Popup</strong>
+                <small>--le-surface-popup</small>
+              </div>
+              <div class="surface-chip surface-popover">
+                <strong>Popover</strong>
+                <small>--le-surface-popover</small>
+              </div>
+            </div>
+
+            <div class="mini-app">
+              <div class="mini-toolbar">
+                <div class="mini-brand">
+                  <strong>Le-Kit Workspace A</strong>
+                  <small>Toolbar + nav + content + popup form</small>
+                </div>
+                <div class="mini-toolbar-actions">
+                  <le-popover popover-title="Quick Actions" position="bottom" align="end">
+                    <le-button slot="trigger" variant="outlined" size="small">Actions</le-button>
+                    <div class="nested-popover-content">
+                      <p style="margin: 0 0 8px 0; font-size: var(--le-font-size-sm);">Nested popover surface</p>
+                      <le-button size="small" variant="clear" color="primary">Create</le-button>
+                      <le-button size="small" variant="clear" color="secondary">Share</le-button>
+                    </div>
+                  </le-popover>
+                  <le-button id="left-open-popup" size="small" color="primary">Open Form</le-button>
+                </div>
+              </div>
+
+              <div class="mini-main">
+                <aside class="mini-sidebar">
+                  <le-navigation orientation="vertical">
+                    <le-item label="Dashboard" selected></le-item>
+                    <le-item label="Projects"></le-item>
+                    <le-item label="Team"></le-item>
+                    <le-item label="Settings"></le-item>
+                  </le-navigation>
+                </aside>
+
+                <main class="mini-content">
+                  <div class="stats-grid">
+                    <div class="stat-card">
+                      <small>Revenue</small>
+                      <strong>$24,300</strong>
+                    </div>
+                    <div class="stat-card">
+                      <small>Active Users</small>
+                      <strong>1,284</strong>
+                    </div>
+                    <div class="stat-card">
+                      <small>Open Tasks</small>
+                      <strong>37</strong>
+                    </div>
+                  </div>
+
+                  <le-tabs variant="pills">
+                    <le-tab-panel label="Overview" value="overview">Shows active/inactive group emphasis behavior.</le-tab-panel>
+                    <le-tab-panel label="Activity" value="activity">Switch active context to inactive to compare.</le-tab-panel>
+                    <le-tab-panel label="Messages" value="messages">Focus styling stays visible for keyboard users.</le-tab-panel>
+                  </le-tabs>
+
+                  <div>
+                    <le-button variant="outlined" color="primary" id="left-open-popup-2">Edit Profile</le-button>
+                  </div>
+                </main>
+              </div>
+            </div>
+
+            <le-popup id="left-popup" popup-title="Edit Profile" type="custom" modal="false" position="center">
+              <div class="popup-form">
+                <le-string-input label="Name" placeholder="Jane Doe" value="Jane Doe"></le-string-input>
+                <div class="inline-row">
+                  <le-string-input label="Role" placeholder="Product Designer" value="Product Designer"></le-string-input>
+                  <le-number-input label="Projects" min="0" step="1" value="5"></le-number-input>
+                </div>
+                <le-checkbox checked>Receive weekly summary</le-checkbox>
+              </div>
+              <div slot="footer" style="display: flex; justify-content: end; gap: var(--le-spacing-2);">
+                <le-button variant="outlined" id="left-cancel-popup">Cancel</le-button>
+                <le-button color="primary" id="left-save-popup">Save</le-button>
+              </div>
+            </le-popup>
+          </div>
+        </article>
+
+        <article class="pane" data-pane="right">
+          <div class="pane-header">
+            <h2 class="pane-title">Example B</h2>
+            <span id="right-summary" class="context-note"></span>
+          </div>
+
+          <div class="controls">
+            <div class="control">
+              <label for="right-scope">Scope API</label>
+              <select id="right-scope">
+                <option value="attribute">Attribute</option>
+                <option value="class" selected>Class</option>
+              </select>
+            </div>
+            <div class="control">
+              <label for="right-theme">Theme</label>
+              <select id="right-theme">
+                <option value="default">default</option>
+                <option value="dark" selected>dark</option>
+                <option value="minimal">minimal</option>
+                <option value="warm">warm</option>
+                <option value="gradient">gradient</option>
+              </select>
+            </div>
+            <div class="control">
+              <label for="right-appearance">Appearance</label>
+              <select id="right-appearance">
+                <option value="default">default</option>
+                <option value="macos">macos</option>
+                <option value="windows" selected>windows</option>
+                <option value="ios">ios</option>
+                <option value="android">android</option>
+              </select>
+            </div>
+            <div class="control">
+              <label for="right-context">Active Context</label>
+              <select id="right-context">
+                <option value="active">active</option>
+                <option value="inactive" selected>inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="right-preview" class="preview">
+            <div class="surface-strip">
+              <div class="surface-chip surface-panel">
+                <strong>Panel</strong>
+                <small>--le-surface-panel</small>
+              </div>
+              <div class="surface-chip surface-control">
+                <strong>Control</strong>
+                <small>--le-surface-control</small>
+              </div>
+              <div class="surface-chip surface-popup">
+                <strong>Popup</strong>
+                <small>--le-surface-popup</small>
+              </div>
+              <div class="surface-chip surface-popover">
+                <strong>Popover</strong>
+                <small>--le-surface-popover</small>
+              </div>
+            </div>
+
+            <div class="mini-app">
+              <div class="mini-toolbar">
+                <div class="mini-brand">
+                  <strong>Le-Kit Workspace B</strong>
+                  <small>Compare against Example A in real time</small>
+                </div>
+                <div class="mini-toolbar-actions">
+                  <le-popover popover-title="Quick Actions" position="bottom" align="end">
+                    <le-button slot="trigger" variant="outlined" size="small">Actions</le-button>
+                    <div class="nested-popover-content">
+                      <p style="margin: 0 0 8px 0; font-size: var(--le-font-size-sm);">Nested popover surface</p>
+                      <le-button size="small" variant="clear" color="primary">Create</le-button>
+                      <le-button size="small" variant="clear" color="secondary">Share</le-button>
+                    </div>
+                  </le-popover>
+                  <le-button id="right-open-popup" size="small" color="primary">Open Form</le-button>
+                </div>
+              </div>
+
+              <div class="mini-main">
+                <aside class="mini-sidebar">
+                  <le-navigation orientation="vertical">
+                    <le-item label="Dashboard" selected></le-item>
+                    <le-item label="Projects"></le-item>
+                    <le-item label="Team"></le-item>
+                    <le-item label="Settings"></le-item>
+                  </le-navigation>
+                </aside>
+
+                <main class="mini-content">
+                  <div class="stats-grid">
+                    <div class="stat-card">
+                      <small>Revenue</small>
+                      <strong>$24,300</strong>
+                    </div>
+                    <div class="stat-card">
+                      <small>Active Users</small>
+                      <strong>1,284</strong>
+                    </div>
+                    <div class="stat-card">
+                      <small>Open Tasks</small>
+                      <strong>37</strong>
+                    </div>
+                  </div>
+
+                  <le-tabs variant="pills">
+                    <le-tab-panel label="Overview" value="overview">Shows active/inactive group emphasis behavior.</le-tab-panel>
+                    <le-tab-panel label="Activity" value="activity">Switch active context to inactive to compare.</le-tab-panel>
+                    <le-tab-panel label="Messages" value="messages">Focus styling stays visible for keyboard users.</le-tab-panel>
+                  </le-tabs>
+
+                  <div>
+                    <le-button variant="outlined" color="primary" id="right-open-popup-2">Edit Profile</le-button>
+                  </div>
+                </main>
+              </div>
+            </div>
+
+            <le-popup id="right-popup" popup-title="Edit Profile" type="custom" modal="false" position="center">
+              <div class="popup-form">
+                <le-string-input label="Name" placeholder="Jane Doe" value="Jane Doe"></le-string-input>
+                <div class="inline-row">
+                  <le-string-input label="Role" placeholder="Product Designer" value="Product Designer"></le-string-input>
+                  <le-number-input label="Projects" min="0" step="1" value="5"></le-number-input>
+                </div>
+                <le-checkbox checked>Receive weekly summary</le-checkbox>
+              </div>
+              <div slot="footer" style="display: flex; justify-content: end; gap: var(--le-spacing-2);">
+                <le-button variant="outlined" id="right-cancel-popup">Cancel</le-button>
+                <le-button color="primary" id="right-save-popup">Save</le-button>
+              </div>
+            </le-popup>
+          </div>
+        </article>
+      </section>
+
+      <section class="legend">
+        <h3>How to read this page</h3>
+        <p>
+          Theme changes color tokens. Appearance changes structural feel (radius, density, and platform-like spacing cues).
+          Active context changes interaction emphasis for control groups.
+        </p>
+        <p>
+          Try setting one side to <code>attribute</code> scope and the other to <code>class</code> scope. You should get
+          the same visual result, which proves both APIs are equivalent.
+        </p>
+      </section>
+    </div>
+
+    <script>
+      const THEMES = ['default', 'dark', 'minimal', 'warm', 'gradient'];
+      const APPEARANCES = ['default', 'macos', 'windows', 'ios', 'android'];
+      const CONTEXTS = ['active', 'inactive'];
+
+      function clearScopeClasses(el) {
+        el.classList.remove(
+          ...THEMES.map(name => `le-theme-${name}`),
+          ...APPEARANCES.map(name => `le-appearance-${name}`),
+          ...CONTEXTS.map(name => `le-active-context-${name}`)
+        );
+      }
+
+      function applyScope(side) {
+        const scopeMode = document.getElementById(`${side}-scope`).value;
+        const theme = document.getElementById(`${side}-theme`).value;
+        const appearance = document.getElementById(`${side}-appearance`).value;
+        const context = document.getElementById(`${side}-context`).value;
+
+        const preview = document.getElementById(`${side}-preview`);
+        const summary = document.getElementById(`${side}-summary`);
+
+        preview.removeAttribute('theme');
+        preview.removeAttribute('appearance');
+        preview.removeAttribute('active-context');
+        clearScopeClasses(preview);
+
+        if (scopeMode === 'attribute') {
+          preview.setAttribute('theme', theme);
+          preview.setAttribute('appearance', appearance);
+          preview.setAttribute('active-context', context);
+        } else {
+          preview.classList.add(`le-theme-${theme}`);
+          preview.classList.add(`le-appearance-${appearance}`);
+          preview.classList.add(`le-active-context-${context}`);
+        }
+
+        summary.textContent = `${scopeMode} | theme: ${theme} | appearance: ${appearance} | context: ${context}`;
+      }
+
+      function bindPopup(side) {
+        const popup = document.getElementById(`${side}-popup`);
+        const openBtn = document.getElementById(`${side}-open-popup`);
+        const openBtn2 = document.getElementById(`${side}-open-popup-2`);
+        const cancelBtn = document.getElementById(`${side}-cancel-popup`);
+        const saveBtn = document.getElementById(`${side}-save-popup`);
+
+        const open = async () => {
+          if (popup && typeof popup.show === 'function') {
+            await popup.show();
+          }
+        };
+
+        const close = async confirmed => {
+          if (popup && typeof popup.hide === 'function') {
+            await popup.hide(confirmed);
+          }
+        };
+
+        openBtn?.addEventListener('click', open);
+        openBtn2?.addEventListener('click', open);
+        cancelBtn?.addEventListener('click', () => close(false));
+        saveBtn?.addEventListener('click', () => close(true));
+      }
+
+      function bindPane(side) {
+        ['scope', 'theme', 'appearance', 'context'].forEach(field => {
+          const el = document.getElementById(`${side}-${field}`);
+          el.addEventListener('change', () => applyScope(side));
+        });
+        applyScope(side);
+        bindPopup(side);
+      }
+
+      bindPane('left');
+      bindPane('right');
+    </script>
+  </body>
+</html>

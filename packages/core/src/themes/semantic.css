@@ -1,0 +1,105 @@
+/**
+ * Le-Kit Semantic Theme Tokens
+ *
+ * Canonical token names by visual role. Theme files provide values for these
+ * tokens. Keep this file additive and backwards compatible.
+ */
+
+:root {
+  /* Brand roles */
+  --le-color-brand-primary: var(--le-color-primary);
+  --le-color-brand-secondary: var(--le-color-secondary);
+
+  /* On-color roles */
+  --le-color-on-primary: var(--le-color-primary-contrast);
+  --le-color-on-secondary: var(--le-color-secondary-contrast);
+  --le-color-on-success: var(--le-color-success-contrast);
+  --le-color-on-warning: var(--le-color-warning-contrast);
+  --le-color-on-danger: var(--le-color-danger-contrast);
+  --le-color-on-info: var(--le-color-info-contrast);
+
+  /* Surface hierarchy */
+  --le-surface-background: var(--le-color-background);
+  --le-surface-background-secondary: var(--le-color-background-secondary);
+  --le-surface-background-tertiary: var(--le-color-background-tertiary);
+  --le-surface-panel: var(--le-color-surface);
+  --le-surface-control: var(--le-color-surface);
+  --le-surface-popup: var(--le-color-surface-elevated);
+  --le-surface-popover: var(--le-color-surface-alt);
+  --le-surface-nested: var(--le-surface-popover);
+
+  /* Text roles */
+  --le-color-on-background: var(--le-color-text-primary);
+  --le-color-on-background-muted: var(--le-color-text-secondary);
+  --le-color-on-background-disabled: var(--le-color-text-disabled);
+  --le-color-on-surface: var(--le-color-text-primary);
+  --le-color-on-surface-muted: var(--le-color-text-secondary);
+  --le-color-on-surface-disabled: var(--le-color-text-disabled);
+
+  /* Borders */
+  --le-border-color-default: var(--le-color-border);
+  --le-border-color-hover: var(--le-color-border-hover);
+  --le-border-color-muted: var(--le-color-border-light);
+  --le-border-color-strong: var(--le-color-border-dark);
+  --le-border-color-input: var(--le-color-border-input, var(--le-color-border));
+
+  /* Focus */
+  --le-color-focus-ring: var(--le-color-focus);
+  --le-focus-ring-width: 2px;
+  --le-focus-ring-offset: var(--le-input-border-focus-offset, 2px);
+
+  /* Shared interaction states */
+  --le-state-disabled-opacity: 0.6;
+  --le-state-hover-overlay: rgba(0, 0, 0, 0.05);
+  --le-state-pressed-overlay: rgba(0, 0, 0, 0.1);
+
+  /* Active/inactive context */
+  --le-context-active-emphasis: 1;
+  --le-context-inactive-emphasis: 0.72;
+  --le-context-emphasis: var(--le-context-active-emphasis);
+  --le-control-group-inactive-opacity: 0.72;
+  --le-context-selected-filter-inactive: saturate(0.55) brightness(0.92);
+}
+
+[active-context='inactive'],
+.le-active-context-inactive {
+  --le-context-emphasis: var(--le-context-inactive-emphasis);
+}
+
+[active-context='active'],
+.le-active-context-active {
+  --le-context-emphasis: var(--le-context-active-emphasis);
+}
+
+/* Appearance roles for OS-specific styling presets */
+:root,
+[appearance='default'],
+.le-appearance-default {
+  --le-appearance-control-radius: var(--le-radius-md);
+  --le-appearance-control-density: 1;
+  --le-appearance-focus-weight: var(--le-focus-ring-width);
+}
+
+[appearance='ios'],
+.le-appearance-ios {
+  --le-appearance-control-radius: var(--le-radius-xl);
+  --le-appearance-control-density: 0.95;
+}
+
+[appearance='android'],
+.le-appearance-android {
+  --le-appearance-control-radius: var(--le-radius-lg);
+  --le-appearance-control-density: 1;
+}
+
+[appearance='macos'],
+.le-appearance-macos {
+  --le-appearance-control-radius: var(--le-radius-md);
+  --le-appearance-control-density: 1;
+}
+
+[appearance='windows'],
+.le-appearance-windows {
+  --le-appearance-control-radius: var(--le-radius-sm);
+  --le-appearance-control-density: 1.05;
+}

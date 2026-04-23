@@ -6,7 +6,8 @@
  * Usage: set theme="gradient" on any element, or import as your default.
  */
 
-[theme="gradient"] {
+[theme="gradient"],
+.le-theme-gradient {
   /* Primary brand color - purple */
   --le-color-primary: #8b5cf6;
   --le-color-primary-light: #a78bfa;
@@ -103,4 +104,42 @@
   --le-shadow-lg: 0 10px 20px rgba(139, 92, 246, 0.2), 0 4px 8px rgba(139, 92, 246, 0.1);
   --le-shadow-xl: 0 20px 40px rgba(139, 92, 246, 0.25), 0 8px 16px rgba(139, 92, 246, 0.15);
   --le-shadow-2xl: 0 30px 60px rgba(139, 92, 246, 0.3), 0 15px 30px rgba(139, 92, 246, 0.2);
+
+  /* Semantic tokens */
+  --le-surface-background: var(--le-color-background);
+  --le-surface-background-secondary: var(--le-color-background-secondary);
+  --le-surface-background-tertiary: var(--le-color-background-tertiary);
+  --le-surface-panel: var(--le-color-surface);
+  --le-surface-control: var(--le-color-surface);
+  --le-surface-popup: var(--le-color-surface-elevated);
+  --le-surface-popover: var(--le-color-surface-alt);
+  --le-surface-nested: var(--le-color-surface-alt);
+
+  --le-color-on-primary: var(--le-color-primary-contrast);
+  --le-color-on-secondary: var(--le-color-secondary-contrast);
+  --le-color-on-background: var(--le-color-text-primary);
+  --le-color-on-background-muted: var(--le-color-text-secondary);
+  --le-color-on-background-disabled: var(--le-color-text-disabled);
+  --le-color-on-surface: var(--le-color-text-primary);
+  --le-color-on-surface-muted: var(--le-color-text-secondary);
+  --le-color-on-surface-disabled: var(--le-color-text-disabled);
+
+  --le-border-color-default: var(--le-color-border);
+  --le-border-color-hover: var(--le-color-border-hover);
+  --le-border-color-muted: var(--le-color-border-light);
+  --le-border-color-strong: var(--le-color-border-dark);
+  --le-border-color-input: var(--le-color-border-input);
+
+  --le-color-focus-ring: var(--le-color-focus);
+  --le-focus-ring-width: 2px;
+  --le-focus-ring-offset: 2px;
+
+  --le-state-disabled-opacity: 0.6;
+  --le-state-hover-overlay: rgba(139, 92, 246, 0.08);
+  --le-state-pressed-overlay: rgba(139, 92, 246, 0.14);
+
+  --le-context-active-emphasis: 1;
+  --le-context-inactive-emphasis: 0.72;
+  --le-control-group-inactive-opacity: 0.72;
+  --le-context-selected-filter-inactive: saturate(0.6) brightness(0.92);
 }

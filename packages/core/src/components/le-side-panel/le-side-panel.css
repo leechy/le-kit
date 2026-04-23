@@ -148,7 +148,16 @@
   left: -5px;
 }
 
-/* Overlay (contained within component) */
+/*
+ * Overlay (contained within component)
+ *
+ * NOTE: The scrim and overlay drawer use `position: absolute; height: 100%`
+ * which requires the host element to have an explicit height. When placed in a
+ * flex or grid layout this usually happens automatically, but if the host has
+ * no block size the scrim will collapse to zero height and backdrop-click-to-
+ * close will silently stop working. Set `height: 100%` (or an equivalent) on
+ * the host element when using narrow overlay mode.
+ */
 .overlayRoot {
   position: absolute;
   inset: 0;

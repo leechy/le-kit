@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@jest/globals';
+import { describe, it } from '@jest/globals';
 import { newE2EPage } from '@stencil/core/testing';
 
 /** Flush pending requestAnimationFrame callbacks in the page context. */

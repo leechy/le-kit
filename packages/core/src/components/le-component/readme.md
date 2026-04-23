@@ -73,6 +73,7 @@ render() {
  - [le-tabs](../le-tabs)
  - [le-tag](../le-tag)
  - [le-text](../le-text)
+ - [le-tooltip](../le-tooltip)
 
 ### Depends on
 
@@ -119,6 +120,7 @@ graph TD;
   le-tabs --> le-component
   le-tag --> le-component
   le-text --> le-component
+  le-tooltip --> le-component
   style le-component fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

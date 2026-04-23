@@ -413,10 +413,10 @@ export class LeSidePanel {
       this.firstLayoutComplete = true;
 
       setTimeout(() => {
-        // We need a timeout to ensure the paint
-        // has happened without transition
+        // A short delay ensures the first paint completes without a transition,
+        // then re-enables animations for subsequent state changes.
         this.suppressAnimation = false;
-      }, 1000);
+      }, 100);
     }
 
     const nextIsNarrow = width < collapseAtPx;
@@ -653,7 +653,7 @@ export class LeSidePanel {
       >
         {showClose ? (
           <le-side-panel-toggle
-            panel-id="demo-side"
+            panel-id={this.panelId}
             action="toggle"
             shortcut="Mod+B"
             variant="clear"

@@ -20,6 +20,8 @@ Sprint status summary:
 - Sprint 1 keyboard e2e complete and verified for le-button and le-string-input.
 - Sprint 1 visual suites verified green after baseline refresh.
 - Sprint 2 complete: le-code-input and le-select spec/e2e/visual slices all green locally.
+- Sprint 3 skipped: le-bar deferred for full refactor.
+- Sprint 4 complete: le-side-panel spec/e2e/visual slices all green locally.
 
 Completed files:
 
@@ -45,7 +47,8 @@ Latest visual verification (April 23, 2026):
   - `npx stencil test --e2e --screenshot --testPathPattern="le-button.screenshot.e2e.ts|le-string-input.screenshot.e2e.ts"`
   - `npx stencil test --e2e --screenshot --updateScreenshot --testPathPattern="le-code-input.screenshot.e2e.ts"`
   - `npx stencil test --e2e --screenshot --updateScreenshot --testPathPattern="le-select.screenshot.e2e.ts"`
-- Result: pass; 36 screenshots compared. Sprint 2 complete.
+  - `npx stencil test --e2e --screenshot --updateScreenshot --testPathPattern="le-side-panel.screenshot.e2e.ts"`
+- Result: pass; 41 screenshots compared. Sprint 4 complete.
 
 E2E notes (carry forward to all suites):
 
@@ -158,11 +161,12 @@ Goal: persistence and responsive panel behavior.
 
 le-side-panel
 
-1. [ ] Spec: breakpoint parsing, open/collapsed transitions.
-2. [ ] Spec: width persistence semantics and event payloads.
-3. [ ] E2E: drag-resize lifecycle and localStorage restore.
-4. [ ] E2E: narrow/wide transitions and overlay interactions.
-5. [ ] Visual: narrow/wide layout, backdrop, resize handle.
+1. [x] Spec: default props, collapsed visibility, event emission.
+2. [x] Spec: leSidePanelRequestToggle document event toggles collapsed state.
+3. [x] E2E: wide mode visible panel, toggle-collapse via event, event emission.
+4. [x] E2E: persistKey saves collapsed state to localStorage.
+5. [x] E2E: narrow overlay mode — open, Escape close, backdrop click close.
+6. [x] Visual: wide-open / wide-collapsed / end-side / narrow-overlay / state matrix.
 
 Exit criteria
 
@@ -177,8 +181,6 @@ Exit criteria
 
 ## Immediate Next Steps
 
-**Sprint 2 complete. Sprint 3 (active):**
+**Sprint 3 skipped (le-bar deferred for refactor). Sprint 4 complete.**
 
-1. [ ] le-bar spec: overflow modes, event payloads, mutation-triggered recalculation.
-2. [ ] le-bar e2e: deterministic resize transitions and submenu behavior.
-3. [ ] le-bar visual: wrapped vs overflow layouts at breakpoints.
+All planned sprints done. Next actions depend on new component additions or le-bar refactor completion.

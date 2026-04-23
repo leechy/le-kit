@@ -19,6 +19,7 @@ Sprint status summary:
 - Sprint 1 spec complete.
 - Sprint 1 keyboard e2e complete and verified for le-button and le-string-input.
 - Sprint 1 visual suites verified green after baseline refresh.
+- Sprint 2 complete: le-code-input and le-select spec/e2e/visual slices all green locally.
 
 Completed files:
 
@@ -42,7 +43,9 @@ Latest visual verification (April 23, 2026):
 - Commands:
   - `npx stencil test --e2e --screenshot --updateScreenshot --testPathPattern="le-button.screenshot.e2e.ts|le-string-input.screenshot.e2e.ts"`
   - `npx stencil test --e2e --screenshot --testPathPattern="le-button.screenshot.e2e.ts|le-string-input.screenshot.e2e.ts"`
-- Result: pass; baselines updated to match locked viewport policy.
+  - `npx stencil test --e2e --screenshot --updateScreenshot --testPathPattern="le-code-input.screenshot.e2e.ts"`
+  - `npx stencil test --e2e --screenshot --updateScreenshot --testPathPattern="le-select.screenshot.e2e.ts"`
+- Result: pass; 36 screenshots compared. Sprint 2 complete.
 
 E2E notes (carry forward to all suites):
 
@@ -115,19 +118,19 @@ Goal: advanced text editing and keyboard workflows.
 
 le-code-input
 
-1. [ ] Spec: paste distribution across boxes.
-2. [ ] Spec: selection behavior and cursor movement.
-3. [ ] Spec: auto-advance, backspace navigation, value truncation.
-4. [ ] E2E: realistic typing and paste sequences.
-5. [ ] Visual: focus/error states.
+1. [x] Spec: paste distribution across boxes.
+2. [x] Spec: selection behavior and cursor movement.
+3. [x] Spec: auto-advance/backspace-like cursor navigation and value truncation.
+4. [x] E2E: realistic typing and paste sequences.
+5. [x] Visual: focus/error states.
 
 le-select
 
-1. [ ] Spec: value synchronization and disabled handling.
-2. [ ] Spec: declarative vs prop-driven option source behavior.
-3. [ ] E2E: keyboard matrix (ArrowUp, ArrowDown, Home, End, Enter, Escape).
-4. [ ] E2E: popover dependency behavior.
-5. [ ] Visual: trigger/menu hover/selected/disabled states.
+1. [x] Spec: value synchronization and disabled handling.
+2. [x] Spec: declarative vs prop-driven option source behavior.
+3. [x] E2E: keyboard matrix (ArrowUp, ArrowDown, Home, End, Enter, Escape).
+4. [x] E2E: popover dependency behavior.
+5. [x] Visual: trigger/menu hover/selected/disabled states.
 
 Exit criteria
 
@@ -174,9 +177,8 @@ Exit criteria
 
 ## Immediate Next Steps
 
-**Sprint 2 (active):**
+**Sprint 2 complete. Sprint 3 (active):**
 
-1. [ ] le-code-input spec: paste distribution, selection, auto-advance, backspace, truncation.
-2. [ ] le-code-input e2e: realistic typing and paste sequences.
-3. [ ] le-select spec: value sync, option source mode, open/close events, disabled.
-4. [ ] le-select e2e: keyboard matrix (ArrowUp, ArrowDown, Home, End, Enter, Escape) and popover behavior.
+1. [ ] le-bar spec: overflow modes, event payloads, mutation-triggered recalculation.
+2. [ ] le-bar e2e: deterministic resize transitions and submenu behavior.
+3. [ ] le-bar visual: wrapped vs overflow layouts at breakpoints.

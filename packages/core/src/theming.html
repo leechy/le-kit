@@ -297,7 +297,8 @@
         <h1>Le-Kit Theming Playground</h1>
         <p>
           This page compares two independent mini-app scopes side by side. Each side can use either attribute-based or
-          class-based API, and you can switch theme, appearance, and active context independently.
+          class-based API, and you can switch theme and appearance independently while <code>le-kit</code> handles
+          active context automatically.
         </p>
       </section>
 
@@ -336,15 +337,9 @@
                 <option value="android">android</option>
               </select>
             </div>
-            <div class="control">
-              <label for="left-context">Active Context</label>
-              <select id="left-context">
-                <option value="active" selected>active</option>
-                <option value="inactive">inactive</option>
-              </select>
-            </div>
           </div>
 
+          <le-kit id="left-kit" theme="default" appearance="default" watch-window="true" watch-modals="true">
           <div id="left-preview" class="preview">
             <div class="surface-strip">
               <div class="surface-chip surface-panel">
@@ -381,6 +376,7 @@
                     </div>
                   </le-popover>
                   <le-button id="left-open-popup" size="small" color="primary">Open Form</le-button>
+                  <le-button id="left-open-modal-popup" size="small" variant="outlined">Open Modal</le-button>
                 </div>
               </div>
 
@@ -437,7 +433,21 @@
                 <le-button color="primary" id="left-save-popup">Save</le-button>
               </div>
             </le-popup>
+
+            <le-popup id="left-modal-popup" popup-title="Confirm Publish" type="custom" modal="true" position="center">
+              <div class="popup-form">
+                <p style="margin: 0; font-size: var(--le-font-size-sm); color: var(--le-color-on-surface-muted, var(--le-color-text-secondary));">
+                  This is a modal popup. While it is open, this <code>le-kit</code> scope should become inactive except for the popup itself.
+                </p>
+                <le-checkbox checked>Notify collaborators after publish</le-checkbox>
+              </div>
+              <div slot="footer" style="display: flex; justify-content: end; gap: var(--le-spacing-2);">
+                <le-button variant="outlined" id="left-cancel-modal-popup">Cancel</le-button>
+                <le-button color="primary" id="left-confirm-modal-popup">Publish</le-button>
+              </div>
+            </le-popup>
           </div>
+          </le-kit>
         </article>
 
         <article class="pane" data-pane="right">
@@ -474,15 +484,9 @@
                 <option value="android">android</option>
               </select>
             </div>
-            <div class="control">
-              <label for="right-context">Active Context</label>
-              <select id="right-context">
-                <option value="active">active</option>
-                <option value="inactive" selected>inactive</option>
-              </select>
-            </div>
           </div>
 
+          <le-kit id="right-kit" theme="dark" appearance="windows" watch-window="true" watch-modals="true">
           <div id="right-preview" class="preview">
             <div class="surface-strip">
               <div class="surface-chip surface-panel">
@@ -519,6 +523,7 @@
                     </div>
                   </le-popover>
                   <le-button id="right-open-popup" size="small" color="primary">Open Form</le-button>
+                  <le-button id="right-open-modal-popup" size="small" variant="outlined">Open Modal</le-button>
                 </div>
               </div>
 
@@ -575,7 +580,21 @@
                 <le-button color="primary" id="right-save-popup">Save</le-button>
               </div>
             </le-popup>
+
+            <le-popup id="right-modal-popup" popup-title="Confirm Publish" type="custom" modal="true" position="center">
+              <div class="popup-form">
+                <p style="margin: 0; font-size: var(--le-font-size-sm); color: var(--le-color-on-surface-muted, var(--le-color-text-secondary));">
+                  This modal tests scoped inactive context with two independent <code>le-kit</code> hosts.
+                </p>
+                <le-checkbox checked>Notify collaborators after publish</le-checkbox>
+              </div>
+              <div slot="footer" style="display: flex; justify-content: end; gap: var(--le-spacing-2);">
+                <le-button variant="outlined" id="right-cancel-modal-popup">Cancel</le-button>
+                <le-button color="primary" id="right-confirm-modal-popup">Publish</le-button>
+              </div>
+            </le-popup>
           </div>
+          </le-kit>
         </article>
       </section>
 
@@ -584,6 +603,10 @@
         <p>
           Theme changes color tokens. Appearance changes structural feel (radius, density, and platform-like spacing cues).
           Active context changes interaction emphasis for control groups.
+        </p>
+        <p>
+          In this demo, window blur sets <code>active-context="inactive"</code> on both <code>le-kit</code> scopes.
+          When the window regains focus, both scopes return to active unless a modal popup is open in that scope.
         </p>
         <p>
           Try setting one side to <code>attribute</code> scope and the other to <code>class</code> scope. You should get
@@ -595,13 +618,11 @@
     <script>
       const THEMES = ['default', 'dark', 'minimal', 'warm', 'gradient'];
       const APPEARANCES = ['default', 'macos', 'windows', 'ios', 'android'];
-      const CONTEXTS = ['active', 'inactive'];
 
       function clearScopeClasses(el) {
         el.classList.remove(
           ...THEMES.map(name => `le-theme-${name}`),
-          ...APPEARANCES.map(name => `le-appearance-${name}`),
-          ...CONTEXTS.map(name => `le-active-context-${name}`)
+          ...APPEARANCES.map(name => `le-appearance-${name}`)
         );
       }
 
@@ -609,35 +630,36 @@
         const scopeMode = document.getElementById(`${side}-scope`).value;
         const theme = document.getElementById(`${side}-theme`).value;
         const appearance = document.getElementById(`${side}-appearance`).value;
-        const context = document.getElementById(`${side}-context`).value;
 
+        const kit = document.getElementById(`${side}-kit`);
         const preview = document.getElementById(`${side}-preview`);
         const summary = document.getElementById(`${side}-summary`);
 
+        kit.removeAttribute('theme');
+        kit.removeAttribute('appearance');
         preview.removeAttribute('theme');
         preview.removeAttribute('appearance');
-        preview.removeAttribute('active-context');
+
+        clearScopeClasses(kit);
         clearScopeClasses(preview);
 
         if (scopeMode === 'attribute') {
-          preview.setAttribute('theme', theme);
-          preview.setAttribute('appearance', appearance);
-          preview.setAttribute('active-context', context);
+          kit.setAttribute('theme', theme);
+          kit.setAttribute('appearance', appearance);
         } else {
-          preview.classList.add(`le-theme-${theme}`);
-          preview.classList.add(`le-appearance-${appearance}`);
-          preview.classList.add(`le-active-context-${context}`);
+          kit.classList.add(`le-theme-${theme}`);
+          kit.classList.add(`le-appearance-${appearance}`);
         }
 
-        summary.textContent = `${scopeMode} | theme: ${theme} | appearance: ${appearance} | context: ${context}`;
+        const activeContext = kit.getAttribute('active-context') || 'active';
+        summary.textContent = `${scopeMode} | theme: ${theme} | appearance: ${appearance} | context(auto): ${activeContext}`;
       }
 
-      function bindPopup(side) {
-        const popup = document.getElementById(`${side}-popup`);
-        const openBtn = document.getElementById(`${side}-open-popup`);
-        const openBtn2 = document.getElementById(`${side}-open-popup-2`);
-        const cancelBtn = document.getElementById(`${side}-cancel-popup`);
-        const saveBtn = document.getElementById(`${side}-save-popup`);
+      function bindPopup(side, popupId, openButtonIds, cancelButtonId, confirmButtonId) {
+        const popup = document.getElementById(`${side}-${popupId}`);
+        const openButtons = openButtonIds.map(buttonId => document.getElementById(`${side}-${buttonId}`));
+        const cancelBtn = document.getElementById(`${side}-${cancelButtonId}`);
+        const confirmBtn = document.getElementById(`${side}-${confirmButtonId}`);
 
         const open = async () => {
           if (popup && typeof popup.show === 'function') {
@@ -651,19 +673,38 @@
           }
         };
 
-        openBtn?.addEventListener('click', open);
-        openBtn2?.addEventListener('click', open);
+        openButtons.forEach(button => button?.addEventListener('click', open));
         cancelBtn?.addEventListener('click', () => close(false));
-        saveBtn?.addEventListener('click', () => close(true));
+        confirmBtn?.addEventListener('click', () => close(true));
+      }
+
+      function bindContextSummary(side) {
+        const kit = document.getElementById(`${side}-kit`);
+
+        const observer = new MutationObserver(() => applyScope(side));
+        observer.observe(kit, {
+          attributes: true,
+          attributeFilter: ['active-context'],
+        });
       }
 
       function bindPane(side) {
-        ['scope', 'theme', 'appearance', 'context'].forEach(field => {
+        ['scope', 'theme', 'appearance'].forEach(field => {
           const el = document.getElementById(`${side}-${field}`);
           el.addEventListener('change', () => applyScope(side));
         });
+
         applyScope(side);
-        bindPopup(side);
+        bindContextSummary(side);
+
+        bindPopup(side, 'popup', ['open-popup', 'open-popup-2'], 'cancel-popup', 'save-popup');
+        bindPopup(
+          side,
+          'modal-popup',
+          ['open-modal-popup'],
+          'cancel-modal-popup',
+          'confirm-modal-popup'
+        );
       }
 
       bindPane('left');

@@ -8,7 +8,13 @@
  */
 
 // Utility exports
-export { generateId, parseCommaSeparated, slotHasContent } from './utils/utils';
+export {
+  generateId,
+  parseCommaSeparated,
+  slotHasContent,
+  getActiveContext,
+  observeActiveContextChanges,
+} from './utils/utils';
 
 // Global mode and theme helpers
 export { setAssetPath } from '@stencil/core';
@@ -27,6 +33,17 @@ export type { LeKitMode, LeKitTheme } from './global/app';
 export { leAlert, leConfirm, lePrompt } from './components/le-popup/le-popup.api';
 export type { PopupOptions } from './components/le-popup/le-popup.api';
 export type { PopupResult, PopupType, PopupPosition } from './components/le-popup/le-popup';
+
+// le-kit optional store APIs
+export {
+  createLeKitStore,
+  defaultLeKitStore,
+  defaultPersistKeys,
+  parsePersistConfig,
+} from './store/le-kit-store';
+export type { LeKitStore, LeKitPersistConfig, LeKitPersistKey } from './store/le-kit-store';
+export { atom } from 'nanostores';
+export { persistentAtom } from '@nanostores/persistent';
 
 // Type exports
 export type * from './components.d.ts';

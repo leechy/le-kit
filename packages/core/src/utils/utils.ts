@@ -259,6 +259,100 @@ export function observeModeChanges(el: HTMLElement, callback: (mode: string) => 
 }
 
 /**
+ * Helper function to get the current active context for an element.
+ * Traverses both regular DOM and shadow DOM boundaries.
+ */
+export function getActiveContext(el: HTMLElement): 'active' | 'inactive' {
+  const ownContext = el.getAttribute('active-context');
+  if (ownContext === 'active' || ownContext === 'inactive') {
+    return ownContext;
+  }
+
+  let current: Node | null = el;
+  while (current) {
+    if (current instanceof Element && current.parentElement) {
+      current = current.parentElement;
+      const ctx = (current as HTMLElement).getAttribute?.('active-context');
+      if (ctx === 'active' || ctx === 'inactive') {
+        return ctx;
+      }
+    } else {
+      const root = current.getRootNode();
+      if (root instanceof ShadowRoot) {
+        current = root.host;
+        const ctx = (current as HTMLElement).getAttribute?.('active-context');
+        if (ctx === 'active' || ctx === 'inactive') {
+          return ctx;
+        }
+      } else {
+        break;
+      }
+    }
+  }
+
+  const rootContext = document.documentElement.getAttribute('active-context');
+  if (rootContext === 'active' || rootContext === 'inactive') {
+    return rootContext;
+  }
+
+  return 'active';
+}
+
+/**
+ * Observe active context changes on an element and its ancestors, shadow-safe.
+ */
+export function observeActiveContextChanges(
+  el: HTMLElement,
+  callback: (context: 'active' | 'inactive') => void,
+): () => void {
+  callback(getActiveContext(el));
+
+  const observer = new MutationObserver(() => {
+    callback(getActiveContext(el));
+  });
+
+  observer.observe(el, {
+    attributes: true,
+    attributeFilter: ['active-context'],
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['active-context'],
+  });
+
+  let current: Node | null = el;
+  while (current) {
+    if (current instanceof Element && current.parentElement) {
+      current = current.parentElement;
+      observer.observe(current, {
+        attributes: true,
+        attributeFilter: ['active-context'],
+      });
+      if ((current as Element).hasAttribute('active-context')) {
+        break;
+      }
+    } else {
+      const root = current.getRootNode();
+      if (root instanceof ShadowRoot) {
+        current = root.host;
+        observer.observe(current, {
+          attributes: true,
+          attributeFilter: ['active-context'],
+        });
+        if ((current as Element).hasAttribute('active-context')) {
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+  }
+
+  return () => observer.disconnect();
+}
+
+/**
  * Combines multiple class names into a single string, filtering out falsy values.
  *
  * @param classes - arguments of class names, undefined, arrays, objects with boolean values and nested combinations of these

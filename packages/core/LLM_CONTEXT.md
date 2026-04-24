@@ -22,6 +22,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-header-placeholder](#le-header-placeholder)
 - [le-icon](#le-icon)
 - [le-item](#le-item)
+- [le-kit](#le-kit)
 - [le-multiselect](#le-multiselect)
 - [le-navigation](#le-navigation)
 - [le-number-input](#le-number-input)
@@ -697,6 +698,27 @@ The header component updates that variable when it renders.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
+
+---
+
+## <le-kit>
+
+Optional app-level context orchestrator for theme, appearance, and active state.
+
+Components continue to work without this wrapper; `le-kit` is opt-in.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `theme` | `string` | `'default'` | Current theme scope value. |
+| `appearance` | `string` | `'default'` | Current appearance scope value. |
+| `activeContext` | `LeActiveContext` | `'active'` | Current active context scope value. |
+| `watchWindow` | `boolean` | `true` | Whether this instance reacts to window focus/blur. |
+| `watchModals` | `boolean` | `true` | Whether this instance reacts to descendant modal popup open/close events. |
+| `storageKey` | `string` | `'le-kit'` | Local storage namespace for persisted values. |
+| `persist` | `string` | `'theme appearance'` | Persistence keys as a space-separated list: `all`, `none`, `theme`, `appearance`. |
 
 ---
 

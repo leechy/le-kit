@@ -70,7 +70,7 @@ input {
   font-size: inherit;
   outline: none;
   text-align: end; /* Aligned to end */
-  -moz-appearance: textfield; /* Remove default spinners in Firefox */
+  appearance: textfield; /* Remove default spinners in Firefox */
 }
 
 /* Remove default spinners in Chrome/Safari/Edge */
@@ -117,6 +117,10 @@ input::placeholder {
   color: var(--le-input-desc-color);
   font-size: 10px;
   line-height: 1;
+
+  le-icon {
+    color: var(--le-input-desc-color);
+  }
 }
 
 .le-input-control-btn:hover {

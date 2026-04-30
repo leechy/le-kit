@@ -84,12 +84,90 @@
   /* ============================================
    * TRANSITIONS
    * ============================================ */
+  --le-transition-xs: 120ms;
   --le-transition-fast: 150ms;
   --le-transition-normal: 250ms;
   --le-transition-slow: 400ms;
+  --le-transition-long: 500ms;
   --le-transition-bounce: 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
   --le-transition-easing: ease-in-out;
+  --le-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --le-easing-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --le-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --le-easing-linear: linear;
+  --le-easing-soft-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --le-easing-fluid-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
+  /* ============================================
+   * MOTION PRESETS
+   * ============================================ */
+  --le-motion-preset: soft;
+  --le-motion-visibility-duration: var(--le-transition-normal);
+  --le-motion-visibility-easing: var(--le-easing-standard);
+  --le-motion-visibility-scale-from: 0.94;
+  --le-motion-visibility-opacity-from: 0;
+  --le-motion-visibility-blur-from: 6px;
+  --le-motion-visibility-translate-y-from: 0.4rem;
+  --le-motion-visibility-collapse-size: 0px;
+}
+
+
+:root,
+[motion-preset='soft'],
+.le-motion-soft {
+  --le-motion-preset: soft;
+  --le-motion-visibility-duration: var(--le-transition-normal);
+  --le-motion-visibility-easing: var(--le-easing-standard);
+  --le-motion-visibility-scale-from: 0.96;
+  --le-motion-visibility-opacity-from: 0.08;
+  --le-motion-visibility-blur-from: 3px;
+  --le-motion-visibility-translate-y-from: 0.2rem;
+}
+
+[motion-preset='fluid'],
+.le-motion-fluid {
+  --le-motion-preset: fluid;
+  --le-motion-visibility-duration: var(--le-transition-slow);
+  --le-motion-visibility-easing: var(--le-easing-soft-spring);
+  --le-motion-visibility-scale-from: 0.92;
+  --le-motion-visibility-opacity-from: 0;
+  --le-motion-visibility-blur-from: 8px;
+  --le-motion-visibility-translate-y-from: 0.5rem;
+}
+
+[motion-preset='spring'],
+.le-motion-spring {
+  --le-motion-preset: spring;
+  --le-motion-visibility-duration: var(--le-transition-bounce);
+  --le-motion-visibility-easing: var(--le-easing-fluid-spring);
+  --le-motion-visibility-scale-from: 0.88;
+  --le-motion-visibility-opacity-from: 0;
+  --le-motion-visibility-blur-from: 10px;
+  --le-motion-visibility-translate-y-from: 0.7rem;
+}
+
+[motion-preset='none'],
+.le-motion-none {
+  --le-motion-preset: none;
+  --le-motion-visibility-duration: 0ms;
+  --le-motion-visibility-easing: var(--le-easing-linear);
+  --le-motion-visibility-scale-from: 1;
+  --le-motion-visibility-opacity-from: 1;
+  --le-motion-visibility-blur-from: 0px;
+  --le-motion-visibility-translate-y-from: 0px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --le-motion-visibility-duration: 0ms;
+    --le-motion-visibility-scale-from: 1;
+    --le-motion-visibility-opacity-from: 1;
+    --le-motion-visibility-blur-from: 0px;
+    --le-motion-visibility-translate-y-from: 0px;
+  }
+}
+
+:root {
   /* ============================================
    * Z-INDEX LAYERS
    * ============================================ */

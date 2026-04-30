@@ -51,6 +51,7 @@ A number input component with validation, keyboard controls, and custom spinners
 
 - [le-component](../le-component)
 - [le-button](../le-button)
+- [le-icon](../le-icon)
 - [le-slot](../le-slot)
 
 ### Graph
@@ -58,6 +59,7 @@ A number input component with validation, keyboard controls, and custom spinners
 graph TD;
   le-number-input --> le-component
   le-number-input --> le-button
+  le-number-input --> le-icon
   le-number-input --> le-slot
   le-component --> le-button
   le-component --> le-select

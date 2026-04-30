@@ -8,8 +8,10 @@ import {
   EventEmitter,
   Host,
   State,
+  Method,
 } from '@stencil/core';
 import { classnames, observeNamedSlotPresence, slotHasContent } from '../../utils/utils';
+import type { LeOption } from '../../types/options';
 
 /**
  * A flexible button component with multiple variants and states.
@@ -84,6 +86,25 @@ export class LeButton {
    * Whether the button takes full width of its container
    */
   @Prop({ reflect: true }) fullWidth: boolean = false;
+
+  /**
+   * Visibility state used by responsive containers to animate show/hide transitions.
+   * @allowedValues visible | collapsing | collapsed | expanding
+   */
+  @Prop({ reflect: true }) visibility: 'visible' | 'collapsing' | 'collapsed' | 'expanding' =
+    'visible';
+
+  /**
+   * Shape of the button when rendered inside grouped containers.
+   * @allowedValues start | middle | end | single
+   */
+  @Prop({ reflect: true }) groupShape: 'start' | 'middle' | 'end' | 'single' = 'single';
+
+  /**
+   * Optional per-instance motion preset override.
+   * @allowedValues none | soft | fluid | spring
+   */
+  @Prop({ reflect: true }) motionPreset?: 'none' | 'soft' | 'fluid' | 'spring';
 
   /**
    * Icon only button image or emoji
@@ -181,10 +202,43 @@ export class LeButton {
     this.disconnectSlotObserver?.();
   }
 
+  @Method()
+  async getOption(): Promise<LeOption> {
+    const textLabel = Array.from(this.el.childNodes)
+      .filter(node => {
+        if (!(node instanceof HTMLElement)) return true;
+        const slotName = node.getAttribute('slot');
+        return !slotName;
+      })
+      .map(node => node.textContent || '')
+      .join('')
+      .trim();
+
+    const label =
+      textLabel || this.el.getAttribute('aria-label') || this.el.textContent?.trim() || '';
+    const id = this.el.id || undefined;
+
+    return {
+      id,
+      label,
+      value: this.el.getAttribute('value') || id || label,
+      disabled: this.disabled,
+      selected: this.selected,
+      iconStart: typeof this.iconStart === 'string' ? this.iconStart : undefined,
+      iconEnd: typeof this.iconEnd === 'string' ? this.iconEnd : undefined,
+      href: this.href,
+      target: this.target,
+      className: this.el.className || undefined,
+      part: this.el.getAttribute('part') || undefined,
+    };
+  }
+
   render() {
     const hasIconOnly = this.iconOnly !== undefined || this.hasIconOnlySlot;
     const hasIconStart = this.iconStart !== undefined || this.hasIconStartSlot;
     const hasIconEnd = this.iconEnd !== undefined || this.hasIconEndSlot;
+    const visibilityState =
+      this.visibility === 'collapsed' || this.visibility === 'collapsing' ? 'collapsed' : 'visible';
 
     const classes = classnames(
       `variant-${this.variant}`,
@@ -205,44 +259,49 @@ export class LeButton {
 
     return (
       <Host class={classes}>
-        <le-component component="le-button">
-          <TagType
-            class={classnames('le-button-container', `le-button-align-${this.align}`)}
-            part="button"
-            {...attrs}
-            onClick={this.handleClick}
-          >
-            <span class={classnames('icon-only', { 'is-visible': hasIconOnly })} part="icon-only">
-              <slot name="icon-only">
-                {typeof this.iconOnly === 'string' ? this.iconOnly : null}
-              </slot>
-            </span>
-            {!hasIconOnly && (
-              <Fragment>
-                <span class="le-button-label">
-                  <span
-                    class={classnames('icon-start', { 'is-visible': hasIconStart })}
-                    part="icon-start"
-                  >
-                    <slot name="icon-start">{this.iconStart}</slot>
+        <le-visibility state={visibilityState} mode="width">
+          <le-component component="le-button">
+            <TagType
+              class={classnames('le-button-container', `le-button-align-${this.align}`)}
+              part="button"
+              {...attrs}
+              onClick={this.handleClick}
+            >
+              <span class={classnames('icon-only', { 'is-visible': hasIconOnly })} part="icon-only">
+                <slot name="icon-only">
+                  {typeof this.iconOnly === 'string' ? this.iconOnly : null}
+                </slot>
+              </span>
+              {!hasIconOnly && (
+                <Fragment>
+                  <span class="le-button-label">
+                    <span
+                      class={classnames('icon-start', { 'is-visible': hasIconStart })}
+                      part="icon-start"
+                    >
+                      <slot name="icon-start">{this.iconStart}</slot>
+                    </span>
+                    <le-slot
+                      name=""
+                      description="Button text"
+                      type="text"
+                      class="content"
+                      part="content"
+                    >
+                      <slot></slot>
+                    </le-slot>
                   </span>
-                  <le-slot
-                    name=""
-                    description="Button text"
-                    type="text"
-                    class="content"
-                    part="content"
+                  <span
+                    class={classnames('icon-end', { 'is-visible': hasIconEnd })}
+                    part="icon-end"
                   >
-                    <slot></slot>
-                  </le-slot>
-                </span>
-                <span class={classnames('icon-end', { 'is-visible': hasIconEnd })} part="icon-end">
-                  <slot name="icon-end">{this.iconEnd}</slot>
-                </span>
-              </Fragment>
-            )}
-          </TagType>
-        </le-component>
+                    <slot name="icon-end">{this.iconEnd}</slot>
+                  </span>
+                </Fragment>
+              )}
+            </TagType>
+          </le-component>
+        </le-visibility>
       </Host>
     );
   }

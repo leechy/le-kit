@@ -9,6 +9,7 @@ import { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
+import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 import { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side-panel/le-side-panel";
@@ -17,6 +18,7 @@ export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
+export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side-panel/le-side-panel";
@@ -33,7 +35,7 @@ export namespace Components {
      * @csspart arrow-start - The start (left) scroll arrow
      * @csspart arrow-end - The end (right) scroll arrow
      * @csspart all-menu-button - The "show all" menu button
-     * @csspart popover-content - The popover content wrapper
+     * @csspart trigger - The overflow trigger wrapper
      * @cmsEditable true
      * @cmsCategory Layout
      */
@@ -335,6 +337,13 @@ export namespace Components {
           * @default false
          */
         "fullWidth": boolean;
+        "getOption": () => Promise<LeOption>;
+        /**
+          * Shape of the button when rendered inside grouped containers.
+          * @allowedValues start | middle | end | single
+          * @default 'single'
+         */
+        "groupShape": 'start' | 'middle' | 'end' | 'single';
         /**
           * Optional href to make the button act as a link
          */
@@ -355,6 +364,11 @@ export namespace Components {
           * Mode of the popover should be 'default' for internal use
          */
         "mode"?: 'default' | 'admin';
+        /**
+          * Optional per-instance motion preset override.
+          * @allowedValues none | soft | fluid | spring
+         */
+        "motionPreset"?: 'none' | 'soft' | 'fluid' | 'spring';
         /**
           * Whether the button is in a selected/active state
           * @default false
@@ -382,6 +396,26 @@ export namespace Components {
           * @default 'solid'
          */
         "variant": 'solid' | 'outlined' | 'clear' | 'system';
+        /**
+          * Visibility state used by responsive containers to animate show/hide transitions.
+          * @allowedValues visible | collapsing | collapsed | expanding
+          * @default 'visible'
+         */
+        "visibility": 'visible' | 'collapsing' | 'collapsed' | 'expanding';
+    }
+    /**
+     * Groups multiple `le-button` elements and optionally collapses low-priority actions
+     * into an overflow "more" menu.
+     * @csspart group - The grouped buttons frame
+     * @csspart more-button - The overflow trigger button
+     * @cmsEditable true
+     * @cmsCategory Actions
+     */
+    interface LeButtonGroup {
+        /**
+          * Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`.
+         */
+        "collapse"?: boolean | number | string;
     }
     /**
      * A flexible card component with header, content, and footer slots.
@@ -1108,6 +1142,61 @@ export namespace Components {
           * The value of the input
          */
         "value"?: number;
+    }
+    interface LeOverflowMenu {
+        /**
+          * Popover alignment relative to trigger.
+          * @default 'end'
+         */
+        "align": 'start' | 'center' | 'end';
+        /**
+          * Disables trigger interactions.
+          * @default false
+         */
+        "disabled": boolean;
+        "hide": () => Promise<void>;
+        /**
+          * Fallback icon name for trigger.
+          * @default 'ellipsis-horizontal'
+         */
+        "icon": string;
+        /**
+          * List of menu items represented as options.
+          * @default []
+         */
+        "items": LeOverflowMenuItem[] | string;
+        /**
+          * Minimum popover width.
+          * @default '200px'
+         */
+        "minWidth": string;
+        /**
+          * Popover offset in px.
+          * @default 8
+         */
+        "offset": number;
+        /**
+          * Whether the menu popover is open.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Popover position.
+          * @default 'bottom'
+         */
+        "position": 'top' | 'right' | 'bottom' | 'left';
+        "show": () => Promise<void>;
+        "toggle": () => Promise<void>;
+        /**
+          * Aria label for fallback trigger button.
+          * @default 'Open menu'
+         */
+        "triggerAriaLabel": string;
+        /**
+          * Part name for fallback trigger button.
+          * @default 'trigger-button'
+         */
+        "triggerPart": string;
     }
     /**
      * A popover component for displaying floating content.
@@ -2262,6 +2351,27 @@ export namespace Components {
          */
         "value": number;
     }
+    /**
+     * Internal visibility transition controller.
+     * This component controls transition phase + measured size variables.
+     * Preferred usage wraps the target content:
+     * <le-visibility state="collapsed"><div>...</div></le-visibility>
+     * For backward compatibility, when no children are provided it
+     * falls back to controlling the parent host element.
+     * @cmsInternal true
+     */
+    interface LeVisibility {
+        /**
+          * Which dimensions to measure and expose as CSS vars.
+          * @default 'width'
+         */
+        "mode": LeVisibilityMode;
+        /**
+          * Desired visibility state.
+          * @default 'visible'
+         */
+        "state": LeVisibilityState;
+    }
 }
 export interface LeBarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2274,6 +2384,10 @@ export interface LeBreadcrumbsCustomEvent<T> extends CustomEvent<T> {
 export interface LeButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeButtonElement;
+}
+export interface LeButtonGroupCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeButtonGroupElement;
 }
 export interface LeCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2306,6 +2420,10 @@ export interface LeNavigationCustomEvent<T> extends CustomEvent<T> {
 export interface LeNumberInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeNumberInputElement;
+}
+export interface LeOverflowMenuCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeOverflowMenuElement;
 }
 export interface LePopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2374,7 +2492,7 @@ declare global {
      * @csspart arrow-start - The start (left) scroll arrow
      * @csspart arrow-end - The end (right) scroll arrow
      * @csspart all-menu-button - The "show all" menu button
-     * @csspart popover-content - The popover content wrapper
+     * @csspart trigger - The overflow trigger wrapper
      * @cmsEditable true
      * @cmsCategory Layout
      */
@@ -2502,6 +2620,31 @@ declare global {
     var HTMLLeButtonElement: {
         prototype: HTMLLeButtonElement;
         new (): HTMLLeButtonElement;
+    };
+    interface HTMLLeButtonGroupElementEventMap {
+        "leOverflowSelect": { id: string };
+    }
+    /**
+     * Groups multiple `le-button` elements and optionally collapses low-priority actions
+     * into an overflow "more" menu.
+     * @csspart group - The grouped buttons frame
+     * @csspart more-button - The overflow trigger button
+     * @cmsEditable true
+     * @cmsCategory Actions
+     */
+    interface HTMLLeButtonGroupElement extends Components.LeButtonGroup, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeButtonGroupElementEventMap>(type: K, listener: (this: HTMLLeButtonGroupElement, ev: LeButtonGroupCustomEvent<HTMLLeButtonGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeButtonGroupElementEventMap>(type: K, listener: (this: HTMLLeButtonGroupElement, ev: LeButtonGroupCustomEvent<HTMLLeButtonGroupElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeButtonGroupElement: {
+        prototype: HTMLLeButtonGroupElement;
+        new (): HTMLLeButtonGroupElement;
     };
     /**
      * A flexible card component with header, content, and footer slots.
@@ -2906,6 +3049,24 @@ declare global {
     var HTMLLeNumberInputElement: {
         prototype: HTMLLeNumberInputElement;
         new (): HTMLLeNumberInputElement;
+    };
+    interface HTMLLeOverflowMenuElementEventMap {
+        "leOverflowMenuItemSelect": LeOverflowMenuItemSelectDetail;
+        "leOverflowMenuClose": void;
+    }
+    interface HTMLLeOverflowMenuElement extends Components.LeOverflowMenu, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeOverflowMenuElementEventMap>(type: K, listener: (this: HTMLLeOverflowMenuElement, ev: LeOverflowMenuCustomEvent<HTMLLeOverflowMenuElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeOverflowMenuElementEventMap>(type: K, listener: (this: HTMLLeOverflowMenuElement, ev: LeOverflowMenuCustomEvent<HTMLLeOverflowMenuElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeOverflowMenuElement: {
+        prototype: HTMLLeOverflowMenuElement;
+        new (): HTMLLeOverflowMenuElement;
     };
     interface HTMLLePopoverElementEventMap {
         "lePopoverOpen": void;
@@ -3387,6 +3548,21 @@ declare global {
         prototype: HTMLLeTurntableElement;
         new (): HTMLLeTurntableElement;
     };
+    /**
+     * Internal visibility transition controller.
+     * This component controls transition phase + measured size variables.
+     * Preferred usage wraps the target content:
+     * <le-visibility state="collapsed"><div>...</div></le-visibility>
+     * For backward compatibility, when no children are provided it
+     * falls back to controlling the parent host element.
+     * @cmsInternal true
+     */
+    interface HTMLLeVisibilityElement extends Components.LeVisibility, HTMLStencilElement {
+    }
+    var HTMLLeVisibilityElement: {
+        prototype: HTMLLeVisibilityElement;
+        new (): HTMLLeVisibilityElement;
+    };
     interface HTMLElementTagNameMap {
         "le-bar": HTMLLeBarElement;
         "le-bento-grid": HTMLLeBentoGridElement;
@@ -3394,6 +3570,7 @@ declare global {
         "le-box": HTMLLeBoxElement;
         "le-breadcrumbs": HTMLLeBreadcrumbsElement;
         "le-button": HTMLLeButtonElement;
+        "le-button-group": HTMLLeButtonGroupElement;
         "le-card": HTMLLeCardElement;
         "le-checkbox": HTMLLeCheckboxElement;
         "le-code-input": HTMLLeCodeInputElement;
@@ -3409,6 +3586,7 @@ declare global {
         "le-multiselect": HTMLLeMultiselectElement;
         "le-navigation": HTMLLeNavigationElement;
         "le-number-input": HTMLLeNumberInputElement;
+        "le-overflow-menu": HTMLLeOverflowMenuElement;
         "le-popover": HTMLLePopoverElement;
         "le-popup": HTMLLePopupElement;
         "le-round-progress": HTMLLeRoundProgressElement;
@@ -3428,6 +3606,7 @@ declare global {
         "le-text": HTMLLeTextElement;
         "le-tooltip": HTMLLeTooltipElement;
         "le-turntable": HTMLLeTurntableElement;
+        "le-visibility": HTMLLeVisibilityElement;
     }
 }
 declare namespace LocalJSX {
@@ -3444,7 +3623,7 @@ declare namespace LocalJSX {
      * @csspart arrow-start - The start (left) scroll arrow
      * @csspart arrow-end - The end (right) scroll arrow
      * @csspart all-menu-button - The "show all" menu button
-     * @csspart popover-content - The popover content wrapper
+     * @csspart trigger - The overflow trigger wrapper
      * @cmsEditable true
      * @cmsCategory Layout
      */
@@ -3751,6 +3930,12 @@ declare namespace LocalJSX {
          */
         "fullWidth"?: boolean;
         /**
+          * Shape of the button when rendered inside grouped containers.
+          * @allowedValues start | middle | end | single
+          * @default 'single'
+         */
+        "groupShape"?: 'start' | 'middle' | 'end' | 'single';
+        /**
           * Optional href to make the button act as a link
          */
         "href"?: string;
@@ -3770,6 +3955,11 @@ declare namespace LocalJSX {
           * Mode of the popover should be 'default' for internal use
          */
         "mode"?: 'default' | 'admin';
+        /**
+          * Optional per-instance motion preset override.
+          * @allowedValues none | soft | fluid | spring
+         */
+        "motionPreset"?: 'none' | 'soft' | 'fluid' | 'spring';
         /**
           * Emitted when the button is clicked. This is a custom event that wraps the native click but ensures the target is the le-button.
          */
@@ -3801,6 +3991,27 @@ declare namespace LocalJSX {
           * @default 'solid'
          */
         "variant"?: 'solid' | 'outlined' | 'clear' | 'system';
+        /**
+          * Visibility state used by responsive containers to animate show/hide transitions.
+          * @allowedValues visible | collapsing | collapsed | expanding
+          * @default 'visible'
+         */
+        "visibility"?: 'visible' | 'collapsing' | 'collapsed' | 'expanding';
+    }
+    /**
+     * Groups multiple `le-button` elements and optionally collapses low-priority actions
+     * into an overflow "more" menu.
+     * @csspart group - The grouped buttons frame
+     * @csspart more-button - The overflow trigger button
+     * @cmsEditable true
+     * @cmsCategory Actions
+     */
+    interface LeButtonGroup {
+        /**
+          * Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`.
+         */
+        "collapse"?: boolean | number | string;
+        "onLeOverflowSelect"?: (event: LeButtonGroupCustomEvent<{ id: string }>) => void;
     }
     /**
      * A flexible card component with header, content, and footer slots.
@@ -4594,6 +4805,60 @@ declare namespace LocalJSX {
           * The value of the input
          */
         "value"?: number;
+    }
+    interface LeOverflowMenu {
+        /**
+          * Popover alignment relative to trigger.
+          * @default 'end'
+         */
+        "align"?: 'start' | 'center' | 'end';
+        /**
+          * Disables trigger interactions.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Fallback icon name for trigger.
+          * @default 'ellipsis-horizontal'
+         */
+        "icon"?: string;
+        /**
+          * List of menu items represented as options.
+          * @default []
+         */
+        "items"?: LeOverflowMenuItem[] | string;
+        /**
+          * Minimum popover width.
+          * @default '200px'
+         */
+        "minWidth"?: string;
+        /**
+          * Popover offset in px.
+          * @default 8
+         */
+        "offset"?: number;
+        "onLeOverflowMenuClose"?: (event: LeOverflowMenuCustomEvent<void>) => void;
+        "onLeOverflowMenuItemSelect"?: (event: LeOverflowMenuCustomEvent<LeOverflowMenuItemSelectDetail>) => void;
+        /**
+          * Whether the menu popover is open.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Popover position.
+          * @default 'bottom'
+         */
+        "position"?: 'top' | 'right' | 'bottom' | 'left';
+        /**
+          * Aria label for fallback trigger button.
+          * @default 'Open menu'
+         */
+        "triggerAriaLabel"?: string;
+        /**
+          * Part name for fallback trigger button.
+          * @default 'trigger-button'
+         */
+        "triggerPart"?: string;
     }
     /**
      * A popover component for displaying floating content.
@@ -5772,6 +6037,27 @@ declare namespace LocalJSX {
          */
         "value"?: number;
     }
+    /**
+     * Internal visibility transition controller.
+     * This component controls transition phase + measured size variables.
+     * Preferred usage wraps the target content:
+     * <le-visibility state="collapsed"><div>...</div></le-visibility>
+     * For backward compatibility, when no children are provided it
+     * falls back to controlling the parent host element.
+     * @cmsInternal true
+     */
+    interface LeVisibility {
+        /**
+          * Which dimensions to measure and expose as CSS vars.
+          * @default 'width'
+         */
+        "mode"?: LeVisibilityMode;
+        /**
+          * Desired visibility state.
+          * @default 'visible'
+         */
+        "state"?: LeVisibilityState;
+    }
 
     interface LeBarAttributes {
         "overflow": 'more' | 'scroll' | 'hamburger' | 'wrap';
@@ -5836,6 +6122,9 @@ declare namespace LocalJSX {
         "size": 'small' | 'medium' | 'large';
         "selected": boolean;
         "fullWidth": boolean;
+        "visibility": 'visible' | 'collapsing' | 'collapsed' | 'expanding';
+        "groupShape": 'start' | 'middle' | 'end' | 'single';
+        "motionPreset": 'none' | 'soft' | 'fluid' | 'spring';
         "iconOnly": string | Node;
         "iconStart": string | Node;
         "iconEnd": string | Node;
@@ -5844,6 +6133,9 @@ declare namespace LocalJSX {
         "href": string;
         "target": string;
         "align": 'start' | 'center' | 'space-between' | 'end';
+    }
+    interface LeButtonGroupAttributes {
+        "collapse": string;
     }
     interface LeCardAttributes {
         "variant": 'default' | 'outlined' | 'elevated';
@@ -5964,6 +6256,18 @@ declare namespace LocalJSX {
         "iconStart": string;
         "showSpinners": boolean;
         "externalId": string;
+    }
+    interface LeOverflowMenuAttributes {
+        "open": boolean;
+        "disabled": boolean;
+        "position": 'top' | 'right' | 'bottom' | 'left';
+        "align": 'start' | 'center' | 'end';
+        "offset": number;
+        "minWidth": string;
+        "icon": string;
+        "triggerAriaLabel": string;
+        "triggerPart": string;
+        "items": LeOverflowMenuItem[] | string;
     }
     interface LePopoverAttributes {
         "mode": 'default' | 'admin';
@@ -6195,6 +6499,10 @@ declare namespace LocalJSX {
         "center": string;
         "value": number;
     }
+    interface LeVisibilityAttributes {
+        "state": LeVisibilityState;
+        "mode": LeVisibilityMode;
+    }
 
     interface IntrinsicElements {
         "le-bar": Omit<LeBar, keyof LeBarAttributes> & { [K in keyof LeBar & keyof LeBarAttributes]?: LeBar[K] } & { [K in keyof LeBar & keyof LeBarAttributes as `attr:${K}`]?: LeBarAttributes[K] } & { [K in keyof LeBar & keyof LeBarAttributes as `prop:${K}`]?: LeBar[K] };
@@ -6203,6 +6511,7 @@ declare namespace LocalJSX {
         "le-box": Omit<LeBox, keyof LeBoxAttributes> & { [K in keyof LeBox & keyof LeBoxAttributes]?: LeBox[K] } & { [K in keyof LeBox & keyof LeBoxAttributes as `attr:${K}`]?: LeBoxAttributes[K] } & { [K in keyof LeBox & keyof LeBoxAttributes as `prop:${K}`]?: LeBox[K] };
         "le-breadcrumbs": Omit<LeBreadcrumbs, keyof LeBreadcrumbsAttributes> & { [K in keyof LeBreadcrumbs & keyof LeBreadcrumbsAttributes]?: LeBreadcrumbs[K] } & { [K in keyof LeBreadcrumbs & keyof LeBreadcrumbsAttributes as `attr:${K}`]?: LeBreadcrumbsAttributes[K] } & { [K in keyof LeBreadcrumbs & keyof LeBreadcrumbsAttributes as `prop:${K}`]?: LeBreadcrumbs[K] };
         "le-button": Omit<LeButton, keyof LeButtonAttributes> & { [K in keyof LeButton & keyof LeButtonAttributes]?: LeButton[K] } & { [K in keyof LeButton & keyof LeButtonAttributes as `attr:${K}`]?: LeButtonAttributes[K] } & { [K in keyof LeButton & keyof LeButtonAttributes as `prop:${K}`]?: LeButton[K] };
+        "le-button-group": Omit<LeButtonGroup, keyof LeButtonGroupAttributes> & { [K in keyof LeButtonGroup & keyof LeButtonGroupAttributes]?: LeButtonGroup[K] } & { [K in keyof LeButtonGroup & keyof LeButtonGroupAttributes as `attr:${K}`]?: LeButtonGroupAttributes[K] } & { [K in keyof LeButtonGroup & keyof LeButtonGroupAttributes as `prop:${K}`]?: LeButtonGroup[K] };
         "le-card": Omit<LeCard, keyof LeCardAttributes> & { [K in keyof LeCard & keyof LeCardAttributes]?: LeCard[K] } & { [K in keyof LeCard & keyof LeCardAttributes as `attr:${K}`]?: LeCardAttributes[K] } & { [K in keyof LeCard & keyof LeCardAttributes as `prop:${K}`]?: LeCard[K] };
         "le-checkbox": Omit<LeCheckbox, keyof LeCheckboxAttributes> & { [K in keyof LeCheckbox & keyof LeCheckboxAttributes]?: LeCheckbox[K] } & { [K in keyof LeCheckbox & keyof LeCheckboxAttributes as `attr:${K}`]?: LeCheckboxAttributes[K] } & { [K in keyof LeCheckbox & keyof LeCheckboxAttributes as `prop:${K}`]?: LeCheckbox[K] };
         "le-code-input": Omit<LeCodeInput, keyof LeCodeInputAttributes> & { [K in keyof LeCodeInput & keyof LeCodeInputAttributes]?: LeCodeInput[K] } & { [K in keyof LeCodeInput & keyof LeCodeInputAttributes as `attr:${K}`]?: LeCodeInputAttributes[K] } & { [K in keyof LeCodeInput & keyof LeCodeInputAttributes as `prop:${K}`]?: LeCodeInput[K] };
@@ -6218,6 +6527,7 @@ declare namespace LocalJSX {
         "le-multiselect": Omit<LeMultiselect, keyof LeMultiselectAttributes> & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes]?: LeMultiselect[K] } & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes as `attr:${K}`]?: LeMultiselectAttributes[K] } & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes as `prop:${K}`]?: LeMultiselect[K] };
         "le-navigation": Omit<LeNavigation, keyof LeNavigationAttributes> & { [K in keyof LeNavigation & keyof LeNavigationAttributes]?: LeNavigation[K] } & { [K in keyof LeNavigation & keyof LeNavigationAttributes as `attr:${K}`]?: LeNavigationAttributes[K] } & { [K in keyof LeNavigation & keyof LeNavigationAttributes as `prop:${K}`]?: LeNavigation[K] };
         "le-number-input": Omit<LeNumberInput, keyof LeNumberInputAttributes> & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes]?: LeNumberInput[K] } & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes as `attr:${K}`]?: LeNumberInputAttributes[K] } & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes as `prop:${K}`]?: LeNumberInput[K] };
+        "le-overflow-menu": Omit<LeOverflowMenu, keyof LeOverflowMenuAttributes> & { [K in keyof LeOverflowMenu & keyof LeOverflowMenuAttributes]?: LeOverflowMenu[K] } & { [K in keyof LeOverflowMenu & keyof LeOverflowMenuAttributes as `attr:${K}`]?: LeOverflowMenuAttributes[K] } & { [K in keyof LeOverflowMenu & keyof LeOverflowMenuAttributes as `prop:${K}`]?: LeOverflowMenu[K] };
         "le-popover": Omit<LePopover, keyof LePopoverAttributes> & { [K in keyof LePopover & keyof LePopoverAttributes]?: LePopover[K] } & { [K in keyof LePopover & keyof LePopoverAttributes as `attr:${K}`]?: LePopoverAttributes[K] } & { [K in keyof LePopover & keyof LePopoverAttributes as `prop:${K}`]?: LePopover[K] };
         "le-popup": Omit<LePopup, keyof LePopupAttributes> & { [K in keyof LePopup & keyof LePopupAttributes]?: LePopup[K] } & { [K in keyof LePopup & keyof LePopupAttributes as `attr:${K}`]?: LePopupAttributes[K] } & { [K in keyof LePopup & keyof LePopupAttributes as `prop:${K}`]?: LePopup[K] };
         "le-round-progress": Omit<LeRoundProgress, keyof LeRoundProgressAttributes> & { [K in keyof LeRoundProgress & keyof LeRoundProgressAttributes]?: LeRoundProgress[K] } & { [K in keyof LeRoundProgress & keyof LeRoundProgressAttributes as `attr:${K}`]?: LeRoundProgressAttributes[K] } & { [K in keyof LeRoundProgress & keyof LeRoundProgressAttributes as `prop:${K}`]?: LeRoundProgress[K] } & OneOf<"paths", LeRoundProgress["paths"], LeRoundProgressAttributes["paths"]>;
@@ -6237,6 +6547,7 @@ declare namespace LocalJSX {
         "le-text": Omit<LeText, keyof LeTextAttributes> & { [K in keyof LeText & keyof LeTextAttributes]?: LeText[K] } & { [K in keyof LeText & keyof LeTextAttributes as `attr:${K}`]?: LeTextAttributes[K] } & { [K in keyof LeText & keyof LeTextAttributes as `prop:${K}`]?: LeText[K] };
         "le-tooltip": Omit<LeTooltip, keyof LeTooltipAttributes> & { [K in keyof LeTooltip & keyof LeTooltipAttributes]?: LeTooltip[K] } & { [K in keyof LeTooltip & keyof LeTooltipAttributes as `attr:${K}`]?: LeTooltipAttributes[K] } & { [K in keyof LeTooltip & keyof LeTooltipAttributes as `prop:${K}`]?: LeTooltip[K] };
         "le-turntable": Omit<LeTurntable, keyof LeTurntableAttributes> & { [K in keyof LeTurntable & keyof LeTurntableAttributes]?: LeTurntable[K] } & { [K in keyof LeTurntable & keyof LeTurntableAttributes as `attr:${K}`]?: LeTurntableAttributes[K] } & { [K in keyof LeTurntable & keyof LeTurntableAttributes as `prop:${K}`]?: LeTurntable[K] };
+        "le-visibility": Omit<LeVisibility, keyof LeVisibilityAttributes> & { [K in keyof LeVisibility & keyof LeVisibilityAttributes]?: LeVisibility[K] } & { [K in keyof LeVisibility & keyof LeVisibilityAttributes as `attr:${K}`]?: LeVisibilityAttributes[K] } & { [K in keyof LeVisibility & keyof LeVisibilityAttributes as `prop:${K}`]?: LeVisibility[K] };
     }
 }
 export { LocalJSX as JSX };
@@ -6254,7 +6565,7 @@ declare module "@stencil/core" {
              * @csspart arrow-start - The start (left) scroll arrow
              * @csspart arrow-end - The end (right) scroll arrow
              * @csspart all-menu-button - The "show all" menu button
-             * @csspart popover-content - The popover content wrapper
+             * @csspart trigger - The overflow trigger wrapper
              * @cmsEditable true
              * @cmsCategory Layout
              */
@@ -6323,6 +6634,15 @@ declare module "@stencil/core" {
              * @cmsCategory Actions
              */
             "le-button": LocalJSX.IntrinsicElements["le-button"] & JSXBase.HTMLAttributes<HTMLLeButtonElement>;
+            /**
+             * Groups multiple `le-button` elements and optionally collapses low-priority actions
+             * into an overflow "more" menu.
+             * @csspart group - The grouped buttons frame
+             * @csspart more-button - The overflow trigger button
+             * @cmsEditable true
+             * @cmsCategory Actions
+             */
+            "le-button-group": LocalJSX.IntrinsicElements["le-button-group"] & JSXBase.HTMLAttributes<HTMLLeButtonGroupElement>;
             /**
              * A flexible card component with header, content, and footer slots.
              * The card uses le-slot wrappers for each slot area. In admin mode,
@@ -6530,6 +6850,7 @@ declare module "@stencil/core" {
              * @cssprop --le-input-padding - Input padding
              */
             "le-number-input": LocalJSX.IntrinsicElements["le-number-input"] & JSXBase.HTMLAttributes<HTMLLeNumberInputElement>;
+            "le-overflow-menu": LocalJSX.IntrinsicElements["le-overflow-menu"] & JSXBase.HTMLAttributes<HTMLLeOverflowMenuElement>;
             /**
              * A popover component for displaying floating content.
              * Uses the native HTML Popover API for proper layering with dialogs
@@ -6754,6 +7075,16 @@ declare module "@stencil/core" {
             "le-text": LocalJSX.IntrinsicElements["le-text"] & JSXBase.HTMLAttributes<HTMLLeTextElement>;
             "le-tooltip": LocalJSX.IntrinsicElements["le-tooltip"] & JSXBase.HTMLAttributes<HTMLLeTooltipElement>;
             "le-turntable": LocalJSX.IntrinsicElements["le-turntable"] & JSXBase.HTMLAttributes<HTMLLeTurntableElement>;
+            /**
+             * Internal visibility transition controller.
+             * This component controls transition phase + measured size variables.
+             * Preferred usage wraps the target content:
+             * <le-visibility state="collapsed"><div>...</div></le-visibility>
+             * For backward compatibility, when no children are provided it
+             * falls back to controlling the parent host element.
+             * @cmsInternal true
+             */
+            "le-visibility": LocalJSX.IntrinsicElements["le-visibility"] & JSXBase.HTMLAttributes<HTMLLeVisibilityElement>;
         }
     }
 }

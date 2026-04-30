@@ -53,6 +53,7 @@ graph TD;
   le-checkbox --> le-component
   le-checkbox --> le-slot
   le-component --> le-checkbox
+  le-button --> le-visibility
   le-button --> le-component
   le-button --> le-slot
   le-slot --> le-popover

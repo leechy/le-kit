@@ -51,6 +51,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 ### Used by
 
  - [le-breadcrumbs](../le-breadcrumbs)
+ - [le-overflow-menu](../le-overflow-menu)
 
 ### Depends on
 
@@ -80,6 +81,7 @@ graph TD;
   le-component --> le-string-input
   le-component --> le-popover
   le-component --> le-popup
+  le-button --> le-visibility
   le-button --> le-component
   le-button --> le-slot
   le-slot --> le-popover
@@ -96,7 +98,8 @@ graph TD;
   le-popup --> le-component
   le-collapse --> le-component
   le-bar --> le-icon
-  le-bar --> le-popover
+  le-bar --> le-overflow-menu
+  le-overflow-menu --> le-navigation
   le-breadcrumbs --> le-navigation
   style le-navigation fill:#f9f,stroke:#333,stroke-width:4px
 ```

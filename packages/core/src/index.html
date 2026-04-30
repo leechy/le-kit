@@ -90,6 +90,98 @@
         font-size: var(--le-font-size-sm);
       }
 
+      .motion-demo {
+        display: grid;
+        gap: var(--le-space-md);
+      }
+
+      .motion-demo-status {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--le-space-sm);
+        align-items: center;
+        font-size: var(--le-font-size-sm);
+        color: var(--le-color-text-secondary);
+      }
+
+      .motion-demo-status code {
+        padding: 0.15rem 0.45rem;
+        border-radius: var(--le-radius-full);
+        background: color-mix(in srgb, var(--le-color-primary) 8%, var(--le-color-surface));
+        color: var(--le-color-text-primary);
+      }
+
+      .motion-preview-frame {
+        display: grid;
+        gap: var(--le-space-sm);
+        padding: var(--le-space-md);
+        border: 1px solid var(--le-color-border);
+        border-radius: var(--le-radius-lg);
+        background:
+          linear-gradient(180deg, color-mix(in srgb, var(--le-color-primary) 6%, transparent), transparent 45%),
+          var(--le-color-surface);
+        overflow: hidden;
+      }
+
+      .motion-preview-toolbar {
+        display: flex;
+        align-items: center;
+        gap: var(--le-space-sm);
+        flex-wrap: wrap;
+      }
+
+      .motion-preview-item {
+        display: inline-flex;
+        min-width: 0;
+      }
+
+      .motion-preview-item > le-visibility {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 0;
+        overflow: clip;
+        white-space: nowrap;
+        padding: 0.55rem 0.85rem;
+        border: 1px solid color-mix(in srgb, var(--le-color-primary) 30%, transparent);
+        border-radius: var(--le-radius-full);
+        background: color-mix(in srgb, var(--le-color-primary) 8%, var(--le-color-surface));
+        color: var(--le-color-text-primary);
+        box-shadow: var(--le-shadow-sm);
+        transform-origin: center center;
+        transition:
+          opacity var(--le-motion-visibility-duration) var(--le-motion-visibility-easing),
+          transform var(--le-motion-visibility-duration) var(--le-motion-visibility-easing),
+          filter var(--le-motion-visibility-duration) var(--le-motion-visibility-easing),
+          max-width var(--le-motion-visibility-duration) var(--le-motion-visibility-easing),
+          margin var(--le-motion-visibility-duration) var(--le-motion-visibility-easing),
+          padding var(--le-motion-visibility-duration) var(--le-motion-visibility-easing),
+          border-width var(--le-motion-visibility-duration) var(--le-motion-visibility-easing);
+        opacity: 1;
+        filter: blur(0px);
+        transform: translateY(0) scale(1);
+        max-width: var(--le-visibility-measured-width, 12rem);
+      }
+
+      .motion-preview-item > le-visibility[visibility-state='collapsing'],
+      .motion-preview-item > le-visibility[visibility-state='collapsed'] {
+        opacity: var(--le-motion-visibility-opacity-from);
+        filter: blur(var(--le-motion-visibility-blur-from));
+        transform:
+          translateY(var(--le-motion-visibility-translate-y-from))
+          scale(var(--le-motion-visibility-scale-from));
+        max-width: var(--le-motion-visibility-collapse-size);
+        margin-inline: 0;
+        padding-inline: 0;
+        border-width: 0;
+        pointer-events: none;
+      }
+
+      .motion-preview-caption {
+        font-size: var(--le-font-size-xs);
+        color: var(--le-color-text-secondary);
+      }
+
       /* le-navigation ::part() demo (driven by item.part) */
       #demo-nav-router::part(item-accent) {
         color: var(--le-color-primary);
@@ -187,16 +279,109 @@
     <le-header-placeholder></le-header-placeholder> -->
 
     <br />
-    <div style="
-      border: 1px solid var(--le-color-border);
-      padding: var(--le-space-sm);
-    ">
-      <le-button variant="outlined">
-        <le-icon name="side-panel-start" slot="icon-only"></le-icon>
-      </le-button>
-      <le-button variant="outlined">
-        <le-icon name="side-panel-start" slot="icon-only"></le-icon>
-      </le-button>
+    <div
+      style="
+        border: 1px solid var(--le-color-border);
+        border-radius: var(--le-radius-md);
+        padding: var(--le-space-md);
+        margin: var(--le-space-md) var(--le-space-lg);
+        display: grid;
+        gap: var(--le-space-sm);
+      "
+    >
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-sm);">
+        <strong style="font-size: var(--le-font-size-sm);">le-button-group manual demo</strong>
+        <span id="demo-button-group-collapse-status" style="font-size: var(--le-font-size-xs); color: var(--le-color-text-secondary);"></span>
+      </div>
+
+      <div>
+        <le-button-group id="demo-button-group">
+          <le-button variant="outlined" priority="1">Save</le-button>
+          <le-button variant="outlined" priority="3">Publish</le-button>
+          <le-button variant="outlined" priority="2">Preview</le-button>
+          <le-button variant="outlined">Share</le-button>
+          <le-button variant="outlined">Duplicate</le-button>
+          <le-button variant="outlined" priority="6" color="danger">Delete</le-button>
+        </le-button-group>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-sm);">
+        <le-button size="small" variant="outlined" onclick="setButtonGroupCollapse()">remove collapse</le-button>
+        <le-button size="small" variant="outlined" onclick="setButtonGroupCollapse(true)">collapse=true</le-button>
+        <le-button size="small" variant="outlined" onclick="setButtonGroupCollapse(0)">collapse=0</le-button>
+        <le-button size="small" variant="outlined" onclick="setButtonGroupCollapse(2)">collapse=2</le-button>
+        <le-button size="small" variant="outlined" onclick="setButtonGroupCollapse(-2)">collapse=-2</le-button>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-sm);">
+        <label for="demo-button-group-collapse-input" style="font-size: var(--le-font-size-sm); color: var(--le-color-text-secondary);">Numeric collapse:</label>
+        <le-number-input
+          id="demo-button-group-collapse-input"
+          min="-10"
+          max="10"
+          value="2"
+          step="1"
+          external-id="qty-field"></le-number-input>
+        <le-button size="small" variant="outlined" onclick="applyNumericButtonGroupCollapse()">apply number</le-button>
+      </div>
+    </div>
+
+    <div
+      class="motion-demo"
+      style="
+        border: 1px solid var(--le-color-border);
+        border-radius: var(--le-radius-md);
+        padding: var(--le-space-md);
+        margin: var(--le-space-md) var(--le-space-lg);
+      "
+    >
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-sm);">
+        <strong style="font-size: var(--le-font-size-sm);">Phase 1 motion preset demo</strong>
+        <span id="demo-motion-preset-status" style="font-size: var(--le-font-size-xs); color: var(--le-color-text-secondary);"></span>
+      </div>
+
+      <div class="controls" style="justify-content: flex-start;">
+        <div class="control-group">
+          <span>Preset:</span>
+          <button type="button" data-motion-preset="none" onclick="setMotionPreset('none')">none</button>
+          <button type="button" data-motion-preset="soft" onclick="setMotionPreset('soft')">soft</button>
+          <button type="button" data-motion-preset="fluid" onclick="setMotionPreset('fluid')">fluid</button>
+          <button type="button" data-motion-preset="spring" onclick="setMotionPreset('spring')">spring</button>
+        </div>
+      </div>
+
+      <div class="motion-demo-status">
+        <span>Current tokens:</span>
+        <code id="demo-motion-token-duration"></code>
+        <code id="demo-motion-token-easing"></code>
+        <code id="demo-motion-token-transform"></code>
+      </div>
+
+      <div class="motion-preview-frame">
+        <div class="motion-preview-toolbar">
+          <div class="motion-preview-item" data-motion-preview="save">
+            <le-visibility state="visible" mode="width">Save</le-visibility>
+          </div>
+          <div class="motion-preview-item" data-motion-preview="search">
+            <le-visibility state="visible" mode="width">Search</le-visibility>
+          </div>
+          <div class="motion-preview-item" data-motion-preview="filter">
+            <le-visibility state="visible" mode="width">Filter</le-visibility>
+          </div>
+          <div class="motion-preview-item" data-motion-preview="share">
+            <le-visibility state="visible" mode="width">Share</le-visibility>
+          </div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-sm);">
+          <le-button size="small" variant="outlined" onclick="toggleMotionPreviewItem('search')">toggle search</le-button>
+          <le-button size="small" variant="outlined" onclick="toggleMotionPreviewItem('filter')">toggle filter</le-button>
+          <le-button size="small" variant="outlined" onclick="replayMotionPreview()">replay sequence</le-button>
+          <le-button size="small" variant="outlined" onclick="resetMotionPreview()">reset</le-button>
+        </div>
+        <div class="motion-preview-caption">
+          This preview now uses le-visibility with the global motion tokens.
+        </div>
+      </div>
     </div>
 
     <!-- Editable content container - contents stored in localStorage -->
@@ -1375,6 +1560,127 @@ console.log(greeting);</le-text>
         });
       }
 
+      function getDemoButtonGroup() {
+        return document.getElementById('demo-button-group');
+      }
+
+      function updateButtonGroupCollapseStatus() {
+        const group = getDemoButtonGroup();
+        const statusEl = document.getElementById('demo-button-group-collapse-status');
+        if (!group || !statusEl) return;
+
+        if (!group.hasAttribute('collapse')) {
+          statusEl.textContent = 'collapse attribute: not set';
+          return;
+        }
+
+        const value = group.getAttribute('collapse');
+        statusEl.textContent = value === '' ? 'collapse attribute: "" (boolean true)' : `collapse attribute: "${value}"`;
+      }
+
+      function setButtonGroupCollapse(value) {
+        const group = getDemoButtonGroup();
+        if (!group) return;
+
+        if (value === undefined || value === null || value === false) {
+          group.removeAttribute('collapse');
+          updateButtonGroupCollapseStatus();
+          return;
+        }
+
+        if (value === true) {
+          group.setAttribute('collapse', '');
+          updateButtonGroupCollapseStatus();
+          return;
+        }
+
+        group.setAttribute('collapse', String(value));
+        updateButtonGroupCollapseStatus();
+      }
+
+      function applyNumericButtonGroupCollapse() {
+        const input = document.getElementById('demo-button-group-collapse-input');
+
+        if (input.value) {
+          setButtonGroupCollapse(input.value)
+        } else {
+          setButtonGroupCollapse();
+          return;
+        }
+      }
+
+      function getMotionPreset() {
+        return document.documentElement.getAttribute('motion-preset') || 'soft';
+      }
+
+      function updateMotionPresetControls() {
+        const preset = getMotionPreset();
+
+        document.querySelectorAll('[data-motion-preset]').forEach(button => {
+          button.classList.toggle('active', button.dataset.motionPreset === preset);
+        });
+      }
+
+      function updateMotionPresetStatus() {
+        const preset = getMotionPreset();
+        const styles = getComputedStyle(document.documentElement);
+        const status = document.getElementById('demo-motion-preset-status');
+        const duration = document.getElementById('demo-motion-token-duration');
+        const easing = document.getElementById('demo-motion-token-easing');
+        const transform = document.getElementById('demo-motion-token-transform');
+
+        status && (status.textContent = `motion-preset="${preset}"`);
+        duration && (duration.textContent = `duration ${styles.getPropertyValue('--le-motion-visibility-duration').trim()}`);
+        easing && (easing.textContent = `easing ${styles.getPropertyValue('--le-motion-visibility-easing').trim()}`);
+        transform &&
+          (transform.textContent = `from scale(${styles.getPropertyValue('--le-motion-visibility-scale-from').trim()}) translateY(${styles.getPropertyValue('--le-motion-visibility-translate-y-from').trim()}) blur(${styles.getPropertyValue('--le-motion-visibility-blur-from').trim()})`);
+      }
+
+      function setMotionPreset(preset) {
+        document.documentElement.setAttribute('motion-preset', preset);
+        updateMotionPresetControls();
+        updateMotionPresetStatus();
+      }
+
+      function getMotionPreviewItems() {
+        return Array.from(document.querySelectorAll('[data-motion-preview]'));
+      }
+
+      function toggleMotionPreviewItem(name) {
+        const item = document.querySelector(`[data-motion-preview="${name}"]`);
+        if (!item) return;
+
+        const visibility = item.querySelector('le-visibility');
+        if (!visibility) return;
+
+        const current = visibility.getAttribute('state') || 'visible';
+        visibility.setAttribute('state', current === 'collapsed' ? 'visible' : 'collapsed');
+      }
+
+      function resetMotionPreview() {
+        getMotionPreviewItems().forEach(item => {
+          const visibility = item.querySelector('le-visibility');
+          if (visibility) {
+            visibility.setAttribute('state', 'visible');
+          }
+        });
+      }
+
+      function replayMotionPreview() {
+        const sequence = ['search', 'filter', 'search', 'filter'];
+
+        resetMotionPreview();
+
+        const styles = getComputedStyle(document.documentElement);
+        const duration = styles.getPropertyValue('--le-motion-visibility-duration').trim();
+        const numericDuration = Number.parseFloat(duration) || 0;
+        const stepDelay = duration.endsWith('ms') ? numericDuration + 70 : numericDuration * 1000 + 70;
+
+        sequence.forEach((name, index) => {
+          window.setTimeout(() => toggleMotionPreviewItem(name), index * stepDelay);
+        });
+      }
+
       // Listen for changes from le-slot components
       contentContainer.addEventListener('leSlotChange', (event) => {
         const { name, value, isValid } = event.detail;
@@ -1489,6 +1795,8 @@ console.log(greeting);</le-text>
       // Initialize on page load
       initContent();
       wireNavigationDemo();
+      updateButtonGroupCollapseStatus();
+      setMotionPreset(getMotionPreset());
 
       document.getElementById('demo-combobox').options = [
         { label: 'JavaScript', value: 'js', description: 'Dynamic scripting language' },

@@ -102,21 +102,21 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [le-bar](../le-bar)
  - [le-breadcrumbs](../le-breadcrumbs)
  - [le-component](../le-component)
  - [le-dropdown-base](../le-dropdown-base)
  - [le-navigation](../le-navigation)
+ - [le-overflow-menu](../le-overflow-menu)
  - [le-slot](../le-slot)
 
 ### Graph
 ```mermaid
 graph TD;
-  le-bar --> le-popover
   le-breadcrumbs --> le-popover
   le-component --> le-popover
   le-dropdown-base --> le-popover
   le-navigation --> le-popover
+  le-overflow-menu --> le-popover
   le-slot --> le-popover
   style le-popover fill:#f9f,stroke:#333,stroke-width:4px
 ```

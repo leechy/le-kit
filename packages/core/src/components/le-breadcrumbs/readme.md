@@ -39,6 +39,7 @@ graph TD;
   le-breadcrumbs --> le-button
   le-breadcrumbs --> le-popover
   le-breadcrumbs --> le-navigation
+  le-button --> le-visibility
   le-button --> le-component
   le-button --> le-slot
   le-component --> le-button
@@ -71,7 +72,11 @@ graph TD;
   le-navigation --> le-component
   le-collapse --> le-component
   le-bar --> le-icon
-  le-bar --> le-popover
+  le-bar --> le-overflow-menu
+  le-overflow-menu --> le-navigation
+  le-overflow-menu --> le-popover
+  le-overflow-menu --> le-button
+  le-overflow-menu --> le-icon
   style le-breadcrumbs fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -53,6 +53,7 @@ render() {
  - [le-bento-grid](../le-bento-grid)
  - [le-box](../le-box)
  - [le-button](../le-button)
+ - [le-button-group](../le-button-group)
  - [le-card](../le-card)
  - [le-checkbox](../le-checkbox)
  - [le-code-input](../le-code-input)
@@ -104,6 +105,7 @@ graph TD;
   le-popup --> le-component
   le-bento-grid --> le-component
   le-box --> le-component
+  le-button-group --> le-component
   le-card --> le-component
   le-code-input --> le-component
   le-collapse --> le-component

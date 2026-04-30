@@ -20,6 +20,7 @@
  - [le-bar](../le-bar)
  - [le-breadcrumbs](../le-breadcrumbs)
  - [le-navigation](../le-navigation)
+ - [le-overflow-menu](../le-overflow-menu)
  - [le-side-panel](../le-side-panel)
  - [le-string-input](../le-string-input)
  - [le-tag](../le-tag)
@@ -30,6 +31,7 @@ graph TD;
   le-bar --> le-icon
   le-breadcrumbs --> le-icon
   le-navigation --> le-icon
+  le-overflow-menu --> le-icon
   le-side-panel --> le-icon
   le-string-input --> le-icon
   le-tag --> le-icon

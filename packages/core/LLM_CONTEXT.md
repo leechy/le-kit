@@ -10,6 +10,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-box](#le-box)
 - [le-breadcrumbs](#le-breadcrumbs)
 - [le-button](#le-button)
+- [le-button-group](#le-button-group)
 - [le-card](#le-card)
 - [le-checkbox](#le-checkbox)
 - [le-code-input](#le-code-input)
@@ -25,6 +26,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-multiselect](#le-multiselect)
 - [le-navigation](#le-navigation)
 - [le-number-input](#le-number-input)
+- [le-overflow-menu](#le-overflow-menu)
 - [le-popover](#le-popover)
 - [le-popup](#le-popup)
 - [le-round-progress](#le-round-progress)
@@ -44,6 +46,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-text](#le-text)
 - [le-tooltip](#le-tooltip)
 - [le-turntable](#le-turntable)
+- [le-visibility](#le-visibility)
 
 ---
 
@@ -253,6 +256,9 @@ A flexible button component with multiple variants and states.
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Button size |
 | `selected` | `boolean` | `false` | Whether the button is in a selected/active state |
 | `fullWidth` | `boolean` | `false` | Whether the button takes full width of its container |
+| `visibility` | `'visible' \| 'collapsing' \| 'collapsed' \| 'expanding'` | `'visible'` | Visibility state used by responsive containers to animate show/hide transitions. |
+| `groupShape` | `'start' \| 'middle' \| 'end' \| 'single'` | `'single'` | Shape of the button when rendered inside grouped containers. |
+| `motionPreset` | `'none' \| 'soft' \| 'fluid' \| 'spring' \| undefined` |  | Optional per-instance motion preset override. |
 | `iconOnly` | `string \| Node \| undefined` |  | Icon only button image or emoji if this prop is set, the button will render only the icon slot |
 | `iconStart` | `string \| Node \| undefined` |  | Start icon image or emoji |
 | `iconEnd` | `string \| Node \| undefined` |  | End icon image or emoji |
@@ -284,6 +290,33 @@ A flexible button component with multiple variants and states.
 | `--le-button-border-radius` | Button border radius |
 | `--le-button-padding-x` | Button horizontal padding |
 | `--le-button-padding-y` | Button vertical padding |
+
+---
+
+## <le-button-group>
+
+Groups multiple `le-button` elements and optionally collapses low-priority actions
+into an overflow "more" menu.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `collapse` | `boolean \| number \| string \| undefined` |  | Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`. |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leOverflowSelect` | `EventEmitter<{ id: string }>` |  |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | Group button elements (`le-button` children) |
+| `"more"` | Custom icon/content for the overflow trigger button |
 
 ---
 
@@ -835,6 +868,32 @@ A number input component with validation, keyboard controls, and custom spinners
 | `--le-input-border-error` | Input border style when invalid |
 | `--le-input-radius` | Input border radius |
 | `--le-input-padding` | Input padding |
+
+---
+
+## <le-overflow-menu>
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | `false` | Whether the menu popover is open. |
+| `disabled` | `boolean` | `false` | Disables trigger interactions. |
+| `position` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` | Popover position. |
+| `align` | `'start' \| 'center' \| 'end'` | `'end'` | Popover alignment relative to trigger. |
+| `offset` | `number` | `8` | Popover offset in px. |
+| `minWidth` | `string` | `'200px'` | Minimum popover width. |
+| `icon` | `string` | `'ellipsis-horizontal'` | Fallback icon name for trigger. |
+| `triggerAriaLabel` | `string` | `'Open menu'` | Aria label for fallback trigger button. |
+| `triggerPart` | `string` | `'trigger-button'` | Part name for fallback trigger button. |
+| `items` | `LeOverflowMenuItem[] \| string` | `[]` | List of menu items represented as options. |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leOverflowMenuItemSelect` | `EventEmitter<LeOverflowMenuItemSelectDetail>` |  |
+| `leOverflowMenuClose` | `EventEmitter<void>` |  |
 
 ---
 
@@ -1543,6 +1602,28 @@ toolbar for bold, italic, links, and paragraph type selection.
 | `pageY` | `number \| undefined` |  |  |
 | `currentAngle` | `number` | `0` |  |
 | `startAngle` | `number \| undefined` |  |  |
+
+---
+
+## <le-visibility>
+
+Internal visibility transition controller.
+
+This component controls transition phase + measured size variables.
+
+Preferred usage wraps the target content:
+<le-visibility state="collapsed"><div>...</div></le-visibility>
+
+For backward compatibility, when no children are provided it
+falls back to controlling the parent host element.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `state` | `LeVisibilityState` | `'visible'` | Desired visibility state. |
+| `mode` | `LeVisibilityMode` | `'width'` | Which dimensions to measure and expose as CSS vars. |
 
 ---
 

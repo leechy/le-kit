@@ -1,0 +1,44 @@
+le-visibility {
+  display: inline-block;
+  max-width: 100%;
+  overflow: clip;
+  transform-origin: center center;
+
+  /* Default motion tokens — override via --le-motion-visibility-* on any ancestor */
+  --le-motion-visibility-duration: var(--le-transition-normal);
+  --le-motion-visibility-easing: var(--le-transition-easing, ease-in-out);
+  --le-motion-visibility-scale-from: 0.96;
+  --le-motion-visibility-opacity-from: 0;
+  --le-motion-visibility-blur-from: 0px;
+  --le-motion-visibility-translate-y-from: 0px;
+  --le-motion-visibility-collapse-size: 0px;
+
+  transition:
+    max-width var(--le-motion-visibility-duration) var(--le-motion-visibility-easing),
+    opacity var(--le-motion-visibility-duration) var(--le-motion-visibility-easing),
+    transform var(--le-motion-visibility-duration) var(--le-motion-visibility-easing),
+    filter var(--le-motion-visibility-duration) var(--le-motion-visibility-easing);
+}
+
+le-visibility[visibility-state='visible'],
+le-visibility[visibility-state='expanding'] {
+  max-width: var(--le-visibility-measured-width, 100%);
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0) scale(1);
+}
+
+le-visibility[visibility-state='collapsing'],
+le-visibility[visibility-state='collapsed'] {
+  max-width: var(--le-motion-visibility-collapse-size);
+  opacity: var(--le-motion-visibility-opacity-from);
+  filter: blur(var(--le-motion-visibility-blur-from));
+  transform:
+    translateY(var(--le-motion-visibility-translate-y-from))
+    scale(var(--le-motion-visibility-scale-from));
+  pointer-events: none;
+}
+
+le-visibility[visibility-state='collapsed'] {
+  visibility: hidden;
+}

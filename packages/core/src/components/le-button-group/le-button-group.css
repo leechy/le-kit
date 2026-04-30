@@ -1,0 +1,66 @@
+:host {
+  display: inline-flex;
+  max-width: 100%;
+
+  --le-button-group-bg: var(--le-color-background-secondary);
+  --le-button-group-padding: var(--le-spacing-1);
+  --le-button-group-radius: calc(var(--le-radius-md) + var(--le-button-group-padding));
+}
+
+.button-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  max-width: 100%;
+  padding: var(--le-button-group-padding);
+  border-radius: var(--le-button-group-radius);
+  background: var(--le-button-group-bg);
+}
+
+::slotted(le-button) {
+  --le-button-border-radius: 0;
+}
+
+::slotted(le-button[group-shape='single']) {
+  --le-button-border-radius: var(--le-radius-md);
+}
+
+::slotted(le-button[group-shape='start']) {
+  --le-button-border-radius: var(--le-radius-md) 0 0 var(--le-radius-md);
+}
+
+::slotted(le-button[group-shape='middle']) {
+  --le-button-border-radius: 0;
+}
+
+::slotted(le-button[group-shape='end']) {
+  --le-button-border-radius: 0 var(--le-radius-md) var(--le-radius-md) 0;
+}
+
+.button-group-overflow {
+  display: inline-flex;
+}
+
+.button-group-more-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: var(--le-button-padding-y, var(--le-spacing-1)) var(--le-button-padding-x, var(--le-spacing-3));
+  border: 1px solid color-mix(in srgb, var(--le-color-primary) 33%, transparent);
+  border-left: none;
+  background: transparent;
+  color: var(--le-color-primary);
+  cursor: pointer;
+  --le-button-border-radius: 0 var(--le-radius-md) var(--le-radius-md) 0;
+  border-radius: var(--le-button-border-radius);
+}
+
+.button-group-more-trigger:hover {
+  background: var(--le-color-gray-100);
+}
+
+.button-group-more-trigger:focus-visible {
+  outline: var(--le-input-border-focus);
+  outline-offset: var(--le-input-border-focus-offset, 2px);
+}

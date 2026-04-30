@@ -1,0 +1,16 @@
+:host {
+  display: inline-flex;
+  --le-overflow-menu-popover-gap: var(--le-spacing-1);
+  --le-overflow-menu-popover-padding: var(--le-spacing-2);
+  --le-overflow-menu-item-radius: var(--le-radius-sm);
+  --le-overflow-menu-item-hover-bg: var(--le-color-gray-100);
+}
+
+/* Popover list container */
+le-popover::part(content) {
+  padding: var(--le-spacing-1);
+}
+
+le-navigation {
+  --le-nav-padding: 0;
+}

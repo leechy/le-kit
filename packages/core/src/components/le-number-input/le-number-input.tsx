@@ -288,7 +288,7 @@ export class LeNumberInput {
                   }
                   tabindex="-1"
                 >
-                  <span slot="icon-only">↑</span>
+                  <le-icon name="chevron-up" size={12} slot="icon-only"></le-icon>
                 </le-button>
                 <le-button
                   mode="default"
@@ -304,7 +304,7 @@ export class LeNumberInput {
                   }
                   tabindex="-1"
                 >
-                  <span slot="icon-only">↓</span>
+                  <le-icon name="chevron-down" size={12} slot="icon-only"></le-icon>
                 </le-button>
               </div>
             )}

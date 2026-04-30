@@ -8,6 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
+import { LeActiveContext } from "./components/le-kit/le-kit";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 import { LeKitMode } from "./global/app";
@@ -17,6 +18,7 @@ import { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./compo
 export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
+export { LeActiveContext } from "./components/le-kit/le-kit";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 export { LeKitMode } from "./global/app";
@@ -903,6 +905,52 @@ export namespace Components {
     }
     interface LeItem {
         "getOption": () => Promise<LeOption>;
+    }
+    /**
+     * Optional app-level context orchestrator for theme, appearance, and active state.
+     * Components continue to work without this wrapper; `le-kit` is opt-in.
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LeKit {
+        /**
+          * Current active context scope value.
+          * @default 'active'
+         */
+        "activeContext": LeActiveContext;
+        /**
+          * Current appearance scope value.
+          * @default 'default'
+         */
+        "appearance": string;
+        /**
+          * Persistence keys as a space-separated list: `all`, `none`, `theme`, `appearance`.
+          * @default 'theme appearance'
+         */
+        "persist": string;
+        "setActiveContext": (ctx: LeActiveContext) => Promise<void>;
+        "setAppearance": (appearance: string) => Promise<void>;
+        "setTheme": (theme: string) => Promise<void>;
+        /**
+          * Local storage namespace for persisted values.
+          * @default 'le-kit'
+         */
+        "storageKey": string;
+        /**
+          * Current theme scope value.
+          * @default 'default'
+         */
+        "theme": string;
+        /**
+          * Whether this instance reacts to descendant modal popup open/close events.
+          * @default true
+         */
+        "watchModals": boolean;
+        /**
+          * Whether this instance reacts to window focus/blur.
+          * @default true
+         */
+        "watchWindow": boolean;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -2939,6 +2987,18 @@ declare global {
         prototype: HTMLLeItemElement;
         new (): HTMLLeItemElement;
     };
+    /**
+     * Optional app-level context orchestrator for theme, appearance, and active state.
+     * Components continue to work without this wrapper; `le-kit` is opt-in.
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface HTMLLeKitElement extends Components.LeKit, HTMLStencilElement {
+    }
+    var HTMLLeKitElement: {
+        prototype: HTMLLeKitElement;
+        new (): HTMLLeKitElement;
+    };
     interface HTMLLeMultiselectElementEventMap {
         "leChange": LeMultiOptionSelectDetail;
         "leOpen": void;
@@ -3583,6 +3643,7 @@ declare global {
         "le-header-placeholder": HTMLLeHeaderPlaceholderElement;
         "le-icon": HTMLLeIconElement;
         "le-item": HTMLLeItemElement;
+        "le-kit": HTMLLeKitElement;
         "le-multiselect": HTMLLeMultiselectElement;
         "le-navigation": HTMLLeNavigationElement;
         "le-number-input": HTMLLeNumberInputElement;
@@ -4540,6 +4601,49 @@ declare namespace LocalJSX {
         "size"?: number;
     }
     interface LeItem {
+    }
+    /**
+     * Optional app-level context orchestrator for theme, appearance, and active state.
+     * Components continue to work without this wrapper; `le-kit` is opt-in.
+     * @cmsInternal true
+     * @cmsCategory System
+     */
+    interface LeKit {
+        /**
+          * Current active context scope value.
+          * @default 'active'
+         */
+        "activeContext"?: LeActiveContext;
+        /**
+          * Current appearance scope value.
+          * @default 'default'
+         */
+        "appearance"?: string;
+        /**
+          * Persistence keys as a space-separated list: `all`, `none`, `theme`, `appearance`.
+          * @default 'theme appearance'
+         */
+        "persist"?: string;
+        /**
+          * Local storage namespace for persisted values.
+          * @default 'le-kit'
+         */
+        "storageKey"?: string;
+        /**
+          * Current theme scope value.
+          * @default 'default'
+         */
+        "theme"?: string;
+        /**
+          * Whether this instance reacts to descendant modal popup open/close events.
+          * @default true
+         */
+        "watchModals"?: boolean;
+        /**
+          * Whether this instance reacts to window focus/blur.
+          * @default true
+         */
+        "watchWindow"?: boolean;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -6215,6 +6319,15 @@ declare namespace LocalJSX {
         "name": string;
         "size": number;
     }
+    interface LeKitAttributes {
+        "theme": string;
+        "appearance": string;
+        "activeContext": LeActiveContext;
+        "watchWindow": boolean;
+        "watchModals": boolean;
+        "storageKey": string;
+        "persist": string;
+    }
     interface LeMultiselectAttributes {
         "options": LeOption[] | string;
         "placeholder": string;
@@ -6524,6 +6637,7 @@ declare namespace LocalJSX {
         "le-header-placeholder": LeHeaderPlaceholder;
         "le-icon": Omit<LeIcon, keyof LeIconAttributes> & { [K in keyof LeIcon & keyof LeIconAttributes]?: LeIcon[K] } & { [K in keyof LeIcon & keyof LeIconAttributes as `attr:${K}`]?: LeIconAttributes[K] } & { [K in keyof LeIcon & keyof LeIconAttributes as `prop:${K}`]?: LeIcon[K] };
         "le-item": LeItem;
+        "le-kit": Omit<LeKit, keyof LeKitAttributes> & { [K in keyof LeKit & keyof LeKitAttributes]?: LeKit[K] } & { [K in keyof LeKit & keyof LeKitAttributes as `attr:${K}`]?: LeKitAttributes[K] } & { [K in keyof LeKit & keyof LeKitAttributes as `prop:${K}`]?: LeKit[K] };
         "le-multiselect": Omit<LeMultiselect, keyof LeMultiselectAttributes> & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes]?: LeMultiselect[K] } & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes as `attr:${K}`]?: LeMultiselectAttributes[K] } & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes as `prop:${K}`]?: LeMultiselect[K] };
         "le-navigation": Omit<LeNavigation, keyof LeNavigationAttributes> & { [K in keyof LeNavigation & keyof LeNavigationAttributes]?: LeNavigation[K] } & { [K in keyof LeNavigation & keyof LeNavigationAttributes as `attr:${K}`]?: LeNavigationAttributes[K] } & { [K in keyof LeNavigation & keyof LeNavigationAttributes as `prop:${K}`]?: LeNavigation[K] };
         "le-number-input": Omit<LeNumberInput, keyof LeNumberInputAttributes> & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes]?: LeNumberInput[K] } & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes as `attr:${K}`]?: LeNumberInputAttributes[K] } & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes as `prop:${K}`]?: LeNumberInput[K] };
@@ -6801,6 +6915,13 @@ declare module "@stencil/core" {
             "le-header-placeholder": LocalJSX.IntrinsicElements["le-header-placeholder"] & JSXBase.HTMLAttributes<HTMLLeHeaderPlaceholderElement>;
             "le-icon": LocalJSX.IntrinsicElements["le-icon"] & JSXBase.HTMLAttributes<HTMLLeIconElement>;
             "le-item": LocalJSX.IntrinsicElements["le-item"] & JSXBase.HTMLAttributes<HTMLLeItemElement>;
+            /**
+             * Optional app-level context orchestrator for theme, appearance, and active state.
+             * Components continue to work without this wrapper; `le-kit` is opt-in.
+             * @cmsInternal true
+             * @cmsCategory System
+             */
+            "le-kit": LocalJSX.IntrinsicElements["le-kit"] & JSXBase.HTMLAttributes<HTMLLeKitElement>;
             /**
              * A multiselect component for selecting multiple options.
              * Displays selected items as tags with optional search filtering.

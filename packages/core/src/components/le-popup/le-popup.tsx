@@ -145,15 +145,47 @@ export class LePopup {
     // Native dialog handles Escape key automatically when modal
     // We just need to listen for the cancel event
     this.dialogEl?.addEventListener('cancel', this.handleDialogCancel);
+    this.dialogEl?.addEventListener('focusin', this.handleDialogFocusIn);
+    this.dialogEl?.addEventListener('focusout', this.handleDialogFocusOut);
   }
 
   disconnectedCallback() {
     this.dialogEl?.removeEventListener('cancel', this.handleDialogCancel);
+    this.dialogEl?.removeEventListener('focusin', this.handleDialogFocusIn);
+    this.dialogEl?.removeEventListener('focusout', this.handleDialogFocusOut);
   }
 
   private handleDialogCancel = (e: Event) => {
     e.preventDefault(); // Prevent default close to handle it ourselves
     this.handleCancel();
+  };
+
+  private applyPopupActiveContext(active: boolean) {
+    this.el.setAttribute('active-context', active ? 'active' : 'inactive');
+  }
+
+  private clearPopupActiveContext() {
+    this.el.removeAttribute('active-context');
+  }
+
+  private handleDialogFocusIn = () => {
+    if (!this.open || this.modal) {
+      return;
+    }
+    this.applyPopupActiveContext(true);
+  };
+
+  private handleDialogFocusOut = (event: FocusEvent) => {
+    if (!this.open || this.modal || !this.dialogEl) {
+      return;
+    }
+
+    const nextFocusTarget = event.relatedTarget as Node | null;
+    if (nextFocusTarget && this.dialogEl.contains(nextFocusTarget)) {
+      return;
+    }
+
+    this.applyPopupActiveContext(false);
   };
 
   /**
@@ -171,8 +203,10 @@ export class LePopup {
         if (this.dialogEl) {
           if (this.modal) {
             this.dialogEl.showModal();
+            this.applyPopupActiveContext(true);
           } else {
             this.dialogEl.show();
+            this.applyPopupActiveContext(true);
           }
 
           this.leOpen?.emit();
@@ -199,6 +233,7 @@ export class LePopup {
 
     this.dialogEl?.close();
     this.open = false;
+    this.clearPopupActiveContext();
     this.leClose.emit(result);
 
     if (this.resolvePromise) {

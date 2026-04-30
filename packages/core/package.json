@@ -51,6 +51,10 @@
     "analyze": "cem analyze --stencil && npm run generate:llm",
     "generate:llm": "node scripts/generate-llm-context.mjs"
   },
+  "dependencies": {
+    "@nanostores/persistent": "^0.10.2",
+    "nanostores": "^0.11.4"
+  },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
     "@stencil/core": "^4.27.1",

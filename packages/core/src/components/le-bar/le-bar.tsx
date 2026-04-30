@@ -12,6 +12,8 @@ import {
   Listen,
 } from '@stencil/core';
 import { classnames, generateId } from '../../utils/utils';
+import { LeOverflowMenuItemSelectDetail } from '../le-overflow-menu/le-overflow-menu';
+import type { LeOption } from '../../types/options';
 
 export interface LeBarOverflowChangeDetail {
   /** IDs of items that are currently overflowing (in the "more" popover) */
@@ -40,7 +42,7 @@ export interface LeBarOverflowChangeDetail {
  * @csspart arrow-start - The start (left) scroll arrow
  * @csspart arrow-end - The end (right) scroll arrow
  * @csspart all-menu-button - The "show all" menu button
- * @csspart popover-content - The popover content wrapper
+ * @csspart trigger - The overflow trigger wrapper
  *
  * @cmsEditable true
  * @cmsCategory Layout
@@ -100,9 +102,6 @@ export class LeBar {
    */
   @Event() leBarOverflowChange?: EventEmitter<LeBarOverflowChangeDetail>;
 
-  /** Whether the hamburger/more popover is open */
-  @State() private popoverOpen: boolean = false;
-
   /** Whether hamburger mode is active (for hamburger overflow) */
   @State() private hamburgerActive: boolean = false;
 
@@ -114,9 +113,6 @@ export class LeBar {
 
   /** Whether we can scroll right */
   @State() private canScrollEnd: boolean = false;
-
-  /** Whether the all-menu popover is open */
-  @State() private allMenuOpen: boolean = false;
 
   /** Current height of the items container (for overflow handling) */
   @State() private containerHeight: number | null = null;
@@ -209,10 +205,21 @@ export class LeBar {
   }
 
   private resetOverflowState() {
-    this.hamburgerActive = false;
-    this.overflowingIds = new Set();
-    this.containerHeight = null;
-    this.popoverOpen = false;
+    if (this.hamburgerActive) {
+      this.hamburgerActive = false;
+    }
+    if ((this.overflowingIds?.size ?? 0) > 0) {
+      this.overflowingIds = new Set();
+    }
+    if (this.containerHeight !== null) {
+      this.containerHeight = null;
+    }
+  }
+
+  private setContainerHeight(next: number | null) {
+    if (this.containerHeight !== next) {
+      this.containerHeight = next;
+    }
   }
 
   private getSlottedItems(): HTMLElement[] {
@@ -296,9 +303,9 @@ export class LeBar {
 
       // Set height to show only first row (or hide all if hamburger is active)
       if (shouldHamburger && firstRowBottom > 0) {
-        this.containerHeight = firstRowBottom;
+        this.setContainerHeight(firstRowBottom);
       } else {
-        this.containerHeight = null;
+        this.setContainerHeight(null);
       }
     } else {
       // 'more' mode
@@ -337,9 +344,9 @@ export class LeBar {
 
         // Set height to show only first row
         if (firstRowBottom > 0) {
-          this.containerHeight = firstRowBottom;
+          this.setContainerHeight(firstRowBottom);
         } else {
-          this.containerHeight = null;
+          this.setContainerHeight(null);
         }
         return;
       }
@@ -361,9 +368,9 @@ export class LeBar {
 
       // Set container height to show only first row
       if ((newOverflowingIds?.size ?? 0) > 0 && firstRowBottom > 0) {
-        this.containerHeight = firstRowBottom;
+        this.setContainerHeight(firstRowBottom);
       } else {
-        this.containerHeight = null;
+        this.setContainerHeight(null);
       }
     }
   }
@@ -449,24 +456,7 @@ export class LeBar {
     setTimeout(() => this.updateScrollState(), 300);
   };
 
-  private togglePopover = () => {
-    this.popoverOpen = !this.popoverOpen;
-  };
-
-  private closePopover = () => {
-    this.popoverOpen = false;
-  };
-
-  private toggleAllMenu = () => {
-    this.allMenuOpen = !this.allMenuOpen;
-  };
-
-  private closeAllMenu = () => {
-    this.allMenuOpen = false;
-  };
-
-  private handleItemClick = (_e: MouseEvent, id: string) => {
-    // Close popover when an item inside is clicked
+  private handleItemClick(id: string) {
     const originalItem = this.itemMap.get(id);
 
     if (originalItem) {
@@ -478,9 +468,10 @@ export class LeBar {
       });
       originalItem.dispatchEvent(cloneEvent);
     }
+  }
 
-    this.closePopover();
-    this.closeAllMenu();
+  private handleMenuItemSelect = (event: CustomEvent<LeOverflowMenuItemSelectDetail>) => {
+    this.handleItemClick(event.detail.id);
   };
 
   private renderMoreButton() {
@@ -491,8 +482,6 @@ export class LeBar {
         class="bar-more-button"
         part="more-button"
         ref={el => (this.moreButtonEl = el)}
-        onClick={this.togglePopover}
-        aria-expanded={String(this.popoverOpen)}
         aria-haspopup="true"
       >
         {hasSlottedMore ? <slot name="more" /> : <le-icon name="ellipsis-horizontal" />}
@@ -504,13 +493,7 @@ export class LeBar {
     const hasSlottedHamburger = this.el.querySelector('[slot="hamburger"]');
 
     return (
-      <button
-        class="bar-hamburger-button"
-        part="hamburger-button"
-        onClick={this.togglePopover}
-        aria-expanded={String(this.popoverOpen)}
-        aria-haspopup="true"
-      >
+      <button class="bar-hamburger-button" part="hamburger-button" aria-haspopup="true">
         {hasSlottedHamburger ? <slot name="hamburger" /> : <le-icon name="hamburger" />}
       </button>
     );
@@ -562,73 +545,67 @@ export class LeBar {
     const hasSlottedAllMenu = this.el.querySelector('[slot="all-menu"]');
 
     return (
-      <button
-        class="bar-all-menu-button"
-        part="all-menu-button"
-        onClick={this.toggleAllMenu}
-        aria-expanded={String(this.allMenuOpen)}
-        aria-haspopup="true"
-      >
+      <button class="bar-all-menu-button" part="all-menu-button" aria-haspopup="true">
         {hasSlottedAllMenu ? <slot name="all-menu" /> : <le-icon name="hamburger" />}
       </button>
     );
   }
 
-  private renderPopoverContent(itemsToShow: { id: string; item: HTMLElement }[]) {
-    return (
-      <div class="bar-popover-content" part="popover-content">
-        {itemsToShow.map(({ id, item }) => (
-          <div
-            class="bar-popover-item"
-            key={id}
-            onClick={(e: MouseEvent) => this.handleItemClick(e, id)}
-            innerHTML={item.outerHTML}
-          />
-        ))}
-      </div>
-    );
+  private mapMenuItems(items: HTMLElement[], allItems: HTMLElement[]): LeOption[] {
+    return items.map(item => {
+      const index = Math.max(0, allItems.indexOf(item));
+      const id = this.getItemId(item, index);
+      const label =
+        item.getAttribute('label') ||
+        item.textContent?.trim() ||
+        item.getAttribute('aria-label') ||
+        id;
+
+      return {
+        id,
+        label,
+        value: id,
+        disabled: item.hasAttribute('disabled'),
+        href: item.getAttribute('href') || undefined,
+        target: item.getAttribute('target') || undefined,
+        className: item.className || undefined,
+        part: item.getAttribute('part') || undefined,
+      };
+    });
   }
 
   private renderOverflowPopover() {
     if (this.overflow !== 'more' && this.overflow !== 'hamburger') return null;
 
     const items = this.getSlottedItems();
-    let itemsToShow: { id: string; item: HTMLElement }[] = [];
+    let itemsToShow: HTMLElement[] = [];
 
     if (this.overflow === 'hamburger' && this.hamburgerActive) {
       // Show all items in hamburger mode
-      itemsToShow = items.map((item, index) => ({
-        id: this.getItemId(item, index),
-        item,
-      }));
+      itemsToShow = items;
     } else if (this.overflow === 'more' && (this.overflowingIds?.size ?? 0) > 0) {
       // Show only overflowing items
-      itemsToShow = items
-        .map((item, index) => ({
-          id: this.getItemId(item, index),
-          item,
-        }))
-        .filter(({ id }) => this.overflowingIds?.has(id));
+      itemsToShow = items.filter((item, index) =>
+        this.overflowingIds?.has(this.getItemId(item, index)),
+      );
     }
 
     if (itemsToShow.length === 0) return null;
 
     return (
-      <le-popover
-        mode="default"
-        open={this.popoverOpen}
+      <le-overflow-menu
+        items={this.mapMenuItems(itemsToShow, items)}
         position="bottom"
         align="end"
-        showClose={false}
-        closeOnClickOutside={true}
-        closeOnEscape={true}
-        onLePopoverClose={this.closePopover}
+        triggerPart={this.overflow === 'hamburger' ? 'hamburger-button' : 'more-button'}
+        icon={this.overflow === 'hamburger' ? 'hamburger' : 'ellipsis-horizontal'}
+        triggerAriaLabel={this.overflow === 'hamburger' ? 'Open menu' : 'More'}
+        onLeOverflowMenuItemSelect={this.handleMenuItemSelect}
       >
-        <div slot="trigger" class="bar-overflow-trigger">
+        <div slot="trigger" class="bar-overflow-trigger" part="trigger">
           {this.overflow === 'hamburger' ? this.renderHamburgerButton() : this.renderMoreButton()}
         </div>
-        {this.renderPopoverContent(itemsToShow)}
-      </le-popover>
+      </le-overflow-menu>
     );
   }
 
@@ -636,29 +613,24 @@ export class LeBar {
     if (!this.showAllMenu) return null;
 
     const items = this.getSlottedItems();
-    const itemsToShow = items.map((item, index) => ({
-      id: this.getItemId(item, index),
-      item,
-    }));
+    const itemsToShow = this.mapMenuItems(items, items);
 
     const position = this.showAllMenu === 'start' ? 'start' : 'end';
 
     return (
-      <le-popover
-        mode="default"
-        open={this.allMenuOpen}
+      <le-overflow-menu
+        items={itemsToShow}
         position="bottom"
         align={position}
-        showClose={false}
-        closeOnClickOutside={true}
-        closeOnEscape={true}
-        onLePopoverClose={this.closeAllMenu}
+        icon="hamburger"
+        triggerPart="all-menu-button"
+        triggerAriaLabel="Show all items"
+        onLeOverflowMenuItemSelect={this.handleMenuItemSelect}
       >
-        <div slot="trigger" class="bar-all-menu-trigger">
+        <div slot="trigger" class="bar-all-menu-trigger" part="trigger">
           {this.renderAllMenuButton()}
         </div>
-        {this.renderPopoverContent(itemsToShow)}
-      </le-popover>
+      </le-overflow-menu>
     );
   }
 

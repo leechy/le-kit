@@ -1,0 +1,41 @@
+{
+  "viewBox": "0 0 16 16",
+  "children": [
+    {
+      "tag": "line",
+      "x1": "2",
+      "y1": "3.5",
+      "x2": "13",
+      "y2": "3.5",
+      "stroke": "currentColor",
+      "stroke-width": "1.5"
+    },
+    {
+      "tag": "line",
+      "x1": "2",
+      "y1": "6.5",
+      "x2": "14",
+      "y2": "6.5",
+      "stroke": "currentColor",
+      "stroke-width": "1.5"
+    },
+    {
+      "tag": "line",
+      "x1": "2",
+      "y1": "9.5",
+      "x2": "8",
+      "y2": "9.5",
+      "stroke": "currentColor",
+      "stroke-width": "1.5"
+    },
+    {
+      "tag": "line",
+      "x1": "2",
+      "y1": "12.5",
+      "x2": "10",
+      "y2": "12.5",
+      "stroke": "currentColor",
+      "stroke-width": "1.5"
+    }
+  ]
+}

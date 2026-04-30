@@ -11,6 +11,10 @@ le-popover::part(content) {
   padding: var(--le-spacing-1);
 }
 
+.more-icon {
+  display: block;
+}
+
 le-navigation {
   --le-nav-padding: 0;
 }

@@ -213,7 +213,7 @@ export class LeOverflowMenu {
                 aria-label={this.triggerAriaLabel}
                 part={this.triggerPart}
               >
-                <le-icon name={this.icon} />
+                <le-icon class="more-icon" name={this.icon} />
               </le-button>
             </slot>
           </div>

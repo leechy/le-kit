@@ -19,6 +19,10 @@ export interface LeOverflowMenuItemSelectDetail {
 export class LeOverflowMenu {
   private popoverEl?: HTMLLePopoverElement;
 
+  private navigationEl?: HTMLLeNavigationElement;
+
+  private triggerEl?: HTMLElement;
+
   /**
    * Whether the menu popover is open.
    */
@@ -113,12 +117,20 @@ export class LeOverflowMenu {
   private handlePopoverOpen = () => {
     if (this.open) return;
     this.open = true;
+
+    requestAnimationFrame(() => {
+      void this.navigationEl?.focusActiveItem();
+    });
   };
 
   private handlePopoverClose = () => {
     if (!this.open) return;
     this.open = false;
     this.leOverflowMenuClose.emit();
+
+    requestAnimationFrame(() => {
+      this.triggerEl?.focus();
+    });
   };
 
   private handleItemClick = (event: MouseEvent | KeyboardEvent, item: LeOverflowMenuItem) => {
@@ -138,8 +150,7 @@ export class LeOverflowMenu {
   private handleNavigationSelect = (event: CustomEvent<LeNavigationItemSelectDetail>) => {
     const { item, id, originalEvent } = event.detail;
 
-    // Overflow menu should control navigation and delegate action selection to consumers.
-    originalEvent.preventDefault();
+    // Keep event local to this component, but preserve native link navigation.
     originalEvent.stopPropagation();
 
     this.handleItemClick(originalEvent, {
@@ -151,6 +162,7 @@ export class LeOverflowMenu {
   private renderItems(items: LeOverflowMenuItem[]) {
     return (
       <le-navigation
+        ref={el => (this.navigationEl = el)}
         orientation="vertical"
         items={items}
         onLeNavItemSelect={this.handleNavigationSelect}
@@ -181,6 +193,7 @@ export class LeOverflowMenu {
           onLePopoverClose={this.handlePopoverClose}
         >
           <div
+            ref={el => (this.triggerEl = el)}
             slot="trigger"
             part="trigger"
             onClick={

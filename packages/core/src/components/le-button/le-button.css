@@ -71,6 +71,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--le-spacing-3);
+  box-sizing: border-box;
   width: 100%;
   padding: var(--le-button-padding);
   border: 1px solid var(--_btn-border-color);
@@ -360,15 +361,4 @@ span.icon-only.is-visible {
 }
 .le-button-align-end {
   justify-content: flex-end;
-}
-
-le-visibility[visibility-state='collapsing'] .le-button-container,
-le-visibility[visibility-state='collapsed'] .le-button-container {
-  min-width: 0;
-  overflow: hidden;
-}
-
-le-visibility[visibility-state='collapsed'] .le-button-container {
-  padding-inline: 0;
-  border-width: 0;
 }

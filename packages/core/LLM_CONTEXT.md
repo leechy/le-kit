@@ -814,6 +814,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `searchPlaceholder` | `string` | `'Search...'` | Placeholder text for the search input. |
 | `emptyText` | `string` | `'No results found'` | Text shown when no items match the filter. |
 | `submenuSearchable` | `boolean` | `false` | Whether submenu popovers should include a filter input. |
+| `activationMode` | `LeNavigationActivationMode` | `'manual'` | Whether keyboard focus only highlights, or also activates immediately. |
 
 ### Events
 

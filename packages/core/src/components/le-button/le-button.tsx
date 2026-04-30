@@ -228,6 +228,7 @@ export class LeButton {
       iconEnd: typeof this.iconEnd === 'string' ? this.iconEnd : undefined,
       href: this.href,
       target: this.target,
+      color: this.color,
       className: this.el.className || undefined,
       part: this.el.getAttribute('part') || undefined,
     };

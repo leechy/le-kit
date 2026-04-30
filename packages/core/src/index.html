@@ -296,12 +296,12 @@
 
       <div>
         <le-button-group id="demo-button-group">
-          <le-button variant="outlined" priority="1">Save</le-button>
-          <le-button variant="outlined" priority="3">Publish</le-button>
-          <le-button variant="outlined" priority="2">Preview</le-button>
-          <le-button variant="outlined">Share</le-button>
-          <le-button variant="outlined">Duplicate</le-button>
-          <le-button variant="outlined" priority="6" color="danger">Delete</le-button>
+          <le-button variant="clear" priority="1" href="#save">Save</le-button>
+          <le-button variant="clear" priority="3" onclick="alert('Publish')">Publish</le-button>
+          <le-button variant="clear" priority="2" onclick="alert('Preview')">Preview</le-button>
+          <le-button variant="clear" href="#share">Share</le-button>
+          <le-button variant="clear" onclick="alert('Duplicate')">Duplicate</le-button>
+          <le-button variant="clear" priority="6" color="danger" onclick="alert('Delete')" shortcut="Del">Delete</le-button>
         </le-button-group>
       </div>
 

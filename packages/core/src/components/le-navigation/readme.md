@@ -17,6 +17,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 
 | Property                 | Attribute                    | Description                                                                                                                                                        | Type                                              | Default              |
 | ------------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | -------------------- |
+| `activationMode`         | `activation-mode`            | Whether keyboard focus only highlights, or also activates immediately.                                                                                             | `"automatic" \| "manual"`                         | `'manual'`           |
 | `activeUrl`              | `active-url`                 | Active url for automatic selection.                                                                                                                                | `string`                                          | `''`                 |
 | `align`                  | `align`                      | Alignment of the menu items within the navigation bar.                                                                                                             | `"center" \| "end" \| "space-between" \| "start"` | `'start'`            |
 | `emptyText`              | `empty-text`                 | Text shown when no items match the filter.                                                                                                                         | `string`                                          | `'No results found'` |
@@ -36,6 +37,29 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
 | `leNavItemSelect` | Fired when a navigation item is activated.  This event is cancelable. Call `event.preventDefault()` to prevent default browser navigation and implement custom routing. | `CustomEvent<LeNavigationItemSelectDetail>` |
 | `leNavItemToggle` | Fired when a tree branch is toggled.                                                                                                                                    | `CustomEvent<LeNavigationItemToggleDetail>` |
+
+
+## Methods
+
+### `focusActiveItem() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `focusFirstItem() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
 
 
 ## Slots

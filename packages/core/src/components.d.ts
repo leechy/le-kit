@@ -1067,6 +1067,11 @@ export namespace Components {
      */
     interface LeNavigation {
         /**
+          * Whether keyboard focus only highlights, or also activates immediately.
+          * @default 'manual'
+         */
+        "activationMode": LeNavigationActivationMode;
+        /**
           * Active url for automatic selection.
           * @default ''
          */
@@ -1081,6 +1086,8 @@ export namespace Components {
           * @default 'No results found'
          */
         "emptyText": string;
+        "focusActiveItem": () => Promise<void>;
+        "focusFirstItem": () => Promise<void>;
         /**
           * Navigation items. Can be passed as an array or JSON string (same pattern as le-select).
           * @default []
@@ -4760,6 +4767,11 @@ declare namespace LocalJSX {
      */
     interface LeNavigation {
         /**
+          * Whether keyboard focus only highlights, or also activates immediately.
+          * @default 'manual'
+         */
+        "activationMode"?: LeNavigationActivationMode;
+        /**
           * Active url for automatic selection.
           * @default ''
          */
@@ -6354,6 +6366,7 @@ declare namespace LocalJSX {
         "searchPlaceholder": string;
         "emptyText": string;
         "submenuSearchable": boolean;
+        "activationMode": LeNavigationActivationMode;
     }
     interface LeNumberInputAttributes {
         "value": number;

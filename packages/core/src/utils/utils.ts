@@ -5,6 +5,20 @@
 import { getMode } from '../global/app';
 import type { LeOption } from '../types/options';
 
+/**
+ * Maps parsed LeOption objects back to the <le-item> DOM element they were parsed from.
+ * Only populated when items are parsed via parseOptionFromItemElement.
+ */
+const optionElementMap = new WeakMap<object, HTMLElement>();
+
+/**
+ * Returns the original <le-item> DOM element that a LeOption was parsed from,
+ * or undefined if the option was not created from a declarative element.
+ */
+export function getOptionElement(option: LeOption): HTMLElement | undefined {
+  return optionElementMap.get(option);
+}
+
 function getItemLabel(item: HTMLElement): string {
   if (item.hasAttribute('label')) {
     return item.getAttribute('label') || '';
@@ -24,8 +38,10 @@ export function parseOptionFromItemElement(item: HTMLElement): LeOption {
   const label = getItemLabel(item);
   const value = item.getAttribute('value') || label;
   const href = item.getAttribute('href') || '';
+  const action = item.getAttribute('action') || '';
   const target = item.getAttribute('target') || '';
   const part = item.getAttribute('part') || '';
+  const color = item.getAttribute('color') || '';
   const className = item.getAttribute('class') || '';
   const disabled = item.hasAttribute('disabled');
   const selected = item.hasAttribute('selected');
@@ -41,13 +57,15 @@ export function parseOptionFromItemElement(item: HTMLElement): LeOption {
   const group = item.getAttribute('group') || '';
   const separator = item.getAttribute('separator') as 'before' | 'after' | undefined;
 
-  return {
-    id,
+  const option = {
+    id: id || undefined,
     label,
     value,
     href,
+    action,
     target,
     part,
+    color,
     className,
     disabled,
     selected,
@@ -61,6 +79,9 @@ export function parseOptionFromItemElement(item: HTMLElement): LeOption {
     group,
     separator,
   } as LeOption;
+
+  optionElementMap.set(option, item);
+  return option;
 }
 
 /**

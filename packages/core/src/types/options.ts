@@ -118,6 +118,12 @@ export interface LeOption {
   part?: string;
 
   /**
+   * Semantic color token used by color-aware components.
+   * Common values: primary, secondary, success, warning, danger, info.
+   */
+  color?: string;
+
+  /**
    * Group label for categorizing options in flat lists.
    * Options with the same group value are visually grouped together.
    */
@@ -132,6 +138,12 @@ export interface LeOption {
    * URL to navigate to when the option is selected.
    */
   href?: string;
+
+  /**
+   * Application-defined action key to trigger when the option is selected.
+   * This remains serializable across array, JSON-string, and declarative inputs.
+   */
+  action?: string;
 
   /**
    * Specifies where to open the linked document (e.g., `_blank`, `_self`).

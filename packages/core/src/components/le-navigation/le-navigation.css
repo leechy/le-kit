@@ -24,6 +24,16 @@
   --le-nav-hover-bg: var(--le-color-gray-100);
   --le-nav-selected-bg: var(--le-color-primary);
   --le-nav-selected-color: var(--le-color-primary-contrast);
+  --le-nav-selected-bg-secondary: var(--le-color-secondary);
+  --le-nav-selected-color-secondary: var(--le-color-secondary-contrast);
+  --le-nav-selected-bg-success: var(--le-color-success);
+  --le-nav-selected-color-success: var(--le-color-success-contrast);
+  --le-nav-selected-bg-warning: var(--le-color-warning);
+  --le-nav-selected-color-warning: var(--le-color-warning-contrast);
+  --le-nav-selected-bg-danger: var(--le-color-danger);
+  --le-nav-selected-color-danger: var(--le-color-danger-contrast);
+  --le-nav-selected-bg-info: var(--le-color-info);
+  --le-nav-selected-color-info: var(--le-color-info-contrast);
 }
 
 /*
@@ -84,6 +94,10 @@
 
 .nav-row:hover {
   background: var(--le-nav-hover-bg);
+}
+
+:host(:focus-within) .nav-row.is-focused {
+  box-shadow: 0 0 0 2px var(--le-color-focus) inset;
 }
 
 .nav-toggle,
@@ -150,19 +164,65 @@
   cursor: pointer;
 }
 
-button.nav-item {
-  color: var(--le-nav-trigger-color, var(--le-default-nav-trigger-color));
-  font-size: var(--le-nav-trigger-font-size, var(--le-default-nav-trigger-font-size));
+.nav-item:visited {
+  color: var(--le-nav-color);
 }
 
 .nav-item:focus-visible {
-  outline: 2px solid var(--le-color-focus);
-  outline-offset: 2px;
+  outline: none;
+}
+
+.nav-item.color-primary {
+  color: var(--le-color-primary);
+}
+.nav-item.color-secondary {
+  color: var(--le-color-secondary);
+}
+.nav-item.color-success {
+  color: var(--le-color-success);
+}
+.nav-item.color-warning {
+  color: var(--le-color-warning);
+}
+.nav-item.color-danger {
+  color: var(--le-color-danger);
+}
+.nav-item.color-info {
+  color: var(--le-color-info);
 }
 
 .nav-node.selected > .nav-row {
   background: var(--le-nav-selected-bg);
   color: var(--le-nav-selected-color);
+}
+
+.nav-node.color-secondary.selected > .nav-row {
+  background: var(--le-nav-selected-bg-secondary);
+  color: var(--le-nav-selected-color-secondary);
+}
+
+.nav-node.color-success.selected > .nav-row {
+  background: var(--le-nav-selected-bg-success);
+  color: var(--le-nav-selected-color-success);
+}
+
+.nav-node.color-warning.selected > .nav-row {
+  background: var(--le-nav-selected-bg-warning);
+  color: var(--le-nav-selected-color-warning);
+}
+
+.nav-node.color-danger.selected > .nav-row {
+  background: var(--le-nav-selected-bg-danger);
+  color: var(--le-nav-selected-color-danger);
+}
+
+.nav-node.color-info.selected > .nav-row {
+  background: var(--le-nav-selected-bg-info);
+  color: var(--le-nav-selected-color-info);
+}
+
+:host(:focus-within) .nav-node.selected > .nav-row.is-focused {
+  box-shadow: 0 0 0 2px color-mix(in srgb, white 45%, transparent) inset;
 }
 .nav-node.selected > .nav-row > .nav-item {
   color: inherit;
@@ -264,9 +324,16 @@ button.nav-item {
   background: var(--le-nav-hover-bg);
 }
 
+:host(:focus-within) .h-link.focused {
+  box-shadow: 0 0 0 2px var(--le-color-focus) inset;
+}
+
+.h-link:visited {
+  color: var(--le-nav-color);
+}
+
 .h-link:focus-visible {
-  outline: 2px solid var(--le-color-focus);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .h-link.disabled,
@@ -279,6 +346,40 @@ button.nav-item {
 .h-trigger.selected {
   background: var(--le-nav-selected-bg);
   color: var(--le-nav-selected-color);
+}
+
+.h-link.selected.color-secondary,
+.h-trigger.selected.color-secondary {
+  background: var(--le-nav-selected-bg-secondary);
+  color: var(--le-nav-selected-color-secondary);
+}
+
+.h-link.selected.color-success,
+.h-trigger.selected.color-success {
+  background: var(--le-nav-selected-bg-success);
+  color: var(--le-nav-selected-color-success);
+}
+
+.h-link.selected.color-warning,
+.h-trigger.selected.color-warning {
+  background: var(--le-nav-selected-bg-warning);
+  color: var(--le-nav-selected-color-warning);
+}
+
+.h-link.selected.color-danger,
+.h-trigger.selected.color-danger {
+  background: var(--le-nav-selected-bg-danger);
+  color: var(--le-nav-selected-color-danger);
+}
+
+.h-link.selected.color-info,
+.h-trigger.selected.color-info {
+  background: var(--le-nav-selected-bg-info);
+  color: var(--le-nav-selected-color-info);
+}
+
+:host(:focus-within) .h-link.focused.selected {
+  box-shadow: 0 0 0 2px color-mix(in srgb, white 45%, transparent) inset;
 }
 
 .h-label {

@@ -199,6 +199,7 @@ export class LeButtonGroup {
       disabled: item.element.hasAttribute('disabled'),
       className: item.element.className || undefined,
       part: item.element.getAttribute('part') || undefined,
+      color: item.element.getAttribute('color') || undefined,
       href: item.element.getAttribute('href') || undefined,
       target: item.element.getAttribute('target') || undefined,
     };

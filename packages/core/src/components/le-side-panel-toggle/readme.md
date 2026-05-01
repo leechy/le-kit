@@ -49,9 +49,17 @@
 ```mermaid
 graph TD;
   le-side-panel-toggle --> le-button
+  le-button --> le-slot
   le-button --> le-visibility
   le-button --> le-component
-  le-button --> le-slot
+  le-button --> le-tooltip
+  le-slot --> le-popover
+  le-slot --> le-button
+  le-slot --> le-string-input
+  le-string-input --> le-component
+  le-string-input --> le-button
+  le-string-input --> le-icon
+  le-string-input --> le-slot
   le-component --> le-button
   le-component --> le-select
   le-component --> le-checkbox
@@ -64,16 +72,10 @@ graph TD;
   le-dropdown-base --> le-popover
   le-checkbox --> le-component
   le-checkbox --> le-slot
-  le-slot --> le-popover
-  le-slot --> le-button
-  le-slot --> le-string-input
-  le-string-input --> le-component
-  le-string-input --> le-button
-  le-string-input --> le-icon
-  le-string-input --> le-slot
   le-popup --> le-slot
   le-popup --> le-button
   le-popup --> le-component
+  le-tooltip --> le-component
   le-side-panel --> le-side-panel-toggle
   style le-side-panel-toggle fill:#f9f,stroke:#333,stroke-width:4px
 ```

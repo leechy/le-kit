@@ -91,6 +91,7 @@ graph TD;
   le-checkbox --> le-slot
   le-string-input --> le-slot
   le-popup --> le-slot
+  le-tooltip --> le-component
   le-bento-grid --> le-slot
   le-box --> le-slot
   le-card --> le-slot

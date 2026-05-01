@@ -8,6 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
+import { TooltipPlacement } from ".";
 import { LeActiveContext } from "./components/le-kit/le-kit";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
@@ -15,9 +16,11 @@ import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 import { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side-panel/le-side-panel";
 import { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./components/le-side-panel-toggle/le-side-panel-toggle";
+import { TooltipPlacement as TooltipPlacement1 } from "./components/le-tooltip/le-tooltip";
 export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
+export { TooltipPlacement } from ".";
 export { LeActiveContext } from "./components/le-kit/le-kit";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
@@ -25,6 +28,7 @@ export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side-panel/le-side-panel";
 export { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./components/le-side-panel-toggle/le-side-panel-toggle";
+export { TooltipPlacement as TooltipPlacement1 } from "./components/le-tooltip/le-tooltip";
 export namespace Components {
     /**
      * A flexible bar component that handles overflow gracefully.
@@ -362,6 +366,10 @@ export namespace Components {
          */
         "iconStart"?: string | Node;
         /**
+          * Optional label for the button, used for accessibility and tooltips when the button is icon-only.
+         */
+        "label"?: string;
+        /**
           * Mode of the popover should be 'default' for internal use
          */
         "mode"?: 'default' | 'admin';
@@ -385,6 +393,16 @@ export namespace Components {
           * Link target when href is set
          */
         "target"?: string;
+        /**
+          * Tooltip text to show on hover
+         */
+        "tooltip"?: string;
+        /**
+          * Tooltip position around the button
+          * @allowedValues auto | top | bottom | left | right
+          * @default 'top'
+         */
+        "tooltipPosition": TooltipPlacement;
         /**
           * The button type attribute
           * @allowedValues button | submit | reset
@@ -1226,7 +1244,7 @@ export namespace Components {
         "items": LeOverflowMenuItem[] | string;
         /**
           * Minimum popover width.
-          * @default '200px'
+          * @default '160px'
          */
         "minWidth": string;
         /**
@@ -2371,7 +2389,7 @@ export namespace Components {
           * Preferred tooltip placement relative to trigger.
           * @default 'auto'
          */
-        "placement": TooltipPlacement;
+        "placement": TooltipPlacement1;
         /**
           * Shows the tooltip.
          */
@@ -4023,6 +4041,10 @@ declare namespace LocalJSX {
          */
         "iconStart"?: string | Node;
         /**
+          * Optional label for the button, used for accessibility and tooltips when the button is icon-only.
+         */
+        "label"?: string;
+        /**
           * Mode of the popover should be 'default' for internal use
          */
         "mode"?: 'default' | 'admin';
@@ -4050,6 +4072,16 @@ declare namespace LocalJSX {
           * Link target when href is set
          */
         "target"?: string;
+        /**
+          * Tooltip text to show on hover
+         */
+        "tooltip"?: string;
+        /**
+          * Tooltip position around the button
+          * @allowedValues auto | top | bottom | left | right
+          * @default 'top'
+         */
+        "tooltipPosition"?: TooltipPlacement;
         /**
           * The button type attribute
           * @allowedValues button | submit | reset
@@ -4953,7 +4985,7 @@ declare namespace LocalJSX {
         "items"?: LeOverflowMenuItem[] | string;
         /**
           * Minimum popover width.
-          * @default '200px'
+          * @default '160px'
          */
         "minWidth"?: string;
         /**
@@ -6134,7 +6166,7 @@ declare namespace LocalJSX {
           * Preferred tooltip placement relative to trigger.
           * @default 'auto'
          */
-        "placement"?: TooltipPlacement;
+        "placement"?: TooltipPlacement1;
         /**
           * Delay in milliseconds before showing the tooltip.
           * @default 500
@@ -6245,6 +6277,9 @@ declare namespace LocalJSX {
     | 'transparent';
         "size": 'small' | 'medium' | 'large';
         "selected": boolean;
+        "label": string;
+        "tooltip": string;
+        "tooltipPosition": string;
         "fullWidth": boolean;
         "visibility": 'visible' | 'collapsing' | 'collapsed' | 'expanding';
         "groupShape": 'start' | 'middle' | 'end' | 'single';

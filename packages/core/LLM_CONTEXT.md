@@ -253,9 +253,12 @@ A flexible button component with multiple variants and states.
     \| 'warning'
     \| 'danger'
     \| 'info'
-    \| 'transparent'` | `'primary'` | Button color theme (uses theme semantic colors) |
+    \| 'transparent' \| undefined` |  | Button color theme (uses theme semantic colors) |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Button size |
 | `selected` | `boolean` | `false` | Whether the button is in a selected/active state |
+| `label` | `string \| undefined` |  | Optional label for the button, used for accessibility and tooltips when the button is icon-only. |
+| `tooltip` | `string \| undefined` |  | Tooltip text to show on hover |
+| `tooltipPosition` | `TooltipPlacement` | `'top'` | Tooltip position around the button |
 | `fullWidth` | `boolean` | `false` | Whether the button takes full width of its container |
 | `visibility` | `'visible' \| 'collapsing' \| 'collapsed' \| 'expanding'` | `'visible'` | Visibility state used by responsive containers to animate show/hide transitions. |
 | `groupShape` | `'start' \| 'middle' \| 'end' \| 'single'` | `'single'` | Shape of the button when rendered inside grouped containers. |
@@ -906,7 +909,7 @@ A number input component with validation, keyboard controls, and custom spinners
 | `position` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` | Popover position. |
 | `align` | `'start' \| 'center' \| 'end'` | `'end'` | Popover alignment relative to trigger. |
 | `offset` | `number` | `8` | Popover offset in px. |
-| `minWidth` | `string` | `'200px'` | Minimum popover width. |
+| `minWidth` | `string` | `'160px'` | Minimum popover width. |
 | `icon` | `string` | `'ellipsis-horizontal'` | Fallback icon name for trigger. |
 | `triggerAriaLabel` | `string` | `'Open menu'` | Aria label for fallback trigger button. |
 | `triggerPart` | `string` | `'trigger-button'` | Part name for fallback trigger button. |

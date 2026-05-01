@@ -12,6 +12,7 @@ import {
 } from '@stencil/core';
 import { classnames, observeNamedSlotPresence, slotHasContent } from '../../utils/utils';
 import type { LeOption } from '../../types/options';
+import { TooltipPlacement } from '../..';
 
 /**
  * A flexible button component with multiple variants and states.
@@ -81,6 +82,23 @@ export class LeButton {
    * Whether the button is in a selected/active state
    */
   @Prop() selected: boolean = false;
+
+  /**
+   * Optional label for the button,
+   * used for accessibility and tooltips when the button is icon-only.
+   */
+  @Prop() label?: string;
+
+  /**
+   * Tooltip text to show on hover
+   */
+  @Prop() tooltip?: string;
+
+  /**
+   * Tooltip position around the button
+   * @allowedValues auto | top | bottom | left | right
+   */
+  @Prop() tooltipPosition: TooltipPlacement = 'top';
 
   /**
    * Whether the button takes full width of its container
@@ -295,49 +313,52 @@ export class LeButton {
       ? { href: this.href, target: this.target, role: 'button' }
       : { type: this.type, disabled: this.disabled };
 
+    const renderButton = () => (
+      <TagType
+        class={classnames('le-button-container', `le-button-align-${this.align}`)}
+        part="button"
+        {...attrs}
+        onClick={this.handleClick}
+      >
+        <span class={classnames('icon-only', { 'is-visible': hasIconOnly })} part="icon-only">
+          <slot name="icon-only">{typeof this.iconOnly === 'string' ? this.iconOnly : null}</slot>
+        </span>
+        {!hasIconOnly && (
+          <Fragment>
+            <span class="le-button-label">
+              <span
+                class={classnames('icon-start', { 'is-visible': hasIconStart })}
+                part="icon-start"
+              >
+                <slot name="icon-start">{this.iconStart}</slot>
+              </span>
+              <le-slot name="" description="Button text" type="text" class="content" part="content">
+                <slot></slot>
+              </le-slot>
+            </span>
+            <span class={classnames('icon-end', { 'is-visible': hasIconEnd })} part="icon-end">
+              <slot name="icon-end">{this.iconEnd}</slot>
+            </span>
+          </Fragment>
+        )}
+      </TagType>
+    );
+
     return (
       <Host class={classes}>
         <le-visibility state={visibilityState} mode="width">
           <le-component component="le-button">
-            <TagType
-              class={classnames('le-button-container', `le-button-align-${this.align}`)}
-              part="button"
-              {...attrs}
-              onClick={this.handleClick}
-            >
-              <span class={classnames('icon-only', { 'is-visible': hasIconOnly })} part="icon-only">
-                <slot name="icon-only">
-                  {typeof this.iconOnly === 'string' ? this.iconOnly : null}
-                </slot>
-              </span>
-              {!hasIconOnly && (
-                <Fragment>
-                  <span class="le-button-label">
-                    <span
-                      class={classnames('icon-start', { 'is-visible': hasIconStart })}
-                      part="icon-start"
-                    >
-                      <slot name="icon-start">{this.iconStart}</slot>
-                    </span>
-                    <le-slot
-                      name=""
-                      description="Button text"
-                      type="text"
-                      class="content"
-                      part="content"
-                    >
-                      <slot></slot>
-                    </le-slot>
-                  </span>
-                  <span
-                    class={classnames('icon-end', { 'is-visible': hasIconEnd })}
-                    part="icon-end"
-                  >
-                    <slot name="icon-end">{this.iconEnd}</slot>
-                  </span>
-                </Fragment>
-              )}
-            </TagType>
+            {this.tooltip ? (
+              <le-tooltip text={this.tooltip} placement={this.tooltipPosition}>
+                {renderButton()}
+              </le-tooltip>
+            ) : hasIconOnly && this.label ? (
+              <le-tooltip text={this.label} placement={this.tooltipPosition}>
+                {renderButton()}
+              </le-tooltip>
+            ) : (
+              renderButton()
+            )}
           </le-component>
         </le-visibility>
       </Host>

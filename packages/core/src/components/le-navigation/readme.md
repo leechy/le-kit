@@ -105,12 +105,14 @@ graph TD;
   le-component --> le-string-input
   le-component --> le-popover
   le-component --> le-popup
+  le-button --> le-slot
   le-button --> le-visibility
   le-button --> le-component
-  le-button --> le-slot
+  le-button --> le-tooltip
   le-slot --> le-popover
   le-slot --> le-button
   le-slot --> le-string-input
+  le-tooltip --> le-component
   le-select --> le-component
   le-select --> le-dropdown-base
   le-select --> le-button

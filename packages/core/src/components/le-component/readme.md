@@ -99,6 +99,7 @@ graph TD;
   le-slot --> le-button
   le-slot --> le-string-input
   le-string-input --> le-component
+  le-tooltip --> le-component
   le-select --> le-component
   le-dropdown-base --> le-popover
   le-checkbox --> le-component
@@ -122,7 +123,6 @@ graph TD;
   le-tabs --> le-component
   le-tag --> le-component
   le-text --> le-component
-  le-tooltip --> le-component
   style le-component fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

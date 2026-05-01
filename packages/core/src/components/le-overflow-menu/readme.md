@@ -13,7 +13,7 @@
 | `disabled`         | `disabled`           | Disables trigger interactions.             | `boolean`                                | `false`                 |
 | `icon`             | `icon`               | Fallback icon name for trigger.            | `string`                                 | `'ellipsis-horizontal'` |
 | `items`            | `items`              | List of menu items represented as options. | `LeOption[] \| string`                   | `[]`                    |
-| `minWidth`         | `min-width`          | Minimum popover width.                     | `string`                                 | `'200px'`               |
+| `minWidth`         | `min-width`          | Minimum popover width.                     | `string`                                 | `'160px'`               |
 | `offset`           | `offset`             | Popover offset in px.                      | `number`                                 | `8`                     |
 | `open`             | `open`               | Whether the menu popover is open.          | `boolean`                                | `false`                 |
 | `position`         | `position`           | Popover position.                          | `"bottom" \| "left" \| "right" \| "top"` | `'bottom'`              |
@@ -106,12 +106,14 @@ graph TD;
   le-component --> le-string-input
   le-component --> le-popover
   le-component --> le-popup
+  le-button --> le-slot
   le-button --> le-visibility
   le-button --> le-component
-  le-button --> le-slot
+  le-button --> le-tooltip
   le-slot --> le-popover
   le-slot --> le-button
   le-slot --> le-string-input
+  le-tooltip --> le-component
   le-select --> le-component
   le-select --> le-dropdown-base
   le-select --> le-button

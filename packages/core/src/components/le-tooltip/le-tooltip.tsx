@@ -12,7 +12,7 @@ import {
 import { classnames, observeNamedSlotPresence, slotHasContent } from '../../utils/utils';
 import { LeKitMode } from '../../global/app';
 
-type TooltipPlacement = 'auto' | 'top' | 'bottom' | 'left' | 'right';
+export type TooltipPlacement = 'auto' | 'top' | 'bottom' | 'left' | 'right';
 type TooltipAlign = 'start' | 'center' | 'end';
 type TooltipVariant = 'default' | 'success' | 'danger';
 

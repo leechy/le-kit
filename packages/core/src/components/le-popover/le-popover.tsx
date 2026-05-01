@@ -5,6 +5,7 @@ import {
   Event,
   EventEmitter,
   State,
+  Watch,
   h,
   Element,
   Host,
@@ -130,6 +131,26 @@ export class LePopover {
 
   private isListeningForDismiss: boolean = false;
 
+  private isNativePopoverOpen(): boolean {
+    return !!(this.popoverEl && this.popoverEl.matches(':popover-open'));
+  }
+
+  @Watch('open')
+  handleOpenChange(nextOpen: boolean) {
+    if (!this.popoverEl) return;
+
+    if (nextOpen) {
+      if (!this.supportsPopoverApi || !this.isNativePopoverOpen()) {
+        void this.show();
+      }
+      return;
+    }
+
+    if (!this.supportsPopoverApi || this.isNativePopoverOpen()) {
+      void this.hide();
+    }
+  }
+
   private get supportsPopoverApi(): boolean {
     return typeof (HTMLElement.prototype as any).showPopover === 'function';
   }
@@ -168,9 +189,9 @@ export class LePopover {
     // Listen for other popovers opening to close this one
     document.addEventListener('le-popover-will-open', this.handleOtherPopoverOpen);
 
-    // If the popover is initially open (unlikely, but possible), wire listeners.
+    // If initially open, sync the rendered popover state.
     if (this.open) {
-      this.addDismissListeners();
+      void this.show();
     }
   }
 
@@ -335,6 +356,10 @@ export class LePopover {
    */
   @Method()
   async show() {
+    if (this.open && (!this.supportsPopoverApi || this.isNativePopoverOpen())) {
+      return;
+    }
+
     document.dispatchEvent(
       new CustomEvent('le-popover-will-open', {
         detail: { popover: this.el },
@@ -353,6 +378,10 @@ export class LePopover {
    */
   @Method()
   async hide() {
+    if (!this.open && (!this.supportsPopoverApi || !this.isNativePopoverOpen())) {
+      return;
+    }
+
     if (this.supportsPopoverApi) {
       this.popoverEl?.hidePopover();
     } else {

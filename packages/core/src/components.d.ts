@@ -320,9 +320,8 @@ export namespace Components {
         /**
           * Button color theme (uses theme semantic colors)
           * @allowedValues primary | secondary | success | warning | danger | info
-          * @default 'primary'
          */
-        "color": | 'primary'
+        "color"?: | 'primary'
     | 'secondary'
     | 'success'
     | 'warning'
@@ -418,6 +417,11 @@ export namespace Components {
           * Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`.
          */
         "collapse"?: boolean | number | string;
+        /**
+          * When true, icons from collapsed buttons are shown in the overflow navigation list.
+          * @default false
+         */
+        "overflowIcons": boolean;
     }
     /**
      * A flexible card component with header, content, and footer slots.
@@ -3978,7 +3982,6 @@ declare namespace LocalJSX {
         /**
           * Button color theme (uses theme semantic colors)
           * @allowedValues primary | secondary | success | warning | danger | info
-          * @default 'primary'
          */
         "color"?: | 'primary'
     | 'secondary'
@@ -4080,6 +4083,11 @@ declare namespace LocalJSX {
          */
         "collapse"?: boolean | number | string;
         "onLeOverflowSelect"?: (event: LeButtonGroupCustomEvent<{ id: string }>) => void;
+        /**
+          * When true, icons from collapsed buttons are shown in the overflow navigation list.
+          * @default false
+         */
+        "overflowIcons"?: boolean;
     }
     /**
      * A flexible card component with header, content, and footer slots.
@@ -6252,6 +6260,7 @@ declare namespace LocalJSX {
     }
     interface LeButtonGroupAttributes {
         "collapse": string;
+        "overflowIcons": boolean;
     }
     interface LeCardAttributes {
         "variant": 'default' | 'outlined' | 'elevated';

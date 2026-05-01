@@ -12,9 +12,10 @@ into an overflow "more" menu.
 
 ## Properties
 
-| Property   | Attribute  | Description                                                                                                                                                                                                                            | Type                                       | Default     |
-| ---------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ----------- |
-| `collapse` | `collapse` | Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`. | `boolean \| number \| string \| undefined` | `undefined` |
+| Property        | Attribute        | Description                                                                                                                                                                                                                            | Type                                       | Default     |
+| --------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ----------- |
+| `collapse`      | `collapse`       | Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`. | `boolean \| number \| string \| undefined` | `undefined` |
+| `overflowIcons` | `overflow-icons` | When true, icons from collapsed buttons are shown in the overflow navigation list.                                                                                                                                                     | `boolean`                                  | `false`     |
 
 
 ## Events

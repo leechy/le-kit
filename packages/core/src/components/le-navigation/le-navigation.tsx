@@ -196,6 +196,13 @@ export class LeNavigation {
     return label;
   }
 
+  private renderIcon(icon: string) {
+    if (icon.includes('<')) {
+      return <span class="nav-icon-inner" innerHTML={icon}></span>;
+    }
+    return icon;
+  }
+
   private isItemSelected(item: LeOption): boolean {
     return !!(item.selected || (this.activeUrl && item.href === this.activeUrl));
   }
@@ -977,7 +984,7 @@ export class LeNavigation {
                     >
                       {item.iconStart && (
                         <span class="nav-icon" aria-hidden="true">
-                          {item.iconStart}
+                          {this.renderIcon(item.iconStart)}
                         </span>
                       )}
                       <span class="nav-text">
@@ -988,7 +995,7 @@ export class LeNavigation {
                       </span>
                       {item.iconEnd && (
                         <span class="nav-icon nav-icon-end" aria-hidden="true">
-                          {item.iconEnd}
+                          {this.renderIcon(item.iconEnd)}
                         </span>
                       )}
                     </TagType>
@@ -1068,13 +1075,13 @@ export class LeNavigation {
           >
             {item.iconStart && (
               <span class="nav-icon" aria-hidden="true">
-                {item.iconStart}
+                {this.renderIcon(item.iconStart)}
               </span>
             )}
             <span class="h-label">{this.renderLabel(item.label)}</span>
             {item.iconEnd && (
               <span class="nav-icon nav-icon-end" aria-hidden="true">
-                {item.iconEnd}
+                {this.renderIcon(item.iconEnd)}
               </span>
             )}
           </TagType>
@@ -1158,7 +1165,7 @@ export class LeNavigation {
               >
                 {item.iconStart && (
                   <span class="nav-icon" aria-hidden="true">
-                    {item.iconStart}
+                    {this.renderIcon(item.iconStart)}
                   </span>
                 )}
                 <span class="h-label">{this.renderLabel(item.label)}</span>
@@ -1209,7 +1216,7 @@ export class LeNavigation {
               >
                 {item.iconStart && (
                   <span class="nav-icon" aria-hidden="true">
-                    {item.iconStart}
+                    {this.renderIcon(item.iconStart)}
                   </span>
                 )}
                 <span class="h-label">{this.renderLabel(item.label)}</span>

@@ -8,6 +8,7 @@
 }
 
 :host svg {
+  flex-shrink: 0;
   display: block;
   fill: currentColor;
 }

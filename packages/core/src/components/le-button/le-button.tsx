@@ -62,14 +62,14 @@ export class LeButton {
    * Button color theme (uses theme semantic colors)
    * @allowedValues primary | secondary | success | warning | danger | info
    */
-  @Prop() color:
+  @Prop() color?:
     | 'primary'
     | 'secondary'
     | 'success'
     | 'warning'
     | 'danger'
     | 'info'
-    | 'transparent' = 'primary';
+    | 'transparent';
 
   /**
    * Button size
@@ -215,8 +215,45 @@ export class LeButton {
       .trim();
 
     const label =
-      textLabel || this.el.getAttribute('aria-label') || this.el.textContent?.trim() || '';
+      textLabel ||
+      this.el.getAttribute('label') ||
+      this.el.getAttribute('aria-label') ||
+      this.el.textContent?.trim() ||
+      '';
     const id = this.el.id || undefined;
+
+    // Build iconStart: explicit prop → icon-start slot → icon-only slot
+    let iconStart: string | undefined;
+    if (typeof this.iconStart === 'string') {
+      iconStart = this.iconStart;
+    } else if (this.hasIconStartSlot) {
+      const slotEl = this.el.querySelector('[slot="icon-start"]');
+      if (slotEl) {
+        const clone = slotEl.cloneNode(true) as HTMLElement;
+        clone.removeAttribute('slot');
+        iconStart = clone.outerHTML;
+      }
+    } else if (this.hasIconOnlySlot) {
+      const slotEl = this.el.querySelector('[slot="icon-only"]');
+      if (slotEl) {
+        const clone = slotEl.cloneNode(true) as HTMLElement;
+        clone.removeAttribute('slot');
+        iconStart = clone.outerHTML;
+      }
+    }
+
+    // Build iconEnd from slot when no explicit prop
+    let iconEnd: string | undefined;
+    if (typeof this.iconEnd === 'string') {
+      iconEnd = this.iconEnd;
+    } else if (this.hasIconEndSlot) {
+      const slotEl = this.el.querySelector('[slot="icon-end"]');
+      if (slotEl) {
+        const clone = slotEl.cloneNode(true) as HTMLElement;
+        clone.removeAttribute('slot');
+        iconEnd = clone.outerHTML;
+      }
+    }
 
     return {
       id,
@@ -224,8 +261,8 @@ export class LeButton {
       value: this.el.getAttribute('value') || id || label,
       disabled: this.disabled,
       selected: this.selected,
-      iconStart: typeof this.iconStart === 'string' ? this.iconStart : undefined,
-      iconEnd: typeof this.iconEnd === 'string' ? this.iconEnd : undefined,
+      iconStart,
+      iconEnd,
       href: this.href,
       target: this.target,
       color: this.color,

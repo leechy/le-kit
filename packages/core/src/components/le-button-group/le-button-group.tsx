@@ -53,6 +53,11 @@ export class LeButtonGroup {
    */
   @Prop() collapse?: boolean | number | string;
 
+  /**
+   * When true, icons from collapsed buttons are shown in the overflow navigation list.
+   */
+  @Prop({ reflect: true }) overflowIcons: boolean = false;
+
   @State() private overflowItems: LeOption[] = [];
 
   @State() private hasOverflow: boolean = false;
@@ -71,6 +76,11 @@ export class LeButtonGroup {
 
   @Watch('collapse')
   handleCollapseChange() {
+    void this.syncLayout();
+  }
+
+  @Watch('overflowIcons')
+  handleOverflowIconsChange() {
     void this.syncLayout();
   }
 
@@ -180,6 +190,9 @@ export class LeButtonGroup {
           id: option.id || item.id,
           value: option.value ?? option.id ?? option.label,
           disabled: option.disabled ?? item.element.hasAttribute('disabled'),
+          // Strip icons when overflowIcons prop is off
+          iconStart: this.overflowIcons ? option.iconStart : undefined,
+          iconEnd: this.overflowIcons ? option.iconEnd : undefined,
         };
       } catch {
         // Fall back to a lightweight extraction if custom method fails.
@@ -192,6 +205,21 @@ export class LeButtonGroup {
       item.element.getAttribute('aria-label') ||
       item.id;
 
+    // Extract icon from slot when overflowIcons is enabled
+    let iconStart: string | undefined;
+    if (this.overflowIcons) {
+      const iconStartEl = item.element.querySelector('[slot="icon-start"]');
+      const iconOnlyEl = item.element.querySelector('[slot="icon-only"]');
+      const sourceEl = iconStartEl ?? iconOnlyEl;
+      if (sourceEl) {
+        const clone = sourceEl.cloneNode(true) as HTMLElement;
+        clone.removeAttribute('slot');
+        iconStart = clone.outerHTML;
+      } else {
+        iconStart = item.element.getAttribute('icon-start') || undefined;
+      }
+    }
+
     return {
       id: item.id,
       label,
@@ -202,6 +230,7 @@ export class LeButtonGroup {
       color: item.element.getAttribute('color') || undefined,
       href: item.element.getAttribute('href') || undefined,
       target: item.element.getAttribute('target') || undefined,
+      iconStart,
     };
   }
 

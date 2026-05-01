@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="/build/le-kit.css" />
     
     <style>
+      html {
+        margin: 0;
+      }
       body {
         font-family: var(--le-font-family);
         background: var(--le-color-background);
@@ -294,7 +297,7 @@
         <span id="demo-button-group-collapse-status" style="font-size: var(--le-font-size-xs); color: var(--le-color-text-secondary);"></span>
       </div>
 
-      <div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-lg);">
         <le-button-group id="demo-button-group">
           <le-button variant="clear" priority="1" href="#save">Save</le-button>
           <le-button variant="clear" priority="3" onclick="alert('Publish')">Publish</le-button>
@@ -302,8 +305,20 @@
           <le-button variant="clear" href="#share">Share</le-button>
           <le-button variant="clear" onclick="alert('Duplicate')">Duplicate</le-button>
           <le-button variant="clear" priority="6" color="danger" onclick="alert('Delete')" shortcut="Del">Delete</le-button>
-          <le-button variant="clear" color="primary" label="Align Left" onclick="alert('Align Left')">
-            <le-icon slot="icon-only" size="24" name="align-left"></le-icon>
+        </le-button-group>
+
+        <le-button-group id="demo-button-group" overflow-icons collapse>
+          <le-button variant="clear" label="Align Left" onclick="alert('Align Left')">
+            <le-icon slot="icon-only" size="20" name="align-left"></le-icon>
+          </le-button>
+          <le-button variant="clear" label="Align Center" onclick="alert('Align Center')">
+            <le-icon slot="icon-only" size="20" name="align-center"></le-icon>
+          </le-button>
+          <le-button variant="clear" label="Align Right" onclick="alert('Align Right')">
+            <le-icon slot="icon-only" size="20" name="align-right"></le-icon>
+          </le-button>
+          <le-button variant="clear" label="Justify" onclick="alert('Align Justify')">
+            <le-icon slot="icon-only" size="20" name="align-justify"></le-icon>
           </le-button>
         </le-button-group>
       </div>

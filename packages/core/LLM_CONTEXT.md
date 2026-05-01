@@ -305,6 +305,7 @@ into an overflow "more" menu.
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
 | `collapse` | `boolean \| number \| string \| undefined` |  | Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`. |
+| `overflowIcons` | `boolean` | `false` | When true, icons from collapsed buttons are shown in the overflow navigation list. |
 
 ### Events
 

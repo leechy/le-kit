@@ -51,7 +51,7 @@ export class LeOverflowMenu {
   /**
    * Minimum popover width.
    */
-  @Prop() minWidth: string = '200px';
+  @Prop() minWidth: string = '160px';
 
   /**
    * Fallback icon name for trigger.

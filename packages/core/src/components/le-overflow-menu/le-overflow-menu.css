@@ -17,4 +17,6 @@ le-popover::part(content) {
 
 le-navigation {
   --le-nav-padding: 0;
+  --le-nav-item-padding-x: var(--le-spacing-3);
+  --le-font-size: var(--le-font-size-sm);
 }

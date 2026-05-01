@@ -19,6 +19,8 @@
 
 ::slotted(le-button) {
   --le-button-border-radius: 0;
+  /* Preventing wrapping of the animated collapsing buttons */
+  white-space: nowrap;
 }
 
 ::slotted(le-button[group-shape='single']) {

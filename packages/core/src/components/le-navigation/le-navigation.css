@@ -73,7 +73,7 @@
 
 .nav-empty {
   color: var(--le-nav-muted);
-  font-size: var(--le-font-size-sm);
+  font-size: var(--le-font-size-empty, var(--le-font-size-sm));
 }
 
 .nav-list {
@@ -159,7 +159,7 @@
   text-decoration: none;
   color: var(--le-nav-color);
   font-family: var(--le-font-family-base);
-  font-size: var(--le-font-size-md);
+  font-size: var(--le-font-size, var(--le-font-size-md));
   line-height: var(--le-line-height-tight);
   cursor: pointer;
 }
@@ -247,7 +247,7 @@
 
 .nav-description {
   color: color-mix(in srgb, var(--le-nav-muted) 90%, transparent);
-  font-size: var(--le-font-size-sm);
+  font-size: var(--le-font-size-description, var(--le-font-size-sm));
   line-height: var(--le-line-height-tight);
 }
 
@@ -316,7 +316,7 @@
   text-decoration: none;
   color: var(--le-nav-color);
   font-family: var(--le-font-family-base);
-  font-size: var(--le-font-size-md);
+  font-size: var(--le-font-size, var(--le-font-size-md));
   cursor: pointer;
 }
 
@@ -422,7 +422,7 @@
   color: var(--le-nav-color);
   cursor: pointer;
   font-family: var(--le-font-family-base);
-  font-size: var(--le-font-size-md);
+  font-size: var(--le-font-size-trigger, var(--le-font-size-md));
 }
 
 .overflow-trigger:hover {

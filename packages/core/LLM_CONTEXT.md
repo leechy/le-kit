@@ -30,6 +30,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-overflow-menu](#le-overflow-menu)
 - [le-popover](#le-popover)
 - [le-popup](#le-popup)
+- [le-preview-frame](#le-preview-frame)
 - [le-round-progress](#le-round-progress)
 - [le-scroll-progress](#le-scroll-progress)
 - [le-segmented-control](#le-segmented-control)
@@ -1009,6 +1010,44 @@ via leAlert(), leConfirm(), lePrompt().
 | Default | Default slot for custom body content |
 | `"header"` | Custom header content (replaces title) |
 | `"footer"` | Custom footer content (replaces default buttons) |
+
+---
+
+## <le-preview-frame>
+
+A resizable preview frame for showcasing responsive component behavior.
+
+Wraps any content in a resizable viewport, complete with drag handle,
+width indicator, and preset device-size buttons. Designed for use in
+component demos and documentation.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `frameWidth` | `number` | `0` | Initial inner width of the preview viewport in pixels. Set to 0 or 'auto' to fill the available container width. |
+| `minWidth` | `number` | `240` | Minimum resizable width in pixels. |
+| `maxWidth` | `number` | `0` | Maximum resizable width in pixels. 0 = unconstrained. |
+| `showControls` | `boolean` | `true` | Whether to show the controls bar (breakpoint buttons + width badge). |
+| `resizable` | `boolean` | `true` | Whether to show the drag resize handle on the right edge. |
+| `breakpoints` | `LePreviewFrameBreakpoint[] \| string` | `DEFAULT_BREAKPOINTS` | Preset breakpoints shown as buttons. Can be a JSON string or a LePreviewFrameBreakpoint[]. |
+| `widthUnit` | `string` | `'px'` | Label for the width badge. Set empty to hide the unit suffix. |
+| `minHeight` | `number` | `64` | Minimum height of the viewport in pixels. |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `lePreviewFrameResize` | `EventEmitter<LePreviewFrameResizeDetail> \| undefined` | Emitted whenever the frame width changes (drag or preset button). |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | The content to preview |
+| `"controls-start"` | Extra content inserted before the preset buttons |
+| `"controls-end"` | Extra content inserted after the preset buttons |
 
 ---
 

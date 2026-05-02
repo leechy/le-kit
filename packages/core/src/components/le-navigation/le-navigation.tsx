@@ -184,6 +184,8 @@ export class LeNavigation {
 
   private pendingAutoActivationId?: string;
 
+  private pendingFocusSyncFrame?: number;
+
   private renderLabel(label: string | HTMLCollection) {
     if (label instanceof HTMLCollection) {
       const div = document.createElement('div');
@@ -271,6 +273,10 @@ export class LeNavigation {
 
   disconnectedCallback() {
     this.mutationObserver?.disconnect();
+    if (this.pendingFocusSyncFrame !== undefined) {
+      cancelAnimationFrame(this.pendingFocusSyncFrame);
+      this.pendingFocusSyncFrame = undefined;
+    }
   }
 
   componentDidRender() {
@@ -280,9 +286,20 @@ export class LeNavigation {
     }
 
     const fallbackId = this.getFirstVisibleItemId();
-    if (fallbackId && fallbackId !== this.focusedItemId) {
-      this.focusedItemId = fallbackId;
+    if (!fallbackId || fallbackId === this.focusedItemId) return;
+
+    if (this.pendingFocusSyncFrame !== undefined) {
+      cancelAnimationFrame(this.pendingFocusSyncFrame);
     }
+
+    // Defer fallback focus update to post-render frame to avoid
+    // mutating @State during the current render lifecycle.
+    this.pendingFocusSyncFrame = requestAnimationFrame(() => {
+      this.pendingFocusSyncFrame = undefined;
+      if (this.focusedItemId !== fallbackId) {
+        this.focusedItemId = fallbackId;
+      }
+    });
   }
 
   private async buildDeclarativeItems() {

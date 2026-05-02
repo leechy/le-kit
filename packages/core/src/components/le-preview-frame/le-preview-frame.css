@@ -1,0 +1,139 @@
+/* ──────────────────────────────────────────────────────────────
+   le-preview-frame
+   A resizable viewport wrapper for component demos.
+   ────────────────────────────────────────────────────────────── */
+
+:host {
+  display: block;
+
+  --le-preview-frame-bg: var(--le-color-background, #fff);
+  --le-preview-frame-border: 1px solid var(--le-color-border, rgba(0,0,0,.12));
+  --le-preview-frame-radius: var(--le-radius-lg, 10px);
+  --le-preview-frame-shadow: var(--le-shadow-md, 0 4px 24px rgba(0,0,0,.08));
+
+  --le-preview-frame-controls-bg: var(--le-color-background-secondary, #f5f5f7);
+  --le-preview-frame-controls-height: 40px;
+  --le-preview-frame-controls-padding: 0 var(--le-spacing-3, 12px);
+  --le-preview-frame-controls-border: 1px solid var(--le-color-border, rgba(0,0,0,.1));
+
+  --le-preview-frame-handle-width: 10px;
+  --le-preview-frame-handle-color: var(--le-color-border, rgba(0,0,0,.15));
+  --le-preview-frame-handle-color-hover: var(--le-color-primary, #2781ca);
+
+  --le-preview-frame-min-height: 80px;
+}
+
+/* ── Outer shell ─────────────────────────────────────────────── */
+
+.frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+
+  /* Size comes from inline style (JS-driven) */
+  background: var(--le-preview-frame-bg);
+  border: var(--le-preview-frame-border);
+  border-radius: var(--le-preview-frame-radius);
+  box-shadow: var(--le-preview-frame-shadow);
+  overflow: hidden; /* clips content + handle within border-radius */
+  transition: width 0.25s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Disable smooth transition while dragging so it follows the cursor instantly */
+:host(.is-dragging) .frame {
+  transition: none;
+}
+
+/* ── Controls bar ────────────────────────────────────────────── */
+
+.frame-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--le-spacing-2, 8px);
+  height: var(--le-preview-frame-controls-height);
+  padding: var(--le-preview-frame-controls-padding);
+  background: var(--le-preview-frame-controls-bg);
+  border-bottom: var(--le-preview-frame-controls-border);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* ── Width badge ─────────────────────────────────────────────── */
+
+.frame-width-badge {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: var(--le-radius-full, 999px);
+  background: color-mix(in srgb, var(--le-color-primary, #2781ca) 8%, transparent);
+  color: var(--le-color-text-secondary, #666);
+  font-size: var(--le-font-size-xs, 11px);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.width-unit {
+  margin-left: 1px;
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+/* ── Viewport ────────────────────────────────────────────────── */
+
+.frame-viewport {
+  flex: 1 1 auto;
+  overflow: auto;
+  min-height: var(--le-preview-frame-min-height, 80px);
+  position: relative;
+}
+
+/* ── Drag handle ─────────────────────────────────────────────── */
+
+.drag-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--le-preview-frame-handle-width);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ew-resize;
+  z-index: 10;
+  outline: none;
+  background: transparent;
+  transition: background 0.15s;
+}
+
+.drag-handle:hover,
+:host(.is-dragging) .drag-handle {
+  background: color-mix(in srgb, var(--le-preview-frame-handle-color-hover) 12%, transparent);
+}
+
+.drag-handle:focus-visible {
+  outline: 2px solid var(--le-preview-frame-handle-color-hover);
+  outline-offset: -1px;
+}
+
+.drag-handle-grip {
+  width: 3px;
+  height: 32px;
+  border-radius: 2px;
+  background: var(--le-preview-frame-handle-color);
+  transition: background 0.15s, height 0.15s;
+}
+
+.drag-handle:hover .drag-handle-grip,
+:host(.is-dragging) .drag-handle .drag-handle-grip {
+  background: var(--le-preview-frame-handle-color-hover);
+  height: 40px;
+}
+
+/* ── Host display helpers ────────────────────────────────────── */
+
+:host(:not(.is-resizable)) .drag-handle {
+  display: none;
+}

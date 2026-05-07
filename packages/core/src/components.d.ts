@@ -14,8 +14,10 @@ import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./co
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
+import { LePreviewFrameBreakpoint, LePreviewFrameResizeDetail } from "./components/le-preview-frame/le-preview-frame";
 import { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side-panel/le-side-panel";
 import { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./components/le-side-panel-toggle/le-side-panel-toggle";
+import { LeToolbarOverflowChangeDetail } from "./components/le-toolbar/le-toolbar";
 import { TooltipPlacement as TooltipPlacement1 } from "./components/le-tooltip/le-tooltip";
 export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
@@ -26,8 +28,10 @@ export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./co
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
+export { LePreviewFrameBreakpoint, LePreviewFrameResizeDetail } from "./components/le-preview-frame/le-preview-frame";
 export { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side-panel/le-side-panel";
 export { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./components/le-side-panel-toggle/le-side-panel-toggle";
+export { LeToolbarOverflowChangeDetail } from "./components/le-toolbar/le-toolbar";
 export { TooltipPlacement as TooltipPlacement1 } from "./components/le-tooltip/le-tooltip";
 export namespace Components {
     /**
@@ -435,6 +439,11 @@ export namespace Components {
           * Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`.
          */
         "collapse"?: boolean | number | string;
+        /**
+          * Disabled attribute, when the button group is disabled, all buttons inside will be disabled and the overflow menu will not be accessible.
+          * @default false
+         */
+        "disabled": boolean;
         /**
           * When true, icons from collapsed buttons are shown in the overflow navigation list.
           * @default false
@@ -1440,6 +1449,67 @@ export namespace Components {
          */
         "type": PopupType;
     }
+    /**
+     * A resizable preview frame for showcasing responsive component behavior.
+     * Wraps any content in a resizable viewport, complete with drag handle,
+     * width indicator, and preset device-size buttons. Designed for use in
+     * component demos and documentation.
+     * @csspart frame - The outer chrome (toolbar + viewport)
+     * @csspart controls - The top controls bar
+     * @csspart viewport - The scrollable content area
+     * @csspart drag-handle - The right drag-resize handle
+     * @csspart width-badge - The live width indicator
+     * @cmsInternal true
+     */
+    interface LePreviewFrame {
+        /**
+          * Preset breakpoints shown as buttons. Can be a JSON string or a LePreviewFrameBreakpoint[].
+          * @default DEFAULT_BREAKPOINTS
+         */
+        "breakpoints": LePreviewFrameBreakpoint[] | string;
+        /**
+          * Initial inner width of the preview viewport in pixels. Set to 0 or 'auto' to fill the available container width.
+         */
+        "frameWidth"?: number;
+        /**
+          * Maximum resizable width in pixels. 0 = unconstrained.
+          * @default 0
+         */
+        "maxWidth": number;
+        /**
+          * Minimum height of the viewport in pixels.
+          * @default 64
+         */
+        "minHeight": number;
+        /**
+          * Minimum resizable width in pixels.
+          * @default 240
+         */
+        "minWidth": number;
+        /**
+          * Reset to natural/container width.
+         */
+        "resetWidth": () => Promise<void>;
+        /**
+          * Whether to show the drag resize handle on the right edge.
+          * @default true
+         */
+        "resizable": boolean;
+        /**
+          * Whether to show the controls bar (breakpoint buttons + width badge).
+          * @default true
+         */
+        "showControls": boolean;
+        /**
+          * Snap to a preset width.
+         */
+        "snapTo": (width: number) => Promise<void>;
+        /**
+          * Label for the width badge. Set empty to hide the unit suffix.
+          * @default 'px'
+         */
+        "widthUnit": string;
+    }
     interface LeRoundProgress {
         /**
           * @default 0
@@ -2345,6 +2415,53 @@ export namespace Components {
     | 'label'
     | 'small';
     }
+    /**
+     * A priority-aware, overflow-safe toolbar component.
+     * Items are slotted light-DOM children. Each item may carry a
+     * `priority` attribute (lower = more important). When there
+     * isn't enough space, lower-priority items move to an overflow menu.
+     * Collapsible `le-button-group` children are asked to reduce their own
+     * footprint first before their contents are overflowed entirely.
+     * @csspart container - The main flex row
+     * @csspart overflow-trigger - The "more" button wrapper
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeToolbar {
+        /**
+          * Alignment of items along the main axis.
+          * @default 'start'
+         */
+        "alignItems": 'start' | 'center' | 'end' | 'stretch';
+        /**
+          * Disable the built-in overflow popover. The toolbar will still compute overflow state and emit events, but won't render its own menu. Useful for custom overflow handling.
+          * @default false
+         */
+        "disablePopover": boolean;
+        /**
+          * Hysteresis epsilon in pixels. A visibility state flip only happens when the available/required width delta exceeds this value, preventing flicker from sub-pixel resize events.
+          * @default 2
+         */
+        "epsilon": number;
+        /**
+          * Optional declarative items input.  The current implementation is slot-driven, but when this prop changes we still invalidate the slotted-items cache and recompute layout.
+         */
+        "items"?: unknown;
+        /**
+          * Icon for the overflow trigger button when no custom slot content is provided.
+          * @default 'ellipsis-horizontal'
+         */
+        "overflowIcon": string;
+        /**
+          * Accessible label for the overflow trigger button.
+          * @default 'More'
+         */
+        "overflowLabel": string;
+        /**
+          * Force a layout recalculation.
+         */
+        "recalculate": () => Promise<void>;
+    }
     interface LeTooltip {
         /**
           * Alignment along the cross axis for the chosen placement.
@@ -2510,6 +2627,10 @@ export interface LePopupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLePopupElement;
 }
+export interface LePreviewFrameCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLePreviewFrameElement;
+}
 export interface LeSegmentedControlCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeSegmentedControlElement;
@@ -2549,6 +2670,10 @@ export interface LeTabsCustomEvent<T> extends CustomEvent<T> {
 export interface LeTagCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeTagElement;
+}
+export interface LeToolbarCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeToolbarElement;
 }
 export interface LeTooltipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3212,6 +3337,35 @@ declare global {
         prototype: HTMLLePopupElement;
         new (): HTMLLePopupElement;
     };
+    interface HTMLLePreviewFrameElementEventMap {
+        "lePreviewFrameResize": LePreviewFrameResizeDetail;
+    }
+    /**
+     * A resizable preview frame for showcasing responsive component behavior.
+     * Wraps any content in a resizable viewport, complete with drag handle,
+     * width indicator, and preset device-size buttons. Designed for use in
+     * component demos and documentation.
+     * @csspart frame - The outer chrome (toolbar + viewport)
+     * @csspart controls - The top controls bar
+     * @csspart viewport - The scrollable content area
+     * @csspart drag-handle - The right drag-resize handle
+     * @csspart width-badge - The live width indicator
+     * @cmsInternal true
+     */
+    interface HTMLLePreviewFrameElement extends Components.LePreviewFrame, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLePreviewFrameElementEventMap>(type: K, listener: (this: HTMLLePreviewFrameElement, ev: LePreviewFrameCustomEvent<HTMLLePreviewFrameElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLePreviewFrameElementEventMap>(type: K, listener: (this: HTMLLePreviewFrameElement, ev: LePreviewFrameCustomEvent<HTMLLePreviewFrameElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLePreviewFrameElement: {
+        prototype: HTMLLePreviewFrameElement;
+        new (): HTMLLePreviewFrameElement;
+    };
     interface HTMLLeRoundProgressElement extends Components.LeRoundProgress, HTMLStencilElement {
     }
     var HTMLLeRoundProgressElement: {
@@ -3613,6 +3767,35 @@ declare global {
         prototype: HTMLLeTextElement;
         new (): HTMLLeTextElement;
     };
+    interface HTMLLeToolbarElementEventMap {
+        "leToolbarOverflowChange": LeToolbarOverflowChangeDetail;
+    }
+    /**
+     * A priority-aware, overflow-safe toolbar component.
+     * Items are slotted light-DOM children. Each item may carry a
+     * `priority` attribute (lower = more important). When there
+     * isn't enough space, lower-priority items move to an overflow menu.
+     * Collapsible `le-button-group` children are asked to reduce their own
+     * footprint first before their contents are overflowed entirely.
+     * @csspart container - The main flex row
+     * @csspart overflow-trigger - The "more" button wrapper
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeToolbarElement extends Components.LeToolbar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeToolbarElementEventMap>(type: K, listener: (this: HTMLLeToolbarElement, ev: LeToolbarCustomEvent<HTMLLeToolbarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeToolbarElementEventMap>(type: K, listener: (this: HTMLLeToolbarElement, ev: LeToolbarCustomEvent<HTMLLeToolbarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeToolbarElement: {
+        prototype: HTMLLeToolbarElement;
+        new (): HTMLLeToolbarElement;
+    };
     interface HTMLLeTooltipElementEventMap {
         "leTooltipOpen": void;
         "leTooltipClose": void;
@@ -3679,6 +3862,7 @@ declare global {
         "le-overflow-menu": HTMLLeOverflowMenuElement;
         "le-popover": HTMLLePopoverElement;
         "le-popup": HTMLLePopupElement;
+        "le-preview-frame": HTMLLePreviewFrameElement;
         "le-round-progress": HTMLLeRoundProgressElement;
         "le-scroll-progress": HTMLLeScrollProgressElement;
         "le-segmented-control": HTMLLeSegmentedControlElement;
@@ -3694,6 +3878,7 @@ declare global {
         "le-tabs": HTMLLeTabsElement;
         "le-tag": HTMLLeTagElement;
         "le-text": HTMLLeTextElement;
+        "le-toolbar": HTMLLeToolbarElement;
         "le-tooltip": HTMLLeTooltipElement;
         "le-turntable": HTMLLeTurntableElement;
         "le-visibility": HTMLLeVisibilityElement;
@@ -4114,6 +4299,11 @@ declare namespace LocalJSX {
           * Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`.
          */
         "collapse"?: boolean | number | string;
+        /**
+          * Disabled attribute, when the button group is disabled, all buttons inside will be disabled and the overflow menu will not be accessible.
+          * @default false
+         */
+        "disabled"?: boolean;
         "onLeOverflowSelect"?: (event: LeButtonGroupCustomEvent<{ id: string }>) => void;
         /**
           * When true, icons from collapsed buttons are shown in the overflow navigation list.
@@ -5181,6 +5371,63 @@ declare namespace LocalJSX {
          */
         "type"?: PopupType;
     }
+    /**
+     * A resizable preview frame for showcasing responsive component behavior.
+     * Wraps any content in a resizable viewport, complete with drag handle,
+     * width indicator, and preset device-size buttons. Designed for use in
+     * component demos and documentation.
+     * @csspart frame - The outer chrome (toolbar + viewport)
+     * @csspart controls - The top controls bar
+     * @csspart viewport - The scrollable content area
+     * @csspart drag-handle - The right drag-resize handle
+     * @csspart width-badge - The live width indicator
+     * @cmsInternal true
+     */
+    interface LePreviewFrame {
+        /**
+          * Preset breakpoints shown as buttons. Can be a JSON string or a LePreviewFrameBreakpoint[].
+          * @default DEFAULT_BREAKPOINTS
+         */
+        "breakpoints"?: LePreviewFrameBreakpoint[] | string;
+        /**
+          * Initial inner width of the preview viewport in pixels. Set to 0 or 'auto' to fill the available container width.
+         */
+        "frameWidth"?: number;
+        /**
+          * Maximum resizable width in pixels. 0 = unconstrained.
+          * @default 0
+         */
+        "maxWidth"?: number;
+        /**
+          * Minimum height of the viewport in pixels.
+          * @default 64
+         */
+        "minHeight"?: number;
+        /**
+          * Minimum resizable width in pixels.
+          * @default 240
+         */
+        "minWidth"?: number;
+        /**
+          * Emitted whenever the frame width changes (drag or preset button).
+         */
+        "onLePreviewFrameResize"?: (event: LePreviewFrameCustomEvent<LePreviewFrameResizeDetail>) => void;
+        /**
+          * Whether to show the drag resize handle on the right edge.
+          * @default true
+         */
+        "resizable"?: boolean;
+        /**
+          * Whether to show the controls bar (breakpoint buttons + width badge).
+          * @default true
+         */
+        "showControls"?: boolean;
+        /**
+          * Label for the width badge. Set empty to hide the unit suffix.
+          * @default 'px'
+         */
+        "widthUnit"?: string;
+    }
     interface LeRoundProgress {
         /**
           * @default 0
@@ -6118,6 +6365,53 @@ declare namespace LocalJSX {
     | 'label'
     | 'small';
     }
+    /**
+     * A priority-aware, overflow-safe toolbar component.
+     * Items are slotted light-DOM children. Each item may carry a
+     * `priority` attribute (lower = more important). When there
+     * isn't enough space, lower-priority items move to an overflow menu.
+     * Collapsible `le-button-group` children are asked to reduce their own
+     * footprint first before their contents are overflowed entirely.
+     * @csspart container - The main flex row
+     * @csspart overflow-trigger - The "more" button wrapper
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeToolbar {
+        /**
+          * Alignment of items along the main axis.
+          * @default 'start'
+         */
+        "alignItems"?: 'start' | 'center' | 'end' | 'stretch';
+        /**
+          * Disable the built-in overflow popover. The toolbar will still compute overflow state and emit events, but won't render its own menu. Useful for custom overflow handling.
+          * @default false
+         */
+        "disablePopover"?: boolean;
+        /**
+          * Hysteresis epsilon in pixels. A visibility state flip only happens when the available/required width delta exceeds this value, preventing flicker from sub-pixel resize events.
+          * @default 2
+         */
+        "epsilon"?: number;
+        /**
+          * Optional declarative items input.  The current implementation is slot-driven, but when this prop changes we still invalidate the slotted-items cache and recompute layout.
+         */
+        "items"?: unknown;
+        /**
+          * Emitted when the overflow state changes.
+         */
+        "onLeToolbarOverflowChange"?: (event: LeToolbarCustomEvent<LeToolbarOverflowChangeDetail>) => void;
+        /**
+          * Icon for the overflow trigger button when no custom slot content is provided.
+          * @default 'ellipsis-horizontal'
+         */
+        "overflowIcon"?: string;
+        /**
+          * Accessible label for the overflow trigger button.
+          * @default 'More'
+         */
+        "overflowLabel"?: string;
+    }
     interface LeTooltip {
         /**
           * Alignment along the cross axis for the chosen placement.
@@ -6296,6 +6590,7 @@ declare namespace LocalJSX {
     interface LeButtonGroupAttributes {
         "collapse": string;
         "overflowIcons": boolean;
+        "disabled": boolean;
     }
     interface LeCardAttributes {
         "variant": 'default' | 'outlined' | 'elevated';
@@ -6467,6 +6762,16 @@ declare namespace LocalJSX {
         "placeholder": string;
         "defaultValue": string;
         "closeOnBackdrop": boolean;
+    }
+    interface LePreviewFrameAttributes {
+        "frameWidth": number;
+        "minWidth": number;
+        "maxWidth": number;
+        "showControls": boolean;
+        "resizable": boolean;
+        "breakpoints": LePreviewFrameBreakpoint[] | string;
+        "widthUnit": string;
+        "minHeight": number;
     }
     interface LeRoundProgressAttributes {
         "value": number;
@@ -6652,6 +6957,13 @@ declare namespace LocalJSX {
         "truncate": boolean;
         "maxLines": number;
     }
+    interface LeToolbarAttributes {
+        "alignItems": 'start' | 'center' | 'end' | 'stretch';
+        "overflowIcon": string;
+        "overflowLabel": string;
+        "disablePopover": boolean;
+        "epsilon": number;
+    }
     interface LeTooltipAttributes {
         "mode": LeKitMode;
         "open": boolean;
@@ -6701,6 +7013,7 @@ declare namespace LocalJSX {
         "le-overflow-menu": Omit<LeOverflowMenu, keyof LeOverflowMenuAttributes> & { [K in keyof LeOverflowMenu & keyof LeOverflowMenuAttributes]?: LeOverflowMenu[K] } & { [K in keyof LeOverflowMenu & keyof LeOverflowMenuAttributes as `attr:${K}`]?: LeOverflowMenuAttributes[K] } & { [K in keyof LeOverflowMenu & keyof LeOverflowMenuAttributes as `prop:${K}`]?: LeOverflowMenu[K] };
         "le-popover": Omit<LePopover, keyof LePopoverAttributes> & { [K in keyof LePopover & keyof LePopoverAttributes]?: LePopover[K] } & { [K in keyof LePopover & keyof LePopoverAttributes as `attr:${K}`]?: LePopoverAttributes[K] } & { [K in keyof LePopover & keyof LePopoverAttributes as `prop:${K}`]?: LePopover[K] };
         "le-popup": Omit<LePopup, keyof LePopupAttributes> & { [K in keyof LePopup & keyof LePopupAttributes]?: LePopup[K] } & { [K in keyof LePopup & keyof LePopupAttributes as `attr:${K}`]?: LePopupAttributes[K] } & { [K in keyof LePopup & keyof LePopupAttributes as `prop:${K}`]?: LePopup[K] };
+        "le-preview-frame": Omit<LePreviewFrame, keyof LePreviewFrameAttributes> & { [K in keyof LePreviewFrame & keyof LePreviewFrameAttributes]?: LePreviewFrame[K] } & { [K in keyof LePreviewFrame & keyof LePreviewFrameAttributes as `attr:${K}`]?: LePreviewFrameAttributes[K] } & { [K in keyof LePreviewFrame & keyof LePreviewFrameAttributes as `prop:${K}`]?: LePreviewFrame[K] };
         "le-round-progress": Omit<LeRoundProgress, keyof LeRoundProgressAttributes> & { [K in keyof LeRoundProgress & keyof LeRoundProgressAttributes]?: LeRoundProgress[K] } & { [K in keyof LeRoundProgress & keyof LeRoundProgressAttributes as `attr:${K}`]?: LeRoundProgressAttributes[K] } & { [K in keyof LeRoundProgress & keyof LeRoundProgressAttributes as `prop:${K}`]?: LeRoundProgress[K] } & OneOf<"paths", LeRoundProgress["paths"], LeRoundProgressAttributes["paths"]>;
         "le-scroll-progress": Omit<LeScrollProgress, keyof LeScrollProgressAttributes> & { [K in keyof LeScrollProgress & keyof LeScrollProgressAttributes]?: LeScrollProgress[K] } & { [K in keyof LeScrollProgress & keyof LeScrollProgressAttributes as `attr:${K}`]?: LeScrollProgressAttributes[K] } & { [K in keyof LeScrollProgress & keyof LeScrollProgressAttributes as `prop:${K}`]?: LeScrollProgress[K] };
         "le-segmented-control": Omit<LeSegmentedControl, keyof LeSegmentedControlAttributes> & { [K in keyof LeSegmentedControl & keyof LeSegmentedControlAttributes]?: LeSegmentedControl[K] } & { [K in keyof LeSegmentedControl & keyof LeSegmentedControlAttributes as `attr:${K}`]?: LeSegmentedControlAttributes[K] } & { [K in keyof LeSegmentedControl & keyof LeSegmentedControlAttributes as `prop:${K}`]?: LeSegmentedControl[K] };
@@ -6716,6 +7029,7 @@ declare namespace LocalJSX {
         "le-tabs": Omit<LeTabs, keyof LeTabsAttributes> & { [K in keyof LeTabs & keyof LeTabsAttributes]?: LeTabs[K] } & { [K in keyof LeTabs & keyof LeTabsAttributes as `attr:${K}`]?: LeTabsAttributes[K] } & { [K in keyof LeTabs & keyof LeTabsAttributes as `prop:${K}`]?: LeTabs[K] };
         "le-tag": Omit<LeTag, keyof LeTagAttributes> & { [K in keyof LeTag & keyof LeTagAttributes]?: LeTag[K] } & { [K in keyof LeTag & keyof LeTagAttributes as `attr:${K}`]?: LeTagAttributes[K] } & { [K in keyof LeTag & keyof LeTagAttributes as `prop:${K}`]?: LeTag[K] };
         "le-text": Omit<LeText, keyof LeTextAttributes> & { [K in keyof LeText & keyof LeTextAttributes]?: LeText[K] } & { [K in keyof LeText & keyof LeTextAttributes as `attr:${K}`]?: LeTextAttributes[K] } & { [K in keyof LeText & keyof LeTextAttributes as `prop:${K}`]?: LeText[K] };
+        "le-toolbar": Omit<LeToolbar, keyof LeToolbarAttributes> & { [K in keyof LeToolbar & keyof LeToolbarAttributes]?: LeToolbar[K] } & { [K in keyof LeToolbar & keyof LeToolbarAttributes as `attr:${K}`]?: LeToolbarAttributes[K] } & { [K in keyof LeToolbar & keyof LeToolbarAttributes as `prop:${K}`]?: LeToolbar[K] };
         "le-tooltip": Omit<LeTooltip, keyof LeTooltipAttributes> & { [K in keyof LeTooltip & keyof LeTooltipAttributes]?: LeTooltip[K] } & { [K in keyof LeTooltip & keyof LeTooltipAttributes as `attr:${K}`]?: LeTooltipAttributes[K] } & { [K in keyof LeTooltip & keyof LeTooltipAttributes as `prop:${K}`]?: LeTooltip[K] };
         "le-turntable": Omit<LeTurntable, keyof LeTurntableAttributes> & { [K in keyof LeTurntable & keyof LeTurntableAttributes]?: LeTurntable[K] } & { [K in keyof LeTurntable & keyof LeTurntableAttributes as `attr:${K}`]?: LeTurntableAttributes[K] } & { [K in keyof LeTurntable & keyof LeTurntableAttributes as `prop:${K}`]?: LeTurntable[K] };
         "le-visibility": Omit<LeVisibility, keyof LeVisibilityAttributes> & { [K in keyof LeVisibility & keyof LeVisibilityAttributes]?: LeVisibility[K] } & { [K in keyof LeVisibility & keyof LeVisibilityAttributes as `attr:${K}`]?: LeVisibilityAttributes[K] } & { [K in keyof LeVisibility & keyof LeVisibilityAttributes as `prop:${K}`]?: LeVisibility[K] };
@@ -7048,6 +7362,19 @@ declare module "@stencil/core" {
              * @cmsCategory System
              */
             "le-popup": LocalJSX.IntrinsicElements["le-popup"] & JSXBase.HTMLAttributes<HTMLLePopupElement>;
+            /**
+             * A resizable preview frame for showcasing responsive component behavior.
+             * Wraps any content in a resizable viewport, complete with drag handle,
+             * width indicator, and preset device-size buttons. Designed for use in
+             * component demos and documentation.
+             * @csspart frame - The outer chrome (toolbar + viewport)
+             * @csspart controls - The top controls bar
+             * @csspart viewport - The scrollable content area
+             * @csspart drag-handle - The right drag-resize handle
+             * @csspart width-badge - The live width indicator
+             * @cmsInternal true
+             */
+            "le-preview-frame": LocalJSX.IntrinsicElements["le-preview-frame"] & JSXBase.HTMLAttributes<HTMLLePreviewFrameElement>;
             "le-round-progress": LocalJSX.IntrinsicElements["le-round-progress"] & JSXBase.HTMLAttributes<HTMLLeRoundProgressElement>;
             /**
              * Displays scroll progress as a simple bar.
@@ -7251,6 +7578,19 @@ declare module "@stencil/core" {
              * @cmsCategory Content
              */
             "le-text": LocalJSX.IntrinsicElements["le-text"] & JSXBase.HTMLAttributes<HTMLLeTextElement>;
+            /**
+             * A priority-aware, overflow-safe toolbar component.
+             * Items are slotted light-DOM children. Each item may carry a
+             * `priority` attribute (lower = more important). When there
+             * isn't enough space, lower-priority items move to an overflow menu.
+             * Collapsible `le-button-group` children are asked to reduce their own
+             * footprint first before their contents are overflowed entirely.
+             * @csspart container - The main flex row
+             * @csspart overflow-trigger - The "more" button wrapper
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-toolbar": LocalJSX.IntrinsicElements["le-toolbar"] & JSXBase.HTMLAttributes<HTMLLeToolbarElement>;
             "le-tooltip": LocalJSX.IntrinsicElements["le-tooltip"] & JSXBase.HTMLAttributes<HTMLLeTooltipElement>;
             "le-turntable": LocalJSX.IntrinsicElements["le-turntable"] & JSXBase.HTMLAttributes<HTMLLeTurntableElement>;
             /**

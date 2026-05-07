@@ -22,9 +22,11 @@
  - [le-navigation](../le-navigation)
  - [le-number-input](../le-number-input)
  - [le-overflow-menu](../le-overflow-menu)
+ - [le-preview-frame](../le-preview-frame)
  - [le-side-panel](../le-side-panel)
  - [le-string-input](../le-string-input)
  - [le-tag](../le-tag)
+ - [le-toolbar](../le-toolbar)
 
 ### Graph
 ```mermaid
@@ -34,9 +36,11 @@ graph TD;
   le-navigation --> le-icon
   le-number-input --> le-icon
   le-overflow-menu --> le-icon
+  le-preview-frame --> le-icon
   le-side-panel --> le-icon
   le-string-input --> le-icon
   le-tag --> le-icon
+  le-toolbar --> le-icon
   style le-icon fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

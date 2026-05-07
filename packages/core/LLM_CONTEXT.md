@@ -46,6 +46,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-tabs](#le-tabs)
 - [le-tag](#le-tag)
 - [le-text](#le-text)
+- [le-toolbar](#le-toolbar)
 - [le-tooltip](#le-tooltip)
 - [le-turntable](#le-turntable)
 - [le-visibility](#le-visibility)
@@ -310,6 +311,7 @@ into an overflow "more" menu.
 | `el` | `HTMLElement` |  |  |
 | `collapse` | `boolean \| number \| string \| undefined` |  | Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`. |
 | `overflowIcons` | `boolean` | `false` | When true, icons from collapsed buttons are shown in the overflow navigation list. |
+| `disabled` | `boolean` | `false` | Disabled attribute, when the button group is disabled, all buttons inside will be disabled and the overflow menu will not be accessible. |
 
 ### Events
 
@@ -1026,7 +1028,7 @@ component demos and documentation.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
-| `frameWidth` | `number` | `0` | Initial inner width of the preview viewport in pixels. Set to 0 or 'auto' to fill the available container width. |
+| `frameWidth` | `number \| undefined` |  | Initial inner width of the preview viewport in pixels. Set to 0 or 'auto' to fill the available container width. |
 | `minWidth` | `number` | `240` | Minimum resizable width in pixels. |
 | `maxWidth` | `number` | `0` | Maximum resizable width in pixels. 0 = unconstrained. |
 | `showControls` | `boolean` | `true` | Whether to show the controls bar (breakpoint buttons + width badge). |
@@ -1046,8 +1048,7 @@ component demos and documentation.
 | Name | Description |
 |------|-------------|
 | Default | The content to preview |
-| `"controls-start"` | Extra content inserted before the preset buttons |
-| `"controls-end"` | Extra content inserted after the preset buttons |
+| `"controls"` | Extra content inserted after the preset buttons |
 
 ---
 
@@ -1621,6 +1622,44 @@ toolbar for bold, italic, links, and paragraph type selection.
 | `--le-text-font-size` | Font size |
 | `--le-text-line-height` | Line height |
 | `--le-text-font-weight` | Font weight |
+
+---
+
+## <le-toolbar>
+
+A priority-aware, overflow-safe toolbar component.
+
+Items are slotted light-DOM children. Each item may carry a
+`priority` attribute (lower = more important). When there
+isn't enough space, lower-priority items move to an overflow menu.
+
+Collapsible `le-button-group` children are asked to reduce their own
+footprint first before their contents are overflowed entirely.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `items` | `unknown \| undefined` |  | Optional declarative items input.  The current implementation is slot-driven, but when this prop changes we still invalidate the slotted-items cache and recompute layout. |
+| `alignItems` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'start'` | Alignment of items along the main axis. |
+| `overflowIcon` | `string` | `'ellipsis-horizontal'` | Icon for the overflow trigger button when no custom slot content is provided. |
+| `overflowLabel` | `string` | `'More'` | Accessible label for the overflow trigger button. |
+| `disablePopover` | `boolean` | `false` | Disable the built-in overflow popover. The toolbar will still compute overflow state and emit events, but won't render its own menu. Useful for custom overflow handling. |
+| `epsilon` | `number` | `2` | Hysteresis epsilon in pixels. A visibility state flip only happens when the available/required width delta exceeds this value, preventing flicker from sub-pixel resize events. |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leToolbarOverflowChange` | `EventEmitter<LeToolbarOverflowChangeDetail> \| undefined` | Emitted when the overflow state changes. |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | Toolbar items |
+| `"overflow-trigger"` | Custom content for the overflow trigger button |
 
 ---
 

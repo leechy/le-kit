@@ -58,6 +58,12 @@ export class LeButtonGroup {
    */
   @Prop({ reflect: true }) overflowIcons: boolean = false;
 
+  /**
+   * Disabled attribute, when the button group is disabled,
+   * all buttons inside will be disabled and the overflow menu will not be accessible.
+   */
+  @Prop({ reflect: true }) disabled: boolean = false;
+
   @State() private overflowItems: LeOption[] = [];
 
   @State() private hasOverflow: boolean = false;
@@ -84,7 +90,13 @@ export class LeButtonGroup {
     void this.syncLayout();
   }
 
+  @Watch('disabled')
+  handleDisabledChange({ newValue }: { newValue: boolean }) {
+    this.setDisabledState(newValue);
+  }
+
   componentWillLoad() {
+    this.setDisabledState(this.disabled);
     void this.syncLayout();
   }
 
@@ -117,6 +129,13 @@ export class LeButtonGroup {
         node.tagName.toLowerCase() === 'le-button' &&
         !node.hasAttribute('slot'),
     );
+  }
+
+  private setDisabledState(disabled: boolean) {
+    const buttons = this.getButtonChildren();
+    buttons.forEach(button => {
+      (button as HTMLButtonElement).disabled = disabled;
+    });
   }
 
   private getButtonId(button: HTMLElement, index: number): string {
@@ -348,7 +367,7 @@ export class LeButtonGroup {
     return (
       <Host>
         <le-component component="le-button-group">
-          <div class="button-group" part="group">
+          <fieldset class="button-group" part="group">
             <slot />
             {this.hasOverflow && (
               <le-overflow-menu
@@ -360,7 +379,7 @@ export class LeButtonGroup {
                 onLeOverflowMenuItemSelect={this.handleOverflowSelect}
               ></le-overflow-menu>
             )}
-          </div>
+          </fieldset>
         </le-component>
       </Host>
     );

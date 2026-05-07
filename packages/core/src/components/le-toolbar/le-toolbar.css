@@ -1,0 +1,131 @@
+/* ──────────────────────────────────────────────────────────────
+   le-toolbar
+   ────────────────────────────────────────────────────────────── */
+
+:host {
+  display: block;
+  width: 100%;
+
+  /* Public tokens */
+  --le-toolbar-gap: var(--le-spacing-1, 4px);
+  --le-toolbar-padding-x: var(--le-spacing-2, 8px);
+  --le-toolbar-padding-y: var(--le-spacing-1, 4px);
+  --le-toolbar-bg: transparent;
+  --le-toolbar-border-radius: var(--le-radius-md, 6px);
+
+  /* Overflow button appearance */
+  --le-toolbar-trigger-padding-x: var(--le-spacing-2, 8px);
+  --le-toolbar-trigger-padding-y: var(--le-spacing-1, 4px);
+}
+
+/* ── Main container ──────────────────────────────────────────── */
+
+.toolbar-container {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin: 0;
+  border: none;
+  gap: var(--le-toolbar-gap);
+  padding: var(--le-toolbar-padding-y) var(--le-toolbar-padding-x);
+  background: var(--le-toolbar-bg);
+  border-radius: var(--le-toolbar-border-radius);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.toolbar-container.align-start  { justify-content: flex-start; }
+.toolbar-container.align-center { justify-content: center; }
+.toolbar-container.align-end    { justify-content: flex-end; }
+.toolbar-container.align-stretch { justify-content: stretch; }
+
+/* ── Virtual toolbar (off-screen, inert) ─────────────────────── */
+
+.toolbar-virtual {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: -1;
+  white-space: nowrap;
+}
+
+.toolbar-virtual-items {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--le-toolbar-gap);
+
+  /* Disable transitions for the virtual toolbar, to calculate the widths fast */
+  --le-transition-fast: 0ms;
+  --le-transition-normal: 0ms;
+  --le-transition-slow: 0ms;
+}
+
+.toolbar-virtual-trigger {
+  display: none;
+}
+
+/* ── Overflow trigger ────────────────────────────────────────── */
+
+.toolbar-overflow-trigger {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* The phantom trigger is invisible but keeps its layout footprint
+   so the solver can measure the reserved width. */
+.toolbar-overflow-trigger--phantom {
+  visibility: hidden;
+  pointer-events: none;
+  /* Move out of flow visually but keep width contribution */
+  position: absolute;
+  right: var(--le-toolbar-padding-x);
+}
+
+.toolbar-more-button-wrap {
+  display: inline-flex;
+}
+
+.toolbar-more-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--le-toolbar-trigger-padding-y) var(--le-toolbar-trigger-padding-x);
+  background: transparent;
+  border: none;
+  border-radius: var(--le-toolbar-border-radius);
+  color: inherit;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.toolbar-more-button:hover {
+  background: var(--le-color-gray-100, rgba(0, 0, 0, 0.05));
+}
+
+.toolbar-more-button:focus-visible {
+  outline: var(--le-input-border-focus, 2px solid var(--le-color-primary));
+  outline-offset: 2px;
+}
+
+.toolbar-more-button--phantom {
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ── Separator support ───────────────────────────────────────── */
+
+::slotted([role='separator']),
+::slotted(le-toolbar-separator) {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 1px;
+  min-width: 1px;
+  background: var(--le-color-border, rgba(0, 0, 0, 0.12));
+  margin: var(--le-spacing-1, 4px) 0;
+  border: none;
+}

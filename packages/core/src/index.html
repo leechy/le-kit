@@ -344,6 +344,70 @@
       </div>
     </div>
 
+    <!-- ─── le-toolbar demo ───────────────────────────────────────────────── -->
+    <div
+      style="
+        border: 1px solid var(--le-color-border);
+        border-radius: var(--le-radius-md);
+        padding: var(--le-space-md);
+        margin: var(--le-space-md) var(--le-space-lg);
+        display: grid;
+        gap: var(--le-space-sm);
+      "
+    >
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-sm);">
+        <strong style="font-size: var(--le-font-size-sm);">le-toolbar — priority overflow demo</strong>
+        <span id="demo-toolbar-status" style="font-size: var(--le-font-size-xs); color: var(--le-color-text-secondary);"></span>
+      </div>
+
+      <le-preview-frame
+        id="demo-toolbar-frame"
+        min-width="200"
+        min-height="56"
+        frame-width="400"
+      >
+        <le-toolbar
+          id="demo-toolbar"
+          onLeToolbarOverflowChange="onToolbarOverflow(event)"
+        >
+          <!-- Lower priority number = higher importance = last to overflow -->
+          <le-button priority="10" variant="solid" color="primary" label="Save" onclick="alert('Save')">Save</le-button>
+
+          <le-button priority="20" variant="outlined" label="Publish" onclick="alert('Publish')">Publish</le-button>
+
+          <le-button priority="30" variant="clear" label="Preview" onclick="alert('Preview')">Preview</le-button>
+
+          <!-- A collapsible button group — collapses internally first -->
+          <le-button-group priority="40" overflow-icons>
+            <le-button variant="clear" label="Align Left">
+              <le-icon slot="icon-only" name="align-left"></le-icon>
+            </le-button>
+            <le-button variant="clear" label="Align Center">
+              <le-icon slot="icon-only" name="align-center"></le-icon>
+            </le-button>
+            <le-button variant="clear" label="Align Right">
+              <le-icon slot="icon-only" name="align-right"></le-icon>
+            </le-button>
+            <le-button variant="clear" label="Justify">
+              <le-icon slot="icon-only" name="align-justify"></le-icon>
+            </le-button>
+          </le-button-group>
+
+          <le-button variant="clear" label="Share" onclick="alert('Share')">Share</le-button>
+          <le-button variant="clear" label="Duplicate" onclick="alert('Duplicate')">Duplicate</le-button>
+          <le-button priority="100" variant="clear" color="danger" label="Delete" onclick="alert('Delete')">Delete</le-button>
+        </le-toolbar>
+      </le-preview-frame>
+
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-sm);">
+        <le-button size="small" variant="outlined" onclick="document.getElementById('demo-toolbar-frame').snapTo(1200)">1200px</le-button>
+        <le-button size="small" variant="outlined" onclick="document.getElementById('demo-toolbar-frame').snapTo(800)">800px</le-button>
+        <le-button size="small" variant="outlined" onclick="document.getElementById('demo-toolbar-frame').snapTo(500)">500px</le-button>
+        <le-button size="small" variant="outlined" onclick="document.getElementById('demo-toolbar-frame').snapTo(320)">320px</le-button>
+        <le-button size="small" variant="outlined" onclick="document.getElementById('demo-toolbar-frame').snapTo(240)">240px</le-button>
+      </div>
+    </div>
+
     <div
       class="motion-demo"
       style="
@@ -1626,6 +1690,17 @@ console.log(greeting);</le-text>
           return;
         }
       }
+
+      function onToolbarOverflow(event) {
+        const { overflowIds, collapsedGroupIds } = event.detail;
+        const parts = [];
+        if (overflowIds.length) parts.push(`${overflowIds.length} overflowed`);
+        if (collapsedGroupIds.length) parts.push(`${collapsedGroupIds.length} group(s) collapsed`);
+        console.log('onToolbarOverflow', parts.length ? parts.join(' · ') : 'all visible');
+      }
+
+      const demoToolbarEl = document.getElementById('demo-toolbar');
+      demoToolbarEl?.addEventListener('leToolbarOverflowChange', onToolbarOverflow);
 
       function getMotionPreset() {
         return document.documentElement.getAttribute('motion-preset') || 'soft';

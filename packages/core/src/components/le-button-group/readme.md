@@ -15,6 +15,7 @@ into an overflow "more" menu.
 | Property        | Attribute        | Description                                                                                                                                                                                                                            | Type                                       | Default     |
 | --------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ----------- |
 | `collapse`      | `collapse`       | Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`. | `boolean \| number \| string \| undefined` | `undefined` |
+| `disabled`      | `disabled`       | Disabled attribute, when the button group is disabled, all buttons inside will be disabled and the overflow menu will not be accessible.                                                                                               | `boolean`                                  | `false`     |
 | `overflowIcons` | `overflow-icons` | When true, icons from collapsed buttons are shown in the overflow navigation list.                                                                                                                                                     | `boolean`                                  | `false`     |
 
 
@@ -41,6 +42,10 @@ into an overflow "more" menu.
 
 
 ## Dependencies
+
+### Used by
+
+ - [le-preview-frame](../le-preview-frame)
 
 ### Depends on
 
@@ -92,6 +97,7 @@ graph TD;
   le-collapse --> le-component
   le-bar --> le-icon
   le-bar --> le-overflow-menu
+  le-preview-frame --> le-button-group
   style le-button-group fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

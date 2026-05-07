@@ -153,6 +153,7 @@ Type: `Promise<LeOption>`
  - [le-number-input](../le-number-input)
  - [le-overflow-menu](../le-overflow-menu)
  - [le-popup](../le-popup)
+ - [le-preview-frame](../le-preview-frame)
  - [le-select](../le-select)
  - [le-side-panel-toggle](../le-side-panel-toggle)
  - [le-slot](../le-slot)
@@ -185,6 +186,7 @@ graph TD;
   le-breadcrumbs --> le-button
   le-number-input --> le-button
   le-overflow-menu --> le-button
+  le-preview-frame --> le-button
   le-side-panel-toggle --> le-button
   le-tag --> le-button
   style le-button fill:#f9f,stroke:#333,stroke-width:4px

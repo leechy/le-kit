@@ -6,13 +6,14 @@
   --le-overflow-menu-item-hover-bg: var(--le-color-gray-100);
 }
 
+.trigger-button {
+  --le-button-padding-x: 0;
+  --le-button-icon-only-padding: var(--le-spacing-1) 0;
+}
+
 /* Popover list container */
 le-popover::part(content) {
   padding: var(--le-spacing-1);
-}
-
-.more-icon {
-  display: block;
 }
 
 le-navigation {

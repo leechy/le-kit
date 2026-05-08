@@ -20,6 +20,19 @@
   --le-toolbar-trigger-padding-y: var(--le-spacing-1, 4px);
 }
 
+:host(.is-initializing-layout) {
+  visibility: hidden !important;
+  --le-transition-fast: 0ms;
+  --le-transition-normal: 0ms;
+  --le-transition-slow: 0ms;
+}
+
+:host(.is-initializing-layout) ::slotted(*) {
+  --le-transition-fast: 0ms;
+  --le-transition-normal: 0ms;
+  --le-transition-slow: 0ms;
+}
+
 /* ── Main container ──────────────────────────────────────────── */
 
 .toolbar-container {

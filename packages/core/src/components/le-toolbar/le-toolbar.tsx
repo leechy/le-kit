@@ -139,6 +139,10 @@ export class LeToolbar {
 
   @State() private overflowMenuItems: LeOption[] = [];
 
+  @State() private initializingLayout: boolean = true;
+
+  private hasPreparedInitialLayout: boolean = false;
+
   private instanceId: string = generateId('le-toolbar');
 
   /** Toolbar host element (follows the width of the parent element). */
@@ -509,6 +513,7 @@ export class LeToolbar {
     });
 
     await this.calculateLayoutWidths();
+    this.hasPreparedInitialLayout = true;
     this.scheduleRecalc();
   }
 
@@ -568,18 +573,20 @@ export class LeToolbar {
     const container = this.toolbarContainerEl;
     if (!host || !container) return;
 
+    // Ignore early observer-driven recalcs until the virtual measurement pass
+    // has produced collapse thresholds.
+    if (this.initializingLayout && !this.hasPreparedInitialLayout) {
+      return;
+    }
+
     const newHostWidth = host.getBoundingClientRect().width;
 
     const visibleIds = new Set<string>(this.itemMap.keys());
     const overflowIds = new Set<string>();
     const collapsedGroupIds = new Set<string>();
     const groupCollapseValues = new Map<string, string>();
+    const hiddenGroupIds = new Set<string>();
     const overflowOptionMap = new Map<string, LeOption>();
-
-    for (const item of this.itemMap.values()) {
-      item.element.setAttribute('visibility', 'visible');
-      item.element.removeAttribute('collapse');
-    }
 
     for (const step of this.collapseSteps) {
       if (newHostWidth >= step.thresholdWidth) {
@@ -606,11 +613,32 @@ export class LeToolbar {
         item.element.setAttribute('collapse', 'collapse');
         visibleIds.delete(step.itemId);
         overflowIds.add(step.itemId);
+        hiddenGroupIds.add(step.itemId);
         collapsedGroupIds.delete(step.itemId);
         groupCollapseValues.delete(step.itemId);
         if (step.overflowOption) {
           overflowOptionMap.set(step.itemId, step.overflowOption);
         }
+      }
+    }
+
+    for (const [id, item] of this.itemMap.entries()) {
+      const desiredVisibility = overflowIds.has(id) ? 'collapsed' : 'visible';
+      if (item.element.getAttribute('visibility') !== desiredVisibility) {
+        item.element.setAttribute('visibility', desiredVisibility);
+      }
+
+      const desiredCollapse = hiddenGroupIds.has(id)
+        ? 'collapse'
+        : (groupCollapseValues.get(id) ?? undefined);
+      const currentCollapse = item.element.getAttribute('collapse') ?? undefined;
+
+      if (desiredCollapse) {
+        if (currentCollapse !== desiredCollapse) {
+          item.element.setAttribute('collapse', desiredCollapse);
+        }
+      } else if (currentCollapse !== undefined) {
+        item.element.removeAttribute('collapse');
       }
     }
 
@@ -632,6 +660,10 @@ export class LeToolbar {
       },
       overflowMenuItems,
     );
+
+    if (this.initializingLayout) {
+      this.initializingLayout = false;
+    }
   }
 
   private applyOutput(output: SolverOutput, overflowItems: LeOption[]) {
@@ -683,6 +715,7 @@ export class LeToolbar {
       <Host
         class={classnames({
           'has-overflow': showTrigger,
+          'is-initializing-layout': this.initializingLayout,
         })}
         style={hostStyle}
         ref={el => {

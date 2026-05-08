@@ -5,11 +5,12 @@ import {
   Event,
   EventEmitter,
   Element,
+  Method,
   Watch,
   h,
   Host,
 } from '@stencil/core';
-import { generateId } from '../../utils/utils';
+import { generateId, nextFrame } from '../../utils/utils';
 import { LeOverflowMenuItemSelectDetail } from '../le-overflow-menu/le-overflow-menu';
 import type { LeOption } from '../../types/options';
 
@@ -18,6 +19,12 @@ interface RankedButton {
   element: HTMLElement;
   index: number;
   priority: number;
+}
+
+export interface LeButtonGroupItemsMeta {
+  label: string;
+  items: LeOption[];
+  visibleCounts: number[];
 }
 
 /**
@@ -40,6 +47,12 @@ interface RankedButton {
 })
 export class LeButtonGroup {
   @Element() el!: HTMLElement;
+
+  /**
+   * Optional label used when the whole group is represented as a parent item
+   * inside another component's overflow menu.
+   */
+  @Prop() label?: string;
 
   /**
    * Collapse mode.
@@ -122,6 +135,58 @@ export class LeButtonGroup {
     this.mutationObserver?.disconnect();
   }
 
+  @Method()
+  async getItemsMeta(): Promise<LeButtonGroupItemsMeta> {
+    const items = await this.getToolbarOverflowItems();
+    return {
+      label: this.getGroupLabel(),
+      items,
+      visibleCounts: this.getToolbarVisibleCountsSync(),
+    };
+  }
+
+  @Method()
+  async getToolbarOverflowGroupOption(): Promise<LeOption> {
+    const meta = await this.getItemsMeta();
+    return {
+      id: this.el.id || this.instanceId,
+      label: meta.label,
+      value: this.el.id || this.instanceId,
+      open: true,
+      children: meta.items,
+    };
+  }
+
+  @Method()
+  async whenLayoutSettled(): Promise<void> {
+    await this.syncLayout();
+    await nextFrame();
+
+    const overflowMenu = this.el.shadowRoot?.querySelector('le-overflow-menu') as
+      | (HTMLElement & { componentOnReady?: () => Promise<unknown> })
+      | null;
+
+    if (overflowMenu?.componentOnReady) {
+      await overflowMenu.componentOnReady();
+      await nextFrame();
+    }
+  }
+
+  @Method()
+  async getToolbarOverflowItems(): Promise<LeOption[]> {
+    const buttons = this.getButtonChildren();
+    const ranked: RankedButton[] = buttons
+      .map((button, index) => ({
+        id: this.getButtonId(button, index),
+        element: button,
+        index,
+        priority: this.getButtonPriority(button, index),
+      }))
+      .sort((a, b) => a.index - b.index);
+
+    return Promise.all(ranked.map(item => this.buildOverflowOption(item)));
+  }
+
   private getButtonChildren(): HTMLElement[] {
     return Array.from(this.el.children).filter(
       (node): node is HTMLElement =>
@@ -136,6 +201,33 @@ export class LeButtonGroup {
     buttons.forEach(button => {
       (button as HTMLButtonElement).disabled = disabled;
     });
+  }
+
+  private getGroupLabel(): string {
+    return (
+      this.label ||
+      this.el.getAttribute('label') ||
+      this.el.getAttribute('aria-label') ||
+      this.el.getAttribute('title') ||
+      this.getButtonChildren()[0]?.getAttribute('aria-label') ||
+      this.getButtonChildren()[0]?.getAttribute('label') ||
+      'Group'
+    );
+  }
+
+  private isFullyCollapsed(): boolean {
+    return this.collapse === 'collapse';
+  }
+
+  private getToolbarVisibleCountsSync(): number[] {
+    const totalButtons = this.getButtonChildren().length;
+    const steps: number[] = [];
+
+    for (let visibleCount = totalButtons - 1; visibleCount >= 1; visibleCount -= 1) {
+      steps.push(visibleCount);
+    }
+
+    return steps;
   }
 
   private getButtonId(button: HTMLElement, index: number): string {
@@ -163,6 +255,10 @@ export class LeButtonGroup {
   }
 
   private parseCollapseValue(totalButtons: number): { active: boolean; visibleCount: number } {
+    if (this.isFullyCollapsed()) {
+      return { active: true, visibleCount: 0 };
+    }
+
     if (
       this.collapse === undefined ||
       this.collapse === null ||
@@ -264,6 +360,23 @@ export class LeButtonGroup {
 
     try {
       const buttons = this.getButtonChildren();
+
+      if (this.isFullyCollapsed()) {
+        buttons.forEach(button => {
+          button.setAttribute('visibility', 'collapsed');
+        });
+
+        if (this.overflowItems.length > 0) {
+          this.overflowItems = [];
+        }
+
+        if (this.hasOverflow) {
+          this.hasOverflow = false;
+        }
+
+        return;
+      }
+
       const ranked: RankedButton[] = buttons
         .map((button, index) => ({
           id: this.getButtonId(button, index),
@@ -364,23 +477,27 @@ export class LeButtonGroup {
   };
 
   render() {
+    const visibilityState = this.isFullyCollapsed() ? 'collapsed' : 'visible';
+
     return (
       <Host>
-        <le-component component="le-button-group">
-          <fieldset class="button-group" part="group">
-            <slot />
-            {this.hasOverflow && (
-              <le-overflow-menu
-                class="button-group-overflow"
-                items={this.overflowItems}
-                icon="chevron-down"
-                triggerAriaLabel="More actions"
-                triggerPart="more-button"
-                onLeOverflowMenuItemSelect={this.handleOverflowSelect}
-              ></le-overflow-menu>
-            )}
-          </fieldset>
-        </le-component>
+        <le-visibility state={visibilityState} mode="width">
+          <le-component component="le-button-group">
+            <fieldset class="button-group" part="group">
+              <slot />
+              {this.hasOverflow && (
+                <le-overflow-menu
+                  class="button-group-overflow"
+                  items={this.overflowItems}
+                  icon="chevron-down"
+                  triggerAriaLabel="More actions"
+                  triggerPart="more-button"
+                  onLeOverflowMenuItemSelect={this.handleOverflowSelect}
+                ></le-overflow-menu>
+              )}
+            </fieldset>
+          </le-component>
+        </le-visibility>
       </Host>
     );
   }

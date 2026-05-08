@@ -2,8 +2,7 @@
   display: inline-flex;
   max-width: 100%;
 
-  --le-button-group-bg: var(--le-color-background-secondary);
-  --le-button-group-padding: var(--le-spacing-1);
+  --le-button-group-padding: 0;
   --le-button-group-radius: calc(var(--le-radius-md) + var(--le-button-group-padding));
 }
 
@@ -21,6 +20,7 @@
 
 ::slotted(le-button) {
   --le-button-border-radius: 0;
+  --le-button-toolbar-inner-margin: 0px;
   /* Preventing wrapping of the animated collapsing buttons */
   white-space: nowrap;
 }

@@ -16,6 +16,7 @@ into an overflow "more" menu.
 | --------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ----------- |
 | `collapse`      | `collapse`       | Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`. | `boolean \| number \| string \| undefined` | `undefined` |
 | `disabled`      | `disabled`       | Disabled attribute, when the button group is disabled, all buttons inside will be disabled and the overflow menu will not be accessible.                                                                                               | `boolean`                                  | `false`     |
+| `label`         | `label`          | Optional label used when the whole group is represented as a parent item inside another component's overflow menu.                                                                                                                     | `string \| undefined`                      | `undefined` |
 | `overflowIcons` | `overflow-icons` | When true, icons from collapsed buttons are shown in the overflow navigation list.                                                                                                                                                     | `boolean`                                  | `false`     |
 
 
@@ -24,6 +25,39 @@ into an overflow "more" menu.
 | Event              | Description | Type                           |
 | ------------------ | ----------- | ------------------------------ |
 | `leOverflowSelect` |             | `CustomEvent<{ id: string; }>` |
+
+
+## Methods
+
+### `getItemsMeta() => Promise<LeButtonGroupItemsMeta>`
+
+
+
+#### Returns
+
+Type: `Promise<LeButtonGroupItemsMeta>`
+
+
+
+### `getToolbarOverflowGroupOption() => Promise<LeOption>`
+
+
+
+#### Returns
+
+Type: `Promise<LeOption>`
+
+
+
+### `getToolbarOverflowItems() => Promise<LeOption[]>`
+
+
+
+#### Returns
+
+Type: `Promise<LeOption[]>`
+
+
 
 
 ## Slots

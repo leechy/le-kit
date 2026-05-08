@@ -1,7 +1,6 @@
 le-visibility {
   display: inline-block;
-  max-width: 100%;
-  overflow: clip;
+  overflow: visible;
   transform-origin: center center;
 
   /* Default motion tokens — override via --le-motion-visibility-* on any ancestor */
@@ -12,7 +11,18 @@ le-visibility {
   --le-motion-visibility-blur-from: 0px;
   --le-motion-visibility-translate-y-from: 0px;
   --le-motion-visibility-collapse-size: 0px;
+}
 
+le-visibility[visibility-phase='transitioning'],
+le-visibility[visibility-state='collapsing'],
+le-visibility[visibility-state='collapsed'] {
+  overflow: clip;
+}
+
+/* Transitions are gated behind the 'transitioning' phase so that
+   pre-collapse width snapshots and post-expand natural-width resets
+   are applied immediately without animating. */
+le-visibility[visibility-phase='transitioning'] {
   transition:
     max-width var(--le-motion-visibility-duration) var(--le-motion-visibility-easing),
     opacity var(--le-motion-visibility-duration) var(--le-motion-visibility-easing),
@@ -20,7 +30,31 @@ le-visibility {
     filter var(--le-motion-visibility-duration) var(--le-motion-visibility-easing);
 }
 
-le-visibility[visibility-state='visible'],
+le-visibility[visibility-state='visible'] {
+  /* No explicit max-width — content renders at its natural size.
+     This allows child custom elements to size up after upgrading
+     without being clamped, and ensures ResizeObserver always
+     captures the true content width. */
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0) scale(1);
+}
+
+/* Pre-collapse snapshot: locks max-width to the last measured value
+   (no transition since 'transitioning' phase is not yet active).
+   This gives the CSS transition engine a pixel starting point so that
+   the collapse can animate from the real content width to 0. */
+le-visibility[visibility-phase='pre-collapse'] {
+  max-width: var(--le-visibility-measured-width);
+}
+
+/* While transitions are enabled but the collapsing rAF hasn't fired yet,
+   hold max-width at the measured value so the browser has a pixel start
+   point for the collapse animation (measured-width → 0). */
+le-visibility[visibility-phase='transitioning'][visibility-state='visible'] {
+  max-width: var(--le-visibility-measured-width);
+}
+
 le-visibility[visibility-state='expanding'] {
   max-width: var(--le-visibility-measured-width, 100%);
   opacity: 1;

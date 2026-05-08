@@ -1,7 +1,7 @@
 import { Component, Element, h, Prop, Watch } from '@stencil/core';
 
 type LeVisibilityState = 'visible' | 'collapsed';
-type LeVisibilityPhase = 'stable' | 'transitioning';
+type LeVisibilityPhase = 'stable' | 'transitioning' | 'pre-collapse';
 type LeVisibilityMode = 'width' | 'height' | 'both';
 
 /**
@@ -34,6 +34,8 @@ export class LeVisibility {
   private target?: HTMLElement;
 
   private transitionTimer?: number;
+
+  private resizeObserver?: ResizeObserver;
 
   private clearTimer() {
     if (this.transitionTimer !== undefined) {
@@ -100,7 +102,19 @@ export class LeVisibility {
   private canMeasure(target: HTMLElement): boolean {
     const phase = target.getAttribute('visibility-phase');
     const state = target.getAttribute('visibility-state');
-    return phase !== 'transitioning' && (!state || state === 'visible');
+    return phase !== 'transitioning' && phase !== 'pre-collapse' && (!state || state === 'visible');
+  }
+
+  private attachResizeObserver() {
+    if (typeof ResizeObserver === 'undefined' || !this.target) return;
+
+    this.resizeObserver = new ResizeObserver(() => {
+      if (this.target && this.canMeasure(this.target)) {
+        this.cacheMeasuredSize(this.target);
+      }
+    });
+
+    this.resizeObserver.observe(this.target);
   }
 
   private cacheMeasuredSize(target: HTMLElement) {
@@ -151,24 +165,20 @@ export class LeVisibility {
       this.setVisualState(target, 'expanding');
 
       if (durationMs <= 0) {
-        this.setVisualState(target, 'visible');
+        // Disable transitions before restoring natural width so there is no
+        // animation from measured-width back to unconstrained (max-width: none).
         this.setPhase(target, 'stable');
-        this.cacheMeasuredSize(target);
+        this.setVisualState(target, 'visible');
         return;
       }
 
-      requestAnimationFrame(() => {
-        if (target.getAttribute('visibility-state') === 'expanding') {
-          this.setVisualState(target, 'visible');
-        }
-      });
-
       this.transitionTimer = window.setTimeout(() => {
         if (target.getAttribute('visibility-state') !== 'collapsed') {
+          // Disable transitions first, then switch to visible so the
+          // removal of max-width (→ natural size) is instant, not animated.
+          this.setPhase(target, 'stable');
           this.setVisualState(target, 'visible');
         }
-        this.setPhase(target, 'stable');
-        this.cacheMeasuredSize(target);
         this.transitionTimer = undefined;
       }, durationMs + 20);
 
@@ -177,8 +187,9 @@ export class LeVisibility {
 
     if (current === 'collapsed' || current === 'collapsing') return;
 
-    this.setPhase(target, 'transitioning');
-    this.setVisualState(target, 'collapsing');
+    // Re-measure the natural content width while the element is still
+    // unconstrained (visible, stable) so the CSS var is up to date.
+    this.cacheMeasuredSize(target);
 
     if (durationMs <= 0) {
       this.setVisualState(target, 'collapsed');
@@ -186,13 +197,27 @@ export class LeVisibility {
       return;
     }
 
-    this.transitionTimer = window.setTimeout(() => {
-      if (target.getAttribute('visibility-state') === 'collapsing') {
-        this.setVisualState(target, 'collapsed');
-      }
-      this.setPhase(target, 'stable');
-      this.transitionTimer = undefined;
-    }, durationMs + 20);
+    // Phase 1 — snapshot: set max-width to measured-width without transition
+    // (transitions are gated on 'transitioning' phase, so this is instant).
+    this.setPhase(target, 'pre-collapse');
+    void target.offsetWidth; // force reflow so the browser registers the value
+
+    // Phase 2 — animate: enable transitions, then in the next frame trigger
+    // the collapsing state so CSS transitions from measured-width → 0.
+    this.setPhase(target, 'transitioning');
+    requestAnimationFrame(() => {
+      if (target.getAttribute('visibility-phase') !== 'transitioning') return;
+
+      this.setVisualState(target, 'collapsing');
+
+      this.transitionTimer = window.setTimeout(() => {
+        if (target.getAttribute('visibility-state') === 'collapsing') {
+          this.setVisualState(target, 'collapsed');
+        }
+        this.setPhase(target, 'stable');
+        this.transitionTimer = undefined;
+      }, durationMs + 20);
+    });
   }
 
   @Watch('state')
@@ -213,10 +238,14 @@ export class LeVisibility {
         this.cacheMeasuredSize(this.target);
       }
     });
+    // Keep measured-width up to date when children resize in the visible state
+    // (e.g. child custom elements that finish upgrading after componentDidLoad).
+    this.attachResizeObserver();
   }
 
   disconnectedCallback() {
     this.clearTimer();
+    this.resizeObserver?.disconnect();
   }
 
   render() {

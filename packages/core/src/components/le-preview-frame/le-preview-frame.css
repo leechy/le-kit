@@ -84,6 +84,9 @@
 /* ── Viewport ────────────────────────────────────────────────── */
 
 .frame-viewport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 1 1 auto;
   overflow: auto;
   min-height: var(--le-preview-frame-min-height, 80px);

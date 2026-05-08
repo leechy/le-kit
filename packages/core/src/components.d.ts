@@ -9,6 +9,7 @@ import { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
 import { TooltipPlacement } from ".";
+import { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-group";
 import { LeActiveContext } from "./components/le-kit/le-kit";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
@@ -23,6 +24,7 @@ export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
 export { TooltipPlacement } from ".";
+export { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-group";
 export { LeActiveContext } from "./components/le-kit/le-kit";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
@@ -444,11 +446,19 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
+        "getItemsMeta": () => Promise<LeButtonGroupItemsMeta>;
+        "getToolbarOverflowGroupOption": () => Promise<LeOption>;
+        "getToolbarOverflowItems": () => Promise<LeOption[]>;
+        /**
+          * Optional label used when the whole group is represented as a parent item inside another component's overflow menu.
+         */
+        "label"?: string;
         /**
           * When true, icons from collapsed buttons are shown in the overflow navigation list.
           * @default false
          */
         "overflowIcons": boolean;
+        "whenLayoutSettled": () => Promise<void>;
     }
     /**
      * A flexible card component with header, content, and footer slots.
@@ -2439,10 +2449,10 @@ export namespace Components {
          */
         "disablePopover": boolean;
         /**
-          * Hysteresis epsilon in pixels. A visibility state flip only happens when the available/required width delta exceeds this value, preventing flicker from sub-pixel resize events.
-          * @default 2
+          * Spacing between top-level toolbar items. Accepts any valid CSS length (e.g. `8px`, `0.5rem`, `var(--le-spacing-2)`).
+          * @default 'var(--le-toolbar-gap, var(--le-spacing-1, 4px))'
          */
-        "epsilon": number;
+        "itemGap": string;
         /**
           * Optional declarative items input.  The current implementation is slot-driven, but when this prop changes we still invalidate the slotted-items cache and recompute layout.
          */
@@ -4304,6 +4314,10 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Optional label used when the whole group is represented as a parent item inside another component's overflow menu.
+         */
+        "label"?: string;
         "onLeOverflowSelect"?: (event: LeButtonGroupCustomEvent<{ id: string }>) => void;
         /**
           * When true, icons from collapsed buttons are shown in the overflow navigation list.
@@ -6389,10 +6403,10 @@ declare namespace LocalJSX {
          */
         "disablePopover"?: boolean;
         /**
-          * Hysteresis epsilon in pixels. A visibility state flip only happens when the available/required width delta exceeds this value, preventing flicker from sub-pixel resize events.
-          * @default 2
+          * Spacing between top-level toolbar items. Accepts any valid CSS length (e.g. `8px`, `0.5rem`, `var(--le-spacing-2)`).
+          * @default 'var(--le-toolbar-gap, var(--le-spacing-1, 4px))'
          */
-        "epsilon"?: number;
+        "itemGap"?: string;
         /**
           * Optional declarative items input.  The current implementation is slot-driven, but when this prop changes we still invalidate the slotted-items cache and recompute layout.
          */
@@ -6588,6 +6602,7 @@ declare namespace LocalJSX {
         "align": 'start' | 'center' | 'space-between' | 'end';
     }
     interface LeButtonGroupAttributes {
+        "label": string;
         "collapse": string;
         "overflowIcons": boolean;
         "disabled": boolean;
@@ -6959,10 +6974,10 @@ declare namespace LocalJSX {
     }
     interface LeToolbarAttributes {
         "alignItems": 'start' | 'center' | 'end' | 'stretch';
+        "itemGap": string;
         "overflowIcon": string;
         "overflowLabel": string;
         "disablePopover": boolean;
-        "epsilon": number;
     }
     interface LeTooltipAttributes {
         "mode": LeKitMode;

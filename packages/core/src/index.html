@@ -369,16 +369,17 @@
         <le-toolbar
           id="demo-toolbar"
           onLeToolbarOverflowChange="onToolbarOverflow(event)"
+          style="background-color: var(--le-color-surface); --le-toolbar-gap: var(--le-space-sm);"
         >
           <!-- Lower priority number = higher importance = last to overflow -->
           <le-button priority="10" variant="solid" color="primary" label="Save" onclick="alert('Save')">Save</le-button>
 
-          <le-button priority="20" variant="outlined" label="Publish" onclick="alert('Publish')">Publish</le-button>
+          <le-button priority="200" variant="outlined" label="Publish" onclick="alert('Publish')">Publish</le-button>
 
           <le-button priority="30" variant="clear" label="Preview" onclick="alert('Preview')">Preview</le-button>
 
           <!-- A collapsible button group — collapses internally first -->
-          <le-button-group priority="40" overflow-icons>
+          <le-button-group priority="80" overflow-icons label="Text Align">
             <le-button variant="clear" label="Align Left">
               <le-icon slot="icon-only" name="align-left"></le-icon>
             </le-button>
@@ -395,7 +396,7 @@
 
           <le-button variant="clear" label="Share" onclick="alert('Share')">Share</le-button>
           <le-button variant="clear" label="Duplicate" onclick="alert('Duplicate')">Duplicate</le-button>
-          <le-button priority="100" variant="clear" color="danger" label="Delete" onclick="alert('Delete')">Delete</le-button>
+          <le-button priority="50" variant="clear" color="danger" label="Delete" onclick="alert('Delete')">Delete</le-button>
         </le-toolbar>
       </le-preview-frame>
 

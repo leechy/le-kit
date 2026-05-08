@@ -59,6 +59,16 @@ Type: `Promise<LeOption[]>`
 
 
 
+### `whenLayoutSettled() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 
 ## Slots
 
@@ -83,12 +93,14 @@ Type: `Promise<LeOption[]>`
 
 ### Depends on
 
+- [le-visibility](../le-visibility)
 - [le-component](../le-component)
 - [le-overflow-menu](../le-overflow-menu)
 
 ### Graph
 ```mermaid
 graph TD;
+  le-button-group --> le-visibility
   le-button-group --> le-component
   le-button-group --> le-overflow-menu
   le-component --> le-button

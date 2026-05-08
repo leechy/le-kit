@@ -90,8 +90,8 @@
   /* Border radius - more rounded */
   --le-radius-none: 0;
   --le-radius-sm: 0.25rem;
-  --le-radius-md: 0.5rem;
-  --le-radius-lg: 1rem;
+  --le-radius-md: 1rem;
+  --le-radius-lg: 1.25rem;
   --le-radius-xl: 1.5rem;
   --le-radius-2xl: 2rem;
   --le-radius-full: 9999px;

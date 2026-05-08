@@ -12,6 +12,8 @@
   --le-toolbar-padding-y: var(--le-spacing-1, 4px);
   --le-toolbar-bg: transparent;
   --le-toolbar-border-radius: var(--le-radius-md, 6px);
+  --le-toolbar-item-gap: var(--le-toolbar-gap);
+  --le-toolbar-item-inner-margin: calc(var(--le-toolbar-item-gap) / 2);
 
   /* Overflow button appearance */
   --le-toolbar-trigger-padding-x: var(--le-spacing-2, 8px);
@@ -26,7 +28,6 @@
   align-items: center;
   margin: 0;
   border: none;
-  gap: var(--le-toolbar-gap);
   padding: var(--le-toolbar-padding-y) var(--le-toolbar-padding-x);
   background: var(--le-toolbar-bg);
   border-radius: var(--le-toolbar-border-radius);
@@ -56,7 +57,6 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--le-toolbar-gap);
 
   /* Disable transitions for the virtual toolbar, to calculate the widths fast */
   --le-transition-fast: 0ms;
@@ -74,6 +74,7 @@
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
+  margin-inline: var(--le-toolbar-item-inner-margin, 0px);
 }
 
 /* The phantom trigger is invisible but keeps its layout footprint

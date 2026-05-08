@@ -462,3 +462,23 @@ export async function buildDeclarativeOptionsFromChildren(
     };
   }
 }
+
+/**
+ * Helper that returns a promise resolving on the next animation frame, allowing the browser to batch DOM reads/writes and apply pending styles.
+ */
+export function nextFrame(): Promise<void> {
+  return new Promise(resolve => requestAnimationFrame(() => resolve()));
+}
+
+/**
+ * Helper that returns a promise resolving on the next resize of the given element.
+ */
+export function nextResize(element: HTMLElement): Promise<ResizeObserverEntry> {
+  return new Promise(resolve => {
+    const observer = new ResizeObserver(([entry]) => {
+      observer.disconnect(); // Remove observer after the first resize to avoid multiple triggers.
+      resolve(entry);
+    });
+    observer.observe(element);
+  });
+}

@@ -11,9 +11,10 @@ import {
   h,
   Host,
 } from '@stencil/core';
-import { classnames, generateId } from '../../utils/utils';
+import { classnames, generateId, nextFrame, nextResize } from '../../utils/utils';
 import { LeOverflowMenuItemSelectDetail } from '../le-overflow-menu/le-overflow-menu';
 import type { LeOption } from '../../types/options';
+import { LeButtonGroupItemsMeta } from '../le-button-group/le-button-group';
 
 export interface LeToolbarOverflowChangeDetail {
   /** IDs of items currently in the overflow menu. */
@@ -37,6 +38,28 @@ export interface SolverOutput {
 
   /** Whether the overflow trigger button should be shown. */
   showTrigger: boolean;
+}
+
+interface ToolbarItemRecord {
+  element: HTMLElement;
+  virtual: HTMLElement;
+  index: number;
+  priority: number;
+  kind: 'item' | 'group';
+  overflowOption: LeOption;
+}
+
+interface CollapseStep {
+  id: string;
+  itemId: string;
+  priority: number;
+  index: number;
+  stage: number;
+  action: 'hide-item' | 'group-collapse' | 'hide-group';
+  collapseValue?: string;
+  overflowOption?: LeOption;
+  thresholdWidth: number;
+  resultingWidth: number;
 }
 
 /**
@@ -80,6 +103,12 @@ export class LeToolbar {
   @Prop({ reflect: true }) alignItems: 'start' | 'center' | 'end' | 'stretch' = 'start';
 
   /**
+   * Spacing between top-level toolbar items.
+   * Accepts any valid CSS length (e.g. `8px`, `0.5rem`, `var(--le-spacing-2)`).
+   */
+  @Prop() itemGap: string = 'var(--le-toolbar-gap, var(--le-spacing-1, 4px))';
+
+  /**
    * Icon for the overflow trigger button when no custom slot content is provided.
    */
   @Prop() overflowIcon: string = 'ellipsis-horizontal';
@@ -95,13 +124,6 @@ export class LeToolbar {
    * won't render its own menu. Useful for custom overflow handling.
    */
   @Prop() disablePopover: boolean = false;
-
-  /**
-   * Hysteresis epsilon in pixels. A visibility state flip only happens when
-   * the available/required width delta exceeds this value, preventing flicker
-   * from sub-pixel resize events.
-   */
-  @Prop() epsilon: number = 2;
 
   /**
    * Emitted when the overflow state changes.
@@ -142,22 +164,17 @@ export class LeToolbar {
   /** Prevent double-attach on rapid connect/disconnect cycles. */
   private observersAttached: boolean = false;
 
-  /** Map from ID → original light-DOM element (for click forwarding). */
-  private itemMap: Map<string, { element: HTMLElement; virtual: HTMLElement }> = new Map();
+  /** Map from ID → original light-DOM element plus virtual clone. */
+  private itemMap: Map<string, ToolbarItemRecord> = new Map();
 
-  private itemsByPriority: Array<{
-    id: string;
-    priority: number;
-    width: number;
-    hidden: boolean;
-  }> = [];
-  private hiddenItems: Set<string> = new Set();
+  private collapseSteps: CollapseStep[] = [];
 
   private disconnectModeObserver?: () => void;
 
   @Watch('alignItems')
+  @Watch('itemGap')
   handlePropChange() {
-    this.scheduleRecalc();
+    void this.prepareToolbarItems();
   }
 
   @Watch('items')
@@ -221,7 +238,7 @@ export class LeToolbar {
 
     this.mutationObserver.observe(this.el, {
       childList: true,
-      subtree: false,
+      subtree: true,
       attributes: true,
       attributeFilter: ['priority', 'data-le-pinned', 'data-le-separator', 'disabled'],
     });
@@ -272,9 +289,72 @@ export class LeToolbar {
     return Number.isFinite(parsed) ? parsed : 1000 + index;
   }
 
+  private async buildOverflowOption(item: HTMLElement, id: string): Promise<LeOption> {
+    const optionLike = item as HTMLElement & {
+      getOption?: () => Promise<LeOption>;
+    };
+
+    if (typeof optionLike.getOption === 'function') {
+      try {
+        const option = await optionLike.getOption();
+        return {
+          ...option,
+          id: option.id || id,
+          value: option.value ?? option.id ?? option.label,
+          disabled: option.disabled ?? item.hasAttribute('disabled'),
+        };
+      } catch {
+        // Fall back to lightweight extraction.
+      }
+    }
+
+    const label =
+      item.getAttribute('label') ||
+      item.textContent?.trim() ||
+      item.getAttribute('aria-label') ||
+      id;
+
+    return {
+      id,
+      label,
+      value: id,
+      disabled: item.hasAttribute('disabled'),
+      href: item.getAttribute('href') ?? undefined,
+      target: item.getAttribute('target') ?? undefined,
+    };
+  }
+
   private setVirtualTriggerVisible(visible: boolean) {
     if (!this.virtualTriggerEl) return;
     this.virtualTriggerEl.style.display = visible ? 'inline-flex' : 'none';
+  }
+
+  private clearVirtualMeasurements() {
+    this.virtualItemsEl?.replaceChildren();
+    this.virtualTriggerEl?.replaceChildren();
+    this.setVirtualTriggerVisible(false);
+  }
+
+  private async settleVirtualItem(element?: HTMLElement) {
+    const virtualLike = element as
+      | (HTMLElement & {
+          componentOnReady?: () => Promise<unknown>;
+          whenLayoutSettled?: () => Promise<void>;
+        })
+      | undefined;
+
+    if (!virtualLike) return;
+
+    if (virtualLike.componentOnReady) {
+      await virtualLike.componentOnReady();
+    }
+
+    if (typeof virtualLike.whenLayoutSettled === 'function') {
+      await virtualLike.whenLayoutSettled();
+      return;
+    }
+
+    await nextFrame();
   }
 
   private syncVirtualTriggerContent() {
@@ -313,8 +393,7 @@ export class LeToolbar {
     // Revuild itemMap, trying to keep the id's stable for existing elements
     // to preserve overflow state when possible.
     this.itemMap.clear();
-
-    this.itemsByPriority = [];
+    this.collapseSteps = [];
 
     const virtual = this.virtualItemsEl;
     if (!virtual) return;
@@ -322,98 +401,166 @@ export class LeToolbar {
     virtual.replaceChildren();
     this.syncVirtualTriggerContent();
 
-    for (var i = 0; i < items.length; i++) {
-      const clone = items[i].cloneNode(true) as any;
-      const id = this.getItemId(items[i], i);
+    for (let index = 0; index < items.length; index += 1) {
+      const item = items[index];
+      const clone = item.cloneNode(true) as HTMLElement & {
+        componentOnReady?: () => Promise<unknown>;
+      };
+      const id = this.getItemId(item, index);
+      const priority = this.getItemPriority(item, index);
+
       clone.removeAttribute('id');
       clone.setAttribute('visibility', 'visible');
       clone.setAttribute('disabled', 'true');
       clone.removeAttribute('collapse');
       virtual.appendChild(clone);
 
-      // wait until the cloned item is rendered in the virtual toolbar before continuing
-      if (clone.componentOnReady) await clone.componentOnReady();
-      // wait for the virtual toolbar to render with the new items before measuring
-      await this.nextResize(virtual);
+      if (clone.componentOnReady) {
+        await clone.componentOnReady();
+        await nextResize(virtual);
+      }
 
-      // add the item to the priority list
-      const priority = this.getItemPriority(items[i], i);
-      this.itemsByPriority.push({ id, priority, width: 0, hidden: false });
+      if (clone.tagName.toLowerCase() === 'le-button-group') {
+        await this.settleVirtualItem(clone);
+      }
 
-      // create new item
-      const newItem = {
-        element: items[i],
+      const overflowOption = await this.buildOverflowOption(item, id);
+      const itemRecord: ToolbarItemRecord = {
+        element: item,
         virtual: clone,
+        index,
+        priority,
+        kind: item.tagName.toLowerCase() === 'le-button-group' ? 'group' : 'item',
+        overflowOption,
       };
-      this.itemMap.set(id, newItem);
+      this.itemMap.set(id, itemRecord);
+
+      if (itemRecord.kind === 'group') {
+        const group = item as HTMLElement & {
+          componentOnReady?: () => Promise<unknown>;
+          getItemsMeta?: () => Promise<LeButtonGroupItemsMeta>;
+          getToolbarOverflowGroupOption?: () => Promise<LeOption>;
+        };
+
+        if (group.componentOnReady) {
+          await group.componentOnReady();
+        }
+
+        const meta =
+          typeof group.getItemsMeta === 'function'
+            ? await group.getItemsMeta()
+            : { label: overflowOption.label, items: [], visibleCounts: [] };
+
+        meta.visibleCounts.forEach((visibleCount, stage) => {
+          this.collapseSteps.push({
+            id: `${id}::collapse-${visibleCount}`,
+            itemId: id,
+            priority,
+            index,
+            stage,
+            action: 'group-collapse',
+            collapseValue: String(visibleCount),
+            thresholdWidth: 0,
+            resultingWidth: 0,
+          });
+        });
+
+        const groupOverflowOption =
+          typeof group.getToolbarOverflowGroupOption === 'function'
+            ? await group.getToolbarOverflowGroupOption()
+            : {
+                id,
+                label: meta.label,
+                value: id,
+                children: meta.items,
+              };
+
+        this.collapseSteps.push({
+          id: `${id}::collapse-hide`,
+          itemId: id,
+          priority,
+          index,
+          stage: meta.visibleCounts.length,
+          action: 'hide-group',
+          collapseValue: 'collapse',
+          overflowOption: groupOverflowOption,
+          thresholdWidth: 0,
+          resultingWidth: 0,
+        });
+      } else {
+        this.collapseSteps.push({
+          id: `${id}::hide`,
+          itemId: id,
+          priority,
+          index,
+          stage: 0,
+          action: 'hide-item',
+          overflowOption,
+          thresholdWidth: 0,
+          resultingWidth: 0,
+        });
+      }
     }
 
-    // sort the items by priority (highest first) to use when collapsing items
-    this.itemsByPriority.sort((a, b) => {
-      if (a.priority !== b.priority) return a.priority - b.priority;
-      return 0;
+    this.collapseSteps.sort((a, b) => {
+      if (a.priority !== b.priority) return b.priority - a.priority;
+      if (a.index !== b.index) return b.index - a.index;
+      return a.stage - b.stage;
     });
 
     await this.calculateLayoutWidths();
     this.scheduleRecalc();
   }
 
-  /**
-   * Helper that returns a promise resolving on the next resize of the given element.
-   */
-  private nextResize(element: HTMLElement): Promise<ResizeObserverEntry> {
-    return new Promise(resolve => {
-      const observer = new ResizeObserver(([entry]) => {
-        console.log('[le-toolbar] Resize observed: ', entry);
-        observer.disconnect(); // Remove observer after the first resize to avoid multiple triggers.
-        resolve(entry);
-      });
-      observer.observe(element);
-    });
-  }
-
   // ─── Virtual Solver + State Sync ───────────────────────────────────────────
 
   private async calculateLayoutWidths() {
     const virtual = this.virtualToolbarEl;
-    if (!virtual) return;
-
-    let virtualToolbarWidth = virtual.getBoundingClientRect().width;
-
-    // saving the full width of the toolbar before any collapsing happens,
-    // and without the trigger, to use as a reference when expanding items back
-    if (this.hiddenItems.size === 0 && this.itemsByPriority.length > 0) {
-      this.itemsByPriority[this.itemsByPriority.length - 1].width = virtualToolbarWidth;
+    if (!virtual || this.collapseSteps.length === 0) {
+      this.clearVirtualMeasurements();
+      return;
     }
 
-    // show the trigger first if it's not already, to include it in the width calculations
-    this.setVirtualTriggerVisible(true);
-    await this.nextResize(virtual);
-    virtualToolbarWidth = virtual.getBoundingClientRect().width;
+    this.setVirtualTriggerVisible(false);
 
-    // iterate through the items by priority,
-    // and save the width of the toolbar when each item is hidden,
-    // to know when to expand items again when the host grows back
-    for (var i = this.itemsByPriority.length - 1; i >= 0; i--) {
-      const priorityItem = this.itemsByPriority[i];
-
-      // set visibility to collapsed in the virtual toolbar
-      const item = this.itemMap.get(priorityItem.id);
-      if (item?.virtual) {
-        item.virtual.setAttribute('visibility', 'collapsed');
-      }
-
-      await this.nextResize(virtual);
-      virtualToolbarWidth = virtual.getBoundingClientRect().width;
-
-      // save this width to the itemsByPriority list,
-      // to know when to expand items again when the host grows back
-      if (this.itemsByPriority[i - 1] && this.itemsByPriority[i - 1].width === 0) {
-        this.itemsByPriority[i - 1].width = virtualToolbarWidth;
-      }
+    for (const item of this.itemMap.values()) {
+      item.virtual.setAttribute('visibility', 'visible');
+      item.virtual.removeAttribute('collapse');
     }
 
-    console.log('[le-toolbar] Initial layout widths: ', this.itemsByPriority);
+    await nextFrame();
+
+    let currentWidth = virtual.getBoundingClientRect().width;
+
+    for (let index = 0; index < this.collapseSteps.length; index += 1) {
+      const step = this.collapseSteps[index];
+      step.thresholdWidth = currentWidth;
+
+      if (step.action === 'hide-item') {
+        this.itemMap.get(step.itemId)?.virtual.setAttribute('visibility', 'collapsed');
+      } else if (step.action === 'group-collapse' || step.action === 'hide-group') {
+        this.itemMap.get(step.itemId)?.virtual.setAttribute('collapse', step.collapseValue || '');
+      }
+
+      if (index === 0) {
+        this.setVirtualTriggerVisible(true);
+      }
+
+      const record = this.itemMap.get(step.itemId);
+
+      if (record?.kind === 'group') {
+        await this.settleVirtualItem(record.virtual);
+        await nextFrame();
+      } else {
+        await nextResize(virtual);
+        await nextFrame();
+      }
+
+      currentWidth = virtual.getBoundingClientRect().width;
+      step.resultingWidth = currentWidth;
+    }
+
+    this.clearVirtualMeasurements();
   }
 
   private async computeLayout() {
@@ -423,75 +570,71 @@ export class LeToolbar {
 
     const newHostWidth = host.getBoundingClientRect().width;
 
-    // data for the solver:
-    const visibleIds = new Set<string>();
+    const visibleIds = new Set<string>(this.itemMap.keys());
     const overflowIds = new Set<string>();
+    const collapsedGroupIds = new Set<string>();
+    const groupCollapseValues = new Map<string, string>();
+    const overflowOptionMap = new Map<string, LeOption>();
 
-    // look at the `itemsByPriority` list, which items should be hidden at which widths
-    // and show or hide the items in the container accordingly
-    this.itemsByPriority.forEach(priorityItem => {
-      if (newHostWidth < priorityItem.width) {
-        overflowIds.add(priorityItem.id);
-        this.hiddenItems.add(priorityItem.id);
-        if (priorityItem.hidden) return;
+    for (const item of this.itemMap.values()) {
+      item.element.setAttribute('visibility', 'visible');
+      item.element.removeAttribute('collapse');
+    }
 
-        const item = this.itemMap.get(priorityItem.id);
-        if (item?.element) {
-          item.element.setAttribute('visibility', 'collapsed');
-        }
-        priorityItem.hidden = true;
-      } else if (newHostWidth >= priorityItem.width) {
-        visibleIds.add(priorityItem.id);
-        this.hiddenItems.delete(priorityItem.id);
-        if (!priorityItem.hidden) return;
-
-        const item = this.itemMap.get(priorityItem.id);
-        if (item?.element) {
-          item.element.setAttribute('visibility', 'visible');
-        }
-        priorityItem.hidden = false;
+    for (const step of this.collapseSteps) {
+      if (newHostWidth >= step.thresholdWidth) {
+        break;
       }
-    });
 
-    // show the trigger if there are any hidden items, to make sure the overflow menu is accessible
-    this.setVirtualTriggerVisible(this.hiddenItems.size > 0);
+      const item = this.itemMap.get(step.itemId);
+      if (!item) {
+        continue;
+      }
+
+      if (step.action === 'hide-item') {
+        item.element.setAttribute('visibility', 'collapsed');
+        visibleIds.delete(step.itemId);
+        overflowIds.add(step.itemId);
+        if (step.overflowOption) {
+          overflowOptionMap.set(step.itemId, step.overflowOption);
+        }
+      } else if (step.action === 'group-collapse') {
+        item.element.setAttribute('collapse', step.collapseValue || '1');
+        collapsedGroupIds.add(step.itemId);
+        groupCollapseValues.set(step.itemId, step.collapseValue || '1');
+      } else if (step.action === 'hide-group') {
+        item.element.setAttribute('collapse', 'collapse');
+        visibleIds.delete(step.itemId);
+        overflowIds.add(step.itemId);
+        collapsedGroupIds.delete(step.itemId);
+        groupCollapseValues.delete(step.itemId);
+        if (step.overflowOption) {
+          overflowOptionMap.set(step.itemId, step.overflowOption);
+        }
+      }
+    }
+
+    void groupCollapseValues;
+
+    const overflowMenuItems = Array.from(overflowOptionMap.entries())
+      .sort(([leftId], [rightId]) => {
+        return (this.itemMap.get(leftId)?.index ?? 0) - (this.itemMap.get(rightId)?.index ?? 0);
+      })
+      .map(([, option]) => option);
+
+    this.setVirtualTriggerVisible(overflowMenuItems.length > 0);
     this.applyOutput(
       {
         visibleIds,
-        collapsedGroupIds: new Set<string>(),
+        collapsedGroupIds,
         overflowIds,
-        showTrigger: this.hiddenItems.size > 0,
-      } as SolverOutput,
-      // filter the overflow items
-      Array.from(this.itemMap.entries())
-        .filter(([id]) => overflowIds.has(id))
-        .map(([_id, { element }]) => element),
+        showTrigger: overflowMenuItems.length > 0,
+      },
+      overflowMenuItems,
     );
   }
 
-  private applyOutput(output: SolverOutput, items: HTMLElement[]) {
-    // Build overflow menu options.
-    const overflowItems: LeOption[] = items
-      .filter((item, index) => output.overflowIds.has(this.getItemId(item, index)))
-      .map((item, _i) => {
-        const index = items.indexOf(item);
-        const id = this.getItemId(item, index);
-        const label =
-          item.getAttribute('label') ||
-          item.textContent?.trim() ||
-          item.getAttribute('aria-label') ||
-          id;
-
-        return {
-          id,
-          label,
-          value: id,
-          disabled: item.hasAttribute('disabled'),
-          href: item.getAttribute('href') ?? undefined,
-          target: item.getAttribute('target') ?? undefined,
-        } satisfies LeOption;
-      });
-
+  private applyOutput(output: SolverOutput, overflowItems: LeOption[]) {
     const prevOverflowKey = this.overflowMenuItems.map(i => i.id).join('|');
     const nextOverflowKey = overflowItems.map(i => i.id).join('|');
 
@@ -531,12 +674,17 @@ export class LeToolbar {
   render() {
     const { showTrigger } = this.solverOutput;
     const showMenu = showTrigger && !this.disablePopover;
+    const hostStyle = {
+      '--le-toolbar-item-gap': this.itemGap,
+      '--le-toolbar-item-inner-margin': `calc(${this.itemGap} / 2)`,
+    } as { [key: string]: string };
 
     return (
       <Host
         class={classnames({
           'has-overflow': showTrigger,
         })}
+        style={hostStyle}
         ref={el => {
           this.toolbarHostEl = el;
           this.observeContainer(el);

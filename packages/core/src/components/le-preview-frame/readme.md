@@ -97,6 +97,7 @@ graph TD;
   le-preview-frame --> le-button
   le-preview-frame --> le-icon
   le-preview-frame --> le-tag
+  le-button-group --> le-visibility
   le-button-group --> le-component
   le-button-group --> le-overflow-menu
   le-component --> le-button

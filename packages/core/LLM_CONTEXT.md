@@ -309,6 +309,7 @@ into an overflow "more" menu.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
+| `label` | `string \| undefined` |  | Optional label used when the whole group is represented as a parent item inside another component's overflow menu. |
 | `collapse` | `boolean \| number \| string \| undefined` |  | Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`. |
 | `overflowIcons` | `boolean` | `false` | When true, icons from collapsed buttons are shown in the overflow navigation list. |
 | `disabled` | `boolean` | `false` | Disabled attribute, when the button group is disabled, all buttons inside will be disabled and the overflow menu will not be accessible. |
@@ -1643,10 +1644,10 @@ footprint first before their contents are overflowed entirely.
 | `el` | `HTMLElement` |  |  |
 | `items` | `unknown \| undefined` |  | Optional declarative items input.  The current implementation is slot-driven, but when this prop changes we still invalidate the slotted-items cache and recompute layout. |
 | `alignItems` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'start'` | Alignment of items along the main axis. |
+| `itemGap` | `string` | `'var(--le-toolbar-gap, var(--le-spacing-1, 4px))'` | Spacing between top-level toolbar items. Accepts any valid CSS length (e.g. `8px`, `0.5rem`, `var(--le-spacing-2)`). |
 | `overflowIcon` | `string` | `'ellipsis-horizontal'` | Icon for the overflow trigger button when no custom slot content is provided. |
 | `overflowLabel` | `string` | `'More'` | Accessible label for the overflow trigger button. |
 | `disablePopover` | `boolean` | `false` | Disable the built-in overflow popover. The toolbar will still compute overflow state and emit events, but won't render its own menu. Useful for custom overflow handling. |
-| `epsilon` | `number` | `2` | Hysteresis epsilon in pixels. A visibility state flip only happens when the available/required width delta exceeds this value, preventing flicker from sub-pixel resize events. |
 
 ### Events
 

@@ -27,7 +27,17 @@
   --_btn-bg-system: var(--le-color-black);
   --_btn-color: var(--le-button-color);
   --_btn-border-color: var(--le-color-primary);
+  --le-button-toolbar-inner-margin: var(--le-toolbar-item-inner-margin, 0px);
 
+}
+
+le-visibility {
+  margin-inline: var(--le-button-toolbar-inner-margin);
+}
+
+:host([visibility='collapsed']) le-visibility,
+:host([visibility='collapsing']) le-visibility {
+  margin-inline: 0 !important;
 }
 
 :host([motion-preset='none']) {
@@ -50,14 +60,6 @@
   --le-motion-visibility-scale-from: 0.9;
   --le-motion-visibility-blur-from: 8px;
   --le-motion-visibility-translate-y-from: 0.4rem;
-}
-
-
-
-:host(:focus-within) {
-  outline: var(--le-input-border-focus);
-  outline-offset: var(--le-input-border-focus-offset, 2px);
-  border-radius: var(--le-button-border-radius);
 }
 
 :host([full-width]) {
@@ -105,8 +107,8 @@
 }
 
 .le-button-container:focus-visible {
-  outline: none;
-  outline-offset: 0;
+  outline: var(--le-input-border-focus);
+  outline-offset: var(--le-input-border-focus-offset, var(--le-focus-ring-offset, 2px));
 }
 
 .le-button-container:disabled {

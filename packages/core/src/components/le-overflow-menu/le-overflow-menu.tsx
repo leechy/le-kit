@@ -136,6 +136,13 @@ export class LeOverflowMenu {
   private handleItemClick = (event: MouseEvent | KeyboardEvent, item: LeOverflowMenuItem) => {
     if (item.disabled) return;
 
+    // if the menu item doesn't have action or href
+    // but have children instead, then we have to prevent emiting events,
+    // since the user is toggling the open property
+    if (!item.href && !item.action && (item.children?.length || 0) > 0) {
+      return;
+    }
+
     const emitted = this.leOverflowMenuItemSelect.emit({
       id: item.id || String(item.value ?? item.label),
       item,

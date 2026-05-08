@@ -171,6 +171,11 @@
 .nav-item:focus-visible {
   outline: none;
 }
+.nav-item.has-children {
+  font-size: var(--le-font-size-parent-label, auto);
+  color: var(--le-color-parent-label, #999);
+}
+
 
 .nav-item.color-primary {
   color: var(--le-color-primary);

@@ -51,6 +51,18 @@ interface VerticalListRenderOptions {
   closePopover?: () => void;
 }
 
+interface RenderedNavItem {
+  id: string;
+  item: LeOption;
+  depth: number;
+  parentId?: string;
+  submenuRoot: string;
+  hasChildren: boolean;
+  open: boolean;
+  disabled: boolean;
+  autoActivatable: boolean;
+}
+
 type LeNavigationActivationMode = 'manual' | 'automatic';
 
 /**
@@ -280,8 +292,10 @@ export class LeNavigation {
   }
 
   componentDidRender() {
-    const current = this.focusedItemId ? this.getNavElementById(this.focusedItemId) : undefined;
-    if (current && this.isElementVisible(current)) {
+    const currentId = this.focusedItemId;
+    const currentItem = currentId ? this.getRenderedNavItemById(currentId) : undefined;
+    const currentElement = currentId ? this.getNavElementById(currentId) : undefined;
+    if (currentItem && currentElement && this.isElementVisible(currentElement)) {
       return;
     }
 
@@ -328,37 +342,114 @@ export class LeNavigation {
     return Array.isArray(item.children) ? item.children : [];
   }
 
-  private getItemById(
-    targetId: string,
-    items: LeOption[] = this.parsedItems,
-    pathPrefix: string = '',
-  ): LeOption | undefined {
-    for (const [index, item] of items.entries()) {
+  private appendRenderedVerticalItems(
+    target: RenderedNavItem[],
+    items: LeOption[],
+    {
+      depth,
+      pathPrefix,
+      parentId,
+      submenuId,
+      submenuRoot,
+      searchQuery,
+    }: Pick<
+      VerticalListRenderOptions,
+      'depth' | 'pathPrefix' | 'parentId' | 'submenuId' | 'submenuRoot' | 'searchQuery'
+    >,
+  ) {
+    const query = searchQuery ?? '';
+    const autoOpenIds = new Set<string>();
+    const filtered = query ? this.filterTree(items, query, pathPrefix, autoOpenIds) : items;
+    const resolvedSubmenuRoot = submenuRoot ?? submenuId ?? '';
+
+    filtered.forEach((item, index) => {
       const path = pathPrefix ? `${pathPrefix}.${index}` : String(index);
       const id = this.getItemId(item, path);
-
-      if (id === targetId) {
-        return item;
-      }
-
       const children = this.getChildItems(item);
-      if (children.length > 0) {
-        const found = this.getItemById(targetId, children, path);
-        if (found) {
-          return found;
-        }
-      }
-    }
+      const hasChildren = children.length > 0;
+      const open = hasChildren && (this.isOpen(item, id) || autoOpenIds.has(id));
 
-    return undefined;
+      target.push({
+        id,
+        item,
+        depth,
+        parentId,
+        submenuRoot: resolvedSubmenuRoot,
+        hasChildren,
+        open,
+        disabled: !!item.disabled,
+        autoActivatable: !!(item.href || item.action || !hasChildren),
+      });
+
+      if (!hasChildren || !open) return;
+
+      this.appendRenderedVerticalItems(target, children, {
+        depth: depth + 1,
+        pathPrefix: path,
+        parentId: id,
+        submenuId,
+        submenuRoot: resolvedSubmenuRoot,
+        searchQuery,
+      });
+    });
   }
 
-  private getNavElements(): HTMLElement[] {
-    return Array.from(this.el.shadowRoot?.querySelectorAll<HTMLElement>('[data-nav-id]') ?? []);
+  private getRenderedNavItems(): RenderedNavItem[] {
+    const rendered: RenderedNavItem[] = [];
+    const items = this.parsedItems;
+
+    if (this.orientation === 'horizontal') {
+      items.forEach((item, index) => {
+        const id = this.getItemId(item, String(index));
+        const children = this.getChildItems(item);
+        const hasChildren = children.length > 0;
+        const open = hasChildren && this.openSubmenuId === id;
+
+        rendered.push({
+          id,
+          item,
+          depth: 0,
+          submenuRoot: '',
+          hasChildren,
+          open,
+          disabled: !!item.disabled,
+          autoActivatable: !!(item.href || item.action || !hasChildren),
+        });
+
+        if (!open) return;
+
+        this.appendRenderedVerticalItems(rendered, children, {
+          depth: 0,
+          pathPrefix: String(index),
+          parentId: id,
+          submenuId: id,
+          submenuRoot: id,
+          searchQuery: this.submenuQueries[id] ?? '',
+        });
+      });
+
+      return rendered;
+    }
+
+    this.appendRenderedVerticalItems(rendered, items, {
+      depth: 0,
+      pathPrefix: '',
+      searchQuery: this.searchQuery,
+    });
+
+    return rendered;
+  }
+
+  private getRenderedNavItemById(id: string): RenderedNavItem | undefined {
+    return this.getRenderedNavItems().find(item => item.id === id);
   }
 
   private getNavElementById(id: string): HTMLElement | undefined {
-    return this.getNavElements().find(element => element.dataset.navId === id);
+    const matches = Array.from(
+      this.el.shadowRoot?.querySelectorAll<HTMLElement>('[data-nav-id]') ?? [],
+    ).filter(element => element.dataset.navId === id);
+
+    return matches.find(element => this.isElementVisible(element)) ?? matches[0];
   }
 
   private isElementVisible(element: HTMLElement): boolean {
@@ -369,42 +460,40 @@ export class LeNavigation {
     return element.getAttribute('aria-disabled') === 'true' || element.hasAttribute('disabled');
   }
 
-  private getVisibleNavElements(): HTMLElement[] {
-    return this.getNavElements().filter(element => this.isElementVisible(element));
+  private getVisibleNavItems(): RenderedNavItem[] {
+    return this.getRenderedNavItems();
   }
 
   private getFirstVisibleItemId(): string | undefined {
-    return this.getVisibleNavElements().find(element => !this.isElementDisabled(element))?.dataset
-      .navId;
+    return this.getVisibleNavItems().find(item => !item.disabled)?.id;
   }
 
-  private getTopLevelHorizontalElements(): HTMLElement[] {
-    return this.getVisibleNavElements().filter(element => {
-      return (element.dataset.submenuRoot ?? '') === '' && Number(element.dataset.depth ?? 0) === 0;
+  private getTopLevelHorizontalItems(): RenderedNavItem[] {
+    return this.getVisibleNavItems().filter(item => {
+      return item.submenuRoot === '' && item.depth === 0;
     });
   }
 
-  private getLinearGroupForElement(element: HTMLElement): HTMLElement[] {
-    const submenuRoot = element.dataset.submenuRoot ?? '';
-    const depth = Number(element.dataset.depth ?? 0);
+  private getLinearGroupForItem(item: RenderedNavItem): RenderedNavItem[] {
+    const { submenuRoot, depth } = item;
 
     if (this.orientation === 'horizontal' && depth === 0 && !submenuRoot) {
-      return this.getTopLevelHorizontalElements();
+      return this.getTopLevelHorizontalItems();
     }
 
-    return this.getVisibleNavElements().filter(candidate => {
-      return (candidate.dataset.submenuRoot ?? '') === submenuRoot;
+    return this.getVisibleNavItems().filter(candidate => {
+      return candidate.submenuRoot === submenuRoot;
     });
   }
 
   private findAdjacentEnabledElement(
-    elements: HTMLElement[],
+    elements: RenderedNavItem[],
     currentId: string,
     direction: 1 | -1,
-  ): HTMLElement | undefined {
+  ): RenderedNavItem | undefined {
     if (elements.length === 0) return undefined;
 
-    let index = elements.findIndex(element => element.dataset.navId === currentId);
+    let index = elements.findIndex(element => element.id === currentId);
     if (index < 0) {
       index = direction > 0 ? -1 : 0;
     }
@@ -412,7 +501,7 @@ export class LeNavigation {
     for (let step = 0; step < elements.length; step++) {
       index = (index + direction + elements.length) % elements.length;
       const candidate = elements[index];
-      if (!this.isElementDisabled(candidate)) {
+      if (!candidate.disabled) {
         return candidate;
       }
     }
@@ -420,28 +509,28 @@ export class LeNavigation {
     return undefined;
   }
 
-  private getFirstEnabledElement(elements: HTMLElement[]): HTMLElement | undefined {
-    return elements.find(element => !this.isElementDisabled(element));
+  private getFirstEnabledElement(elements: RenderedNavItem[]): RenderedNavItem | undefined {
+    return elements.find(element => !element.disabled);
   }
 
-  private getLastEnabledElement(elements: HTMLElement[]): HTMLElement | undefined {
-    return [...elements].reverse().find(element => !this.isElementDisabled(element));
+  private getLastEnabledElement(elements: RenderedNavItem[]): RenderedNavItem | undefined {
+    return [...elements].reverse().find(element => !element.disabled);
   }
 
-  private getFirstChildElement(parentId: string, submenuRoot: string): HTMLElement | undefined {
-    return this.getVisibleNavElements().find(element => {
+  private getFirstChildItem(parentId: string, submenuRoot: string): RenderedNavItem | undefined {
+    return this.getVisibleNavItems().find(element => {
       return (
-        (element.dataset.parentId ?? '') === parentId &&
-        (element.dataset.submenuRoot ?? '') === submenuRoot &&
-        !this.isElementDisabled(element)
+        (element.parentId ?? '') === parentId &&
+        element.submenuRoot === submenuRoot &&
+        !element.disabled
       );
     });
   }
 
-  private getParentElement(element: HTMLElement): HTMLElement | undefined {
-    const parentId = element.dataset.parentId ?? '';
+  private getParentItem(item: RenderedNavItem): RenderedNavItem | undefined {
+    const parentId = item.parentId ?? '';
     if (!parentId) return undefined;
-    return this.getNavElementById(parentId);
+    return this.getRenderedNavItemById(parentId);
   }
 
   private setFocusedItem(
@@ -680,14 +769,15 @@ export class LeNavigation {
     const currentId = currentElement.dataset.navId;
     if (!currentId) return;
 
-    const currentItem = this.getItemById(currentId);
-    if (!currentItem) return;
+    const currentItemData = this.getRenderedNavItemById(currentId);
+    if (!currentItemData) return;
 
-    const group = this.getLinearGroupForElement(currentElement);
-    const submenuRoot = currentElement.dataset.submenuRoot ?? '';
-    const depth = Number(currentElement.dataset.depth ?? 0);
-    const hasChildren = currentElement.dataset.hasChildren === 'true';
-    const isOpen = currentElement.dataset.open === 'true';
+    const currentItem = currentItemData.item;
+    const group = this.getLinearGroupForItem(currentItemData);
+    const submenuRoot = currentItemData.submenuRoot;
+    const depth = currentItemData.depth;
+    const hasChildren = currentItemData.hasChildren;
+    const isOpen = currentItemData.open;
 
     switch (event.key) {
       case 'ArrowDown': {
@@ -696,17 +786,17 @@ export class LeNavigation {
         if (this.orientation === 'horizontal' && depth === 0 && !submenuRoot && hasChildren) {
           this.openHorizontalSubmenu(currentId);
           requestAnimationFrame(() => {
-            const firstChild = this.getFirstChildElement(currentId, currentId);
-            if (firstChild?.dataset.navId) {
-              this.setFocusedItem(firstChild.dataset.navId, true, true);
+            const firstChild = this.getFirstChildItem(currentId, currentId);
+            if (firstChild?.id) {
+              this.setFocusedItem(firstChild.id, true, true);
             }
           });
           return;
         }
 
         const next = this.findAdjacentEnabledElement(group, currentId, 1);
-        if (next?.dataset.navId) {
-          this.setFocusedItem(next.dataset.navId, true, true);
+        if (next?.id) {
+          this.setFocusedItem(next.id, true, true);
         }
         return;
       }
@@ -727,8 +817,8 @@ export class LeNavigation {
         }
 
         const previous = this.findAdjacentEnabledElement(group, currentId, -1);
-        if (previous?.dataset.navId) {
-          this.setFocusedItem(previous.dataset.navId, true, true);
+        if (previous?.id) {
+          this.setFocusedItem(previous.id, true, true);
         }
         return;
       }
@@ -739,12 +829,12 @@ export class LeNavigation {
         if (this.orientation === 'horizontal' && depth === 0 && !submenuRoot) {
           this.closeHorizontalSubmenu();
           const next = this.findAdjacentEnabledElement(
-            this.getTopLevelHorizontalElements(),
+            this.getTopLevelHorizontalItems(),
             currentId,
             1,
           );
-          if (next?.dataset.navId) {
-            this.setFocusedItem(next.dataset.navId, true, true);
+          if (next?.id) {
+            this.setFocusedItem(next.id, true, true);
           }
           return;
         }
@@ -752,18 +842,18 @@ export class LeNavigation {
         if (hasChildren && !isOpen) {
           this.toggleItemOpen(currentItem, currentId, event, true);
           requestAnimationFrame(() => {
-            const firstChild = this.getFirstChildElement(currentId, submenuRoot || currentId);
-            if (firstChild?.dataset.navId) {
-              this.setFocusedItem(firstChild.dataset.navId, true, true);
+            const firstChild = this.getFirstChildItem(currentId, submenuRoot);
+            if (firstChild?.id) {
+              this.setFocusedItem(firstChild.id, true, true);
             }
           });
           return;
         }
 
         if (hasChildren && isOpen) {
-          const firstChild = this.getFirstChildElement(currentId, submenuRoot || currentId);
-          if (firstChild?.dataset.navId) {
-            this.setFocusedItem(firstChild.dataset.navId, true, true);
+          const firstChild = this.getFirstChildItem(currentId, submenuRoot);
+          if (firstChild?.id) {
+            this.setFocusedItem(firstChild.id, true, true);
           }
         }
         return;
@@ -775,12 +865,12 @@ export class LeNavigation {
         if (this.orientation === 'horizontal' && depth === 0 && !submenuRoot) {
           this.closeHorizontalSubmenu();
           const previous = this.findAdjacentEnabledElement(
-            this.getTopLevelHorizontalElements(),
+            this.getTopLevelHorizontalItems(),
             currentId,
             -1,
           );
-          if (previous?.dataset.navId) {
-            this.setFocusedItem(previous.dataset.navId, true, true);
+          if (previous?.id) {
+            this.setFocusedItem(previous.id, true, true);
           }
           return;
         }
@@ -791,12 +881,12 @@ export class LeNavigation {
           return;
         }
 
-        const parentElement = this.getParentElement(currentElement);
-        if (parentElement?.dataset.navId) {
+        const parentItem = this.getParentItem(currentItemData);
+        if (parentItem?.id) {
           if (this.orientation === 'horizontal' && submenuRoot) {
             this.closeHorizontalSubmenu(submenuRoot);
           }
-          this.setFocusedItem(parentElement.dataset.navId, true, false);
+          this.setFocusedItem(parentItem.id, true, false);
         }
         return;
       }
@@ -804,8 +894,8 @@ export class LeNavigation {
       case 'Home': {
         event.preventDefault();
         const first = this.getFirstEnabledElement(group);
-        if (first?.dataset.navId) {
-          this.setFocusedItem(first.dataset.navId, true, true);
+        if (first?.id) {
+          this.setFocusedItem(first.id, true, true);
         }
         return;
       }
@@ -813,8 +903,8 @@ export class LeNavigation {
       case 'End': {
         event.preventDefault();
         const last = this.getLastEnabledElement(group);
-        if (last?.dataset.navId) {
-          this.setFocusedItem(last.dataset.navId, true, true);
+        if (last?.id) {
+          this.setFocusedItem(last.id, true, true);
         }
         return;
       }
@@ -827,11 +917,11 @@ export class LeNavigation {
       }
 
       case 'Escape': {
-        const parentElement = this.getParentElement(currentElement);
-        if (this.orientation === 'horizontal' && submenuRoot && parentElement?.dataset.navId) {
+        const parentItem = this.getParentItem(currentItemData);
+        if (this.orientation === 'horizontal' && submenuRoot && parentItem?.id) {
           event.preventDefault();
           this.closeHorizontalSubmenu(submenuRoot);
-          this.setFocusedItem(parentElement.dataset.navId, true, false);
+          this.setFocusedItem(parentItem.id, true, false);
         }
         return;
       }
@@ -978,9 +1068,10 @@ export class LeNavigation {
                       class={classnames(
                         'nav-item',
                         {
-                          disabled: item.disabled,
-                          focused: isFocused,
-                          selected,
+                          'disabled': item.disabled,
+                          'focused': isFocused,
+                          'has-children': hasChildren,
+                          'selected': selected,
                         },
                         item.className,
                       )}

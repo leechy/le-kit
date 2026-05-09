@@ -23,6 +23,18 @@ export interface LePreviewFrameResizeDetail {
   width: number;
 }
 
+type LePreviewFrameHandleSide = 'left' | 'right' | 'bottom';
+type LePreviewFrameResizeOrigin = 'auto' | 'edge' | 'center';
+
+interface LePreviewFrameDragState {
+  side: LePreviewFrameHandleSide;
+  origin: Exclude<LePreviewFrameResizeOrigin, 'auto'>;
+  leftEdge: number;
+  rightEdge: number;
+  centerX: number;
+  topEdge: number;
+}
+
 const DEFAULT_BREAKPOINTS: LePreviewFrameBreakpoint[] = [
   { label: 'Desktop', width: 1280, icon: 'desktop' },
   { label: 'Tablet', width: 768, icon: 'tablet' },
@@ -42,7 +54,7 @@ const DEFAULT_BREAKPOINTS: LePreviewFrameBreakpoint[] = [
  * @csspart frame - The outer chrome (toolbar + viewport)
  * @csspart controls - The top controls bar
  * @csspart viewport - The scrollable content area
- * @csspart drag-handle - The right drag-resize handle
+ * @csspart drag-handle - The drag-resize handle(s)
  * @csspart width-badge - The live width indicator
  *
  * @cmsInternal true
@@ -77,9 +89,29 @@ export class LePreviewFrame {
   @Prop() showControls: boolean = true;
 
   /**
-   * Whether to show the drag resize handle on the right edge.
+   * Whether to show drag resize handles.
    */
   @Prop() resizable: boolean = true;
+
+  /**
+   * Which handles are rendered.
+   * Accepts "right", "left", "bottom", "left,right", etc. or a JSON string/array.
+   */
+  @Prop() handles: LePreviewFrameHandleSide[] | string = 'right';
+
+  /**
+   * Horizontal resize origin strategy.
+   * - auto: detects centered layouts and switches to center math
+   * - edge: keeps opposite edge fixed (default left-aligned behavior)
+   * - center: grows/shrinks from center
+   */
+  @Prop() origin: LePreviewFrameResizeOrigin = 'auto';
+
+  /**
+   * Extra layout padding to subtract from available container space.
+   * Useful when visual page padding is not detectable from the immediate parent.
+   */
+  @Prop() padding: number = 0;
 
   /**
    * Preset breakpoints shown as buttons.
@@ -98,6 +130,11 @@ export class LePreviewFrame {
   @Prop() minHeight: number = 64;
 
   /**
+   * Maximum resizable viewport height in pixels. 0 = unconstrained.
+   */
+  @Prop() maxHeight: number = 0;
+
+  /**
    * Emitted whenever the frame width changes (drag or preset button).
    */
   @Event() lePreviewFrameResize?: EventEmitter<LePreviewFrameResizeDetail>;
@@ -108,8 +145,10 @@ export class LePreviewFrame {
   /** Whether a drag operation is in progress */
   @State() private isDragging: boolean = false;
 
-  private dragStartX: number = 0;
-  private dragStartWidth: number = 0;
+  /** Current live viewport height, updated during bottom-handle drag */
+  @State() private currentHeight: number = 0;
+
+  private dragState?: LePreviewFrameDragState;
 
   private resizeObserver?: ResizeObserver;
 
@@ -118,6 +157,9 @@ export class LePreviewFrame {
 
   /** Whether width should track parent container size automatically. */
   private autoWidth: boolean = true;
+
+  /** Whether viewport height should track content size automatically. */
+  private autoHeight: boolean = true;
 
   private get parsedBreakpoints(): LePreviewFrameBreakpoint[] {
     if (typeof this.breakpoints === 'string') {
@@ -128,6 +170,29 @@ export class LePreviewFrame {
       }
     }
     return this.breakpoints ?? DEFAULT_BREAKPOINTS;
+  }
+
+  private get parsedHandles(): LePreviewFrameHandleSide[] {
+    const fallback: LePreviewFrameHandleSide[] = ['right'];
+
+    if (Array.isArray(this.handles)) {
+      return this.normalizeHandles(this.handles);
+    }
+
+    if (typeof this.handles !== 'string') {
+      return fallback;
+    }
+
+    try {
+      const parsed = JSON.parse(this.handles);
+      if (Array.isArray(parsed)) {
+        return this.normalizeHandles(parsed);
+      }
+    } catch {
+      // Treat as comma-separated shorthand when JSON parsing fails.
+    }
+
+    return this.normalizeHandles(this.handles.split(','));
   }
 
   @Watch('frameWidth')
@@ -152,11 +217,13 @@ export class LePreviewFrame {
     if (initialExplicit !== null) {
       this.autoWidth = false;
       this.currentWidth = Math.max(this.minWidth, initialExplicit);
-      return;
+    } else {
+      this.autoWidth = true;
+      this.currentWidth = Math.max(this.minWidth, this.containerWidth || 900);
     }
 
-    this.autoWidth = true;
-    this.currentWidth = Math.max(this.minWidth, this.containerWidth || 900);
+    this.autoHeight = true;
+    this.currentHeight = 0;
   }
 
   componentDidLoad() {
@@ -193,13 +260,17 @@ export class LePreviewFrame {
   /** Resize handle drag */
   private naturalContainerWidth(): number {
     const parent = this.el.parentElement;
+    const layoutPadding = this.normalizedPadding * 2;
     if (parent) {
       const style = getComputedStyle(parent);
       const paddingLeft = parseFloat(style.paddingLeft) || 0;
       const paddingRight = parseFloat(style.paddingRight) || 0;
-      return Math.max(0, parent.getBoundingClientRect().width - paddingLeft - paddingRight);
+      return Math.max(
+        0,
+        parent.getBoundingClientRect().width - paddingLeft - paddingRight - layoutPadding,
+      );
     }
-    return 900; // Fallback width if parent size can't be determined
+    return Math.max(this.minWidth, 900 - layoutPadding); // Fallback width
   }
 
   private observeContainer() {
@@ -212,6 +283,10 @@ export class LePreviewFrame {
       if (this.autoWidth) {
         this.setCurrentWidth(nextContainerWidth, false);
       }
+
+      if (!this.autoHeight && this.currentHeight > 0) {
+        this.setCurrentHeight(this.currentHeight, false);
+      }
     });
     if (this.el.parentElement) {
       this.resizeObserver.observe(this.el.parentElement);
@@ -223,29 +298,187 @@ export class LePreviewFrame {
     this.setCurrentWidth(width, true);
   }
 
-  private handleDragStart = (event: PointerEvent) => {
+  private applyHeight(height: number) {
+    this.autoHeight = false;
+    this.setCurrentHeight(height, false);
+  }
+
+  private handleDragStart = (side: LePreviewFrameHandleSide, event: PointerEvent) => {
     if (!this.resizable) return;
     event.preventDefault();
+
+    const frameEl = this.el.shadowRoot?.querySelector('.frame') as HTMLElement | null;
+    const parent = this.el.parentElement;
+    if (!frameEl || !parent) return;
+
+    const frameRect = frameEl.getBoundingClientRect();
+    const viewportEl = this.el.shadowRoot?.querySelector('.frame-viewport') as HTMLElement | null;
+    const viewportRect = viewportEl?.getBoundingClientRect();
+    const parentRect = parent.getBoundingClientRect();
+
+    this.dragState = {
+      side,
+      origin: this.resolveResizeOrigin(frameRect, parentRect),
+      leftEdge: frameRect.left,
+      rightEdge: frameRect.right,
+      centerX: frameRect.left + frameRect.width / 2,
+      topEdge: viewportRect?.top ?? frameRect.top,
+    };
+
     this.isDragging = true;
-    this.dragStartX = event.clientX;
-    this.dragStartWidth = this.currentWidth || this.naturalContainerWidth();
     (event.target as HTMLElement).setPointerCapture(event.pointerId);
   };
 
   private handleDragMove = (event: PointerEvent) => {
-    if (!this.isDragging) return;
-    const delta = event.clientX - this.dragStartX;
-    this.applyWidth(this.dragStartWidth + delta);
+    if (!this.isDragging || !this.dragState) return;
+
+    if (this.dragState.side === 'bottom') {
+      const height = event.clientY - this.dragState.topEdge;
+      this.applyHeight(height);
+      return;
+    }
+
+    const width = this.computeDragWidth(event.clientX, this.dragState);
+    this.applyWidth(width);
   };
 
   private handleDragEnd = (event: PointerEvent) => {
     if (!this.isDragging) return;
     this.isDragging = false;
+    this.dragState = undefined;
     (event.target as HTMLElement).releasePointerCapture(event.pointerId);
   };
 
   private cleanupDragListeners() {
     this.isDragging = false;
+    this.dragState = undefined;
+  }
+
+  private normalizeHandles(input: unknown[]): LePreviewFrameHandleSide[] {
+    const handles = input
+      .map(item => String(item).trim().toLowerCase())
+      .filter(
+        (item): item is LePreviewFrameHandleSide =>
+          item === 'left' || item === 'right' || item === 'bottom',
+      );
+
+    if (handles.length === 0) return ['right'];
+    return Array.from(new Set(handles));
+  }
+
+  private resolveResizeOrigin(
+    frameRect: DOMRect,
+    parentRect: DOMRect,
+  ): Exclude<LePreviewFrameResizeOrigin, 'auto'> {
+    if (this.origin !== 'auto') {
+      return this.origin;
+    }
+
+    const leftGap = Math.max(0, frameRect.left - parentRect.left);
+    const rightGap = Math.max(0, parentRect.right - frameRect.right);
+    const centerTolerancePx = 2;
+
+    return Math.abs(leftGap - rightGap) <= centerTolerancePx ? 'center' : 'edge';
+  }
+
+  private computeDragWidth(clientX: number, dragState: LePreviewFrameDragState): number {
+    if (dragState.origin === 'center') {
+      if (dragState.side === 'left') {
+        return (dragState.centerX - clientX) * 2;
+      }
+      return (clientX - dragState.centerX) * 2;
+    }
+
+    if (dragState.side === 'left') {
+      return dragState.rightEdge - clientX;
+    }
+    return clientX - dragState.leftEdge;
+  }
+
+  private handleResizeKeyDown = (side: LePreviewFrameHandleSide, event: KeyboardEvent) => {
+    if (side === 'bottom') {
+      const step = event.shiftKey ? 50 : 10;
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        this.applyHeight(this.currentViewportHeight + step);
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        this.applyHeight(this.currentViewportHeight - step);
+      }
+      return;
+    }
+
+    const step = event.shiftKey ? 50 : 10;
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      const delta = side === 'left' ? -step : step;
+      this.applyWidth(this.currentWidth + delta);
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      const delta = side === 'left' ? step : -step;
+      this.applyWidth(this.currentWidth + delta);
+    }
+  };
+
+  private renderHandle(side: LePreviewFrameHandleSide) {
+    const oppositeSide = side === 'left' ? 'right' : 'left';
+    return (
+      <div
+        class={{
+          'drag-handle': true,
+          'drag-handle-left': side === 'left',
+          'drag-handle-right': side === 'right',
+          'drag-handle-bottom': side === 'bottom',
+        }}
+        part={`drag-handle drag-handle-${side}`}
+        role="slider"
+        aria-label={`Resize preview frame from ${side} edge`}
+        aria-orientation={side === 'bottom' ? 'vertical' : 'horizontal'}
+        aria-valuenow={
+          side === 'bottom' ? Math.round(this.currentViewportHeight) : Math.round(this.currentWidth)
+        }
+        aria-valuemin={side === 'bottom' ? this.minHeight : this.minWidth}
+        aria-valuemax={
+          side === 'bottom'
+            ? this.maxHeight > 0
+              ? this.maxHeight
+              : undefined
+            : this.maxWidth > 0
+              ? this.maxWidth
+              : undefined
+        }
+        tabIndex={0}
+        onPointerDown={event => this.handleDragStart(side, event)}
+        onPointerMove={this.handleDragMove}
+        onPointerUp={this.handleDragEnd}
+        onPointerCancel={this.handleDragEnd}
+        onKeyDown={event => this.handleResizeKeyDown(side, event)}
+      >
+        <span class="sr-only">
+          {side === 'bottom'
+            ? 'Drag bottom handle to resize height.'
+            : `Drag ${side} handle to resize. ${oppositeSide} edge remains anchor.`}
+        </span>
+        <div class="drag-handle-grip" />
+      </div>
+    );
+  }
+
+  private get normalizedPadding(): number {
+    return this.isFiniteNumber(this.padding) ? Math.max(0, this.padding) : 0;
+  }
+
+  private get currentViewportHeight(): number {
+    if (this.currentHeight > 0) {
+      return this.currentHeight;
+    }
+
+    const viewportEl = this.el.shadowRoot?.querySelector('.frame-viewport') as HTMLElement | null;
+    if (viewportEl) {
+      return viewportEl.getBoundingClientRect().height;
+    }
+
+    return this.minHeight;
   }
 
   private setCurrentWidth(width: number, emit: boolean) {
@@ -258,6 +491,19 @@ export class LePreviewFrame {
       this.currentWidth = clamped;
       if (emit) {
         this.lePreviewFrameResize?.emit({ width: clamped });
+      }
+    }
+  }
+
+  private setCurrentHeight(height: number, emit: boolean) {
+    const maxCandidate = this.maxHeight > 0 ? this.maxHeight : Number.POSITIVE_INFINITY;
+    const maxH = Math.max(this.minHeight, maxCandidate);
+    const clamped = Math.max(this.minHeight, Math.min(height, maxH));
+
+    if (this.currentHeight !== clamped) {
+      this.currentHeight = clamped;
+      if (emit) {
+        this.lePreviewFrameResize?.emit({ width: this.currentWidth });
       }
     }
   }
@@ -312,11 +558,22 @@ export class LePreviewFrame {
 
   render() {
     const frameStyle: Record<string, string> = {};
+    const viewportStyle: Record<string, string> = {};
+
     if (this.currentWidth > 0) {
       frameStyle.width = `${this.currentWidth}px`;
     }
+
     if (this.minHeight > 0) {
       frameStyle['--le-preview-frame-min-height'] = `${this.minHeight}px`;
+    }
+
+    if (this.currentHeight > 0) {
+      viewportStyle.height = `${this.currentHeight}px`;
+    }
+
+    if (this.normalizedPadding > 0) {
+      viewportStyle.padding = `${this.normalizedPadding}px`;
     }
 
     return (
@@ -329,38 +586,11 @@ export class LePreviewFrame {
         <div class="frame" part="frame" style={frameStyle}>
           {this.renderControls()}
 
-          <div class="frame-viewport" part="viewport">
+          <div class="frame-viewport" part="viewport" style={viewportStyle}>
             <slot />
           </div>
 
-          {this.resizable && (
-            <div
-              class="drag-handle"
-              part="drag-handle"
-              role="slider"
-              aria-label="Resize preview frame"
-              aria-valuenow={Math.round(this.currentWidth)}
-              aria-valuemin={this.minWidth}
-              aria-valuemax={this.maxWidth > 0 ? this.maxWidth : undefined}
-              tabIndex={0}
-              onPointerDown={this.handleDragStart}
-              onPointerMove={this.handleDragMove}
-              onPointerUp={this.handleDragEnd}
-              onPointerCancel={this.handleDragEnd}
-              onKeyDown={e => {
-                const step = e.shiftKey ? 50 : 10;
-                if (e.key === 'ArrowRight') {
-                  e.preventDefault();
-                  this.applyWidth(this.currentWidth + step);
-                } else if (e.key === 'ArrowLeft') {
-                  e.preventDefault();
-                  this.applyWidth(this.currentWidth - step);
-                }
-              }}
-            >
-              <div class="drag-handle-grip" />
-            </div>
-          )}
+          {this.resizable && this.parsedHandles.map(side => this.renderHandle(side))}
         </div>
       </Host>
     );

@@ -1,9 +1,6 @@
 # le-preview-frame
 
-
-
 <!-- Auto Generated Below -->
-
 
 ## Overview
 
@@ -15,24 +12,26 @@ component demos and documentation.
 
 ## Properties
 
-| Property       | Attribute       | Description                                                                                                      | Type                                   | Default               |
-| -------------- | --------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------- | --------------------- |
-| `breakpoints`  | `breakpoints`   | Preset breakpoints shown as buttons. Can be a JSON string or a LePreviewFrameBreakpoint[].                       | `LePreviewFrameBreakpoint[] \| string` | `DEFAULT_BREAKPOINTS` |
-| `frameWidth`   | `frame-width`   | Initial inner width of the preview viewport in pixels. Set to 0 or 'auto' to fill the available container width. | `number \| undefined`                  | `undefined`           |
-| `maxWidth`     | `max-width`     | Maximum resizable width in pixels. 0 = unconstrained.                                                            | `number`                               | `0`                   |
-| `minHeight`    | `min-height`    | Minimum height of the viewport in pixels.                                                                        | `number`                               | `64`                  |
-| `minWidth`     | `min-width`     | Minimum resizable width in pixels.                                                                               | `number`                               | `240`                 |
-| `resizable`    | `resizable`     | Whether to show the drag resize handle on the right edge.                                                        | `boolean`                              | `true`                |
-| `showControls` | `show-controls` | Whether to show the controls bar (breakpoint buttons + width badge).                                             | `boolean`                              | `true`                |
-| `widthUnit`    | `width-unit`    | Label for the width badge. Set empty to hide the unit suffix.                                                    | `string`                               | `'px'`                |
-
+| Property       | Attribute       | Description                                                                                                                                                                                           | Type                                   | Default               |
+| -------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | --------------------- |
+| `breakpoints`  | `breakpoints`   | Preset breakpoints shown as buttons. Can be a JSON string or a LePreviewFrameBreakpoint[].                                                                                                            | `LePreviewFrameBreakpoint[] \| string` | `DEFAULT_BREAKPOINTS` |
+| `frameWidth`   | `frame-width`   | Initial inner width of the preview viewport in pixels. Set to 0 or 'auto' to fill the available container width.                                                                                      | `number \| undefined`                  | `undefined`           |
+| `handles`      | `handles`       | Which handles are rendered. Accepts "right", "left", "bottom", "left,right", etc. or a JSON string/array.                                                                                             | `LePreviewFrameHandleSide[] \| string` | `'right'`             |
+| `maxHeight`    | `max-height`    | Maximum resizable viewport height in pixels. 0 = unconstrained.                                                                                                                                       | `number`                               | `0`                   |
+| `maxWidth`     | `max-width`     | Maximum resizable width in pixels. 0 = unconstrained.                                                                                                                                                 | `number`                               | `0`                   |
+| `minHeight`    | `min-height`    | Minimum height of the viewport in pixels.                                                                                                                                                             | `number`                               | `64`                  |
+| `minWidth`     | `min-width`     | Minimum resizable width in pixels.                                                                                                                                                                    | `number`                               | `240`                 |
+| `origin`       | `origin`        | Horizontal resize origin strategy. - auto: detects centered layouts and switches to center math - edge: keeps opposite edge fixed (default left-aligned behavior) - center: grows/shrinks from center | `"auto" \| "center" \| "edge"`         | `'auto'`              |
+| `padding`      | `padding`       | Extra layout padding to subtract from available container space. Useful when visual page padding is not detectable from the immediate parent.                                                         | `number`                               | `0`                   |
+| `resizable`    | `resizable`     | Whether to show drag resize handles.                                                                                                                                                                  | `boolean`                              | `true`                |
+| `showControls` | `show-controls` | Whether to show the controls bar (breakpoint buttons + width badge).                                                                                                                                  | `boolean`                              | `true`                |
+| `widthUnit`    | `width-unit`    | Label for the width badge. Set empty to hide the unit suffix.                                                                                                                                         | `string`                               | `'px'`                |
 
 ## Events
 
 | Event                  | Description                                                       | Type                                      |
 | ---------------------- | ----------------------------------------------------------------- | ----------------------------------------- |
 | `lePreviewFrameResize` | Emitted whenever the frame width changes (drag or preset button). | `CustomEvent<LePreviewFrameResizeDetail>` |
-
 
 ## Methods
 
@@ -43,8 +42,6 @@ Reset to natural/container width.
 #### Returns
 
 Type: `Promise<void>`
-
-
 
 ### `snapTo(width: number) => Promise<void>`
 
@@ -60,9 +57,6 @@ Snap to a preset width.
 
 Type: `Promise<void>`
 
-
-
-
 ## Slots
 
 | Slot         | Description                                     |
@@ -70,16 +64,13 @@ Type: `Promise<void>`
 |              | The content to preview                          |
 | `"controls"` | Extra content inserted after the preset buttons |
 
-
 ## Shadow Parts
 
-| Part            | Description |
-| --------------- | ----------- |
-| `"controls"`    |             |
-| `"drag-handle"` |             |
-| `"frame"`       |             |
-| `"viewport"`    |             |
-
+| Part         | Description |
+| ------------ | ----------- |
+| `"controls"` |             |
+| `"frame"`    |             |
+| `"viewport"` |             |
 
 ## Dependencies
 
@@ -91,6 +82,7 @@ Type: `Promise<void>`
 - [le-tag](../le-tag)
 
 ### Graph
+
 ```mermaid
 graph TD;
   le-preview-frame --> le-button-group
@@ -147,6 +139,6 @@ graph TD;
   style le-preview-frame fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
-----------------------------------------------
+---
 
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

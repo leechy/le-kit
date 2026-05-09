@@ -98,7 +98,6 @@
 .drag-handle {
   position: absolute;
   top: 0;
-  right: 0;
   bottom: 0;
   width: var(--le-preview-frame-handle-width);
   display: flex;
@@ -109,6 +108,24 @@
   outline: none;
   background: transparent;
   transition: background 0.15s;
+}
+
+.drag-handle-right {
+  right: 0;
+}
+
+.drag-handle-left {
+  left: 0;
+}
+
+.drag-handle-bottom {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+  width: auto;
+  height: var(--le-preview-frame-handle-width);
+  cursor: ns-resize;
 }
 
 .drag-handle:hover,
@@ -129,14 +146,37 @@
   transition: background 0.15s, height 0.15s;
 }
 
+.drag-handle-bottom .drag-handle-grip {
+  width: 32px;
+  height: 3px;
+}
+
 .drag-handle:hover .drag-handle-grip,
 :host(.is-dragging) .drag-handle .drag-handle-grip {
   background: var(--le-preview-frame-handle-color-hover);
   height: 40px;
 }
 
+.drag-handle-bottom:hover .drag-handle-grip,
+:host(.is-dragging) .drag-handle-bottom .drag-handle-grip {
+  width: 40px;
+  height: 3px;
+}
+
 /* ── Host display helpers ────────────────────────────────────── */
 
 :host(:not(.is-resizable)) .drag-handle {
   display: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

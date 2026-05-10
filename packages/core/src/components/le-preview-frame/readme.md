@@ -2,6 +2,7 @@
 
 <!-- Auto Generated Below -->
 
+
 ## Overview
 
 A resizable preview frame for showcasing responsive component behavior.
@@ -27,11 +28,13 @@ component demos and documentation.
 | `showControls` | `show-controls` | Whether to show the controls bar (breakpoint buttons + width badge).                                                                                                                                  | `boolean`                              | `true`                |
 | `widthUnit`    | `width-unit`    | Label for the width badge. Set empty to hide the unit suffix.                                                                                                                                         | `string`                               | `'px'`                |
 
+
 ## Events
 
 | Event                  | Description                                                       | Type                                      |
 | ---------------------- | ----------------------------------------------------------------- | ----------------------------------------- |
 | `lePreviewFrameResize` | Emitted whenever the frame width changes (drag or preset button). | `CustomEvent<LePreviewFrameResizeDetail>` |
+
 
 ## Methods
 
@@ -42,6 +45,8 @@ Reset to natural/container width.
 #### Returns
 
 Type: `Promise<void>`
+
+
 
 ### `snapTo(width: number) => Promise<void>`
 
@@ -57,12 +62,16 @@ Snap to a preset width.
 
 Type: `Promise<void>`
 
+
+
+
 ## Slots
 
 | Slot         | Description                                     |
 | ------------ | ----------------------------------------------- |
 |              | The content to preview                          |
 | `"controls"` | Extra content inserted after the preset buttons |
+
 
 ## Shadow Parts
 
@@ -71,6 +80,7 @@ Type: `Promise<void>`
 | `"controls"` |             |
 | `"frame"`    |             |
 | `"viewport"` |             |
+
 
 ## Dependencies
 
@@ -82,7 +92,6 @@ Type: `Promise<void>`
 - [le-tag](../le-tag)
 
 ### Graph
-
 ```mermaid
 graph TD;
   le-preview-frame --> le-button-group
@@ -139,6 +148,6 @@ graph TD;
   style le-preview-frame fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
----
+----------------------------------------------
 
-_Built with [StencilJS](https://stenciljs.com/)_
+*Built with [StencilJS](https://stenciljs.com/)*

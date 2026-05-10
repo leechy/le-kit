@@ -248,7 +248,7 @@ A flexible button component with multiple variants and states.
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
 | `mode` | `'default' \| 'admin' \| undefined` |  | Mode of the popover should be 'default' for internal use |
-| `variant` | `'solid' \| 'outlined' \| 'clear' \| 'system'` | `'solid'` | Button variant style |
+| `variant` | `'solid' \| 'outlined' \| 'clear' \| 'system'` | `'outlined'` | Button variant style |
 | `color` | `\| 'primary'
     \| 'secondary'
     \| 'success'
@@ -313,6 +313,7 @@ into an overflow "more" menu.
 | `collapse` | `boolean \| number \| string \| undefined` |  | Collapse mode.  - `true`: show only the top-priority button - positive number: show top N buttons - `0`: show only the more button - negative number: hide abs(N) lowest-priority buttons  Non-integers are rounded with `Math.round`. |
 | `overflowIcons` | `boolean` | `false` | When true, icons from collapsed buttons are shown in the overflow navigation list. |
 | `disabled` | `boolean` | `false` | Disabled attribute, when the button group is disabled, all buttons inside will be disabled and the overflow menu will not be accessible. |
+| `visibility` | `'visible' \| 'collapsing' \| 'collapsed' \| 'expanding'` | `'visible'` | Visibility state used by responsive containers such as le-toolbar. |
 
 ### Events
 
@@ -1033,10 +1034,14 @@ component demos and documentation.
 | `minWidth` | `number` | `240` | Minimum resizable width in pixels. |
 | `maxWidth` | `number` | `0` | Maximum resizable width in pixels. 0 = unconstrained. |
 | `showControls` | `boolean` | `true` | Whether to show the controls bar (breakpoint buttons + width badge). |
-| `resizable` | `boolean` | `true` | Whether to show the drag resize handle on the right edge. |
+| `resizable` | `boolean` | `true` | Whether to show drag resize handles. |
+| `handles` | `LePreviewFrameHandleSide[] \| string` | `'right'` | Which handles are rendered. Accepts "right", "left", "bottom", "left,right", etc. or a JSON string/array. |
+| `origin` | `LePreviewFrameResizeOrigin` | `'auto'` | Horizontal resize origin strategy. - auto: detects centered layouts and switches to center math - edge: keeps opposite edge fixed (default left-aligned behavior) - center: grows/shrinks from center |
+| `padding` | `number` | `0` | Extra layout padding to subtract from available container space. Useful when visual page padding is not detectable from the immediate parent. |
 | `breakpoints` | `LePreviewFrameBreakpoint[] \| string` | `DEFAULT_BREAKPOINTS` | Preset breakpoints shown as buttons. Can be a JSON string or a LePreviewFrameBreakpoint[]. |
 | `widthUnit` | `string` | `'px'` | Label for the width badge. Set empty to hide the unit suffix. |
 | `minHeight` | `number` | `64` | Minimum height of the viewport in pixels. |
+| `maxHeight` | `number` | `0` | Maximum resizable viewport height in pixels. 0 = unconstrained. |
 
 ### Events
 

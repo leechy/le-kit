@@ -418,7 +418,7 @@ export namespace Components {
         /**
           * Button variant style
           * @allowedValues solid | outlined | clear
-          * @default 'solid'
+          * @default 'outlined'
          */
         "variant": 'solid' | 'outlined' | 'clear' | 'system';
         /**
@@ -458,6 +458,12 @@ export namespace Components {
           * @default false
          */
         "overflowIcons": boolean;
+        /**
+          * Visibility state used by responsive containers such as le-toolbar.
+          * @allowedValues visible | collapsing | collapsed | expanding
+          * @default 'visible'
+         */
+        "visibility": 'visible' | 'collapsing' | 'collapsed' | 'expanding';
         "whenLayoutSettled": () => Promise<void>;
     }
     /**
@@ -1467,7 +1473,7 @@ export namespace Components {
      * @csspart frame - The outer chrome (toolbar + viewport)
      * @csspart controls - The top controls bar
      * @csspart viewport - The scrollable content area
-     * @csspart drag-handle - The right drag-resize handle
+     * @csspart drag-handle - The drag-resize handle(s)
      * @csspart width-badge - The live width indicator
      * @cmsInternal true
      */
@@ -1481,6 +1487,16 @@ export namespace Components {
           * Initial inner width of the preview viewport in pixels. Set to 0 or 'auto' to fill the available container width.
          */
         "frameWidth"?: number;
+        /**
+          * Which handles are rendered. Accepts "right", "left", "bottom", "left,right", etc. or a JSON string/array.
+          * @default 'right'
+         */
+        "handles": LePreviewFrameHandleSide[] | string;
+        /**
+          * Maximum resizable viewport height in pixels. 0 = unconstrained.
+          * @default 0
+         */
+        "maxHeight": number;
         /**
           * Maximum resizable width in pixels. 0 = unconstrained.
           * @default 0
@@ -1497,11 +1513,21 @@ export namespace Components {
          */
         "minWidth": number;
         /**
+          * Horizontal resize origin strategy. - auto: detects centered layouts and switches to center math - edge: keeps opposite edge fixed (default left-aligned behavior) - center: grows/shrinks from center
+          * @default 'auto'
+         */
+        "origin": LePreviewFrameResizeOrigin;
+        /**
+          * Extra layout padding to subtract from available container space. Useful when visual page padding is not detectable from the immediate parent.
+          * @default 0
+         */
+        "padding": number;
+        /**
           * Reset to natural/container width.
          */
         "resetWidth": () => Promise<void>;
         /**
-          * Whether to show the drag resize handle on the right edge.
+          * Whether to show drag resize handles.
           * @default true
          */
         "resizable": boolean;
@@ -3358,7 +3384,7 @@ declare global {
      * @csspart frame - The outer chrome (toolbar + viewport)
      * @csspart controls - The top controls bar
      * @csspart viewport - The scrollable content area
-     * @csspart drag-handle - The right drag-resize handle
+     * @csspart drag-handle - The drag-resize handle(s)
      * @csspart width-badge - The live width indicator
      * @cmsInternal true
      */
@@ -4286,7 +4312,7 @@ declare namespace LocalJSX {
         /**
           * Button variant style
           * @allowedValues solid | outlined | clear
-          * @default 'solid'
+          * @default 'outlined'
          */
         "variant"?: 'solid' | 'outlined' | 'clear' | 'system';
         /**
@@ -4324,6 +4350,12 @@ declare namespace LocalJSX {
           * @default false
          */
         "overflowIcons"?: boolean;
+        /**
+          * Visibility state used by responsive containers such as le-toolbar.
+          * @allowedValues visible | collapsing | collapsed | expanding
+          * @default 'visible'
+         */
+        "visibility"?: 'visible' | 'collapsing' | 'collapsed' | 'expanding';
     }
     /**
      * A flexible card component with header, content, and footer slots.
@@ -5393,7 +5425,7 @@ declare namespace LocalJSX {
      * @csspart frame - The outer chrome (toolbar + viewport)
      * @csspart controls - The top controls bar
      * @csspart viewport - The scrollable content area
-     * @csspart drag-handle - The right drag-resize handle
+     * @csspart drag-handle - The drag-resize handle(s)
      * @csspart width-badge - The live width indicator
      * @cmsInternal true
      */
@@ -5407,6 +5439,16 @@ declare namespace LocalJSX {
           * Initial inner width of the preview viewport in pixels. Set to 0 or 'auto' to fill the available container width.
          */
         "frameWidth"?: number;
+        /**
+          * Which handles are rendered. Accepts "right", "left", "bottom", "left,right", etc. or a JSON string/array.
+          * @default 'right'
+         */
+        "handles"?: LePreviewFrameHandleSide[] | string;
+        /**
+          * Maximum resizable viewport height in pixels. 0 = unconstrained.
+          * @default 0
+         */
+        "maxHeight"?: number;
         /**
           * Maximum resizable width in pixels. 0 = unconstrained.
           * @default 0
@@ -5427,7 +5469,17 @@ declare namespace LocalJSX {
          */
         "onLePreviewFrameResize"?: (event: LePreviewFrameCustomEvent<LePreviewFrameResizeDetail>) => void;
         /**
-          * Whether to show the drag resize handle on the right edge.
+          * Horizontal resize origin strategy. - auto: detects centered layouts and switches to center math - edge: keeps opposite edge fixed (default left-aligned behavior) - center: grows/shrinks from center
+          * @default 'auto'
+         */
+        "origin"?: LePreviewFrameResizeOrigin;
+        /**
+          * Extra layout padding to subtract from available container space. Useful when visual page padding is not detectable from the immediate parent.
+          * @default 0
+         */
+        "padding"?: number;
+        /**
+          * Whether to show drag resize handles.
           * @default true
          */
         "resizable"?: boolean;
@@ -6606,6 +6658,7 @@ declare namespace LocalJSX {
         "collapse": string;
         "overflowIcons": boolean;
         "disabled": boolean;
+        "visibility": 'visible' | 'collapsing' | 'collapsed' | 'expanding';
     }
     interface LeCardAttributes {
         "variant": 'default' | 'outlined' | 'elevated';
@@ -6784,9 +6837,13 @@ declare namespace LocalJSX {
         "maxWidth": number;
         "showControls": boolean;
         "resizable": boolean;
+        "handles": LePreviewFrameHandleSide[] | string;
+        "origin": LePreviewFrameResizeOrigin;
+        "padding": number;
         "breakpoints": LePreviewFrameBreakpoint[] | string;
         "widthUnit": string;
         "minHeight": number;
+        "maxHeight": number;
     }
     interface LeRoundProgressAttributes {
         "value": number;
@@ -7385,7 +7442,7 @@ declare module "@stencil/core" {
              * @csspart frame - The outer chrome (toolbar + viewport)
              * @csspart controls - The top controls bar
              * @csspart viewport - The scrollable content area
-             * @csspart drag-handle - The right drag-resize handle
+             * @csspart drag-handle - The drag-resize handle(s)
              * @csspart width-badge - The live width indicator
              * @cmsInternal true
              */

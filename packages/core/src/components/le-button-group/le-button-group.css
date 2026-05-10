@@ -4,6 +4,20 @@
 
   --le-button-group-padding: 0;
   --le-button-group-radius: calc(var(--le-radius-md) + var(--le-button-group-padding));
+  --le-button-group-toolbar-inner-margin: var(--le-toolbar-item-inner-margin, 0px);
+}
+
+le-visibility {
+  margin-inline: var(--le-button-group-toolbar-inner-margin);
+}
+/* le-overflow-menu::part(trigger-button) {
+  --le-toolbar-gap: 0px;
+} */
+
+:host([collapse='collapse']) le-visibility,
+:host([visibility='collapsed']) le-visibility,
+:host([visibility='collapsing']) le-visibility {
+  margin-inline: 0 !important;
 }
 
 .button-group {
@@ -34,10 +48,12 @@
 }
 
 ::slotted(le-button[group-shape='middle']) {
+  --le-button-toolbar-inner-margin: -1px 0;
   --le-button-border-radius: 0;
 }
 
 ::slotted(le-button[group-shape='end']) {
+  --le-button-toolbar-inner-margin: -1px 0;
   --le-button-border-radius: 0 var(--le-radius-md) var(--le-radius-md) 0;
 }
 

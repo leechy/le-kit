@@ -77,6 +77,13 @@ export class LeButtonGroup {
    */
   @Prop({ reflect: true }) disabled: boolean = false;
 
+  /**
+   * Visibility state used by responsive containers such as le-toolbar.
+   * @allowedValues visible | collapsing | collapsed | expanding
+   */
+  @Prop({ reflect: true }) visibility: 'visible' | 'collapsing' | 'collapsed' | 'expanding' =
+    'visible';
+
   @State() private overflowItems: LeOption[] = [];
 
   @State() private hasOverflow: boolean = false;
@@ -477,7 +484,10 @@ export class LeButtonGroup {
   };
 
   render() {
-    const visibilityState = this.isFullyCollapsed() ? 'collapsed' : 'visible';
+    const visibilityState =
+      this.isFullyCollapsed() || this.visibility === 'collapsed' || this.visibility === 'collapsing'
+        ? 'collapsed'
+        : 'visible';
 
     return (
       <Host>

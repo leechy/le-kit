@@ -355,10 +355,31 @@ export class LeToolbar {
 
     if (typeof virtualLike.whenLayoutSettled === 'function') {
       await virtualLike.whenLayoutSettled();
+      await this.waitForNestedCustomElements(virtualLike);
       return;
     }
 
+    await this.waitForNestedCustomElements(virtualLike);
     await nextFrame();
+  }
+
+  private async waitForNestedCustomElements(root: HTMLElement) {
+    const nested = Array.from(root.querySelectorAll('*')).filter(
+      (el): el is HTMLElement & { componentOnReady?: () => Promise<unknown> } =>
+        el instanceof HTMLElement && el.tagName.includes('-'),
+    );
+
+    await Promise.all(
+      nested.map(async el => {
+        if (typeof el.componentOnReady !== 'function') return;
+
+        try {
+          await el.componentOnReady();
+        } catch {
+          // Keep measurement resilient even if one nested component fails to resolve readiness.
+        }
+      }),
+    );
   }
 
   private syncVirtualTriggerContent() {
@@ -531,6 +552,12 @@ export class LeToolbar {
     for (const item of this.itemMap.values()) {
       item.virtual.setAttribute('visibility', 'visible');
       item.virtual.removeAttribute('collapse');
+    }
+
+    for (const item of this.itemMap.values()) {
+      if (item.kind === 'group') {
+        await this.settleVirtualItem(item.virtual);
+      }
     }
 
     await nextFrame();

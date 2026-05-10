@@ -65,6 +65,7 @@ graph TD;
   le-side-panel --> le-side-panel-toggle
   le-side-panel --> le-icon
   le-side-panel-toggle --> le-button
+  le-button --> le-icon
   le-button --> le-slot
   le-button --> le-visibility
   le-button --> le-component

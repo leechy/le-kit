@@ -251,6 +251,14 @@ export class LeButton {
         clone.removeAttribute('slot');
         iconStart = clone.outerHTML;
       }
+    } else if (this.iconOnly && typeof this.iconOnly === 'string') {
+      if (this.iconOnly.length <= 2) {
+        iconStart = this.iconOnly;
+      } else {
+        // assuming that if the string is longer than 2 characters,
+        // it's an icon name rather than an emoji
+        iconStart = `<le-icon name="${this.iconOnly}"></le-icon>`;
+      }
     } else if (this.hasIconOnlySlot) {
       const slotEl = this.el.querySelector('[slot="icon-only"]');
       if (slotEl) {
@@ -321,7 +329,16 @@ export class LeButton {
         onClick={this.handleClick}
       >
         <span class={classnames('icon-only', { 'is-visible': hasIconOnly })} part="icon-only">
-          <slot name="icon-only">{typeof this.iconOnly === 'string' ? this.iconOnly : null}</slot>
+          <slot name="icon-only">
+            {typeof this.iconOnly === 'string' ? (
+              this.iconOnly.length <= 2 ? (
+                this.iconOnly
+              ) : (
+                // assuming that if the string is longer than 2 characters, it's an icon name rather than an emoji
+                <le-icon name={this.iconOnly}></le-icon>
+              )
+            ) : null}
+          </slot>
         </span>
         {!hasIconOnly && (
           <Fragment>

@@ -100,7 +100,15 @@ import CodeBlock from "../../components/CodeBlock.astro";
     its container. This can be useful for buttons in forms or mobile layouts.
   </p>
   <div class="component-example">
-    <le-button full-width>Full Width Button</le-button>
+    <le-preview-frame
+      id="demo-toolbar-frame"
+      min-width="200"
+      min-height="56"
+      padding="16"
+      handles="left,right"
+    >
+      <le-button full-width>Full Width Button</le-button>
+    </le-preview-frame>
   </div>
 
   <h3>
@@ -171,7 +179,8 @@ import CodeBlock from "../../components/CodeBlock.astro";
 
   <h2>
     <a class="anchor" href="#properties-or-slots" id="properties-or-slots"
-      >Properties or Slots</a>
+      >Properties or Slots</a
+    >
   </h2>
   <p>
     There are a couple of properties that can be set as a properties and as

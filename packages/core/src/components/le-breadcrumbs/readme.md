@@ -39,6 +39,7 @@ graph TD;
   le-breadcrumbs --> le-button
   le-breadcrumbs --> le-popover
   le-breadcrumbs --> le-navigation
+  le-button --> le-icon
   le-button --> le-slot
   le-button --> le-visibility
   le-button --> le-component

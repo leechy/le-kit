@@ -75,6 +75,7 @@ graph TD;
   le-select --> le-dropdown-base
   le-select --> le-button
   le-component --> le-select
+  le-button --> le-icon
   le-button --> le-slot
   le-button --> le-visibility
   le-button --> le-component

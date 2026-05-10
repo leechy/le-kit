@@ -96,6 +96,7 @@ graph TD;
   le-component --> le-string-input
   le-component --> le-popover
   le-component --> le-popup
+  le-button --> le-icon
   le-button --> le-slot
   le-button --> le-visibility
   le-button --> le-component

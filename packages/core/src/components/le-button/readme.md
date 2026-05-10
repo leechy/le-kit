@@ -162,6 +162,7 @@ Type: `Promise<LeOption>`
 
 ### Depends on
 
+- [le-icon](../le-icon)
 - [le-slot](../le-slot)
 - [le-visibility](../le-visibility)
 - [le-component](../le-component)
@@ -170,6 +171,7 @@ Type: `Promise<LeOption>`
 ### Graph
 ```mermaid
 graph TD;
+  le-button --> le-icon
   le-button --> le-slot
   le-button --> le-visibility
   le-button --> le-component

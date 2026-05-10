@@ -19,6 +19,7 @@
 
  - [le-bar](../le-bar)
  - [le-breadcrumbs](../le-breadcrumbs)
+ - [le-button](../le-button)
  - [le-navigation](../le-navigation)
  - [le-number-input](../le-number-input)
  - [le-overflow-menu](../le-overflow-menu)
@@ -33,6 +34,7 @@
 graph TD;
   le-bar --> le-icon
   le-breadcrumbs --> le-icon
+  le-button --> le-icon
   le-navigation --> le-icon
   le-number-input --> le-icon
   le-overflow-menu --> le-icon

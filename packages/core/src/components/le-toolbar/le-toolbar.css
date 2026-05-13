@@ -36,7 +36,6 @@
 /* ── Main container ──────────────────────────────────────────── */
 
 .toolbar-container {
-  display: inline-flex;
   flex-wrap: nowrap;
   align-items: center;
   margin: 0;
@@ -46,12 +45,23 @@
   border-radius: var(--le-toolbar-border-radius);
   overflow: hidden;
   box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.toolbar-container:not(.toolbar-virtual) {
+  display: flex;
+  width: 100%;
+}
+
+.toolbar-container.toolbar-virtual {
+  display: inline-flex;
+  width: auto;
 }
 
 .toolbar-container.align-start  { justify-content: flex-start; }
 .toolbar-container.align-center { justify-content: center; }
 .toolbar-container.align-end    { justify-content: flex-end; }
-.toolbar-container.align-stretch { justify-content: stretch; }
+.toolbar-container.align-stretch { justify-content: space-between; }
 
 /* ── Virtual toolbar (off-screen, inert) ─────────────────────── */
 

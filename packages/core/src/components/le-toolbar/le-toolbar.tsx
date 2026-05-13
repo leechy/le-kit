@@ -45,8 +45,8 @@ interface ToolbarItemRecord {
   virtual: HTMLElement;
   index: number;
   priority: number;
-  kind: 'item' | 'group';
-  overflowOption: LeOption;
+  kind: 'item' | 'group' | 'spacer-flex' | 'spacer-fixed';
+  overflowOption?: LeOption;
 }
 
 interface CollapseStep {
@@ -58,6 +58,7 @@ interface CollapseStep {
   action: 'hide-item' | 'group-collapse' | 'hide-group';
   collapseValue?: string;
   overflowOption?: LeOption;
+  excludeFromOverflowMenu?: boolean;
   thresholdWidth: number;
   resultingWidth: number;
 }
@@ -73,7 +74,7 @@ interface CollapseStep {
  * footprint first before their contents are overflowed entirely.
  *
  * @slot - Toolbar items
- * @slot overflow-trigger - Custom content for the overflow trigger button
+ * @slot more - Custom content for the overflow trigger button
  *
  * @csspart container - The main flex row
  * @csspart overflow-trigger - The "more" button wrapper
@@ -176,8 +177,16 @@ export class LeToolbar {
   private disconnectModeObserver?: () => void;
 
   @Watch('alignItems')
+  handleAlignChange() {
+    void this.prepareToolbarItems();
+  }
+
   @Watch('itemGap')
-  handlePropChange() {
+  handleGapChange(newValue: string) {
+    if (!newValue || newValue.trim() === '') {
+      // set default gap if input is empty or invalid
+      this.itemGap = 'var(--le-toolbar-gap, var(--le-spacing-1, 4px))';
+    }
     void this.prepareToolbarItems();
   }
 
@@ -293,6 +302,23 @@ export class LeToolbar {
     return Number.isFinite(parsed) ? parsed : 1000 + index;
   }
 
+  private isToolbarSpacer(el: HTMLElement): boolean {
+    return el.tagName.toLowerCase() === 'le-toolbar-spacer';
+  }
+
+  private getFixedSpacerWidthPx(el: HTMLElement): number | undefined {
+    if (!this.isToolbarSpacer(el)) return undefined;
+
+    const spacer = el as HTMLElement & { width?: unknown };
+    const raw = spacer.getAttribute('width') ?? spacer.width;
+    if (raw === null || raw === undefined || String(raw).trim() === '') return undefined;
+
+    const parsed = Number(raw);
+    if (!Number.isFinite(parsed) || parsed < 0) return undefined;
+
+    return parsed;
+  }
+
   private async buildOverflowOption(item: HTMLElement, id: string): Promise<LeOption> {
     const optionLike = item as HTMLElement & {
       getOption?: () => Promise<LeOption>;
@@ -389,7 +415,7 @@ export class LeToolbar {
 
     const slottedTriggerNodes = Array.from(this.el.children).filter(
       (node): node is HTMLElement =>
-        node instanceof HTMLElement && node.getAttribute('slot') === 'overflow-trigger',
+        node instanceof HTMLElement && node.getAttribute('slot') === 'more',
     );
 
     if (slottedTriggerNodes.length > 0) {
@@ -449,13 +475,24 @@ export class LeToolbar {
         await this.settleVirtualItem(clone);
       }
 
-      const overflowOption = await this.buildOverflowOption(item, id);
+      const fixedSpacerWidth = this.getFixedSpacerWidthPx(item);
+      const kind: ToolbarItemRecord['kind'] = this.isToolbarSpacer(item)
+        ? fixedSpacerWidth !== undefined
+          ? 'spacer-fixed'
+          : 'spacer-flex'
+        : item.tagName.toLowerCase() === 'le-button-group'
+          ? 'group'
+          : 'item';
+
+      const overflowOption =
+        kind === 'item' || kind === 'group' ? await this.buildOverflowOption(item, id) : undefined;
+
       const itemRecord: ToolbarItemRecord = {
         element: item,
         virtual: clone,
         index,
         priority,
-        kind: item.tagName.toLowerCase() === 'le-button-group' ? 'group' : 'item',
+        kind,
         overflowOption,
       };
       this.itemMap.set(id, itemRecord);
@@ -474,7 +511,7 @@ export class LeToolbar {
         const meta =
           typeof group.getItemsMeta === 'function'
             ? await group.getItemsMeta()
-            : { label: overflowOption.label, items: [], visibleCounts: [] };
+            : { label: overflowOption?.label || id, items: [], visibleCounts: [] };
 
         meta.visibleCounts.forEach((visibleCount, stage) => {
           this.collapseSteps.push({
@@ -513,17 +550,31 @@ export class LeToolbar {
           resultingWidth: 0,
         });
       } else {
-        this.collapseSteps.push({
-          id: `${id}::hide`,
-          itemId: id,
-          priority,
-          index,
-          stage: 0,
-          action: 'hide-item',
-          overflowOption,
-          thresholdWidth: 0,
-          resultingWidth: 0,
-        });
+        if (itemRecord.kind === 'item') {
+          this.collapseSteps.push({
+            id: `${id}::hide`,
+            itemId: id,
+            priority,
+            index,
+            stage: 0,
+            action: 'hide-item',
+            overflowOption,
+            thresholdWidth: 0,
+            resultingWidth: 0,
+          });
+        } else if (itemRecord.kind === 'spacer-fixed') {
+          this.collapseSteps.push({
+            id: `${id}::hide`,
+            itemId: id,
+            priority,
+            index,
+            stage: 0,
+            action: 'hide-item',
+            excludeFromOverflowMenu: true,
+            thresholdWidth: 0,
+            resultingWidth: 0,
+          });
+        }
       }
     }
 
@@ -563,6 +614,7 @@ export class LeToolbar {
     await nextFrame();
 
     let currentWidth = virtual.getBoundingClientRect().width;
+    let virtualTriggerVisible = false;
 
     for (let index = 0; index < this.collapseSteps.length; index += 1) {
       const step = this.collapseSteps[index];
@@ -574,8 +626,13 @@ export class LeToolbar {
         this.itemMap.get(step.itemId)?.virtual.setAttribute('collapse', step.collapseValue || '');
       }
 
-      if (index === 0) {
+      const addsOverflowEntry =
+        (step.action === 'hide-item' || step.action === 'hide-group') &&
+        !step.excludeFromOverflowMenu;
+
+      if (!virtualTriggerVisible && addsOverflowEntry) {
         this.setVirtualTriggerVisible(true);
+        virtualTriggerVisible = true;
       }
 
       const record = this.itemMap.get(step.itemId);
@@ -609,6 +666,7 @@ export class LeToolbar {
     const newHostWidth = host.getBoundingClientRect().width;
 
     const visibleIds = new Set<string>(this.itemMap.keys());
+    const hiddenIds = new Set<string>();
     const overflowIds = new Set<string>();
     const collapsedGroupIds = new Set<string>();
     const groupCollapseValues = new Map<string, string>();
@@ -628,8 +686,11 @@ export class LeToolbar {
       if (step.action === 'hide-item') {
         item.element.setAttribute('visibility', 'collapsed');
         visibleIds.delete(step.itemId);
-        overflowIds.add(step.itemId);
-        if (step.overflowOption) {
+        hiddenIds.add(step.itemId);
+        if (!step.excludeFromOverflowMenu) {
+          overflowIds.add(step.itemId);
+        }
+        if (!step.excludeFromOverflowMenu && step.overflowOption) {
           overflowOptionMap.set(step.itemId, step.overflowOption);
         }
       } else if (step.action === 'group-collapse') {
@@ -639,6 +700,7 @@ export class LeToolbar {
       } else if (step.action === 'hide-group') {
         item.element.setAttribute('collapse', 'collapse');
         visibleIds.delete(step.itemId);
+        hiddenIds.add(step.itemId);
         overflowIds.add(step.itemId);
         hiddenGroupIds.add(step.itemId);
         collapsedGroupIds.delete(step.itemId);
@@ -650,7 +712,7 @@ export class LeToolbar {
     }
 
     for (const [id, item] of this.itemMap.entries()) {
-      const desiredVisibility = overflowIds.has(id) ? 'collapsed' : 'visible';
+      const desiredVisibility = hiddenIds.has(id) ? 'collapsed' : 'visible';
       if (item.element.getAttribute('visibility') !== desiredVisibility) {
         item.element.setAttribute('visibility', desiredVisibility);
       }

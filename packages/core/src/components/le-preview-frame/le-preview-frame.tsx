@@ -5,6 +5,7 @@ import {
   Event,
   EventEmitter,
   Element,
+  Listen,
   Watch,
   Method,
   h,
@@ -149,6 +150,8 @@ export class LePreviewFrame {
   @State() private currentHeight: number = 0;
 
   private dragState?: LePreviewFrameDragState;
+  private dragPointerId?: number;
+  private dragHandleEl?: HTMLElement;
 
   private resizeObserver?: ResizeObserver;
 
@@ -326,11 +329,17 @@ export class LePreviewFrame {
     };
 
     this.isDragging = true;
-    (event.target as HTMLElement).setPointerCapture(event.pointerId);
+    this.dragPointerId = event.pointerId;
+    this.dragHandleEl = event.currentTarget as HTMLElement;
+    this.dragHandleEl?.setPointerCapture?.(event.pointerId);
   };
 
-  private handleDragMove = (event: PointerEvent) => {
+  @Listen('pointermove', { target: 'window', passive: false })
+  handleDragMove(event: PointerEvent) {
+    if (this.dragPointerId !== event.pointerId) return;
     if (!this.isDragging || !this.dragState) return;
+
+    event.preventDefault();
 
     if (this.dragState.side === 'bottom') {
       const height = event.clientY - this.dragState.topEdge;
@@ -340,18 +349,29 @@ export class LePreviewFrame {
 
     const width = this.computeDragWidth(event.clientX, this.dragState);
     this.applyWidth(width);
-  };
+  }
 
-  private handleDragEnd = (event: PointerEvent) => {
+  @Listen('pointerup', { target: 'window' })
+  @Listen('pointercancel', { target: 'window' })
+  handleDragEnd(event: PointerEvent) {
+    if (this.dragPointerId !== event.pointerId) return;
     if (!this.isDragging) return;
+
+    if (this.dragHandleEl?.hasPointerCapture?.(event.pointerId)) {
+      this.dragHandleEl.releasePointerCapture(event.pointerId);
+    }
+
     this.isDragging = false;
     this.dragState = undefined;
-    (event.target as HTMLElement).releasePointerCapture(event.pointerId);
-  };
+    this.dragPointerId = undefined;
+    this.dragHandleEl = undefined;
+  }
 
   private cleanupDragListeners() {
     this.isDragging = false;
     this.dragState = undefined;
+    this.dragPointerId = undefined;
+    this.dragHandleEl = undefined;
   }
 
   private normalizeHandles(input: unknown[]): LePreviewFrameHandleSide[] {
@@ -449,9 +469,6 @@ export class LePreviewFrame {
         }
         tabIndex={0}
         onPointerDown={event => this.handleDragStart(side, event)}
-        onPointerMove={this.handleDragMove}
-        onPointerUp={this.handleDragEnd}
-        onPointerCancel={this.handleDragEnd}
         onKeyDown={event => this.handleResizeKeyDown(side, event)}
       >
         <span class="sr-only">

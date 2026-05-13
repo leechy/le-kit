@@ -74,6 +74,10 @@
   color: var(--le-color-text-disabled);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -118,7 +122,8 @@ le-breadcrumbs.site-navigation {
   align-items: center;
   justify-content: center;
 
-  &:has(+ .code-block) {
+  &:has(+ .code-block),
+  &:has(+ .component-example-tabs) {
     margin-bottom: 0;
     border-bottom: none;
   }
@@ -135,6 +140,23 @@ le-breadcrumbs.site-navigation {
 .component-example-horizontal {
   flex-direction: row;
   gap: var(--le-spacing-4);
+}
+
+.component-example-tabs {
+  --le-tab-panel-padding: 0px;
+  --le-tab-panel-top-gap: 0px;
+
+  &::part(tablist) {
+    border-radius: 0px;
+  }
+
+  .code-block {
+    margin-top: 0px;
+
+    pre {
+      margin: 0px;
+    }
+  }
 }
 
 
@@ -209,6 +231,7 @@ a[id] {
   cursor: pointer;
   text-decoration: none;
   color: inherit;
+  scroll-margin-top: calc(var(--le-header-height) + var(--le-spacing-8) * 2);
 
   &:hover::before {
     position: absolute;

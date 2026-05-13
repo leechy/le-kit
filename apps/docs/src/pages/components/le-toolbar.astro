@@ -1,0 +1,479 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-toolbar">
+  <h1>&lt;le-toolbar&gt;</h1>
+  <p>
+    A horizontal container for buttons and button groups that automatically
+    collapses overflowing items into a dropdown menu. The toolbar uses a
+    priority system to determine which items to collapse first, allowing
+    important actions to remain visible as long as possible.
+  </p>
+
+  <div class="component-example">
+    <le-preview-frame
+      id="demo-toolbar-frame"
+      min-width="200"
+      min-height="56"
+      padding="16"
+      handles="left,right"
+    >
+      <le-toolbar style="background-color: var(--le-color-border);">
+        <le-button-group overflow-icons label="Navigation">
+          <le-button label="Back" icon-only="arrow-left"></le-button>
+          <le-button label="Forward" icon-only="arrow-right"></le-button>
+        </le-button-group>
+
+        <le-button priority="3">Save</le-button>
+        <le-button priority="1" color="success">Publish</le-button>
+
+        <le-toolbar-spacer></le-toolbar-spacer>
+
+        <le-button-group overflow-icons priority="2" label="Text Align">
+          <le-button label="Align Left" icon-only="align-left"></le-button>
+          <le-button label="Align Center" icon-only="align-center"></le-button>
+          <le-button label="Align Right" icon-only="align-right"></le-button>
+          <le-button label="Justify" icon-only="align-justify"></le-button>
+        </le-button-group>
+      </le-toolbar>
+    </le-preview-frame>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+<le-toolbar>
+  <le-button-group overflow-icons label="Navigation">
+    <le-button label="Back" icon-only="arrow-left"></le-button>
+    <le-button label="Forward" icon-only="arrow-right"></le-button>
+  </le-button-group>
+
+  <le-button priority="3">Save</le-button>
+  <le-button priority="1" color="success">Publish</le-button>
+
+  <le-toolbar-spacer></le-toolbar-spacer>
+
+  <le-button-group overflow-icons priority="2" label="Text Align">
+    <le-button variant="outlined" label="Align Left" icon-only="align-left"></le-button>
+    <le-button variant="outlined" label="Align Center" icon-only="align-center"></le-button>
+    <le-button variant="outlined" label="Align Right" icon-only="align-right"></le-button>
+    <le-button variant="outlined" label="Justify" icon-only="align-justify"></le-button>
+  </le-button-group>
+</le-toolbar>`}
+  />
+
+  <h2><a href="#children" id="children">Children</a></h2>
+
+  <p>
+    As you can see, <code>&lt;le-toolbar&gt;</code> is not working alone. The toolbar
+    requires <code>&lt;le-button&gt;</code> or <code
+      >&lt;le-button-group&gt;</code
+    > components to function properly.
+  </p>
+  <p>
+    At the moment, there are three components that can be used within a toolbar:
+  </p>
+
+  <h3>
+    <a href="/components/le-button">&lt;le-button&gt;</a>
+  </h3>
+  <p>
+    The buttons should collapse with an animation when the toolbar overflows,
+    and then they will appear in the overflow menu. To appear correctly in the
+    overflow menu, buttons that are <code>icon-only</code> should have a <code
+      >label</code
+    > attribute.
+  </p>
+
+  <h3>
+    <a href="/components/le-button-group">&lt;le-button-group&gt;</a>
+  </h3>
+  <p>
+    Button groups will try to shrink first, using it's <code>collapse</code> attrbiute.
+    And will appear in the toolbar's overflow menu only after it fully collapses.
+    It will appear in the overflow menu as a expandable section, and it also need
+    a <code>label</code> attribute.
+  </p>
+
+  <h3>
+    <a href="/components/le-toolbar-spacer">&lt;le-toolbar-spacer&gt;</a>
+  </h3>
+  <p>
+    The Toolbar Spacer is a special component that will take up all available
+    space in the toolbar, pushing other items to the sides. It can be used to
+    create space between groups of buttons, or to align certain items to the
+    start or end of the toolbar. It will never appear in the overflow menu, and
+    it will never cause other items to collapse.
+  </p>
+
+  <h2><a href="#properties" id="properties">Properties / Attributes</a></h2>
+
+  <h3>
+    <a href="#@align-items" id="@align-items"><code>@align-items</code></a>
+  </h3>
+  <p>
+    Specifies the alignment of all items in the <code>start</code>, <code
+      >center</code
+    >, or even the <code>end</code> of the toolbar.
+  </p>
+
+  <div class="component-example">
+    <script>
+      (() => {
+        const show = () => {
+          const toolbar = document.getElementById("demo-toolbar-align");
+          const codeTabs = document.getElementById("demo-toolbar-align-tabs");
+
+          // subscribe to tab changes to update the toolbar alignment
+          codeTabs?.addEventListener("leTabChange", (event) => {
+            const detail = (event as CustomEvent).detail;
+            if (detail) {
+              const align = detail.value as "start" | "center" | "end";
+              if (align) {
+                toolbar?.setAttribute(
+                  "align-items",
+                  align === "start" ? "" : align,
+                );
+              }
+            }
+          });
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+              void show();
+            },
+            { once: true },
+          );
+        } else {
+          void show();
+        }
+      })();
+    </script>
+
+    <le-preview-frame
+      id="demo-toolbar-align-frame"
+      min-width="200"
+      min-height="56"
+      padding="16"
+      handles="left,right"
+    >
+      <le-toolbar
+        id="demo-toolbar-align"
+        align-items="end"
+        style="background-color: var(--le-color-border);"
+      >
+        <le-button-group overflow-icons label="Navigation">
+          <le-button label="Back" icon-only="arrow-left"></le-button>
+          <le-button label="Forward" icon-only="arrow-right"></le-button>
+        </le-button-group>
+      </le-toolbar>
+    </le-preview-frame>
+  </div>
+  <le-tabs
+    variant="enclosed"
+    id="demo-toolbar-align-tabs"
+    class="component-example-tabs"
+    selected="end"
+  >
+    <le-tab-panel label="Default align (start)" value="start">
+      <CodeBlock
+        language="html"
+        code={`
+<le-toolbar>
+  <le-button-group overflow-icons label="Navigation">
+    <le-button label="Back" icon-only="arrow-left"></le-button>
+    <le-button label="Forward" icon-only="arrow-right"></le-button>
+  </le-button-group>
+</le-toolbar>`}
+      />
+    </le-tab-panel>
+    <le-tab-panel label="Align items to the Center" value="center">
+      <CodeBlock
+        language="html"
+        code={`
+<le-toolbar align-items="center">
+  <le-button-group overflow-icons label="Navigation">
+    <le-button label="Back" icon-only="arrow-left"></le-button>
+    <le-button label="Forward" icon-only="arrow-right"></le-button>
+  </le-button-group>
+</le-toolbar>`}
+      />
+    </le-tab-panel>
+    <le-tab-panel label="Align items to the End" value="end" selected>
+      <CodeBlock
+        language="html"
+        code={`
+<le-toolbar align-items="end">
+  <le-button-group overflow-icons label="Navigation">
+    <le-button label="Back" icon-only="arrow-left"></le-button>
+    <le-button label="Forward" icon-only="arrow-right"></le-button>
+  </le-button-group>
+</le-toolbar>`}
+      />
+    </le-tab-panel>
+  </le-tabs>
+
+  <h3>
+    <a href="#@disable-popover" id="@disable-popover"
+      ><code>@disable-popover</code></a
+    >
+  </h3>
+  <p>
+    Specifies whether the popover functionality is disabled for the toolbar.
+    When disabled, user should provide an alternative way to access the
+    overflowed items, such as a separate menu button. This can be useful in
+    cases where the default popover behavior may not be desirable or accessible.
+  </p>
+
+  <h3>
+    <a href="#@item-gap" id="@item-gap"><code>@item-gap</code></a>
+  </h3>
+  <p>
+    Gap between items in the toolbar. This can be set to a specific numeric
+    value (e.g. <code>8</code> or <code>16</code>) or any CSS-valid length,
+    including variables (e.g. <code>8px</code>, <code
+      >var(--le-spacing-8, 5rem)</code
+    >, etc.). The default gap is <code>8</code>.
+  </p>
+
+  <div class="component-example">
+    <script>
+      (() => {
+        const show = () => {
+          const toolbar = document.getElementById("demo-toolbar-gap");
+          const codeTabs = document.getElementById("demo-toolbar-gap-tabs");
+
+          // subscribe to tab changes to update the toolbar gap
+          codeTabs?.addEventListener("leTabChange", (event) => {
+            const detail = (event as CustomEvent).detail;
+            if (detail) {
+              const gap = detail.value as string;
+              console.log("Setting toolbar gap to", gap);
+              if (gap) {
+                if (gap === "none") {
+                  toolbar?.removeAttribute("item-gap");
+                } else {
+                  toolbar?.setAttribute("item-gap", gap);
+                }
+              }
+            }
+          });
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+              void show();
+            },
+            { once: true },
+          );
+        } else {
+          void show();
+        }
+      })();
+    </script>
+
+    <le-preview-frame
+      id="demo-toolbar-gap-frame"
+      min-width="200"
+      min-height="56"
+      padding="16"
+      handles="left,right"
+    >
+      <le-toolbar
+        id="demo-toolbar-gap"
+        style="background-color: var(--le-color-border);"
+      >
+        <le-button label="Align Left" icon-only="align-left"></le-button>
+        <le-button label="Align Center" icon-only="align-center"></le-button>
+        <le-button label="Align Right" icon-only="align-right"></le-button>
+        <le-button label="Justify" icon-only="align-justify"></le-button>
+      </le-toolbar>
+    </le-preview-frame>
+  </div>
+  <le-tabs
+    variant="enclosed"
+    id="demo-toolbar-gap-tabs"
+    class="component-example-tabs"
+    selected="none"
+  >
+    <le-tab-panel label="Default gap (4px)" value="none">
+      <CodeBlock
+        language="html"
+        code={`
+<le-toolbar>
+  <le-button-group overflow-icons label="Navigation">
+    <le-button label="Back" icon-only="arrow-left"></le-button>
+    <le-button label="Forward" icon-only="arrow-right"></le-button>
+  </le-button-group>
+</le-toolbar>`}
+      />
+    </le-tab-panel>
+    <le-tab-panel label="Gap 16px" value="16px">
+      <CodeBlock
+        language="html"
+        code={`
+<le-toolbar item-gap="16px">
+  <le-button-group overflow-icons label="Navigation">
+    <le-button label="Back" icon-only="arrow-left"></le-button>
+    <le-button label="Forward" icon-only="arrow-right"></le-button>
+  </le-button-group>
+</le-toolbar>`}
+      />
+    </le-tab-panel>
+    <le-tab-panel
+      label="Gap with css variable"
+      value="var(--le-spacing-8, 8px)"
+      selected
+    >
+      <CodeBlock
+        language="html"
+        code={`
+<le-toolbar item-gap="var(--le-spacing-8)">
+  <le-button-group overflow-icons label="Navigation">
+    <le-button label="Back" icon-only="arrow-left"></le-button>
+    <le-button label="Forward" icon-only="arrow-right"></le-button>
+  </le-button-group>
+</le-toolbar>`}
+      />
+    </le-tab-panel>
+  </le-tabs>
+  <p>
+    Gap can be also set using CSS variable <code>--le-toolbar-gap</code>.
+    Because of the animated collapse, the gap is actually included as inner
+    margin for the children components, instead of actual spacing in the flex
+    container.
+  </p>
+
+  <h3>
+    <a href="#@overflow-icon" id="@overflow-icon"><code>@overflow-icon</code></a
+    >
+  </h3>
+  <p>
+    In case you need a different icon for the overflow trigger button, you can
+    use the <code>@overflow-icon</code> property.
+  </p>
+  <p>
+    Currently, only icons from the Le Kit icon set are supported, and you can
+    specify them by name (e.g. <code>chevron-down</code>, <code>ellipsis</code>,
+    etc.). If you need to use a custom icon, you can set the overflow trigger to
+    an empty string and provide your own button with the slot <a href="#more"
+      ><code>more</code></a
+    >.
+  </p>
+  <div class="component-example">
+    <le-preview-frame
+      id="demo-toolbar-overflow-icon-frame"
+      min-width="200"
+      min-height="56"
+      padding="16"
+      handles="left,right"
+    >
+      <le-toolbar
+        style="background-color: var(--le-color-border);"
+        overflow-icon="chevron-down"
+      >
+        <le-button>Action 1</le-button>
+        <le-button>Action 2</le-button>
+        <le-button>Action 3</le-button>
+        <le-button>Action 4</le-button>
+        <le-button>Action 5</le-button>
+        <le-button>Action 6</le-button>
+      </le-toolbar>
+    </le-preview-frame>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`<le-toolbar overflow-icon="chevron-down">
+  <le-button>Action 1</le-button>
+  <le-button>Action 2</le-button>
+  <le-button>Action 3</le-button>
+  <le-button>Action 4</le-button>
+  <le-button>Action 5</le-button>
+  <le-button>Action 6</le-button>
+</le-toolbar>`}
+  />
+
+  <h2><a href="#slots" id="slots">Slots</a></h2>
+  <h3>
+    <a href="#default-slot" id="default-slot">Default slot</a>
+  </h3>
+  <p>
+    The default slot is where you place the toolbar items, such as buttons and
+    button groups. The toolbar will automatically manage the layout and overflow
+    of these items based on the available space.
+  </p>
+
+  <h3>
+    <a href="#more" id="more"><code>more</code></a>
+  </h3>
+  <p>
+    This named slot allows you to provide a custom trigger element for the
+    overflow menu. If you set the <a href="#@overflow-icon"
+      ><code>@overflow-icon</code></a
+    > property to an empty string, the toolbar will not render a default trigger button,
+    and you can use this slot to insert your own button or element that will toggle
+    the overflow menu when clicked.
+  </p>
+  <div class="component-example">
+    <le-preview-frame
+      id="demo-toolbar-overflow-icon-frame"
+      min-width="200"
+      min-height="56"
+      padding="16"
+      handles="left,right"
+    >
+      <le-toolbar style="background-color: var(--le-color-border);">
+        <le-button>Action 1</le-button>
+        <le-button>Action 2</le-button>
+        <le-button>Action 3</le-button>
+        <le-button>Action 4</le-button>
+        <le-button>Action 5</le-button>
+        <le-button>Action 6</le-button>
+        <div slot="more">
+          <le-button variant="clear">More...</le-button>
+        </div>
+      </le-toolbar>
+    </le-preview-frame>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`<le-toolbar>
+  <le-button>Action 1</le-button>
+  <le-button>Action 2</le-button>
+  <le-button>Action 3</le-button>
+  <le-button>Action 4</le-button>
+  <le-button>Action 5</le-button>
+  <le-button>Action 6</le-button>
+  <div slot="more">
+    <le-button variant="clear">More...</le-button>
+  </div>
+</le-toolbar>`}
+  />
+
+  <h2><a href="#events" id="events">Events</a></h2>
+  <h3>
+    <a href="#leToolbarOverflowChange" id="leToolbarOverflowChange"
+      ><code>leToolbarOverflowChange</code></a
+    >
+  </h3>
+  <p>
+    This event is emitted whenever the overflow state of the toolbar changes,
+    such as when items are collapsed into or expanded out of the overflow menu.
+  </p>
+  <p>
+    <i>Warning:</i> The action for the <code>leToolbarOverflowChange</code> event
+    is subject to change. It will emit <code>LeOption</code> objects representing
+    the overflowed items.
+  </p>
+  <p>
+    Currently, the event detail includes information about which items are
+    currently overflowed, allowing you to respond to these changes in your
+    application logic if needed.
+  </p>
+</ComponentsPage>

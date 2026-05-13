@@ -376,6 +376,8 @@
             <!-- Lower priority number = higher importance = last to overflow -->
             <le-button priority="10" variant="solid" color="primary" label="Save" onclick="alert('Save')">Save</le-button>
 
+            <le-toolbar-spacer width="50" priority="1000"></le-toolbar-spacer>
+
             <le-button priority="200" variant="outlined" label="Publish" onclick="alert('Publish')">Publish</le-button>
 
             <le-button priority="30" variant="clear" label="Preview" onclick="alert('Preview')">Preview</le-button>
@@ -400,11 +402,7 @@
             <le-button variant="clear" label="Duplicate" onclick="alert('Duplicate')">Duplicate</le-button>
             <le-button priority="50" variant="clear" color="danger" label="Delete" onclick="alert('Delete')">Delete</le-button>
 
-            <div style="
-              flex: 1;
-              border: 1px solid;
-              align-self: stretch;
-            "></div>
+            <le-toolbar-spacer width="50"></le-toolbar-spacer>
 
             <!-- A collapsible button group — collapses internally first -->
             <le-button-group label="Text Align">

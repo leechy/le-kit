@@ -50,10 +50,10 @@ Type: `Promise<void>`
 
 ## Slots
 
-| Slot                 | Description                                    |
-| -------------------- | ---------------------------------------------- |
-|                      | Toolbar items                                  |
-| `"overflow-trigger"` | Custom content for the overflow trigger button |
+| Slot     | Description                                    |
+| -------- | ---------------------------------------------- |
+|          | Toolbar items                                  |
+| `"more"` | Custom content for the overflow trigger button |
 
 
 ## Shadow Parts

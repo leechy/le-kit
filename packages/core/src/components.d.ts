@@ -2498,6 +2498,25 @@ export namespace Components {
          */
         "recalculate": () => Promise<void>;
     }
+    /**
+     * Flexible spacer for le-toolbar layouts.
+     * Default behavior (no width): occupies available free space and shrinks naturally.
+     * With numeric `width`: behaves as a fixed-width spacer that can be collapsed by le-toolbar.
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeToolbarSpacer {
+        /**
+          * Visibility state controlled by responsive containers such as le-toolbar.
+          * @allowedValues visible | collapsing | collapsed | expanding
+          * @default 'visible'
+         */
+        "visibility": LeVisibilityState;
+        /**
+          * Optional fixed width in pixels. Numeric values (e.g. `24`) are treated as px.
+         */
+        "width"?: number | string;
+    }
     interface LeTooltip {
         /**
           * Alignment along the cross axis for the chosen placement.
@@ -3832,6 +3851,19 @@ declare global {
         prototype: HTMLLeToolbarElement;
         new (): HTMLLeToolbarElement;
     };
+    /**
+     * Flexible spacer for le-toolbar layouts.
+     * Default behavior (no width): occupies available free space and shrinks naturally.
+     * With numeric `width`: behaves as a fixed-width spacer that can be collapsed by le-toolbar.
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface HTMLLeToolbarSpacerElement extends Components.LeToolbarSpacer, HTMLStencilElement {
+    }
+    var HTMLLeToolbarSpacerElement: {
+        prototype: HTMLLeToolbarSpacerElement;
+        new (): HTMLLeToolbarSpacerElement;
+    };
     interface HTMLLeTooltipElementEventMap {
         "leTooltipOpen": void;
         "leTooltipClose": void;
@@ -3915,6 +3947,7 @@ declare global {
         "le-tag": HTMLLeTagElement;
         "le-text": HTMLLeTextElement;
         "le-toolbar": HTMLLeToolbarElement;
+        "le-toolbar-spacer": HTMLLeToolbarSpacerElement;
         "le-tooltip": HTMLLeTooltipElement;
         "le-turntable": HTMLLeTurntableElement;
         "le-visibility": HTMLLeVisibilityElement;
@@ -6478,6 +6511,25 @@ declare namespace LocalJSX {
          */
         "overflowLabel"?: string;
     }
+    /**
+     * Flexible spacer for le-toolbar layouts.
+     * Default behavior (no width): occupies available free space and shrinks naturally.
+     * With numeric `width`: behaves as a fixed-width spacer that can be collapsed by le-toolbar.
+     * @cmsEditable true
+     * @cmsCategory Layout
+     */
+    interface LeToolbarSpacer {
+        /**
+          * Visibility state controlled by responsive containers such as le-toolbar.
+          * @allowedValues visible | collapsing | collapsed | expanding
+          * @default 'visible'
+         */
+        "visibility"?: LeVisibilityState;
+        /**
+          * Optional fixed width in pixels. Numeric values (e.g. `24`) are treated as px.
+         */
+        "width"?: number | string;
+    }
     interface LeTooltip {
         /**
           * Alignment along the cross axis for the chosen placement.
@@ -7036,6 +7088,10 @@ declare namespace LocalJSX {
         "overflowLabel": string;
         "disablePopover": boolean;
     }
+    interface LeToolbarSpacerAttributes {
+        "width": string;
+        "visibility": LeVisibilityState;
+    }
     interface LeTooltipAttributes {
         "mode": LeKitMode;
         "open": boolean;
@@ -7102,6 +7158,7 @@ declare namespace LocalJSX {
         "le-tag": Omit<LeTag, keyof LeTagAttributes> & { [K in keyof LeTag & keyof LeTagAttributes]?: LeTag[K] } & { [K in keyof LeTag & keyof LeTagAttributes as `attr:${K}`]?: LeTagAttributes[K] } & { [K in keyof LeTag & keyof LeTagAttributes as `prop:${K}`]?: LeTag[K] };
         "le-text": Omit<LeText, keyof LeTextAttributes> & { [K in keyof LeText & keyof LeTextAttributes]?: LeText[K] } & { [K in keyof LeText & keyof LeTextAttributes as `attr:${K}`]?: LeTextAttributes[K] } & { [K in keyof LeText & keyof LeTextAttributes as `prop:${K}`]?: LeText[K] };
         "le-toolbar": Omit<LeToolbar, keyof LeToolbarAttributes> & { [K in keyof LeToolbar & keyof LeToolbarAttributes]?: LeToolbar[K] } & { [K in keyof LeToolbar & keyof LeToolbarAttributes as `attr:${K}`]?: LeToolbarAttributes[K] } & { [K in keyof LeToolbar & keyof LeToolbarAttributes as `prop:${K}`]?: LeToolbar[K] };
+        "le-toolbar-spacer": Omit<LeToolbarSpacer, keyof LeToolbarSpacerAttributes> & { [K in keyof LeToolbarSpacer & keyof LeToolbarSpacerAttributes]?: LeToolbarSpacer[K] } & { [K in keyof LeToolbarSpacer & keyof LeToolbarSpacerAttributes as `attr:${K}`]?: LeToolbarSpacerAttributes[K] } & { [K in keyof LeToolbarSpacer & keyof LeToolbarSpacerAttributes as `prop:${K}`]?: LeToolbarSpacer[K] };
         "le-tooltip": Omit<LeTooltip, keyof LeTooltipAttributes> & { [K in keyof LeTooltip & keyof LeTooltipAttributes]?: LeTooltip[K] } & { [K in keyof LeTooltip & keyof LeTooltipAttributes as `attr:${K}`]?: LeTooltipAttributes[K] } & { [K in keyof LeTooltip & keyof LeTooltipAttributes as `prop:${K}`]?: LeTooltip[K] };
         "le-turntable": Omit<LeTurntable, keyof LeTurntableAttributes> & { [K in keyof LeTurntable & keyof LeTurntableAttributes]?: LeTurntable[K] } & { [K in keyof LeTurntable & keyof LeTurntableAttributes as `attr:${K}`]?: LeTurntableAttributes[K] } & { [K in keyof LeTurntable & keyof LeTurntableAttributes as `prop:${K}`]?: LeTurntable[K] };
         "le-visibility": Omit<LeVisibility, keyof LeVisibilityAttributes> & { [K in keyof LeVisibility & keyof LeVisibilityAttributes]?: LeVisibility[K] } & { [K in keyof LeVisibility & keyof LeVisibilityAttributes as `attr:${K}`]?: LeVisibilityAttributes[K] } & { [K in keyof LeVisibility & keyof LeVisibilityAttributes as `prop:${K}`]?: LeVisibility[K] };
@@ -7663,6 +7720,14 @@ declare module "@stencil/core" {
              * @cmsCategory Layout
              */
             "le-toolbar": LocalJSX.IntrinsicElements["le-toolbar"] & JSXBase.HTMLAttributes<HTMLLeToolbarElement>;
+            /**
+             * Flexible spacer for le-toolbar layouts.
+             * Default behavior (no width): occupies available free space and shrinks naturally.
+             * With numeric `width`: behaves as a fixed-width spacer that can be collapsed by le-toolbar.
+             * @cmsEditable true
+             * @cmsCategory Layout
+             */
+            "le-toolbar-spacer": LocalJSX.IntrinsicElements["le-toolbar-spacer"] & JSXBase.HTMLAttributes<HTMLLeToolbarSpacerElement>;
             "le-tooltip": LocalJSX.IntrinsicElements["le-tooltip"] & JSXBase.HTMLAttributes<HTMLLeTooltipElement>;
             "le-turntable": LocalJSX.IntrinsicElements["le-turntable"] & JSXBase.HTMLAttributes<HTMLLeTurntableElement>;
             /**

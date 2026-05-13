@@ -47,6 +47,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-tag](#le-tag)
 - [le-text](#le-text)
 - [le-toolbar](#le-toolbar)
+- [le-toolbar-spacer](#le-toolbar-spacer)
 - [le-tooltip](#le-tooltip)
 - [le-turntable](#le-turntable)
 - [le-visibility](#le-visibility)
@@ -1665,7 +1666,23 @@ footprint first before their contents are overflowed entirely.
 | Name | Description |
 |------|-------------|
 | Default | Toolbar items |
-| `"overflow-trigger"` | Custom content for the overflow trigger button |
+| `"more"` | Custom content for the overflow trigger button |
+
+---
+
+## <le-toolbar-spacer>
+
+Flexible spacer for le-toolbar layouts.
+
+Default behavior (no width): occupies available free space and shrinks naturally.
+With numeric `width`: behaves as a fixed-width spacer that can be collapsed by le-toolbar.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `width` | `number \| string \| undefined` |  | Optional fixed width in pixels. Numeric values (e.g. `24`) are treated as px. |
+| `visibility` | `LeVisibilityState` | `'visible'` | Visibility state controlled by responsive containers such as le-toolbar. |
 
 ---
 

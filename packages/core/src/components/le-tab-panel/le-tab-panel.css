@@ -7,7 +7,7 @@
 }
 
 .tab-panel {
-  margin-top: 4px;
+  margin-top: var(--le-tab-panel-top-gap, 4px);
   display: none;
   border-radius: var(--le-tab-panel-radius, var(--le-radius-md));
   padding: var(--le-tab-panel-padding, var(--le-spacing-4));

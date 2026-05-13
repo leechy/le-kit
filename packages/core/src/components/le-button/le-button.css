@@ -202,6 +202,12 @@ le-visibility {
   background: transparent;
   color: var(--_btn-bg);
   border-color: color-mix(in srgb, var(--_btn-border-color) 33%, transparent);
+
+  .icon-start,
+  .icon-only,
+  .icon-end {
+    --le-icon-color: var(--_btn-bg);
+  }
 }
 
 :host(.variant-outlined) .le-button-container:hover:not(:disabled) {
@@ -217,13 +223,6 @@ le-visibility {
 
 :host(.variant-clear) .le-button-container:hover:not(:disabled) {
   background: var(--le-color-gray-100);
-  border-color: transparent;
-}
-
-/* System (controls without access) */
-:host(.variant-system) .le-button-container {
-  background: transparent;
-  color: var(--_btn-bg-system);
   border-color: transparent;
 }
 

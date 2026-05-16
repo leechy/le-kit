@@ -12,6 +12,7 @@ import {
 } from '@stencil/core';
 import { classnames, observeNamedSlotPresence, slotHasContent } from '../../utils/utils';
 import type { LeOption } from '../../types/options';
+import type { LeCollapseMeta } from '../../types/toolbar';
 import { TooltipPlacement } from '../..';
 
 /**
@@ -172,7 +173,6 @@ export class LeButton {
    * This is a custom event that wraps the native click but ensures the target is the le-button.
    */
   @Event({ eventName: 'click' }) leClick!: EventEmitter<MouseEvent>;
-
   private handleClick = (event: MouseEvent) => {
     // We stop the internal button click from bubbling up
     event.stopPropagation();
@@ -185,6 +185,17 @@ export class LeButton {
     // And emit our own click event from the host element
     this.leClick.emit(event);
   };
+
+  /**
+   * Returns collapse meta for toolbar integration.
+   */
+  @Method()
+  async getCollapseMeta(): Promise<LeCollapseMeta> {
+    return {
+      kind: 'item',
+      managesVisibility: true,
+    };
+  }
 
   private initSlotObserver() {
     if (this.disconnectSlotObserver) {

@@ -9,6 +9,7 @@ import { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
 import { TooltipPlacement } from ".";
+import { LeCollapseMeta } from "./types/toolbar";
 import { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-group";
 import { LeActiveContext } from "./components/le-kit/le-kit";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
@@ -24,6 +25,7 @@ export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
 export { TooltipPlacement } from ".";
+export { LeCollapseMeta } from "./types/toolbar";
 export { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-group";
 export { LeActiveContext } from "./components/le-kit/le-kit";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
@@ -348,6 +350,10 @@ export namespace Components {
           * @default false
          */
         "fullWidth": boolean;
+        /**
+          * Returns collapse meta for toolbar integration.
+         */
+        "getCollapseMeta": () => Promise<LeCollapseMeta>;
         "getOption": () => Promise<LeOption>;
         /**
           * Shape of the button when rendered inside grouped containers.
@@ -446,6 +452,10 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Returns collapse meta for toolbar integration.
+         */
+        "getCollapseMeta": () => Promise<LeCollapseMeta>;
         "getItemsMeta": () => Promise<LeButtonGroupItemsMeta>;
         "getToolbarOverflowGroupOption": () => Promise<LeOption>;
         "getToolbarOverflowItems": () => Promise<LeOption[]>;

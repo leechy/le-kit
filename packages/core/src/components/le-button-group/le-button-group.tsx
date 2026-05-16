@@ -13,6 +13,7 @@ import {
 import { generateId, nextFrame } from '../../utils/utils';
 import { LeOverflowMenuItemSelectDetail } from '../le-overflow-menu/le-overflow-menu';
 import type { LeOption } from '../../types/options';
+import type { LeCollapseMeta } from '../../types/toolbar';
 
 interface RankedButton {
   id: string;
@@ -192,6 +193,26 @@ export class LeButtonGroup {
       .sort((a, b) => a.index - b.index);
 
     return Promise.all(ranked.map(item => this.buildOverflowOption(item)));
+  }
+
+  /**
+   * Returns collapse meta for toolbar integration.
+   */
+  @Method()
+  async getCollapseMeta(): Promise<LeCollapseMeta> {
+    // If collapse is not undefined or null, treat as 'item' (fully collapsed/expanded only)
+    if (this.collapse !== undefined && this.collapse !== null) {
+      return {
+        kind: 'item',
+        managesVisibility: true,
+      };
+    }
+    const visibleCounts = this.getToolbarVisibleCountsSync();
+    return {
+      kind: 'stepping',
+      collapseValues: visibleCounts.map(String),
+      managesVisibility: true,
+    };
   }
 
   private getButtonChildren(): HTMLElement[] {

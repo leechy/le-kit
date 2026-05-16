@@ -14,7 +14,7 @@ import {
 import { classnames, generateId, nextFrame, nextResize } from '../../utils/utils';
 import { LeOverflowMenuItemSelectDetail } from '../le-overflow-menu/le-overflow-menu';
 import type { LeOption } from '../../types/options';
-import { LeButtonGroupItemsMeta } from '../le-button-group/le-button-group';
+import type { LeCollapseMeta } from '../../types/toolbar';
 
 export interface LeToolbarOverflowChangeDetail {
   /** IDs of items currently in the overflow menu. */
@@ -471,18 +471,23 @@ export class LeToolbar {
         await nextResize(virtual);
       }
 
-      if (clone.tagName.toLowerCase() === 'le-button-group') {
-        await this.settleVirtualItem(clone);
+      // Universal collapse meta detection
+      let collapseMeta: LeCollapseMeta = { kind: 'item' };
+      if (typeof (item as any).getCollapseMeta === 'function') {
+        try {
+          collapseMeta = await (item as any).getCollapseMeta();
+        } catch {}
       }
 
       const fixedSpacerWidth = this.getFixedSpacerWidthPx(item);
-      const kind: ToolbarItemRecord['kind'] = this.isToolbarSpacer(item)
-        ? fixedSpacerWidth !== undefined
-          ? 'spacer-fixed'
-          : 'spacer-flex'
-        : item.tagName.toLowerCase() === 'le-button-group'
-          ? 'group'
-          : 'item';
+      let kind: ToolbarItemRecord['kind'];
+      if (this.isToolbarSpacer(item)) {
+        kind = fixedSpacerWidth !== undefined ? 'spacer-fixed' : 'spacer-flex';
+      } else if (collapseMeta.kind === 'stepping') {
+        kind = 'group';
+      } else {
+        kind = 'item';
+      }
 
       const overflowOption =
         kind === 'item' || kind === 'group' ? await this.buildOverflowOption(item, id) : undefined;
@@ -497,44 +502,34 @@ export class LeToolbar {
       };
       this.itemMap.set(id, itemRecord);
 
-      if (itemRecord.kind === 'group') {
-        const group = item as HTMLElement & {
-          componentOnReady?: () => Promise<unknown>;
-          getItemsMeta?: () => Promise<LeButtonGroupItemsMeta>;
-          getToolbarOverflowGroupOption?: () => Promise<LeOption>;
-        };
-
-        if (group.componentOnReady) {
-          await group.componentOnReady();
-        }
-
-        const meta =
-          typeof group.getItemsMeta === 'function'
-            ? await group.getItemsMeta()
-            : { label: overflowOption?.label || id, items: [], visibleCounts: [] };
-
-        meta.visibleCounts.forEach((visibleCount, stage) => {
+      // Collapse step logic based on collapseMeta
+      if (kind === 'group' && collapseMeta.kind === 'stepping' && collapseMeta.collapseValues) {
+        collapseMeta.collapseValues.forEach((collapseValue, stage) => {
           this.collapseSteps.push({
-            id: `${id}::collapse-${visibleCount}`,
+            id: `${id}::collapse-${collapseValue}`,
             itemId: id,
             priority,
             index,
             stage,
             action: 'group-collapse',
-            collapseValue: String(visibleCount),
+            collapseValue,
             thresholdWidth: 0,
             resultingWidth: 0,
           });
         });
 
+        // Overflow option for fully collapsed group
+        const group = item as HTMLElement & {
+          getToolbarOverflowGroupOption?: () => Promise<LeOption>;
+        };
         const groupOverflowOption =
           typeof group.getToolbarOverflowGroupOption === 'function'
             ? await group.getToolbarOverflowGroupOption()
             : {
                 id,
-                label: meta.label,
+                label: overflowOption?.label || id,
                 value: id,
-                children: meta.items,
+                children: [],
               };
 
         this.collapseSteps.push({
@@ -542,39 +537,37 @@ export class LeToolbar {
           itemId: id,
           priority,
           index,
-          stage: meta.visibleCounts.length,
+          stage: collapseMeta.collapseValues.length,
           action: 'hide-group',
           collapseValue: 'collapse',
           overflowOption: groupOverflowOption,
           thresholdWidth: 0,
           resultingWidth: 0,
         });
-      } else {
-        if (itemRecord.kind === 'item') {
-          this.collapseSteps.push({
-            id: `${id}::hide`,
-            itemId: id,
-            priority,
-            index,
-            stage: 0,
-            action: 'hide-item',
-            overflowOption,
-            thresholdWidth: 0,
-            resultingWidth: 0,
-          });
-        } else if (itemRecord.kind === 'spacer-fixed') {
-          this.collapseSteps.push({
-            id: `${id}::hide`,
-            itemId: id,
-            priority,
-            index,
-            stage: 0,
-            action: 'hide-item',
-            excludeFromOverflowMenu: true,
-            thresholdWidth: 0,
-            resultingWidth: 0,
-          });
-        }
+      } else if (kind === 'item') {
+        this.collapseSteps.push({
+          id: `${id}::hide`,
+          itemId: id,
+          priority,
+          index,
+          stage: 0,
+          action: 'hide-item',
+          overflowOption,
+          thresholdWidth: 0,
+          resultingWidth: 0,
+        });
+      } else if (kind === 'spacer-fixed') {
+        this.collapseSteps.push({
+          id: `${id}::hide`,
+          itemId: id,
+          priority,
+          index,
+          stage: 0,
+          action: 'hide-item',
+          excludeFromOverflowMenu: true,
+          thresholdWidth: 0,
+          resultingWidth: 0,
+        });
       }
     }
 
@@ -717,17 +710,21 @@ export class LeToolbar {
         item.element.setAttribute('visibility', desiredVisibility);
       }
 
-      const desiredCollapse = hiddenGroupIds.has(id)
-        ? 'collapse'
-        : (groupCollapseValues.get(id) ?? undefined);
-      const currentCollapse = item.element.getAttribute('collapse') ?? undefined;
+      // Only manage the collapse attribute for stepping-kind items (kind: 'group').
+      // For 'item' kind, the collapse attribute may be author-set and must not be touched.
+      if (item.kind === 'group') {
+        const desiredCollapse = hiddenGroupIds.has(id)
+          ? 'collapse'
+          : (groupCollapseValues.get(id) ?? undefined);
+        const currentCollapse = item.element.getAttribute('collapse') ?? undefined;
 
-      if (desiredCollapse) {
-        if (currentCollapse !== desiredCollapse) {
-          item.element.setAttribute('collapse', desiredCollapse);
+        if (desiredCollapse) {
+          if (currentCollapse !== desiredCollapse) {
+            item.element.setAttribute('collapse', desiredCollapse);
+          }
+        } else if (currentCollapse !== undefined) {
+          item.element.removeAttribute('collapse');
         }
-      } else if (currentCollapse !== undefined) {
-        item.element.removeAttribute('collapse');
       }
     }
 

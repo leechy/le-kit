@@ -312,8 +312,6 @@ export class LeButton {
     const hasIconOnly = this.iconOnly !== undefined || this.hasIconOnlySlot;
     const hasIconStart = this.iconStart !== undefined || this.hasIconStartSlot;
     const hasIconEnd = this.iconEnd !== undefined || this.hasIconEndSlot;
-    const visibilityState =
-      this.visibility === 'collapsed' || this.visibility === 'collapsing' ? 'collapsed' : 'visible';
 
     const classes = classnames(
       `variant-${this.variant}`,
@@ -374,21 +372,19 @@ export class LeButton {
 
     return (
       <Host class={classes}>
-        <le-visibility state={visibilityState} mode="width">
-          <le-component component="le-button">
-            {this.tooltip ? (
-              <le-tooltip text={this.tooltip} placement={this.tooltipPosition}>
-                {renderButton()}
-              </le-tooltip>
-            ) : hasIconOnly && this.label ? (
-              <le-tooltip text={this.label} placement={this.tooltipPosition}>
-                {renderButton()}
-              </le-tooltip>
-            ) : (
-              renderButton()
-            )}
-          </le-component>
-        </le-visibility>
+        <le-component component="le-button">
+          {this.tooltip ? (
+            <le-tooltip text={this.tooltip} placement={this.tooltipPosition}>
+              {renderButton()}
+            </le-tooltip>
+          ) : hasIconOnly && this.label ? (
+            <le-tooltip text={this.label} placement={this.tooltipPosition}>
+              {renderButton()}
+            </le-tooltip>
+          ) : (
+            renderButton()
+          )}
+        </le-component>
       </Host>
     );
   }

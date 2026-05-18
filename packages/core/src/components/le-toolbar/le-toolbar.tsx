@@ -43,10 +43,12 @@ export interface SolverOutput {
 interface ToolbarItemRecord {
   element: HTMLElement;
   virtual: HTMLElement;
+  virtualWrapper: HTMLElement;
   index: number;
   priority: number;
   kind: 'item' | 'group' | 'spacer-flex' | 'spacer-fixed';
   overflowOption?: LeOption;
+  slotName: string;
 }
 
 interface CollapseStep {
@@ -139,6 +141,8 @@ export class LeToolbar {
   };
 
   @State() private overflowMenuItems: LeOption[] = [];
+
+  @State() private itemSlots: Array<{ id: string; slotName: string }> = [];
 
   @State() private initializingLayout: boolean = true;
 
@@ -438,7 +442,11 @@ export class LeToolbar {
 
   private async prepareToolbarItems() {
     const items = Array.from(this.el.children).filter(
-      (el): el is HTMLElement => el instanceof HTMLElement && !el.hasAttribute('slot'),
+      (el): el is HTMLElement =>
+        el instanceof HTMLElement &&
+        ((el.getAttribute('slot') ?? '').startsWith('__le-toolbar-item-') ||
+          !el.hasAttribute('slot') ||
+          el.getAttribute('slot') === ''),
     );
 
     // Revuild itemMap, trying to keep the id's stable for existing elements
@@ -457,14 +465,23 @@ export class LeToolbar {
       const clone = item.cloneNode(true) as HTMLElement & {
         componentOnReady?: () => Promise<unknown>;
       };
+      const virtualWrapper = document.createElement('div');
+      virtualWrapper.className = 'toolbar-virtual-item-wrap';
       const id = this.getItemId(item, index);
+      const slotName = `__le-toolbar-item-${index}`;
       const priority = this.getItemPriority(item, index);
 
+      if (item.getAttribute('slot') !== slotName) {
+        item.setAttribute('slot', slotName);
+      }
+
       clone.removeAttribute('id');
+      clone.removeAttribute('slot');
       clone.setAttribute('visibility', 'visible');
       clone.setAttribute('disabled', 'true');
       clone.removeAttribute('collapse');
-      virtual.appendChild(clone);
+      virtualWrapper.appendChild(clone);
+      virtual.appendChild(virtualWrapper);
 
       if (clone.componentOnReady) {
         await clone.componentOnReady();
@@ -495,10 +512,12 @@ export class LeToolbar {
       const itemRecord: ToolbarItemRecord = {
         element: item,
         virtual: clone,
+        virtualWrapper,
         index,
         priority,
         kind,
         overflowOption,
+        slotName,
       };
       this.itemMap.set(id, itemRecord);
 
@@ -577,9 +596,28 @@ export class LeToolbar {
       return a.stage - b.stage;
     });
 
+    const nextItemSlots = Array.from(this.itemMap.entries())
+      .sort(([, left], [, right]) => left.index - right.index)
+      .map(([id, record]) => ({ id, slotName: record.slotName }));
+
+    const slotsChanged =
+      nextItemSlots.length !== this.itemSlots.length ||
+      nextItemSlots.some((slot, idx) => {
+        const prev = this.itemSlots[idx];
+        return !prev || prev.id !== slot.id || prev.slotName !== slot.slotName;
+      });
+
+    if (slotsChanged) {
+      this.itemSlots = nextItemSlots;
+    }
+
     await this.calculateLayoutWidths();
     this.hasPreparedInitialLayout = true;
     this.scheduleRecalc();
+  }
+
+  private getVisibilityState(value: string | null): 'visible' | 'collapsed' {
+    return value === 'collapsed' || value === 'collapsing' ? 'collapsed' : 'visible';
   }
 
   // ─── Virtual Solver + State Sync ───────────────────────────────────────────
@@ -596,6 +634,7 @@ export class LeToolbar {
     for (const item of this.itemMap.values()) {
       item.virtual.setAttribute('visibility', 'visible');
       item.virtual.removeAttribute('collapse');
+      item.virtualWrapper.classList.remove('is-collapsed');
     }
 
     for (const item of this.itemMap.values()) {
@@ -614,9 +653,15 @@ export class LeToolbar {
       step.thresholdWidth = currentWidth;
 
       if (step.action === 'hide-item') {
-        this.itemMap.get(step.itemId)?.virtual.setAttribute('visibility', 'collapsed');
+        const record = this.itemMap.get(step.itemId);
+        record?.virtual.setAttribute('visibility', 'collapsed');
+        record?.virtualWrapper.classList.add('is-collapsed');
       } else if (step.action === 'group-collapse' || step.action === 'hide-group') {
-        this.itemMap.get(step.itemId)?.virtual.setAttribute('collapse', step.collapseValue || '');
+        const record = this.itemMap.get(step.itemId);
+        record?.virtual.setAttribute('collapse', step.collapseValue || '');
+        if (step.action === 'hide-group') {
+          record?.virtualWrapper.classList.add('is-collapsed');
+        }
       }
 
       const addsOverflowEntry =
@@ -818,7 +863,33 @@ export class LeToolbar {
           role="toolbar"
           ref={el => (this.toolbarContainerEl = el)}
         >
-          <slot />
+          {this.itemSlots.map(slot => {
+            const record = this.itemMap.get(slot.id);
+
+            if (record?.kind === 'spacer-flex') {
+              return (
+                <div class="toolbar-item-flex-spacer">
+                  <slot name={slot.slotName} />
+                </div>
+              );
+            }
+
+            const state = this.getVisibilityState(
+              record?.element.getAttribute('visibility') ?? null,
+            );
+            return (
+              <le-visibility
+                class={{
+                  'toolbar-item-visibility': true,
+                  'is-collapsed': state === 'collapsed',
+                }}
+                state={state}
+                mode="width"
+              >
+                <slot name={slot.slotName} />
+              </le-visibility>
+            );
+          })}
 
           {/* Overflow trigger – always rendered so we can measure its width;
               hidden via CSS when showTrigger is false */}

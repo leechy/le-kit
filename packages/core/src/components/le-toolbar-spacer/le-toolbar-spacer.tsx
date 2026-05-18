@@ -59,16 +59,7 @@ export class LeToolbarSpacer {
 
     return (
       <Host class="spacer-fixed">
-        <le-visibility
-          state={
-            this.visibility === 'collapsed' || this.visibility === 'collapsing'
-              ? 'collapsed'
-              : 'visible'
-          }
-          mode="width"
-        >
-          <span class="spacer" part="spacer" style={spacerStyle} aria-hidden="true"></span>
-        </le-visibility>
+        <span class="spacer" part="spacer" style={spacerStyle} aria-hidden="true"></span>
       </Host>
     );
   }

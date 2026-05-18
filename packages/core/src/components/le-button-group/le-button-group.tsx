@@ -89,6 +89,8 @@ export class LeButtonGroup {
 
   @State() private hasOverflow: boolean = false;
 
+  @State() private buttonSlots: string[] = [];
+
   private mutationObserver?: MutationObserver;
 
   private instanceId: string = generateId('le-button-group');
@@ -96,6 +98,8 @@ export class LeButtonGroup {
   private syncingLayout: boolean = false;
 
   private pendingSync: boolean = false;
+
+  private hasAuthorCollapse: boolean = false;
 
   private buttonMap: Map<string, HTMLElement> = new Map();
 
@@ -117,6 +121,14 @@ export class LeButtonGroup {
   }
 
   componentWillLoad() {
+    // Capture whether collapse was authored up-front. Runtime collapse updates
+    // from le-toolbar should not change this semantic.
+    this.hasAuthorCollapse =
+      this.collapse !== undefined &&
+      this.collapse !== null &&
+      this.collapse !== false &&
+      this.collapse !== 'false';
+
     this.setDisabledState(this.disabled);
     void this.syncLayout();
   }
@@ -200,8 +212,9 @@ export class LeButtonGroup {
    */
   @Method()
   async getCollapseMeta(): Promise<LeCollapseMeta> {
-    // If collapse is not undefined or null, treat as 'item' (fully collapsed/expanded only)
-    if (this.collapse !== undefined && this.collapse !== null) {
+    // If collapse was authored, treat as item (fully collapsed/expanded only).
+    // Runtime values set by le-toolbar during stepping must not flip behavior.
+    if (this.hasAuthorCollapse) {
       return {
         kind: 'item',
         managesVisibility: true,
@@ -218,10 +231,32 @@ export class LeButtonGroup {
   private getButtonChildren(): HTMLElement[] {
     return Array.from(this.el.children).filter(
       (node): node is HTMLElement =>
-        node instanceof HTMLElement &&
-        node.tagName.toLowerCase() === 'le-button' &&
-        !node.hasAttribute('slot'),
+        node instanceof HTMLElement && node.tagName.toLowerCase() === 'le-button',
     );
+  }
+
+  private syncButtonSlots(buttons: HTMLElement[]): string[] {
+    const slotNames = buttons.map((button, index) => {
+      const slotName = `__le-button-group-item-${index}`;
+      if (button.getAttribute('slot') !== slotName) {
+        button.setAttribute('slot', slotName);
+      }
+      return slotName;
+    });
+
+    const changed =
+      slotNames.length !== this.buttonSlots.length ||
+      slotNames.some((slot, idx) => this.buttonSlots[idx] !== slot);
+
+    if (changed) {
+      this.buttonSlots = slotNames;
+    }
+
+    return slotNames;
+  }
+
+  private getVisibilityState(value: string | null): 'visible' | 'collapsed' {
+    return value === 'collapsed' || value === 'collapsing' ? 'collapsed' : 'visible';
   }
 
   private setDisabledState(disabled: boolean) {
@@ -388,6 +423,7 @@ export class LeButtonGroup {
 
     try {
       const buttons = this.getButtonChildren();
+      this.syncButtonSlots(buttons);
 
       if (this.isFullyCollapsed()) {
         buttons.forEach(button => {
@@ -505,30 +541,43 @@ export class LeButtonGroup {
   };
 
   render() {
-    const visibilityState =
-      this.isFullyCollapsed() || this.visibility === 'collapsed' || this.visibility === 'collapsing'
-        ? 'collapsed'
-        : 'visible';
-
     return (
       <Host>
-        <le-visibility state={visibilityState} mode="width">
-          <le-component component="le-button-group">
-            <fieldset class="button-group" part="group">
-              <slot />
-              {this.hasOverflow && (
-                <le-overflow-menu
-                  class="button-group-overflow"
-                  items={this.overflowItems}
-                  icon="chevron-down"
-                  triggerAriaLabel="More actions"
-                  triggerPart="more-button"
-                  onLeOverflowMenuItemSelect={this.handleOverflowSelect}
-                ></le-overflow-menu>
-              )}
-            </fieldset>
-          </le-component>
-        </le-visibility>
+        <le-component component="le-button-group">
+          <fieldset class="button-group" part="group">
+            {this.buttonSlots.map(slotName => {
+              const button = this.getButtonChildren().find(
+                candidate => candidate.getAttribute('slot') === slotName,
+              );
+              const state = this.getVisibilityState(button?.getAttribute('visibility') ?? null);
+
+              return (
+                <le-visibility
+                  class={{
+                    'button-group-item-visibility': true,
+                    'is-collapsed': state === 'collapsed',
+                  }}
+                  state={state}
+                  mode="width"
+                >
+                  <slot name={slotName} />
+                </le-visibility>
+              );
+            })}
+
+            <slot />
+            {this.hasOverflow && (
+              <le-overflow-menu
+                class="button-group-overflow"
+                items={this.overflowItems}
+                icon="chevron-down"
+                triggerAriaLabel="More actions"
+                triggerPart="more-button"
+                onLeOverflowMenuItemSelect={this.handleOverflowSelect}
+              ></le-overflow-menu>
+            )}
+          </fieldset>
+        </le-component>
       </Host>
     );
   }

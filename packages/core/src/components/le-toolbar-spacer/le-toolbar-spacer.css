@@ -1,8 +1,6 @@
 :host {
   display: flex;
   min-width: 0;
-  --le-toolbar-spacer-inner-margin: var(--le-toolbar-item-inner-margin, 0px);
-  margin-inline: var(--le-toolbar-spacer-inner-margin);
 }
 
 :host(.spacer-flex) {
@@ -11,16 +9,6 @@
 
 :host(.spacer-fixed) {
   flex: 0 0 auto;
-}
-
-le-visibility {
-  display: inline-flex;
-  min-width: 0;
-}
-
-:host([visibility='collapsed']),
-:host([visibility='collapsing']) {
-  margin-inline: 0 !important;
 }
 
 .spacer {

@@ -939,7 +939,7 @@ export class LeToolbar {
 
     void groupCollapseValues;
 
-    // Flatten button-group items: replace groups with their individual button children
+    // Keep le-button-group entries grouped in overflow: parent label + child items
     const overflowMenuItems: LeOption[] = [];
     const sortedOverflowEntries = Array.from(overflowOptionMap.entries()).sort(([leftId], [rightId]) => {
       return (this.itemMap.get(leftId)?.index ?? 0) - (this.itemMap.get(rightId)?.index ?? 0);
@@ -952,15 +952,15 @@ export class LeToolbar {
         continue;
       }
 
-      // If this is a button-group going to overflow, extract its children
+      // If this is a button-group going to overflow, keep it as a parent item.
       const isButtonGroup =
         record.element.tagName.toLowerCase() === 'le-button-group' &&
-        typeof (record.element as any).getToolbarOverflowItems === 'function';
+        typeof (record.element as any).getToolbarOverflowGroupOption === 'function';
 
       if (isButtonGroup) {
         try {
-          const children = await (record.element as any).getToolbarOverflowItems();
-          overflowMenuItems.push(...children);
+          const groupOption = await (record.element as any).getToolbarOverflowGroupOption();
+          overflowMenuItems.push(groupOption);
         } catch {
           // Fallback: add the group option as-is
           overflowMenuItems.push(option);

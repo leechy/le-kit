@@ -365,13 +365,17 @@
           id="demo-toolbar-frame"
           min-width="200"
           min-height="56"
-          frame-width="920"
           padding="16"
         >
+          <!--
+            debug-virtual-toolbar
+            debug-pause-before-measure
+          -->
           <le-toolbar
             id="demo-toolbar"
+            debug-virtual-toolbar
+            debug-pause-before-measure
             onLeToolbarOverflowChange="onToolbarOverflow(event)"
-            style="background-color: var(--le-color-surface); --le-toolbar-gap: var(--le-space-sm);"
           >
             <!-- Lower priority number = higher importance = last to overflow -->
             <le-button priority="10" variant="solid" color="primary" label="Save" onclick="alert('Save')">Save</le-button>
@@ -383,7 +387,7 @@
             <le-button priority="30" variant="clear" label="Preview" onclick="alert('Preview')">Preview</le-button>
 
             <!-- A collapsible button group — collapses internally first -->
-            <le-button-group priority="80" overflow-icons label="Text Align">
+            <le-button-group priority="80" overflow-icons label="Text Align" collapse="2">
               <le-button variant="clear" label="Align Left">
                 <le-icon slot="icon-only" name="align-left"></le-icon>
               </le-button>
@@ -402,7 +406,7 @@
             <le-button variant="clear" label="Duplicate" onclick="alert('Duplicate')">Duplicate</le-button>
             <le-button priority="50" variant="clear" color="danger" label="Delete" onclick="alert('Delete')">Delete</le-button>
 
-            <le-toolbar-spacer width="50"></le-toolbar-spacer>
+            <le-toolbar-spacer></le-toolbar-spacer>
 
             <!-- A collapsible button group — collapses internally first -->
             <le-button-group label="Text Align">
@@ -412,6 +416,9 @@
               <le-button label="Justify" icon-only="align-justify"></le-button>
             </le-button-group>
 
+            <div slot="more">
+              <le-button variant="clear">More...</le-button>
+            </div>
           </le-toolbar>
         </le-preview-frame>
       </div>
@@ -422,6 +429,8 @@
         <le-button size="small" variant="outlined" onclick="document.getElementById('demo-toolbar-frame').snapTo(500)">500px</le-button>
         <le-button size="small" variant="outlined" onclick="document.getElementById('demo-toolbar-frame').snapTo(320)">320px</le-button>
         <le-button size="small" variant="outlined" onclick="document.getElementById('demo-toolbar-frame').snapTo(240)">240px</le-button>
+        <le-button size="small" variant="outlined" onclick="toggleToolbarDebugPause()">toggle debug pause</le-button>
+        <span id="demo-toolbar-debug-status" style="font-size: var(--le-font-size-xs); color: var(--le-color-text-secondary);"></span>
       </div>
     </div>
 
@@ -1719,6 +1728,48 @@ console.log(greeting);</le-text>
       const demoToolbarEl = document.getElementById('demo-toolbar');
       demoToolbarEl?.addEventListener('leToolbarOverflowChange', onToolbarOverflow);
 
+      function updateToolbarDebugStatus() {
+        const toolbar = document.getElementById('demo-toolbar');
+        const status = document.getElementById('demo-toolbar-debug-status');
+        if (!toolbar || !status) return;
+
+        const virtual = toolbar.shadowRoot?.querySelector('.toolbar-virtual-debug');
+        const stepIndex = virtual?.getAttribute('data-debug-step-index') || '0';
+        const stepTotal = virtual?.getAttribute('data-debug-step-total') || '0';
+        const width = virtual?.getAttribute('data-debug-width') || '0';
+        const paused = toolbar.hasAttribute('debug-pause-before-measure');
+
+        status.textContent = paused
+          ? `debug pause ON, step ${stepIndex}/${stepTotal}, width ${width}px`
+          : 'debug pause OFF';
+      }
+
+      function toggleToolbarDebugPause() {
+        const toolbar = document.getElementById('demo-toolbar');
+        if (!toolbar) return;
+
+        if (toolbar.hasAttribute('debug-pause-before-measure')) {
+          toolbar.removeAttribute('debug-pause-before-measure');
+        } else {
+          toolbar.setAttribute('debug-pause-before-measure', '');
+        }
+
+        toolbar.recalculate && toolbar.recalculate();
+        setTimeout(updateToolbarDebugStatus, 0);
+      }
+
+      document.addEventListener('click', (event) => {
+        const target = event.target;
+        const path = target?.composedPath?.() || [];
+        const clickedVirtual = path.some(
+          node => node instanceof HTMLElement && node.classList?.contains('toolbar-virtual-debug')
+        );
+
+        if (clickedVirtual) {
+          setTimeout(updateToolbarDebugStatus, 0);
+        }
+      });
+
       function getMotionPreset() {
         return document.documentElement.getAttribute('motion-preset') || 'soft';
       }
@@ -1907,6 +1958,7 @@ console.log(greeting);</le-text>
       wireNavigationDemo();
       updateButtonGroupCollapseStatus();
       setMotionPreset(getMotionPreset());
+      updateToolbarDebugStatus();
 
       document.getElementById('demo-combobox').options = [
         { label: 'JavaScript', value: 'js', description: 'Dynamic scripting language' },

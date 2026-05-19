@@ -53,6 +53,33 @@
   width: 100%;
 }
 
+.toolbar-container:not(.toolbar-virtual) > .toolbar-item-visibility {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-inline: var(--le-toolbar-item-inner-margin, 0px);
+}
+
+.toolbar-container:not(.toolbar-virtual) > .toolbar-item-flex-spacer {
+  display: inline-flex;
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-inline: var(--le-toolbar-item-inner-margin, 0px);
+}
+
+.toolbar-container:not(.toolbar-virtual) > :first-child {
+  margin-inline-start: 0;
+}
+
+.toolbar-container:not(.toolbar-virtual) > :last-child {
+  margin-inline-end: 0;
+}
+
+.toolbar-container:not(.toolbar-virtual) > .toolbar-item-visibility.is-collapsed {
+  margin-inline: 0;
+}
+
 .toolbar-container.toolbar-virtual {
   display: inline-flex;
   width: auto;
@@ -75,6 +102,21 @@
   white-space: nowrap;
 }
 
+.toolbar-virtual.toolbar-virtual-debug {
+  position: relative;
+  top: auto;
+  left: auto;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: auto;
+  margin-bottom: var(--le-spacing-2, 8px);
+  outline: 1px dashed color-mix(in srgb, var(--le-color-primary) 40%, transparent);
+}
+
+.toolbar-virtual.toolbar-virtual-debug.toolbar-virtual-debug-paused {
+  cursor: pointer;
+}
+
 .toolbar-virtual-items {
   display: inline-flex;
   flex-wrap: nowrap;
@@ -87,8 +129,32 @@
   --le-transition-slow: 0ms;
 }
 
-.toolbar-virtual-trigger {
+.toolbar-virtual-item-wrap {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-inline: var(--le-toolbar-item-inner-margin, 0px);
+}
+
+.toolbar-virtual-item-wrap:first-child {
+  margin-inline-start: 0;
+}
+
+.toolbar-virtual-item-wrap:last-child {
+  margin-inline-end: 0;
+}
+
+.toolbar-virtual-item-wrap.is-collapsed {
   display: none;
+  margin-inline: 0;
+}
+
+.toolbar-overflow-trigger.toolbar-virtual-trigger {
+  display: none;
+}
+
+.toolbar-overflow-trigger.toolbar-virtual-trigger.is-visible {
+  display: inline-flex;
 }
 
 /* ── Overflow trigger ────────────────────────────────────────── */
@@ -98,6 +164,10 @@
   align-items: center;
   flex-shrink: 0;
   margin-inline: var(--le-toolbar-item-inner-margin, 0px);
+}
+
+.toolbar-overflow-trigger:last-child {
+  margin-inline-end: 0;
 }
 
 /* The phantom trigger is invisible but keeps its layout footprint

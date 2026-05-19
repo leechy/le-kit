@@ -1,0 +1,127 @@
+Le-Kit Shortcut System Plan
+
+Status
+- This plan is intentionally deferred until the global <le-kit> component is merged.
+- The global <le-kit> component should become the primary integration point for registration, scope, and event handling.
+
+Goals
+- Support shortcuts across components (not only le-button and le-navigation).
+- Trigger exactly one action per keypress, even when duplicates exist.
+- Provide optional shortcut display in le-navigation UI.
+- Keep behavior deterministic, accessible, and context-aware.
+
+Scope (Phase 1)
+- Component-level support:
+  - le-button: shortcut attribute/property support and registration
+  - le-navigation: item shortcut support, optional display, and activation via registry
+- Shared model updates:
+  - LeOption.shortcut?: string
+  - parse declarative shortcut from <le-item shortcut="...">
+
+Architecture
+1) Global Shortcut Registry (owned by <le-kit>)
+- Singleton-like service mounted once by <le-kit>.
+- Registers entries from participating components.
+- Exposes register/unregister/update APIs.
+
+2) Registration record shape
+- id: string (stable id)
+- shortcutRaw: string (author input, e.g. "Del", "Mod+B")
+- shortcutNormalized: string (canonical form)
+- element: HTMLElement (activation target)
+- source: string (component tag, e.g. le-button, le-navigation)
+- priority: number (higher wins)
+- scopeId?: string (optional grouping/scope)
+- getEnabled?: () => boolean
+- getVisible?: () => boolean
+- activate?: () => void (fallback: element.click())
+
+3) Normalization rules
+- Canonical key naming (Delete, Enter, Escape, ArrowUp, etc.).
+- Mod abstraction:
+  - macOS: Mod -> Meta
+  - others: Mod -> Control
+- Case-insensitive input; normalized token order:
+  - Mod+Shift+KeyX style ordering
+- Alias mapping examples:
+  - Del -> Delete
+  - Esc -> Escape
+
+4) Keydown resolution (single-fire guarantee)
+- Ignore editable targets (input, textarea, contenteditable, select when typing).
+- Build candidate set by normalized shortcut.
+- Filter candidates:
+  - connected
+  - enabled
+  - visible
+  - in active scope/context
+- Resolve one candidate only, deterministic order:
+  1. Closest active scope to focused element
+  2. Highest priority
+  3. Most recently focused/registered tie-breaker
+- Activate selected candidate once.
+- Prevent duplicate dispatch in the same event cycle.
+
+5) Scope model
+- <le-kit> provides active scope context (default global scope).
+- Overlay components (popover, popup, side-panel) can temporarily set scope precedence.
+- If no scoped candidate exists, fallback to global scope.
+
+6) Display model in le-navigation
+- New prop: showShortcuts (boolean, default false).
+- If true, render shortcut hints in item end area.
+- Display value should be human-friendly and platform-aware (e.g. "⌘B" on macOS).
+- Display does not change activation logic.
+
+7) Conflict visibility and diagnostics (optional but recommended)
+- Dev-mode warning when same normalized shortcut is registered multiple times in same scope with same priority.
+- Optional debug API on <le-kit> to inspect active bindings.
+
+Phased Implementation Plan
+Phase A - Foundation
+- Add shortcut support to LeOption and declarative parsing.
+- Implement normalization utility and key matcher utility.
+- Implement registry skeleton in shared utils, hosted/initialized by <le-kit>.
+
+Phase B - Component Integration
+- Wire le-button registration lifecycle:
+  - connectedCallback register
+  - prop/watch updates -> update
+  - disconnectedCallback unregister
+- Wire le-navigation item registration for rendered interactive items.
+- Add optional showShortcuts rendering in navigation.
+
+Phase C - Resolution and Scope
+- Add global keydown listener in <le-kit>.
+- Implement candidate filtering and deterministic single-fire resolver.
+- Add scope handling hooks for overlays.
+
+Phase D - Validation
+- Unit tests:
+  - normalization aliases
+  - duplicate handling and deterministic winner
+  - editable target ignore rules
+  - scope precedence
+- E2E tests:
+  - button shortcut activation
+  - navigation item shortcut activation
+  - duplicate shortcuts in different containers
+  - no double-trigger behavior
+
+Initial API Proposal
+- le-button
+  - @Prop() shortcut?: string;
+- le-navigation
+  - @Prop() showShortcuts: boolean = false;
+- LeOption
+  - shortcut?: string;
+
+Deferred decisions (to finalize after <le-kit> merge)
+- Exact scope API shape on <le-kit>
+- Priority defaults per component type
+- Whether shortcuts are enabled by default globally or opt-in
+- Final display formatting policy (symbols vs text)
+
+Notes
+- Keep shortcut activation path unified around activate() / click() to preserve existing onclick/action/href behavior.
+- Preserve accessibility: keyboard shortcut handling must not interfere with normal tab/enter/space semantics.

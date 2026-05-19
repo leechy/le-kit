@@ -102,6 +102,21 @@
   white-space: nowrap;
 }
 
+.toolbar-virtual.toolbar-virtual-debug {
+  position: relative;
+  top: auto;
+  left: auto;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: auto;
+  margin-bottom: var(--le-spacing-2, 8px);
+  outline: 1px dashed color-mix(in srgb, var(--le-color-primary) 40%, transparent);
+}
+
+.toolbar-virtual.toolbar-virtual-debug.toolbar-virtual-debug-paused {
+  cursor: pointer;
+}
+
 .toolbar-virtual-items {
   display: inline-flex;
   flex-wrap: nowrap;
@@ -134,8 +149,12 @@
   margin-inline: 0;
 }
 
-.toolbar-virtual-trigger {
+.toolbar-overflow-trigger.toolbar-virtual-trigger {
   display: none;
+}
+
+.toolbar-overflow-trigger.toolbar-virtual-trigger.is-visible {
+  display: inline-flex;
 }
 
 /* ── Overflow trigger ────────────────────────────────────────── */

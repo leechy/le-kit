@@ -42,8 +42,8 @@ export interface SolverOutput {
 
 interface ToolbarItemRecord {
   element: HTMLElement;
-  virtual: HTMLElement;
-  virtualWrapper: HTMLElement;
+  virtual?: HTMLElement;
+  virtualWrapper?: HTMLElement;
   index: number;
   priority: number;
   kind: 'item' | 'group' | 'spacer-flex' | 'spacer-fixed';
@@ -129,6 +129,18 @@ export class LeToolbar {
   @Prop() disablePopover: boolean = false;
 
   /**
+   * Temporary debug mode: render the virtual toolbar visibly above
+   * the live toolbar so collapse measurements can be inspected.
+   */
+  @Prop({ reflect: true }) debugVirtualToolbar: boolean = false;
+
+  /**
+   * Temporary debug mode: stop before measuring virtual widths so the
+   * virtual DOM can be inspected before collapse simulation mutates it.
+   */
+  @Prop({ reflect: true }) debugPauseBeforeMeasure: boolean = false;
+
+  /**
    * Emitted when the overflow state changes.
    */
   @Event() leToolbarOverflowChange?: EventEmitter<LeToolbarOverflowChangeDetail>;
@@ -145,6 +157,12 @@ export class LeToolbar {
   @State() private itemSlots: Array<{ id: string; slotName: string }> = [];
 
   @State() private initializingLayout: boolean = true;
+
+  @State() private debugStepIndex: number = 0;
+
+  @State() private debugStepMeasuredWidth: number = 0;
+
+  @State() private virtualTriggerVisible: boolean = false;
 
   private hasPreparedInitialLayout: boolean = false;
 
@@ -169,6 +187,8 @@ export class LeToolbar {
   private mutationObserver?: MutationObserver;
 
   private pendingRecalc: number | null = null;
+
+  private debugVirtualWidth: number = 0;
 
   /** Prevent double-attach on rapid connect/disconnect cycles. */
   private observersAttached: boolean = false;
@@ -359,9 +379,106 @@ export class LeToolbar {
   }
 
   private setVirtualTriggerVisible(visible: boolean) {
-    if (!this.virtualTriggerEl) return;
-    this.virtualTriggerEl.style.display = visible ? 'inline-flex' : 'none';
+    this.virtualTriggerVisible = visible;
   }
+
+  private getAuthoredVirtualCollapse(record: ToolbarItemRecord): string | undefined {
+    if (record.element.tagName.toLowerCase() !== 'le-button-group') {
+      return undefined;
+    }
+
+    // Authored-collapsed groups are represented as 'item' kind.
+    if (record.kind !== 'item') {
+      return undefined;
+    }
+
+    const collapse = record.element.getAttribute('collapse');
+    return collapse === null ? undefined : collapse;
+  }
+
+  private resetVirtualState() {
+    this.setVirtualTriggerVisible(false);
+
+    for (const item of this.itemMap.values()) {
+      item.virtual?.setAttribute('visibility', 'visible');
+      const authoredCollapse = this.getAuthoredVirtualCollapse(item);
+      if (authoredCollapse !== undefined) {
+        item.virtual?.setAttribute('collapse', authoredCollapse);
+      } else {
+        item.virtual?.removeAttribute('collapse');
+      }
+      item.virtualWrapper?.classList.remove('is-collapsed');
+    }
+  }
+
+  private async initializeDebugMeasurementState() {
+    this.resetVirtualState();
+
+    for (const item of this.itemMap.values()) {
+      if (item.kind === 'group' && item.virtual) {
+        await this.settleVirtualItem(item.virtual);
+      }
+    }
+
+    await nextFrame();
+
+    const width = this.virtualToolbarEl?.getBoundingClientRect().width ?? 0;
+    this.debugVirtualWidth = width;
+    this.debugStepMeasuredWidth = width;
+    this.debugStepIndex = 0;
+  }
+
+  private async runDebugMeasurementStep() {
+    const virtual = this.virtualToolbarEl;
+    if (!virtual) return;
+
+    if (this.debugStepIndex >= this.collapseSteps.length) {
+      return;
+    }
+
+    const step = this.collapseSteps[this.debugStepIndex];
+    step.thresholdWidth = this.debugVirtualWidth;
+
+    if (step.action === 'hide-item') {
+      const record = this.itemMap.get(step.itemId);
+      record?.virtual?.setAttribute('visibility', 'collapsed');
+      record?.virtualWrapper?.classList.add('is-collapsed');
+    } else if (step.action === 'group-collapse' || step.action === 'hide-group') {
+      const record = this.itemMap.get(step.itemId);
+      record?.virtual?.setAttribute('collapse', step.collapseValue || '');
+      if (step.action === 'hide-group') {
+        record?.virtualWrapper?.classList.add('is-collapsed');
+      }
+    }
+
+    const addsOverflowEntry =
+      (step.action === 'hide-item' || step.action === 'hide-group') &&
+      !step.excludeFromOverflowMenu;
+
+    if (addsOverflowEntry) {
+      this.setVirtualTriggerVisible(true);
+    }
+
+    const record = this.itemMap.get(step.itemId);
+    if (record?.kind === 'group' && record.virtual) {
+      await this.settleVirtualItem(record.virtual);
+      await nextFrame();
+    } else {
+      await nextResize(virtual);
+      await nextFrame();
+    }
+
+    this.debugVirtualWidth = virtual.getBoundingClientRect().width;
+    this.debugStepMeasuredWidth = this.debugVirtualWidth;
+    step.resultingWidth = this.debugVirtualWidth;
+    this.debugStepIndex += 1;
+  }
+
+  private handleVirtualDebugClick = (event: MouseEvent) => {
+    if (!this.debugPauseBeforeMeasure) return;
+    event.preventDefault();
+    void this.runDebugMeasurementStep();
+  };
 
   private clearVirtualMeasurements() {
     this.virtualItemsEl?.replaceChildren();
@@ -462,6 +579,7 @@ export class LeToolbar {
 
     for (let index = 0; index < items.length; index += 1) {
       const item = items[index];
+      const fixedSpacerWidth = this.getFixedSpacerWidthPx(item);
       const clone = item.cloneNode(true) as HTMLElement & {
         componentOnReady?: () => Promise<unknown>;
       };
@@ -475,19 +593,6 @@ export class LeToolbar {
         item.setAttribute('slot', slotName);
       }
 
-      clone.removeAttribute('id');
-      clone.removeAttribute('slot');
-      clone.setAttribute('visibility', 'visible');
-      clone.setAttribute('disabled', 'true');
-      clone.removeAttribute('collapse');
-      virtualWrapper.appendChild(clone);
-      virtual.appendChild(virtualWrapper);
-
-      if (clone.componentOnReady) {
-        await clone.componentOnReady();
-        await nextResize(virtual);
-      }
-
       // Universal collapse meta detection
       let collapseMeta: LeCollapseMeta = { kind: 'item' };
       if (typeof (item as any).getCollapseMeta === 'function') {
@@ -496,7 +601,6 @@ export class LeToolbar {
         } catch {}
       }
 
-      const fixedSpacerWidth = this.getFixedSpacerWidthPx(item);
       let kind: ToolbarItemRecord['kind'];
       if (this.isToolbarSpacer(item)) {
         kind = fixedSpacerWidth !== undefined ? 'spacer-fixed' : 'spacer-flex';
@@ -506,13 +610,47 @@ export class LeToolbar {
         kind = 'item';
       }
 
+      let virtualNode: HTMLElement | undefined;
+      let virtualWrapperNode: HTMLElement | undefined;
+
+      // Flexible spacers should not influence virtual width simulation.
+      if (kind !== 'spacer-flex') {
+        clone.removeAttribute('id');
+        clone.removeAttribute('slot');
+        clone.setAttribute('visibility', 'visible');
+        clone.setAttribute('disabled', 'true');
+
+        const shouldPreserveAuthoredCollapse =
+          kind === 'item' && item.tagName.toLowerCase() === 'le-button-group' && item.hasAttribute('collapse');
+
+        if (shouldPreserveAuthoredCollapse) {
+          const authoredCollapse = item.getAttribute('collapse');
+          if (authoredCollapse !== null) {
+            clone.setAttribute('collapse', authoredCollapse);
+          }
+        } else {
+          clone.removeAttribute('collapse');
+        }
+
+        virtualWrapper.appendChild(clone);
+        virtual.appendChild(virtualWrapper);
+
+        if (clone.componentOnReady) {
+          await clone.componentOnReady();
+          await nextResize(virtual);
+        }
+
+        virtualNode = clone;
+        virtualWrapperNode = virtualWrapper;
+      }
+
       const overflowOption =
         kind === 'item' || kind === 'group' ? await this.buildOverflowOption(item, id) : undefined;
 
       const itemRecord: ToolbarItemRecord = {
         element: item,
-        virtual: clone,
-        virtualWrapper,
+        virtual: virtualNode,
+        virtualWrapper: virtualWrapperNode,
         index,
         priority,
         kind,
@@ -611,6 +749,24 @@ export class LeToolbar {
       this.itemSlots = nextItemSlots;
     }
 
+    if (this.debugPauseBeforeMeasure) {
+      await this.initializeDebugMeasurementState();
+
+      this.applyOutput(
+        {
+          visibleIds: new Set(this.itemMap.keys()),
+          collapsedGroupIds: new Set<string>(),
+          overflowIds: new Set<string>(),
+          showTrigger: false,
+        },
+        [],
+      );
+
+      this.initializingLayout = false;
+      this.hasPreparedInitialLayout = false;
+      return;
+    }
+
     await this.calculateLayoutWidths();
     this.hasPreparedInitialLayout = true;
     this.scheduleRecalc();
@@ -632,13 +788,18 @@ export class LeToolbar {
     this.setVirtualTriggerVisible(false);
 
     for (const item of this.itemMap.values()) {
-      item.virtual.setAttribute('visibility', 'visible');
-      item.virtual.removeAttribute('collapse');
-      item.virtualWrapper.classList.remove('is-collapsed');
+      item.virtual?.setAttribute('visibility', 'visible');
+      const authoredCollapse = this.getAuthoredVirtualCollapse(item);
+      if (authoredCollapse !== undefined) {
+        item.virtual?.setAttribute('collapse', authoredCollapse);
+      } else {
+        item.virtual?.removeAttribute('collapse');
+      }
+      item.virtualWrapper?.classList.remove('is-collapsed');
     }
 
     for (const item of this.itemMap.values()) {
-      if (item.kind === 'group') {
+      if (item.kind === 'group' && item.virtual) {
         await this.settleVirtualItem(item.virtual);
       }
     }
@@ -654,13 +815,13 @@ export class LeToolbar {
 
       if (step.action === 'hide-item') {
         const record = this.itemMap.get(step.itemId);
-        record?.virtual.setAttribute('visibility', 'collapsed');
-        record?.virtualWrapper.classList.add('is-collapsed');
+        record?.virtual?.setAttribute('visibility', 'collapsed');
+        record?.virtualWrapper?.classList.add('is-collapsed');
       } else if (step.action === 'group-collapse' || step.action === 'hide-group') {
         const record = this.itemMap.get(step.itemId);
-        record?.virtual.setAttribute('collapse', step.collapseValue || '');
+        record?.virtual?.setAttribute('collapse', step.collapseValue || '');
         if (step.action === 'hide-group') {
-          record?.virtualWrapper.classList.add('is-collapsed');
+          record?.virtualWrapper?.classList.add('is-collapsed');
         }
       }
 
@@ -670,6 +831,9 @@ export class LeToolbar {
 
       if (!virtualTriggerVisible && addsOverflowEntry) {
         this.setVirtualTriggerVisible(true);
+        // Wait for the virtual trigger (including any slotted custom elements
+        // like a custom "more" button) to fully settle before measuring widths.
+        await this.settleVirtualItem(this.virtualTriggerEl);
         virtualTriggerVisible = true;
       }
 
@@ -781,7 +945,6 @@ export class LeToolbar {
       })
       .map(([, option]) => option);
 
-    this.setVirtualTriggerVisible(overflowMenuItems.length > 0);
     this.applyOutput(
       {
         visibleIds,
@@ -834,6 +997,33 @@ export class LeToolbar {
 
   // ─── Render ─────────────────────────────────────────────────────────────────
 
+  private renderVirtualToolbar() {
+    return (
+      <fieldset
+        disabled
+        aria-hidden="true"
+        data-debug-step-index={String(this.debugStepIndex)}
+        data-debug-step-total={String(this.collapseSteps.length)}
+        data-debug-width={String(Math.round(this.debugStepMeasuredWidth))}
+        class={classnames('toolbar-container', 'toolbar-virtual', {
+          [`align-${this.alignItems}`]: true,
+          'toolbar-virtual-debug': this.debugVirtualToolbar,
+          'toolbar-virtual-debug-paused': this.debugPauseBeforeMeasure,
+        })}
+        onClick={this.handleVirtualDebugClick}
+        ref={el => (this.virtualToolbarEl = el)}
+      >
+        <div class="toolbar-virtual-items" ref={el => (this.virtualItemsEl = el)} />
+        <div
+          class={classnames('toolbar-overflow-trigger', 'toolbar-virtual-trigger', {
+            'is-visible': this.virtualTriggerVisible,
+          })}
+          ref={el => (this.virtualTriggerEl = el)}
+        />
+      </fieldset>
+    );
+  }
+
   render() {
     const { showTrigger } = this.solverOutput;
     const showMenu = showTrigger && !this.disablePopover;
@@ -854,6 +1044,8 @@ export class LeToolbar {
           this.observeContainer(el);
         }}
       >
+        {this.debugVirtualToolbar && this.renderVirtualToolbar()}
+
         {/* Live toolbar row */}
         <div
           class={classnames('toolbar-container', {
@@ -920,21 +1112,7 @@ export class LeToolbar {
           )}
         </div>
 
-        <fieldset
-          disabled
-          aria-hidden="true"
-          class={classnames('toolbar-container', 'toolbar-virtual', {
-            [`align-${this.alignItems}`]: true,
-          })}
-          ref={el => (this.virtualToolbarEl = el)}
-        >
-          <div class="toolbar-virtual-items" ref={el => (this.virtualItemsEl = el)} />
-          <div
-            class="toolbar-overflow-trigger toolbar-virtual-trigger"
-            style={{ display: 'none' }}
-            ref={el => (this.virtualTriggerEl = el)}
-          />
-        </fieldset>
+        {!this.debugVirtualToolbar && this.renderVirtualToolbar()}
       </Host>
     );
   }

@@ -2480,6 +2480,16 @@ export namespace Components {
          */
         "alignItems": 'start' | 'center' | 'end' | 'stretch';
         /**
+          * Temporary debug mode: stop before measuring virtual widths so the virtual DOM can be inspected before collapse simulation mutates it.
+          * @default false
+         */
+        "debugPauseBeforeMeasure": boolean;
+        /**
+          * Temporary debug mode: render the virtual toolbar visibly above the live toolbar so collapse measurements can be inspected.
+          * @default false
+         */
+        "debugVirtualToolbar": boolean;
+        /**
           * Disable the built-in overflow popover. The toolbar will still compute overflow state and emit events, but won't render its own menu. Useful for custom overflow handling.
           * @default false
          */
@@ -6493,6 +6503,16 @@ declare namespace LocalJSX {
          */
         "alignItems"?: 'start' | 'center' | 'end' | 'stretch';
         /**
+          * Temporary debug mode: stop before measuring virtual widths so the virtual DOM can be inspected before collapse simulation mutates it.
+          * @default false
+         */
+        "debugPauseBeforeMeasure"?: boolean;
+        /**
+          * Temporary debug mode: render the virtual toolbar visibly above the live toolbar so collapse measurements can be inspected.
+          * @default false
+         */
+        "debugVirtualToolbar"?: boolean;
+        /**
           * Disable the built-in overflow popover. The toolbar will still compute overflow state and emit events, but won't render its own menu. Useful for custom overflow handling.
           * @default false
          */
@@ -7097,6 +7117,8 @@ declare namespace LocalJSX {
         "overflowIcon": string;
         "overflowLabel": string;
         "disablePopover": boolean;
+        "debugVirtualToolbar": boolean;
+        "debugPauseBeforeMeasure": boolean;
     }
     interface LeToolbarSpacerAttributes {
         "width": string;

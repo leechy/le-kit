@@ -326,23 +326,6 @@ export class LeToolbar {
     return Number.isFinite(parsed) ? parsed : 1000 + index;
   }
 
-  private isToolbarSpacer(el: HTMLElement): boolean {
-    return el.tagName.toLowerCase() === 'le-toolbar-spacer';
-  }
-
-  private getFixedSpacerWidthPx(el: HTMLElement): number | undefined {
-    if (!this.isToolbarSpacer(el)) return undefined;
-
-    const spacer = el as HTMLElement & { width?: unknown };
-    const raw = spacer.getAttribute('width') ?? spacer.width;
-    if (raw === null || raw === undefined || String(raw).trim() === '') return undefined;
-
-    const parsed = Number(raw);
-    if (!Number.isFinite(parsed) || parsed < 0) return undefined;
-
-    return parsed;
-  }
-
   private async buildOverflowOption(item: HTMLElement, id: string): Promise<LeOption> {
     const optionLike = item as HTMLElement & {
       getOption?: () => Promise<LeOption>;
@@ -579,7 +562,6 @@ export class LeToolbar {
 
     for (let index = 0; index < items.length; index += 1) {
       const item = items[index];
-      const fixedSpacerWidth = this.getFixedSpacerWidthPx(item);
       const clone = item.cloneNode(true) as HTMLElement & {
         componentOnReady?: () => Promise<unknown>;
       };
@@ -602,8 +584,8 @@ export class LeToolbar {
       }
 
       let kind: ToolbarItemRecord['kind'];
-      if (this.isToolbarSpacer(item)) {
-        kind = fixedSpacerWidth !== undefined ? 'spacer-fixed' : 'spacer-flex';
+      if (collapseMeta.kind === 'spacer') {
+        kind = collapseMeta.minWidth !== undefined ? 'spacer-fixed' : 'spacer-flex';
       } else if (collapseMeta.kind === 'stepping') {
         kind = 'group';
       } else {
@@ -621,7 +603,9 @@ export class LeToolbar {
         clone.setAttribute('disabled', 'true');
 
         const shouldPreserveAuthoredCollapse =
-          kind === 'item' && item.tagName.toLowerCase() === 'le-button-group' && item.hasAttribute('collapse');
+          kind === 'item' &&
+          item.tagName.toLowerCase() === 'le-button-group' &&
+          item.hasAttribute('collapse');
 
         if (shouldPreserveAuthoredCollapse) {
           const authoredCollapse = item.getAttribute('collapse');
@@ -941,9 +925,11 @@ export class LeToolbar {
 
     // Keep le-button-group entries grouped in overflow: parent label + child items
     const overflowMenuItems: LeOption[] = [];
-    const sortedOverflowEntries = Array.from(overflowOptionMap.entries()).sort(([leftId], [rightId]) => {
-      return (this.itemMap.get(leftId)?.index ?? 0) - (this.itemMap.get(rightId)?.index ?? 0);
-    });
+    const sortedOverflowEntries = Array.from(overflowOptionMap.entries()).sort(
+      ([leftId], [rightId]) => {
+        return (this.itemMap.get(leftId)?.index ?? 0) - (this.itemMap.get(rightId)?.index ?? 0);
+      },
+    );
 
     for (const [itemId, option] of sortedOverflowEntries) {
       const record = this.itemMap.get(itemId);

@@ -17,3 +17,9 @@
   min-width: 0;
   pointer-events: none;
 }
+
+:host(.spacer-fixed) .spacer {
+  width: var(--le-toolbar-spacer-width);
+  min-width: var(--le-toolbar-spacer-width);
+  max-width: var(--le-toolbar-spacer-width);
+}

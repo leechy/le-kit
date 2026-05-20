@@ -1,7 +1,7 @@
 // Toolbar collapse meta interface for universal overflow/collapse handling
 import type { LeOption } from './options';
 
-export type LeCollapseKind = 'item' | 'stepping' | 'variable';
+export type LeCollapseKind = 'item' | 'stepping' | 'variable' | 'spacer';
 
 export interface LeCollapseMeta {
   kind: LeCollapseKind;

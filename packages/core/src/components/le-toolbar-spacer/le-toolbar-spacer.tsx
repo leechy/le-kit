@@ -1,6 +1,5 @@
-import { Component, h, Host, Prop } from '@stencil/core';
-
-type LeVisibilityState = 'visible' | 'collapsing' | 'collapsed' | 'expanding';
+import { Component, h, Host, Method, Prop } from '@stencil/core';
+import type { LeCollapseMeta } from '../../types/toolbar';
 
 /**
  * Flexible spacer for le-toolbar layouts.
@@ -23,12 +22,6 @@ export class LeToolbarSpacer {
    */
   @Prop() width?: number | string;
 
-  /**
-   * Visibility state controlled by responsive containers such as le-toolbar.
-   * @allowedValues visible | collapsing | collapsed | expanding
-   */
-  @Prop({ reflect: true }) visibility: LeVisibilityState = 'visible';
-
   private getFixedWidthPx(): number | undefined {
     if (this.width === undefined || this.width === null || String(this.width).trim() === '') {
       return undefined;
@@ -40,26 +33,30 @@ export class LeToolbarSpacer {
     return parsed;
   }
 
+  /**
+   * Returns collapse meta for toolbar integration.
+   */
+  @Method()
+  async getCollapseMeta(): Promise<LeCollapseMeta> {
+    const fixedWidth = this.getFixedWidthPx();
+    return {
+      kind: 'spacer',
+      minWidth: fixedWidth,
+      maxWidth: fixedWidth,
+    };
+  }
+
   render() {
     const fixedWidth = this.getFixedWidthPx();
-
-    if (fixedWidth === undefined) {
-      return (
-        <Host class="spacer-flex">
-          <span class="spacer" part="spacer" aria-hidden="true"></span>
-        </Host>
-      );
-    }
-
-    const spacerStyle = {
-      width: `${fixedWidth}px`,
-      minWidth: `${fixedWidth}px`,
-      maxWidth: `${fixedWidth}px`,
-    };
+    const hostClass = fixedWidth !== undefined ? 'spacer-fixed' : 'spacer-flex';
+    const spacerStyle = 
+      fixedWidth !== undefined 
+        ? { '--le-toolbar-spacer-width': `${fixedWidth}px` } as any
+        : undefined;
 
     return (
-      <Host class="spacer-fixed">
-        <span class="spacer" part="spacer" style={spacerStyle} aria-hidden="true"></span>
+      <Host class={hostClass} style={spacerStyle}>
+        <span class="spacer" part="spacer" aria-hidden="true"></span>
       </Host>
     );
   }

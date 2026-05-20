@@ -65,7 +65,12 @@ const navigationMarkup = renderNavigationItems(docsNavigationItems);
     top="under-header"
     full-height
   >
-    <le-navigation slot="panel" orientation="vertical" activeUrl={pathname}>
+    <le-navigation
+      slot="panel"
+      orientation="vertical"
+      activeUrl={pathname}
+      toggle-position="end"
+    >
       <Fragment set:html={navigationMarkup} />
     </le-navigation>
 

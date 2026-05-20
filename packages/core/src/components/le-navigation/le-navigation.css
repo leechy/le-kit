@@ -8,6 +8,8 @@
   /* Vertical navigation items variables */
   --le-nav-item-padding-x: var(--le-spacing-1);
   --le-nav-item-padding-y: var(--le-spacing-2);
+  --le-nav-item-indent: var(--le-spacing-6);
+  --le-nav-toggle-size: var(--le-spacing-2);
   --le-nav-item-gap: var(--le-spacing-2);
 
   /* Trigger items */
@@ -103,8 +105,8 @@
 .nav-toggle,
 .nav-toggle-spacer {
   box-sizing: border-box;
-  width: var(--le-spacing-4);
-  min-width: var(--le-spacing-4);
+  width: var(--le-nav-toggle-size);
+  min-width: var(--le-nav-toggle-size);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -136,23 +138,27 @@
 
 .nav-chevron svg {
   display: block;
-  width: var(--le-spacing-4);
-  height: var(--le-spacing-4);
+  width: var(--le-nav-toggle-size);
+  height: var(--le-nav-toggle-size);
 }
 
-.nav-node > div > button > .nav-chevron {
+.nav-chevron {
   transform: rotate(-90deg);
 }
-.nav-node.open > div > button > .nav-chevron {
+
+.nav-chevron.open {
   transform: rotate(0deg);
 }
 
 .nav-item {
-  flex: 1;
-  display: inline-flex;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
   align-items: center;
+  text-align: start;
   gap: var(--le-nav-item-gap);
-  padding: var(--le-nav-item-padding-y) var(--le-nav-item-padding-x) var(--le-nav-item-padding-y) 0;
+  padding: var(--le-nav-item-padding-y) var(--le-nav-item-padding-x);
   border-radius: var(--le-nav-radius);
   border: 1px solid transparent;
   background: transparent;
@@ -164,6 +170,10 @@
   cursor: pointer;
 }
 
+.nav-item:hover {
+  background: var(--le-nav-hover-bg);
+}
+
 .nav-item:visited {
   color: var(--le-nav-color);
 }
@@ -171,6 +181,11 @@
 .nav-item:focus-visible {
   outline: none;
 }
+
+:host(:focus-within) .nav-item.focused {
+  box-shadow: 0 0 0 2px var(--le-color-focus) inset;
+}
+
 .nav-item.has-children {
   font-size: var(--le-font-size-parent-label, auto);
   color: var(--le-color-parent-label, #999);
@@ -196,44 +211,41 @@
   color: var(--le-color-info);
 }
 
-.nav-node.selected > .nav-row {
+.nav-node.selected > .nav-item {
   background: var(--le-nav-selected-bg);
   color: var(--le-nav-selected-color);
 }
 
-.nav-node.color-secondary.selected > .nav-row {
+.nav-node.color-secondary.selected > .nav-item {
   background: var(--le-nav-selected-bg-secondary);
   color: var(--le-nav-selected-color-secondary);
 }
 
-.nav-node.color-success.selected > .nav-row {
+.nav-node.color-success.selected > .nav-item {
   background: var(--le-nav-selected-bg-success);
   color: var(--le-nav-selected-color-success);
 }
 
-.nav-node.color-warning.selected > .nav-row {
+.nav-node.color-warning.selected > .nav-item {
   background: var(--le-nav-selected-bg-warning);
   color: var(--le-nav-selected-color-warning);
 }
 
-.nav-node.color-danger.selected > .nav-row {
+.nav-node.color-danger.selected > .nav-item {
   background: var(--le-nav-selected-bg-danger);
   color: var(--le-nav-selected-color-danger);
 }
 
-.nav-node.color-info.selected > .nav-row {
+.nav-node.color-info.selected > .nav-item {
   background: var(--le-nav-selected-bg-info);
   color: var(--le-nav-selected-color-info);
 }
 
-:host(:focus-within) .nav-node.selected > .nav-row.is-focused {
+:host(:focus-within) .nav-node.selected > .nav-item.focused {
   box-shadow: 0 0 0 2px color-mix(in srgb, white 45%, transparent) inset;
 }
-.nav-node.selected > .nav-row > .nav-item {
-  color: inherit;
-}
 
-.nav-node.disabled > .nav-row > .nav-item {
+.nav-node.disabled > .nav-item {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -241,6 +253,7 @@
 .nav-text {
   display: flex;
   flex-direction: column;
+  flex: 1;
   min-width: 0;
 }
 

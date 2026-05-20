@@ -1181,6 +1181,11 @@ export namespace Components {
          */
         "submenuSearchable": boolean;
         /**
+          * Position of the toggle arrow for items with children: 'start' | 'end'
+          * @default 'start'
+         */
+        "togglePosition": 'start' | 'end';
+        /**
           * Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`.
           * @default false
          */
@@ -5159,6 +5164,11 @@ declare namespace LocalJSX {
          */
         "submenuSearchable"?: boolean;
         /**
+          * Position of the toggle arrow for items with children: 'start' | 'end'
+          * @default 'start'
+         */
+        "togglePosition"?: 'start' | 'end';
+        /**
           * Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`.
           * @default false
          */
@@ -6856,6 +6866,7 @@ declare namespace LocalJSX {
         "emptyText": string;
         "submenuSearchable": boolean;
         "activationMode": LeNavigationActivationMode;
+        "togglePosition": 'start' | 'end';
     }
     interface LeNumberInputAttributes {
         "value": number;

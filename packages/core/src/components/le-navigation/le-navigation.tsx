@@ -41,6 +41,7 @@ interface VerticalListRenderOptions {
   depth: number;
   pathPrefix: string;
   parentId?: string;
+  leadingToggleAncestors?: number;
   autoOpenIds?: Set<string>;
   searchable?: boolean;
   searchQuery?: string;
@@ -963,6 +964,7 @@ export class LeNavigation {
       depth,
       pathPrefix,
       parentId,
+      leadingToggleAncestors,
       autoOpenIds,
       searchable,
       searchQuery,
@@ -976,6 +978,10 @@ export class LeNavigation {
     const query = searchQuery ?? '';
     const openFromSearch = autoOpenIds ?? new Set<string>();
     const filtered = query ? this.filterTree(items, query, pathPrefix, openFromSearch) : items;
+    const ancestorLeadingSlots = leadingToggleAncestors ?? 0;
+    const levelHasChildren = filtered.some(item => this.getChildItems(item).length > 0);
+    const topLevelEndToggles = depth === 0 && this.togglePosition === 'end';
+    const useLeadingToggleSlot = !topLevelEndToggles && levelHasChildren;
     const firstEnabledId = filtered.find(item => !item.disabled)
       ? this.getItemId(
           filtered.find(item => !item.disabled) as LeOption,
@@ -1011,11 +1017,7 @@ export class LeNavigation {
               const children = this.getChildItems(item);
               const hasChildren = children.length > 0;
               const open = hasChildren && (this.isOpen(item, id) || openFromSearch.has(id));
-              const paddingLeft = `calc(var(--le-nav-item-padding-x) + ${depth} * var(--le-nav-item-indent))`;
-              const paddingRight =
-                this.togglePosition === 'end'
-                  ? `calc(var(--le-nav-item-padding-x) + ${depth} * var(--le-nav-item-indent))`
-                  : undefined;
+              const paddingLeft = `calc(var(--le-nav-item-padding-x) + ${depth} * var(--le-nav-item-indent) + ${ancestorLeadingSlots} * var(--le-nav-toggle-size))`;
               const selected = this.isItemSelected(item);
               const itemPart = this.partFromOptionPart('item', item.part, {
                 selected,
@@ -1025,8 +1027,13 @@ export class LeNavigation {
               const autoActivatable = !!(item.href || item.action || !hasChildren);
               const isDefaultTabStop =
                 !this.focusedItemId && !submenuId && depth === 0 && id === firstEnabledId;
+              const TagType = item.href && !item.disabled ? 'a' : 'button';
+              const attrs =
+                TagType === 'a'
+                  ? { href: item.href, target: item.target, role: 'treeitem' }
+                  : { type: 'button', role: 'treeitem' };
 
-              // Single button for the whole item row
+              // Single interactive control for the whole item row
               return (
                 <li
                   class={classnames('nav-node', {
@@ -1039,7 +1046,7 @@ export class LeNavigation {
                   key={id}
                   role="none"
                 >
-                  <button
+                  <TagType
                     class={classnames(
                       'nav-item',
                       {
@@ -1063,8 +1070,8 @@ export class LeNavigation {
                     tabIndex={item.disabled ? -1 : isFocused ? 0 : isDefaultTabStop ? 0 : -1}
                     style={{
                       paddingLeft,
-                      paddingRight,
                     }}
+                    {...attrs}
                     onFocus={() => this.handleInteractiveFocus(id)}
                     onClick={(e: MouseEvent) => {
                       if (item.disabled) return;
@@ -1076,8 +1083,7 @@ export class LeNavigation {
                       }
                     }}
                   >
-                    {/* Toggle arrow (start or end) */}
-                    {hasChildren && this.togglePosition === 'start' && (
+                    {useLeadingToggleSlot && hasChildren && (
                       <span
                         class={classnames('nav-toggle', { open })}
                         aria-label={open ? 'Collapse' : 'Expand'}
@@ -1096,6 +1102,9 @@ export class LeNavigation {
                         />
                       </span>
                     )}
+                    {useLeadingToggleSlot && !hasChildren && (
+                      <span class="nav-toggle-spacer" aria-hidden="true" />
+                    )}
                     {item.iconStart && (
                       <span class="nav-icon" aria-hidden="true">
                         {this.renderIcon(item.iconStart)}
@@ -1110,8 +1119,7 @@ export class LeNavigation {
                         {this.renderIcon(item.iconEnd)}
                       </span>
                     )}
-                    {/* Toggle arrow (end) */}
-                    {hasChildren && this.togglePosition === 'end' && (
+                    {topLevelEndToggles && hasChildren && (
                       <span
                         class={classnames('nav-toggle', { open })}
                         aria-label={open ? 'Collapse' : 'Expand'}
@@ -1129,13 +1137,15 @@ export class LeNavigation {
                         />
                       </span>
                     )}
-                  </button>
+                  </TagType>
                   {hasChildren && (
                     <le-collapse class="nav-children" closed={!open} noFading={true} role="group">
                       {this.renderVerticalList(children, {
                         depth: depth + 1,
                         pathPrefix: path,
                         parentId: id,
+                        leadingToggleAncestors:
+                          ancestorLeadingSlots + (useLeadingToggleSlot ? 1 : 0),
                         autoOpenIds: openFromSearch,
                         submenuId,
                         submenuRoot: submenuRoot ?? submenuId,
@@ -1497,6 +1507,7 @@ export class LeNavigation {
             {this.renderVerticalList(items, {
               depth: 0,
               pathPrefix: '',
+              leadingToggleAncestors: 0,
               searchable: this.searchable,
               searchQuery: this.searchQuery,
               searchPlaceholder: this.searchPlaceholder,

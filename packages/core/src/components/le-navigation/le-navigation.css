@@ -9,6 +9,7 @@
   --le-nav-item-padding-x: var(--le-spacing-1);
   --le-nav-item-padding-y: var(--le-spacing-2);
   --le-nav-item-indent: var(--le-spacing-6);
+  --le-nav-toggle-size: var(--le-spacing-2);
   --le-nav-item-gap: var(--le-spacing-2);
 
   /* Trigger items */
@@ -104,8 +105,8 @@
 .nav-toggle,
 .nav-toggle-spacer {
   box-sizing: border-box;
-  width: var(--le-spacing-4);
-  min-width: var(--le-spacing-4);
+  width: var(--le-nav-toggle-size);
+  min-width: var(--le-nav-toggle-size);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -137,15 +138,8 @@
 
 .nav-chevron svg {
   display: block;
-  width: var(--le-spacing-4);
-  height: var(--le-spacing-4);
-}
-
-.nav-node > div > button > .nav-chevron {
-  transform: rotate(-90deg);
-}
-.nav-node.open > div > button > .nav-chevron {
-  transform: rotate(0deg);
+  width: var(--le-nav-toggle-size);
+  height: var(--le-nav-toggle-size);
 }
 
 .nav-chevron {
@@ -249,10 +243,6 @@
 
 :host(:focus-within) .nav-node.selected > .nav-item.focused {
   box-shadow: 0 0 0 2px color-mix(in srgb, white 45%, transparent) inset;
-}
-
-.nav-node.selected > .nav-item {
-  color: inherit;
 }
 
 .nav-node.disabled > .nav-item {

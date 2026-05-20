@@ -165,28 +165,22 @@ export class LeNavigation {
   @Event() leNavItemToggle!: EventEmitter<LeNavigationItemToggleDetail>;
 
   @State() private searchQuery: string = '';
-
   @State() private openState: Record<string, boolean> = {};
-
   /** IDs of items currently in overflow (from le-bar) */
   @State() private overflowIds: string[] = [];
-
   /** Whether hamburger mode is active (from le-bar) */
   @State() private hamburgerActive: boolean = false;
-
   @State() private submenuQueries: Record<string, string> = {};
-
   /** Whether the overflow popover is open */
   @State() private overflowPopoverOpen: boolean = false;
-
   @State() private declarativeItems: LeOption[] = [];
-
   @State() private isDeclarativeMode: boolean = false;
-
   /** ID of the currently focused navigation item */
   @State() private focusedItemId?: string;
-
   @State() private openSubmenuId?: string;
+
+  /** Position of the toggle arrow for items with children: 'start' | 'end' */
+  @Prop({ reflect: true }) togglePosition: 'start' | 'end' = 'start';
 
   private popoverRefs: Map<string, HTMLLePopoverElement> = new Map();
 
@@ -1017,12 +1011,11 @@ export class LeNavigation {
               const children = this.getChildItems(item);
               const hasChildren = children.length > 0;
               const open = hasChildren && (this.isOpen(item, id) || openFromSearch.has(id));
-              const paddingLeft = `calc(var(--le-nav-item-padding-x) + ${depth} * var(--le-spacing-4))`;
-              const TagType = item.href && !item.disabled ? 'a' : 'button';
-              const attrs =
-                TagType === 'a'
-                  ? { href: item.href, target: item.target, role: 'treeitem' }
-                  : { type: 'button', role: 'treeitem' };
+              const paddingLeft = `calc(var(--le-nav-item-padding-x) + ${depth} * var(--le-nav-item-indent))`;
+              const paddingRight =
+                this.togglePosition === 'end'
+                  ? `calc(var(--le-nav-item-padding-x) + ${depth} * var(--le-nav-item-indent))`
+                  : undefined;
               const selected = this.isItemSelected(item);
               const itemPart = this.partFromOptionPart('item', item.part, {
                 selected,
@@ -1033,6 +1026,7 @@ export class LeNavigation {
               const isDefaultTabStop =
                 !this.focusedItemId && !submenuId && depth === 0 && id === firstEnabledId;
 
+              // Single button for the whole item row
               return (
                 <li
                   class={classnames('nav-node', {
@@ -1045,70 +1039,97 @@ export class LeNavigation {
                   key={id}
                   role="none"
                 >
-                  <div
-                    class={classnames('nav-row', { 'is-focused': isFocused })}
-                    style={{ paddingLeft }}
+                  <button
+                    class={classnames(
+                      'nav-item',
+                      {
+                        'disabled': item.disabled,
+                        'focused': isFocused,
+                        'has-children': hasChildren,
+                        'selected': selected,
+                      },
+                      item.className,
+                    )}
+                    part={itemPart}
+                    data-nav-id={id}
+                    data-parent-id={parentId ?? ''}
+                    data-depth={String(depth)}
+                    data-has-children={hasChildren ? 'true' : 'false'}
+                    data-open={open ? 'true' : 'false'}
+                    data-submenu-root={submenuRoot ?? submenuId ?? ''}
+                    data-auto-activatable={autoActivatable ? 'true' : 'false'}
+                    aria-disabled={item.disabled ? 'true' : undefined}
+                    aria-expanded={hasChildren ? (open ? 'true' : 'false') : undefined}
+                    tabIndex={item.disabled ? -1 : isFocused ? 0 : isDefaultTabStop ? 0 : -1}
+                    style={{
+                      paddingLeft,
+                      paddingRight,
+                    }}
+                    onFocus={() => this.handleInteractiveFocus(id)}
+                    onClick={(e: MouseEvent) => {
+                      if (item.disabled) return;
+                      // If has children and click is on arrow, toggle children, else activate
+                      if (hasChildren && this.isToggleClick(e)) {
+                        this.handleToggle(e, item, id);
+                      } else {
+                        this.handleItemSelect(e, item, id, closePopover);
+                      }
+                    }}
                   >
-                    {hasChildren ? (
-                      <button
-                        type="button"
-                        class="nav-toggle"
+                    {/* Toggle arrow (start or end) */}
+                    {hasChildren && this.togglePosition === 'start' && (
+                      <span
+                        class={classnames('nav-toggle', { open })}
                         aria-label={open ? 'Collapse' : 'Expand'}
                         aria-expanded={open ? 'true' : 'false'}
-                        onClick={(e: MouseEvent) => this.handleToggle(e, item, id)}
-                        disabled={item.disabled}
+                        tabIndex={-1}
+                        onClick={e => {
+                          // Only handle toggle, don't bubble to button
+                          e.stopPropagation();
+                          this.handleToggle(e as any, item, id);
+                        }}
                       >
-                        <le-icon name="chevron-down" class="nav-chevron" aria-hidden="true" />
-                      </button>
-                    ) : (
-                      <span class="nav-toggle-spacer" aria-hidden="true" />
-                    )}
-
-                    <TagType
-                      class={classnames(
-                        'nav-item',
-                        {
-                          'disabled': item.disabled,
-                          'focused': isFocused,
-                          'has-children': hasChildren,
-                          'selected': selected,
-                        },
-                        item.className,
-                      )}
-                      part={itemPart}
-                      {...attrs}
-                      data-nav-id={id}
-                      data-parent-id={parentId ?? ''}
-                      data-depth={String(depth)}
-                      data-has-children={hasChildren ? 'true' : 'false'}
-                      data-open={open ? 'true' : 'false'}
-                      data-submenu-root={submenuRoot ?? submenuId ?? ''}
-                      data-auto-activatable={autoActivatable ? 'true' : 'false'}
-                      aria-disabled={item.disabled ? 'true' : undefined}
-                      aria-expanded={hasChildren ? (open ? 'true' : 'false') : undefined}
-                      tabIndex={item.disabled ? -1 : isFocused ? 0 : isDefaultTabStop ? 0 : -1}
-                      onFocus={() => this.handleInteractiveFocus(id)}
-                      onClick={(e: MouseEvent) => this.handleItemSelect(e, item, id, closePopover)}
-                    >
-                      {item.iconStart && (
-                        <span class="nav-icon" aria-hidden="true">
-                          {this.renderIcon(item.iconStart)}
-                        </span>
-                      )}
-                      <span class="nav-text">
-                        <span class="nav-label">{this.renderLabel(item.label)}</span>
-                        {item.description && (
-                          <span class="nav-description">{item.description}</span>
-                        )}
+                        <le-icon
+                          name="chevron-down"
+                          class={classnames('nav-chevron', { open })}
+                          aria-hidden="true"
+                        />
                       </span>
-                      {item.iconEnd && (
-                        <span class="nav-icon nav-icon-end" aria-hidden="true">
-                          {this.renderIcon(item.iconEnd)}
-                        </span>
-                      )}
-                    </TagType>
-                  </div>
-
+                    )}
+                    {item.iconStart && (
+                      <span class="nav-icon" aria-hidden="true">
+                        {this.renderIcon(item.iconStart)}
+                      </span>
+                    )}
+                    <span class="nav-text">
+                      <span class="nav-label">{this.renderLabel(item.label)}</span>
+                      {item.description && <span class="nav-description">{item.description}</span>}
+                    </span>
+                    {item.iconEnd && (
+                      <span class="nav-icon nav-icon-end" aria-hidden="true">
+                        {this.renderIcon(item.iconEnd)}
+                      </span>
+                    )}
+                    {/* Toggle arrow (end) */}
+                    {hasChildren && this.togglePosition === 'end' && (
+                      <span
+                        class={classnames('nav-toggle', { open })}
+                        aria-label={open ? 'Collapse' : 'Expand'}
+                        aria-expanded={open ? 'true' : 'false'}
+                        tabIndex={-1}
+                        onClick={e => {
+                          e.stopPropagation();
+                          this.handleToggle(e as any, item, id);
+                        }}
+                      >
+                        <le-icon
+                          name="chevron-down"
+                          class={classnames('nav-chevron', { open, end: true })}
+                          aria-hidden="true"
+                        />
+                      </span>
+                    )}
+                  </button>
                   {hasChildren && (
                     <le-collapse class="nav-children" closed={!open} noFading={true} role="group">
                       {this.renderVerticalList(children, {
@@ -1129,6 +1150,14 @@ export class LeNavigation {
         )}
       </div>
     );
+  }
+  /**
+   * Returns true if the click event was on the toggle arrow, based on position.
+   */
+  private isToggleClick(e: MouseEvent): boolean {
+    // The toggle arrow is a span.nav-toggle inside the button
+    const path = e.composedPath() as HTMLElement[];
+    return path.some(el => el instanceof HTMLElement && el.classList.contains('nav-toggle'));
   }
 
   private renderHorizontalItem(item: LeOption, index: number) {

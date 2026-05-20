@@ -21,7 +21,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
       handles="left,right"
     >
       <le-toolbar style="background-color: var(--le-color-border);">
-        <le-button-group overflow-icons label="Navigation">
+        <le-button-group overflow-icons label="Navigation" collapse="2">
           <le-button label="Back" icon-only="arrow-left"></le-button>
           <le-button label="Forward" icon-only="arrow-right"></le-button>
         </le-button-group>
@@ -44,7 +44,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
     language="html"
     code={`
 <le-toolbar>
-  <le-button-group overflow-icons label="Navigation">
+  <le-button-group overflow-icons label="Navigation" collapse="2">
     <le-button label="Back" icon-only="arrow-left"></le-button>
     <le-button label="Forward" icon-only="arrow-right"></le-button>
   </le-button-group>
@@ -83,7 +83,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
     and then they will appear in the overflow menu. To appear correctly in the
     overflow menu, buttons that are <code>icon-only</code> should have a <code
       >label</code
-    > attribute.
+    > attribute, to be shown correctly in the overflow menu.
   </p>
 
   <h3>
@@ -93,7 +93,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
     Button groups will try to shrink first, using it's <code>collapse</code> attrbiute.
     And will appear in the toolbar's overflow menu only after it fully collapses.
     It will appear in the overflow menu as a expandable section, and it also need
-    a <code>label</code> attribute.
+    a <code>label</code> attribute, to be used as a group title in the overflow menu.
   </p>
 
   <h3>
@@ -105,6 +105,39 @@ import CodeBlock from "../../components/CodeBlock.astro";
     create space between groups of buttons, or to align certain items to the
     start or end of the toolbar. It will never appear in the overflow menu, and
     it will never cause other items to collapse.
+  </p>
+
+  <h2><a href="#how-it-works" id="how-it-works">How It Works</a></h2>
+  <p>
+    When the toolbar is initialized, it's creating a virtual clone of itself to
+    measure the full size of all the children. Then, it starts to collapse the
+    items one by one, starting from the lowest priority, and measures the width
+    of the toolbar after each collapse.
+  </p>
+
+  <p>
+    Using a ResizeObserver, it listens for changes to the original toolbar's
+    size, and based on the measurements from the virtual toolbar, it determines
+    which items should be collapsed or expanded to fit the available space.
+  </p>
+
+  <p>
+    When an item is collapsed, it's moved to an internal overflow menu, which
+    can be accessed through a trigger button that appears at the end of the
+    toolbar when there are overflowed items.
+  </p>
+
+  <p>
+    <code>&lt;le-toolbar&gt;</code> will automatically wrap every child element (except
+    the ones with
+    <code>slot="more"</code> attribute) in <code>&lt;le-visibility&gt;</code> component
+    to manage their visibility with an animation.
+  </p>
+
+  <p>
+    If you don't want your <code>&lt;le-button-group&gt;</code> to be automatically
+    collapsed by the toolbar, just add <code>collapse</code> attribute and it will
+    be collapsed as a whole and not each button individually.
   </p>
 
   <h2><a href="#properties" id="properties">Properties / Attributes</a></h2>

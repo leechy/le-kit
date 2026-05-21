@@ -30,6 +30,16 @@ into an overflow "more" menu.
 
 ## Methods
 
+### `getCollapseMeta() => Promise<LeCollapseMeta>`
+
+Returns collapse meta for toolbar integration.
+
+#### Returns
+
+Type: `Promise<LeCollapseMeta>`
+
+
+
 ### `getItemsMeta() => Promise<LeButtonGroupItemsMeta>`
 
 
@@ -94,15 +104,15 @@ Type: `Promise<void>`
 
 ### Depends on
 
-- [le-visibility](../le-visibility)
 - [le-component](../le-component)
+- [le-visibility](../le-visibility)
 - [le-overflow-menu](../le-overflow-menu)
 
 ### Graph
 ```mermaid
 graph TD;
-  le-button-group --> le-visibility
   le-button-group --> le-component
+  le-button-group --> le-visibility
   le-button-group --> le-overflow-menu
   le-component --> le-button
   le-component --> le-select
@@ -112,7 +122,6 @@ graph TD;
   le-component --> le-popup
   le-button --> le-icon
   le-button --> le-slot
-  le-button --> le-visibility
   le-button --> le-component
   le-button --> le-tooltip
   le-slot --> le-popover

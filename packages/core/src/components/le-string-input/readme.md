@@ -82,7 +82,6 @@ graph TD;
   le-component --> le-string-input
   le-button --> le-icon
   le-button --> le-slot
-  le-button --> le-visibility
   le-button --> le-component
   le-button --> le-tooltip
   le-slot --> le-string-input

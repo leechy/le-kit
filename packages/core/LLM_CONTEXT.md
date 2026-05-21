@@ -825,6 +825,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `emptyText` | `string` | `'No results found'` | Text shown when no items match the filter. |
 | `submenuSearchable` | `boolean` | `false` | Whether submenu popovers should include a filter input. |
 | `activationMode` | `LeNavigationActivationMode` | `'manual'` | Whether keyboard focus only highlights, or also activates immediately. |
+| `togglePosition` | `'start' \| 'end'` | `'start'` | Position of the toggle arrow for items with children: 'start' | 'end' |
 
 ### Events
 
@@ -1654,6 +1655,8 @@ footprint first before their contents are overflowed entirely.
 | `overflowIcon` | `string` | `'ellipsis-horizontal'` | Icon for the overflow trigger button when no custom slot content is provided. |
 | `overflowLabel` | `string` | `'More'` | Accessible label for the overflow trigger button. |
 | `disablePopover` | `boolean` | `false` | Disable the built-in overflow popover. The toolbar will still compute overflow state and emit events, but won't render its own menu. Useful for custom overflow handling. |
+| `debugVirtualToolbar` | `boolean` | `false` | Temporary debug mode: render the virtual toolbar visibly above the live toolbar so collapse measurements can be inspected. |
+| `debugPauseBeforeMeasure` | `boolean` | `false` | Temporary debug mode: stop before measuring virtual widths so the virtual DOM can be inspected before collapse simulation mutates it. |
 
 ### Events
 
@@ -1681,8 +1684,7 @@ With numeric `width`: behaves as a fixed-width spacer that can be collapsed by l
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `width` | `number \| string \| undefined` |  | Optional fixed width in pixels. Numeric values (e.g. `24`) are treated as px. |
-| `visibility` | `LeVisibilityState` | `'visible'` | Visibility state controlled by responsive containers such as le-toolbar. |
+| `width` | `number \| string \| undefined` |  | Optional fixed width. Numeric values (e.g. `24`) are treated as px. String values may be any valid CSS width (e.g. `2rem`, `var(--le-spacing-2)`). |
 
 ---
 

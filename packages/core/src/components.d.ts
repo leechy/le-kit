@@ -2532,13 +2532,11 @@ export namespace Components {
      */
     interface LeToolbarSpacer {
         /**
-          * Visibility state controlled by responsive containers such as le-toolbar.
-          * @allowedValues visible | collapsing | collapsed | expanding
-          * @default 'visible'
+          * Returns collapse meta for toolbar integration.
          */
-        "visibility": LeVisibilityState;
+        "getCollapseMeta": () => Promise<LeCollapseMeta>;
         /**
-          * Optional fixed width in pixels. Numeric values (e.g. `24`) are treated as px.
+          * Optional fixed width. Numeric values (e.g. `24`) are treated as px. String values may be any valid CSS width (e.g. `2rem`, `var(--le-spacing-2)`).
          */
         "width"?: number | string;
     }
@@ -6560,13 +6558,7 @@ declare namespace LocalJSX {
      */
     interface LeToolbarSpacer {
         /**
-          * Visibility state controlled by responsive containers such as le-toolbar.
-          * @allowedValues visible | collapsing | collapsed | expanding
-          * @default 'visible'
-         */
-        "visibility"?: LeVisibilityState;
-        /**
-          * Optional fixed width in pixels. Numeric values (e.g. `24`) are treated as px.
+          * Optional fixed width. Numeric values (e.g. `24`) are treated as px. String values may be any valid CSS width (e.g. `2rem`, `var(--le-spacing-2)`).
          */
         "width"?: number | string;
     }
@@ -7133,7 +7125,6 @@ declare namespace LocalJSX {
     }
     interface LeToolbarSpacerAttributes {
         "width": string;
-        "visibility": LeVisibilityState;
     }
     interface LeTooltipAttributes {
         "mode": LeKitMode;

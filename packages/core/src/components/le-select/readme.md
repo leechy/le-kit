@@ -77,7 +77,6 @@ graph TD;
   le-component --> le-select
   le-button --> le-icon
   le-button --> le-slot
-  le-button --> le-visibility
   le-button --> le-component
   le-button --> le-tooltip
   le-slot --> le-popover

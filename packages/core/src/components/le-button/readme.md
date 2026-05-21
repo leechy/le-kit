@@ -114,6 +114,16 @@ A flexible button component with multiple variants and states.
 
 ## Methods
 
+### `getCollapseMeta() => Promise<LeCollapseMeta>`
+
+Returns collapse meta for toolbar integration.
+
+#### Returns
+
+Type: `Promise<LeCollapseMeta>`
+
+
+
 ### `getOption() => Promise<LeOption>`
 
 
@@ -164,7 +174,6 @@ Type: `Promise<LeOption>`
 
 - [le-icon](../le-icon)
 - [le-slot](../le-slot)
-- [le-visibility](../le-visibility)
 - [le-component](../le-component)
 - [le-tooltip](../le-tooltip)
 
@@ -173,7 +182,6 @@ Type: `Promise<LeOption>`
 graph TD;
   le-button --> le-icon
   le-button --> le-slot
-  le-button --> le-visibility
   le-button --> le-component
   le-button --> le-tooltip
   le-slot --> le-button

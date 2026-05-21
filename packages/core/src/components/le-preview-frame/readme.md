@@ -98,8 +98,8 @@ graph TD;
   le-preview-frame --> le-button
   le-preview-frame --> le-icon
   le-preview-frame --> le-tag
-  le-button-group --> le-visibility
   le-button-group --> le-component
+  le-button-group --> le-visibility
   le-button-group --> le-overflow-menu
   le-component --> le-button
   le-component --> le-select
@@ -109,7 +109,6 @@ graph TD;
   le-component --> le-popup
   le-button --> le-icon
   le-button --> le-slot
-  le-button --> le-visibility
   le-button --> le-component
   le-button --> le-tooltip
   le-slot --> le-popover

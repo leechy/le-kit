@@ -51,7 +51,6 @@ graph TD;
   le-side-panel-toggle --> le-button
   le-button --> le-icon
   le-button --> le-slot
-  le-button --> le-visibility
   le-button --> le-component
   le-button --> le-tooltip
   le-slot --> le-popover

@@ -28,6 +28,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `searchPlaceholder`      | `search-placeholder`         | Placeholder text for the search input.                                                                                                                             | `string`                                          | `'Search...'`        |
 | `searchable`             | `searchable`                 | Enables a search input for the vertical navigation.                                                                                                                | `boolean`                                         | `false`              |
 | `submenuSearchable`      | `submenu-searchable`         | Whether submenu popovers should include a filter input.                                                                                                            | `boolean`                                         | `false`              |
+| `togglePosition`         | `toggle-position`            | Position of the toggle arrow for items with children: 'start' \| 'end'                                                                                             | `"end" \| "start"`                                | `'start'`            |
 | `wrap`                   | `wrap`                       | Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`.                                                                               | `boolean`                                         | `false`              |
 
 
@@ -107,7 +108,6 @@ graph TD;
   le-component --> le-popup
   le-button --> le-icon
   le-button --> le-slot
-  le-button --> le-visibility
   le-button --> le-component
   le-button --> le-tooltip
   le-slot --> le-popover

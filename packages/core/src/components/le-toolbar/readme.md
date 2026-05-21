@@ -18,14 +18,16 @@ footprint first before their contents are overflowed entirely.
 
 ## Properties
 
-| Property         | Attribute         | Description                                                                                                                                                                | Type                                        | Default                                             |
-| ---------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | --------------------------------------------------- |
-| `alignItems`     | `align-items`     | Alignment of items along the main axis.                                                                                                                                    | `"center" \| "end" \| "start" \| "stretch"` | `'start'`                                           |
-| `disablePopover` | `disable-popover` | Disable the built-in overflow popover. The toolbar will still compute overflow state and emit events, but won't render its own menu. Useful for custom overflow handling.  | `boolean`                                   | `false`                                             |
-| `itemGap`        | `item-gap`        | Spacing between top-level toolbar items. Accepts any valid CSS length (e.g. `8px`, `0.5rem`, `var(--le-spacing-2)`).                                                       | `string`                                    | `'var(--le-toolbar-gap, var(--le-spacing-1, 4px))'` |
-| `items`          | --                | Optional declarative items input.  The current implementation is slot-driven, but when this prop changes we still invalidate the slotted-items cache and recompute layout. | `unknown`                                   | `undefined`                                         |
-| `overflowIcon`   | `overflow-icon`   | Icon for the overflow trigger button when no custom slot content is provided.                                                                                              | `string`                                    | `'ellipsis-horizontal'`                             |
-| `overflowLabel`  | `overflow-label`  | Accessible label for the overflow trigger button.                                                                                                                          | `string`                                    | `'More'`                                            |
+| Property                  | Attribute                    | Description                                                                                                                                                                | Type                                        | Default                                             |
+| ------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | --------------------------------------------------- |
+| `alignItems`              | `align-items`                | Alignment of items along the main axis.                                                                                                                                    | `"center" \| "end" \| "start" \| "stretch"` | `'start'`                                           |
+| `debugPauseBeforeMeasure` | `debug-pause-before-measure` | Temporary debug mode: stop before measuring virtual widths so the virtual DOM can be inspected before collapse simulation mutates it.                                      | `boolean`                                   | `false`                                             |
+| `debugVirtualToolbar`     | `debug-virtual-toolbar`      | Temporary debug mode: render the virtual toolbar visibly above the live toolbar so collapse measurements can be inspected.                                                 | `boolean`                                   | `false`                                             |
+| `disablePopover`          | `disable-popover`            | Disable the built-in overflow popover. The toolbar will still compute overflow state and emit events, but won't render its own menu. Useful for custom overflow handling.  | `boolean`                                   | `false`                                             |
+| `itemGap`                 | `item-gap`                   | Spacing between top-level toolbar items. Accepts any valid CSS length (e.g. `8px`, `0.5rem`, `var(--le-spacing-2)`).                                                       | `string`                                    | `'var(--le-toolbar-gap, var(--le-spacing-1, 4px))'` |
+| `items`                   | --                           | Optional declarative items input.  The current implementation is slot-driven, but when this prop changes we still invalidate the slotted-items cache and recompute layout. | `unknown`                                   | `undefined`                                         |
+| `overflowIcon`            | `overflow-icon`              | Icon for the overflow trigger button when no custom slot content is provided.                                                                                              | `string`                                    | `'ellipsis-horizontal'`                             |
+| `overflowLabel`           | `overflow-label`             | Accessible label for the overflow trigger button.                                                                                                                          | `string`                                    | `'More'`                                            |
 
 
 ## Events
@@ -69,12 +71,14 @@ Type: `Promise<void>`
 ### Depends on
 
 - [le-icon](../le-icon)
+- [le-visibility](../le-visibility)
 - [le-overflow-menu](../le-overflow-menu)
 
 ### Graph
 ```mermaid
 graph TD;
   le-toolbar --> le-icon
+  le-toolbar --> le-visibility
   le-toolbar --> le-overflow-menu
   le-overflow-menu --> le-navigation
   le-overflow-menu --> le-popover
@@ -98,7 +102,6 @@ graph TD;
   le-component --> le-popup
   le-button --> le-icon
   le-button --> le-slot
-  le-button --> le-visibility
   le-button --> le-component
   le-button --> le-tooltip
   le-slot --> le-popover

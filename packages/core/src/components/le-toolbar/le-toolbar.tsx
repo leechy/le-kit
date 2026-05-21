@@ -562,6 +562,10 @@ export class LeToolbar {
 
     for (let index = 0; index < items.length; index += 1) {
       const item = items[index];
+      const toolbarParticipant = item as HTMLElement & {
+        componentOnReady?: () => Promise<unknown>;
+        getCollapseMeta?: () => Promise<LeCollapseMeta>;
+      };
       const clone = item.cloneNode(true) as HTMLElement & {
         componentOnReady?: () => Promise<unknown>;
       };
@@ -577,15 +581,22 @@ export class LeToolbar {
 
       // Universal collapse meta detection
       let collapseMeta: LeCollapseMeta = { kind: 'item' };
-      if (typeof (item as any).getCollapseMeta === 'function') {
+      if (typeof toolbarParticipant.componentOnReady === 'function') {
         try {
-          collapseMeta = await (item as any).getCollapseMeta();
+          await toolbarParticipant.componentOnReady();
+        } catch {}
+      }
+
+      if (typeof toolbarParticipant.getCollapseMeta === 'function') {
+        try {
+          collapseMeta = await toolbarParticipant.getCollapseMeta();
         } catch {}
       }
 
       let kind: ToolbarItemRecord['kind'];
       if (collapseMeta.kind === 'spacer') {
-        kind = collapseMeta.minWidth !== undefined ? 'spacer-fixed' : 'spacer-flex';
+        const isFixedSpacer = collapseMeta.fixed ?? collapseMeta.minWidth !== undefined;
+        kind = isFixedSpacer ? 'spacer-fixed' : 'spacer-flex';
       } else if (collapseMeta.kind === 'stepping') {
         kind = 'group';
       } else {

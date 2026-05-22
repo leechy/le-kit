@@ -144,10 +144,79 @@ import CodeBlock from "../../components/CodeBlock.astro";
     and visually indicating that it's not available for interaction.
   </p>
   <div class="component-example component-example-horizontal">
-    <le-button disabled>Disabled</le-button>
-    <le-button disabled variant="outlined">Disabled Outlined</le-button>
-    <le-button disabled variant="clear">Disabled Clear</le-button>
+    <script>
+      (() => {
+        const show = () => {
+          const solidButton = document.getElementById("button-disabled-solid");
+          const defaultButton = document.getElementById("button-disabled");
+          const clearButton = document.getElementById("button-disabled-clear");
+          const codeTabs = document.getElementById("demo-group-disabled-tabs");
+
+          // subscribe to tab changes to update the toolbar gap
+          codeTabs?.addEventListener("leTabChange", (event) => {
+            const detail = (event as CustomEvent).detail;
+            if (detail) {
+              const disabled = detail.value as string;
+              if (disabled) {
+                if (disabled === "disabled") {
+                  solidButton?.setAttribute("disabled", "");
+                  defaultButton?.setAttribute("disabled", "");
+                  clearButton?.setAttribute("disabled", "");
+                } else {
+                  solidButton?.removeAttribute("disabled");
+                  defaultButton?.removeAttribute("disabled");
+                  clearButton?.removeAttribute("disabled");
+                }
+              }
+            }
+          });
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+              void show();
+            },
+            { once: true },
+          );
+        } else {
+          void show();
+        }
+      })();
+    </script>
+
+    <le-button disabled variant="solid" id="button-disabled-solid"
+      >Solid</le-button
+    >
+    <le-button disabled id="button-disabled">Default</le-button>
+    <le-button disabled variant="clear" id="button-disabled-clear"
+      >Clear</le-button
+    >
   </div>
+  <le-tabs
+    variant="enclosed"
+    id="demo-group-disabled-tabs"
+    class="component-example-tabs"
+    selected="disabled"
+  >
+    <le-tab-panel label="Disabled" value="disabled">
+      <CodeBlock
+        language="html"
+        code={`<le-button disabled variant="solid">Solid</le-button>
+<le-button disabled>Default</le-button>
+<le-button disabled variant="clear">Clear</le-button>`}
+      />
+    </le-tab-panel>
+    <le-tab-panel label="Enabled" value="enabled">
+      <CodeBlock
+        language="html"
+        code={`<le-button variant="solid">Solid</le-button>
+<le-button>Default</le-button>
+<le-button variant="clear">Clear</le-button>`}
+      />
+    </le-tab-panel>
+  </le-tabs>
 
   <h3><a href="#@type" id="@type"><code>@type</code></a></h3>
   <p>

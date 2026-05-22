@@ -40,7 +40,7 @@ const renderNavigationItems = (items: NavItem[]): string =>
         item.href ? `href="${escapeAttribute(item.href)}"` : "",
         item.id ? `id="${escapeAttribute(item.id)}"` : "",
         item.open ? "open" : "",
-        item.href && pathname.startsWith(item.href) ? "selected" : "",
+        item.href && pathname === item.href ? "selected" : "",
       ]
         .filter(Boolean)
         .join(" ");

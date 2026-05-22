@@ -1,0 +1,95 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-toolbar-spacer">
+  <h1>&lt;le-toolbar-spacer&gt;</h1>
+
+  <p>
+    The <code>&lt;le-toolbar-spacer&gt;</code> component is a special spacer element
+    that can be used inside
+    <code>&lt;le-toolbar&gt;</code> to create flexible spacing between toolbar items.
+    It can be configured to collapse and expand based on the available space in the
+    toolbar, allowing for responsive and adaptive layouts.
+  </p>
+
+  <p>
+    And when the spacer has an attribute <code>width</code>, it will have a
+    fixed width and will collapse like any other fixed width item in the
+    toolbar.
+  </p>
+
+  <h2><a href="#usage" id="usage">Usage</a></h2>
+
+  <p>
+    To use the <code>&lt;le-toolbar-spacer&gt;</code>, simply include it as a
+    child of a <code>&lt;le-toolbar&gt;</code> element. You can place it between toolbar
+    items to create flexible spacing.
+  </p>
+
+  <p>
+    In the following example, the first spacer will take up all the available
+    space between the "Left" and "Middle" buttons, while the second spacer will
+    have a fixed width of 100 pixels, creating a gap between the "Middle" and
+    "Right" buttons.
+  </p>
+
+  <p>
+    Notice how the "Middle" button is jumping to the "Right" when the
+    fixed-width spacer collapses.
+  </p>
+
+  <div class="component-example">
+    <le-preview-frame
+      id="demo-toolbar-frame"
+      min-width="200"
+      min-height="56"
+      padding="16"
+      handles="left,right"
+    >
+      <le-toolbar style="background-color: var(--le-color-border);">
+        <le-button priority="1">Left</le-button>
+        <le-toolbar-spacer></le-toolbar-spacer>
+        <le-button priority="2">Middle</le-button>
+        <le-toolbar-spacer width="100"></le-toolbar-spacer>
+        <le-button priority="3">Right</le-button>
+      </le-toolbar>
+    </le-preview-frame>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`
+      <le-toolbar>
+        <le-button priority="1">Left</le-button>
+        <le-toolbar-spacer></le-toolbar-spacer>
+        <le-button priority="2">Middle</le-button>
+        <le-toolbar-spacer width="100"></le-toolbar-spacer>
+        <le-button priority="3">Right</le-button>
+      </le-toolbar>
+    `}
+  />
+
+  <h2><a href="#properties" id="properties">Properties / Attributes</a></h2>
+
+  <h3>
+    <a href="#@width" id="@width"><code>@width</code></a>
+  </h3>
+
+  <p>Possible values:</p>
+  <ul>
+    <li>a number (e.g., <code>100</code>)</li>
+    <li>a CSS length value (e.g., <code>5rem</code>)</li>
+  </ul>
+
+  <p>
+    The <code>@width</code> property specifies that the spacer should have a fixed
+    width.
+  </p>
+
+  <p>
+    Fixed-width spacers will collapse like any other fixed-width item in the
+    toolbar, while spacers without a specified width will flexibly take up
+    available space.
+  </p>
+</ComponentsPage>

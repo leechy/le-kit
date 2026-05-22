@@ -1,0 +1,437 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-button-group">
+  <h1>&lt;le-button-group&gt;</h1>
+
+  <p>
+    Despite that technically <code>&lt;le-button-group&gt;</code> is not part of the
+    toolbar and can be used anywhere, it's still a good idea to document it here,
+    since it's primarily designed as a helper component for grouping buttons in toolbars.
+  </p>
+
+  <h2><a href="#usage" id="usage">Usage</a></h2>
+
+  <p>For now, button group is doing two things, and it's doing them greatly:</p>
+  <p>
+    First and the most important — it squishes buttons together, removing the
+    gaps between them, and changing the shape of the buttons to look like they
+    belong together (border-radius + overlapping).
+  </p>
+
+  <div class="component-example">
+    <le-button-group>
+      <le-button>One</le-button>
+      <le-button>Two</le-button>
+      <le-button>Three</le-button>
+      <le-button>Four</le-button>
+      <le-button>Five</le-button>
+    </le-button-group>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`<le-button-group>
+  <le-button>One</le-button>
+  <le-button>Two</le-button>
+  <le-button>Three</le-button>
+  <le-button>Four</le-button>
+  <le-button>Five</le-button>
+</le-button-group>`}
+  />
+
+  <p>
+    Second — the thing, why we're using them in the toolbars — it can collapse,
+    showing the collapsed buttons in a menu at the end of the button group.
+  </p>
+
+  <div class="component-example">
+    <le-button-group collapse="-2">
+      <le-button>One</le-button>
+      <le-button>Two</le-button>
+      <le-button>Three</le-button>
+      <le-button>Four</le-button>
+      <le-button>Five</le-button>
+    </le-button-group>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`<le-button-group collapse="-3">
+  <le-button>One</le-button>
+  <le-button>Two</le-button>
+  <le-button>Three</le-button>
+  <le-button>Four</le-button>
+  <le-button>Five</le-button>
+</le-button-group>`}
+  />
+
+  <p>
+    Read bellow the details about the <code>collapse</code> attribute and how it works.
+  </p>
+
+  <p>
+    <b>Important</b>: The button group cannot collapse itself if there is no
+    space to display all the buttons. It should be used with <code
+      ><a href="/components/le-toolbar">&lt;le-toolbar&gt;</a></code
+    > or other container that can change the collapse value based on some logic.
+  </p>
+
+  <h2><a href="#children" id="children">Children</a></h2>
+  <p>
+    Currently the only supported children of <code>&lt;le-button-group&gt;</code
+    > are <code><a href="/components/le-button">&lt;le-button&gt;</a></code>. If
+    you put any other element inside the button group, it will be rendered at
+    the end of the button group, outside of the collapsing logic, and it will
+    not be hidden when the buttons are collapsed.
+  </p>
+
+  <div class="component-example">
+    <le-button-group collapse="2">
+      <le-button>One</le-button>
+      <div>Non-button element</div>
+      <le-button>Two</le-button>
+      <le-button>Three</le-button>
+      <le-button>Four</le-button>
+      <le-button>Five</le-button>
+    </le-button-group>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`<le-button-group collapse="2">
+  <le-button>One</le-button>
+  <div>Non-button element</div>
+  <le-button>Two</le-button>
+  <le-button>Three</le-button>
+  <le-button>Four</le-button>
+  <le-button>Five</le-button>
+</le-button-group>`}
+  />
+
+  <h2><a href="#priorities" id="priorities">Priorities</a></h2>
+  <p>
+    Just like in the toolbar, the buttons in the button group have priorities.
+    By default, the priority is determined by the order of the buttons — the
+    first button has the highest priority, and the last button has the lowest
+    priority. So when you collapse the button group, the buttons with the lowest
+    priority will be hidden first.
+  </p>
+  <p>
+    You can change the priority of the buttons by using the <code>priority</code
+    >
+    attribute on the <code>&lt;le-button&gt;</code>. The button with the highest
+    priority will be the last one to be hidden when the button group is
+    collapsed.
+  </p>
+  <p>
+    <b>Important</b>: the smaller is the number in the attribute — the higher
+    the priority.
+  </p>
+
+  <div class="component-example">
+    <le-button-group collapse="2">
+      <le-button priority="3">Third</le-button>
+      <le-button>First to be hidden (no priority)</le-button>
+      <le-button priority="1">Last to stay</le-button>
+      <le-button priority="4">Fourth</le-button>
+      <le-button priority="2">Second — still visible</le-button>
+    </le-button-group>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`<le-button-group collapse="2">
+  <le-button priority="3">Third</le-button>
+  <le-button>First to be hidden (no priority)</le-button>
+  <le-button priority="1">Last to stay</le-button>
+  <le-button priority="4">Fourth</le-button>
+  <le-button priority="2">Second — still visible</le-button>
+</le-button-group>`}
+  />
+  <p>
+    You will be able to play with the collapsing order, on the next example.
+  </p>
+
+  <h2><a href="#properties" id="properties">Properties / Attributes</a></h2>
+
+  <h3>
+    <a href="#@collapse" id="@collapse"><code>@collapse</code></a>
+  </h3>
+  <p>
+    This attribute controls how many buttons should be left visible when the
+    button group is collapsed. It accepts:
+  </p>
+  <ul>
+    <li>
+      empty attribute — only one button (the one with the highest priority, see <a
+        href="#priorities">priority</a
+      >) will be visible
+    </li>
+    <li>number — the number of buttons that should be visible</li>
+    <li>
+      negative number — the number of buttons that should be hidden. For
+      example, <code>collapse="-2"</code> means that 2 buttons with the lowest priority
+      will be hidden, and the rest will be visible.
+    </li>
+    <li>
+      zero <code>collapse="0"</code> — no buttons will be visible, only the overflow
+      menu will be shown
+    </li>
+  </ul>
+
+  <div class="component-example">
+    <script>
+      (() => {
+        const show = () => {
+          const buttonGroup = document.getElementById("demo-group-collapse");
+          const codeTabs = document.getElementById("demo-group-collapse-tabs");
+
+          // subscribe to tab changes to update the toolbar gap
+          codeTabs?.addEventListener("leTabChange", (event) => {
+            const detail = (event as CustomEvent).detail;
+            if (detail) {
+              const collapse = detail.value as string;
+              console.log("Setting toolbar gap to", collapse);
+              if (collapse) {
+                if (collapse === "none") {
+                  buttonGroup?.removeAttribute("collapse");
+                } else if (collapse === "collapse") {
+                  buttonGroup?.setAttribute("collapse", "");
+                } else {
+                  buttonGroup?.setAttribute("collapse", collapse);
+                }
+              }
+            }
+          });
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+              void show();
+            },
+            { once: true },
+          );
+        } else {
+          void show();
+        }
+      })();
+    </script>
+    <!-- frame-width="375" -->
+
+    <le-button-group id="demo-group-collapse">
+      <le-button priority="3">First (3)</le-button>
+      <le-button>Second (no priority)</le-button>
+      <le-button priority="1">Third (1)</le-button>
+      <le-button priority="4">Fourth (4)</le-button>
+      <le-button priority="2">Fifth (2)</le-button>
+    </le-button-group>
+  </div>
+  <le-tabs
+    variant="enclosed"
+    id="demo-group-collapse-tabs"
+    class="component-example-tabs"
+    selected="none"
+  >
+    <le-tab-panel label="No collapse" value="none">
+      <CodeBlock
+        language="html"
+        code={`<le-button-group>
+  <le-button priority="3">First (3)</le-button>
+  <le-button>Second (no priority)</le-button>
+  <le-button priority="1">Third (1)</le-button>
+  <le-button priority="4">Fourth (4)</le-button>
+  <le-button priority="2">Fifth (2)</le-button>
+</le-button-group>`}
+      />
+    </le-tab-panel>
+    <le-tab-panel label="Collapse" value="collapse">
+      <CodeBlock
+        language="html"
+        code={`<le-button-group collapse>
+  <le-button priority="3">First (3)</le-button>
+  <le-button>Second (no priority)</le-button>
+  <le-button priority="1">Third (1)</le-button>
+  <le-button priority="4">Fourth (4)</le-button>
+  <le-button priority="2">Fifth (2)</le-button>
+</le-button-group>`}
+      />
+    </le-tab-panel>
+    <le-tab-panel label="Collapse 3" value="3">
+      <CodeBlock
+        language="html"
+        code={`<le-button-group collapse="3">
+  <le-button priority="3">First (3)</le-button>
+  <le-button>Second (no priority)</le-button>
+  <le-button priority="1">Third (1)</le-button>
+  <le-button priority="4">Fourth (4)</le-button>
+  <le-button priority="2">Fifth (2)</le-button>
+</le-button-group>`}
+      />
+    </le-tab-panel>
+    <le-tab-panel label="Collapse -1" value="-1">
+      <CodeBlock
+        language="html"
+        code={`<le-button-group collapse="-1">
+  <le-button priority="3">First (3)</le-button>
+  <le-button>Second (no priority)</le-button>
+  <le-button priority="1">Third (1)</le-button>
+  <le-button priority="4">Fourth (4)</le-button>
+  <le-button priority="2">Fifth (2)</le-button>
+</le-button-group>`}
+      />
+    </le-tab-panel>
+    <le-tab-panel label="Collapse 0" value="0">
+      <CodeBlock
+        language="html"
+        code={`<le-button-group collapse="0">
+  <le-button priority="3">First (3)</le-button>
+  <le-button>Second (no priority)</le-button>
+  <le-button priority="1">Third (1)</le-button>
+  <le-button priority="4">Fourth (4)</le-button>
+  <le-button priority="2">Fifth (2)</le-button>
+</le-button-group>`}
+      />
+    </le-tab-panel>
+  </le-tabs>
+
+  <h3>
+    <a href="#@disabled" id="@disabled"><code>@disabled</code></a>
+  </h3>
+  <p>
+    This attribute disables all the buttons in the button group, and also in the
+    overflow menu. It is a boolean value, if the attribute is present, the
+    button group will be disabled, if it's not present, the button group will be
+    enabled.
+  </p>
+
+  <div class="component-example">
+    <script>
+      (() => {
+        const show = () => {
+          const buttonGroup = document.getElementById("demo-group-disabled");
+          const codeTabs = document.getElementById("demo-group-disabled-tabs");
+
+          // subscribe to tab changes to update the toolbar gap
+          codeTabs?.addEventListener("leTabChange", (event) => {
+            const detail = (event as CustomEvent).detail;
+            if (detail) {
+              const disabled = detail.value as string;
+              if (disabled) {
+                if (disabled === "disabled") {
+                  buttonGroup?.setAttribute("disabled", "");
+                } else {
+                  buttonGroup?.removeAttribute("disabled");
+                }
+              }
+            }
+          });
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+              void show();
+            },
+            { once: true },
+          );
+        } else {
+          void show();
+        }
+      })();
+    </script>
+
+    <le-button-group collapse="2" disabled id="demo-group-disabled">
+      <le-button>First</le-button>
+      <le-button>Second</le-button>
+      <le-button>Third</le-button>
+      <le-button>Fourth</le-button>
+      <le-button>Fifth</le-button>
+    </le-button-group>
+  </div>
+  <le-tabs
+    variant="enclosed"
+    id="demo-group-disabled-tabs"
+    class="component-example-tabs"
+    selected="disabled"
+  >
+    <le-tab-panel label="Disabled" value="disabled">
+      <CodeBlock
+        language="html"
+        code={`<le-button-group collapse="2" disabled>
+  <le-button>First</le-button>
+  <le-button>Second</le-button>
+  <le-button>Third</le-button>
+  <le-button>Fourth</le-button>
+  <le-button>Fifth</le-button>
+</le-button-group>`}
+      />
+    </le-tab-panel>
+    <le-tab-panel label="Enabled" value="enabled">
+      <CodeBlock
+        language="html"
+        code={`<le-button-group collapse="2">
+  <le-button>First</le-button>
+  <le-button>Second</le-button>
+  <le-button>Third</le-button>
+  <le-button>Fourth</le-button>
+  <le-button>Fifth</le-button>
+</le-button-group>`}
+      />
+    </le-tab-panel>
+  </le-tabs>
+
+  <h3>
+    <a href="#@label" id="@label"><code>@label</code></a>
+  </h3>
+  <p>
+    String used in a toolbar's overflow menu to describe the button group, when
+    fully collapsed.
+  </p>
+
+  <h3>
+    <a href="#@overflow-icons" id="@overflow-icons"
+      ><code>@overflow-icons</code></a
+    >
+  </h3>
+  <p>
+    Boolean attribute that controls whether the buttons in the overflow menu
+    should show their icons (if they have any). By default, the icons are not
+    shown in the overflow menu, but if you set this attribute, the icons will be
+    shown.
+  </p>
+
+  <div class="component-example component-example-horizontal">
+    <le-button-group collapse="2">
+      <le-button icon-only="copy" label="Copy"></le-button>
+      <le-button icon-only="paste" label="Paste"></le-button>
+      <le-button icon-only="cut" label="Cut"></le-button>
+      <le-button icon-only="delete" label="Delete"></le-button>
+      <le-button icon-only="download" label="Download"></le-button>
+    </le-button-group>
+    <le-button-group collapse overflow-icons>
+      <le-button icon-only="align-left" label="Align Left"></le-button>
+      <le-button icon-only="align-center" label="Align Center"></le-button>
+      <le-button icon-only="align-right" label="Align Right"></le-button>
+      <le-button icon-only="align-justify" label="Align Justify"></le-button>
+    </le-button-group>
+  </div>
+  <CodeBlock
+    language="html"
+    code={`<le-button-group collapse="2">
+  <le-button icon-only="copy" label="Copy"></le-button>
+  <le-button icon-only="paste" label="Paste"></le-button>
+  <le-button icon-only="cut" label="Cut"></le-button>
+  <le-button icon-only="delete" label="Delete"></le-button>
+  <le-button icon-only="download" label="Download"></le-button>
+</le-button-group>
+
+<le-button-group collapse overflow-icons>
+  <le-button icon-only="align-left" label="Align Left"></le-button>
+  <le-button icon-only="align-center" label="Align Center"></le-button>
+  <le-button icon-only="align-right" label="Align Right"></le-button>
+  <le-button icon-only="align-justify" label="Align Justify"></le-button>
+</le-button-group>`}
+  />
+</ComponentsPage>

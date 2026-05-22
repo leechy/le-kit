@@ -1,7 +1,8 @@
 :root {
   --le-color-primary: #18619D;
   --le-color-primary-dark: #082742;
-  --le-color-background: #97c8f8;
+  --le-color-background: #c4e2ff;
+  --le-color-blueprint: #88bef5;
   --le-header-content-max-width: 100vw;
   --le-header-padding-y: 0;
   --le-color-surface: #e8f0f7aa;
@@ -207,6 +208,10 @@ p {
   line-height: 1.6;
 }
 
+p:has(+ ul) {
+  margin-bottom: calc(var(--le-spacing-1) * -1);
+}
+
 ul {
   margin: var(--le-spacing-2) 0 var(--le-spacing-3);
   padding-left: var(--le-spacing-6);
@@ -272,6 +277,16 @@ pre {
     font-weight: 500;
     font-size: inherit;
   }
+}
+
+le-preview-frame {
+  --le-preview-frame-bg: var(--le-color-blueprint);
+}
+le-preview-frame::part(viewport) {
+  background-image:
+    linear-gradient(var(--background-lines-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--background-lines-color) 1px, transparent 1px);
+  background-size: var(--background-lines-grid-size) var(--background-lines-grid-size);
 }
 
 /* Bento Grids and tiles */

@@ -79,7 +79,15 @@ export const componentsNavigationItems: NavItem[] = [
     id: "layout-navigation",
     open: true,
     children: [
-      { label: "Toolbar", href: "/components/le-toolbar" },
+      {
+        label: "Toolbar",
+        href: "/components/le-toolbar",
+        open: true,
+        children: [
+          { label: "Button Group", href: "/components/le-button-group" },
+          { label: "Toolbar Spacer", href: "/components/le-toolbar-spacer" },
+        ],
+      },
       { label: "Header", href: "/components/le-header" },
       { label: "Scroll Progress", href: "/components/le-scroll-progress" },
       { label: "Side Panel", href: "/components/le-side-panel" },

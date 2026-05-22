@@ -329,6 +329,8 @@
         <le-button size="small" variant="outlined" onclick="setButtonGroupCollapse(0)">collapse=0</le-button>
         <le-button size="small" variant="outlined" onclick="setButtonGroupCollapse(2)">collapse=2</le-button>
         <le-button size="small" variant="outlined" onclick="setButtonGroupCollapse(-2)">collapse=-2</le-button>
+        <le-button size="small" variant="outlined" onclick="setButtonGroupDisabled(true)">disable</le-button>
+        <le-button size="small" variant="outlined" onclick="setButtonGroupDisabled(false)">enable</le-button>
       </div>
 
       <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-sm);">
@@ -1708,6 +1710,17 @@ console.log(greeting);</le-text>
         } else {
           setButtonGroupCollapse();
           return;
+        }
+      }
+
+      function setButtonGroupDisabled(value) {
+        const group = getDemoButtonGroup();
+        if (!group) return;
+
+        if (value) {
+          group.setAttribute('disabled', '');
+        } else {
+          group.removeAttribute('disabled');
         }
       }
 

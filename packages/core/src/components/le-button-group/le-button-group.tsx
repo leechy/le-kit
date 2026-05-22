@@ -116,7 +116,7 @@ export class LeButtonGroup {
   }
 
   @Watch('disabled')
-  handleDisabledChange({ newValue }: { newValue: boolean }) {
+  handleDisabledChange(newValue: boolean) {
     this.setDisabledState(newValue);
   }
 
@@ -264,6 +264,11 @@ export class LeButtonGroup {
     buttons.forEach(button => {
       (button as HTMLButtonElement).disabled = disabled;
     });
+    // toggle the buttons in the overflow menu
+    this.overflowItems = this.overflowItems.map(item => ({
+      ...item,
+      disabled,
+    }));
   }
 
   private getGroupLabel(): string {

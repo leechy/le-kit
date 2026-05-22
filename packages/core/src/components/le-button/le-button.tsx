@@ -144,7 +144,7 @@ export class LeButton {
   /**
    * Whether the button is disabled
    */
-  @Prop() disabled: boolean = false;
+  @Prop({ mutable: true, reflect: true }) disabled: boolean = false;
 
   /**
    * The button type attribute

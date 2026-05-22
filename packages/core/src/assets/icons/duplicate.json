@@ -1,0 +1,44 @@
+{
+  "viewBox": "0 0 16 16",
+  "children": [
+    {
+      "tag": "path",
+      "d": "M8,2.5 L8.5,2.5 C9.05228475,2.5 9.5,2.94771525 9.5,3.5 L9.5,8.03744709 L9.5,8.03744709 L9.5,8.5 C9.5,9.05228475 9.05228475,9.5 8.5,9.5 L7.93586684,9.5 L7.93586684,9.5 L3.5,9.5 C2.94771525,9.5 2.5,9.05228475 2.5,8.5 L2.5,8 L2.5,8",
+      "transform": "translate(6, 6) rotate(180) translate(-6, -6)",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1"
+    },
+    {
+      "tag": "rect",
+      "x": "5.5",
+      "y": "5.5",
+      "width": "8",
+      "height": "8",
+      "rx": "1",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.5"
+    },
+    {
+      "tag": "line",
+      "x1": "7.5",
+      "y1": "9.5",
+      "x2": "11.5",
+      "y2": "9.5",
+      "id": "horizontal",
+      "stroke": "currentColor",
+      "stroke-width": "1"
+    },
+    {
+      "tag": "line",
+      "x1": "9.5",
+      "y1": "7.5",
+      "x2": "9.5",
+      "y2": "11.5",
+      "id": "vertical",
+      "stroke": "currentColor",
+      "stroke-width": "1"
+    }
+  ]
+}

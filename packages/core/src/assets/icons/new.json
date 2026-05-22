@@ -1,0 +1,33 @@
+{
+  "viewBox": "0 0 16 16",
+  "children": [
+    {
+      "tag": "path",
+      "d": "M7,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,12 C12,12.5522847 11.5522847,13 11,13 L5,13 C4.44771525,13 4,12.5522847 4,12 L4,9.5 L4,9.5",
+      "id": "Rectangle",
+      "stroke-opacity": "0.5",
+      "stroke": "currentColor",
+      "stroke-width": "1.5",
+      "fill": "none",
+      "transform": "translate(8, 8) scale(-1, 1) translate(-8, -8)"
+    },
+    {
+      "tag": "line",
+      "x1": "8",
+      "y1": "5.5",
+      "x2": "14",
+      "y2": "5.5",
+      "stroke": "currentColor",
+      "stroke-width": "2"
+    },
+    {
+      "tag": "line",
+      "x1": "11",
+      "y1": "2.5",
+      "x2": "11",
+      "y2": "8.5",
+      "stroke": "currentColor",
+      "stroke-width": "2"
+    }
+  ]
+}

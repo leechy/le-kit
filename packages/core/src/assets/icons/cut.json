@@ -1,0 +1,68 @@
+{
+  "viewBox": "0 0 16 16",
+  "children": [
+    {
+      "tag": "circle",
+      "cx": "3.5",
+      "cy": "5.5",
+      "r": "1",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1"
+    },
+    {
+      "tag": "circle",
+      "cx": "3.5",
+      "cy": "10.5",
+      "r": "1",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1"
+    },
+    {
+      "tag": "line",
+      "x1": "4.24899243",
+      "y1": "6.25",
+      "x2": "5.64509757",
+      "y2": "7.10620405",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1",
+      "stroke-linecap": "round"
+    },
+    {
+      "tag": "line",
+      "x1": "4.24899243",
+      "y1": "9.75",
+      "x2": "7.04120272",
+      "y2": "7.95518692",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1"
+    },
+    {
+      "tag": "line",
+      "x1": 12.5,
+      "y1": 5,
+      "x2": 7,
+      "y2": 8,
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.5",
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round"
+    },
+    {
+      "tag": "line",
+      "x1": 9,
+      "y1": 9,
+      "x2": 12.5,
+      "y2": 11,
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.5",
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round"
+    }
+  ]
+}

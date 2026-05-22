@@ -20,16 +20,24 @@ import CodeBlock from "../../components/CodeBlock.astro";
       padding="16"
       handles="left,right"
     >
-      <le-toolbar style="background-color: var(--le-color-border);">
-        <le-button-group overflow-icons label="Navigation" collapse="2">
-          <le-button label="Back" icon-only="arrow-left"></le-button>
-          <le-button label="Forward" icon-only="arrow-right"></le-button>
+      <le-toolbar>
+        <le-button priority="3">
+          <le-icon name="new" slot="icon-start" size="18"></le-icon>
+          New
+        </le-button>
+        <le-button priority="3">
+          <le-icon name="open" slot="icon-start" size="18"></le-icon>
+          Open
+        </le-button>
+
+        <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+        <le-button-group overflow-icons label="History" collapse="2">
+          <le-button label="Undo" icon-only="undo"></le-button>
+          <le-button label="Redo" icon-only="redo"></le-button>
         </le-button-group>
 
-        <le-button priority="3">Save</le-button>
-        <le-button priority="1" color="success">Publish</le-button>
-
-        <le-toolbar-spacer></le-toolbar-spacer>
+        <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
 
         <le-button-group overflow-icons priority="2" label="Text Align">
           <le-button label="Align Left" icon-only="align-left"></le-button>
@@ -37,6 +45,26 @@ import CodeBlock from "../../components/CodeBlock.astro";
           <le-button label="Align Right" icon-only="align-right"></le-button>
           <le-button label="Justify" icon-only="align-justify"></le-button>
         </le-button-group>
+
+        <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+        <le-button-group overflow-icons label="Lists">
+          <le-button label="Bullet List" icon-only="bullet-list"></le-button>
+          <le-button label="Numbered List" icon-only="numbered-list"
+          ></le-button>
+          <le-button label="Checklist" icon-only="check-list"></le-button>
+          <le-button label="Increase Indent" icon-only="increase-indent"
+          ></le-button>
+          <le-button label="Decrease Indent" icon-only="decrease-indent"
+          ></le-button>
+        </le-button-group>
+
+        <le-toolbar-spacer></le-toolbar-spacer>
+
+        <le-button color="danger">
+          <le-icon name="delete" slot="icon-start" size="20"></le-icon>
+          Delete
+        </le-button>
       </le-toolbar>
     </le-preview-frame>
   </div>
@@ -44,22 +72,50 @@ import CodeBlock from "../../components/CodeBlock.astro";
     language="html"
     code={`
 <le-toolbar>
-  <le-button-group overflow-icons label="Navigation" collapse="2">
-    <le-button label="Back" icon-only="arrow-left"></le-button>
-    <le-button label="Forward" icon-only="arrow-right"></le-button>
+  <le-button priority="3">
+    <le-icon name="new" slot="icon-start" size="18"></le-icon>
+    New
+  </le-button>
+  <le-button priority="3">
+    <le-icon name="open" slot="icon-start" size="18"></le-icon>
+    Open
+  </le-button>
+
+  <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+  <le-button-group overflow-icons label="History" collapse="2">
+    <le-button label="Undo" icon-only="undo"></le-button>
+    <le-button label="Redo" icon-only="redo"></le-button>
   </le-button-group>
 
-  <le-button priority="3">Save</le-button>
-  <le-button priority="1" color="success">Publish</le-button>
+  <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+  <le-button-group overflow-icons priority="2" label="Text Align">
+    <le-button label="Align Left" icon-only="align-left"></le-button>
+    <le-button label="Align Center" icon-only="align-center"></le-button>
+    <le-button label="Align Right" icon-only="align-right"></le-button>
+    <le-button label="Justify" icon-only="align-justify"></le-button>
+  </le-button-group>
+
+  <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+  <le-button-group overflow-icons label="Lists">
+    <le-button label="Bullet List" icon-only="bullet-list"></le-button>
+    <le-button label="Numbered List" icon-only="numbered-list"
+    ></le-button>
+    <le-button label="Checklist" icon-only="check-list"></le-button>
+    <le-button label="Increase Indent" icon-only="increase-indent"
+    ></le-button>
+    <le-button label="Decrease Indent" icon-only="decrease-indent"
+    ></le-button>
+  </le-button-group>
 
   <le-toolbar-spacer></le-toolbar-spacer>
 
-  <le-button-group overflow-icons priority="2" label="Text Align">
-    <le-button variant="outlined" label="Align Left" icon-only="align-left"></le-button>
-    <le-button variant="outlined" label="Align Center" icon-only="align-center"></le-button>
-    <le-button variant="outlined" label="Align Right" icon-only="align-right"></le-button>
-    <le-button variant="outlined" label="Justify" icon-only="align-justify"></le-button>
-  </le-button-group>
+  <le-button color="danger">
+    <le-icon name="delete" slot="icon-start" size="20"></le-icon>
+    Delete
+  </le-button>
 </le-toolbar>`}
   />
 
@@ -114,6 +170,89 @@ import CodeBlock from "../../components/CodeBlock.astro";
     items one by one, starting from the lowest priority, and measures the width
     of the toolbar after each collapse.
   </p>
+
+  <p>
+    Here we have the virtual toolbar in debug mode. You can run the debug
+    measurement step by clicking the button below:
+  </p>
+
+  <div class="component-example">
+    <le-preview-frame
+      id="demo-toolbar-frame"
+      min-width="200"
+      min-height="56"
+      padding="16"
+      handles="left,right"
+    >
+      <le-toolbar
+        debug-virtual-toolbar
+        debug-pause-before-measure
+        id="demo-toolbar-debug"
+      >
+        <le-button priority="3">
+          <le-icon name="new" slot="icon-start" size="18"></le-icon>
+          New
+        </le-button>
+        <le-button priority="3">
+          <le-icon name="open" slot="icon-start" size="18"></le-icon>
+          Open
+        </le-button>
+
+        <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+        <le-button-group overflow-icons label="History" collapse="2">
+          <le-button label="Undo" icon-only="undo"></le-button>
+          <le-button label="Redo" icon-only="redo"></le-button>
+        </le-button-group>
+
+        <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+        <le-button-group overflow-icons priority="2" label="Text Align">
+          <le-button label="Align Left" icon-only="align-left"></le-button>
+          <le-button label="Align Center" icon-only="align-center"></le-button>
+          <le-button label="Align Right" icon-only="align-right"></le-button>
+          <le-button label="Justify" icon-only="align-justify"></le-button>
+        </le-button-group>
+
+        <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+        <le-button-group overflow-icons label="Lists">
+          <le-button label="Bullet List" icon-only="bullet-list"></le-button>
+          <le-button label="Numbered List" icon-only="numbered-list"
+          ></le-button>
+          <le-button label="Checklist" icon-only="check-list"></le-button>
+          <le-button label="Increase Indent" icon-only="increase-indent"
+          ></le-button>
+          <le-button label="Decrease Indent" icon-only="decrease-indent"
+          ></le-button>
+        </le-button-group>
+
+        <le-toolbar-spacer></le-toolbar-spacer>
+
+        <le-button color="danger">
+          <le-icon name="delete" slot="icon-start" size="20"></le-icon>
+          Delete
+        </le-button>
+      </le-toolbar>
+    </le-preview-frame>
+
+    <div
+      style="display: flex; gap: var(--le-space-md); margin-top: var(--le-space-md);"
+    >
+      <le-button
+        onclick="document.getElementById('demo-toolbar-debug')?.runDebugMeasurementStep()"
+      >
+        <le-icon name="arrow-right" slot="icon-start" size="24"></le-icon>
+        Run debug measurement step
+      </le-button>
+      <le-button
+        onclick="document.getElementById('demo-toolbar-debug')?.resetToolbar()"
+      >
+        <le-icon name="revert" slot="icon-start" size="24"></le-icon>
+        Reset debug
+      </le-button>
+    </div>
+  </div>
 
   <p>
     Using a ResizeObserver, it listens for changes to the original toolbar's
@@ -194,11 +333,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
       padding="16"
       handles="left,right"
     >
-      <le-toolbar
-        id="demo-toolbar-align"
-        align-items="end"
-        style="background-color: var(--le-color-border);"
-      >
+      <le-toolbar id="demo-toolbar-align" align-items="end">
         <le-button-group overflow-icons label="Navigation">
           <le-button label="Back" icon-only="arrow-left"></le-button>
           <le-button label="Forward" icon-only="arrow-right"></le-button>
@@ -319,10 +454,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
       padding="16"
       handles="left,right"
     >
-      <le-toolbar
-        id="demo-toolbar-gap"
-        style="background-color: var(--le-color-border);"
-      >
+      <le-toolbar id="demo-toolbar-gap">
         <le-button>First</le-button>
         <le-button>Second</le-button>
         <le-button>Third</le-button>
@@ -408,10 +540,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
       padding="16"
       handles="left,right"
     >
-      <le-toolbar
-        style="background-color: var(--le-color-border);"
-        overflow-icon="chevron-down"
-      >
+      <le-toolbar overflow-icon="chevron-down">
         <le-button>Action 1</le-button>
         <le-button>Action 2</le-button>
         <le-button>Action 3</le-button>
@@ -462,7 +591,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
       padding="16"
       handles="left,right"
     >
-      <le-toolbar style="background-color: var(--le-color-border);">
+      <le-toolbar>
         <le-button>Action 1</le-button>
         <le-button>Action 2</le-button>
         <le-button>Action 3</le-button>

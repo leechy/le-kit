@@ -136,6 +136,13 @@ le-breadcrumbs.site-navigation {
   * {
     --le-color-surface: #fff;
   }
+
+  le-toolbar {
+    background-color: var(--le-color-border);
+    border-radius: var(--le-radius-md);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
 }
 
 .component-example-horizontal {

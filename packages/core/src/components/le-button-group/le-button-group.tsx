@@ -550,12 +550,15 @@ export class LeButtonGroup {
                 candidate => candidate.getAttribute('slot') === slotName,
               );
               const state = this.getVisibilityState(button?.getAttribute('visibility') ?? null);
+              const groupShape = button?.getAttribute('group-shape');
 
               return (
                 <le-visibility
                   class={{
                     'button-group-item-visibility': true,
                     'is-collapsed': state === 'collapsed',
+                    'is-middle': groupShape === 'middle',
+                    'is-end': groupShape === 'end',
                   }}
                   state={state}
                   mode="width"

@@ -65,7 +65,7 @@
   box-sizing: border-box;
   width: 100%;
   padding: var(--le-button-padding);
-  border: 1px solid var(--_btn-border-color);
+  border: var(--le-button-border-width, 1px) solid var(--_btn-border-color);
   border-radius: var(--le-button-border-radius);
   background: var(--_btn-bg);
   color: var(--_btn-color);

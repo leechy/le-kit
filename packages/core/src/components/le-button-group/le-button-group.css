@@ -15,6 +15,11 @@ le-visibility {
   align-items: center;
 }
 
+.button-group-item-visibility.is-middle,
+.button-group-item-visibility.is-end {
+  margin-inline: calc(-1 * var(--le-button-border-width, 1px)) 0;
+}
+
 .button-group-item-visibility.is-collapsed {
   margin-inline: 0;
 }
@@ -56,12 +61,10 @@ le-visibility {
 }
 
 ::slotted(le-button[group-shape='middle']) {
-  --le-button-toolbar-inner-margin: -1px 0;
   --le-button-border-radius: 0;
 }
 
 ::slotted(le-button[group-shape='end']) {
-  --le-button-toolbar-inner-margin: -1px 0;
   --le-button-border-radius: 0 var(--le-radius-md) var(--le-radius-md) 0;
 }
 
@@ -75,7 +78,8 @@ le-visibility {
   justify-content: center;
   min-height: 100%;
   padding: var(--le-button-padding-y, var(--le-spacing-1)) var(--le-button-padding-x, var(--le-spacing-3));
-  border: 1px solid color-mix(in srgb, var(--le-color-primary) 33%, transparent);
+  border: var(--le-button-border-width, 1px) solid
+    color-mix(in srgb, var(--le-color-primary) 33%, transparent);
   border-left: none;
   background: transparent;
   color: var(--le-color-primary);

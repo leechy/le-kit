@@ -49,6 +49,26 @@ Type: `Promise<void>`
 
 
 
+### `resetToolbar() => Promise<void>`
+
+Reset the toolbar's internal layout state and recalculate item visibility from scratch.
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `runDebugMeasurementStep() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 
 ## Slots
 

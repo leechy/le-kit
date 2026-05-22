@@ -2522,6 +2522,11 @@ export namespace Components {
           * Force a layout recalculation.
          */
         "recalculate": () => Promise<void>;
+        /**
+          * Reset the toolbar's internal layout state and recalculate item visibility from scratch.
+         */
+        "resetToolbar": () => Promise<void>;
+        "runDebugMeasurementStep": () => Promise<void>;
     }
     /**
      * Flexible spacer for le-toolbar layouts.

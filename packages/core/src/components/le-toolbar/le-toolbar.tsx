@@ -245,6 +245,15 @@ export class LeToolbar {
   }
 
   /**
+   * Reset the toolbar's internal layout state and recalculate item visibility from scratch.
+   */
+  @Method()
+  async resetToolbar() {
+    this.clearVirtualMeasurements();
+    this.prepareToolbarItems();
+  }
+
+  /**
    * Force a layout recalculation.
    */
   @Method()
@@ -411,7 +420,8 @@ export class LeToolbar {
     this.debugStepIndex = 0;
   }
 
-  private async runDebugMeasurementStep() {
+  @Method()
+  async runDebugMeasurementStep() {
     const virtual = this.virtualToolbarEl;
     if (!virtual) return;
 
@@ -549,7 +559,7 @@ export class LeToolbar {
           el.getAttribute('slot') === ''),
     );
 
-    // Revuild itemMap, trying to keep the id's stable for existing elements
+    // Rebuild itemMap, trying to keep the id's stable for existing elements
     // to preserve overflow state when possible.
     this.itemMap.clear();
     this.collapseSteps = [];

@@ -195,21 +195,27 @@
 
 .nav-item.color-primary {
   color: var(--le-color-primary);
+  --le-icon-color: var(--le-color-primary);
 }
 .nav-item.color-secondary {
   color: var(--le-color-secondary);
+  --le-icon-color: var(--le-color-secondary);
 }
 .nav-item.color-success {
   color: var(--le-color-success);
+  --le-icon-color: var(--le-color-success);
 }
 .nav-item.color-warning {
   color: var(--le-color-warning);
+  --le-icon-color: var(--le-color-warning);
 }
 .nav-item.color-danger {
   color: var(--le-color-danger);
+  --le-icon-color: var(--le-color-danger);
 }
 .nav-item.color-info {
   color: var(--le-color-info);
+  --le-icon-color: var(--le-color-info);
 }
 
 .nav-node.selected > .nav-item {

@@ -406,11 +406,62 @@ export class LePopover {
     this.toggle();
   };
 
+  /**
+   * During opening animation we scale the popover (e.g. 0.95 -> 1).
+   * getBoundingClientRect() returns transformed dimensions, so for initial
+   * positioning we compensate back to the unscaled size.
+   */
+  private getUnscaledPopoverSize(rect: DOMRect): { width: number; height: number } {
+    if (!this.popoverEl) {
+      return { width: rect.width, height: rect.height };
+    }
+
+    const transform = getComputedStyle(this.popoverEl).transform;
+    if (!transform || transform === 'none') {
+      return { width: rect.width, height: rect.height };
+    }
+
+    let scaleX = 1;
+    let scaleY = 1;
+
+    if (transform.startsWith('matrix3d(')) {
+      const values = transform
+        .slice('matrix3d('.length, -1)
+        .split(',')
+        .map(v => Number(v.trim()));
+
+      if (values.length === 16) {
+        scaleX = Math.hypot(values[0], values[1], values[2]);
+        scaleY = Math.hypot(values[4], values[5], values[6]);
+      }
+    } else if (transform.startsWith('matrix(')) {
+      const values = transform
+        .slice('matrix('.length, -1)
+        .split(',')
+        .map(v => Number(v.trim()));
+
+      if (values.length === 6) {
+        const [a, b, c, d] = values;
+        scaleX = Math.hypot(a, b);
+        scaleY = Math.hypot(c, d);
+      }
+    }
+
+    if (!Number.isFinite(scaleX) || scaleX <= 0) scaleX = 1;
+    if (!Number.isFinite(scaleY) || scaleY <= 0) scaleY = 1;
+
+    return {
+      width: rect.width / scaleX,
+      height: rect.height / scaleY,
+    };
+  }
+
   private _updatePosition() {
     if (!this.triggerEl || !this.popoverEl) return;
 
     const triggerRect = this.triggerEl.getBoundingClientRect();
     const popoverRect = this.popoverEl.getBoundingClientRect();
+    const popoverSize = this.getUnscaledPopoverSize(popoverRect);
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const viewportPadding = 8;
@@ -425,13 +476,13 @@ export class LePopover {
     const spaceLeft = triggerRect.left - viewportPadding;
 
     if (position === 'auto') {
-      if (spaceBelow >= popoverRect.height + this.offset) {
+      if (spaceBelow >= popoverSize.height + this.offset) {
         position = 'bottom';
-      } else if (spaceAbove >= popoverRect.height + this.offset) {
+      } else if (spaceAbove >= popoverSize.height + this.offset) {
         position = 'top';
-      } else if (spaceRight >= popoverRect.width + this.offset) {
+      } else if (spaceRight >= popoverSize.width + this.offset) {
         position = 'right';
-      } else if (spaceLeft >= popoverRect.width + this.offset) {
+      } else if (spaceLeft >= popoverSize.width + this.offset) {
         position = 'left';
       } else {
         const maxSpace = Math.max(spaceBelow, spaceAbove, spaceRight, spaceLeft);
@@ -446,16 +497,16 @@ export class LePopover {
     if (position === 'top' || position === 'bottom') {
       if (
         align === 'start' &&
-        triggerRect.left + popoverRect.width > viewportWidth - viewportPadding
+        triggerRect.left + popoverSize.width > viewportWidth - viewportPadding
       ) {
         align = 'end';
-      } else if (align === 'end' && triggerRect.right - popoverRect.width < viewportPadding) {
+      } else if (align === 'end' && triggerRect.right - popoverSize.width < viewportPadding) {
         align = 'start';
       } else if (align === 'center') {
         const triggerCenter = triggerRect.left + triggerRect.width / 2;
-        if (triggerCenter - popoverRect.width / 2 < viewportPadding) {
+        if (triggerCenter - popoverSize.width / 2 < viewportPadding) {
           align = 'start';
-        } else if (triggerCenter + popoverRect.width / 2 > viewportWidth - viewportPadding) {
+        } else if (triggerCenter + popoverSize.width / 2 > viewportWidth - viewportPadding) {
           align = 'end';
         }
       }
@@ -468,7 +519,7 @@ export class LePopover {
 
     switch (position) {
       case 'top':
-        top = triggerRect.top - popoverRect.height - this.offset;
+        top = triggerRect.top - popoverSize.height - this.offset;
         if (top < viewportPadding) {
           maxHeight = triggerRect.top - this.offset - viewportPadding * 2;
           top = viewportPadding;
@@ -476,20 +527,20 @@ export class LePopover {
         break;
       case 'bottom':
         top = triggerRect.bottom + this.offset;
-        if (top + popoverRect.height > viewportHeight - viewportPadding) {
+        if (top + popoverSize.height > viewportHeight - viewportPadding) {
           maxHeight = viewportHeight - top - viewportPadding;
         }
         break;
       case 'left':
-        left = triggerRect.left - popoverRect.width - this.offset;
+        left = triggerRect.left - popoverSize.width - this.offset;
         top = triggerRect.top;
         if (left < viewportPadding) left = viewportPadding;
         break;
       case 'right':
         left = triggerRect.right + this.offset;
         top = triggerRect.top;
-        if (left + popoverRect.width > viewportWidth - viewportPadding) {
-          left = viewportWidth - popoverRect.width - viewportPadding;
+        if (left + popoverSize.width > viewportWidth - viewportPadding) {
+          left = viewportWidth - popoverSize.width - viewportPadding;
         }
         break;
     }
@@ -501,18 +552,18 @@ export class LePopover {
           left = triggerRect.left;
           break;
         case 'center':
-          left = triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2;
+          left = triggerRect.left + triggerRect.width / 2 - popoverSize.width / 2;
           break;
         case 'end':
-          left = triggerRect.right - popoverRect.width;
+          left = triggerRect.right - popoverSize.width;
           break;
       }
 
       // Constrain to viewport
       if (left < viewportPadding) {
         left = viewportPadding;
-      } else if (left + popoverRect.width > viewportWidth - viewportPadding) {
-        left = viewportWidth - popoverRect.width - viewportPadding;
+      } else if (left + popoverSize.width > viewportWidth - viewportPadding) {
+        left = viewportWidth - popoverSize.width - viewportPadding;
       }
     }
 
@@ -523,15 +574,15 @@ export class LePopover {
           top = triggerRect.top;
           break;
         case 'center':
-          top = triggerRect.top + triggerRect.height / 2 - popoverRect.height / 2;
+          top = triggerRect.top + triggerRect.height / 2 - popoverSize.height / 2;
           break;
         case 'end':
-          top = triggerRect.bottom - popoverRect.height;
+          top = triggerRect.bottom - popoverSize.height;
           break;
       }
 
       if (top < viewportPadding) top = viewportPadding;
-      if (top + popoverRect.height > viewportHeight - viewportPadding) {
+      if (top + popoverSize.height > viewportHeight - viewportPadding) {
         maxHeight = viewportHeight - top - viewportPadding;
       }
     }

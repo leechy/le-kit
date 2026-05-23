@@ -9,9 +9,10 @@ interface Props {
 
 const { title, pageType } = Astro.props;
 
-const pathname = Astro.url.pathname;
-const isComponentsIndex =
-  pathname === "/components" || pathname === "/components/";
+const normalizeHref = (href: string) => href.replace(/\/$/, "") || "/";
+
+const pathname = normalizeHref(Astro.url.pathname);
+const isComponentsIndex = pathname === "/components";
 
 const documentTitle = isComponentsIndex
   ? "Le-Kit Components"
@@ -40,7 +41,7 @@ const renderNavigationItems = (items: NavItem[]): string =>
         item.href ? `href="${escapeAttribute(item.href)}"` : "",
         item.id ? `id="${escapeAttribute(item.id)}"` : "",
         item.open ? "open" : "",
-        item.href && pathname === item.href ? "selected" : "",
+        item.href && pathname === normalizeHref(item.href) ? "selected" : "",
       ]
         .filter(Boolean)
         .join(" ");

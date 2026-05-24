@@ -57,13 +57,14 @@ const navigationMarkup = renderNavigationItems(docsNavigationItems);
 <Layout title={documentTitle}>
   <le-side-panel
     panel-id="docs-navigation"
-    resizable
     persist-key="docs-panel"
-    collapse-at="900"
-    narrow-behavior="overlay"
-    sticky
     top="under-header"
+    margin="var(--le-spacing-2)"
+    collapse-at="900"
+    collapse-behavior="overlay"
+    sticky
     full-height
+    resizable
   >
     <le-navigation
       slot="panel"

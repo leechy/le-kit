@@ -47,11 +47,15 @@
 
 .inline-panel.sticky {
   position: sticky;
-  top: var(--le-side-panel-top, 0);
+  top: var(--le-side-panel-effective-top, var(--le-side-panel-top, 0));
 }
 
 .inline-panel.sticky.full-height {
-  height: calc(100vh - var(--le-side-panel-top, 0));
+  height: var(
+    --le-side-panel-viewport-height,
+    calc(100vh - var(--le-side-panel-top, 0) - var(--le-side-panel-bottom, 0))
+  );
+  min-height: var(--le-side-panel-min-height, 0);
 }
 
 .inline-panel.hidden {
@@ -149,7 +153,7 @@ le-drag-handle {
  * the host element when using narrow overlay mode.
  */
 .overlayRoot {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: var(--le-side-panel-backdrop, var(--le-default-side-panel-backdrop));
   z-index: var(--le-z-content-backdrop, 990);
@@ -168,11 +172,9 @@ le-drag-handle {
 
 .overlayPanelWrap {
   position: absolute;
-  top: var(--le-side-panel-top, 0);
-  bottom: 0;
+  top: var(--le-side-panel-effective-top, var(--le-side-panel-top, 0));
+  bottom: var(--le-side-panel-bottom, 0);
   width: min(100%, var(--le-side-panel-width, var(--le-default-side-panel-width)));
-
-  height: 100%;
 
   z-index: var(--le-z-modal, 1050);
 

@@ -59,14 +59,14 @@ const navigationMarkup = renderNavigationItems(componentsNavigationItems);
 <Layout title={documentTitle}>
   <le-side-panel
     panel-id="components-navigation"
-    resizable
     persist-key="components-panel"
-    collapse-at="900"
-    narrow-behavior="overlay"
-    margin="var(--le-spacing-2)"
-    sticky
     top="under-header"
+    margin="var(--le-spacing-2)"
+    collapse-at="900"
+    collapse-behavior="overlay"
+    sticky
     full-height
+    resizable
   >
     <le-navigation
       slot="panel"

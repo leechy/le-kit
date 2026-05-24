@@ -1758,6 +1758,11 @@ export namespace Components {
          */
         "autoShowOnWide": boolean;
         /**
+          * Bottom offset for sticky full-height calculations.
+          * @default 0
+         */
+        "bottom": number | 'under-footer';
+        /**
           * Width breakpoint (in px or a CSS var like `--le-breakpoint-md`) below which the panel enters "narrow" mode.
          */
         "collapseAt"?: string;
@@ -1780,6 +1785,11 @@ export namespace Components {
           * @default 420
          */
         "maxPanelWidth": number;
+        /**
+          * Minimum panel height (px) when sticky full-height logic is active.
+          * @default 200
+         */
+        "minPanelHeight": number;
         /**
           * Minimum allowed width when resizable.
           * @default 220
@@ -5799,6 +5809,11 @@ declare namespace LocalJSX {
          */
         "autoShowOnWide"?: boolean;
         /**
+          * Bottom offset for sticky full-height calculations.
+          * @default 0
+         */
+        "bottom"?: number | 'under-footer';
+        /**
           * Width breakpoint (in px or a CSS var like `--le-breakpoint-md`) below which the panel enters "narrow" mode.
          */
         "collapseAt"?: string;
@@ -5821,6 +5836,11 @@ declare namespace LocalJSX {
           * @default 420
          */
         "maxPanelWidth"?: number;
+        /**
+          * Minimum panel height (px) when sticky full-height logic is active.
+          * @default 200
+         */
+        "minPanelHeight"?: number;
         /**
           * Minimum allowed width when resizable.
           * @default 220
@@ -7033,7 +7053,9 @@ declare namespace LocalJSX {
         "collapseAt": string;
         "narrowBehavior": LeSidePanelNarrowBehavior;
         "sticky": boolean;
+        "minPanelHeight": number;
         "top": string;
+        "bottom": string;
         "fullHeight": boolean;
         "margin": string;
         "open": boolean;

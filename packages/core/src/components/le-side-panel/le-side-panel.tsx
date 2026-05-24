@@ -72,6 +72,25 @@ function normalizeMarginValue(value?: string | number): string | undefined {
   return trimmed ? trimmed : undefined;
 }
 
+function resolveOffsetValue(value: number | string | undefined, cssVarName: string): number {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    if (value === cssVarName) {
+      const fromVar = readCssVariablePixels(cssVarName);
+      return fromVar ?? 0;
+    }
+    const parsed = Number.parseFloat(value);
+    if (Number.isFinite(parsed)) {
+      return parsed;
+    }
+  }
+
+  return 0;
+}
+
 @Component({
   tag: 'le-side-panel',
   styleUrl: 'le-side-panel.css',
@@ -98,8 +117,14 @@ export class LeSidePanel {
   /** Whether the panel is sticky (remains visible when scrolling). */
   @Prop({ mutable: true, reflect: true }) sticky: boolean = false;
 
+  /** Minimum panel height (px) when sticky full-height logic is active. */
+  @Prop() minPanelHeight: number = 200;
+
   /** Top offset for the sticky panel. */
   @Prop({ mutable: true, reflect: true }) top: number | 'under-header' = 0;
+
+  /** Bottom offset for sticky full-height calculations. */
+  @Prop({ mutable: true, reflect: true }) bottom: number | 'under-footer' = 0;
 
   /** Whether the sticky panel should stretch to full height. */
   @Prop({ mutable: true, reflect: true }) fullHeight: boolean = false;
@@ -165,6 +190,7 @@ export class LeSidePanel {
   private panelEl?: HTMLElement;
   private overlayWrapEl?: HTMLElement;
   private focusedBeforeOpen?: HTMLElement | null;
+  private stickyMetricsFrame?: number;
 
   private dragPointerId?: number;
   private dragStartX?: number;
@@ -181,8 +207,14 @@ export class LeSidePanel {
     if (Build.isBrowser && 'ResizeObserver' in window) {
       this.resizeObserver = new ResizeObserver(() => {
         this.recomputeNarrow();
+        this.scheduleStickyMetricsUpdate();
       });
       this.resizeObserver.observe(this.el);
+    }
+
+    if (Build.isBrowser) {
+      window.addEventListener('scroll', this.onWindowViewportChange, { passive: true });
+      window.addEventListener('resize', this.onWindowViewportChange, { passive: true });
     }
 
     // Ensure we get at least one post-layout measurement.
@@ -206,11 +238,19 @@ export class LeSidePanel {
     } else {
       this.suppressAnimation = false;
     }
+
+    this.scheduleStickyMetricsUpdate();
   }
 
   disconnectedCallback() {
     this.resizeObserver?.disconnect();
     this.teardownDragListeners();
+    this.clearStickyMetricsFrame();
+
+    if (Build.isBrowser) {
+      window.removeEventListener('scroll', this.onWindowViewportChange as any);
+      window.removeEventListener('resize', this.onWindowViewportChange as any);
+    }
   }
 
   private isModalOverlayActive(): boolean {
@@ -304,6 +344,106 @@ export class LeSidePanel {
   @Watch('narrowBehavior')
   protected onResponsivePropChanged() {
     this.recomputeNarrow();
+    this.scheduleStickyMetricsUpdate();
+  }
+
+  @Watch('sticky')
+  @Watch('fullHeight')
+  @Watch('top')
+  @Watch('bottom')
+  @Watch('minPanelHeight')
+  protected onStickyLayoutPropChanged() {
+    this.scheduleStickyMetricsUpdate();
+  }
+
+  private onWindowViewportChange = () => {
+    this.scheduleStickyMetricsUpdate();
+  };
+
+  private clearStickyMetricsFrame() {
+    if (!Build.isBrowser) {
+      this.stickyMetricsFrame = undefined;
+      return;
+    }
+    if (this.stickyMetricsFrame !== undefined) {
+      cancelAnimationFrame(this.stickyMetricsFrame);
+      this.stickyMetricsFrame = undefined;
+    }
+  }
+
+  private scheduleStickyMetricsUpdate() {
+    if (!Build.isBrowser) {
+      return;
+    }
+
+    this.clearStickyMetricsFrame();
+    this.stickyMetricsFrame = requestAnimationFrame(() => {
+      this.stickyMetricsFrame = undefined;
+      this.updateStickyMetrics();
+    });
+  }
+
+  private resolveTopOffsetPx(): number {
+    if (this.top === 'under-header') {
+      return resolveOffsetValue('--le-header-height', '--le-header-height');
+    }
+    return resolveOffsetValue(this.top, '--le-header-height');
+  }
+
+  private resolveBottomOffsetPx(): number {
+    if (this.bottom === 'under-footer') {
+      return resolveOffsetValue('--le-footer-height', '--le-footer-height');
+    }
+    return resolveOffsetValue(this.bottom, '--le-footer-height');
+  }
+
+  private updateStickyMetrics() {
+    if (!Build.isBrowser) {
+      return;
+    }
+
+    const topPx = this.resolveTopOffsetPx();
+    const bottomPx = this.resolveBottomOffsetPx();
+
+    this.el.style.setProperty('--le-side-panel-top', `${topPx}px`);
+    this.el.style.setProperty('--le-side-panel-bottom', `${bottomPx}px`);
+
+    if (!(this.sticky && this.fullHeight)) {
+      this.el.style.removeProperty('--le-side-panel-effective-top');
+      this.el.style.removeProperty('--le-side-panel-viewport-height');
+      return;
+    }
+
+    const hostRect = this.el.getBoundingClientRect();
+    const isNarrowOverlayMode = this.isNarrow && this.narrowBehavior === 'overlay';
+    const viewportBottom = window.innerHeight - bottomPx;
+    const effectiveTop = isNarrowOverlayMode ? topPx : Math.max(topPx, hostRect.top);
+
+    // Space available in viewport for the panel body.
+    const availableViewportHeight = Math.max(0, viewportBottom - effectiveTop);
+    // In narrow overlay mode, panel should be viewport-anchored and not constrained
+    // by parent component bounds.
+    const availableContainerHeight = isNarrowOverlayMode
+      ? Number.POSITIVE_INFINITY
+      : Math.max(0, hostRect.bottom - effectiveTop);
+
+    // Keep the panel inside both viewport and parent container bounds.
+    let viewportHeight = Math.min(availableViewportHeight, availableContainerHeight);
+
+    if (viewportHeight > 0) {
+      const minRequested = Number.isFinite(this.minPanelHeight)
+        ? Math.max(0, this.minPanelHeight)
+        : 0;
+      const minApplied = Math.min(minRequested, availableViewportHeight, availableContainerHeight);
+      viewportHeight = Math.max(viewportHeight, minApplied);
+    }
+
+    this.el.style.setProperty('--le-side-panel-effective-top', `${effectiveTop}px`);
+    this.el.style.setProperty('--le-side-panel-viewport-height', `${viewportHeight}px`);
+    this.el.style.setProperty(
+      '--le-side-panel-min-height',
+      `${Math.max(0, this.minPanelHeight)}px`,
+    );
   }
 
   @Listen('keydown', { target: 'document', capture: true })
@@ -722,6 +862,13 @@ export class LeSidePanel {
       hostStyle['--le-side-panel-margin'] = normalizedMargin;
     }
 
+    if (typeof this.top === 'number' && Number.isFinite(this.top)) {
+      hostStyle['--le-side-panel-top'] = `${this.top}px`;
+    }
+    if (typeof this.bottom === 'number' && Number.isFinite(this.bottom)) {
+      hostStyle['--le-side-panel-bottom'] = `${this.bottom}px`;
+    }
+
     const isOverlay = this.isNarrow && this.narrowBehavior === 'overlay';
     const isModalOverlayOpen = isOverlay && this.open;
 
@@ -765,11 +912,6 @@ export class LeSidePanel {
               'full-height': this.sticky && this.fullHeight,
             }}
             part="inline-panel"
-            style={
-              this.sticky && typeof this.top === 'number'
-                ? { '--le-side-panel-top': `${this.top}px` }
-                : undefined
-            }
             aria-hidden={!layoutHasInlinePanel ? 'true' : null}
           >
             {/* In narrow overlay mode, only the overlay should own the named slot. */}

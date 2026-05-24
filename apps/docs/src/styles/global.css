@@ -94,7 +94,10 @@ body {
 }
 
 le-side-panel::part(panel) {
+  --le-color-surface: #fafdffaa;
   border: 2px solid var(--le-color-border);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 le-breadcrumbs.site-navigation {

@@ -96,8 +96,8 @@
 .panel {
   position: relative;
   margin: var(--le-side-panel-margin, var(--le-default-side-panel-margin));
-  height: 100%;
-  max-height: min(calc(100% - (var(--le-side-panel-margin, var(--le-default-side-panel-margin)) * 2)), calc(100vh - (var(--le-side-panel-margin, var(--le-default-side-panel-margin)) * 2)));
+  height: calc(100% - (var(--le-side-panel-margin, var(--le-default-side-panel-margin)) * 2));
+  max-height: calc(100% - (var(--le-side-panel-margin, var(--le-default-side-panel-margin)) * 2));
   width: calc(100% - (var(--le-side-panel-margin, var(--le-default-side-panel-margin)) * 2));
   border-radius: var(--le-side-panel-border-radius, var(--le-default-side-panel-border-radius));
 

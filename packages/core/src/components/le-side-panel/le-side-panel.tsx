@@ -59,6 +59,19 @@ function parseCollapseAtPx(value?: string): number | undefined {
   return Number.isFinite(numeric) ? numeric : undefined;
 }
 
+function normalizeMarginValue(value?: string | number): string | undefined {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+
+  if (typeof value === 'number') {
+    return `${value}px`;
+  }
+
+  const trimmed = value.trim();
+  return trimmed ? trimmed : undefined;
+}
+
 @Component({
   tag: 'le-side-panel',
   styleUrl: 'le-side-panel.css',
@@ -90,6 +103,9 @@ export class LeSidePanel {
 
   /** Whether the sticky panel should stretch to full height. */
   @Prop({ mutable: true, reflect: true }) fullHeight: boolean = false;
+
+  /** Optional panel margin override. Accepts CSS length (e.g. `16px`, `1rem`, `var(--space-4)`). */
+  @Prop() margin?: string | number;
 
   /**
    * Panel open state for narrow mode.
@@ -697,9 +713,14 @@ export class LeSidePanel {
   }
 
   render() {
-    const widthStyle = {
+    const hostStyle: Record<string, string> = {
       '--le-side-panel-width': `${this.currentWidthPx}px`,
     };
+
+    const normalizedMargin = normalizeMarginValue(this.margin);
+    if (normalizedMargin) {
+      hostStyle['--le-side-panel-margin'] = normalizedMargin;
+    }
 
     const isOverlay = this.isNarrow && this.narrowBehavior === 'overlay';
     const isModalOverlayOpen = isOverlay && this.open;
@@ -722,7 +743,7 @@ export class LeSidePanel {
           push: !isOverlay,
           collapsed: !this.isNarrow && this.collapsed,
         }}
-        style={widthStyle as any}
+        style={hostStyle as any}
         data-resizing={this.resizing ? 'true' : null}
       >
         {/* Wide + narrow push layout */}

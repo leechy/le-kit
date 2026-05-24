@@ -1772,6 +1772,10 @@ export namespace Components {
          */
         "fullHeight": boolean;
         /**
+          * Optional panel margin override. Accepts CSS length (e.g. `16px`, `1rem`, `var(--space-4)`).
+         */
+        "margin"?: string | number;
+        /**
           * Maximum allowed width when resizable.
           * @default 420
          */
@@ -5809,6 +5813,10 @@ declare namespace LocalJSX {
          */
         "fullHeight"?: boolean;
         /**
+          * Optional panel margin override. Accepts CSS length (e.g. `16px`, `1rem`, `var(--space-4)`).
+         */
+        "margin"?: string | number;
+        /**
           * Maximum allowed width when resizable.
           * @default 420
          */
@@ -7027,6 +7035,7 @@ declare namespace LocalJSX {
         "sticky": boolean;
         "top": string;
         "fullHeight": boolean;
+        "margin": string;
         "open": boolean;
         "collapsed": boolean;
         "panelWidth": number;

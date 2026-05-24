@@ -95,89 +95,10 @@
 
 /* ── Drag handle ─────────────────────────────────────────────── */
 
-.drag-handle {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: var(--le-preview-frame-handle-width);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: ew-resize;
-  z-index: 10;
-  outline: none;
-  background: transparent;
-  transition: background 0.15s;
-  touch-action: none;
-}
-
-.drag-handle-right {
-  right: 0;
-}
-
-.drag-handle-left {
-  left: 0;
-}
-
-.drag-handle-bottom {
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: auto;
-  width: auto;
-  height: var(--le-preview-frame-handle-width);
-  cursor: ns-resize;
-}
-
-.drag-handle:hover,
-:host(.is-dragging) .drag-handle {
-  background: color-mix(in srgb, var(--le-preview-frame-handle-color-hover) 12%, transparent);
-}
-
-.drag-handle:focus-visible {
-  outline: 2px solid var(--le-preview-frame-handle-color-hover);
-  outline-offset: -1px;
-}
-
-.drag-handle-grip {
-  width: 3px;
-  height: 32px;
-  border-radius: 2px;
-  background: var(--le-preview-frame-handle-color);
-  transition: background 0.15s, height 0.15s;
-}
-
-.drag-handle-bottom .drag-handle-grip {
-  width: 32px;
-  height: 3px;
-}
-
-.drag-handle:hover .drag-handle-grip,
-:host(.is-dragging) .drag-handle .drag-handle-grip {
-  background: var(--le-preview-frame-handle-color-hover);
-  height: 40px;
-}
-
-.drag-handle-bottom:hover .drag-handle-grip,
-:host(.is-dragging) .drag-handle-bottom .drag-handle-grip {
-  width: 40px;
-  height: 3px;
+le-drag-handle {
+  --le-drag-handle-size: var(--le-preview-frame-handle-width);
+  --le-drag-handle-grip-color: var(--le-preview-frame-handle-color);
+  --le-drag-handle-grip-color-hover: var(--le-preview-frame-handle-color-hover);
 }
 
 /* ── Host display helpers ────────────────────────────────────── */
-
-:host(:not(.is-resizable)) .drag-handle {
-  display: none;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}

@@ -11,6 +11,7 @@ import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcr
 import { TooltipPlacement } from ".";
 import { LeCollapseMeta } from "./types/toolbar";
 import { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-group";
+import { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 import { LeActiveContext } from "./components/le-kit/le-kit";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
@@ -27,6 +28,7 @@ export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcr
 export { TooltipPlacement } from ".";
 export { LeCollapseMeta } from "./types/toolbar";
 export { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-group";
+export { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 export { LeActiveContext } from "./components/le-kit/le-kit";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
@@ -779,6 +781,21 @@ export namespace Components {
           * @default ''
          */
         "selector": string;
+    }
+    /**
+     * Reusable drag handle used by resizable components.
+     */
+    interface LeDragHandle {
+        /**
+          * Handle orientation (vertical = width drag, horizontal = height drag).
+          * @default 'vertical'
+         */
+        "orientation": LeDragHandleOrientation;
+        /**
+          * Handle position on the owning edge.
+          * @default 'end'
+         */
+        "placement": LeDragHandlePlacement;
     }
     /**
      * Internal dropdown base component that provides shared functionality
@@ -3117,6 +3134,15 @@ declare global {
         prototype: HTMLLeCurrentHeadingElement;
         new (): HTMLLeCurrentHeadingElement;
     };
+    /**
+     * Reusable drag handle used by resizable components.
+     */
+    interface HTMLLeDragHandleElement extends Components.LeDragHandle, HTMLStencilElement {
+    }
+    var HTMLLeDragHandleElement: {
+        prototype: HTMLLeDragHandleElement;
+        new (): HTMLLeDragHandleElement;
+    };
     interface HTMLLeDropdownBaseElementEventMap {
         "leOptionSelect": LeOptionSelectDetail;
         "leDropdownOpen": void;
@@ -3951,6 +3977,7 @@ declare global {
         "le-combobox": HTMLLeComboboxElement;
         "le-component": HTMLLeComponentElement;
         "le-current-heading": HTMLLeCurrentHeadingElement;
+        "le-drag-handle": HTMLLeDragHandleElement;
         "le-dropdown-base": HTMLLeDropdownBaseElement;
         "le-header": HTMLLeHeaderElement;
         "le-header-placeholder": HTMLLeHeaderPlaceholderElement;
@@ -4755,6 +4782,21 @@ declare namespace LocalJSX {
           * @default ''
          */
         "selector"?: string;
+    }
+    /**
+     * Reusable drag handle used by resizable components.
+     */
+    interface LeDragHandle {
+        /**
+          * Handle orientation (vertical = width drag, horizontal = height drag).
+          * @default 'vertical'
+         */
+        "orientation"?: LeDragHandleOrientation;
+        /**
+          * Handle position on the owning edge.
+          * @default 'end'
+         */
+        "placement"?: LeDragHandlePlacement;
     }
     /**
      * Internal dropdown base component that provides shared functionality
@@ -6811,6 +6853,10 @@ declare namespace LocalJSX {
     interface LeCurrentHeadingAttributes {
         "selector": string;
     }
+    interface LeDragHandleAttributes {
+        "orientation": LeDragHandleOrientation;
+        "placement": LeDragHandlePlacement;
+    }
     interface LeDropdownBaseAttributes {
         "value": string;
         "multiple": boolean;
@@ -7179,6 +7225,7 @@ declare namespace LocalJSX {
         "le-combobox": Omit<LeCombobox, keyof LeComboboxAttributes> & { [K in keyof LeCombobox & keyof LeComboboxAttributes]?: LeCombobox[K] } & { [K in keyof LeCombobox & keyof LeComboboxAttributes as `attr:${K}`]?: LeComboboxAttributes[K] } & { [K in keyof LeCombobox & keyof LeComboboxAttributes as `prop:${K}`]?: LeCombobox[K] };
         "le-component": Omit<LeComponent, keyof LeComponentAttributes> & { [K in keyof LeComponent & keyof LeComponentAttributes]?: LeComponent[K] } & { [K in keyof LeComponent & keyof LeComponentAttributes as `attr:${K}`]?: LeComponentAttributes[K] } & { [K in keyof LeComponent & keyof LeComponentAttributes as `prop:${K}`]?: LeComponent[K] } & OneOf<"component", LeComponent["component"], LeComponentAttributes["component"]>;
         "le-current-heading": Omit<LeCurrentHeading, keyof LeCurrentHeadingAttributes> & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes]?: LeCurrentHeading[K] } & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes as `attr:${K}`]?: LeCurrentHeadingAttributes[K] } & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes as `prop:${K}`]?: LeCurrentHeading[K] };
+        "le-drag-handle": Omit<LeDragHandle, keyof LeDragHandleAttributes> & { [K in keyof LeDragHandle & keyof LeDragHandleAttributes]?: LeDragHandle[K] } & { [K in keyof LeDragHandle & keyof LeDragHandleAttributes as `attr:${K}`]?: LeDragHandleAttributes[K] } & { [K in keyof LeDragHandle & keyof LeDragHandleAttributes as `prop:${K}`]?: LeDragHandle[K] };
         "le-dropdown-base": Omit<LeDropdownBase, keyof LeDropdownBaseAttributes> & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes]?: LeDropdownBase[K] } & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes as `attr:${K}`]?: LeDropdownBaseAttributes[K] } & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes as `prop:${K}`]?: LeDropdownBase[K] };
         "le-header": Omit<LeHeader, keyof LeHeaderAttributes> & { [K in keyof LeHeader & keyof LeHeaderAttributes]?: LeHeader[K] } & { [K in keyof LeHeader & keyof LeHeaderAttributes as `attr:${K}`]?: LeHeaderAttributes[K] } & { [K in keyof LeHeader & keyof LeHeaderAttributes as `prop:${K}`]?: LeHeader[K] };
         "le-header-placeholder": LeHeaderPlaceholder;
@@ -7409,6 +7456,10 @@ declare module "@stencil/core" {
              * @cmsCategory Layout
              */
             "le-current-heading": LocalJSX.IntrinsicElements["le-current-heading"] & JSXBase.HTMLAttributes<HTMLLeCurrentHeadingElement>;
+            /**
+             * Reusable drag handle used by resizable components.
+             */
+            "le-drag-handle": LocalJSX.IntrinsicElements["le-drag-handle"] & JSXBase.HTMLAttributes<HTMLLeDragHandleElement>;
             /**
              * Internal dropdown base component that provides shared functionality
              * for select, combobox, and multiselect components.

@@ -132,20 +132,10 @@
   cursor: pointer;
 }
 
-.handle {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 10px;
-  cursor: col-resize;
-}
-
-.handle.start {
-  right: -5px;
-}
-
-.handle.end {
-  left: -5px;
+le-drag-handle {
+  --le-drag-handle-size: 10px;
+  --le-drag-handle-grip-color: var(--le-color-border, rgba(0, 0, 0, 0.15));
+  --le-drag-handle-grip-color-hover: var(--le-color-primary, #2781ca);
 }
 
 /*

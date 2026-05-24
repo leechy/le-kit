@@ -442,14 +442,16 @@ export class LePreviewFrame {
 
   private renderHandle(side: LePreviewFrameHandleSide) {
     const oppositeSide = side === 'left' ? 'right' : 'left';
+    const orientation = side === 'bottom' ? 'horizontal' : 'vertical';
+    const placement = side === 'left' ? 'start' : 'end';
+
     return (
-      <div
+      <le-drag-handle
         class={{
-          'drag-handle': true,
-          'drag-handle-left': side === 'left',
-          'drag-handle-right': side === 'right',
-          'drag-handle-bottom': side === 'bottom',
+          'is-dragging': this.isDragging,
         }}
+        orientation={orientation}
+        placement={placement}
         part={`drag-handle drag-handle-${side}`}
         role="slider"
         aria-label={`Resize preview frame from ${side} edge`}
@@ -471,13 +473,10 @@ export class LePreviewFrame {
         onPointerDown={event => this.handleDragStart(side, event)}
         onKeyDown={event => this.handleResizeKeyDown(side, event)}
       >
-        <span class="sr-only">
-          {side === 'bottom'
-            ? 'Drag bottom handle to resize height.'
-            : `Drag ${side} handle to resize. ${oppositeSide} edge remains anchor.`}
-        </span>
-        <div class="drag-handle-grip" />
-      </div>
+        {side === 'bottom'
+          ? 'Drag bottom handle to resize height.'
+          : `Drag ${side} handle to resize. ${oppositeSide} edge remains anchor.`}
+      </le-drag-handle>
     );
   }
 

@@ -676,18 +676,21 @@ export class LeSidePanel {
         </div>
 
         {this.resizable ? (
-          <div
+          <le-drag-handle
             class={{
-              handle: true,
-              start: this.side === 'start',
-              end: this.side === 'end',
+              'is-dragging': this.resizing,
             }}
+            orientation="vertical"
+            placement={this.side === 'start' ? 'end' : 'start'}
             part="resize-handle"
             role="separator"
             aria-orientation="vertical"
             tabindex={-1}
+            style={{ '--le-drag-handle-offset': '-5px' }}
             onPointerDown={this.startResizeDrag}
-          />
+          >
+            Drag panel edge to resize width.
+          </le-drag-handle>
         ) : null}
       </div>
     );

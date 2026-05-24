@@ -1,0 +1,103 @@
+:host {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  outline: none;
+  background: transparent;
+  transition: background 0.15s;
+  touch-action: none;
+
+  --le-drag-handle-size: 10px;
+  --le-drag-handle-offset: 0px;
+  --le-drag-handle-grip-color: var(--le-color-border, rgba(0, 0, 0, 0.15));
+  --le-drag-handle-grip-color-hover: var(--le-color-primary, #2781ca);
+  --le-drag-handle-hover-bg: color-mix(in srgb, var(--le-drag-handle-grip-color-hover) 12%, transparent);
+  --le-drag-handle-grip-thickness: 3px;
+  --le-drag-handle-grip-length: 32px;
+  --le-drag-handle-grip-length-hover: 40px;
+}
+
+:host([orientation='vertical']) {
+  top: 0;
+  bottom: 0;
+  width: var(--le-drag-handle-size);
+  cursor: ew-resize;
+}
+
+:host([orientation='vertical'][placement='start']) {
+  left: var(--le-drag-handle-offset);
+}
+
+:host([orientation='vertical'][placement='end']) {
+  right: var(--le-drag-handle-offset);
+}
+
+:host([orientation='horizontal']) {
+  left: 0;
+  right: 0;
+  height: var(--le-drag-handle-size);
+  cursor: ns-resize;
+}
+
+:host([orientation='horizontal'][placement='start']) {
+  top: var(--le-drag-handle-offset);
+}
+
+:host([orientation='horizontal'][placement='end']) {
+  bottom: var(--le-drag-handle-offset);
+}
+
+:host(:hover),
+:host(.is-dragging) {
+  background: var(--le-drag-handle-hover-bg);
+}
+
+:host(:focus-visible) {
+  outline: 2px solid var(--le-drag-handle-grip-color-hover);
+  outline-offset: -1px;
+}
+
+.grip {
+  border-radius: 2px;
+  background: var(--le-drag-handle-grip-color);
+  transition: background 0.15s, width 0.15s, height 0.15s;
+}
+
+:host([orientation='vertical']) .grip {
+  width: var(--le-drag-handle-grip-thickness);
+  height: var(--le-drag-handle-grip-length);
+}
+
+:host([orientation='horizontal']) .grip {
+  width: var(--le-drag-handle-grip-length);
+  height: var(--le-drag-handle-grip-thickness);
+}
+
+:host(:hover) .grip,
+:host(.is-dragging) .grip {
+  background: var(--le-drag-handle-grip-color-hover);
+}
+
+:host([orientation='vertical']:hover) .grip,
+:host([orientation='vertical'].is-dragging) .grip {
+  height: var(--le-drag-handle-grip-length-hover);
+}
+
+:host([orientation='horizontal']:hover) .grip,
+:host([orientation='horizontal'].is-dragging) .grip {
+  width: var(--le-drag-handle-grip-length-hover);
+}
+
+.assistive {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,4 +1,5 @@
 import {
+  Build,
   Component,
   Prop,
   State,
@@ -153,6 +154,17 @@ export class LeNavigation {
   @Prop({ reflect: true }) activationMode: LeNavigationActivationMode = 'manual';
 
   /**
+   * Automatically scroll the active item into view when the active URL changes
+   * or on initial load.
+   *
+   * - Initial load: instant (no animation)
+   * - Subsequent `activeUrl` changes: smooth
+   *
+   * Only applies to `vertical` orientation.
+   */
+  @Prop() autoScroll: boolean = false;
+
+  /**
    * Fired when a navigation item is activated.
    *
    * This event is cancelable. Call `event.preventDefault()` to prevent
@@ -192,6 +204,9 @@ export class LeNavigation {
   private pendingAutoActivationId?: string;
 
   private pendingFocusSyncFrame?: number;
+  private pendingScrollBehavior?: ScrollBehavior;
+  private initialScrollObserver?: IntersectionObserver;
+  private pendingInitialScrollFrame?: number;
 
   private renderLabel(label: string | HTMLCollection) {
     if (label instanceof HTMLCollection) {
@@ -259,6 +274,13 @@ export class LeNavigation {
     this.openSubmenuId = undefined;
   }
 
+  @Watch('activeUrl')
+  handleActiveUrlChange() {
+    if (this.autoScroll) {
+      this.pendingScrollBehavior = 'smooth';
+    }
+  }
+
   @Listen('slotchange')
   handleSlotChange() {
     this.buildDeclarativeItems();
@@ -266,6 +288,35 @@ export class LeNavigation {
 
   componentWillLoad() {
     this.buildDeclarativeItems();
+  }
+
+  componentDidLoad() {
+    if (!this.autoScroll || !Build.isBrowser || this.orientation !== 'vertical') {
+      return;
+    }
+
+    // componentDidLoad fires before the outer scroll container (e.g. le-side-panel)
+    // has finished its layout. A plain rAF is too early — the panel may still have
+    // width/height 0. IntersectionObserver fires exactly once when this element
+    // first intersects the viewport, at which point layout is guaranteed complete.
+    if (typeof IntersectionObserver === 'undefined') {
+      // Fallback for environments without IntersectionObserver (e.g. jsdom).
+      this.tryInitialActiveScroll(16);
+      return;
+    }
+
+    this.initialScrollObserver = new IntersectionObserver(
+      entries => {
+        if (entries.some(e => e.isIntersecting)) {
+          this.initialScrollObserver?.disconnect();
+          this.initialScrollObserver = undefined;
+          this.tryInitialActiveScroll(16);
+        }
+      },
+      { threshold: 0 },
+    );
+
+    this.initialScrollObserver.observe(this.el);
   }
 
   connectedCallback() {
@@ -280,6 +331,12 @@ export class LeNavigation {
 
   disconnectedCallback() {
     this.mutationObserver?.disconnect();
+    this.initialScrollObserver?.disconnect();
+    this.initialScrollObserver = undefined;
+    if (this.pendingInitialScrollFrame !== undefined) {
+      cancelAnimationFrame(this.pendingInitialScrollFrame);
+      this.pendingInitialScrollFrame = undefined;
+    }
     if (this.pendingFocusSyncFrame !== undefined) {
       cancelAnimationFrame(this.pendingFocusSyncFrame);
       this.pendingFocusSyncFrame = undefined;
@@ -291,24 +348,137 @@ export class LeNavigation {
     const currentItem = currentId ? this.getRenderedNavItemById(currentId) : undefined;
     const currentElement = currentId ? this.getNavElementById(currentId) : undefined;
     if (currentItem && currentElement && this.isElementVisible(currentElement)) {
+      // Focus sync is satisfied; still check for pending scroll below.
+    } else {
+      const fallbackId = this.getFirstVisibleItemId();
+      if (fallbackId && fallbackId !== this.focusedItemId) {
+        if (this.pendingFocusSyncFrame !== undefined) {
+          cancelAnimationFrame(this.pendingFocusSyncFrame);
+        }
+        // Defer fallback focus update to post-render frame to avoid
+        // mutating @State during the current render lifecycle.
+        this.pendingFocusSyncFrame = requestAnimationFrame(() => {
+          this.pendingFocusSyncFrame = undefined;
+          if (this.focusedItemId !== fallbackId) {
+            this.focusedItemId = fallbackId;
+          }
+        });
+      }
+    }
+
+    if (this.pendingScrollBehavior !== undefined && this.orientation === 'vertical') {
+      const behavior = this.pendingScrollBehavior;
+      this.pendingScrollBehavior = undefined;
+      requestAnimationFrame(() => {
+        this.scrollActiveItemIntoView(behavior);
+      });
+    }
+  }
+
+  private tryInitialActiveScroll(attemptsLeft: number) {
+    if (!Build.isBrowser || attemptsLeft <= 0) {
       return;
     }
 
-    const fallbackId = this.getFirstVisibleItemId();
-    if (!fallbackId || fallbackId === this.focusedItemId) return;
-
-    if (this.pendingFocusSyncFrame !== undefined) {
-      cancelAnimationFrame(this.pendingFocusSyncFrame);
+    const scrolled = this.scrollActiveItemIntoView('instant');
+    if (scrolled) {
+      return;
     }
 
-    // Defer fallback focus update to post-render frame to avoid
-    // mutating @State during the current render lifecycle.
-    this.pendingFocusSyncFrame = requestAnimationFrame(() => {
-      this.pendingFocusSyncFrame = undefined;
-      if (this.focusedItemId !== fallbackId) {
-        this.focusedItemId = fallbackId;
-      }
+    this.pendingInitialScrollFrame = requestAnimationFrame(() => {
+      this.pendingInitialScrollFrame = undefined;
+      this.tryInitialActiveScroll(attemptsLeft - 1);
     });
+  }
+
+  private scrollActiveItemIntoView(behavior: ScrollBehavior): boolean {
+    if (!Build.isBrowser) {
+      return false;
+    }
+
+    const items = this.getRenderedNavItems();
+    const activeItem = items.find(item => this.isItemSelected(item.item));
+    if (!activeItem) {
+      return false;
+    }
+
+    const element = this.getNavElementById(activeItem.id);
+    if (!element) {
+      return false;
+    }
+
+    const scrollContainer = this.findScrollableAncestorInComposedTree(element);
+
+    if (!scrollContainer) {
+      element.scrollIntoView({ behavior, block: 'nearest' });
+      return true;
+    }
+
+    const elementRect = element.getBoundingClientRect();
+    const containerRect = scrollContainer.getBoundingClientRect();
+
+    if (elementRect.height <= 0 || containerRect.height <= 0) {
+      return false;
+    }
+
+    const topDiff = elementRect.top - containerRect.top;
+    const bottomDiff = elementRect.bottom - containerRect.bottom;
+
+    if (topDiff >= 0 && bottomDiff <= 0) {
+      return true;
+    }
+
+    // The container can be identified correctly but still not be scroll-ready
+    // during early layout (e.g. equal client/scroll heights while sizing settles).
+    const maxScrollTop = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+    if (maxScrollTop <= 0) {
+      return false;
+    }
+
+    const adjustment = topDiff < 0 ? topDiff : bottomDiff;
+    scrollContainer.scrollTo({
+      top: scrollContainer.scrollTop + adjustment,
+      behavior,
+    });
+
+    return true;
+  }
+
+  private findScrollableAncestorInComposedTree(startElement: Element): HTMLElement | null {
+    let current: Element | null = startElement;
+
+    while (current) {
+      const assignedSlotEl: HTMLSlotElement | null = (current as HTMLElement).assignedSlot ?? null;
+      if (assignedSlotEl) {
+        current = assignedSlotEl;
+        continue;
+      }
+
+      if (current instanceof HTMLElement) {
+        const style = getComputedStyle(current);
+        const overflowY = style.overflowY;
+
+        if (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') {
+          return current;
+        }
+      }
+
+      const parentEl: Element | null = current.parentElement;
+      if (parentEl) {
+        current = parentEl;
+        continue;
+      }
+
+      const root = current.getRootNode();
+      if (root instanceof ShadowRoot) {
+        current = root.host;
+        continue;
+      }
+
+      break;
+    }
+
+    return null;
   }
 
   private async buildDeclarativeItems() {

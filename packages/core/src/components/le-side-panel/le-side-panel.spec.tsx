@@ -55,12 +55,9 @@ describe('le-side-panel spec', () => {
     });
 
     // In spec mode Build.isBrowser is false → suppressAnimation is cleared synchronously
-    // in componentDidLoad. The rendered class reflects the post-load state.
-    // The key invariant we test: a fresh page with no explicit prop starts
-    // with suppressAnimation=true at the @State declaration level.
-    const host = page.root as HTMLLeSidePanelElement & { suppressAnimation?: boolean };
-    // Access internal state via the instance the spec page exposes on rootInstance.
-    const instance = page.rootInstance as LeSidePanel & { suppressAnimation: boolean };
+    // in componentDidLoad. Cast through any to access the private field for testing.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const instance = page.rootInstance as any;
     // After componentDidLoad in non-browser mode, suppressAnimation should be false.
     expect(instance.suppressAnimation).toBe(false);
   });

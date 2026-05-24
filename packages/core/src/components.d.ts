@@ -1139,6 +1139,11 @@ export namespace Components {
          */
         "align": 'start' | 'end' | 'center' | 'space-between';
         /**
+          * Automatically scroll the active item into view when the active URL changes or on initial load.  - Initial load: instant (no animation) - Subsequent `activeUrl` changes: smooth  Only applies to `vertical` orientation.
+          * @default false
+         */
+        "autoScroll": boolean;
+        /**
           * Text shown when no items match the filter.
           * @default 'No results found'
          */
@@ -5119,6 +5124,11 @@ declare namespace LocalJSX {
          */
         "align"?: 'start' | 'end' | 'center' | 'space-between';
         /**
+          * Automatically scroll the active item into view when the active URL changes or on initial load.  - Initial load: instant (no animation) - Subsequent `activeUrl` changes: smooth  Only applies to `vertical` orientation.
+          * @default false
+         */
+        "autoScroll"?: boolean;
+        /**
           * Text shown when no items match the filter.
           * @default 'No results found'
          */
@@ -6863,6 +6873,7 @@ declare namespace LocalJSX {
         "emptyText": string;
         "submenuSearchable": boolean;
         "activationMode": LeNavigationActivationMode;
+        "autoScroll": boolean;
         "togglePosition": 'start' | 'end';
     }
     interface LeNumberInputAttributes {

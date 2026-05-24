@@ -825,6 +825,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `emptyText` | `string` | `'No results found'` | Text shown when no items match the filter. |
 | `submenuSearchable` | `boolean` | `false` | Whether submenu popovers should include a filter input. |
 | `activationMode` | `LeNavigationActivationMode` | `'manual'` | Whether keyboard focus only highlights, or also activates immediately. |
+| `autoScroll` | `boolean` | `true` | Automatically scroll the active item into view when the active URL changes or on initial load.  - Initial load: instant (no animation) - Subsequent `activeUrl` changes: smooth  Only applies to `vertical` orientation. |
 | `togglePosition` | `'start' \| 'end'` | `'start'` | Position of the toggle arrow for items with children: 'start' | 'end' |
 
 ### Events

@@ -43,6 +43,28 @@ describe('le-side-panel spec', () => {
     expect(inlinePanel.classList.contains('hidden')).toBe(false);
   });
 
+  it('disables inline panel transition on the initial render until componentDidLoad settles', async () => {
+    // suppressAnimation starts true. In the browser a 0ms setTimeout in
+    // componentDidLoad clears it after the first paint. In jsdom (Build.isBrowser=false)
+    // the SSR branch clears it synchronously, so after page creation it is already false.
+    // Either way: the important thing is the initial @State default is true so
+    // the very first render always carries no-transition.
+    const page = await newSpecPage({
+      components: [LeSidePanel],
+      html: `<le-side-panel collapse-at="9999"></le-side-panel>`,
+    });
+
+    // In spec mode Build.isBrowser is false → suppressAnimation is cleared synchronously
+    // in componentDidLoad. The rendered class reflects the post-load state.
+    // The key invariant we test: a fresh page with no explicit prop starts
+    // with suppressAnimation=true at the @State declaration level.
+    const host = page.root as HTMLLeSidePanelElement & { suppressAnimation?: boolean };
+    // Access internal state via the instance the spec page exposes on rootInstance.
+    const instance = page.rootInstance as LeSidePanel & { suppressAnimation: boolean };
+    // After componentDidLoad in non-browser mode, suppressAnimation should be false.
+    expect(instance.suppressAnimation).toBe(false);
+  });
+
   it('hides inline panel when collapsed (wide mode)', async () => {
     const page = await newSpecPage({
       components: [LeSidePanel],

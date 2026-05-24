@@ -143,14 +143,12 @@ export class LeSidePanel {
   @State() private overlayVisible: boolean = false;
   @State() private currentWidthPx!: number;
   @State() private resizing: boolean = false;
-  @State() private suppressAnimation: boolean = false;
+  @State() private suppressAnimation: boolean = true;
 
   private resizeObserver?: ResizeObserver;
   private panelEl?: HTMLElement;
   private overlayWrapEl?: HTMLElement;
   private focusedBeforeOpen?: HTMLElement | null;
-
-  private firstLayoutComplete: boolean = false;
 
   private dragPointerId?: number;
   private dragStartX?: number;
@@ -179,6 +177,19 @@ export class LeSidePanel {
 
   componentWillLoad() {
     this.recomputeNarrow();
+  }
+
+  componentDidLoad() {
+    // First paint has happened. Release the animation suppression so all
+    // subsequent state changes (user toggles, resize events) can animate.
+    // A 0ms timeout is sufficient — it runs after the current paint task.
+    if (Build.isBrowser) {
+      setTimeout(() => {
+        this.suppressAnimation = false;
+      }, 0);
+    } else {
+      this.suppressAnimation = false;
+    }
   }
 
   disconnectedCallback() {
@@ -406,18 +417,6 @@ export class LeSidePanel {
     }
 
     this.responsiveReady = true;
-
-    // Suppress animation on the very first successful layout
-    if (!this.firstLayoutComplete) {
-      this.suppressAnimation = true;
-      this.firstLayoutComplete = true;
-
-      setTimeout(() => {
-        // A short delay ensures the first paint completes without a transition,
-        // then re-enables animations for subsequent state changes.
-        this.suppressAnimation = false;
-      }, 100);
-    }
 
     const nextIsNarrow = width < collapseAtPx;
 

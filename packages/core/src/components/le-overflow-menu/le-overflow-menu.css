@@ -6,9 +6,15 @@
   --le-overflow-menu-item-hover-bg: var(--le-color-gray-100);
 }
 
+/* Popover trigger button */
+[part="trigger"] {
+  display: inline-flex;
+}
+
 .trigger-button {
   --le-button-padding-x: 0;
   --le-button-icon-only-padding: var(--le-spacing-1) 0;
+  --le-button-icon-aspect-ratio: auto;
 }
 
 /* Popover list container */

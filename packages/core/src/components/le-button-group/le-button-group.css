@@ -70,6 +70,7 @@ le-visibility {
 
 .button-group-overflow {
   display: inline-flex;
+  align-self: stretch;
 }
 
 .button-group-more-trigger {

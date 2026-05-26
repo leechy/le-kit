@@ -215,6 +215,7 @@ export class LeOverflowMenu {
             <slot name="trigger">
               <le-button
                 variant="clear"
+                size="small"
                 disabled={this.disabled}
                 aria-label={this.triggerAriaLabel}
                 part={this.triggerPart}

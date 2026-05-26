@@ -4,7 +4,7 @@
    ============================================ */
 
 :host {
-  display: inline-block;
+  display: inline-flex;
   position: relative;
   --le-popover-padding: var(--le-space-md, 12px);
 }
@@ -19,6 +19,7 @@
    ============================================ */
 
 .le-popover-trigger {
+  display: inline-flex;
   cursor: pointer;
 }
 

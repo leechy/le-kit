@@ -3,7 +3,7 @@
  * Uses global design tokens with component-specific overrides
  */
 :host {
-  display: inline-block;
+  display: inline-flex;
   vertical-align: middle;
   transform-origin: center center;
   max-width: 100%;
@@ -223,6 +223,12 @@
   --le-button-padding-y: 0.3rem;
   --le-button-padding-top: 0.35rem;
   --le-button-font-size: var(--le-button-small-font-size, var(--le-font-size-xs));
+
+  .icon-start,
+  .icon-only,
+  .icon-end {
+    transform: scale(0.9);
+  }
 }
 
 :host(.size-large) {
@@ -281,11 +287,11 @@
 }
 
 :host(.icon-only.size-small) .le-button-container {
-  padding: var(--le-button-small-padding, 0.25rem);
+  padding: var(--le-button-icon-only-padding, var(--le-button-small-padding, 0.25rem));
 }
 
 :host(.icon-only.size-large) .le-button-container {
-  padding: 0.75rem;
+  padding: var(--le-button-icon-only-padding, var(--le-button-large-padding, 0.75rem));
 }
 
 /* Hide content in icon-only mode */
@@ -313,6 +319,7 @@
   display: none;
   align-items: center;
   justify-content: center;
+  transform: scale(1.3);
 }
 
 .icon-start.is-visible,

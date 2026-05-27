@@ -84,6 +84,12 @@
     transform var(--le-button-transition),
     outline var(--le-button-transition),
     outline-offset var(--le-button-transition);
+
+  .icon-start,
+  .icon-only,
+  .icon-end {
+    --le-icon-color: var(--_btn-color);
+  }
 }
 
 .le-button-container:hover:not(:disabled) {
@@ -208,6 +214,12 @@
   background: transparent;
   color: var(--_btn-bg);
   border-color: transparent;
+
+  .icon-start,
+  .icon-only,
+  .icon-end {
+    --le-icon-color: var(--_btn-bg);
+  }
 }
 
 :host(.variant-clear) .le-button-container:hover:not(:disabled) {

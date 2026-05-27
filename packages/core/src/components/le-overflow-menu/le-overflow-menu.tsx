@@ -171,6 +171,7 @@ export class LeOverflowMenu {
       <le-navigation
         ref={el => (this.navigationEl = el)}
         orientation="vertical"
+        toggle-position="end"
         items={items}
         onLeNavItemSelect={this.handleNavigationSelect}
       />

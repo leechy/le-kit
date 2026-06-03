@@ -332,6 +332,20 @@ export namespace Components {
          */
         "align": 'start' | 'center' | 'space-between' | 'end';
         /**
+          * Runtime collapse state controlled by responsive containers.
+         */
+        "collapse"?: string;
+        /**
+          * Relative collapse priority offset for toolbar stepping. Higher numbers collapse earlier while keeping the button visible longer.
+          * @default 100
+         */
+        "collapsePriorityOffset": number;
+        /**
+          * Enables responsive collapse to icon-only when the toolbar applies `collapse="icon"`.
+          * @default false
+         */
+        "collapsible": boolean;
+        /**
           * Button color theme (uses theme semantic colors)
           * @allowedValues primary | secondary | success | warning | danger | info
          */
@@ -4326,6 +4340,20 @@ declare namespace LocalJSX {
          */
         "align"?: 'start' | 'center' | 'space-between' | 'end';
         /**
+          * Runtime collapse state controlled by responsive containers.
+         */
+        "collapse"?: string;
+        /**
+          * Relative collapse priority offset for toolbar stepping. Higher numbers collapse earlier while keeping the button visible longer.
+          * @default 100
+         */
+        "collapsePriorityOffset"?: number;
+        /**
+          * Enables responsive collapse to icon-only when the toolbar applies `collapse="icon"`.
+          * @default false
+         */
+        "collapsible"?: boolean;
+        /**
           * Button color theme (uses theme semantic colors)
           * @allowedValues primary | secondary | success | warning | danger | info
          */
@@ -6815,6 +6843,9 @@ declare namespace LocalJSX {
         "motionPreset": 'none' | 'soft' | 'fluid' | 'spring';
         "iconOnly": string | Node;
         "iconStart": string | Node;
+        "collapsible": boolean;
+        "collapse": string;
+        "collapsePriorityOffset": number;
         "iconEnd": string | Node;
         "disabled": boolean;
         "type": 'button' | 'submit' | 'reset';

@@ -86,6 +86,7 @@ Type: `Promise<void>`
 
 ### Depends on
 
+- [le-drag-handle](../le-drag-handle)
 - [le-button-group](../le-button-group)
 - [le-button](../le-button)
 - [le-icon](../le-icon)
@@ -94,6 +95,7 @@ Type: `Promise<void>`
 ### Graph
 ```mermaid
 graph TD;
+  le-preview-frame --> le-drag-handle
   le-preview-frame --> le-button-group
   le-preview-frame --> le-button
   le-preview-frame --> le-icon
@@ -108,6 +110,7 @@ graph TD;
   le-component --> le-popover
   le-component --> le-popup
   le-button --> le-icon
+  le-button --> le-visibility
   le-button --> le-slot
   le-button --> le-component
   le-button --> le-tooltip

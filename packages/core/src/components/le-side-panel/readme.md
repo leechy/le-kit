@@ -2,14 +2,15 @@
 
 <!-- Auto Generated Below -->
 
+
 ## Properties
 
 | Property           | Attribute             | Description                                                                                                                       | Type                            | Default        |
 | ------------------ | --------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | -------------- |
 | `autoHideOnNarrow` | `auto-hide-on-narrow` | When crossing to narrow mode, automatically hide the panel (open=false).                                                          | `boolean`                       | `true`         |
 | `autoShowOnWide`   | `auto-show-on-wide`   | When crossing to wide mode, automatically show the panel (collapsed=false).                                                       | `boolean`                       | `true`         |
-| `collapseAt`       | `collapse-at`         | Width breakpoint (in px or a CSS var like `--le-breakpoint-md`) below which the panel enters "narrow" mode.                       | `string \| undefined`           | `undefined`    |
 | `bottom`           | `bottom`              | Bottom offset for sticky full-height calculations.                                                                                | `"under-footer" \| number`      | `0`            |
+| `collapseAt`       | `collapse-at`         | Width breakpoint (in px or a CSS var like `--le-breakpoint-md`) below which the panel enters "narrow" mode.                       | `string \| undefined`           | `undefined`    |
 | `collapsed`        | `collapsed`           | Panel collapsed state for wide mode (fully hidden).                                                                               | `boolean`                       | `false`        |
 | `fullHeight`       | `full-height`         | Whether the sticky panel should stretch to full height.                                                                           | `boolean`                       | `false`        |
 | `margin`           | `margin`              | Optional panel margin override. Accepts CSS length (e.g. `16px`, `1rem`, `var(--space-4)`).                                       | `number \| string \| undefined` | `undefined`    |
@@ -28,6 +29,7 @@
 | `sticky`           | `sticky`              | Whether the panel is sticky (remains visible when scrolling).                                                                     | `boolean`                       | `false`        |
 | `top`              | `top`                 | Top offset for the sticky panel.                                                                                                  | `"under-header" \| number`      | `0`            |
 
+
 ## Events
 
 | Event                        | Description | Type                                                                  |
@@ -35,6 +37,7 @@
 | `leSidePanelCollapsedChange` |             | `CustomEvent<{ collapsed: boolean; panelId?: string \| undefined; }>` |
 | `leSidePanelOpenChange`      |             | `CustomEvent<{ open: boolean; panelId?: string \| undefined; }>`      |
 | `leSidePanelWidthChange`     |             | `CustomEvent<{ width: number; panelId?: string \| undefined; }>`      |
+
 
 ## Shadow Parts
 
@@ -49,21 +52,24 @@
 | `"resize-handle"`  |             |
 | `"scrim"`          |             |
 
+
 ## Dependencies
 
 ### Depends on
 
 - [le-side-panel-toggle](../le-side-panel-toggle)
 - [le-icon](../le-icon)
+- [le-drag-handle](../le-drag-handle)
 
 ### Graph
-
 ```mermaid
 graph TD;
   le-side-panel --> le-side-panel-toggle
   le-side-panel --> le-icon
+  le-side-panel --> le-drag-handle
   le-side-panel-toggle --> le-button
   le-button --> le-icon
+  le-button --> le-visibility
   le-button --> le-slot
   le-button --> le-component
   le-button --> le-tooltip
@@ -93,6 +99,6 @@ graph TD;
   style le-side-panel fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
----
+----------------------------------------------
 
-_Built with [StencilJS](https://stenciljs.com/)_
+*Built with [StencilJS](https://stenciljs.com/)*

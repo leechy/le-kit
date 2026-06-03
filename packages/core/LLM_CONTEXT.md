@@ -18,6 +18,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-combobox](#le-combobox)
 - [le-component](#le-component)
 - [le-current-heading](#le-current-heading)
+- [le-drag-handle](#le-drag-handle)
 - [le-dropdown-base](#le-dropdown-base)
 - [le-header](#le-header)
 - [le-header-placeholder](#le-header-placeholder)
@@ -268,6 +269,9 @@ A flexible button component with multiple variants and states.
 | `motionPreset` | `'none' \| 'soft' \| 'fluid' \| 'spring' \| undefined` |  | Optional per-instance motion preset override. |
 | `iconOnly` | `string \| Node \| undefined` |  | Icon only button image or emoji if this prop is set, the button will render only the icon slot |
 | `iconStart` | `string \| Node \| undefined` |  | Start icon image or emoji |
+| `collapsible` | `boolean` | `false` | Enables responsive collapse to icon-only when the toolbar applies `collapse="icon"`. |
+| `collapse` | `string \| undefined` |  | Runtime collapse state controlled by responsive containers. |
+| `collapsePriorityOffset` | `number` | `100` | Relative collapse priority offset for toolbar stepping. Higher numbers collapse earlier while keeping the button visible longer. |
 | `iconEnd` | `string \| Node \| undefined` |  | End icon image or emoji |
 | `disabled` | `boolean` | `false` | Whether the button is disabled |
 | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | The button type attribute |
@@ -592,6 +596,25 @@ When `selector` matches multiple elements, the title becomes the last element
 
 ---
 
+## <le-drag-handle>
+
+Reusable drag handle used by resizable components.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `orientation` | `LeDragHandleOrientation` | `'vertical'` | Handle orientation (vertical = width drag, horizontal = height drag). |
+| `placement` | `LeDragHandlePlacement` | `'end'` | Handle position on the owning edge. |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | Optional assistive text for screen readers. |
+
+---
+
 ## <le-dropdown-base>
 
 Internal dropdown base component that provides shared functionality
@@ -825,7 +848,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `emptyText` | `string` | `'No results found'` | Text shown when no items match the filter. |
 | `submenuSearchable` | `boolean` | `false` | Whether submenu popovers should include a filter input. |
 | `activationMode` | `LeNavigationActivationMode` | `'manual'` | Whether keyboard focus only highlights, or also activates immediately. |
-| `autoScroll` | `boolean` | `true` | Automatically scroll the active item into view when the active URL changes or on initial load.  - Initial load: instant (no animation) - Subsequent `activeUrl` changes: smooth  Only applies to `vertical` orientation. |
+| `autoScroll` | `boolean` | `false` | Automatically scroll the active item into view when the active URL changes or on initial load.  - Initial load: instant (no animation) - Subsequent `activeUrl` changes: smooth  Only applies to `vertical` orientation. |
 | `togglePosition` | `'start' \| 'end'` | `'start'` | Position of the toggle arrow for items with children: 'start' | 'end' |
 
 ### Events
@@ -1184,8 +1207,11 @@ A select dropdown component for single selection.
 | `collapseAt` | `string \| undefined` |  | Width breakpoint (in px or a CSS var like `--le-breakpoint-md`) below which the panel enters "narrow" mode. |
 | `narrowBehavior` | `LeSidePanelNarrowBehavior` | `'overlay'` | Behavior when in narrow mode. |
 | `sticky` | `boolean` | `false` | Whether the panel is sticky (remains visible when scrolling). |
+| `minPanelHeight` | `number` | `200` | Minimum panel height (px) when sticky full-height logic is active. |
 | `top` | `number \| 'under-header'` | `0` | Top offset for the sticky panel. |
+| `bottom` | `number \| 'under-footer'` | `0` | Bottom offset for sticky full-height calculations. |
 | `fullHeight` | `boolean` | `false` | Whether the sticky panel should stretch to full height. |
+| `margin` | `string \| number \| undefined` |  | Optional panel margin override. Accepts CSS length (e.g. `16px`, `1rem`, `var(--space-4)`). |
 | `open` | `boolean` | `false` | Panel open state for narrow mode. - overlay: controls modal drawer visibility - push: controls whether panel is shown (non-modal) |
 | `collapsed` | `boolean` | `false` | Panel collapsed state for wide mode (fully hidden). |
 | `panelWidth` | `number` | `280` | Default panel width in pixels. |

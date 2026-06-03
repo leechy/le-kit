@@ -2,6 +2,7 @@
 
 <!-- Auto Generated Below -->
 
+
 ## Overview
 
 Navigation component with vertical (tree) and horizontal (menu) layouts.
@@ -12,43 +13,54 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 
 ## Properties
 
-| Property                 | Attribute                    | Description                                                                                                                                                                                                            | Type                                              | Default              |
-| ------------------------ | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------- |
-| `activationMode`         | `activation-mode`            | Whether keyboard focus only highlights, or also activates immediately.                                                                                                                                                 | `"automatic" \| "manual"`                         | `'manual'`           |
-| `activeUrl`              | `active-url`                 | Active url for automatic selection.                                                                                                                                                                                    | `string`                                          | `''`                 |
-| `align`                  | `align`                      | Alignment of the menu items within the navigation bar.                                                                                                                                                                 | `"center" \| "end" \| "space-between" \| "start"` | `'start'`            |
-| `autoScroll`             | `auto-scroll`                | Automatically scroll the active item into view when the active URL changes or on initial load. - Initial load: instant (no animation) - Subsequent `activeUrl` changes: smooth Only applies to `vertical` orientation. | `boolean`                                         | `false`              |
-| `emptyText`              | `empty-text`                 | Text shown when no items match the filter.                                                                                                                                                                             | `string`                                          | `'No results found'` |
-| `items`                  | `items`                      | Navigation items. Can be passed as an array or JSON string (same pattern as le-select).                                                                                                                                | `LeOption[] \| string`                            | `[]`                 |
-| `minVisibleItemsForMore` | `min-visible-items-for-more` | Minimum number of visible top-level items required to use the "More" overflow. If fewer would be visible, the navigation falls back to hamburger.                                                                      | `number`                                          | `2`                  |
-| `orientation`            | `orientation`                | Layout orientation.                                                                                                                                                                                                    | `"horizontal" \| "vertical"`                      | `'horizontal'`       |
-| `overflowMode`           | `overflow-mode`              | Overflow behavior for horizontal, non-wrapping menus. - more: moves overflow items into a "More" popover - hamburger: turns the whole nav into a hamburger popover                                                     | `"hamburger" \| "more"`                           | `'more'`             |
-| `searchPlaceholder`      | `search-placeholder`         | Placeholder text for the search input.                                                                                                                                                                                 | `string`                                          | `'Search...'`        |
-| `searchable`             | `searchable`                 | Enables a search input for the vertical navigation.                                                                                                                                                                    | `boolean`                                         | `false`              |
-| `submenuSearchable`      | `submenu-searchable`         | Whether submenu popovers should include a filter input.                                                                                                                                                                | `boolean`                                         | `false`              |
-| `togglePosition`         | `toggle-position`            | Position of the toggle arrow for items with children: 'start' \| 'end'                                                                                                                                                 | `"end" \| "start"`                                | `'start'`            |
-| `wrap`                   | `wrap`                       | Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`.                                                                                                                                   | `boolean`                                         | `false`              |
+| Property                 | Attribute                    | Description                                                                                                                                                                                                              | Type                                              | Default              |
+| ------------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | -------------------- |
+| `activationMode`         | `activation-mode`            | Whether keyboard focus only highlights, or also activates immediately.                                                                                                                                                   | `"automatic" \| "manual"`                         | `'manual'`           |
+| `activeUrl`              | `active-url`                 | Active url for automatic selection.                                                                                                                                                                                      | `string`                                          | `''`                 |
+| `align`                  | `align`                      | Alignment of the menu items within the navigation bar.                                                                                                                                                                   | `"center" \| "end" \| "space-between" \| "start"` | `'start'`            |
+| `autoScroll`             | `auto-scroll`                | Automatically scroll the active item into view when the active URL changes or on initial load.  - Initial load: instant (no animation) - Subsequent `activeUrl` changes: smooth  Only applies to `vertical` orientation. | `boolean`                                         | `false`              |
+| `emptyText`              | `empty-text`                 | Text shown when no items match the filter.                                                                                                                                                                               | `string`                                          | `'No results found'` |
+| `items`                  | `items`                      | Navigation items. Can be passed as an array or JSON string (same pattern as le-select).                                                                                                                                  | `LeOption[] \| string`                            | `[]`                 |
+| `minVisibleItemsForMore` | `min-visible-items-for-more` | Minimum number of visible top-level items required to use the "More" overflow. If fewer would be visible, the navigation falls back to hamburger.                                                                        | `number`                                          | `2`                  |
+| `orientation`            | `orientation`                | Layout orientation.                                                                                                                                                                                                      | `"horizontal" \| "vertical"`                      | `'horizontal'`       |
+| `overflowMode`           | `overflow-mode`              | Overflow behavior for horizontal, non-wrapping menus. - more: moves overflow items into a "More" popover - hamburger: turns the whole nav into a hamburger popover                                                       | `"hamburger" \| "more"`                           | `'more'`             |
+| `searchPlaceholder`      | `search-placeholder`         | Placeholder text for the search input.                                                                                                                                                                                   | `string`                                          | `'Search...'`        |
+| `searchable`             | `searchable`                 | Enables a search input for the vertical navigation.                                                                                                                                                                      | `boolean`                                         | `false`              |
+| `submenuSearchable`      | `submenu-searchable`         | Whether submenu popovers should include a filter input.                                                                                                                                                                  | `boolean`                                         | `false`              |
+| `togglePosition`         | `toggle-position`            | Position of the toggle arrow for items with children: 'start' \| 'end'                                                                                                                                                   | `"end" \| "start"`                                | `'start'`            |
+| `wrap`                   | `wrap`                       | Horizontal wrapping behavior. If false, overflow behavior depends on `overflowMode`.                                                                                                                                     | `boolean`                                         | `false`              |
+
 
 ## Events
 
-| Event             | Description                                                                                                                                                            | Type                                        |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| `leNavItemSelect` | Fired when a navigation item is activated. This event is cancelable. Call `event.preventDefault()` to prevent default browser navigation and implement custom routing. | `CustomEvent<LeNavigationItemSelectDetail>` |
-| `leNavItemToggle` | Fired when a tree branch is toggled.                                                                                                                                   | `CustomEvent<LeNavigationItemToggleDetail>` |
+| Event             | Description                                                                                                                                                             | Type                                        |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `leNavItemSelect` | Fired when a navigation item is activated.  This event is cancelable. Call `event.preventDefault()` to prevent default browser navigation and implement custom routing. | `CustomEvent<LeNavigationItemSelectDetail>` |
+| `leNavItemToggle` | Fired when a tree branch is toggled.                                                                                                                                    | `CustomEvent<LeNavigationItemToggleDetail>` |
+
 
 ## Methods
 
 ### `focusActiveItem() => Promise<void>`
 
+
+
 #### Returns
 
 Type: `Promise<void>`
+
+
 
 ### `focusFirstItem() => Promise<void>`
 
+
+
 #### Returns
 
 Type: `Promise<void>`
+
+
+
 
 ## Slots
 
@@ -57,12 +69,13 @@ Type: `Promise<void>`
 | `"hamburger-trigger"` | Custom trigger contents for the hamburger button |
 | `"more-trigger"`      | Custom trigger contents for the "More" button    |
 
+
 ## Dependencies
 
 ### Used by
 
-- [le-breadcrumbs](../le-breadcrumbs)
-- [le-overflow-menu](../le-overflow-menu)
+ - [le-breadcrumbs](../le-breadcrumbs)
+ - [le-overflow-menu](../le-overflow-menu)
 
 ### Depends on
 
@@ -74,7 +87,6 @@ Type: `Promise<void>`
 - [le-component](../le-component)
 
 ### Graph
-
 ```mermaid
 graph TD;
   le-navigation --> le-string-input
@@ -94,6 +106,7 @@ graph TD;
   le-component --> le-popover
   le-component --> le-popup
   le-button --> le-icon
+  le-button --> le-visibility
   le-button --> le-slot
   le-button --> le-component
   le-button --> le-tooltip
@@ -118,6 +131,6 @@ graph TD;
   style le-navigation fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
----
+----------------------------------------------
 
-_Built with [StencilJS](https://stenciljs.com/)_
+*Built with [StencilJS](https://stenciljs.com/)*

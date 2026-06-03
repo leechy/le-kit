@@ -115,6 +115,7 @@ graph TD;
   le-slot --> le-button
   le-slot --> le-string-input
   le-button --> le-icon
+  le-button --> le-visibility
   le-button --> le-slot
   le-button --> le-component
   le-button --> le-tooltip

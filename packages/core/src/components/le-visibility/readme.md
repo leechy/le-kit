@@ -29,12 +29,14 @@ falls back to controlling the parent host element.
 
 ### Used by
 
+ - [le-button](../le-button)
  - [le-button-group](../le-button-group)
  - [le-toolbar](../le-toolbar)
 
 ### Graph
 ```mermaid
 graph TD;
+  le-button --> le-visibility
   le-button-group --> le-visibility
   le-toolbar --> le-visibility
   style le-visibility fill:#f9f,stroke:#333,stroke-width:4px

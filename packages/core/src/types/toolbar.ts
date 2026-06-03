@@ -9,6 +9,11 @@ export interface LeCollapseMeta {
   fixed?: boolean;
   /** For stepping/variable: supported collapse values (e.g., [3,2,1] for button-group stages) */
   collapseValues?: string[];
+  /**
+   * Optional relative priority offset for collapse stages.
+   * Positive values make collapse stages run earlier than full hide.
+   */
+  collapsePriorityOffset?: number;
   /** For variable: min/max width in px (optional) */
   minWidth?: number;
   maxWidth?: number;

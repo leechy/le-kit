@@ -46,7 +46,7 @@ interface ToolbarItemRecord {
   virtualWrapper?: HTMLElement;
   index: number;
   priority: number;
-  kind: 'item' | 'group' | 'spacer-flex' | 'spacer-fixed';
+  kind: 'item' | 'item-stepping' | 'group' | 'spacer-flex' | 'spacer-fixed';
   overflowOption?: LeOption;
   slotName: string;
 }
@@ -608,7 +608,7 @@ export class LeToolbar {
         const isFixedSpacer = collapseMeta.fixed ?? collapseMeta.minWidth !== undefined;
         kind = isFixedSpacer ? 'spacer-fixed' : 'spacer-flex';
       } else if (collapseMeta.kind === 'stepping') {
-        kind = 'group';
+        kind = item.tagName.toLowerCase() === 'le-button-group' ? 'group' : 'item-stepping';
       } else {
         kind = 'item';
       }
@@ -650,7 +650,9 @@ export class LeToolbar {
       }
 
       const overflowOption =
-        kind === 'item' || kind === 'group' ? await this.buildOverflowOption(item, id) : undefined;
+        kind === 'item' || kind === 'item-stepping' || kind === 'group'
+          ? await this.buildOverflowOption(item, id)
+          : undefined;
 
       const itemRecord: ToolbarItemRecord = {
         element: item,
@@ -666,11 +668,12 @@ export class LeToolbar {
 
       // Collapse step logic based on collapseMeta
       if (kind === 'group' && collapseMeta.kind === 'stepping' && collapseMeta.collapseValues) {
+        const collapseStagePriority = priority + (collapseMeta.collapsePriorityOffset ?? 0);
         collapseMeta.collapseValues.forEach((collapseValue, stage) => {
           this.collapseSteps.push({
             id: `${id}::collapse-${collapseValue}`,
             itemId: id,
-            priority,
+            priority: collapseStagePriority,
             index,
             stage,
             action: 'group-collapse',
@@ -706,6 +709,37 @@ export class LeToolbar {
           thresholdWidth: 0,
           resultingWidth: 0,
         });
+      } else if (
+        kind === 'item-stepping' &&
+        collapseMeta.kind === 'stepping' &&
+        collapseMeta.collapseValues
+      ) {
+        const collapseStagePriority = priority + (collapseMeta.collapsePriorityOffset ?? 0);
+        collapseMeta.collapseValues.forEach((collapseValue, stage) => {
+          this.collapseSteps.push({
+            id: `${id}::collapse-${collapseValue}`,
+            itemId: id,
+            priority: collapseStagePriority,
+            index,
+            stage,
+            action: 'group-collapse',
+            collapseValue,
+            thresholdWidth: 0,
+            resultingWidth: 0,
+          });
+        });
+
+        this.collapseSteps.push({
+          id: `${id}::hide`,
+          itemId: id,
+          priority,
+          index,
+          stage: collapseMeta.collapseValues.length,
+          action: 'hide-item',
+          overflowOption,
+          thresholdWidth: 0,
+          resultingWidth: 0,
+        });
       } else if (kind === 'item') {
         this.collapseSteps.push({
           id: `${id}::hide`,
@@ -734,6 +768,11 @@ export class LeToolbar {
     }
 
     this.collapseSteps.sort((a, b) => {
+      const aBucket = a.action === 'group-collapse' ? 0 : 1;
+      const bBucket = b.action === 'group-collapse' ? 0 : 1;
+
+      // First collapse participants (no overflow), then start hiding items.
+      if (aBucket !== bBucket) return aBucket - bBucket;
       if (a.priority !== b.priority) return b.priority - a.priority;
       if (a.index !== b.index) return b.index - a.index;
       return a.stage - b.stage;
@@ -876,7 +915,7 @@ export class LeToolbar {
     const hiddenIds = new Set<string>();
     const overflowIds = new Set<string>();
     const collapsedGroupIds = new Set<string>();
-    const groupCollapseValues = new Map<string, string>();
+    const steppingCollapseValues = new Map<string, string>();
     const hiddenGroupIds = new Set<string>();
     const overflowOptionMap = new Map<string, LeOption>();
 
@@ -902,8 +941,10 @@ export class LeToolbar {
         }
       } else if (step.action === 'group-collapse') {
         item.element.setAttribute('collapse', step.collapseValue || '1');
-        collapsedGroupIds.add(step.itemId);
-        groupCollapseValues.set(step.itemId, step.collapseValue || '1');
+        steppingCollapseValues.set(step.itemId, step.collapseValue || '1');
+        if (item.kind === 'group') {
+          collapsedGroupIds.add(step.itemId);
+        }
       } else if (step.action === 'hide-group') {
         item.element.setAttribute('collapse', 'collapse');
         visibleIds.delete(step.itemId);
@@ -911,7 +952,7 @@ export class LeToolbar {
         overflowIds.add(step.itemId);
         hiddenGroupIds.add(step.itemId);
         collapsedGroupIds.delete(step.itemId);
-        groupCollapseValues.delete(step.itemId);
+        steppingCollapseValues.delete(step.itemId);
         if (step.overflowOption) {
           overflowOptionMap.set(step.itemId, step.overflowOption);
         }
@@ -924,12 +965,13 @@ export class LeToolbar {
         item.element.setAttribute('visibility', desiredVisibility);
       }
 
-      // Only manage the collapse attribute for stepping-kind items (kind: 'group').
-      // For 'item' kind, the collapse attribute may be author-set and must not be touched.
-      if (item.kind === 'group') {
-        const desiredCollapse = hiddenGroupIds.has(id)
-          ? 'collapse'
-          : (groupCollapseValues.get(id) ?? undefined);
+      // Only manage runtime collapse for toolbar stepping participants.
+      // For plain 'item' kind, authored collapse values must remain untouched.
+      if (item.kind === 'group' || item.kind === 'item-stepping') {
+        const desiredCollapse =
+          item.kind === 'group' && hiddenGroupIds.has(id)
+            ? 'collapse'
+            : (steppingCollapseValues.get(id) ?? undefined);
         const currentCollapse = item.element.getAttribute('collapse') ?? undefined;
 
         if (desiredCollapse) {
@@ -942,7 +984,7 @@ export class LeToolbar {
       }
     }
 
-    void groupCollapseValues;
+    void steppingCollapseValues;
 
     // Keep le-button-group entries grouped in overflow: parent label + child items
     const overflowMenuItems: LeOption[] = [];

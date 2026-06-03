@@ -352,7 +352,8 @@ export class LeButton {
     const compactTooltipText = this.getResolvedLabel();
     const isCompactPresentation = hasIconOnly || isCollapsedToIcon;
     const tooltipText = this.tooltip || compactTooltipText || '';
-    const shouldRenderTooltip = !!this.tooltip || (!!compactTooltipText && (this.collapsible || hasIconOnly));
+    const shouldRenderTooltip =
+      !!this.tooltip || (!!compactTooltipText && (this.collapsible || hasIconOnly));
     const tooltipDisabled = !this.tooltip && !isCompactPresentation;
 
     const classes = classnames(
@@ -400,7 +401,9 @@ export class LeButton {
           <Fragment>
             <span class="le-button-label">
               <span
-                class={classnames('icon-start', { 'is-visible': hasIconStart || isCollapsedToIcon })}
+                class={classnames('icon-start', {
+                  'is-visible': hasIconStart || isCollapsedToIcon,
+                })}
                 part="icon-start"
               >
                 <slot name="icon-start">{this.iconStart}</slot>
@@ -409,12 +412,21 @@ export class LeButton {
                 class="le-button-label-visibility"
                 state={isCollapsedToIcon ? 'collapsed' : 'visible'}
               >
-                <le-slot name="" description="Button text" type="text" class="content" part="content">
+                <le-slot
+                  name=""
+                  description="Button text"
+                  type="text"
+                  class="content"
+                  part="content"
+                >
                   <slot></slot>
                 </le-slot>
               </le-visibility>
             </span>
-            <span class={classnames('icon-end', { 'is-visible': hasIconEnd && !isCollapsedToIcon })} part="icon-end">
+            <span
+              class={classnames('icon-end', { 'is-visible': hasIconEnd && !isCollapsedToIcon })}
+              part="icon-end"
+            >
               <slot name="icon-end">{this.iconEnd}</slot>
             </span>
           </Fragment>

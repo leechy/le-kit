@@ -74,16 +74,14 @@
   font-weight: var(--le-button-font-weight);
   line-height: var(--le-line-height-tight);
   text-decoration: none;
-  outline: 0 solid transparent;
-  outline-offset: 0;
   cursor: pointer;
   transition:
     background-color var(--le-button-transition),
     border-color var(--le-button-transition),
     box-shadow var(--le-button-transition),
     transform var(--le-button-transition),
-    outline var(--le-button-transition),
-    outline-offset var(--le-button-transition);
+    outline var(--le-control-focus-transition),
+    outline-offset var(--le-control-focus-transition);
 
   .icon-start,
   .icon-only,
@@ -99,11 +97,6 @@
 
 .le-button-container:active:not(:disabled) {
   box-shadow: inset 0 0 5px color-mix(in srgb, var(--_btn-bg) 50%, transparent);
-}
-
-.le-button-container:focus-visible {
-  outline: var(--le-input-border-focus);
-  outline-offset: var(--le-input-border-focus-offset, var(--le-focus-ring-offset, 2px));
 }
 
 .le-button-container:disabled {

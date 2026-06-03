@@ -91,9 +91,11 @@
   --le-color-border-input: #c4d6e6;
   
   /* Focus ring */
-  --le-color-focus: rgba(0, 136, 255, 0.15);
+  --le-color-focus: #0088ff80;
+  --le-input-focus-ring-initial: 6px solid transparent;
   --le-input-border-focus: 2px solid var(--le-color-focus);
-  --le-input-border-focus-offset: 2px;
+  --le-input-border-focus-offset: -1px;
+  --le-control-focus-transition: var(--le-transition-normal) var(--le-transition-easing, ease-in-out);
   
   /* Border radius */
   --le-radius-none: 0;
@@ -139,8 +141,8 @@
   --le-border-color-input: var(--le-color-border-input);
 
   --le-color-focus-ring: var(--le-color-focus);
-  --le-focus-ring-width: 2px;
-  --le-focus-ring-offset: 2px;
+  --le-focus-ring-width: 3px;
+  --le-focus-ring-offset: 0px;
 
   --le-state-disabled-opacity: 0.6;
   --le-state-hover-overlay: rgba(0, 0, 0, 0.05);
@@ -150,4 +152,17 @@
   --le-context-inactive-emphasis: 0.72;
   --le-control-group-inactive-opacity: 0.72;
   --le-context-selected-filter-inactive: saturate(0.55) brightness(0.92);
+}
+
+.le-control-focus {
+  outline: 6px solid transparent;
+  outline-offset: 0px;
+  transition:
+    outline var(--le-control-focus-transition) outline-offset var(--le-control-focus-transition),
+    outline-offset var(--le-control-focus-transition) outline-offset var(--le-control-focus-transition);
+
+  &:focus-visible {
+    outline: 2px solid var(--le-color-focus);
+    outline-offset: -1px;
+  }
 }

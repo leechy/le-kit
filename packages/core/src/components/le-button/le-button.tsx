@@ -332,7 +332,11 @@ export class LeButton {
 
     const renderButton = () => (
       <TagType
-        class={classnames('le-button-container', `le-button-align-${this.align}`)}
+        class={classnames(
+          'le-button-container',
+          'le-control-focus',
+          `le-button-align-${this.align}`,
+        )}
         part="button"
         {...attrs}
         onClick={this.handleClick}

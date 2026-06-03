@@ -21,11 +21,11 @@ import CodeBlock from "../../components/CodeBlock.astro";
       handles="left,right"
     >
       <le-toolbar>
-        <le-button priority="3">
+        <le-button priority="3" collapsible>
           <le-icon name="new" slot="icon-start" size="18"></le-icon>
           New
         </le-button>
-        <le-button priority="3">
+        <le-button priority="3" collapsible>
           <le-icon name="open" slot="icon-start" size="18"></le-icon>
           Open
         </le-button>
@@ -61,7 +61,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
 
         <le-toolbar-spacer></le-toolbar-spacer>
 
-        <le-button color="danger">
+        <le-button color="danger" collapsible>
           <le-icon name="delete" slot="icon-start" size="20"></le-icon>
           Delete
         </le-button>
@@ -72,11 +72,11 @@ import CodeBlock from "../../components/CodeBlock.astro";
     language="html"
     code={`
 <le-toolbar>
-  <le-button priority="3">
+  <le-button priority="3" collapsible>
     <le-icon name="new" slot="icon-start" size="18"></le-icon>
     New
   </le-button>
-  <le-button priority="3">
+  <le-button priority="3" collapsible>
     <le-icon name="open" slot="icon-start" size="18"></le-icon>
     Open
   </le-button>
@@ -112,7 +112,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
 
   <le-toolbar-spacer></le-toolbar-spacer>
 
-  <le-button color="danger">
+  <le-button color="danger" collapsible>
     <le-icon name="delete" slot="icon-start" size="20"></le-icon>
     Delete
   </le-button>
@@ -189,11 +189,11 @@ import CodeBlock from "../../components/CodeBlock.astro";
         debug-pause-before-measure
         id="demo-toolbar-debug"
       >
-        <le-button priority="3">
+        <le-button priority="3" collapsible>
           <le-icon name="new" slot="icon-start" size="18"></le-icon>
           New
         </le-button>
-        <le-button priority="3">
+        <le-button priority="3" collapsible>
           <le-icon name="open" slot="icon-start" size="18"></le-icon>
           Open
         </le-button>
@@ -229,7 +229,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
 
         <le-toolbar-spacer></le-toolbar-spacer>
 
-        <le-button color="danger">
+        <le-button color="danger" collapsible>
           <le-icon name="delete" slot="icon-start" size="20"></le-icon>
           Delete
         </le-button>

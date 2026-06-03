@@ -378,7 +378,10 @@
             onLeToolbarOverflowChange="onToolbarOverflow(event)"
           >
             <!-- Lower priority number = higher importance = last to overflow -->
-            <le-button priority="10" variant="solid" color="primary" label="Save" onclick="alert('Save')">Save</le-button>
+            <le-button priority="10" variant="solid" color="primary" collapsible>
+              <le-icon slot="icon-start" name="save"></le-icon>
+              Save
+            </le-button>
 
             <le-toolbar-spacer width="5rem" priority="1000"></le-toolbar-spacer>
 
@@ -404,12 +407,15 @@
 
             <le-button variant="clear" label="Share" onclick="alert('Share')">Share</le-button>
             <le-button variant="clear" label="Duplicate" onclick="alert('Duplicate')">Duplicate</le-button>
-            <le-button priority="50" variant="clear" color="danger" label="Delete" onclick="alert('Delete')">Delete</le-button>
+            <le-button color="danger" collapsible priority="50">
+              <le-icon name="delete" slot="icon-start" size="20"></le-icon>
+              Delete
+            </le-button>
 
             <le-toolbar-spacer></le-toolbar-spacer>
 
             <!-- A collapsible button group — collapses internally first -->
-            <le-button-group label="Text Align">
+            <le-button-group label="Text Align" priority="150">
               <le-button label="Align Left" icon-only="align-left"></le-button>
               <le-button label="Align Center" icon-only="align-center"></le-button>
               <le-button label="Align Right" icon-only="align-right"></le-button>

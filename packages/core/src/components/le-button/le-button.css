@@ -291,6 +291,13 @@
   aspect-ratio: var(--le-button-icon-aspect-ratio, 1);
 }
 
+:host(.is-collapsed-icon) .le-button-container {
+  gap: 0;
+  /* Keep vertical rhythm unchanged while shrinking horizontal footprint. */
+  padding-block: var(--le-button-padding-y);
+  padding-inline: var(--le-button-collapsed-icon-padding-x, var(--le-button-padding-y));
+}
+
 :host(.icon-only.size-small) .le-button-container {
   padding: var(--le-button-icon-only-padding, var(--le-button-small-padding, 0.25rem));
 }
@@ -302,6 +309,20 @@
 /* Hide content in icon-only mode */
 :host(.icon-only) .content {
   display: none;
+}
+
+:host(.is-collapsed-icon) .le-button-label {
+  gap: 0;
+}
+
+/* Make label collapse feel as snappy as toolbar item collapse. */
+.le-button-label-visibility {
+  --le-motion-visibility-duration: var(--le-transition-fast);
+  --le-motion-visibility-easing: var(--le-transition-easing, ease-in-out);
+  --le-motion-visibility-scale-from: 1;
+  --le-motion-visibility-opacity-from: 1;
+  --le-motion-visibility-blur-from: 0px;
+  --le-motion-visibility-translate-y-from: 0px;
 }
 
 /* ===========================================

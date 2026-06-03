@@ -3,10 +3,6 @@
   position: relative;
 }
 
-:host([disabled]) {
-  pointer-events: none;
-}
-
 .le-tooltip-trigger {
   display: inline-flex;
   width: fit-content;

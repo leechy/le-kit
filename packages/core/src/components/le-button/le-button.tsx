@@ -137,6 +137,23 @@ export class LeButton {
   @Prop() iconStart?: string | Node;
 
   /**
+   * Enables responsive collapse to icon-only when the toolbar applies
+   * `collapse="icon"`.
+   */
+  @Prop({ reflect: true }) collapsible: boolean = false;
+
+  /**
+   * Runtime collapse state controlled by responsive containers.
+   */
+  @Prop({ reflect: true }) collapse?: string;
+
+  /**
+   * Relative collapse priority offset for toolbar stepping.
+   * Higher numbers collapse earlier while keeping the button visible longer.
+   */
+  @Prop() collapsePriorityOffset: number = 100;
+
+  /**
    * End icon image or emoji
    */
   @Prop() iconEnd?: string | Node;
@@ -191,6 +208,18 @@ export class LeButton {
    */
   @Method()
   async getCollapseMeta(): Promise<LeCollapseMeta> {
+    const hasIconOnly = this.iconOnly !== undefined || this.hasIconOnlySlot;
+    const hasIconStart = this.iconStart !== undefined || this.hasIconStartSlot;
+
+    if (this.collapsible && hasIconStart && !hasIconOnly) {
+      return {
+        kind: 'stepping',
+        collapseValues: ['icon'],
+        collapsePriorityOffset: this.collapsePriorityOffset,
+        managesVisibility: true,
+      };
+    }
+
     return {
       kind: 'item',
       managesVisibility: true,
@@ -233,22 +262,7 @@ export class LeButton {
 
   @Method()
   async getOption(): Promise<LeOption> {
-    const textLabel = Array.from(this.el.childNodes)
-      .filter(node => {
-        if (!(node instanceof HTMLElement)) return true;
-        const slotName = node.getAttribute('slot');
-        return !slotName;
-      })
-      .map(node => node.textContent || '')
-      .join('')
-      .trim();
-
-    const label =
-      textLabel ||
-      this.el.getAttribute('label') ||
-      this.el.getAttribute('aria-label') ||
-      this.el.textContent?.trim() ||
-      '';
+    const label = this.getResolvedLabel() || '';
     const id = this.el.id || undefined;
 
     // Build iconStart: explicit prop → icon-start slot → icon-only slot
@@ -308,10 +322,38 @@ export class LeButton {
     };
   }
 
+  private getResolvedLabel(): string | undefined {
+    const textLabel = Array.from(this.el.childNodes)
+      .filter(node => {
+        if (!(node instanceof HTMLElement)) return true;
+        const slotName = node.getAttribute('slot');
+        return !slotName;
+      })
+      .map(node => node.textContent || '')
+      .join('')
+      .trim();
+
+    return (
+      this.label ||
+      textLabel ||
+      this.el.getAttribute('label') ||
+      this.el.getAttribute('aria-label') ||
+      this.el.textContent?.trim() ||
+      undefined
+    );
+  }
+
   render() {
     const hasIconOnly = this.iconOnly !== undefined || this.hasIconOnlySlot;
     const hasIconStart = this.iconStart !== undefined || this.hasIconStartSlot;
     const hasIconEnd = this.iconEnd !== undefined || this.hasIconEndSlot;
+    const isCollapsedToIcon =
+      this.collapsible && this.collapse === 'icon' && hasIconStart && !hasIconOnly;
+    const compactTooltipText = this.getResolvedLabel();
+    const isCompactPresentation = hasIconOnly || isCollapsedToIcon;
+    const tooltipText = this.tooltip || compactTooltipText || '';
+    const shouldRenderTooltip = !!this.tooltip || (!!compactTooltipText && (this.collapsible || hasIconOnly));
+    const tooltipDisabled = !this.tooltip && !isCompactPresentation;
 
     const classes = classnames(
       `variant-${this.variant}`,
@@ -321,6 +363,7 @@ export class LeButton {
         'selected': this.selected,
         'full-width': this.fullWidth,
         'icon-only': hasIconOnly,
+        'is-collapsed-icon': isCollapsedToIcon,
         'disabled': this.disabled,
       },
     );
@@ -357,16 +400,21 @@ export class LeButton {
           <Fragment>
             <span class="le-button-label">
               <span
-                class={classnames('icon-start', { 'is-visible': hasIconStart })}
+                class={classnames('icon-start', { 'is-visible': hasIconStart || isCollapsedToIcon })}
                 part="icon-start"
               >
                 <slot name="icon-start">{this.iconStart}</slot>
               </span>
-              <le-slot name="" description="Button text" type="text" class="content" part="content">
-                <slot></slot>
-              </le-slot>
+              <le-visibility
+                class="le-button-label-visibility"
+                state={isCollapsedToIcon ? 'collapsed' : 'visible'}
+              >
+                <le-slot name="" description="Button text" type="text" class="content" part="content">
+                  <slot></slot>
+                </le-slot>
+              </le-visibility>
             </span>
-            <span class={classnames('icon-end', { 'is-visible': hasIconEnd })} part="icon-end">
+            <span class={classnames('icon-end', { 'is-visible': hasIconEnd && !isCollapsedToIcon })} part="icon-end">
               <slot name="icon-end">{this.iconEnd}</slot>
             </span>
           </Fragment>
@@ -377,12 +425,12 @@ export class LeButton {
     return (
       <Host class={classes}>
         <le-component component="le-button">
-          {this.tooltip ? (
-            <le-tooltip text={this.tooltip} placement={this.tooltipPosition}>
-              {renderButton()}
-            </le-tooltip>
-          ) : hasIconOnly && this.label ? (
-            <le-tooltip text={this.label} placement={this.tooltipPosition}>
+          {shouldRenderTooltip ? (
+            <le-tooltip
+              text={tooltipText}
+              placement={this.tooltipPosition}
+              disabled={tooltipDisabled}
+            >
               {renderButton()}
             </le-tooltip>
           ) : (

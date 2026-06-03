@@ -7,6 +7,7 @@ import {
   Method,
   Prop,
   State,
+  Watch,
   h,
 } from '@stencil/core';
 import { classnames, observeNamedSlotPresence, slotHasContent } from '../../utils/utils';
@@ -135,6 +136,13 @@ export class LeTooltip {
     this.removeScrollListeners();
     this.removeDismissListeners();
     this.clearTimers();
+  }
+
+  @Watch('disabled')
+  handleDisabledChange(nextDisabled: boolean) {
+    if (nextDisabled) {
+      this.hide();
+    }
   }
 
   /**

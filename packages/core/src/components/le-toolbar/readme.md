@@ -104,8 +104,8 @@ graph TD;
   le-overflow-menu --> le-popover
   le-overflow-menu --> le-button
   le-overflow-menu --> le-icon
-  le-navigation --> le-string-input
   le-navigation --> le-icon
+  le-navigation --> le-string-input
   le-navigation --> le-collapse
   le-navigation --> le-popover
   le-navigation --> le-bar

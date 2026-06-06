@@ -17,6 +17,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-collapse](#le-collapse)
 - [le-combobox](#le-combobox)
 - [le-component](#le-component)
+- [le-context-menu](#le-context-menu)
 - [le-current-heading](#le-current-heading)
 - [le-drag-handle](#le-drag-handle)
 - [le-dropdown-base](#le-dropdown-base)
@@ -571,6 +572,39 @@ render() {
 | Name | Description |
 |------|-------------|
 | Default | The component's rendered content |
+
+---
+
+## <le-context-menu>
+
+Context menu component that displays a vertical navigation menu
+when the user right-clicks or long-presses on its children.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `open` | `boolean` | `false` | Whether the context menu is open. |
+| `disabled` | `boolean` | `false` | Disables right-click and touch interactions. |
+| `items` | `LeOption[] \| string` | `[]` | List of menu items represented as options. |
+| `backdrop` | `boolean` | `false` | Whether to show a backdrop behind the menu, lifting the active item. |
+| `pageScrollBehavior` | `'blocked' \| 'menu-close' \| 'fixed-menu'` | `'fixed-menu'` | Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll - 'fixed-menu': menu scrolls with the page (default) |
+| `position` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'mouse'` | `'mouse'` | Position of the menu relative to the trigger. If 'mouse', positions next to mouse/touch coords. |
+| `align` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment of the menu relative to the trigger. |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leContextMenuSelect` | `EventEmitter<LeContextMenuSelectDetail>` | Emitted when a menu item is selected. |
+| `leContextMenuClose` | `EventEmitter<void>` | Emitted when the context menu is closed. |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | Trigger content |
 
 ---
 

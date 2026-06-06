@@ -67,8 +67,8 @@ graph TD;
   le-popup --> le-button
   le-popup --> le-component
   le-tooltip --> le-component
-  le-navigation --> le-string-input
   le-navigation --> le-icon
+  le-navigation --> le-string-input
   le-navigation --> le-collapse
   le-navigation --> le-popover
   le-navigation --> le-bar

@@ -84,7 +84,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--le-spacing-1);
+  gap: var(--le-items-gap, var(--le-spacing-1));
 }
 
 .nav-row {
@@ -468,4 +468,21 @@
 /* Popover list container */
 le-popover::part(content) {
   padding: var(--le-spacing-1);
+}
+
+.nav-check-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+
+.nav-check-spacer {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
 }

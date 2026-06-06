@@ -209,7 +209,7 @@ export class LeNavigation {
   private pendingInitialScrollFrame?: number;
 
   private renderLabel(label: string | HTMLCollection) {
-    if (label instanceof HTMLCollection) {
+    if (typeof HTMLCollection !== 'undefined' && label instanceof HTMLCollection) {
       const div = document.createElement('div');
       Array.from(label).forEach(n => div.appendChild(n.cloneNode(true)));
       label = div.innerHTML;
@@ -221,8 +221,12 @@ export class LeNavigation {
   }
 
   private renderIcon(icon: string) {
+    console.log('Rendering icon:', icon);
     if (icon.includes('<')) {
       return <span class="nav-icon-inner" innerHTML={icon}></span>;
+    }
+    if (icon.length > 3) {
+      return <le-icon name={icon}></le-icon>;
     }
     return icon;
   }
@@ -1150,6 +1154,7 @@ export class LeNavigation {
     const filtered = query ? this.filterTree(items, query, pathPrefix, openFromSearch) : items;
     const ancestorLeadingSlots = leadingToggleAncestors ?? 0;
     const levelHasChildren = filtered.some(item => this.getChildItems(item).length > 0);
+    const hasCheckableItems = filtered.some(item => item.checked !== undefined);
     const topLevelEndToggles = depth === 0 && this.togglePosition === 'end';
     const useLeadingToggleSlot = !topLevelEndToggles && levelHasChildren;
     const firstEnabledId = filtered.find(item => !item.disabled)
@@ -1275,6 +1280,12 @@ export class LeNavigation {
                     {useLeadingToggleSlot && !hasChildren && (
                       <span class="nav-toggle-spacer" aria-hidden="true" />
                     )}
+                    {hasCheckableItems &&
+                      (item.checked ? (
+                        <le-icon name="check" class="nav-check-icon" aria-hidden="true" />
+                      ) : (
+                        <span class="nav-check-spacer" aria-hidden="true" />
+                      ))}
                     {item.iconStart && (
                       <span class="nav-icon" aria-hidden="true">
                         {this.renderIcon(item.iconStart)}
@@ -1344,6 +1355,7 @@ export class LeNavigation {
     const id = this.getItemId(item, String(index));
     const children = this.getChildItems(item);
     const hasChildren = children.length > 0;
+    const hasCheckableItems = this.parsedItems.some(opt => opt.checked !== undefined);
     const selected = this.isItemSelected(item);
     const itemPart = this.partFromOptionPart('item', item.part, {
       selected,
@@ -1390,6 +1402,12 @@ export class LeNavigation {
             onFocus={() => this.handleInteractiveFocus(id)}
             onClick={(e: MouseEvent) => this.handleItemSelect(e, item, id)}
           >
+            {hasCheckableItems &&
+              (item.checked ? (
+                <le-icon name="check" class="nav-check-icon" aria-hidden="true" />
+              ) : (
+                <span class="nav-check-spacer" aria-hidden="true" />
+              ))}
             {item.iconStart && (
               <span class="nav-icon" aria-hidden="true">
                 {this.renderIcon(item.iconStart)}
@@ -1480,6 +1498,12 @@ export class LeNavigation {
                   }
                 }}
               >
+                {hasCheckableItems &&
+                  (item.checked ? (
+                    <le-icon name="check" class="nav-check-icon" aria-hidden="true" />
+                  ) : (
+                    <span class="nav-check-spacer" aria-hidden="true" />
+                  ))}
                 {item.iconStart && (
                   <span class="nav-icon" aria-hidden="true">
                     {this.renderIcon(item.iconStart)}
@@ -1531,6 +1555,12 @@ export class LeNavigation {
                   }
                 }}
               >
+                {hasCheckableItems &&
+                  (item.checked ? (
+                    <le-icon name="check" class="nav-check-icon" aria-hidden="true" />
+                  ) : (
+                    <span class="nav-check-spacer" aria-hidden="true" />
+                  ))}
                 {item.iconStart && (
                   <span class="nav-icon" aria-hidden="true">
                     {this.renderIcon(item.iconStart)}

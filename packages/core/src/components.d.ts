@@ -815,8 +815,8 @@ export namespace Components {
          */
         "open": boolean;
         /**
-          * Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll - 'fixed-menu': menu scrolls with the page (default)
-          * @default 'fixed-menu'
+          * Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll (default) - 'fixed-menu': menu scrolls with the page
+          * @default 'menu-close'
          */
         "pageScrollBehavior": 'blocked' | 'menu-close' | 'fixed-menu';
         /**
@@ -4922,8 +4922,8 @@ declare namespace LocalJSX {
          */
         "open"?: boolean;
         /**
-          * Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll - 'fixed-menu': menu scrolls with the page (default)
-          * @default 'fixed-menu'
+          * Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll (default) - 'fixed-menu': menu scrolls with the page
+          * @default 'menu-close'
          */
         "pageScrollBehavior"?: 'blocked' | 'menu-close' | 'fixed-menu';
         /**

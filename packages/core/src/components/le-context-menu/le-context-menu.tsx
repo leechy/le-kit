@@ -12,6 +12,7 @@ import {
 } from '@stencil/core';
 import type { LeOption } from '../../types/options';
 import { parseOptionInput } from '../../utils/utils';
+import { LONG_PRESS_DURATION, LONG_PRESS_MOVE_THRESHOLD } from '../../utils/constants';
 import type { LeNavigationItemSelectDetail } from '../le-navigation/le-navigation';
 
 export interface LeContextMenuSelectDetail {
@@ -43,8 +44,6 @@ export class LeContextMenu {
   private startX = 0;
   private startY = 0;
   private isLongPressActive = false;
-  private readonly LONG_PRESS_DURATION = 500; // ms
-  private readonly MOVE_THRESHOLD = 10; // px
 
   private initialTriggerRect?: DOMRect;
   private initialCoords = { x: 0, y: 0 };
@@ -73,10 +72,10 @@ export class LeContextMenu {
   /**
    * Behavior of the menu on page scroll:
    * - 'blocked': blocks page scroll
-   * - 'menu-close': closes the menu automatically on scroll
-   * - 'fixed-menu': menu scrolls with the page (default)
+   * - 'menu-close': closes the menu automatically on scroll (default)
+   * - 'fixed-menu': menu scrolls with the page
    */
-  @Prop() pageScrollBehavior: 'blocked' | 'menu-close' | 'fixed-menu' = 'fixed-menu';
+  @Prop() pageScrollBehavior: 'blocked' | 'menu-close' | 'fixed-menu' = 'menu-close';
 
   /**
    * Position of the menu relative to the trigger.
@@ -298,7 +297,7 @@ export class LeContextMenu {
     this.touchTimeout = setTimeout(() => {
       this.isLongPressActive = true;
       this.triggerMenu(touch.clientX, touch.clientY, e);
-    }, this.LONG_PRESS_DURATION);
+    }, LONG_PRESS_DURATION);
   };
 
   private handleTouchMove = (e: TouchEvent) => {
@@ -307,7 +306,7 @@ export class LeContextMenu {
     const dx = touch.clientX - this.startX;
     const dy = touch.clientY - this.startY;
 
-    if (Math.hypot(dx, dy) > this.MOVE_THRESHOLD) {
+    if (Math.hypot(dx, dy) > LONG_PRESS_MOVE_THRESHOLD) {
       this.clearTouchTimeout();
     }
   };
@@ -408,7 +407,7 @@ export class LeContextMenu {
 
         {this.backdrop && (
           <div
-            class="le-context-menu-backdrop"
+            class="le-context-menu-backdrop le-backdrop-background"
             onClick={() => this.hide()}
           />
         )}

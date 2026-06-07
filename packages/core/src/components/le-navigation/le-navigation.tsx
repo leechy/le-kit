@@ -221,7 +221,6 @@ export class LeNavigation {
   }
 
   private renderIcon(icon: string) {
-    console.log('Rendering icon:', icon);
     if (icon.includes('<')) {
       return <span class="nav-icon-inner" innerHTML={icon}></span>;
     }

@@ -23,6 +23,13 @@
   pointer-events: auto;
 }
 
+/* Shared backdrop style for Shadow DOM */
+.le-backdrop-background {
+  background: var(--le-color-backdrop, rgba(0, 0, 0, 0.5));
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
 :host([has-backdrop]) ::slotted(.le-context-menu-active-item) {
   position: relative !important;
   z-index: 9995 !important;

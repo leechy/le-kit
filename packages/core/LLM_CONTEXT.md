@@ -589,7 +589,7 @@ when the user right-clicks or long-presses on its children.
 | `disabled` | `boolean` | `false` | Disables right-click and touch interactions. |
 | `items` | `LeOption[] \| string` | `[]` | List of menu items represented as options. |
 | `backdrop` | `boolean` | `false` | Whether to show a backdrop behind the menu, lifting the active item. |
-| `pageScrollBehavior` | `'blocked' \| 'menu-close' \| 'fixed-menu'` | `'fixed-menu'` | Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll - 'fixed-menu': menu scrolls with the page (default) |
+| `pageScrollBehavior` | `'blocked' \| 'menu-close' \| 'fixed-menu'` | `'menu-close'` | Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll (default) - 'fixed-menu': menu scrolls with the page |
 | `position` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'mouse'` | `'mouse'` | Position of the menu relative to the trigger. If 'mouse', positions next to mouse/touch coords. |
 | `align` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment of the menu relative to the trigger. |
 

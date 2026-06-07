@@ -23,7 +23,7 @@ describe('le-context-menu', () => {
     const host = page.root as any;
     expect(host).not.toBeNull();
     expect(host.backdrop).toBe(false);
-    expect(host.pageScrollBehavior).toBe('fixed-menu');
+    expect(host.pageScrollBehavior).toBe('menu-close');
     expect(host.position).toBe('mouse');
     expect(host.align).toBe('start');
 

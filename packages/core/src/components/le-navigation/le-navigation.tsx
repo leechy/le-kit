@@ -191,6 +191,8 @@ export class LeNavigation {
   /** ID of the currently focused navigation item */
   @State() private focusedItemId?: string;
   @State() private openSubmenuId?: string;
+  @State() private showFocusRing: boolean = false;
+  @State() private visualFocusActive: boolean = false;
 
   /** Position of the toggle arrow for items with children: 'start' | 'end' */
   @Prop({ reflect: true }) togglePosition: 'start' | 'end' = 'start';
@@ -275,6 +277,8 @@ export class LeNavigation {
     this.hamburgerActive = false;
     this.focusedItemId = undefined;
     this.openSubmenuId = undefined;
+    this.showFocusRing = false;
+    this.visualFocusActive = false;
   }
 
   @Watch('activeUrl')
@@ -621,7 +625,10 @@ export class LeNavigation {
   }
 
   private isElementVisible(element: HTMLElement): boolean {
-    return element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden';
+    return (
+      (typeof element.getClientRects === 'function' ? element.getClientRects().length > 0 : true) &&
+      getComputedStyle(element).visibility !== 'hidden'
+    );
   }
 
   private isElementDisabled(element: HTMLElement): boolean {
@@ -914,6 +921,36 @@ export class LeNavigation {
     this.focusedItemId = id;
   };
 
+  private handleMouseEnterItem(id: string) {
+    const item = this.getRenderedNavItemById(id);
+    if (!item || item.disabled) return;
+    this.showFocusRing = false;
+    this.visualFocusActive = true;
+    this.setFocusedItem(id, true, false);
+  }
+
+  private containsElement(container: HTMLElement, node: Node | null): boolean {
+    let current = node;
+    while (current) {
+      if (current === container) return true;
+      if (current instanceof ShadowRoot) {
+        current = current.host;
+      } else {
+        current = current.parentNode || (current.getRootNode?.() as ShadowRoot)?.host || null;
+      }
+    }
+    return false;
+  }
+
+  @Listen('focusout')
+  handleFocusOut(event: FocusEvent) {
+    const relatedTarget = event.relatedTarget as Node | null;
+    if (!relatedTarget || !this.containsElement(this.el, relatedTarget)) {
+      this.showFocusRing = false;
+      this.visualFocusActive = false;
+    }
+  }
+
   private isEditableTarget(target: EventTarget | null): boolean {
     if (!(target instanceof globalThis.Element)) return false;
     return !!target.closest('input, textarea, [contenteditable="true"]');
@@ -923,6 +960,44 @@ export class LeNavigation {
   handleKeyDown(event: KeyboardEvent) {
     if (this.isEditableTarget(event.target)) {
       return;
+    }
+
+    const isNavKey = [
+      'ArrowDown',
+      'ArrowUp',
+      'ArrowLeft',
+      'ArrowRight',
+      'Home',
+      'End',
+    ].includes(event.key);
+
+    if (isNavKey) {
+      if (!this.visualFocusActive) {
+        event.preventDefault();
+        this.visualFocusActive = true;
+        this.showFocusRing = true;
+
+        const currentId = this.focusedItemId ?? this.getFirstVisibleItemId();
+        let startItem: RenderedNavItem | undefined;
+
+        if (currentId) {
+          const currentItemData = this.getRenderedNavItemById(currentId);
+          if (currentItemData) {
+            const group = this.getLinearGroupForItem(currentItemData);
+            if (event.key === 'ArrowUp') {
+              startItem = this.getLastEnabledElement(group);
+            } else {
+              startItem = this.getFirstEnabledElement(group);
+            }
+          }
+        }
+
+        if (startItem?.id) {
+          this.setFocusedItem(startItem.id, true, false);
+        }
+        return;
+      }
+      this.showFocusRing = true;
     }
 
     const interactiveTarget = event.composedPath().find(target => {
@@ -1225,12 +1300,13 @@ export class LeNavigation {
                       'nav-item',
                       {
                         'disabled': item.disabled,
-                        'focused': isFocused,
+                        'focused': isFocused && this.showFocusRing,
                         'has-children': hasChildren,
                         'selected': selected,
                       },
                       item.className,
                     )}
+                    onMouseEnter={() => this.handleMouseEnterItem(id)}
                     part={itemPart}
                     data-nav-id={id}
                     data-parent-id={parentId ?? ''}
@@ -1381,12 +1457,13 @@ export class LeNavigation {
               'h-link',
               {
                 disabled: item.disabled,
-                focused: isFocused,
+                focused: isFocused && this.showFocusRing,
                 selected,
                 [`color-${item.color}`]: !!item.color,
               },
               item.className,
             )}
+            onMouseEnter={() => this.handleMouseEnterItem(id)}
             part={itemPart}
             {...attrs}
             data-nav-id={id}
@@ -1460,12 +1537,13 @@ export class LeNavigation {
                   'h-link',
                   {
                     disabled: item.disabled,
-                    focused: isFocused,
+                    focused: isFocused && this.showFocusRing,
                     selected,
                     [`color-${item.color}`]: !!item.color,
                   },
                   item.className,
                 )}
+                onMouseEnter={() => this.handleMouseEnterItem(id)}
                 part={itemPart}
                 role="menuitem"
                 data-nav-id={id}
@@ -1520,12 +1598,13 @@ export class LeNavigation {
                   'h-link',
                   {
                     disabled: item.disabled,
-                    focused: isFocused,
+                    focused: isFocused && this.showFocusRing,
                     selected,
                     [`color-${item.color}`]: !!item.color,
                   },
                   item.className,
                 )}
+                onMouseEnter={() => this.handleMouseEnterItem(id)}
                 role="menuitem"
                 data-nav-id={id}
                 data-parent-id=""

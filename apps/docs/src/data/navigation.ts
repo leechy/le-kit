@@ -120,6 +120,7 @@ export const componentsNavigationItems: NavItem[] = [
     children: [
       { label: "Popover", href: "/components/le-popover" },
       { label: "Popup", href: "/components/le-popup" },
+      { label: "Context Menu", href: "/components/le-context-menu" },
     ],
   },
   {

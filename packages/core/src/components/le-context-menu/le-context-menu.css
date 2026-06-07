@@ -1,0 +1,68 @@
+:host {
+  display: contents;
+}
+
+.context-menu-trigger-zone {
+  display: contents;
+}
+
+.le-context-menu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9990;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:host([open]) .le-context-menu-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Shared backdrop style for Shadow DOM */
+.le-backdrop-background {
+  background: var(--le-color-backdrop, rgba(0, 0, 0, 0.5));
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+:host([has-backdrop]) ::slotted(.le-context-menu-active-item) {
+  position: relative !important;
+  z-index: 9995 !important;
+  box-shadow: var(--le-shadow-lg, 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.15));
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:host([open][has-backdrop]) ::slotted(.le-context-menu-active-item) {
+  transform: scale(1.02);
+}
+
+le-popover {
+  position: fixed !important;
+  pointer-events: none;
+  z-index: 9999 !important;
+}
+
+le-popover::part(content) {
+  pointer-events: auto;
+  padding: var(--le-spacing-1, 4px);
+}
+
+le-popover::part(trigger) {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+le-navigation {
+  --le-nav-padding: 0;
+  --le-nav-item-padding-x: var(--le-spacing-2, 8px);
+  --le-nav-item-indent: var(--le-spacing-3, 12px);
+  --le-items-gap: 0;
+  --le-font-size: var(--le-font-size-sm, 0.875rem);
+}

@@ -21,3 +21,10 @@
 .header-is-shrunk .hidden-on-shrink {
   display: none;
 }
+
+/* Shared backdrop utility class */
+.le-backdrop-background {
+  background: var(--le-color-backdrop, rgba(0, 0, 0, 0.5));
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}

@@ -75,12 +75,13 @@ Type: `Promise<void>`
 ### Used by
 
  - [le-breadcrumbs](../le-breadcrumbs)
+ - [le-context-menu](../le-context-menu)
  - [le-overflow-menu](../le-overflow-menu)
 
 ### Depends on
 
-- [le-string-input](../le-string-input)
 - [le-icon](../le-icon)
+- [le-string-input](../le-string-input)
 - [le-collapse](../le-collapse)
 - [le-popover](../le-popover)
 - [le-bar](../le-bar)
@@ -89,8 +90,8 @@ Type: `Promise<void>`
 ### Graph
 ```mermaid
 graph TD;
-  le-navigation --> le-string-input
   le-navigation --> le-icon
+  le-navigation --> le-string-input
   le-navigation --> le-collapse
   le-navigation --> le-popover
   le-navigation --> le-bar
@@ -128,6 +129,7 @@ graph TD;
   le-bar --> le-overflow-menu
   le-overflow-menu --> le-navigation
   le-breadcrumbs --> le-navigation
+  le-context-menu --> le-navigation
   style le-navigation fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

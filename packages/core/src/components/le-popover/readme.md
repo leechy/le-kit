@@ -104,6 +104,7 @@ Type: `Promise<void>`
 
  - [le-breadcrumbs](../le-breadcrumbs)
  - [le-component](../le-component)
+ - [le-context-menu](../le-context-menu)
  - [le-dropdown-base](../le-dropdown-base)
  - [le-navigation](../le-navigation)
  - [le-overflow-menu](../le-overflow-menu)
@@ -114,6 +115,7 @@ Type: `Promise<void>`
 graph TD;
   le-breadcrumbs --> le-popover
   le-component --> le-popover
+  le-context-menu --> le-popover
   le-dropdown-base --> le-popover
   le-navigation --> le-popover
   le-overflow-menu --> le-popover

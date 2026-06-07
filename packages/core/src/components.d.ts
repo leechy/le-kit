@@ -11,6 +11,7 @@ import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcr
 import { TooltipPlacement } from ".";
 import { LeCollapseMeta } from "./types/toolbar";
 import { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-group";
+import { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 import { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 import { LeActiveContext } from "./components/le-kit/le-kit";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
@@ -28,6 +29,7 @@ export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcr
 export { TooltipPlacement } from ".";
 export { LeCollapseMeta } from "./types/toolbar";
 export { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-group";
+export { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 export { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 export { LeActiveContext } from "./components/le-kit/le-kit";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
@@ -780,6 +782,50 @@ export namespace Components {
           * Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties).
          */
         "hostStyle"?: { [key: string]: string };
+    }
+    /**
+     * Context menu component that displays a vertical navigation menu
+     * when the user right-clicks or long-presses on its children.
+     */
+    interface LeContextMenu {
+        /**
+          * Alignment of the menu relative to the trigger.
+          * @default 'start'
+         */
+        "align": 'start' | 'center' | 'end';
+        /**
+          * Whether to show a backdrop behind the menu, lifting the active item.
+          * @default false
+         */
+        "backdrop": boolean;
+        /**
+          * Disables right-click and touch interactions.
+          * @default false
+         */
+        "disabled": boolean;
+        "hide": () => Promise<void>;
+        /**
+          * List of menu items represented as options.
+          * @default []
+         */
+        "items": LeOption[] | string;
+        /**
+          * Whether the context menu is open.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll (default) - 'fixed-menu': menu scrolls with the page
+          * @default 'menu-close'
+         */
+        "pageScrollBehavior": 'blocked' | 'menu-close' | 'fixed-menu';
+        /**
+          * Position of the menu relative to the trigger. If 'mouse', positions next to mouse/touch coords.
+          * @default 'mouse'
+         */
+        "position": 'top' | 'bottom' | 'left' | 'right' | 'mouse';
+        "show": (x?: number, y?: number) => Promise<void>;
+        "toggle": (x?: number, y?: number) => Promise<void>;
     }
     /**
      * Shows a "smart" header title based on what has scrolled out of view.
@@ -2728,6 +2774,10 @@ export interface LeComboboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeComboboxElement;
 }
+export interface LeContextMenuCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeContextMenuElement;
+}
 export interface LeDropdownBaseCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeDropdownBaseElement;
@@ -3147,6 +3197,28 @@ declare global {
     var HTMLLeComponentElement: {
         prototype: HTMLLeComponentElement;
         new (): HTMLLeComponentElement;
+    };
+    interface HTMLLeContextMenuElementEventMap {
+        "leContextMenuSelect": LeContextMenuSelectDetail;
+        "leContextMenuClose": void;
+    }
+    /**
+     * Context menu component that displays a vertical navigation menu
+     * when the user right-clicks or long-presses on its children.
+     */
+    interface HTMLLeContextMenuElement extends Components.LeContextMenu, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeContextMenuElementEventMap>(type: K, listener: (this: HTMLLeContextMenuElement, ev: LeContextMenuCustomEvent<HTMLLeContextMenuElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeContextMenuElementEventMap>(type: K, listener: (this: HTMLLeContextMenuElement, ev: LeContextMenuCustomEvent<HTMLLeContextMenuElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeContextMenuElement: {
+        prototype: HTMLLeContextMenuElement;
+        new (): HTMLLeContextMenuElement;
     };
     /**
      * Shows a "smart" header title based on what has scrolled out of view.
@@ -4004,6 +4076,7 @@ declare global {
         "le-collapse": HTMLLeCollapseElement;
         "le-combobox": HTMLLeComboboxElement;
         "le-component": HTMLLeComponentElement;
+        "le-context-menu": HTMLLeContextMenuElement;
         "le-current-heading": HTMLLeCurrentHeadingElement;
         "le-drag-handle": HTMLLeDragHandleElement;
         "le-dropdown-base": HTMLLeDropdownBaseElement;
@@ -4809,6 +4882,55 @@ declare namespace LocalJSX {
           * Inline styles to apply to the host element. Allows parent components to pass dynamic styles (e.g., flex properties).
          */
         "hostStyle"?: { [key: string]: string };
+    }
+    /**
+     * Context menu component that displays a vertical navigation menu
+     * when the user right-clicks or long-presses on its children.
+     */
+    interface LeContextMenu {
+        /**
+          * Alignment of the menu relative to the trigger.
+          * @default 'start'
+         */
+        "align"?: 'start' | 'center' | 'end';
+        /**
+          * Whether to show a backdrop behind the menu, lifting the active item.
+          * @default false
+         */
+        "backdrop"?: boolean;
+        /**
+          * Disables right-click and touch interactions.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * List of menu items represented as options.
+          * @default []
+         */
+        "items"?: LeOption[] | string;
+        /**
+          * Emitted when the context menu is closed.
+         */
+        "onLeContextMenuClose"?: (event: LeContextMenuCustomEvent<void>) => void;
+        /**
+          * Emitted when a menu item is selected.
+         */
+        "onLeContextMenuSelect"?: (event: LeContextMenuCustomEvent<LeContextMenuSelectDetail>) => void;
+        /**
+          * Whether the context menu is open.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll (default) - 'fixed-menu': menu scrolls with the page
+          * @default 'menu-close'
+         */
+        "pageScrollBehavior"?: 'blocked' | 'menu-close' | 'fixed-menu';
+        /**
+          * Position of the menu relative to the trigger. If 'mouse', positions next to mouse/touch coords.
+          * @default 'mouse'
+         */
+        "position"?: 'top' | 'bottom' | 'left' | 'right' | 'mouse';
     }
     /**
      * Shows a "smart" header title based on what has scrolled out of view.
@@ -6909,6 +7031,15 @@ declare namespace LocalJSX {
         "displayName": string;
         "hostClass": string;
     }
+    interface LeContextMenuAttributes {
+        "open": boolean;
+        "disabled": boolean;
+        "items": LeOption[] | string;
+        "backdrop": boolean;
+        "pageScrollBehavior": 'blocked' | 'menu-close' | 'fixed-menu';
+        "position": 'top' | 'bottom' | 'left' | 'right' | 'mouse';
+        "align": 'start' | 'center' | 'end';
+    }
     interface LeCurrentHeadingAttributes {
         "selector": string;
     }
@@ -7286,6 +7417,7 @@ declare namespace LocalJSX {
         "le-collapse": Omit<LeCollapse, keyof LeCollapseAttributes> & { [K in keyof LeCollapse & keyof LeCollapseAttributes]?: LeCollapse[K] } & { [K in keyof LeCollapse & keyof LeCollapseAttributes as `attr:${K}`]?: LeCollapseAttributes[K] } & { [K in keyof LeCollapse & keyof LeCollapseAttributes as `prop:${K}`]?: LeCollapse[K] };
         "le-combobox": Omit<LeCombobox, keyof LeComboboxAttributes> & { [K in keyof LeCombobox & keyof LeComboboxAttributes]?: LeCombobox[K] } & { [K in keyof LeCombobox & keyof LeComboboxAttributes as `attr:${K}`]?: LeComboboxAttributes[K] } & { [K in keyof LeCombobox & keyof LeComboboxAttributes as `prop:${K}`]?: LeCombobox[K] };
         "le-component": Omit<LeComponent, keyof LeComponentAttributes> & { [K in keyof LeComponent & keyof LeComponentAttributes]?: LeComponent[K] } & { [K in keyof LeComponent & keyof LeComponentAttributes as `attr:${K}`]?: LeComponentAttributes[K] } & { [K in keyof LeComponent & keyof LeComponentAttributes as `prop:${K}`]?: LeComponent[K] } & OneOf<"component", LeComponent["component"], LeComponentAttributes["component"]>;
+        "le-context-menu": Omit<LeContextMenu, keyof LeContextMenuAttributes> & { [K in keyof LeContextMenu & keyof LeContextMenuAttributes]?: LeContextMenu[K] } & { [K in keyof LeContextMenu & keyof LeContextMenuAttributes as `attr:${K}`]?: LeContextMenuAttributes[K] } & { [K in keyof LeContextMenu & keyof LeContextMenuAttributes as `prop:${K}`]?: LeContextMenu[K] };
         "le-current-heading": Omit<LeCurrentHeading, keyof LeCurrentHeadingAttributes> & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes]?: LeCurrentHeading[K] } & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes as `attr:${K}`]?: LeCurrentHeadingAttributes[K] } & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes as `prop:${K}`]?: LeCurrentHeading[K] };
         "le-drag-handle": Omit<LeDragHandle, keyof LeDragHandleAttributes> & { [K in keyof LeDragHandle & keyof LeDragHandleAttributes]?: LeDragHandle[K] } & { [K in keyof LeDragHandle & keyof LeDragHandleAttributes as `attr:${K}`]?: LeDragHandleAttributes[K] } & { [K in keyof LeDragHandle & keyof LeDragHandleAttributes as `prop:${K}`]?: LeDragHandle[K] };
         "le-dropdown-base": Omit<LeDropdownBase, keyof LeDropdownBaseAttributes> & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes]?: LeDropdownBase[K] } & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes as `attr:${K}`]?: LeDropdownBaseAttributes[K] } & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes as `prop:${K}`]?: LeDropdownBase[K] };
@@ -7509,6 +7641,11 @@ declare module "@stencil/core" {
              * @cmsCategory System
              */
             "le-component": LocalJSX.IntrinsicElements["le-component"] & JSXBase.HTMLAttributes<HTMLLeComponentElement>;
+            /**
+             * Context menu component that displays a vertical navigation menu
+             * when the user right-clicks or long-presses on its children.
+             */
+            "le-context-menu": LocalJSX.IntrinsicElements["le-context-menu"] & JSXBase.HTMLAttributes<HTMLLeContextMenuElement>;
             /**
              * Shows a "smart" header title based on what has scrolled out of view.
              * When `selector` matches multiple elements, the title becomes the last element

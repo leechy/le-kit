@@ -1,0 +1,305 @@
+---
+import ComponentsPage from "../../layouts/ComponentsPage.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+---
+
+<ComponentsPage title="le-context-menu">
+  <h1>&lt;le-context-menu&gt;</h1>
+  <p>
+    A custom component that triggers a vertical navigation menu upon right-clicking (mouse/desktop) 
+    or long-pressing (touch/mobile) its children. It is built on top of <code>&lt;le-popover&gt;</code> 
+    and <code>&lt;le-navigation&gt;</code>.
+  </p>
+
+  <h2><a href="#examples" id="examples">Examples</a></h2>
+
+  <h3>Standard Right-Click Menu</h3>
+  <p>
+    Right-click inside the dashed area below to trigger the context menu. By default, the menu positions itself next to the mouse click.
+  </p>
+
+  <div class="component-example">
+    <le-context-menu
+      id="basic-context-menu"
+      items='[
+        {"label": "Refresh", "value": "refresh", "icon": "sync"},
+        {"label": "Settings", "value": "settings", "icon": "settings"},
+        {"label": "Delete Item", "value": "delete", "icon": "delete", "disabled": true}
+      ]'
+    >
+      <div style="padding: var(--le-space-xl, 32px); border: 2px dashed var(--le-color-border, #e0e0e0); text-align: center; border-radius: var(--le-radius-lg, 8px); color: var(--le-color-text-secondary, #666); cursor: context-menu; background: var(--le-color-surface-alt, #f9f9f9);">
+        Right-click here to open the menu.
+      </div>
+    </le-context-menu>
+
+    <script>
+      (() => {
+        const menu = document.getElementById("basic-context-menu");
+        menu?.addEventListener("leContextMenuSelect", (event: any) => {
+          alert(`Selected: ${event.detail.item.label} (${event.detail.item.value})`);
+        });
+      })();
+    </script>
+  </div>
+
+  <CodeBlock
+    language="html"
+    code={`
+<le-context-menu
+  items='[
+    {"label": "Refresh", "value": "refresh", "icon": "sync"},
+    {"label": "Settings", "value": "settings", "icon": "settings"},
+    {"label": "Delete Item", "value": "delete", "icon": "delete", "disabled": true}
+  ]'
+>
+  <div class="trigger-zone">Right-click here.</div>
+</le-context-menu>
+
+<script>
+  const menu = document.querySelector('le-context-menu');
+  menu.addEventListener('leContextMenuSelect', (event) => {
+    console.log('Selected:', event.detail.item);
+  });
+</script>
+`}
+  />
+
+  <h3>iOS-Style Touch Long-Press with Backdrop</h3>
+  <p>
+    On touch interfaces, long-pressing triggers the menu. The <code>backdrop</code> property dims the screen and lifts the active item above the backdrop overlay, matching native mobile UI patterns.
+  </p>
+
+  <div class="component-example">
+    <le-context-menu
+      backdrop
+      position="bottom"
+      align="center"
+      items='[
+        {"label": "Share", "value": "share", "icon": "arrow-right"},
+        {"label": "Favorite", "value": "favorite", "icon": "heart", "checked": true},
+        {"label": "Report", "value": "report", "icon": "warning"}
+      ]'
+    >
+      <div style="padding: var(--le-space-lg, 20px); border: 1px solid var(--le-color-border, #e0e0e0); text-align: center; border-radius: var(--le-radius-md, 8px); cursor: pointer; background: var(--le-color-surface, #ffffff); max-width: 320px; margin: 0 auto; user-select: none;">
+        Long-press (touch) or right-click here.
+      </div>
+    </le-context-menu>
+  </div>
+
+  <CodeBlock
+    language="html"
+    code={`
+<le-context-menu
+  backdrop
+  position="bottom"
+  align="center"
+  items='[
+    {"label": "Share", "value": "share"},
+    {"label": "Favorite", "value": "favorite", "checked": true},
+    {"label": "Report", "value": "report"}
+  ]'
+>
+  <div class="card">Long-press or right-click here.</div>
+</le-context-menu>
+`}
+  />
+
+  <h3>Page Scroll Behavior</h3>
+  <p>
+    You can customize what happens to the menu when the user scrolls the page. Use the <code>page-scroll-behavior</code> property:
+  </p>
+  <ul>
+    <li><code>menu-close</code> (default) — Closes the context menu automatically when page scrolling is detected.</li>
+    <li><code>fixed-menu</code> — The context menu remains open and moves relative to the scrolling page/trigger.</li>
+    <li><code>blocked</code> — Blocks scroll interactions on the document body entirely while the menu is open.</li>
+  </ul>
+
+  <div class="component-example">
+    <div style="display: flex; gap: var(--le-space-md, 16px); flex-wrap: wrap; justify-content: center;">
+      <le-context-menu
+        page-scroll-behavior="menu-close"
+        items='[{"label": "Item A", "value": "a"}, {"label": "Item B", "value": "b"}]'
+      >
+        <le-button variant="outlined">Scroll: Close (menu-close)</le-button>
+      </le-context-menu>
+
+      <le-context-menu
+        page-scroll-behavior="fixed-menu"
+        items='[{"label": "Item A", "value": "a"}, {"label": "Item B", "value": "b"}]'
+      >
+        <le-button variant="outlined">Scroll: Follow (fixed-menu)</le-button>
+      </le-context-menu>
+
+      <le-context-menu
+        page-scroll-behavior="blocked"
+        items='[{"label": "Item A", "value": "a"}, {"label": "Item B", "value": "b"}]'
+      >
+        <le-button variant="outlined">Scroll: Blocked (blocked)</le-button>
+      </le-context-menu>
+    </div>
+  </div>
+
+  <CodeBlock
+    language="html"
+    code={`
+<!-- Closes the menu on page scroll -->
+<le-context-menu page-scroll-behavior="menu-close" items="...">
+  <le-button>Scroll Close</le-button>
+</le-context-menu>
+
+<!-- Menu moves synchronously with the scrolling page -->
+<le-context-menu page-scroll-behavior="fixed-menu" items="...">
+  <le-button>Scroll Follow</le-button>
+</le-context-menu>
+
+<!-- Scroll is disabled until the menu is closed -->
+<le-context-menu page-scroll-behavior="blocked" items="...">
+  <le-button>Scroll Blocked</le-button>
+</le-context-menu>
+`}
+  />
+
+  <h3>Positioning and Alignment Options</h3>
+  <p>
+    When you specify a layout position other than <code>mouse</code>, the menu aligns itself relative to the trigger element's bounding box. You can configure both <code>position</code> (top, bottom, left, right) and <code>align</code> (start, center, end):
+  </p>
+
+  <div class="component-example">
+    <div style="display: flex; gap: var(--le-space-md, 16px); flex-wrap: wrap; justify-content: center;">
+      <le-context-menu
+        position="top"
+        align="center"
+        items='[{"label": "Top Center 1", "value": "1"}, {"label": "Top Center 2", "value": "2"}]'
+      >
+        <le-button variant="solid">Top Center</le-button>
+      </le-context-menu>
+
+      <le-context-menu
+        position="bottom"
+        align="end"
+        items='[{"label": "Bottom End 1", "value": "1"}, {"label": "Bottom End 2", "value": "2"}]'
+      >
+        <le-button variant="solid">Bottom End</le-button>
+      </le-context-menu>
+
+      <le-context-menu
+        position="right"
+        align="start"
+        items='[{"label": "Right Start 1", "value": "1"}, {"label": "Right Start 2", "value": "2"}]'
+      >
+        <le-button variant="solid">Right Start</le-button>
+      </le-context-menu>
+    </div>
+  </div>
+
+  <CodeBlock
+    language="html"
+    code={`
+<!-- Positioned above, centered horizontally -->
+<le-context-menu position="top" align="center" items="...">
+  <le-button>Top Center</le-button>
+</le-context-menu>
+
+<!-- Positioned below, aligned to the end side -->
+<le-context-menu position="bottom" align="end" items="...">
+  <le-button>Bottom End</le-button>
+</le-context-menu>
+
+<!-- Positioned on the right side, aligned to the start (top edge) -->
+<le-context-menu position="right" align="start" items="...">
+  <le-button>Right Start</le-button>
+</le-context-menu>
+`}
+  />
+
+  <h2><a href="#properties" id="properties">Properties / Attributes</a></h2>
+
+  <h3><code>@open</code></h3>
+  <p>
+    Controls the visibility of the menu. Reflects as an attribute. Can be toggled programmatically.
+  </p>
+  <ul>
+    <li>Type: <code>boolean</code></li>
+    <li>Default: <code>false</code></li>
+  </ul>
+
+  <h3><code>@disabled</code></h3>
+  <p>
+    When present or set to <code>true</code>, blocks right-click and touch long-press triggers.
+  </p>
+  <ul>
+    <li>Type: <code>boolean</code></li>
+    <li>Default: <code>false</code></li>
+  </ul>
+
+  <h3><code>@items</code></h3>
+  <p>
+    An array of menu options to display. Supports nested icons, actions, selection states (checkmarks), and disabling. Passed as a JSON string in HTML or an array in frameworks.
+  </p>
+  <ul>
+    <li>Type: <code>LeOption[] | string</code></li>
+    <li>Default: <code>[]</code></li>
+  </ul>
+
+  <h3><code>@backdrop</code></h3>
+  <p>
+    Whether to show a dimming overlay behind the menu, lifting the active trigger item above the backdrop overlay.
+  </p>
+  <ul>
+    <li>Type: <code>boolean</code></li>
+    <li>Default: <code>false</code></li>
+  </ul>
+
+  <h3><code>@page-scroll-behavior</code></h3>
+  <p>
+    Determines how the menu reacts when the page is scrolled:
+  </p>
+  <ul>
+    <li><code>menu-close</code> (default) — Closes the context menu automatically when page scrolling is detected.</li>
+    <li><code>fixed-menu</code> — The context menu remains open and smoothly scrolls/moves along with the page.</li>
+    <li><code>blocked</code> — Blocks scroll interactions on the document body entirely while the menu is open.</li>
+  </ul>
+
+  <h3><code>@position</code></h3>
+  <p>
+    Placement direction relative to the trigger container.
+  </p>
+  <ul>
+    <li><code>mouse</code> (default) — Dynamic placement following the click coordinate. Falls back to <code>bottom</code> alignment on touch devices.</li>
+    <li><code>top</code>, <code>bottom</code>, <code>left</code>, <code>right</code> — Align next to the specified side of the trigger boundary box.</li>
+  </ul>
+
+  <h3><code>@align</code></h3>
+  <p>
+    Alignment relative to the target boundary: <code>start</code> (default), <code>center</code>, or <code>end</code>.
+  </p>
+
+  <h2><a href="#slots" id="slots">Slots</a></h2>
+
+  <h3>Default Slot</h3>
+  <p>
+    The trigger content. Any DOM nodes placed in this slot will act as the right-click/long-press trigger zone.
+  </p>
+
+  <h2><a href="#events" id="events">Events</a></h2>
+
+  <h3><code>leContextMenuSelect</code></h3>
+  <p>
+    Fired when a menu navigation item is selected.
+  </p>
+  <CodeBlock
+    language="typescript"
+    code={`
+interface LeContextMenuSelectDetail {
+  id: string;
+  item: LeOption;
+  originalEvent: MouseEvent | KeyboardEvent;
+}
+`}
+  />
+
+  <h3><code>leContextMenuClose</code></h3>
+  <p>
+    Fired when the context menu is closed.
+  </p>
+</ComponentsPage>

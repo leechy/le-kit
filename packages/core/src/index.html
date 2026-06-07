@@ -1244,6 +1244,47 @@
       </div>
 
       <div class="demo-section">
+        <h2>Context Menu Component</h2>
+        <p>Right-click on desktop or long-press on mobile to show context menus. Supports checkmarks and backdrop elevation.</p>
+        <div class="demo-grid">
+          <div class="text-slot-demo">
+            <label>Standard Context Menu (with checkmarks):</label>
+            <le-context-menu
+              id="demo-context-menu"
+              items='[
+                {"label": "Show Column: ID", "value": "id", "checked": true},
+                {"label": "Show Column: Name", "value": "name", "checked": true},
+                {"label": "Show Column: Status", "value": "status", "checked": false}
+              ]'
+            >
+              <div style="padding: var(--le-space-md); border: 2px dashed var(--le-color-border); border-radius: var(--le-radius-md); text-align: center; background: var(--le-color-surface);">
+                Right-Click / Long-Press Here
+              </div>
+            </le-context-menu>
+          </div>
+
+          <div class="text-slot-demo">
+            <label>iOS-Style Context Menu (with backdrop):</label>
+            <le-context-menu
+              id="demo-context-menu-backdrop"
+              backdrop
+              position="bottom"
+              align="center"
+              items='[
+                {"label": "Duplicate", "value": "duplicate", "iconStart": "duplicate"},
+                {"label": "Save", "value": "save", "iconStart": "save"},
+                {"label": "Delete", "value": "delete", "iconStart": "delete", "color": "danger"}
+              ]'
+            >
+              <div style="padding: var(--le-space-md); border: 1px solid var(--le-color-border); border-radius: var(--le-radius-md); text-align: center; background: var(--le-color-surface);">
+                Right-Click / Long-Press (Backdrop)
+              </div>
+            </le-context-menu>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-section">
         <h2>Tooltip Component</h2>
         <p>Hover on desktop or long-press on touch devices. Uses top-layer popover behavior with viewport-aware positioning.</p>
         <div class="demo-grid">

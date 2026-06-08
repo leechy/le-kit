@@ -962,14 +962,9 @@ export class LeNavigation {
       return;
     }
 
-    const isNavKey = [
-      'ArrowDown',
-      'ArrowUp',
-      'ArrowLeft',
-      'ArrowRight',
-      'Home',
-      'End',
-    ].includes(event.key);
+    const isNavKey = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(
+      event.key,
+    );
 
     if (isNavKey) {
       if (!this.visualFocusActive) {
@@ -1266,7 +1261,7 @@ export class LeNavigation {
               const children = this.getChildItems(item);
               const hasChildren = children.length > 0;
               const open = hasChildren && (this.isOpen(item, id) || openFromSearch.has(id));
-              const paddingLeft = `calc(var(--le-nav-item-padding-x) + ${depth} * var(--le-nav-item-indent) + ${ancestorLeadingSlots} * var(--le-nav-toggle-size))`;
+              const paddingLeft = `calc(var(--le-nav-item-padding-x) + ${this.togglePosition === 'end' ? Math.max(depth - 1, 0) : depth} * var(--le-nav-item-indent) + ${ancestorLeadingSlots} * var(--le-nav-toggle-size))`;
               const selected = this.isItemSelected(item);
               const itemPart = this.partFromOptionPart('item', item.part, {
                 selected,

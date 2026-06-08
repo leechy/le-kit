@@ -45,7 +45,7 @@ export function parseOptionFromItemElement(item: HTMLElement): LeOption {
   const className = item.getAttribute('class') || '';
   const disabled = item.hasAttribute('disabled');
   const selected = item.hasAttribute('selected');
-  const checked = item.hasAttribute('checked');
+  const checked = item.getAttribute('checked') ?? undefined;
   const open = item.hasAttribute('open');
   const icon = item.getAttribute('icon') || '';
   const iconStart = item.getAttribute('icon-start') || '';

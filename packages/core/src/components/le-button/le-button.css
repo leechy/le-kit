@@ -80,6 +80,7 @@
     border-color var(--le-button-transition),
     box-shadow var(--le-button-transition),
     transform var(--le-button-transition),
+    padding var(--le-button-transition),
     outline var(--le-control-focus-transition),
     outline-offset var(--le-control-focus-transition);
 

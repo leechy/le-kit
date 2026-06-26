@@ -37,9 +37,24 @@ jobs:
         run: echo "$(date +%s)" > apps/docs/dist/build.txt
 
       - name: Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LE_KIT_DEV }}
-          projectId: le-kit-dev
-          channelId: live
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LE_KIT_DEV }}
+        run: |
+          echo "$FIREBASE_SERVICE_ACCOUNT" > service-account.json
+          export GOOGLE_APPLICATION_CREDENTIALS=service-account.json
+          npx firebase-tools deploy --only hosting --project le-kit-dev --non-interactive --json > deploy_output.json 2>&1 || {
+            EXIT_CODE=$?
+            if grep -q "is the current active version" deploy_output.json; then
+              echo "Deployment succeeded (ignoring active version 400 warning)."
+              cat deploy_output.json
+              rm -f service-account.json
+              exit 0
+            else
+              echo "Deployment failed with exit code $EXIT_CODE"
+              cat deploy_output.json
+              rm -f service-account.json
+              exit $EXIT_CODE
+            fi
+          }
+          cat deploy_output.json
+          rm -f service-account.json

@@ -12,7 +12,7 @@ import {
 } from '@stencil/core';
 import { generateId, nextFrame } from '../../utils/utils';
 import { LeOverflowMenuItemSelectDetail } from '../le-overflow-menu/le-overflow-menu';
-import type { LeOption } from '../../types/options';
+import type { LeOption, LeOptionSelectDetail, LeMultiOptionSelectDetail } from '../../types/options';
 import type { LeCollapseMeta } from '../../types/toolbar';
 
 interface RankedButton {
@@ -85,6 +85,16 @@ export class LeButtonGroup {
   @Prop({ reflect: true }) visibility: 'visible' | 'collapsing' | 'collapsed' | 'expanding' =
     'visible';
 
+  /**
+   * Selection type: radio (single select) or checkbox (multi select)
+   */
+  @Prop() type?: 'radio' | 'checkbox';
+
+  /**
+   * Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[].
+   */
+  @Prop({ reflect: true, mutable: true }) value?: string | string[];
+
   @State() private overflowItems: LeOption[] = [];
 
   @State() private hasOverflow: boolean = false;
@@ -105,6 +115,8 @@ export class LeButtonGroup {
 
   @Event() leOverflowSelect!: EventEmitter<{ id: string }>;
 
+  @Event() leChange!: EventEmitter<LeOptionSelectDetail | LeMultiOptionSelectDetail>;
+
   @Watch('collapse')
   handleCollapseChange() {
     void this.syncLayout();
@@ -120,6 +132,18 @@ export class LeButtonGroup {
     this.setDisabledState(newValue);
   }
 
+  @Watch('value')
+  handleValueChange() {
+    this.syncSelectionFromValue();
+    void this.syncLayout();
+  }
+
+  @Watch('type')
+  handleTypeChange() {
+    this.syncSelectionFromValue();
+    void this.syncLayout();
+  }
+
   componentWillLoad() {
     // Capture whether collapse was authored up-front. Runtime collapse updates
     // from le-toolbar should not change this semantic.
@@ -130,10 +154,12 @@ export class LeButtonGroup {
       this.collapse !== 'false';
 
     this.setDisabledState(this.disabled);
+    this.syncSelectionFromValue();
     void this.syncLayout();
   }
 
   componentDidLoad() {
+    this.syncSelectionFromValue();
     // Ensure layout is synced after first paint, when all light-DOM children are upgraded.
     requestAnimationFrame(() => void this.syncLayout());
   }
@@ -147,7 +173,7 @@ export class LeButtonGroup {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ['priority', 'disabled', 'id', 'slot'],
+      attributeFilter: ['priority', 'disabled', 'id', 'slot', 'selected', 'value'],
     });
   }
 
@@ -309,17 +335,21 @@ export class LeButtonGroup {
 
   private getButtonPriority(button: HTMLElement, index: number): number {
     const raw = button.getAttribute('priority');
+    let priority = 1000 + index;
 
-    if (raw === null || raw === undefined || raw.trim() === '') {
-      return 1000 + index;
+    if (raw !== null && raw !== undefined && raw.trim() !== '') {
+      const parsed = Number(raw);
+      if (Number.isFinite(parsed)) {
+        priority = parsed;
+      }
     }
 
-    const parsed = Number(raw);
-    if (!Number.isFinite(parsed)) {
-      return 1000 + index;
+    const isSelected = (button as any).selected || button.hasAttribute('selected');
+    if (isSelected) {
+      priority -= 10000;
     }
 
-    return parsed;
+    return priority;
   }
 
   private parseCollapseValue(totalButtons: number): { active: boolean; visibleCount: number } {
@@ -415,6 +445,131 @@ export class LeButtonGroup {
       target: item.element.getAttribute('target') || undefined,
       iconStart,
     };
+  }
+
+  private getButtonValue(button: HTMLElement): string {
+    const btn = button as any;
+    const val = btn.value || button.getAttribute('value');
+    if (val !== undefined && val !== null) {
+      return String(val);
+    }
+
+    const id = button.id;
+    const label = btn.label || button.getAttribute('label') || button.getAttribute('aria-label') || button.textContent?.trim();
+    return id || label || '';
+  }
+
+  private syncSelectionFromValue() {
+    if (!this.type) {
+      return;
+    }
+
+    const buttons = this.getButtonChildren();
+
+    if (this.type === 'radio') {
+      const targetValue = this.value;
+      buttons.forEach(button => {
+        const btnValue = this.getButtonValue(button);
+        const isSelected = btnValue === targetValue;
+        (button as any).selected = isSelected;
+      });
+    } else if (this.type === 'checkbox') {
+      let targetValues: string[] = [];
+      if (Array.isArray(this.value)) {
+        targetValues = this.value;
+      } else if (typeof this.value === 'string') {
+        const trimmed = this.value.trim();
+        if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+          try {
+            targetValues = JSON.parse(trimmed);
+          } catch {
+            targetValues = [this.value];
+          }
+        } else {
+          targetValues = [this.value];
+        }
+      }
+
+      buttons.forEach(button => {
+        const btnValue = this.getButtonValue(button);
+        const isSelected = targetValues.includes(btnValue);
+        (button as any).selected = isSelected;
+      });
+    }
+  }
+
+  private handleFieldsetClick = async (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    const button = target.closest('le-button');
+
+    if (!button || !this.el.contains(button)) {
+      return;
+    }
+
+    if (this.disabled || button.hasAttribute('disabled') || (button as any).disabled) {
+      return;
+    }
+
+    if (this.type === 'radio') {
+      await this.selectRadioButton(button);
+    } else if (this.type === 'checkbox') {
+      await this.toggleCheckboxButton(button);
+    }
+  };
+
+  private async selectRadioButton(clickedButton: HTMLElement) {
+    const btnValue = this.getButtonValue(clickedButton);
+
+    // If already selected, do nothing
+    if ((clickedButton as any).selected) {
+      return;
+    }
+
+    const buttons = this.getButtonChildren();
+    buttons.forEach(button => {
+      (button as any).selected = button === clickedButton;
+    });
+
+    this.value = btnValue;
+
+    // Trigger layout sync synchronously so state and styles are updated immediately!
+    void this.syncLayout();
+
+    const option = typeof (clickedButton as any).getOption === 'function'
+      ? await (clickedButton as any).getOption()
+      : { value: btnValue, label: clickedButton.textContent?.trim() || '' };
+
+    this.leChange.emit({
+      value: btnValue,
+      option,
+    });
+  }
+
+  private async toggleCheckboxButton(clickedButton: HTMLElement) {
+    const currentSelected = !(clickedButton as any).selected;
+    (clickedButton as any).selected = currentSelected;
+
+    const buttons = this.getButtonChildren();
+    const selectedButtons = buttons.filter(btn => (btn as any).selected);
+    const newValues = selectedButtons.map(btn => this.getButtonValue(btn));
+
+    this.value = newValues;
+
+    // Trigger layout sync synchronously so state and styles are updated immediately!
+    void this.syncLayout();
+
+    const options = await Promise.all(
+      selectedButtons.map(async btn => {
+        return typeof (btn as any).getOption === 'function'
+          ? await (btn as any).getOption()
+          : { value: this.getButtonValue(btn), label: btn.textContent?.trim() || '' };
+      })
+    );
+
+    this.leChange.emit({
+      values: newValues,
+      options,
+    });
   }
 
   private async syncLayout() {
@@ -547,7 +702,7 @@ export class LeButtonGroup {
 
   render() {
     return (
-      <Host>
+      <Host onClick={this.handleFieldsetClick}>
         <le-component component="le-button-group">
           <fieldset class="button-group" part="group">
             {this.buttonSlots.map(slotName => {

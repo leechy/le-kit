@@ -19,8 +19,7 @@ describe('le-button', () => {
       'button.le-button-container',
     ) as HTMLButtonElement;
 
-    expect(host.classList.contains('variant-solid')).toBe(true);
-    expect(host.classList.contains('color-primary')).toBe(true);
+    expect(host.classList.contains('variant-outlined')).toBe(true);
     expect(host.classList.contains('size-medium')).toBe(true);
     expect(button.getAttribute('type')).toBe('button');
     expect(button.hasAttribute('disabled')).toBe(false);

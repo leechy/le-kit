@@ -261,6 +261,7 @@ A flexible button component with multiple variants and states.
     \| 'transparent' \| undefined` |  | Button color theme (uses theme semantic colors) |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Button size |
 | `selected` | `boolean` | `false` | Whether the button is in a selected/active state |
+| `value` | `string \| undefined` |  | The value associated with the button (useful when in a button group) |
 | `label` | `string \| undefined` |  | Optional label for the button, used for accessibility and tooltips when the button is icon-only. |
 | `tooltip` | `string \| undefined` |  | Tooltip text to show on hover |
 | `tooltipPosition` | `TooltipPlacement` | `'top'` | Tooltip position around the button |
@@ -320,12 +321,15 @@ into an overflow "more" menu.
 | `overflowIcons` | `boolean` | `false` | When true, icons from collapsed buttons are shown in the overflow navigation list. |
 | `disabled` | `boolean` | `false` | Disabled attribute, when the button group is disabled, all buttons inside will be disabled and the overflow menu will not be accessible. |
 | `visibility` | `'visible' \| 'collapsing' \| 'collapsed' \| 'expanding'` | `'visible'` | Visibility state used by responsive containers such as le-toolbar. |
+| `type` | `'radio' \| 'checkbox' \| undefined` |  | Selection type: radio (single select) or checkbox (multi select) |
+| `value` | `string \| string[] \| undefined` |  | Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[]. |
 
 ### Events
 
 | Event | Type | Description |
 |-------|------|-------------|
 | `leOverflowSelect` | `EventEmitter<{ id: string }>` |  |
+| `leChange` | `EventEmitter<LeOptionSelectDetail \| LeMultiOptionSelectDetail>` |  |
 
 ### Slots
 

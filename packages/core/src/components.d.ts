@@ -440,6 +440,10 @@ export namespace Components {
          */
         "type": 'button' | 'submit' | 'reset';
         /**
+          * The value associated with the button (useful when in a button group)
+         */
+        "value"?: string;
+        /**
           * Button variant style
           * @allowedValues solid | outlined | clear
           * @default 'outlined'
@@ -486,6 +490,14 @@ export namespace Components {
           * @default false
          */
         "overflowIcons": boolean;
+        /**
+          * Selection type: radio (single select) or checkbox (multi select)
+         */
+        "type"?: 'radio' | 'checkbox';
+        /**
+          * Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[].
+         */
+        "value"?: string | string[];
         /**
           * Visibility state used by responsive containers such as le-toolbar.
           * @allowedValues visible | collapsing | collapsed | expanding
@@ -3008,6 +3020,7 @@ declare global {
     };
     interface HTMLLeButtonGroupElementEventMap {
         "leOverflowSelect": { id: string };
+        "leChange": LeOptionSelectDetail | LeMultiOptionSelectDetail;
     }
     /**
      * Groups multiple `le-button` elements and optionally collapses low-priority actions
@@ -4518,6 +4531,10 @@ declare namespace LocalJSX {
          */
         "type"?: 'button' | 'submit' | 'reset';
         /**
+          * The value associated with the button (useful when in a button group)
+         */
+        "value"?: string;
+        /**
           * Button variant style
           * @allowedValues solid | outlined | clear
           * @default 'outlined'
@@ -4552,12 +4569,21 @@ declare namespace LocalJSX {
           * Optional label used when the whole group is represented as a parent item inside another component's overflow menu.
          */
         "label"?: string;
+        "onLeChange"?: (event: LeButtonGroupCustomEvent<LeOptionSelectDetail | LeMultiOptionSelectDetail>) => void;
         "onLeOverflowSelect"?: (event: LeButtonGroupCustomEvent<{ id: string }>) => void;
         /**
           * When true, icons from collapsed buttons are shown in the overflow navigation list.
           * @default false
          */
         "overflowIcons"?: boolean;
+        /**
+          * Selection type: radio (single select) or checkbox (multi select)
+         */
+        "type"?: 'radio' | 'checkbox';
+        /**
+          * Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[].
+         */
+        "value"?: string | string[];
         /**
           * Visibility state used by responsive containers such as le-toolbar.
           * @allowedValues visible | collapsing | collapsed | expanding
@@ -6956,6 +6982,7 @@ declare namespace LocalJSX {
     | 'transparent';
         "size": 'small' | 'medium' | 'large';
         "selected": boolean;
+        "value": string;
         "label": string;
         "tooltip": string;
         "tooltipPosition": string;
@@ -6981,6 +7008,8 @@ declare namespace LocalJSX {
         "overflowIcons": boolean;
         "disabled": boolean;
         "visibility": 'visible' | 'collapsing' | 'collapsed' | 'expanding';
+        "type": 'radio' | 'checkbox';
+        "value": string | string[];
     }
     interface LeCardAttributes {
         "variant": 'default' | 'outlined' | 'elevated';

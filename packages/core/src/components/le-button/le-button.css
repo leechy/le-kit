@@ -22,11 +22,11 @@
   --le-button-color: var(--le-color-primary-contrast);
   
   /* Internal state variables - set by color classes */
-  --_btn-bg: var(--le-color-primary);
+  --_btn-bg: var(--le-color-primary-dark);
   --_btn-bg-hover: var(--le-color-primary-dark);
   --_btn-bg-system: var(--le-color-black);
   --_btn-color: var(--le-button-color);
-  --_btn-border-color: var(--le-color-primary);
+  --_btn-border-color: var(--le-color-primary-dark);
 }
 
 :host([motion-preset='none']) {

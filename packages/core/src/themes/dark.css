@@ -10,8 +10,8 @@
 .le-theme-dark {
   /* Primary brand color - lighter for dark backgrounds */
   --le-color-primary: #4da6ff;
-  --le-color-primary-light: #80c1ff;
-  --le-color-primary-dark: #0088ff;
+  --le-color-primary-light: #0088ff;
+  --le-color-primary-dark: #c6e2fc;
   --le-color-primary-contrast: #000000;
   
   /* Secondary accent color */

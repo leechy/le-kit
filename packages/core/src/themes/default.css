@@ -19,7 +19,7 @@
   /* Primary brand color */
   --le-color-primary: #0088ff;
   --le-color-primary-light: #4da6ff;
-  --le-color-primary-dark: #0066cc;
+  --le-color-primary-dark: #004284;
   --le-color-primary-contrast: #ffffff;
   
   /* Secondary accent color */
@@ -82,7 +82,7 @@
   
   /* Border colors */
   --le-color-border: #e0e0e0;
-  --le-color-border-hover: #9dd1ff;
+  --le-color-border-hover: #6a8ba880;
   --le-color-border-light: #eeeeee;
   --le-color-border-dark: #bdbdbd;
 

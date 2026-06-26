@@ -82,7 +82,12 @@ export class LeButton {
   /**
    * Whether the button is in a selected/active state
    */
-  @Prop() selected: boolean = false;
+  @Prop({ reflect: true, mutable: true }) selected: boolean = false;
+
+  /**
+   * The value associated with the button (useful when in a button group)
+   */
+  @Prop({ reflect: true }) value?: string;
 
   /**
    * Optional label for the button,
@@ -309,7 +314,7 @@ export class LeButton {
     return {
       id,
       label,
-      value: this.el.getAttribute('value') || id || label,
+      value: this.value || id || label,
       disabled: this.disabled,
       selected: this.selected,
       iconStart,
@@ -358,7 +363,7 @@ export class LeButton {
 
     const classes = classnames(
       `variant-${this.variant}`,
-      `color-${this.color}`,
+      this.color ? `color-${this.color}` : null,
       `size-${this.size}`,
       {
         'selected': this.selected,

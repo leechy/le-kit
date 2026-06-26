@@ -8,8 +8,5 @@
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "dev": "npm run dev --workspaces --if-present"
-  },
-  "devDependencies": {
-    "@rollup/rollup-darwin-x64": "4.62.2"
   }
 }

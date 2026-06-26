@@ -842,7 +842,6 @@ export class LeSidePanel {
             role="separator"
             aria-orientation="vertical"
             tabindex={-1}
-            style={{ '--le-drag-handle-offset': '-5px' }}
             onPointerDown={this.startResizeDrag}
           >
             Drag panel edge to resize width.

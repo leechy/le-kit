@@ -18,14 +18,17 @@ into an overflow "more" menu.
 | `disabled`      | `disabled`       | Disabled attribute, when the button group is disabled, all buttons inside will be disabled and the overflow menu will not be accessible.                                                                                               | `boolean`                                                 | `false`     |
 | `label`         | `label`          | Optional label used when the whole group is represented as a parent item inside another component's overflow menu.                                                                                                                     | `string \| undefined`                                     | `undefined` |
 | `overflowIcons` | `overflow-icons` | When true, icons from collapsed buttons are shown in the overflow navigation list.                                                                                                                                                     | `boolean`                                                 | `false`     |
+| `type`          | `type`           | Selection type: radio (single select) or checkbox (multi select)                                                                                                                                                                       | `"checkbox" \| "radio" \| undefined`                      | `undefined` |
+| `value`         | `value`          | Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[].                                                                                                                        | `string \| string[] \| undefined`                         | `undefined` |
 | `visibility`    | `visibility`     | Visibility state used by responsive containers such as le-toolbar.                                                                                                                                                                     | `"collapsed" \| "collapsing" \| "expanding" \| "visible"` | `'visible'` |
 
 
 ## Events
 
-| Event              | Description | Type                           |
-| ------------------ | ----------- | ------------------------------ |
-| `leOverflowSelect` |             | `CustomEvent<{ id: string; }>` |
+| Event              | Description | Type                                                             |
+| ------------------ | ----------- | ---------------------------------------------------------------- |
+| `leChange`         |             | `CustomEvent<LeMultiOptionSelectDetail \| LeOptionSelectDetail>` |
+| `leOverflowSelect` |             | `CustomEvent<{ id: string; }>`                                   |
 
 
 ## Methods

@@ -75,6 +75,10 @@
   font-weight: 500;
 }
 
+.frame-controls le-tag {
+  margin-left: auto;
+}
+
 .width-unit {
   margin-left: 1px;
   opacity: 0.7;
@@ -99,6 +103,51 @@ le-drag-handle {
   --le-drag-handle-size: var(--le-preview-frame-handle-width);
   --le-drag-handle-grip-color: var(--le-preview-frame-handle-color);
   --le-drag-handle-grip-color-hover: var(--le-preview-frame-handle-color-hover);
+}
+
+/* ── Show frame configurations ────────────────────────────────── */
+
+/* Hover state defaults (when not hovered / not focused) */
+:host([show-frame="hover"]) .frame {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  transition: width 0.25s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+:host([show-frame="hover"]) .frame-controls,
+:host([show-frame="hover"]) le-drag-handle {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Hover state active (when hovered or focused-within) */
+:host([show-frame="hover"]:hover) .frame,
+:host([show-frame="hover"]:focus-within) .frame {
+  background: var(--le-preview-frame-bg);
+  border-color: var(--le-color-border, rgba(0,0,0,.12));
+  box-shadow: var(--le-preview-frame-shadow);
+}
+
+:host([show-frame="hover"]:hover) .frame-controls,
+:host([show-frame="hover"]:focus-within) .frame-controls,
+:host([show-frame="hover"]:hover) le-drag-handle,
+:host([show-frame="hover"]:focus-within) le-drag-handle {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Frame hidden completely ("no" mode) */
+:host([show-frame="no"]) .frame {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+:host([show-frame="no"]) .frame-controls,
+:host([show-frame="no"]) le-drag-handle {
+  display: none !important;
 }
 
 /* ── Host display helpers ────────────────────────────────────── */

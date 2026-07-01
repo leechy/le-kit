@@ -4,6 +4,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 
 ## Table of Contents
 
+- [le-actions-sequence](#le-actions-sequence)
 - [le-bar](#le-bar)
 - [le-bento-grid](#le-bento-grid)
 - [le-bento-tile](#le-bento-tile)
@@ -53,6 +54,36 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-tooltip](#le-tooltip)
 - [le-turntable](#le-turntable)
 - [le-visibility](#le-visibility)
+
+---
+
+## <le-actions-sequence>
+
+A non-visual component that runs a sequence of timed actions on its children.
+Designed for creating automated interaction loops and interactive demos.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `steps` | `ActionStep[] \| string` | `[]` | Array of ActionStep objects or a JSON string representation. |
+| `startOn` | `'init' \| 'in-view' \| 'manual'` | `'init'` | Playback triggers: 'init' (starts immediately), 'in-view' (scrolled into viewport), 'manual'. |
+| `inViewThreshold` | `number` | `0.5` | Visibility threshold ratio (0.0 to 1.0) before triggering in-view. |
+| `loop` | `boolean` | `false` | Repeat the sequence when finished. |
+| `loopDelay` | `number` | `0` | Loop delay in milliseconds before restarting the sequence. |
+| `direction` | `'forward' \| 'reverse' \| 'alternate'` | `'forward'` | Playback direction. |
+| `debug` | `boolean` | `false` | Output debug logs to console. |
+| `pauseOnHover` | `boolean` | `false` | Pause the sequence when the user hovers over the element. Resumes on mouseleave. |
+| `pauseOnInteraction` | `boolean` | `false` | Pause the sequence when the user interacts (click/focus/drag) inside the element. |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leStart` | `EventEmitter<void>` | Emitted when the sequence starts playing |
+| `leStep` | `EventEmitter<{ index: number; step: ActionStep; target: HTMLElement }>` | Emitted when a step starts executing |
+| `leFinish` | `EventEmitter<void>` | Emitted when the sequence finishes |
 
 ---
 
@@ -1097,7 +1128,8 @@ component demos and documentation.
 | `frameWidth` | `number \| undefined` |  | Initial inner width of the preview viewport in pixels. Set to 0 or 'auto' to fill the available container width. |
 | `minWidth` | `number` | `240` | Minimum resizable width in pixels. |
 | `maxWidth` | `number` | `0` | Maximum resizable width in pixels. 0 = unconstrained. |
-| `showControls` | `boolean` | `true` | Whether to show the controls bar (breakpoint buttons + width badge). |
+| `showControls` | `boolean \| 'none' \| 'width' \| 'breakpoints' \| 'all'` | `'all'` | What controls to show in the toolbar. - none: hide the entire controls bar - width: show only the width badge - breakpoints: show only the breakpoint preset buttons - all: show both the buttons and the width badge |
+| `showFrame` | `'no' \| 'hover' \| 'always'` | `'always'` | Visibility strategy for the preview frame border, background, and controls. - always: Frame controls and borders are always visible. - hover: Invisible by default, fades in on hover or focus-within. - no: Always invisible (only viewport content is visible). |
 | `resizable` | `boolean` | `true` | Whether to show drag resize handles. |
 | `handles` | `LePreviewFrameHandleSide[] \| string` | `'right'` | Which handles are rendered. Accepts "right", "left", "bottom", "left,right", etc. or a JSON string/array. |
 | `origin` | `LePreviewFrameResizeOrigin` | `'auto'` | Horizontal resize origin strategy. - auto: detects centered layouts and switches to center math - edge: keeps opposite edge fixed (default left-aligned behavior) - center: grows/shrinks from center |

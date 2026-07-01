@@ -85,9 +85,21 @@ export class LePreviewFrame {
   @Prop() maxWidth: number = 0;
 
   /**
-   * Whether to show the controls bar (breakpoint buttons + width badge).
+   * What controls to show in the toolbar.
+   * - none: hide the entire controls bar
+   * - width: show only the width badge
+   * - breakpoints: show only the breakpoint preset buttons
+   * - all: show both the buttons and the width badge
    */
-  @Prop() showControls: boolean = true;
+  @Prop() showControls: boolean | 'none' | 'width' | 'breakpoints' | 'all' = 'all';
+
+  /**
+   * Visibility strategy for the preview frame border, background, and controls.
+   * - always: Frame controls and borders are always visible.
+   * - hover: Invisible by default, fades in on hover or focus-within.
+   * - no: Always invisible (only viewport content is visible).
+   */
+  @Prop({ reflect: true }) showFrame: 'no' | 'hover' | 'always' = 'always';
 
   /**
    * Whether to show drag resize handles.
@@ -175,6 +187,16 @@ export class LePreviewFrame {
     return this.breakpoints ?? DEFAULT_BREAKPOINTS;
   }
 
+  private get normalizedShowControls(): 'none' | 'width' | 'breakpoints' | 'all' {
+    if (this.showControls === true || this.showControls === 'all') {
+      return 'all';
+    }
+    if (this.showControls === false || this.showControls === 'none') {
+      return 'none';
+    }
+    return this.showControls as 'width' | 'breakpoints';
+  }
+
   private get parsedHandles(): LePreviewFrameHandleSide[] {
     const fallback: LePreviewFrameHandleSide[] = ['right'];
 
@@ -260,9 +282,17 @@ export class LePreviewFrame {
     this.setCurrentWidth(this.naturalContainerWidth(), true);
   }
 
+  private getLayoutParent(): HTMLElement | null {
+    let parent = this.el.parentElement;
+    while (parent && parent.tagName.toLowerCase() === 'le-actions-sequence') {
+      parent = parent.parentElement;
+    }
+    return parent;
+  }
+
   /** Resize handle drag */
   private naturalContainerWidth(): number {
-    const parent = this.el.parentElement;
+    const parent = this.getLayoutParent();
     const layoutPadding = this.normalizedPadding * 2;
     if (parent) {
       const style = getComputedStyle(parent);
@@ -291,8 +321,9 @@ export class LePreviewFrame {
         this.setCurrentHeight(this.currentHeight, false);
       }
     });
-    if (this.el.parentElement) {
-      this.resizeObserver.observe(this.el.parentElement);
+    const parent = this.getLayoutParent();
+    if (parent) {
+      this.resizeObserver.observe(parent);
     }
   }
 
@@ -311,7 +342,7 @@ export class LePreviewFrame {
     event.preventDefault();
 
     const frameEl = this.el.shadowRoot?.querySelector('.frame') as HTMLElement | null;
-    const parent = this.el.parentElement;
+    const parent = this.getLayoutParent();
     if (!frameEl || !parent) return;
 
     const frameRect = frameEl.getBoundingClientRect();
@@ -536,38 +567,44 @@ export class LePreviewFrame {
   // ─── Render ─────────────────────────────────────────────────────────────────
 
   private renderControls() {
-    if (!this.showControls) return null;
+    const mode = this.normalizedShowControls;
+    if (mode === 'none') return null;
 
-    const maxW =
-      this.maxWidth > 0 ? this.maxWidth : this.containerWidth || this.naturalContainerWidth();
+    const showBreakpoints = mode === 'all' || mode === 'breakpoints';
+    const showWidth = mode === 'all' || mode === 'width';
+    const maxW = this.maxWidth > 0 ? this.maxWidth : this.containerWidth || this.naturalContainerWidth();
 
     return (
       <div class="frame-controls" part="controls">
-        <le-button-group>
-          {this.parsedBreakpoints?.map(bp => {
-            const isActive = Math.abs(this.currentWidth - bp.width) < 2;
-            const isDisabled = bp.width < this.minWidth || (this.maxWidth > 0 && bp.width > maxW);
-            return (
-              <le-button
-                disabled={isDisabled}
-                selected={isActive}
-                variant="clear"
-                aria-label={`Preview at ${bp.label} width (${bp.width}px)`}
-                onClick={() => this.applyWidth(bp.width)}
-                tooltip={bp.label}
-              >
-                <le-icon slot="icon-only" name={bp.icon} />
-              </le-button>
-            );
-          })}
-        </le-button-group>
+        {showBreakpoints && (
+          <le-button-group>
+            {this.parsedBreakpoints?.map(bp => {
+              const isActive = Math.abs(this.currentWidth - bp.width) < 2;
+              const isDisabled = bp.width < this.minWidth || (this.maxWidth > 0 && bp.width > maxW);
+              return (
+                <le-button
+                  disabled={isDisabled}
+                  selected={isActive}
+                  variant="clear"
+                  aria-label={`Preview at ${bp.label} width (${bp.width}px)`}
+                  onClick={() => this.applyWidth(bp.width)}
+                  tooltip={bp.label}
+                >
+                  <le-icon slot="icon-only" name={bp.icon} />
+                </le-button>
+              );
+            })}
+          </le-button-group>
+        )}
 
         <slot name="controls" />
 
-        <le-tag aria-live="polite">
-          {Math.round(this.currentWidth)}
-          {this.widthUnit ? <span class="width-unit">{this.widthUnit}</span> : null}
-        </le-tag>
+        {showWidth && (
+          <le-tag aria-live="polite">
+            {Math.round(this.currentWidth)}
+            {this.widthUnit ? <span class="width-unit">{this.widthUnit}</span> : null}
+          </le-tag>
+        )}
       </div>
     );
   }

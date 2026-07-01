@@ -324,6 +324,8 @@ A flexible button component with multiple variants and states.
 |------|-------------|
 | Default | Button text content |
 | `"icon-only"` | Icon for icon-only buttons |
+| `"icon-start"` | Icon placed in the beginning of the button |
+| `"icon-end"` | Icon placed in the end of the button |
 
 ### CSS Variables
 

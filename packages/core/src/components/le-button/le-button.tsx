@@ -20,6 +20,8 @@ import { TooltipPlacement } from '../..';
  *
  * @slot - Button text content
  * @slot icon-only - Icon for icon-only buttons
+ * @slot icon-start - Icon placed in the beginning of the button
+ * @slot icon-end - Icon placed in the end of the button
  *
  * @cssprop --le-button-bg - Button background color
  * @cssprop --le-button-color - Button text color
@@ -273,7 +275,13 @@ export class LeButton {
     // Build iconStart: explicit prop → icon-start slot → icon-only slot
     let iconStart: string | undefined;
     if (typeof this.iconStart === 'string') {
-      iconStart = this.iconStart;
+      if (this.iconStart.length <= 2) {
+        iconStart = this.iconStart;
+      } else {
+        // assuming that if the string is longer than 2 characters,
+        // it's an icon name rather than an emoji
+        iconStart = `<le-icon name="${this.iconStart}"></le-icon>`;
+      }
     } else if (this.hasIconStartSlot) {
       const slotEl = this.el.querySelector('[slot="icon-start"]');
       if (slotEl) {
@@ -411,7 +419,16 @@ export class LeButton {
                 })}
                 part="icon-start"
               >
-                <slot name="icon-start">{this.iconStart}</slot>
+                <slot name="icon-start">
+                  {typeof this.iconStart === 'string' ? (
+                    this.iconStart.length <= 2 ? (
+                      this.iconStart
+                    ) : (
+                      // assuming that if the string is longer than 2 characters, it's an icon name rather than an emoji
+                      <le-icon name={this.iconStart}></le-icon>
+                    )
+                  ) : null}
+                </slot>
               </span>
               <le-visibility
                 class="le-button-label-visibility"

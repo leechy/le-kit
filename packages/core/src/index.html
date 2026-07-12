@@ -394,58 +394,73 @@
     </div>
 
     <div style="display: flex; justify-content: center; gap: var(--le-space-sm);">
-      <le-preview-frame id="demo-toolbar-frame" min-width="200" min-height="56" padding="16">
-        <!--
+      <le-actions-sequence loop direction="alternate" loop-delay="3000" start-on="in-view" in-view-threshold="0.3"
+        debug="true" pause-on-hover="true" pause-on-interaction="true" steps='[
+          { "target": "#demo-toolbar-frame", "action": "method", "name": "snapTo", "value": 320, "delay": 2000 },
+          { "target": "#demo-toolbar", "action": "method", "name": "showOverflowMenu", "delay": 1000 },
+          { "target": "#demo-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowDown", "delay": 500 },
+          { "target": "#demo-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowDown", "delay": 500 },
+          { "target": "#demo-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowDown", "delay": 500 },
+          { "target": "#demo-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowUp", "delay": 500 },
+          { "target": "#demo-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowUp", "delay": 500 },
+          { "target": "#demo-toolbar", "action": "method", "name": "hideOverflowMenu", "delay": 1500 },
+          { "target": "#demo-toolbar-frame", "action": "method", "name": "snapTo", "value": 800, "delay": 2000 },
+          { "target": "#demo-toolbar-frame", "action": "method", "name": "resetWidth", "delay": 2000 }
+        ]'>
+        <le-preview-frame id="demo-toolbar-frame" min-width="200" min-height="56" padding="16" show-controls="width"
+          show-frame="hover">
+          <!--
             debug-virtual-toolbar
             debug-pause-before-measure
           -->
-        <le-toolbar id="demo-toolbar" onLeToolbarOverflowChange="onToolbarOverflow(event)">
-          <!-- Lower priority number = higher importance = last to overflow -->
-          <le-button priority="10" variant="solid" color="primary" collapsible>
-            <le-icon slot="icon-start" name="save"></le-icon>
-            Save
-          </le-button>
-
-          <le-toolbar-spacer width="5rem" priority="1000"></le-toolbar-spacer>
-
-          <le-button priority="200" variant="outlined" label="Publish" onclick="alert('Publish')">Publish</le-button>
-
-          <le-button priority="30" variant="clear" label="Preview" onclick="alert('Preview')">Preview</le-button>
-
-          <!-- A collapsible button group — collapses internally first -->
-          <le-button-group priority="80" overflow-icons label="Text Align" collapse="2">
-            <le-button variant="clear" label="Align Left">
-              <le-icon slot="icon-only" name="align-left"></le-icon>
+          <le-toolbar id="demo-toolbar" onLeToolbarOverflowChange="onToolbarOverflow(event)">
+            <!-- Lower priority number = higher importance = last to overflow -->
+            <le-button priority="10" variant="solid" color="primary" collapsible>
+              <le-icon slot="icon-start" name="save"></le-icon>
+              Save
             </le-button>
-            <le-button variant="clear" label="Align Center">
-              <le-icon slot="icon-only" name="align-center"></le-icon>
-            </le-button>
-            <le-button variant="clear" label="Align Right">
-              <le-icon slot="icon-only" name="align-right"></le-icon>
-            </le-button>
-            <le-button variant="clear" label="Justify">
-              <le-icon slot="icon-only" name="align-justify"></le-icon>
-            </le-button>
-          </le-button-group>
 
-          <le-button variant="clear" label="Share" onclick="alert('Share')">Share</le-button>
-          <le-button variant="clear" label="Duplicate" onclick="alert('Duplicate')">Duplicate</le-button>
-          <le-button color="danger" collapsible priority="50">
-            <le-icon name="delete" slot="icon-start" size="20"></le-icon>
-            Delete
-          </le-button>
+            <le-toolbar-spacer width="5rem" priority="1000"></le-toolbar-spacer>
 
-          <le-toolbar-spacer></le-toolbar-spacer>
+            <le-button priority="200" variant="outlined" label="Publish" onclick="alert('Publish')">Publish</le-button>
 
-          <!-- A collapsible button group — collapses internally first -->
-          <le-button-group label="Text Align" priority="150">
-            <le-button label="Align Left" icon-only="align-left"></le-button>
-            <le-button label="Align Center" icon-only="align-center"></le-button>
-            <le-button label="Align Right" icon-only="align-right"></le-button>
-            <le-button label="Justify" icon-only="align-justify"></le-button>
-          </le-button-group>
-        </le-toolbar>
-      </le-preview-frame>
+            <le-button priority="30" variant="clear" label="Preview" onclick="alert('Preview')">Preview</le-button>
+
+            <!-- A collapsible button group — collapses internally first -->
+            <le-button-group priority="80" overflow-icons label="Text Align" collapse="2">
+              <le-button variant="clear" label="Align Left">
+                <le-icon slot="icon-only" name="align-left"></le-icon>
+              </le-button>
+              <le-button variant="clear" label="Align Center">
+                <le-icon slot="icon-only" name="align-center"></le-icon>
+              </le-button>
+              <le-button variant="clear" label="Align Right">
+                <le-icon slot="icon-only" name="align-right"></le-icon>
+              </le-button>
+              <le-button variant="clear" label="Justify">
+                <le-icon slot="icon-only" name="align-justify"></le-icon>
+              </le-button>
+            </le-button-group>
+
+            <le-button variant="clear" label="Share" onclick="alert('Share')">Share</le-button>
+            <le-button variant="clear" label="Duplicate" onclick="alert('Duplicate')">Duplicate</le-button>
+            <le-button color="danger" collapsible priority="50">
+              <le-icon name="delete" slot="icon-start" size="20"></le-icon>
+              Delete
+            </le-button>
+
+            <le-toolbar-spacer></le-toolbar-spacer>
+
+            <!-- A collapsible button group — collapses internally first -->
+            <le-button-group label="Text Align" priority="150">
+              <le-button label="Align Left" icon-only="align-left"></le-button>
+              <le-button label="Align Center" icon-only="align-center"></le-button>
+              <le-button label="Align Right" icon-only="align-right"></le-button>
+              <le-button label="Justify" icon-only="align-justify"></le-button>
+            </le-button-group>
+          </le-toolbar>
+        </le-preview-frame>
+      </le-actions-sequence>
     </div>
 
     <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-sm);">

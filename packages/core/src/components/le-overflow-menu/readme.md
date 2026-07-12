@@ -41,6 +41,22 @@ Type: `Promise<void>`
 
 
 
+### `navigate(key: "ArrowDown" | "ArrowUp" | "Enter") => Promise<void>`
+
+
+
+#### Parameters
+
+| Name  | Type                                  | Description |
+| ----- | ------------------------------------- | ----------- |
+| `key` | `"ArrowDown" \| "ArrowUp" \| "Enter"` |             |
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `show() => Promise<void>`
 
 

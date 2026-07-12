@@ -5,6 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { ActionStep } from "./components/le-actions-sequence/le-actions-sequence";
 import { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 import { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
@@ -23,6 +24,7 @@ import { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side
 import { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./components/le-side-panel-toggle/le-side-panel-toggle";
 import { LeToolbarOverflowChangeDetail } from "./components/le-toolbar/le-toolbar";
 import { TooltipPlacement as TooltipPlacement1 } from "./components/le-tooltip/le-tooltip";
+export { ActionStep } from "./components/le-actions-sequence/le-actions-sequence";
 export { LeBarOverflowChangeDetail } from "./components/le-bar/le-bar";
 export { LeMultiOptionSelectDetail, LeOption, LeOptionSelectDetail, LeOptionValue } from "./types/options";
 export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcrumbs";
@@ -42,6 +44,74 @@ export { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./compo
 export { LeToolbarOverflowChangeDetail } from "./components/le-toolbar/le-toolbar";
 export { TooltipPlacement as TooltipPlacement1 } from "./components/le-tooltip/le-tooltip";
 export namespace Components {
+    /**
+     * A non-visual component that runs a sequence of timed actions on its children.
+     * Designed for creating automated interaction loops and interactive demos.
+     * @cmsInternal true
+     */
+    interface LeActionsSequence {
+        /**
+          * Output debug logs to console.
+          * @default false
+         */
+        "debug": boolean;
+        /**
+          * Playback direction.
+          * @default 'forward'
+         */
+        "direction": 'forward' | 'reverse' | 'alternate';
+        /**
+          * Returns status information of the runner.
+         */
+        "getStatus": () => Promise<{ isPlaying: boolean; currentStepIndex: number; currentStep: ActionStep; stepsCount: number; }>;
+        /**
+          * Visibility threshold ratio (0.0 to 1.0) before triggering in-view.
+          * @default 0.5
+         */
+        "inViewThreshold": number;
+        /**
+          * Repeat the sequence when finished.
+          * @default false
+         */
+        "loop": boolean;
+        /**
+          * Loop delay in milliseconds before restarting the sequence.
+          * @default 0
+         */
+        "loopDelay": number;
+        /**
+          * Pause playback at the current step.
+         */
+        "pause": () => Promise<void>;
+        /**
+          * Pause the sequence when the user hovers over the element. Resumes on mouseleave.
+          * @default false
+         */
+        "pauseOnHover": boolean;
+        /**
+          * Pause the sequence when the user interacts (click/focus/drag) inside the element.
+          * @default false
+         */
+        "pauseOnInteraction": boolean;
+        /**
+          * Start or resume playback of the sequence.
+         */
+        "play": () => Promise<void>;
+        /**
+          * Playback triggers: 'init' (starts immediately), 'in-view' (scrolled into viewport), 'manual'.
+          * @default 'init'
+         */
+        "startOn": 'init' | 'in-view' | 'manual';
+        /**
+          * Array of ActionStep objects or a JSON string representation.
+          * @default []
+         */
+        "steps": ActionStep[] | string;
+        /**
+          * Stop playback and reset to the beginning.
+         */
+        "stop": () => Promise<void>;
+    }
     /**
      * A flexible bar component that handles overflow gracefully.
      * Items are slotted children. The bar measures which items fit on the first
@@ -1381,6 +1451,7 @@ export namespace Components {
           * @default '160px'
          */
         "minWidth": string;
+        "navigate": (key: "ArrowDown" | "ArrowUp" | "Enter") => Promise<void>;
         /**
           * Popover offset in px.
           * @default 8
@@ -1641,10 +1712,15 @@ export namespace Components {
          */
         "resizable": boolean;
         /**
-          * Whether to show the controls bar (breakpoint buttons + width badge).
-          * @default true
+          * What controls to show in the toolbar. - none: hide the entire controls bar - width: show only the width badge - breakpoints: show only the breakpoint preset buttons - all: show both the buttons and the width badge
+          * @default 'all'
          */
-        "showControls": boolean;
+        "showControls": boolean | 'none' | 'width' | 'breakpoints' | 'all';
+        /**
+          * Visibility strategy for the preview frame border, background, and controls. - always: Frame controls and borders are always visible. - hover: Invisible by default, fades in on hover or focus-within. - no: Always invisible (only viewport content is visible).
+          * @default 'always'
+         */
+        "showFrame": 'no' | 'hover' | 'always';
         /**
           * Snap to a preset width.
          */
@@ -2608,6 +2684,10 @@ export namespace Components {
          */
         "disablePopover": boolean;
         /**
+          * Close the toolbar's overflow menu.
+         */
+        "hideOverflowMenu": () => Promise<void>;
+        /**
           * Spacing between top-level toolbar items. Accepts any valid CSS length (e.g. `8px`, `0.5rem`, `var(--le-spacing-2)`).
           * @default 'var(--le-toolbar-gap, var(--le-spacing-1, 4px))'
          */
@@ -2616,6 +2696,10 @@ export namespace Components {
           * Optional declarative items input.  The current implementation is slot-driven, but when this prop changes we still invalidate the slotted-items cache and recompute layout.
          */
         "items"?: unknown;
+        /**
+          * Simulate a keyboard navigation key on the overflow menu.
+         */
+        "navigateOverflowMenu": (key: "ArrowDown" | "ArrowUp" | "Enter") => Promise<void>;
         /**
           * Icon for the overflow trigger button when no custom slot content is provided.
           * @default 'ellipsis-horizontal'
@@ -2635,6 +2719,10 @@ export namespace Components {
          */
         "resetToolbar": () => Promise<void>;
         "runDebugMeasurementStep": () => Promise<void>;
+        /**
+          * Open the toolbar's overflow menu.
+         */
+        "showOverflowMenu": () => Promise<void>;
     }
     /**
      * Flexible spacer for le-toolbar layouts.
@@ -2758,6 +2846,10 @@ export namespace Components {
         "state": LeVisibilityState;
     }
 }
+export interface LeActionsSequenceCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeActionsSequenceElement;
+}
 export interface LeBarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeBarElement;
@@ -2875,6 +2967,30 @@ export interface LeTooltipCustomEvent<T> extends CustomEvent<T> {
     target: HTMLLeTooltipElement;
 }
 declare global {
+    interface HTMLLeActionsSequenceElementEventMap {
+        "leStart": void;
+        "leStep": { index: number; step: ActionStep; target: HTMLElement };
+        "leFinish": void;
+    }
+    /**
+     * A non-visual component that runs a sequence of timed actions on its children.
+     * Designed for creating automated interaction loops and interactive demos.
+     * @cmsInternal true
+     */
+    interface HTMLLeActionsSequenceElement extends Components.LeActionsSequence, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeActionsSequenceElementEventMap>(type: K, listener: (this: HTMLLeActionsSequenceElement, ev: LeActionsSequenceCustomEvent<HTMLLeActionsSequenceElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeActionsSequenceElementEventMap>(type: K, listener: (this: HTMLLeActionsSequenceElement, ev: LeActionsSequenceCustomEvent<HTMLLeActionsSequenceElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeActionsSequenceElement: {
+        prototype: HTMLLeActionsSequenceElement;
+        new (): HTMLLeActionsSequenceElement;
+    };
     interface HTMLLeBarElementEventMap {
         "leBarOverflowChange": LeBarOverflowChangeDetail;
     }
@@ -4076,6 +4192,7 @@ declare global {
         new (): HTMLLeVisibilityElement;
     };
     interface HTMLElementTagNameMap {
+        "le-actions-sequence": HTMLLeActionsSequenceElement;
         "le-bar": HTMLLeBarElement;
         "le-bento-grid": HTMLLeBentoGridElement;
         "le-bento-tile": HTMLLeBentoTileElement;
@@ -4130,6 +4247,70 @@ declare global {
 declare namespace LocalJSX {
     type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}` | `prop:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K | `prop:${K}`]?: never } | { [P in `prop:${K}`]: PropT } & { [P in K | `attr:${K}`]?: never };
 
+    /**
+     * A non-visual component that runs a sequence of timed actions on its children.
+     * Designed for creating automated interaction loops and interactive demos.
+     * @cmsInternal true
+     */
+    interface LeActionsSequence {
+        /**
+          * Output debug logs to console.
+          * @default false
+         */
+        "debug"?: boolean;
+        /**
+          * Playback direction.
+          * @default 'forward'
+         */
+        "direction"?: 'forward' | 'reverse' | 'alternate';
+        /**
+          * Visibility threshold ratio (0.0 to 1.0) before triggering in-view.
+          * @default 0.5
+         */
+        "inViewThreshold"?: number;
+        /**
+          * Repeat the sequence when finished.
+          * @default false
+         */
+        "loop"?: boolean;
+        /**
+          * Loop delay in milliseconds before restarting the sequence.
+          * @default 0
+         */
+        "loopDelay"?: number;
+        /**
+          * Emitted when the sequence finishes
+         */
+        "onLeFinish"?: (event: LeActionsSequenceCustomEvent<void>) => void;
+        /**
+          * Emitted when the sequence starts playing
+         */
+        "onLeStart"?: (event: LeActionsSequenceCustomEvent<void>) => void;
+        /**
+          * Emitted when a step starts executing
+         */
+        "onLeStep"?: (event: LeActionsSequenceCustomEvent<{ index: number; step: ActionStep; target: HTMLElement }>) => void;
+        /**
+          * Pause the sequence when the user hovers over the element. Resumes on mouseleave.
+          * @default false
+         */
+        "pauseOnHover"?: boolean;
+        /**
+          * Pause the sequence when the user interacts (click/focus/drag) inside the element.
+          * @default false
+         */
+        "pauseOnInteraction"?: boolean;
+        /**
+          * Playback triggers: 'init' (starts immediately), 'in-view' (scrolled into viewport), 'manual'.
+          * @default 'init'
+         */
+        "startOn"?: 'init' | 'in-view' | 'manual';
+        /**
+          * Array of ActionStep objects or a JSON string representation.
+          * @default []
+         */
+        "steps"?: ActionStep[] | string;
+    }
     /**
      * A flexible bar component that handles overflow gracefully.
      * Items are slotted children. The bar measures which items fit on the first
@@ -5792,10 +5973,15 @@ declare namespace LocalJSX {
          */
         "resizable"?: boolean;
         /**
-          * Whether to show the controls bar (breakpoint buttons + width badge).
-          * @default true
+          * What controls to show in the toolbar. - none: hide the entire controls bar - width: show only the width badge - breakpoints: show only the breakpoint preset buttons - all: show both the buttons and the width badge
+          * @default 'all'
          */
-        "showControls"?: boolean;
+        "showControls"?: boolean | 'none' | 'width' | 'breakpoints' | 'all';
+        /**
+          * Visibility strategy for the preview frame border, background, and controls. - always: Frame controls and borders are always visible. - hover: Invisible by default, fades in on hover or focus-within. - no: Always invisible (only viewport content is visible).
+          * @default 'always'
+         */
+        "showFrame"?: 'no' | 'hover' | 'always';
         /**
           * Label for the width badge. Set empty to hide the unit suffix.
           * @default 'px'
@@ -6920,6 +7106,17 @@ declare namespace LocalJSX {
         "state"?: LeVisibilityState;
     }
 
+    interface LeActionsSequenceAttributes {
+        "steps": ActionStep[] | string;
+        "startOn": 'init' | 'in-view' | 'manual';
+        "inViewThreshold": number;
+        "loop": boolean;
+        "loopDelay": number;
+        "direction": 'forward' | 'reverse' | 'alternate';
+        "debug": boolean;
+        "pauseOnHover": boolean;
+        "pauseOnInteraction": boolean;
+    }
     interface LeBarAttributes {
         "overflow": 'more' | 'scroll' | 'hamburger' | 'wrap';
         "alignItems": 'start' | 'end' | 'center' | 'stretch';
@@ -7201,7 +7398,8 @@ declare namespace LocalJSX {
         "frameWidth": number;
         "minWidth": number;
         "maxWidth": number;
-        "showControls": boolean;
+        "showControls": string;
+        "showFrame": 'no' | 'hover' | 'always';
         "resizable": boolean;
         "handles": LePreviewFrameHandleSide[] | string;
         "origin": LePreviewFrameResizeOrigin;
@@ -7433,6 +7631,7 @@ declare namespace LocalJSX {
     }
 
     interface IntrinsicElements {
+        "le-actions-sequence": Omit<LeActionsSequence, keyof LeActionsSequenceAttributes> & { [K in keyof LeActionsSequence & keyof LeActionsSequenceAttributes]?: LeActionsSequence[K] } & { [K in keyof LeActionsSequence & keyof LeActionsSequenceAttributes as `attr:${K}`]?: LeActionsSequenceAttributes[K] } & { [K in keyof LeActionsSequence & keyof LeActionsSequenceAttributes as `prop:${K}`]?: LeActionsSequence[K] };
         "le-bar": Omit<LeBar, keyof LeBarAttributes> & { [K in keyof LeBar & keyof LeBarAttributes]?: LeBar[K] } & { [K in keyof LeBar & keyof LeBarAttributes as `attr:${K}`]?: LeBarAttributes[K] } & { [K in keyof LeBar & keyof LeBarAttributes as `prop:${K}`]?: LeBar[K] };
         "le-bento-grid": Omit<LeBentoGrid, keyof LeBentoGridAttributes> & { [K in keyof LeBentoGrid & keyof LeBentoGridAttributes]?: LeBentoGrid[K] } & { [K in keyof LeBentoGrid & keyof LeBentoGridAttributes as `attr:${K}`]?: LeBentoGridAttributes[K] } & { [K in keyof LeBentoGrid & keyof LeBentoGridAttributes as `prop:${K}`]?: LeBentoGrid[K] };
         "le-bento-tile": Omit<LeBentoTile, keyof LeBentoTileAttributes> & { [K in keyof LeBentoTile & keyof LeBentoTileAttributes]?: LeBentoTile[K] } & { [K in keyof LeBentoTile & keyof LeBentoTileAttributes as `attr:${K}`]?: LeBentoTileAttributes[K] } & { [K in keyof LeBentoTile & keyof LeBentoTileAttributes as `prop:${K}`]?: LeBentoTile[K] };
@@ -7488,6 +7687,12 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * A non-visual component that runs a sequence of timed actions on its children.
+             * Designed for creating automated interaction loops and interactive demos.
+             * @cmsInternal true
+             */
+            "le-actions-sequence": LocalJSX.IntrinsicElements["le-actions-sequence"] & JSXBase.HTMLAttributes<HTMLLeActionsSequenceElement>;
             /**
              * A flexible bar component that handles overflow gracefully.
              * Items are slotted children. The bar measures which items fit on the first

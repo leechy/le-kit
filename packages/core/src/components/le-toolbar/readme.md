@@ -39,6 +39,32 @@ footprint first before their contents are overflowed entirely.
 
 ## Methods
 
+### `hideOverflowMenu() => Promise<void>`
+
+Close the toolbar's overflow menu.
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `navigateOverflowMenu(key: "ArrowDown" | "ArrowUp" | "Enter") => Promise<void>`
+
+Simulate a keyboard navigation key on the overflow menu.
+
+#### Parameters
+
+| Name  | Type                                  | Description |
+| ----- | ------------------------------------- | ----------- |
+| `key` | `"ArrowDown" \| "ArrowUp" \| "Enter"` |             |
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `recalculate() => Promise<void>`
 
 Force a layout recalculation.
@@ -62,6 +88,16 @@ Type: `Promise<void>`
 ### `runDebugMeasurementStep() => Promise<void>`
 
 
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `showOverflowMenu() => Promise<void>`
+
+Open the toolbar's overflow menu.
 
 #### Returns
 

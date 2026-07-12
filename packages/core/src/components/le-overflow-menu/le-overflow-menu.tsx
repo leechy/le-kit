@@ -110,6 +110,18 @@ export class LeOverflowMenu {
     await this.popoverEl?.toggle();
   }
 
+  @Method()
+  async navigate(key: 'ArrowDown' | 'ArrowUp' | 'Enter') {
+    if (this.navigationEl) {
+      const event = new KeyboardEvent('keydown', {
+        key,
+        bubbles: true,
+        cancelable: true,
+      });
+      this.navigationEl.dispatchEvent(event);
+    }
+  }
+
   private parseItems(input: LeOverflowMenuItem[] | string): LeOverflowMenuItem[] {
     return parseOptionInput(input, 'le-overflow-menu', 'items');
   }

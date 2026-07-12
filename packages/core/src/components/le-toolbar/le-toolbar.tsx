@@ -261,6 +261,39 @@ export class LeToolbar {
     this.computeLayout();
   }
 
+  /**
+   * Open the toolbar's overflow menu.
+   */
+  @Method()
+  async showOverflowMenu() {
+    const menu = this.el.shadowRoot?.querySelector('le-overflow-menu') as any;
+    if (menu) {
+      await menu.show();
+    }
+  }
+
+  /**
+   * Close the toolbar's overflow menu.
+   */
+  @Method()
+  async hideOverflowMenu() {
+    const menu = this.el.shadowRoot?.querySelector('le-overflow-menu') as any;
+    if (menu) {
+      await menu.hide();
+    }
+  }
+
+  /**
+   * Simulate a keyboard navigation key on the overflow menu.
+   */
+  @Method()
+  async navigateOverflowMenu(key: 'ArrowDown' | 'ArrowUp' | 'Enter') {
+    const menu = this.el.shadowRoot?.querySelector('le-overflow-menu') as any;
+    if (menu) {
+      await menu.navigate(key);
+    }
+  }
+
   // ─── Observers ──────────────────────────────────────────────────────────────
 
   private attachObservers() {

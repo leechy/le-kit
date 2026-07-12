@@ -198,10 +198,13 @@ export class LeToolbar {
 
   private collapseSteps: CollapseStep[] = [];
 
+  private stepsCache: Map<string, CollapseStep[]> = new Map();
+
   private disconnectModeObserver?: () => void;
 
   @Watch('alignItems')
   handleAlignChange() {
+    this.stepsCache.clear();
     void this.prepareToolbarItems();
   }
 
@@ -211,13 +214,14 @@ export class LeToolbar {
       // set default gap if input is empty or invalid
       this.itemGap = 'var(--le-toolbar-gap, var(--le-spacing-1, 4px))';
     }
+    this.stepsCache.clear();
     void this.prepareToolbarItems();
   }
 
   @Watch('items')
   handleItemsChange() {
-    // update virtual toolbar structure when items are changed
-    this.prepareToolbarItems();
+    this.stepsCache.clear();
+    void this.prepareToolbarItems();
   }
 
   @Listen('slotchange')
@@ -236,6 +240,7 @@ export class LeToolbar {
   }
 
   disconnectedCallback() {
+    this.stepsCache.clear();
     this.detachObservers();
     this.disconnectModeObserver?.();
     if (this.pendingRecalc !== null) {
@@ -249,6 +254,7 @@ export class LeToolbar {
    */
   @Method()
   async resetToolbar() {
+    this.stepsCache.clear();
     this.clearVirtualMeasurements();
     this.prepareToolbarItems();
   }
@@ -274,20 +280,73 @@ export class LeToolbar {
     }
 
     this.mutationObserver = new MutationObserver(mutations => {
-      // Only invalidate cached slotted children when structure changes.
-      if (mutations.some(m => m.type === 'childList')) {
-        // update virtual toolbar structure when items are changed
-        this.prepareToolbarItems();
+      const childListChanged = mutations.some(m => m.type === 'childList');
+      if (childListChanged) {
+        this.stepsCache.clear();
+        void this.prepareToolbarItems();
+      } else {
+        const priorityOrExpandedChanged = mutations.some(
+          m =>
+            m.type === 'attributes' &&
+            (m.attributeName === 'priority' || m.attributeName === 'data-le-expanded'),
+        );
+        if (priorityOrExpandedChanged) {
+          void this.handleStateChange();
+        } else {
+          this.scheduleRecalc();
+        }
       }
-      this.scheduleRecalc();
     });
 
     this.mutationObserver.observe(this.el, {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ['priority', 'data-le-pinned', 'data-le-separator', 'disabled'],
+      attributeFilter: [
+        'priority',
+        'data-le-pinned',
+        'data-le-separator',
+        'disabled',
+        'data-le-expanded',
+      ],
     });
+  }
+
+  private getLayoutStateKey(): string {
+    const expandedIds: string[] = [];
+    const children = Array.from(this.el.children);
+    for (let index = 0; index < children.length; index += 1) {
+      const item = children[index] as HTMLElement;
+      if (
+        item instanceof HTMLElement &&
+        ((item.getAttribute('slot') ?? '').startsWith('__le-toolbar-item-') ||
+          !item.hasAttribute('slot') ||
+          item.getAttribute('slot') === '')
+      ) {
+        const isManuallyExpanded =
+          item.hasAttribute('data-le-expanded') ||
+          (item as any).isExpanded === true;
+        if (isManuallyExpanded) {
+          const id = this.getItemId(item, index);
+          expandedIds.push(id);
+        }
+      }
+    }
+    if (expandedIds.length === 0) {
+      return 'default';
+    }
+    return `expanded::${expandedIds.sort().join(',')}`;
+  }
+
+  private async handleStateChange() {
+    const stateKey = this.getLayoutStateKey();
+    const cachedSteps = this.stepsCache.get(stateKey);
+    if (cachedSteps) {
+      this.collapseSteps = cachedSteps.map(step => ({ ...step }));
+      this.scheduleRecalc();
+    } else {
+      await this.prepareToolbarItems();
+    }
   }
 
   private detachObservers() {
@@ -579,6 +638,7 @@ export class LeToolbar {
       const clone = item.cloneNode(true) as HTMLElement & {
         componentOnReady?: () => Promise<unknown>;
       };
+      clone.setAttribute('data-le-virtual', 'true');
       const virtualWrapper = document.createElement('div');
       virtualWrapper.className = 'toolbar-virtual-item-wrap';
       const id = this.getItemId(item, index);
@@ -604,7 +664,10 @@ export class LeToolbar {
       }
 
       let kind: ToolbarItemRecord['kind'];
-      if (collapseMeta.kind === 'spacer') {
+      const isManuallyExpanded = item.hasAttribute('data-le-expanded') || (item as any).isExpanded === true;
+      if (isManuallyExpanded) {
+        kind = 'item';
+      } else if (collapseMeta.kind === 'spacer') {
         const isFixedSpacer = collapseMeta.fixed ?? collapseMeta.minWidth !== undefined;
         kind = isFixedSpacer ? 'spacer-fixed' : 'spacer-flex';
       } else if (collapseMeta.kind === 'stepping') {
@@ -640,10 +703,8 @@ export class LeToolbar {
         virtualWrapper.appendChild(clone);
         virtual.appendChild(virtualWrapper);
 
-        if (clone.componentOnReady) {
-          await clone.componentOnReady();
-          await nextResize(virtual);
-        }
+        await this.settleVirtualItem(clone);
+        await nextResize(virtual);
 
         virtualNode = clone;
         virtualWrapperNode = virtualWrapper;
@@ -706,6 +767,7 @@ export class LeToolbar {
           action: 'hide-group',
           collapseValue: 'collapse',
           overflowOption: groupOverflowOption,
+          excludeFromOverflowMenu: collapseMeta.excludeFromOverflowMenu,
           thresholdWidth: 0,
           resultingWidth: 0,
         });
@@ -737,6 +799,7 @@ export class LeToolbar {
           stage: collapseMeta.collapseValues.length,
           action: 'hide-item',
           overflowOption,
+          excludeFromOverflowMenu: collapseMeta.excludeFromOverflowMenu,
           thresholdWidth: 0,
           resultingWidth: 0,
         });
@@ -749,6 +812,7 @@ export class LeToolbar {
           stage: 0,
           action: 'hide-item',
           overflowOption,
+          excludeFromOverflowMenu: collapseMeta.excludeFromOverflowMenu,
           thresholdWidth: 0,
           resultingWidth: 0,
         });
@@ -813,6 +877,10 @@ export class LeToolbar {
 
     await this.calculateLayoutWidths();
     this.hasPreparedInitialLayout = true;
+
+    const stateKey = this.getLayoutStateKey();
+    this.stepsCache.set(stateKey, this.collapseSteps.map(step => ({ ...step })));
+
     this.scheduleRecalc();
   }
 
@@ -910,6 +978,42 @@ export class LeToolbar {
     }
 
     const newHostWidth = host.getBoundingClientRect().width;
+
+    // Auto-clear manual expansion state if there is enough space to naturally expand the item
+    const stateKey = this.getLayoutStateKey();
+    if (stateKey !== 'default') {
+      const defaultSteps = this.stepsCache.get('default');
+      if (defaultSteps) {
+        let canClearAll = true;
+        for (const [id, item] of this.itemMap.entries()) {
+          const isManuallyExpanded =
+            item.element.hasAttribute('data-le-expanded') ||
+            (item.element as any).isExpanded === true;
+          if (isManuallyExpanded) {
+            const defaultStep = defaultSteps.find(
+              s => s.itemId === id && s.action === 'group-collapse',
+            );
+            if (defaultStep) {
+              if (newHostWidth < defaultStep.thresholdWidth) {
+                canClearAll = false;
+                break;
+              }
+            }
+          }
+        }
+        if (canClearAll) {
+          for (const item of this.itemMap.values()) {
+            const isManuallyExpanded =
+              item.element.hasAttribute('data-le-expanded') ||
+              (item.element as any).isExpanded === true;
+            if (isManuallyExpanded && typeof (item.element as any).collapseItem === 'function') {
+              void (item.element as any).collapseItem();
+            }
+          }
+          return;
+        }
+      }
+    }
 
     const visibleIds = new Set<string>(this.itemMap.keys());
     const hiddenIds = new Set<string>();
@@ -1073,8 +1177,8 @@ export class LeToolbar {
 
   private renderVirtualToolbar() {
     return (
-      <fieldset
-        disabled
+      <div
+        inert={true}
         aria-hidden="true"
         data-debug-step-index={String(this.debugStepIndex)}
         data-debug-step-total={String(this.collapseSteps.length)}
@@ -1094,7 +1198,7 @@ export class LeToolbar {
           })}
           ref={el => (this.virtualTriggerEl = el)}
         />
-      </fieldset>
+      </div>
     );
   }
 

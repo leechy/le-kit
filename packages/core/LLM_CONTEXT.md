@@ -49,6 +49,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-tag](#le-tag)
 - [le-text](#le-text)
 - [le-toolbar](#le-toolbar)
+- [le-toolbar-item](#le-toolbar-item)
 - [le-toolbar-spacer](#le-toolbar-spacer)
 - [le-tooltip](#le-tooltip)
 - [le-turntable](#le-turntable)
@@ -1735,6 +1736,34 @@ footprint first before their contents are overflowed entirely.
 |------|-------------|
 | Default | Toolbar items |
 | `"more"` | Custom content for the overflow trigger button |
+
+---
+
+## <le-toolbar-item>
+
+A collapsible toolbar item wrapper component that collapses to an icon trigger when space is constrained,
+and expands with smooth Liquid Glass transitions either automatically or interactively.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `collapse` | `'collapsed' \| 'expanded' \| undefined` |  | The current collapse state. Can be 'collapsed' (renders trigger icon) or 'expanded' (renders full slot contents). Typically synced automatically by le-toolbar. |
+| `icon` | `string \| undefined` |  | Icon name for the collapsed button trigger. |
+| `closeIcon` | `string` | `'clear'` | Icon name for the close button. |
+| `showClose` | `boolean` | `false` | Whether to display the close button in the expanded state. |
+| `excludeFromOverflow` | `boolean` | `false` | Exclude this item from the overflow menu if it overflows entirely. |
+| `minWidth` | `string \| undefined` |  | Optional custom min-width for the expanded content. |
+| `maxWidth` | `string \| undefined` |  | Optional custom max-width for the expanded content. |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | Main content (e.g. input, select, custom content) |
+| `"trigger"` | Custom content to replace the default icon button trigger |
+| `"close-button"` | Custom content to replace the default close button |
 
 ---
 

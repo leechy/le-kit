@@ -1,0 +1,53 @@
+:host {
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.toolbar-item-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.collapsed-trigger-visibility,
+.expanded-content-visibility {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.collapsed-trigger-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expanded-content-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--le-spacing-1, 4px);
+  min-width: var(--le-toolbar-item-expanded-min-width, auto);
+  max-width: var(--le-toolbar-item-expanded-max-width, 100%);
+  width: 100%;
+}
+
+.content-slot-container {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.close-button-container {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+::slotted(:not([slot])) {
+  width: 100%;
+  flex: 1;
+}

@@ -412,6 +412,13 @@
 
           <le-button priority="30" variant="clear" label="Preview" onclick="alert('Preview')">Preview</le-button>
 
+          <le-toolbar-item id="demo-toolbar-search-item" priority="40" icon="search" show-close min-width="90px"
+            max-width="260px">
+            <le-string-input placeholder="Search..." clearable>
+              <le-icon name="search" slot="icon-start"></le-icon>
+            </le-string-input>
+          </le-toolbar-item>
+
           <!-- A collapsible button group — collapses internally first -->
           <le-button-group priority="80" overflow-icons label="Text Align" collapse="2">
             <le-button variant="clear" label="Align Left">

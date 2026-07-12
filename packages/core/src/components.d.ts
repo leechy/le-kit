@@ -2637,6 +2637,47 @@ export namespace Components {
         "runDebugMeasurementStep": () => Promise<void>;
     }
     /**
+     * A collapsible toolbar item wrapper component that collapses to an icon trigger when space is constrained,
+     * and expands with smooth Liquid Glass transitions either automatically or interactively.
+     */
+    interface LeToolbarItem {
+        /**
+          * Icon name for the close button.
+          * @default 'clear'
+         */
+        "closeIcon": string;
+        /**
+          * The current collapse state. Can be 'collapsed' (renders trigger icon) or 'expanded' (renders full slot contents). Typically synced automatically by le-toolbar.
+         */
+        "collapse"?: 'collapsed' | 'expanded';
+        "collapseItem": () => Promise<void>;
+        /**
+          * Exclude this item from the overflow menu if it overflows entirely.
+          * @default false
+         */
+        "excludeFromOverflow": boolean;
+        "expand": () => Promise<void>;
+        "getCollapseMeta": () => Promise<LeCollapseMeta>;
+        /**
+          * Icon name for the collapsed button trigger.
+         */
+        "icon"?: string;
+        /**
+          * Optional custom max-width for the expanded content.
+         */
+        "maxWidth"?: string | number;
+        /**
+          * Optional custom min-width for the expanded content.
+         */
+        "minWidth"?: string | number;
+        /**
+          * Whether to display the close button in the expanded state.
+          * @default false
+         */
+        "showClose": boolean;
+        "whenLayoutSettled": () => Promise<void>;
+    }
+    /**
      * Flexible spacer for le-toolbar layouts.
      * Default behavior (no width): occupies available free space and shrinks naturally.
      * With numeric `width`: behaves as a fixed-width spacer that can be collapsed by le-toolbar.
@@ -4024,6 +4065,16 @@ declare global {
         new (): HTMLLeToolbarElement;
     };
     /**
+     * A collapsible toolbar item wrapper component that collapses to an icon trigger when space is constrained,
+     * and expands with smooth Liquid Glass transitions either automatically or interactively.
+     */
+    interface HTMLLeToolbarItemElement extends Components.LeToolbarItem, HTMLStencilElement {
+    }
+    var HTMLLeToolbarItemElement: {
+        prototype: HTMLLeToolbarItemElement;
+        new (): HTMLLeToolbarItemElement;
+    };
+    /**
      * Flexible spacer for le-toolbar layouts.
      * Default behavior (no width): occupies available free space and shrinks naturally.
      * With numeric `width`: behaves as a fixed-width spacer that can be collapsed by le-toolbar.
@@ -4121,6 +4172,7 @@ declare global {
         "le-tag": HTMLLeTagElement;
         "le-text": HTMLLeTextElement;
         "le-toolbar": HTMLLeToolbarElement;
+        "le-toolbar-item": HTMLLeToolbarItemElement;
         "le-toolbar-spacer": HTMLLeToolbarSpacerElement;
         "le-tooltip": HTMLLeTooltipElement;
         "le-turntable": HTMLLeTurntableElement;
@@ -6811,6 +6863,43 @@ declare namespace LocalJSX {
         "overflowLabel"?: string;
     }
     /**
+     * A collapsible toolbar item wrapper component that collapses to an icon trigger when space is constrained,
+     * and expands with smooth Liquid Glass transitions either automatically or interactively.
+     */
+    interface LeToolbarItem {
+        /**
+          * Icon name for the close button.
+          * @default 'clear'
+         */
+        "closeIcon"?: string;
+        /**
+          * The current collapse state. Can be 'collapsed' (renders trigger icon) or 'expanded' (renders full slot contents). Typically synced automatically by le-toolbar.
+         */
+        "collapse"?: 'collapsed' | 'expanded';
+        /**
+          * Exclude this item from the overflow menu if it overflows entirely.
+          * @default false
+         */
+        "excludeFromOverflow"?: boolean;
+        /**
+          * Icon name for the collapsed button trigger.
+         */
+        "icon"?: string;
+        /**
+          * Optional custom max-width for the expanded content.
+         */
+        "maxWidth"?: string | number;
+        /**
+          * Optional custom min-width for the expanded content.
+         */
+        "minWidth"?: string | number;
+        /**
+          * Whether to display the close button in the expanded state.
+          * @default false
+         */
+        "showClose"?: boolean;
+    }
+    /**
      * Flexible spacer for le-toolbar layouts.
      * Default behavior (no width): occupies available free space and shrinks naturally.
      * With numeric `width`: behaves as a fixed-width spacer that can be collapsed by le-toolbar.
@@ -7407,6 +7496,15 @@ declare namespace LocalJSX {
         "debugVirtualToolbar": boolean;
         "debugPauseBeforeMeasure": boolean;
     }
+    interface LeToolbarItemAttributes {
+        "collapse": 'collapsed' | 'expanded';
+        "icon": string;
+        "closeIcon": string;
+        "showClose": boolean;
+        "excludeFromOverflow": boolean;
+        "minWidth": string;
+        "maxWidth": string;
+    }
     interface LeToolbarSpacerAttributes {
         "width": string;
     }
@@ -7478,6 +7576,7 @@ declare namespace LocalJSX {
         "le-tag": Omit<LeTag, keyof LeTagAttributes> & { [K in keyof LeTag & keyof LeTagAttributes]?: LeTag[K] } & { [K in keyof LeTag & keyof LeTagAttributes as `attr:${K}`]?: LeTagAttributes[K] } & { [K in keyof LeTag & keyof LeTagAttributes as `prop:${K}`]?: LeTag[K] };
         "le-text": Omit<LeText, keyof LeTextAttributes> & { [K in keyof LeText & keyof LeTextAttributes]?: LeText[K] } & { [K in keyof LeText & keyof LeTextAttributes as `attr:${K}`]?: LeTextAttributes[K] } & { [K in keyof LeText & keyof LeTextAttributes as `prop:${K}`]?: LeText[K] };
         "le-toolbar": Omit<LeToolbar, keyof LeToolbarAttributes> & { [K in keyof LeToolbar & keyof LeToolbarAttributes]?: LeToolbar[K] } & { [K in keyof LeToolbar & keyof LeToolbarAttributes as `attr:${K}`]?: LeToolbarAttributes[K] } & { [K in keyof LeToolbar & keyof LeToolbarAttributes as `prop:${K}`]?: LeToolbar[K] };
+        "le-toolbar-item": Omit<LeToolbarItem, keyof LeToolbarItemAttributes> & { [K in keyof LeToolbarItem & keyof LeToolbarItemAttributes]?: LeToolbarItem[K] } & { [K in keyof LeToolbarItem & keyof LeToolbarItemAttributes as `attr:${K}`]?: LeToolbarItemAttributes[K] } & { [K in keyof LeToolbarItem & keyof LeToolbarItemAttributes as `prop:${K}`]?: LeToolbarItem[K] };
         "le-toolbar-spacer": Omit<LeToolbarSpacer, keyof LeToolbarSpacerAttributes> & { [K in keyof LeToolbarSpacer & keyof LeToolbarSpacerAttributes]?: LeToolbarSpacer[K] } & { [K in keyof LeToolbarSpacer & keyof LeToolbarSpacerAttributes as `attr:${K}`]?: LeToolbarSpacerAttributes[K] } & { [K in keyof LeToolbarSpacer & keyof LeToolbarSpacerAttributes as `prop:${K}`]?: LeToolbarSpacer[K] };
         "le-tooltip": Omit<LeTooltip, keyof LeTooltipAttributes> & { [K in keyof LeTooltip & keyof LeTooltipAttributes]?: LeTooltip[K] } & { [K in keyof LeTooltip & keyof LeTooltipAttributes as `attr:${K}`]?: LeTooltipAttributes[K] } & { [K in keyof LeTooltip & keyof LeTooltipAttributes as `prop:${K}`]?: LeTooltip[K] };
         "le-turntable": Omit<LeTurntable, keyof LeTurntableAttributes> & { [K in keyof LeTurntable & keyof LeTurntableAttributes]?: LeTurntable[K] } & { [K in keyof LeTurntable & keyof LeTurntableAttributes as `attr:${K}`]?: LeTurntableAttributes[K] } & { [K in keyof LeTurntable & keyof LeTurntableAttributes as `prop:${K}`]?: LeTurntable[K] };
@@ -8049,6 +8148,11 @@ declare module "@stencil/core" {
              * @cmsCategory Layout
              */
             "le-toolbar": LocalJSX.IntrinsicElements["le-toolbar"] & JSXBase.HTMLAttributes<HTMLLeToolbarElement>;
+            /**
+             * A collapsible toolbar item wrapper component that collapses to an icon trigger when space is constrained,
+             * and expands with smooth Liquid Glass transitions either automatically or interactively.
+             */
+            "le-toolbar-item": LocalJSX.IntrinsicElements["le-toolbar-item"] & JSXBase.HTMLAttributes<HTMLLeToolbarItemElement>;
             /**
              * Flexible spacer for le-toolbar layouts.
              * Default behavior (no width): occupies available free space and shrinks naturally.

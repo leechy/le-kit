@@ -21,4 +21,7 @@ export interface LeCollapseMeta {
   managesVisibility?: boolean;
   /** Optionally, overflow menu representation */
   overflowOption?: LeOption;
+  /** Exclude this item from the overflow menu if it is hidden due to layout constraints */
+  excludeFromOverflowMenu?: boolean;
 }
+

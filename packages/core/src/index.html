@@ -6,6 +6,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
   <title>Le-Kit Component Library</title>
 
+  <!-- Register composed icons in the global registry (must run before components) -->
+  <script>
+    window.__leKitConfig__ = {
+      manifestFile: 'custom-elements.json',
+      assetBasePath: '',
+      icons: {
+        defaultBadgePosition: '-4.5, -4.5',
+        defaultBadgeScale: 1,
+        defaultViewBox: '0 0 16 16',
+        composed: {
+          'add-to-folder': { icon: 'folder', badge: 'add-badge' },
+          'move-to': { icon: 'folder', badge: 'move-badge' },
+          'share-folder': { icon: 'folder', badge: 'share-badge' },
+          'new-file': { icon: 'file', badge: 'add-badge' },
+          'move-file': { icon: 'file', badge: 'move-badge' },
+          'share-file': { icon: 'file', badge: 'share-badge' },
+          'file-copy': {
+            viewBox: '0 0 16 16',
+            layers: [
+              { name: 'file', scale: 0.75, position: '6.5px, 9.5px' },
+              { name: 'file', scale: 0.8, position: '-6.5px, 6.8px' },
+            ]
+          },
+        },
+      },
+    };
+  </script>
+
   <script type="module" src="/build/le-kit.esm.js"></script>
   <script nomodule src="/build/le-kit.js"></script>
   <link rel="stylesheet" href="/build/le-kit.css" />
@@ -301,14 +329,148 @@
     <le-header-placeholder></le-header-placeholder> -->
 
   <br />
-  <div style="
+
+  <div class="demo-section">
+    <h2>Icons</h2>
+
+    <h3>Folders</h3>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <le-icon name="folder" size="32"></le-icon>
+      <le-icon name="folder-open" size="32"></le-icon>
+      <le-icon name="folder" badge="add-badge" size="32"></le-icon>
+      <le-icon name="move-to" size="32"></le-icon>
+      <le-icon name="folder" badge="gear-badge" size="32"></le-icon>
+      <le-icon name="folder" badge="move-badge" size="32"></le-icon>
+      <le-icon name="folder" badge="share-badge" size="32"></le-icon>
+
+      <le-button icon-start="folder-open">Open</le-button>
+      <le-button icon-only="move-to" label="Move to"></le-button>
+    </div>
+
+    <h2>Files</h2>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <le-icon name="file" size="32"></le-icon>
+      <le-icon name="file" badge="move-badge" badge-position="top, right" size="32"></le-icon>
+      <le-icon name="move-file" size="32"></le-icon>
+      <le-icon name="share-file" size="32"></le-icon>
+      <le-icon name="copy-file" size="32"></le-icon>
+      <le-icon name="copy-file-to" size="32"></le-icon>
+      <le-icon name="new-file" size="32"></le-icon>
+    </div>
+
+    <h3>Composed Icons (badge prop)</h3>
+    <p>Manual (new-file) vs Composed (file + plus-badge):</p>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <le-icon name="file" size="48"></le-icon>
+      <le-icon name="file" badge="add-badge" size="48"></le-icon>
+      <span style="display: inline-block; width: 16px;"></span>
+      <le-icon name="file" badge="add-badge" badge-position="-3, -3" size="48"></le-icon>
+      <le-icon name="file" badge="move-badge" badge-position="100%, 0%" size="48"></le-icon>
+      <le-icon name="file" badge="add-badge" badge-position="50%, 50%" badge-scale="1.5" size="48"></le-icon>
+      <span style="display: inline-block; width: 16px;"></span>
+      <le-icon name="folder" badge="add-badge" size="48"></le-icon>
+      <le-icon name="folder" badge="add-badge" badge-position="-3, -3" badge-scale="0.8" size="48"></le-icon>
+    </div>
+
+    <h3>Registry Icons (configureLeKit)</h3>
+    <p>These use names registered via configureLeKit({ icons: { ... } }):</p>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <le-icon name="add-to-folder" size="32"></le-icon>
+      <le-icon name="move-to" size="32"></le-icon>
+      <le-icon name="file-copy" size="32"></le-icon>
+      <le-icon name="share-folder" size="32"></le-icon>
+      <le-icon name="new-file" size="32"></le-icon>
+      <le-icon name="move-file" size="32"></le-icon>
+      <le-icon name="share-file" size="32"></le-icon>
+      <span style="display: inline-block; width: 16px;"></span>
+      <le-button icon-only="add-to-folder" label="Add to folder"></le-button>
+      <le-button icon-only="move-to" label="Move to"></le-button>
+      <le-button icon-start="share-folder">Share Folder</le-button>
+    </div>
+
+    <h3>Inline :: Syntax</h3>
+    <p>Ad-hoc composed icons using name::badge syntax:</p>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <le-icon name="folder::add-badge" size="32"></le-icon>
+      <le-icon name="folder::download-badge" size="32"></le-icon>
+      <le-icon name="file::share-badge" size="32"></le-icon>
+      <span style="display: inline-block; width: 16px;"></span>
+      <le-button icon-only="folder::add-badge" label="Add to folder"></le-button>
+      <le-button icon-start="file-copy::download-badge">Download</le-button>
+    </div>
+
+    <h3>Component Controls</h3>
+    <le-icon name="side-panel" size="42" style="color: var(--le-color-primary);"></le-icon>
+    <le-icon name="side-panel-start" size="42" style="color: var(--le-color-primary);"></le-icon>
+    <le-icon name="side-panel-end" size="42" style="color: var(--le-color-danger);"></le-icon>
+    <le-icon name="hamburger" size="42" style="color: var(--le-color-secondary);"></le-icon>
+    <le-icon name="ellipsis-horizontal" size="42" style="color: var(--le-color-danger);"></le-icon>
+    <le-icon name="ellipsis-vertical" size="42" style="color: var(--le-color-warning);"></le-icon>
+    <le-icon name="check" size="42" style="color: var(--le-color-success);"></le-icon>
+    <le-icon name="clear" size="42" style="color: var(--le-color-text);"></le-icon>
+    <br />
+    <le-icon name="arrow-left" size="32"></le-icon>
+    <le-icon name="arrow-right" size="32"></le-icon>
+    <span style="display: inline-block; width: 16px;"></span>
+    <le-icon name="new" size="32"></le-icon>
+    <le-icon name="open" size="32"></le-icon>
+    <le-icon name="save" size="32"></le-icon>
+    <le-icon name="download" size="32"></le-icon>
+    <le-icon name="upload" size="32"></le-icon>
+    <span style="display: inline-block; width: 16px;"></span>
+    <le-icon name="revert" size="32"></le-icon>
+    <le-icon name="reload" size="32"></le-icon>
+    <span style="display: inline-block; width: 16px;"></span>
+    <le-icon name="copy" size="32"></le-icon>
+    <le-icon name="paste" size="32"></le-icon>
+    <le-icon name="cut" size="32"></le-icon>
+    <le-icon name="delete" size="32"></le-icon>
+    <le-icon name="duplicate" size="32"></le-icon>
+    <span style="display: inline-block; width: 16px;"></span>
+    <le-icon name="undo" size="32"></le-icon>
+    <le-icon name="redo" size="32"></le-icon>
+    <span style="display: inline-block; width: 16px;"></span>
+    <le-icon name="align-left" size="32"></le-icon>
+    <le-icon name="align-center" size="32"></le-icon>
+    <le-icon name="align-right" size="32"></le-icon>
+    <le-icon name="align-justify" size="32"></le-icon>
+    <le-icon name="line-spacing" size="32"></le-icon>
+    <span style="display: inline-block; width: 16px;"></span>
+    <le-icon name="bullet-list" size="32"></le-icon>
+    <le-icon name="numbered-list" size="32"></le-icon>
+    <le-icon name="check-list" size="32"></le-icon>
+    <le-icon name="increase-indent" size="32"></le-icon>
+    <le-icon name="decrease-indent" size="32"></le-icon>
+    <br />
+    <le-icon name="chevron-left" size="24"></le-icon>
+    <le-icon name="chevron-up" size="24"></le-icon>
+    <le-icon name="chevron-down" size="24"></le-icon>
+    <le-icon name="chevron-right" size="24"></le-icon>
+    <br />
+    <le-icon name="plus" size="24"></le-icon>
+    <le-icon name="plus-square" size="24"></le-icon>
+    <le-icon name="plus-circle" size="24"></le-icon>
+    <br />
+    <le-icon name="minus" size="24"></le-icon>
+    <le-icon name="minus-square" size="24"></le-icon>
+    <le-icon name="minus-circle" size="24"></le-icon>
+    <br />
+    <le-icon name="desktop" size="42"></le-icon>
+    <le-icon name="tablet" size="42"></le-icon>
+    <le-icon name="phone" size="42"></le-icon>
+  </div>
+
+
+  <div class="demo-section" style="
         border: 1px solid var(--le-color-border);
         border-radius: var(--le-radius-md);
-        padding: var(--le-space-md);
+        padding: 0 var(--le-space-md) var(--le-space-md) var(--le-space-md);
         margin: var(--le-space-md) var(--le-space-lg);
         display: grid;
         gap: var(--le-space-sm);
       ">
+
+    <h2>Button Groups</h2>
     <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-sm);">
       <strong style="font-size: var(--le-font-size-sm);">le-button-group manual demo</strong>
       <span id="demo-button-group-collapse-status"
@@ -379,14 +541,15 @@
   </div>
 
   <!-- ─── le-toolbar demo ───────────────────────────────────────────────── -->
-  <div style="
+  <div class="demo-section" style="
         border: 1px solid var(--le-color-border);
         border-radius: var(--le-radius-md);
-        padding: var(--le-space-md);
+        padding: 0 var(--le-space-md) var(--le-space-md) var(--le-space-md);
         margin: var(--le-space-md) var(--le-space-lg);
         display: grid;
         gap: var(--le-space-sm);
       ">
+    <h2>Toolbar</h2>
     <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-sm);">
       <strong style="font-size: var(--le-font-size-sm);">le-toolbar — priority overflow demo</strong>
       <span id="demo-toolbar-status"
@@ -541,73 +704,6 @@
 
   <!-- Default content template (used when localStorage is empty) -->
   <template id="default-content">
-
-    <le-navigation slot="title">
-      <le-item label="Components" href="/components"></le-item>
-      <le-item label="Blueprints" href="/blueprints"></le-item>
-      <le-item label="Blog" href="/blog"></le-item>
-    </le-navigation>
-
-    <div class="demo-section">
-      <le-icon name="side-panel" size="42" style="color: var(--le-color-primary);"></le-icon>
-      <le-icon name="side-panel-start" size="42" style="color: var(--le-color-primary);"></le-icon>
-      <le-icon name="side-panel-end" size="42" style="color: var(--le-color-danger);"></le-icon>
-      <le-icon name="hamburger" size="42" style="color: var(--le-color-secondary);"></le-icon>
-      <le-icon name="ellipsis-horizontal" size="42" style="color: var(--le-color-danger);"></le-icon>
-      <le-icon name="ellipsis-vertical" size="42" style="color: var(--le-color-warning);"></le-icon>
-      <le-icon name="check" size="42" style="color: var(--le-color-success);"></le-icon>
-      <le-icon name="clear" size="42" style="color: var(--le-color-text);"></le-icon>
-      <br />
-      <le-icon name="arrow-left" size="32"></le-icon>
-      <le-icon name="arrow-right" size="32"></le-icon>
-      <span style="display: inline-block; width: 16px;"></span>
-      <le-icon name="new" size="32"></le-icon>
-      <le-icon name="open" size="32"></le-icon>
-      <le-icon name="save" size="32"></le-icon>
-      <le-icon name="download" size="32"></le-icon>
-      <le-icon name="upload" size="32"></le-icon>
-      <span style="display: inline-block; width: 16px;"></span>
-      <le-icon name="revert" size="32"></le-icon>
-      <le-icon name="reload" size="32"></le-icon>
-      <span style="display: inline-block; width: 16px;"></span>
-      <le-icon name="copy" size="32"></le-icon>
-      <le-icon name="paste" size="32"></le-icon>
-      <le-icon name="cut" size="32"></le-icon>
-      <le-icon name="delete" size="32"></le-icon>
-      <le-icon name="duplicate" size="32"></le-icon>
-      <span style="display: inline-block; width: 16px;"></span>
-      <le-icon name="undo" size="32"></le-icon>
-      <le-icon name="redo" size="32"></le-icon>
-      <span style="display: inline-block; width: 16px;"></span>
-      <le-icon name="align-left" size="32"></le-icon>
-      <le-icon name="align-center" size="32"></le-icon>
-      <le-icon name="align-right" size="32"></le-icon>
-      <le-icon name="align-justify" size="32"></le-icon>
-      <le-icon name="line-spacing" size="32"></le-icon>
-      <span style="display: inline-block; width: 16px;"></span>
-      <le-icon name="bullet-list" size="32"></le-icon>
-      <le-icon name="numbered-list" size="32"></le-icon>
-      <le-icon name="check-list" size="32"></le-icon>
-      <le-icon name="increase-indent" size="32"></le-icon>
-      <le-icon name="decrease-indent" size="32"></le-icon>
-      <br />
-      <le-icon name="chevron-left" size="24"></le-icon>
-      <le-icon name="chevron-up" size="24"></le-icon>
-      <le-icon name="chevron-down" size="24"></le-icon>
-      <le-icon name="chevron-right" size="24"></le-icon>
-      <br />
-      <le-icon name="plus" size="24"></le-icon>
-      <le-icon name="plus-square" size="24"></le-icon>
-      <le-icon name="plus-circle" size="24"></le-icon>
-      <br />
-      <le-icon name="minus" size="24"></le-icon>
-      <le-icon name="minus-square" size="24"></le-icon>
-      <le-icon name="minus-circle" size="24"></le-icon>
-      <br />
-      <le-icon name="desktop" size="42"></le-icon>
-      <le-icon name="tablet" size="42"></le-icon>
-      <le-icon name="phone" size="42"></le-icon>
-    </div>
 
     <div class="demo-section">
       <h2>Side Panel</h2>

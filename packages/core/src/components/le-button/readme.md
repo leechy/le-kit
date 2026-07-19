@@ -141,10 +141,12 @@ Type: `Promise<LeOption>`
 
 ## Slots
 
-| Slot          | Description                |
-| ------------- | -------------------------- |
-|               | Button text content        |
-| `"icon-only"` | Icon for icon-only buttons |
+| Slot           | Description                                |
+| -------------- | ------------------------------------------ |
+|                | Button text content                        |
+| `"icon-end"`   | Icon placed in the end of the button       |
+| `"icon-only"`  | Icon for icon-only buttons                 |
+| `"icon-start"` | Icon placed in the beginning of the button |
 
 
 ## Shadow Parts

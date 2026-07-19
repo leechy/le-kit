@@ -26,8 +26,11 @@ export {
   configureLeKit,
   getLeKitConfig,
   getAssetBasePath,
+  registerIcon,
+  registerIcons,
+  getComposedIcon,
 } from './global/app';
-export type { LeKitMode, LeKitTheme } from './global/app';
+export type { LeKitMode, LeKitTheme, ComposedIconDef, LeKitIconsConfig } from './global/app';
 
 // Popup/dialog programmatic API
 export { leAlert, leConfirm, lePrompt } from './components/le-popup/le-popup.api';

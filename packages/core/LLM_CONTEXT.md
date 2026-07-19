@@ -825,6 +825,11 @@ The header component updates that variable when it renders.
 | `el` | `HTMLElement` |  |  |
 | `name` | `string \| undefined` | `undefined` | Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file. |
 | `size` | `number` | `16` | Size of the icon in pixels. Default is 16. |
+| `viewBox` | `string \| undefined` |  | Custom viewBox for the SVG. When set, overrides the viewBox from the loaded icon data. Useful for layer-only compositions without a base icon. |
+| `badge` | `string \| undefined` |  | Name of a badge icon to overlay on top of the base icon. The badge icon is loaded and composed with mask-based knockout. |
+| `badgePosition` | `string \| undefined` |  | Position of the badge icon within the base icon's viewBox. Comma-separated x,y values in viewBox units or percentages. Positive values = from start/top, Negative values = from end/bottom. Percentages work like CSS background-position. Default: "-5, -5" (bottom-right area). |
+| `badgeScale` | `number \| undefined` |  | Scale factor for the badge icon. Default: 1.0. Badge icons are designed at their natural display size, so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink. |
+| `layers` | `string \| undefined` |  | JSON string defining additional icon layers to compose on top of the base icon. Each layer has a name, optional position, and optional scale. Layers are rendered in order (first = bottom, last = top), and each layer's maskShape (if present) cuts through all layers below it. |
 
 ---
 

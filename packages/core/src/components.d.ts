@@ -1109,6 +1109,26 @@ export namespace Components {
     }
     interface LeIcon {
         /**
+          * Name of a badge icon to overlay on top of the base icon. The badge icon is loaded and composed with mask-based knockout.
+         */
+        "badge"?: string;
+        /**
+          * Position of the badge icon within the base icon's viewBox. Comma-separated x,y values in viewBox units or percentages. Positive values = from start/top, Negative values = from end/bottom. Percentages work like CSS background-position. Default: "-5, -5" (bottom-right area).
+          * @example "-2, -2"    → 2 units from right and bottom edges
+          * @example "100%, 0%"  → top-right corner
+          * @example "50%, 50%"  → centered
+         */
+        "badgePosition"?: string;
+        /**
+          * Scale factor for the badge icon. Default: 1.0. Badge icons are designed at their natural display size, so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink.
+         */
+        "badgeScale"?: number;
+        /**
+          * JSON string defining additional icon layers to compose on top of the base icon. Each layer has a name, optional position, and optional scale. Layers are rendered in order (first = bottom, last = top), and each layer's maskShape (if present) cuts through all layers below it.
+          * @example '[{"name":"folder","position":"0,50%","scale":0.8}]'
+         */
+        "layers"?: string;
+        /**
           * Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file.
           * @default undefined
          */
@@ -1118,6 +1138,11 @@ export namespace Components {
           * @default 16
          */
         "size": number;
+        /**
+          * Custom viewBox for the SVG. When set, overrides the viewBox from the loaded icon data. Useful for layer-only compositions without a base icon.
+          * @example "0 0 16 16"
+         */
+        "viewBox"?: string;
     }
     interface LeItem {
         "getOption": () => Promise<LeOption>;
@@ -5352,6 +5377,26 @@ declare namespace LocalJSX {
     }
     interface LeIcon {
         /**
+          * Name of a badge icon to overlay on top of the base icon. The badge icon is loaded and composed with mask-based knockout.
+         */
+        "badge"?: string;
+        /**
+          * Position of the badge icon within the base icon's viewBox. Comma-separated x,y values in viewBox units or percentages. Positive values = from start/top, Negative values = from end/bottom. Percentages work like CSS background-position. Default: "-5, -5" (bottom-right area).
+          * @example "-2, -2"    → 2 units from right and bottom edges
+          * @example "100%, 0%"  → top-right corner
+          * @example "50%, 50%"  → centered
+         */
+        "badgePosition"?: string;
+        /**
+          * Scale factor for the badge icon. Default: 1.0. Badge icons are designed at their natural display size, so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink.
+         */
+        "badgeScale"?: number;
+        /**
+          * JSON string defining additional icon layers to compose on top of the base icon. Each layer has a name, optional position, and optional scale. Layers are rendered in order (first = bottom, last = top), and each layer's maskShape (if present) cuts through all layers below it.
+          * @example '[{"name":"folder","position":"0,50%","scale":0.8}]'
+         */
+        "layers"?: string;
+        /**
           * Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file.
           * @default undefined
          */
@@ -5361,6 +5406,11 @@ declare namespace LocalJSX {
           * @default 16
          */
         "size"?: number;
+        /**
+          * Custom viewBox for the SVG. When set, overrides the viewBox from the loaded icon data. Useful for layer-only compositions without a base icon.
+          * @example "0 0 16 16"
+         */
+        "viewBox"?: string;
     }
     interface LeItem {
     }
@@ -7298,6 +7348,11 @@ declare namespace LocalJSX {
     interface LeIconAttributes {
         "name": string;
         "size": number;
+        "viewBox": string;
+        "badge": string;
+        "badgePosition": string;
+        "badgeScale": number;
+        "layers": string;
     }
     interface LeKitAttributes {
         "theme": string;

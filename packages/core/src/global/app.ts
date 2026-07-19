@@ -145,6 +145,76 @@ export function setGlobalTheme(theme: LeKitTheme): void {
 }
 
 /**
+ * Definition of a composed icon in the registry.
+ * Used to define icons that combine a base icon with badges or layers.
+ */
+export interface ComposedIconDef {
+  /** Base icon name (the JSON file to load). Optional — omit for layer-only compositions. */
+  icon?: string;
+  /** Optional viewBox for the composed icon (used when no base icon is set). */
+  viewBox?: string;
+  /** Optional badge icon name. */
+  badge?: string;
+  /** Optional badge position (overrides icons.defaultBadgePosition). */
+  badgePosition?: string;
+  /** Optional badge scale (overrides icons.defaultBadgeScale). */
+  badgeScale?: number;
+  /** Optional additional layers. */
+  layers?: Array<{
+    name: string;
+    position?: string;
+    scale?: number;
+  }>;
+}
+
+/**
+ * Configuration for the icon registry and icon composition defaults.
+ */
+export interface LeKitIconsConfig {
+  /**
+   * Default badge position for all composed icons.
+   * Can be overridden per-icon via badgePosition prop or registry entry.
+   *
+   * Default: '-4.5, -4.5' (bottom-right area)
+   */
+  defaultBadgePosition: string;
+
+  /**
+   * Default badge scale for all composed icons.
+   * Can be overridden per-icon via badgeScale prop or registry entry.
+   *
+   * Default: 1
+   */
+  defaultBadgeScale: number;
+
+  /**
+   * Default viewBox for composed icons that have no base icon.
+   * Fallback when neither the element nor the registry entry specifies a viewBox.
+   *
+   * Default: '0 0 16 16'
+   */
+  defaultViewBox: string;
+
+  /**
+   * Registry of named composed icon definitions.
+   * Icons registered here can be used by name in any component that accepts icon names.
+   *
+   * @example
+   * ```ts
+   * configureLeKit({
+   *   icons: {
+   *     composed: {
+   *       'move-to': { icon: 'folder', badge: 'move-badge' },
+   *       'new-file': { icon: 'file', badge: 'add-badge' },
+   *     },
+   *   },
+   * });
+   * ```
+   */
+  composed: Record<string, ComposedIconDef>;
+}
+
+/**
  * Type definition for le-kit configuration
  */
 export interface LeKitConfig {
@@ -177,6 +247,11 @@ export interface LeKitConfig {
    * ```
    */
   assetBasePath: string;
+
+  /**
+   * Icon registry and composition defaults.
+   */
+  icons: LeKitIconsConfig;
 }
 
 // Use a Symbol to avoid conflicts with other libraries
@@ -187,15 +262,33 @@ const LE_KIT_CONFIG_KEY = '__leKitConfig__';
  * Uses globalThis (window in browser) to ensure config is shared
  * across all module bundles.
  */
+const DEFAULT_ICONS_CONFIG: LeKitIconsConfig = {
+  defaultBadgePosition: '-4.5, -4.5',
+  defaultBadgeScale: 1,
+  defaultViewBox: '0 0 16 16',
+  composed: {},
+};
+
 function getGlobalConfig(): LeKitConfig {
   const g = globalThis as any;
   if (!g[LE_KIT_CONFIG_KEY]) {
     g[LE_KIT_CONFIG_KEY] = {
       manifestFile: 'custom-elements.json',
       assetBasePath: '',
+      icons: { ...DEFAULT_ICONS_CONFIG },
     };
   }
-  return g[LE_KIT_CONFIG_KEY];
+  // Ensure icons sub-object has all required defaults (for pre-set configs)
+  const cfg = g[LE_KIT_CONFIG_KEY];
+  if (cfg.icons) {
+    if (!cfg.icons.composed) cfg.icons.composed = {};
+    if (!cfg.icons.defaultBadgePosition) cfg.icons.defaultBadgePosition = DEFAULT_ICONS_CONFIG.defaultBadgePosition;
+    if (cfg.icons.defaultBadgeScale == null) cfg.icons.defaultBadgeScale = DEFAULT_ICONS_CONFIG.defaultBadgeScale;
+    if (!cfg.icons.defaultViewBox) cfg.icons.defaultViewBox = DEFAULT_ICONS_CONFIG.defaultViewBox;
+  } else {
+    cfg.icons = { ...DEFAULT_ICONS_CONFIG };
+  }
+  return cfg;
 }
 
 /**
@@ -213,7 +306,28 @@ function getGlobalConfig(): LeKitConfig {
  */
 export function configureLeKit(config: Partial<LeKitConfig>): void {
   const globalConfig = getGlobalConfig();
-  Object.assign(globalConfig, config);
+
+  // Deep-merge icons config so multiple configureLeKit calls add to the registry
+  if (config.icons) {
+    const iconsConfig = config.icons as Partial<LeKitIconsConfig>;
+    if (iconsConfig.composed) {
+      globalConfig.icons.composed = { ...globalConfig.icons.composed, ...iconsConfig.composed };
+    }
+    if (iconsConfig.defaultBadgePosition) {
+      globalConfig.icons.defaultBadgePosition = iconsConfig.defaultBadgePosition;
+    }
+    if (iconsConfig.defaultBadgeScale != null) {
+      globalConfig.icons.defaultBadgeScale = iconsConfig.defaultBadgeScale;
+    }
+    if (iconsConfig.defaultViewBox) {
+      globalConfig.icons.defaultViewBox = iconsConfig.defaultViewBox;
+    }
+    // Apply non-icons config
+    const { icons: _, ...rest } = config;
+    Object.assign(globalConfig, rest);
+  } else {
+    Object.assign(globalConfig, config);
+  }
 }
 
 /**
@@ -229,4 +343,61 @@ export function getLeKitConfig(): LeKitConfig {
  */
 export function getAssetBasePath(): string {
   return getGlobalConfig().assetBasePath;
+}
+
+/**
+ * Get the default badge position from config.
+ */
+export function getDefaultBadgePosition(): string {
+  return getGlobalConfig().icons.defaultBadgePosition;
+}
+
+/**
+ * Get the default badge scale from config.
+ */
+export function getDefaultBadgeScale(): number {
+  return getGlobalConfig().icons.defaultBadgeScale;
+}
+
+/**
+ * Get the default viewBox from config.
+ */
+export function getDefaultViewBox(): string {
+  return getGlobalConfig().icons.defaultViewBox;
+}
+
+/**
+ * Register a single composed icon definition.
+ * Can be called at any time to add icons to the registry.
+ *
+ * @example
+ * ```ts
+ * registerIcon('move-to', { icon: 'folder', badge: 'move-badge' });
+ * ```
+ */
+export function registerIcon(name: string, def: ComposedIconDef): void {
+  getGlobalConfig().icons.composed[name] = def;
+}
+
+/**
+ * Register multiple composed icon definitions at once.
+ *
+ * @example
+ * ```ts
+ * registerIcons({
+ *   'move-to': { icon: 'folder', badge: 'move-badge' },
+ *   'new-file': { icon: 'file', badge: 'add-badge' },
+ * });
+ * ```
+ */
+export function registerIcons(icons: Record<string, ComposedIconDef>): void {
+  Object.assign(getGlobalConfig().icons.composed, icons);
+}
+
+/**
+ * Look up a composed icon definition by name.
+ * Returns undefined if the name is not registered.
+ */
+export function getComposedIcon(name: string): ComposedIconDef | undefined {
+  return getGlobalConfig().icons.composed[name];
 }

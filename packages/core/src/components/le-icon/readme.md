@@ -7,10 +7,14 @@
 
 ## Properties
 
-| Property | Attribute | Description                                                                                                                           | Type                  | Default     |
-| -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
-| `name`   | `name`    | Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file. | `string \| undefined` | `undefined` |
-| `size`   | `size`    | Size of the icon in pixels. Default is 16.                                                                                            | `number`              | `16`        |
+| Property        | Attribute        | Description                                                                                                                                                                                                                                                                        | Type                  | Default     |
+| --------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
+| `badge`         | `badge`          | Name of a badge icon to overlay on top of the base icon. The badge icon is loaded and composed with mask-based knockout.                                                                                                                                                           | `string \| undefined` | `undefined` |
+| `badgePosition` | `badge-position` | Position of the badge icon within the base icon's viewBox. Comma-separated x,y values in viewBox units or percentages. Positive values = from start/top, Negative values = from end/bottom. Percentages work like CSS background-position. Default: "-5, -5" (bottom-right area).  | `string \| undefined` | `undefined` |
+| `badgeScale`    | `badge-scale`    | Scale factor for the badge icon. Default: 1.0. Badge icons are designed at their natural display size, so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink.                                                                                                                   | `number \| undefined` | `undefined` |
+| `layers`        | `layers`         | JSON string defining additional icon layers to compose on top of the base icon. Each layer has a name, optional position, and optional scale. Layers are rendered in order (first = bottom, last = top), and each layer's maskShape (if present) cuts through all layers below it. | `string \| undefined` | `undefined` |
+| `name`          | `name`           | Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file.                                                                                                                                              | `string \| undefined` | `undefined` |
+| `size`          | `size`           | Size of the icon in pixels. Default is 16.                                                                                                                                                                                                                                         | `number`              | `16`        |
 
 
 ## Dependencies

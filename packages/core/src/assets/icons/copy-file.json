@@ -1,0 +1,32 @@
+{
+  "viewBox": "0 0 16 16",
+  "children": [
+    {
+      "tag": "polyline",
+      "transform": "translate(7, 8.75) scale(-1, 1) translate(-7, -8.75)",
+      "points": "9.5 3.75 11 3.75 11 13.75 3 13.75 3 12.75",
+      "stroke-opacity": "0.7",
+      "stroke": "currentColor",
+      "fill": "none",
+      "children": []
+    },
+    {
+      "tag": "polygon",
+      "stroke": "currentColor",
+      "stroke-width": "1.5",
+      "transform": "translate(9, 7.25) scale(-1, -1) translate(-9, -7.25)",
+      "points": "5.5 2.75 12.5 2.75 12.5 11.75 8.5 11.75 8.5 8.75 5.5 8.75 5.5 7",
+      "fill": "none",
+      "children": []
+    },
+    {
+      "tag": "polyline",
+      "stroke-opacity": "0.7",
+      "stroke": "currentColor",
+      "stroke-width": "1.5",
+      "points": "8.5 2.75 9.936 2.75 12.5 5.292 12.5 6.766",
+      "fill": "none",
+      "children": []
+    }
+  ]
+}

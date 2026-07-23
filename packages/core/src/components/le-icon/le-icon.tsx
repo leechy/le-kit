@@ -153,14 +153,28 @@ export class LeIcon {
     let resolvedViewBox = this.viewBox;
 
     if (name) {
-      // 1. Check the registry for a composed icon definition
-      const composedDef = getComposedIcon(name);
+      let targetName = name;
+
+      // 1. Check if the full name exists in registry
+      let composedDef = getComposedIcon(name);
+
+      // 2. If not, check for inline :: separator
+      if (!composedDef && name.includes(INLINE_BADGE_SEPARATOR)) {
+        const [base, badge] = name.split(INLINE_BADGE_SEPARATOR, 2);
+        targetName = base;
+        if (!resolvedBadge && badge) {
+          resolvedBadge = badge;
+        }
+        composedDef = getComposedIcon(targetName);
+      }
+
+      // 3. Apply composed definition if found (either for full name or extracted base)
       if (composedDef) {
         baseName = composedDef.icon || undefined;
         // Store the registry's viewBox for later resolution
         resolvedViewBox = composedDef.viewBox;
-        // Registry values apply only if explicit props are not set
-        if (!this.badge && composedDef.badge) {
+        // Registry values apply only if explicit/resolved props are not set
+        if (!resolvedBadge && composedDef.badge) {
           resolvedBadge = composedDef.badge;
         }
         if (!this.badgePosition && composedDef.badgePosition) {
@@ -172,14 +186,8 @@ export class LeIcon {
         if (!this.layers && composedDef.layers) {
           resolvedLayers = JSON.stringify(composedDef.layers);
         }
-      }
-      // 2. Check for inline :: separator (only if not a registry match)
-      else if (name.includes(INLINE_BADGE_SEPARATOR)) {
-        const [base, badge] = name.split(INLINE_BADGE_SEPARATOR, 2);
-        baseName = base;
-        if (!this.badge && badge) {
-          resolvedBadge = badge;
-        }
+      } else {
+        baseName = targetName;
       }
     }
 
@@ -300,9 +308,18 @@ export class LeIcon {
   /**
    * Creates a JSX element from a JSON node descriptor.
    */
-  private createElement(node: any) {
+  private createElement(node: any, inverseScale = 1) {
     const { tag, children, ...attrs } = node;
-    return h(tag, attrs, children ? children.map((child: any) => this.createElement(child)) : null);
+
+    // Adjust stroke-width to counteract the group transform scale
+    if (inverseScale !== 1 && attrs['stroke-width'] !== undefined) {
+      const originalStrokeWidth = parseFloat(attrs['stroke-width']);
+      if (!isNaN(originalStrokeWidth)) {
+        attrs['stroke-width'] = String(originalStrokeWidth / inverseScale);
+      }
+    }
+
+    return h(tag, attrs, children ? children.map((child: any) => this.createElement(child, inverseScale)) : null);
   }
 
   /**
@@ -311,12 +328,12 @@ export class LeIcon {
    *
    * @returns JSX.Element | null
    */
-  private renderSVGContent(children?: any[]): any[] {
+  private renderSVGContent(children?: any[], inverseScale = 1): any[] {
     if (!children || children.length === 0) {
       return [];
     }
 
-    return children.map(child => this.createElement(child));
+    return children.map(child => this.createElement(child, inverseScale));
   }
 
   /**
@@ -394,7 +411,7 @@ export class LeIcon {
         if (info.layer.data.maskShape) {
           maskShapes.push(
             h('g', { transform: info.transform }, [
-              this.createElement(info.layer.data.maskShape),
+              this.createElement(info.layer.data.maskShape, info.scale),
             ]),
           );
         }
@@ -437,7 +454,7 @@ export class LeIcon {
       const layerContent = h(
         'g',
         { transform: info.transform },
-        ...this.renderSVGContent(info.layer.data.children),
+        ...this.renderSVGContent(info.layer.data.children, info.scale),
       );
 
       return hasMask

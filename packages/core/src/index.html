@@ -12,6 +12,7 @@
       manifestFile: 'custom-elements.json',
       assetBasePath: '',
       icons: {
+        defaultRounded: true,
         defaultBadgePosition: '-4.5, -4.5',
         defaultBadgeScale: 1,
         defaultViewBox: '0 0 16 16',
@@ -24,6 +25,7 @@
           'share-file': { icon: 'file', badge: 'share-badge' },
           'file-copy': {
             viewBox: '0 0 16 16',
+            rounded: true,
             layers: [
               { name: 'file', scale: 0.75, position: '6.5px, 9.5px' },
               { name: 'file', scale: 0.8, position: '-6.75px, 6.75px' },
@@ -372,6 +374,20 @@
       <le-icon name="folder" badge="add-badge" badge-position="-3, -3" badge-scale="0.8" size="48"></le-icon>
     </div>
 
+    <h3>Icon Variants (rounded / sharp / filled / outlined)</h3>
+    <p>Default vs rounded vs filled vs rounded+filled vs sharp / outlined overrides (defaultRounded is true):</p>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <le-icon name="folder" size="48"></le-icon>
+      <le-icon name="folder" sharp size="48"></le-icon>
+      <le-icon name="folder" filled size="48"></le-icon>
+      <le-icon name="folder" sharp outlined size="48"></le-icon>
+      <br />
+      <le-icon name="folder-open" size="48"></le-icon>
+      <le-icon name="folder-open" sharp size="48"></le-icon>
+      <le-icon name="folder-open" filled size="48"></le-icon>
+      <le-icon name="folder-open" sharp outlined size="48"></le-icon>
+    </div>
+
     <h3>Registry Icons (configureLeKit)</h3>
     <p>These use names registered via configureLeKit({ icons: { ... } }):</p>
     <div style="display: flex; align-items: center; gap: 16px;">
@@ -393,8 +409,8 @@
     <p>Ad-hoc composed icons using name::badge syntax:</p>
     <div style="display: flex; align-items: center; gap: 16px;">
       <le-icon name="folder::add-badge" size="32"></le-icon>
-      <le-icon name="folder::download-badge" size="32"></le-icon>
-      <le-icon name="file::share-badge" size="32"></le-icon>
+      <le-icon name="folder::download-badge" rounded filled size="32"></le-icon>
+      <le-icon name="file::share-badge" filled size="32"></le-icon>
       <span style="display: inline-block; width: 16px;"></span>
       <le-button icon-only="folder::add-badge" label="Add to folder"></le-button>
       <le-button icon-start="file-copy::download-badge">Download</le-button>

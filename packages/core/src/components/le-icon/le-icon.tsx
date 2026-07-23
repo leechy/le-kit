@@ -3,7 +3,15 @@
  * https://paulcpederson.com/articles/stencil-icons/
  */
 import { Build, Component, Element, getAssetPath, h, Prop, State, Watch } from '@stencil/core';
-import { getAssetBasePath, getComposedIcon, getDefaultBadgePosition, getDefaultBadgeScale, getDefaultViewBox } from '../../global/app';
+import {
+  getAssetBasePath,
+  getComposedIcon,
+  getDefaultBadgePosition,
+  getDefaultBadgeScale,
+  getDefaultIconFilled,
+  getDefaultIconRounded,
+  getDefaultViewBox,
+} from '../../global/app';
 import {
   computeLayerTransform,
   LayerConfig,
@@ -126,6 +134,30 @@ export class LeIcon {
    */
   @Prop() layers?: string;
 
+  /**
+   * Whether to use rounded variants of icon elements if defined in icon JSON.
+   * If not explicitly set, defaults to the global le-kit config (`icons.defaultRounded`).
+   */
+  @Prop({ reflect: true }) rounded?: boolean;
+
+  /**
+   * Whether to force sharp (non-rounded) variants of icon elements.
+   * Overrides `rounded` prop, registry settings, and global defaults.
+   */
+  @Prop({ reflect: true }) sharp?: boolean;
+
+  /**
+   * Whether to use filled variants of icon elements if defined in icon JSON.
+   * If not explicitly set, defaults to the global le-kit config (`icons.defaultFilled`).
+   */
+  @Prop({ reflect: true }) filled?: boolean;
+
+  /**
+   * Whether to force outlined (non-filled) variants of icon elements.
+   * Overrides `filled` prop, registry settings, and global defaults.
+   */
+  @Prop({ reflect: true }) outlined?: boolean;
+
   @State() private iconData: any = null;
 
   @State() private badgeData: any = null;
@@ -137,6 +169,10 @@ export class LeIcon {
   @Watch('name')
   @Watch('badge')
   @Watch('layers')
+  @Watch('rounded')
+  @Watch('sharp')
+  @Watch('filled')
+  @Watch('outlined')
   private async loadIconData(): Promise<void> {
     const { name, visible } = this;
 
@@ -151,6 +187,10 @@ export class LeIcon {
     let resolvedBadgeScale = this.badgeScale;
     let resolvedLayers = this.layers;
     let resolvedViewBox = this.viewBox;
+    let resolvedRounded = this.rounded;
+    let resolvedSharp = this.sharp;
+    let resolvedFilled = this.filled;
+    let resolvedOutlined = this.outlined;
 
     if (name) {
       let targetName = name;
@@ -182,6 +222,18 @@ export class LeIcon {
         }
         if (this.badgeScale == null && composedDef.badgeScale != null) {
           resolvedBadgeScale = composedDef.badgeScale;
+        }
+        if (this.sharp == null && composedDef.sharp != null) {
+          resolvedSharp = composedDef.sharp;
+        }
+        if (this.rounded == null && composedDef.rounded != null) {
+          resolvedRounded = composedDef.rounded;
+        }
+        if (this.outlined == null && composedDef.outlined != null) {
+          resolvedOutlined = composedDef.outlined;
+        }
+        if (this.filled == null && composedDef.filled != null) {
+          resolvedFilled = composedDef.filled;
         }
         if (!this.layers && composedDef.layers) {
           resolvedLayers = JSON.stringify(composedDef.layers);
@@ -246,6 +298,10 @@ export class LeIcon {
     this._resolvedBadgePosition = resolvedBadgePosition;
     this._resolvedBadgeScale = resolvedBadgeScale;
     this._resolvedViewBox = resolvedViewBox;
+    this._resolvedRounded = resolvedRounded;
+    this._resolvedSharp = resolvedSharp;
+    this._resolvedFilled = resolvedFilled;
+    this._resolvedOutlined = resolvedOutlined;
 
     await Promise.all(promises);
   }
@@ -260,6 +316,18 @@ export class LeIcon {
 
   /** Resolved viewBox (from explicit prop, registry, config default, or first layer). */
   private _resolvedViewBox?: string;
+
+  /** Resolved rounded setting (from explicit prop, registry, or config default). */
+  private _resolvedRounded?: boolean;
+
+  /** Resolved sharp setting (from explicit prop or registry). */
+  private _resolvedSharp?: boolean;
+
+  /** Resolved filled setting (from explicit prop, registry, or config default). */
+  private _resolvedFilled?: boolean;
+
+  /** Resolved outlined setting (from explicit prop or registry). */
+  private _resolvedOutlined?: boolean;
 
   connectedCallback(): void {
     this.waitUntilVisible(() => {
@@ -306,9 +374,77 @@ export class LeIcon {
   }
 
   /**
+   * Resolves element descriptors, applying variant overrides (rounded, filled, rounded-filled)
+   * based on the component's current `rounded`, `sharp`, `filled`, and `outlined` state.
+   */
+  private resolveNode(node: any): any {
+    if (!node) return node;
+
+    let rounded = false;
+    if (this.sharp === true) {
+      rounded = false;
+    } else if (this.rounded === true) {
+      rounded = true;
+    } else if (this._resolvedSharp === true) {
+      rounded = false;
+    } else if (this._resolvedRounded === true) {
+      rounded = true;
+    } else {
+      rounded = getDefaultIconRounded();
+    }
+
+    let filled = false;
+    if (this.outlined === true) {
+      filled = false;
+    } else if (this.filled === true) {
+      filled = true;
+    } else if (this._resolvedOutlined === true) {
+      filled = false;
+    } else if (this._resolvedFilled === true) {
+      filled = true;
+    } else {
+      filled = getDefaultIconFilled();
+    }
+
+    let resolved = { ...node };
+
+    if (rounded && filled && resolved['rounded-filled']) {
+      resolved = this.applyOverride(resolved, resolved['rounded-filled']);
+    } else {
+      if (rounded && resolved['rounded']) {
+        resolved = this.applyOverride(resolved, resolved['rounded']);
+      }
+      if (filled && resolved['filled']) {
+        resolved = this.applyOverride(resolved, resolved['filled']);
+      }
+    }
+
+    delete resolved['rounded'];
+    delete resolved['filled'];
+    delete resolved['rounded-filled'];
+
+    return resolved;
+  }
+
+  private applyOverride(base: any, override: any): any {
+    const res = { ...base };
+    for (const key of Object.keys(override)) {
+      if (override[key] === null || override[key] === undefined) {
+        delete res[key];
+      } else {
+        res[key] = override[key];
+      }
+    }
+    return res;
+  }
+
+  /**
    * Creates a JSX element from a JSON node descriptor.
    */
-  private createElement(node: any, inverseScale = 1) {
+  private createElement(rawNode: any, inverseScale = 1) {
+    if (!rawNode) return null;
+
+    const node = this.resolveNode(rawNode);
     const { tag, children, ...attrs } = node;
 
     // Adjust stroke-width to counteract the group transform scale

@@ -159,6 +159,14 @@ export interface ComposedIconDef {
   badgePosition?: string;
   /** Optional badge scale (overrides icons.defaultBadgeScale). */
   badgeScale?: number;
+  /** Optional rounded setting for this composed icon. */
+  rounded?: boolean;
+  /** Optional sharp setting for this composed icon. */
+  sharp?: boolean;
+  /** Optional filled setting for this composed icon. */
+  filled?: boolean;
+  /** Optional outlined setting for this composed icon. */
+  outlined?: boolean;
   /** Optional additional layers. */
   layers?: Array<{
     name: string;
@@ -194,6 +202,22 @@ export interface LeKitIconsConfig {
    * Default: '0 0 16 16'
    */
   defaultViewBox: string;
+
+  /**
+   * Default rounded setting for all icons.
+   * Can be overridden per icon via `rounded` prop.
+   *
+   * Default: false
+   */
+  defaultRounded?: boolean;
+
+  /**
+   * Default filled setting for all icons.
+   * Can be overridden per icon via `filled` prop.
+   *
+   * Default: false
+   */
+  defaultFilled?: boolean;
 
   /**
    * Registry of named composed icon definitions.
@@ -266,6 +290,8 @@ const DEFAULT_ICONS_CONFIG: LeKitIconsConfig = {
   defaultBadgePosition: '-4.5, -4.5',
   defaultBadgeScale: 1,
   defaultViewBox: '0 0 16 16',
+  defaultRounded: false,
+  defaultFilled: false,
   composed: {},
 };
 
@@ -285,6 +311,8 @@ function getGlobalConfig(): LeKitConfig {
     if (!cfg.icons.defaultBadgePosition) cfg.icons.defaultBadgePosition = DEFAULT_ICONS_CONFIG.defaultBadgePosition;
     if (cfg.icons.defaultBadgeScale == null) cfg.icons.defaultBadgeScale = DEFAULT_ICONS_CONFIG.defaultBadgeScale;
     if (!cfg.icons.defaultViewBox) cfg.icons.defaultViewBox = DEFAULT_ICONS_CONFIG.defaultViewBox;
+    if (cfg.icons.defaultRounded == null) cfg.icons.defaultRounded = DEFAULT_ICONS_CONFIG.defaultRounded;
+    if (cfg.icons.defaultFilled == null) cfg.icons.defaultFilled = DEFAULT_ICONS_CONFIG.defaultFilled;
   } else {
     cfg.icons = { ...DEFAULT_ICONS_CONFIG };
   }
@@ -321,6 +349,12 @@ export function configureLeKit(config: Partial<LeKitConfig>): void {
     }
     if (iconsConfig.defaultViewBox) {
       globalConfig.icons.defaultViewBox = iconsConfig.defaultViewBox;
+    }
+    if (iconsConfig.defaultRounded != null) {
+      globalConfig.icons.defaultRounded = iconsConfig.defaultRounded;
+    }
+    if (iconsConfig.defaultFilled != null) {
+      globalConfig.icons.defaultFilled = iconsConfig.defaultFilled;
     }
     // Apply non-icons config
     const { icons: _, ...rest } = config;
@@ -364,6 +398,20 @@ export function getDefaultBadgeScale(): number {
  */
 export function getDefaultViewBox(): string {
   return getGlobalConfig().icons.defaultViewBox;
+}
+
+/**
+ * Get the default rounded setting from config.
+ */
+export function getDefaultIconRounded(): boolean {
+  return getGlobalConfig().icons.defaultRounded ?? false;
+}
+
+/**
+ * Get the default filled setting from config.
+ */
+export function getDefaultIconFilled(): boolean {
+  return getGlobalConfig().icons.defaultFilled ?? false;
 }
 
 /**

@@ -29,6 +29,8 @@ export {
   registerIcon,
   registerIcons,
   getComposedIcon,
+  getDefaultIconRounded,
+  getDefaultIconFilled,
 } from './global/app';
 export type { LeKitMode, LeKitTheme, ComposedIconDef, LeKitIconsConfig } from './global/app';
 

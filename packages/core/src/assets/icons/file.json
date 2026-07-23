@@ -3,25 +3,46 @@
   "maskShape": {
     "tag": "polygon",
     "points": "2.75 14.25 13.25 14.25 13.25 5 10 1.75 2.75 1.75",
-    "fill": "black"
+    "fill": "black",
+    "rounded": {
+      "tag": "path",
+      "points": null,
+      "d": "M4.75,14.25 L11.25,14.25 C12.355,14.25 13.25,13.355 13.25,12.25 L13.25,5.828 C13.25,5.298 13.039,4.789 12.664,4.414 L10.586,2.336 C10.21,1.96 9.702,1.75 9.172,1.75 L4.75,1.75 C3.645,1.75 2.75,2.645 2.75,3.75 L2.75,12.25 C2.75,13.355 3.645,14.25 4.75,14.25 Z"
+    }
   },
   "children": [
+    {
+      "tag": "polyline",
+      "points": "4 3 4 13 12 13 12 5.5 9.5 3",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.5",
+      "stroke-opacity": "0.7",
+      "rounded": {
+        "tag": "path",
+        "points": null,
+        "d": "M4,4 L4,12 C4,12.552 4.448,13 5,13 L11,13 C11.552,13 12,12.552 12,12 L12,5.914 C12,5.649 11.895,5.395 11.707,5.207 L9.793,3.293 C9.605,3.105 9.351,3 9.086,3 L5,3 C4.448,3 4,3.448 4,4 Z"
+      },
+      "filled": {
+        "opacity": "0.3",
+        "stroke-opacity": "1",
+        "fill": "currentColor"
+      }
+    },
     {
       "tag": "polygon",
       "points": "4 3 4 13 12 13 12 6 9 6 9 3",
       "fill": "none",
       "stroke": "currentColor",
       "stroke-width": "1.5",
-      "children": []
-    },
-    {
-      "tag": "polyline",
-      "points": "4 3 4 13 12 13 12 5.75 9.25 3",
-      "fill": "none",
-      "stroke": "currentColor",
-      "stroke-width": "1.5",
-      "stroke-opacity": "0.7",
-      "children": []
+      "rounded": {
+        "tag": "path",
+        "points": null,
+        "d": "M4,4 L4,12 C4,12.552 4.448,13 5,13 L11,13 C11.552,13 12,12.552 12,12 L12,7 C12,6.448 11.552,6 11,6 L10,6 C9.448,6 9,5.552 9,5 L9,4 C9,3.448 8.552,3 8,3 L5,3 C4.448,3 4,3.448 4,4 Z"
+      },
+      "filled": {
+        "fill": "currentColor"
+      }
     }
   ]
 }

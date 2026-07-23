@@ -1124,6 +1124,10 @@ export namespace Components {
          */
         "badgeScale"?: number;
         /**
+          * Whether to use filled variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultFilled`).
+         */
+        "filled"?: boolean;
+        /**
           * JSON string defining additional icon layers to compose on top of the base icon. Each layer has a name, optional position, and optional scale. Layers are rendered in order (first = bottom, last = top), and each layer's maskShape (if present) cuts through all layers below it.
           * @example '[{"name":"folder","position":"0,50%","scale":0.8}]'
          */
@@ -1133,6 +1137,18 @@ export namespace Components {
           * @default undefined
          */
         "name"?: string;
+        /**
+          * Whether to force outlined (non-filled) variants of icon elements. Overrides `filled` prop, registry settings, and global defaults.
+         */
+        "outlined"?: boolean;
+        /**
+          * Whether to use rounded variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultRounded`).
+         */
+        "rounded"?: boolean;
+        /**
+          * Whether to force sharp (non-rounded) variants of icon elements. Overrides `rounded` prop, registry settings, and global defaults.
+         */
+        "sharp"?: boolean;
         /**
           * Size of the icon in pixels. Default is 16.
           * @default 16
@@ -5392,6 +5408,10 @@ declare namespace LocalJSX {
          */
         "badgeScale"?: number;
         /**
+          * Whether to use filled variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultFilled`).
+         */
+        "filled"?: boolean;
+        /**
           * JSON string defining additional icon layers to compose on top of the base icon. Each layer has a name, optional position, and optional scale. Layers are rendered in order (first = bottom, last = top), and each layer's maskShape (if present) cuts through all layers below it.
           * @example '[{"name":"folder","position":"0,50%","scale":0.8}]'
          */
@@ -5401,6 +5421,18 @@ declare namespace LocalJSX {
           * @default undefined
          */
         "name"?: string;
+        /**
+          * Whether to force outlined (non-filled) variants of icon elements. Overrides `filled` prop, registry settings, and global defaults.
+         */
+        "outlined"?: boolean;
+        /**
+          * Whether to use rounded variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultRounded`).
+         */
+        "rounded"?: boolean;
+        /**
+          * Whether to force sharp (non-rounded) variants of icon elements. Overrides `rounded` prop, registry settings, and global defaults.
+         */
+        "sharp"?: boolean;
         /**
           * Size of the icon in pixels. Default is 16.
           * @default 16
@@ -7353,6 +7385,10 @@ declare namespace LocalJSX {
         "badgePosition": string;
         "badgeScale": number;
         "layers": string;
+        "rounded": boolean;
+        "sharp": boolean;
+        "filled": boolean;
+        "outlined": boolean;
     }
     interface LeKitAttributes {
         "theme": string;

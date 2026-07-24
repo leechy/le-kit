@@ -511,6 +511,17 @@ export class LeIcon {
   }
 
   /**
+   * Helper to render maskShape which can be a single node descriptor or an array of node descriptors.
+   */
+  private renderMaskShape(maskShape: any, scale: number): any[] {
+    if (!maskShape) return [];
+    if (Array.isArray(maskShape)) {
+      return maskShape.map(node => this.createElement(node, scale));
+    }
+    return [this.createElement(maskShape, scale)];
+  }
+
+  /**
    * Renders the composed SVG with mask-based knockout for overlapping layers.
    */
   private renderComposed() {
@@ -546,9 +557,9 @@ export class LeIcon {
         const info = overlayInfo[j];
         if (info.layer.data.maskShape) {
           maskShapes.push(
-            h('g', { transform: info.transform }, [
-              this.createElement(info.layer.data.maskShape, info.scale),
-            ]),
+            h('g', { transform: info.transform }, 
+              this.renderMaskShape(info.layer.data.maskShape, info.scale),
+            ),
           );
         }
       }

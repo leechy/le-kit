@@ -830,6 +830,10 @@ The header component updates that variable when it renders.
 | `badgePosition` | `string \| undefined` |  | Position of the badge icon within the base icon's viewBox. Comma-separated x,y values in viewBox units or percentages. Positive values = from start/top, Negative values = from end/bottom. Percentages work like CSS background-position. Default: "-5, -5" (bottom-right area). |
 | `badgeScale` | `number \| undefined` |  | Scale factor for the badge icon. Default: 1.0. Badge icons are designed at their natural display size, so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink. |
 | `layers` | `string \| undefined` |  | JSON string defining additional icon layers to compose on top of the base icon. Each layer has a name, optional position, and optional scale. Layers are rendered in order (first = bottom, last = top), and each layer's maskShape (if present) cuts through all layers below it. |
+| `rounded` | `boolean \| undefined` |  | Whether to use rounded variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultRounded`). |
+| `sharp` | `boolean \| undefined` |  | Whether to force sharp (non-rounded) variants of icon elements. Overrides `rounded` prop, registry settings, and global defaults. |
+| `filled` | `boolean \| undefined` |  | Whether to use filled variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultFilled`). |
+| `outlined` | `boolean \| undefined` |  | Whether to force outlined (non-filled) variants of icon elements. Overrides `filled` prop, registry settings, and global defaults. |
 
 ---
 

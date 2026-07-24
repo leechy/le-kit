@@ -12,7 +12,9 @@
       manifestFile: 'custom-elements.json',
       assetBasePath: '',
       icons: {
-        defaultRounded: true,
+        defaultRounded: false,
+        defaultFilled: false,
+        defaultThin: true,
         defaultBadgePosition: '-4.5, -4.5',
         defaultBadgeScale: 1,
         defaultViewBox: '0 0 16 16',
@@ -25,10 +27,10 @@
           'share-file': { icon: 'file', badge: 'share-badge' },
           'file-copy': {
             viewBox: '0 0 16 16',
-            rounded: true,
+            sharp: true,
             layers: [
-              { name: 'file', scale: 0.75, position: '6.5px, 9.5px' },
-              { name: 'file', scale: 0.8, position: '-6.75px, 6.75px' },
+              { name: 'file', scale: 0.75, position: '6.5px, 9.5px', rounded: true },
+              { name: 'file', scale: 0.8, position: '-6.75px, 6.75px', filled: true },
             ]
           },
         },
@@ -378,14 +380,14 @@
     <p>Default vs rounded vs filled vs rounded+filled vs sharp / outlined overrides (defaultRounded is true):</p>
     <div style="display: flex; align-items: center; gap: 16px;">
       <le-icon name="folder" size="48"></le-icon>
-      <le-icon name="folder" sharp size="48"></le-icon>
+      <le-icon name="folder" rounded size="48"></le-icon>
       <le-icon name="folder" filled size="48"></le-icon>
-      <le-icon name="folder" sharp outlined size="48"></le-icon>
+      <le-icon name="folder" rounded outlined size="48"></le-icon>
       <br />
       <le-icon name="folder-open" size="48"></le-icon>
-      <le-icon name="folder-open" sharp size="48"></le-icon>
+      <le-icon name="folder-open" rounded size="48"></le-icon>
       <le-icon name="folder-open" filled size="48"></le-icon>
-      <le-icon name="folder-open" sharp outlined size="48"></le-icon>
+      <le-icon name="folder-open" rounded outlined size="48"></le-icon>
     </div>
 
     <h3>Registry Icons (configureLeKit)</h3>
@@ -393,7 +395,7 @@
     <div style="display: flex; align-items: center; gap: 16px;">
       <le-icon name="add-to-folder" size="32"></le-icon>
       <le-icon name="move-to" size="32"></le-icon>
-      <le-icon name="file-copy" size="32"></le-icon>
+      <le-icon name="file-copy" size="32" style="--le-icon-color: #ffcc00;"></le-icon>
       <le-icon name="file-copy" badge="download-badge" size="32"></le-icon>
       <le-icon name="share-folder" size="32"></le-icon>
       <le-icon name="new-file" size="32"></le-icon>
@@ -408,7 +410,7 @@
     <h3>Inline :: Syntax</h3>
     <p>Ad-hoc composed icons using name::badge syntax:</p>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="folder::add-badge" size="32"></le-icon>
+      <le-icon name="folder::gear-badge" size="32"></le-icon>
       <le-icon name="folder::download-badge" rounded filled size="32"></le-icon>
       <le-icon name="file::share-badge" filled size="32"></le-icon>
       <span style="display: inline-block; width: 16px;"></span>
@@ -426,7 +428,7 @@
     <le-icon name="check" size="42" style="color: var(--le-color-success);"></le-icon>
     <le-icon name="clear" size="42" style="color: var(--le-color-text);"></le-icon>
     <br />
-    <le-icon name="arrow-left" badge="arrow-left" badge-scale="0.5" size="32"></le-icon>
+    <le-icon name="arrow-left" badge="chevron-left" badge-scale="0.5" size="32"></le-icon>
     <le-icon name="arrow-right" size="32"></le-icon>
     <span style="display: inline-block; width: 16px;"></span>
     <le-icon name="new" size="32"></le-icon>

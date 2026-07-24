@@ -172,6 +172,10 @@ export interface ComposedIconDef {
     name: string;
     position?: string;
     scale?: number;
+    rounded?: boolean;
+    sharp?: boolean;
+    filled?: boolean;
+    outlined?: boolean;
   }>;
 }
 

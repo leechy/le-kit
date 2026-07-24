@@ -7,7 +7,6 @@
       "fill": "none",
       "stroke": "black",
       "stroke-width": "3",
-      "stroke-linecap": "square",
       "rounded": {
         "stroke-linecap": "round",
         "stroke-linejoin": "round",
@@ -16,13 +15,12 @@
     },
     {
       "tag": "line",
-      "x1": "5",
+      "x1": "4.75",
       "y1": "8",
       "x2": "12.75",
       "y2": "8",
       "stroke": "black",
       "stroke-width": "3",
-      "stroke-linecap": "square",
       "rounded": {
         "x1": "4.5",
         "x2": "12.5",
@@ -37,7 +35,6 @@
       "fill": "none",
       "stroke": "currentColor",
       "stroke-width": "1.8",
-      "stroke-linecap": "square",
       "rounded": {
         "points": "8 3.5 3.5 8 8 12.5",
         "stroke-linecap": "round",
@@ -46,13 +43,12 @@
     },
     {
       "tag": "line",
-      "x1": "5",
+      "x1": "4.75",
       "y1": "8",
       "x2": "12.75",
       "y2": "8",
       "stroke": "currentColor",
       "stroke-width": "1.8",
-      "stroke-linecap": "square",
       "rounded": {
         "x1": "4.5",
         "x2": "12.5",

@@ -375,15 +375,20 @@ export class LeIcon {
 
   /**
    * Resolves element descriptors, applying variant overrides (rounded, filled, rounded-filled)
-   * based on the component's current `rounded`, `sharp`, `filled`, and `outlined` state.
+   * based on the component's current `rounded`, `sharp`, `filled`, and `outlined` state,
+   * with optional per-layer overrides.
    */
-  private resolveNode(node: any): any {
+  private resolveNode(node: any, overrides?: { rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean }): any {
     if (!node) return node;
 
     let rounded = false;
     if (this.sharp === true) {
       rounded = false;
     } else if (this.rounded === true) {
+      rounded = true;
+    } else if (overrides?.sharp === true) {
+      rounded = false;
+    } else if (overrides?.rounded === true) {
       rounded = true;
     } else if (this._resolvedSharp === true) {
       rounded = false;
@@ -397,6 +402,10 @@ export class LeIcon {
     if (this.outlined === true) {
       filled = false;
     } else if (this.filled === true) {
+      filled = true;
+    } else if (overrides?.outlined === true) {
+      filled = false;
+    } else if (overrides?.filled === true) {
       filled = true;
     } else if (this._resolvedOutlined === true) {
       filled = false;
@@ -441,10 +450,10 @@ export class LeIcon {
   /**
    * Creates a JSX element from a JSON node descriptor.
    */
-  private createElement(rawNode: any, inverseScale = 1) {
+  private createElement(rawNode: any, inverseScale = 1, overrides?: { rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean }) {
     if (!rawNode) return null;
 
-    const node = this.resolveNode(rawNode);
+    const node = this.resolveNode(rawNode, overrides);
     const { tag, children, ...attrs } = node;
 
     // Adjust stroke-width to counteract the group transform scale
@@ -455,7 +464,7 @@ export class LeIcon {
       }
     }
 
-    return h(tag, attrs, children ? children.map((child: any) => this.createElement(child, inverseScale)) : null);
+    return h(tag, attrs, children ? children.map((child: any) => this.createElement(child, inverseScale, overrides)) : null);
   }
 
   /**
@@ -464,12 +473,12 @@ export class LeIcon {
    *
    * @returns JSX.Element | null
    */
-  private renderSVGContent(children?: any[], inverseScale = 1): any[] {
+  private renderSVGContent(children?: any[], inverseScale = 1, overrides?: { rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean }): any[] {
     if (!children || children.length === 0) {
       return [];
     }
 
-    return children.map(child => this.createElement(child, inverseScale));
+    return children.map(child => this.createElement(child, inverseScale, overrides));
   }
 
   /**
@@ -513,12 +522,12 @@ export class LeIcon {
   /**
    * Helper to render maskShape which can be a single node descriptor or an array of node descriptors.
    */
-  private renderMaskShape(maskShape: any, scale: number): any[] {
+  private renderMaskShape(maskShape: any, scale: number, overrides?: { rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean }): any[] {
     if (!maskShape) return [];
     if (Array.isArray(maskShape)) {
-      return maskShape.map(node => this.createElement(node, scale));
+      return maskShape.map(node => this.createElement(node, scale, overrides));
     }
-    return [this.createElement(maskShape, scale)];
+    return [this.createElement(maskShape, scale, overrides)];
   }
 
   /**
@@ -556,9 +565,15 @@ export class LeIcon {
       for (let j = i; j < overlayInfo.length; j++) {
         const info = overlayInfo[j];
         if (info.layer.data.maskShape) {
+          const layerOverrides = {
+            rounded: info.layer.config.rounded,
+            sharp: info.layer.config.sharp,
+            filled: info.layer.config.filled,
+            outlined: info.layer.config.outlined,
+          };
           maskShapes.push(
             h('g', { transform: info.transform }, 
-              this.renderMaskShape(info.layer.data.maskShape, info.scale),
+              this.renderMaskShape(info.layer.data.maskShape, info.scale, layerOverrides),
             ),
           );
         }
@@ -566,7 +581,7 @@ export class LeIcon {
 
       if (maskShapes.length > 0) {
         masks.push(
-          h('mask', { id: `m${i}` }, [
+          h('mask', { id: `m${i}`, maskUnits: 'userSpaceOnUse' }, [
             h('rect', {
               x: parentVB.x,
               y: parentVB.y,
@@ -597,11 +612,17 @@ export class LeIcon {
     const overlayGroups = overlayInfo.map((info, i) => {
       const maskIndex = i + 1;
       const hasMask = maskIndex < masks.length;
+      const layerOverrides = {
+        rounded: info.layer.config.rounded,
+        sharp: info.layer.config.sharp,
+        filled: info.layer.config.filled,
+        outlined: info.layer.config.outlined,
+      };
 
       const layerContent = h(
         'g',
         { transform: info.transform },
-        ...this.renderSVGContent(info.layer.data.children, info.scale),
+        ...this.renderSVGContent(info.layer.data.children, info.scale, layerOverrides),
       );
 
       return hasMask

@@ -1,12 +1,28 @@
 {
   "viewBox": "0 0 16 16",
+  "maskShape": {
+    "tag": "polyline",
+    "points": "6.75 11.25 10 8 6.75 4.75",
+    "stroke": "black",
+    "stroke-width": "3",
+    "stroke-linecap": "square",
+    "rounded": {
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round"
+    }
+  },
   "children": [
     {
       "tag": "polyline",
-      "points": "6 12 10 8 6 4",
+      "points": "6.75 11.25 10 8 6.75 4.75",
       "fill": "none",
       "stroke": "currentColor",
-      "stroke-width": "2"
+      "stroke-width": "2",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+      }
     }
   ]
 }

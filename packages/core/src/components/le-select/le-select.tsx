@@ -291,16 +291,7 @@ export class LeSelect {
                 : undefined
             }
             iconEnd={
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M4 6l4 4 4-4" />
-              </svg>
+              <le-icon name="chevron-down" size={16} class="chevron" />
             }
           >
             <span class="trigger-label">

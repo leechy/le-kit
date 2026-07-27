@@ -1,8 +1,8 @@
 :host {
   display: inline-block;
 
-  width: var(--le-icon-size, var(--le-size-4));
-  height: var(--le-icon-size, var(--le-size-4));
+  width: var(--le-icon-size);
+  height: var(--le-icon-size);
 
   color: var(--le-icon-color, var(--le-color-text-primary));
 }
@@ -11,4 +11,7 @@
   flex-shrink: 0;
   display: block;
   fill: currentColor;
+
+  transition: var(--le-icon-transition);
+  transform: var(--le-icon-transform);
 }

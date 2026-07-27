@@ -11,7 +11,7 @@ import {
   Listen,
 } from '@stencil/core';
 import { LeOption, LeOptionValue, LeOptionSelectDetail } from '../../types/options';
-import { buildDeclarativeOptionsFromChildren, parseOptionInput } from '../../utils/utils';
+import { buildDeclarativeOptionsFromChildren, classnames, parseOptionInput } from '../../utils/utils';
 
 /**
  * A combobox component with searchable dropdown.
@@ -352,7 +352,7 @@ export class LeCombobox {
           onLeDropdownOpen={this.handleDropdownOpen}
           onLeDropdownClose={this.handleDropdownClose}
         >
-          <div slot="trigger" class={{ 'combobox-trigger': true, 'is-open': this.open }}>
+          <div slot="trigger" class={classnames('combobox-trigger', 'le-control-focus', { 'is-open': this.open })}>
             <le-string-input
               mode="default"
               inputRef={el => (this.inputEl = el)}
@@ -382,9 +382,7 @@ export class LeCombobox {
               </button>
             )}
             <span class="combobox-arrow">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 6l4 4 4-4" />
-              </svg>
+              <le-icon name="chevron-down" size={16} />
             </span>
           </div>
         </le-dropdown-base>

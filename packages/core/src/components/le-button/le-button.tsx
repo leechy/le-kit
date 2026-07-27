@@ -427,7 +427,7 @@ export class LeButton {
                       // assuming that if the string is longer than 2 characters, it's an icon name rather than an emoji
                       <le-icon name={this.iconStart}></le-icon>
                     )
-                  ) : null}
+                  ) : this.iconStart}
                 </slot>
               </span>
               <le-visibility

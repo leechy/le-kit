@@ -14,7 +14,7 @@
       icons: {
         defaultRounded: false,
         defaultFilled: false,
-        defaultThin: true,
+        defaultThin: false,
         defaultBadgePosition: '-4.5, -4.5',
         defaultBadgeScale: 1,
         defaultViewBox: '0 0 16 16',
@@ -28,7 +28,7 @@
           'file-copy': {
             viewBox: '0 0 16 16',
             layers: [
-              { name: 'file', scale: 0.75, position: '6.5px, 9.5px', thin: true },
+              { name: 'file', scale: 0.75, position: '6.5px, 9.5px', opacity: 0.7, thin: true },
               { name: 'file', scale: 0.8, position: '-6.75px, 6.75px' },
             ]
           },
@@ -381,12 +381,14 @@
       <le-icon name="folder" size="48"></le-icon>
       <le-icon name="folder" rounded size="48"></le-icon>
       <le-icon name="folder" filled size="48"></le-icon>
-      <le-icon name="folder" rounded outlined size="48"></le-icon>
+      <le-icon name="folder" thin size="48"></le-icon>
+      <le-icon name="folder" rounded thin size="48"></le-icon>
       <br />
       <le-icon name="folder-open" size="48"></le-icon>
       <le-icon name="folder-open" rounded size="48"></le-icon>
       <le-icon name="folder-open" filled size="48"></le-icon>
-      <le-icon name="folder-open" rounded outlined size="48"></le-icon>
+      <le-icon name="folder-open" thin size="48"></le-icon>
+      <le-icon name="folder-open" rounded thin size="48"></le-icon>
     </div>
 
     <h3>Registry Icons (configureLeKit)</h3>
@@ -395,7 +397,7 @@
       <le-icon name="add-to-folder" size="32"></le-icon>
       <le-icon name="move-to" size="32"></le-icon>
       <le-icon name="file-copy" size="32" style="--le-icon-color: #ffcc00;"></le-icon>
-      <le-icon name="file-copy" badge="download-badge" size="32"></le-icon>
+      <le-icon name="file-copy" badge="download-badge" badge-opacity="0.5" size="32"></le-icon>
       <le-icon name="share-folder" size="32"></le-icon>
       <le-icon name="new-file" size="32"></le-icon>
       <le-icon name="move-file" size="32"></le-icon>
@@ -427,7 +429,7 @@
     <le-icon name="check" size="42" style="color: var(--le-color-success);"></le-icon>
     <le-icon name="clear" size="42" style="color: var(--le-color-text);"></le-icon>
     <br />
-    <le-icon name="arrow-left" badge="chevron-left" badge-scale="0.5" size="32"></le-icon>
+    <le-icon name="arrow-left" badge="chevron-left" badge-scale="0.5" badge-opacity="0.6" size="32"></le-icon>
     <le-icon name="arrow-right" size="32"></le-icon>
     <span style="display: inline-block; width: 16px;"></span>
     <le-icon name="new" size="32"></le-icon>

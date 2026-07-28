@@ -1113,6 +1113,10 @@ export namespace Components {
          */
         "badge"?: string;
         /**
+          * Optional opacity for the badge icon (0 to 1).
+         */
+        "badgeOpacity"?: number;
+        /**
           * Position of the badge icon within the base icon's viewBox. Comma-separated x,y values in viewBox units or percentages. Positive values = from start/top, Negative values = from end/bottom. Percentages work like CSS background-position. Default: "-5, -5" (bottom-right area).
           * @example "-2, -2"    → 2 units from right and bottom edges
           * @example "100%, 0%"  → top-right corner
@@ -5401,6 +5405,10 @@ declare namespace LocalJSX {
          */
         "badge"?: string;
         /**
+          * Optional opacity for the badge icon (0 to 1).
+         */
+        "badgeOpacity"?: number;
+        /**
           * Position of the badge icon within the base icon's viewBox. Comma-separated x,y values in viewBox units or percentages. Positive values = from start/top, Negative values = from end/bottom. Percentages work like CSS background-position. Default: "-5, -5" (bottom-right area).
           * @example "-2, -2"    → 2 units from right and bottom edges
           * @example "100%, 0%"  → top-right corner
@@ -7392,6 +7400,7 @@ declare namespace LocalJSX {
         "badge": string;
         "badgePosition": string;
         "badgeScale": number;
+        "badgeOpacity": number;
         "layers": string;
         "rounded": boolean;
         "sharp": boolean;

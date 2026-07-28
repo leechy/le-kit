@@ -122,7 +122,17 @@ export class LeIcon {
    * Badge icons are designed at their natural display size,
    * so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink.
    */
+  /**
+   * Scale factor for the badge icon. Default: 1.0.
+   * Badge icons are designed at their natural display size,
+   * so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink.
+   */
   @Prop() badgeScale?: number;
+
+  /**
+   * Optional opacity for the badge icon (0 to 1).
+   */
+  @Prop({ reflect: true }) badgeOpacity?: number;
 
   /**
    * JSON string defining additional icon layers to compose on top
@@ -175,6 +185,9 @@ export class LeIcon {
 
   @Watch('name')
   @Watch('badge')
+  @Watch('badgePosition')
+  @Watch('badgeScale')
+  @Watch('badgeOpacity')
   @Watch('layers')
   @Watch('rounded')
   @Watch('sharp')
@@ -193,6 +206,7 @@ export class LeIcon {
     let resolvedBadge = this.badge;
     let resolvedBadgePosition = this.badgePosition;
     let resolvedBadgeScale = this.badgeScale;
+    let resolvedBadgeOpacity = this.badgeOpacity;
     let resolvedLayers = this.layers;
     let resolvedViewBox = this.viewBox;
     let resolvedRounded = this.rounded;
@@ -231,6 +245,9 @@ export class LeIcon {
         }
         if (this.badgeScale == null && composedDef.badgeScale != null) {
           resolvedBadgeScale = composedDef.badgeScale;
+        }
+        if (this.badgeOpacity == null && composedDef.badgeOpacity != null) {
+          resolvedBadgeOpacity = composedDef.badgeOpacity;
         }
         if (this.sharp == null && composedDef.sharp != null) {
           resolvedSharp = composedDef.sharp;
@@ -309,6 +326,7 @@ export class LeIcon {
     // Store resolved values for use in rendering
     this._resolvedBadgePosition = resolvedBadgePosition;
     this._resolvedBadgeScale = resolvedBadgeScale;
+    this._resolvedBadgeOpacity = resolvedBadgeOpacity;
     this._resolvedViewBox = resolvedViewBox;
     this._resolvedRounded = resolvedRounded;
     this._resolvedSharp = resolvedSharp;
@@ -326,6 +344,9 @@ export class LeIcon {
 
   /** Resolved badge scale (from explicit prop, registry, or config default). */
   private _resolvedBadgeScale?: number;
+
+  /** Resolved badge opacity (from explicit prop or registry). */
+  private _resolvedBadgeOpacity?: number;
 
   /** Resolved viewBox (from explicit prop, registry, config default, or first layer). */
   private _resolvedViewBox?: string;
@@ -581,6 +602,7 @@ export class LeIcon {
           name: this.badge || '',
           position: this._resolvedBadgePosition || defaultPos,
           scale: this._resolvedBadgeScale ?? defaultScale,
+          opacity: this._resolvedBadgeOpacity,
         },
         data: this.badgeData,
       });
@@ -695,9 +717,16 @@ export class LeIcon {
         thin: info.layer.config.thin,
       };
 
+      const groupAttrs: any = {
+        transform: info.transform,
+      };
+      if (info.layer.config.opacity != null) {
+        groupAttrs.opacity = String(info.layer.config.opacity);
+      }
+
       const layerContent = h(
         'g',
-        { transform: info.transform },
+        groupAttrs,
         ...this.renderSVGContent(info.layer.data.children, info.scale, layerOverrides),
       );
 

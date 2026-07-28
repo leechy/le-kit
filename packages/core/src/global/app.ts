@@ -159,6 +159,8 @@ export interface ComposedIconDef {
   badgePosition?: string;
   /** Optional badge scale (overrides icons.defaultBadgeScale). */
   badgeScale?: number;
+  /** Optional badge opacity (0 to 1). */
+  badgeOpacity?: number;
   /** Optional rounded setting for this composed icon. */
   rounded?: boolean;
   /** Optional sharp setting for this composed icon. */
@@ -174,6 +176,7 @@ export interface ComposedIconDef {
     name: string;
     position?: string;
     scale?: number;
+    opacity?: number;
     rounded?: boolean;
     sharp?: boolean;
     filled?: boolean;

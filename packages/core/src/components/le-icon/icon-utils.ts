@@ -20,6 +20,7 @@ export interface LayerConfig {
   position?: string;
   scale?: number;
   opacity?: number;
+  color?: string;
   rounded?: boolean;
   sharp?: boolean;
   filled?: boolean;

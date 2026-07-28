@@ -122,17 +122,22 @@ export class LeIcon {
    * Badge icons are designed at their natural display size,
    * so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink.
    */
-  /**
-   * Scale factor for the badge icon. Default: 1.0.
-   * Badge icons are designed at their natural display size,
-   * so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink.
-   */
   @Prop() badgeScale?: number;
 
   /**
    * Optional opacity for the badge icon (0 to 1).
    */
   @Prop({ reflect: true }) badgeOpacity?: number;
+
+  /**
+   * Optional color for the badge icon (CSS color or variable).
+   */
+  @Prop({ reflect: true }) badgeColor?: string;
+
+  /**
+   * Optional color for the base icon (CSS color or variable).
+   */
+  @Prop({ reflect: true }) baseColor?: string;
 
   /**
    * JSON string defining additional icon layers to compose on top
@@ -188,6 +193,8 @@ export class LeIcon {
   @Watch('badgePosition')
   @Watch('badgeScale')
   @Watch('badgeOpacity')
+  @Watch('badgeColor')
+  @Watch('baseColor')
   @Watch('layers')
   @Watch('rounded')
   @Watch('sharp')
@@ -207,6 +214,8 @@ export class LeIcon {
     let resolvedBadgePosition = this.badgePosition;
     let resolvedBadgeScale = this.badgeScale;
     let resolvedBadgeOpacity = this.badgeOpacity;
+    let resolvedBadgeColor = this.badgeColor;
+    let resolvedBaseColor = this.baseColor;
     let resolvedLayers = this.layers;
     let resolvedViewBox = this.viewBox;
     let resolvedRounded = this.rounded;
@@ -248,6 +257,12 @@ export class LeIcon {
         }
         if (this.badgeOpacity == null && composedDef.badgeOpacity != null) {
           resolvedBadgeOpacity = composedDef.badgeOpacity;
+        }
+        if (!this.badgeColor && composedDef.badgeColor) {
+          resolvedBadgeColor = composedDef.badgeColor;
+        }
+        if (!this.baseColor && composedDef.baseColor) {
+          resolvedBaseColor = composedDef.baseColor;
         }
         if (this.sharp == null && composedDef.sharp != null) {
           resolvedSharp = composedDef.sharp;
@@ -327,6 +342,8 @@ export class LeIcon {
     this._resolvedBadgePosition = resolvedBadgePosition;
     this._resolvedBadgeScale = resolvedBadgeScale;
     this._resolvedBadgeOpacity = resolvedBadgeOpacity;
+    this._resolvedBadgeColor = resolvedBadgeColor;
+    this._resolvedBaseColor = resolvedBaseColor;
     this._resolvedViewBox = resolvedViewBox;
     this._resolvedRounded = resolvedRounded;
     this._resolvedSharp = resolvedSharp;
@@ -347,6 +364,12 @@ export class LeIcon {
 
   /** Resolved badge opacity (from explicit prop or registry). */
   private _resolvedBadgeOpacity?: number;
+
+  /** Resolved badge color (from explicit prop or registry). */
+  private _resolvedBadgeColor?: string;
+
+  /** Resolved base icon color (from explicit prop or registry). */
+  private _resolvedBaseColor?: string;
 
   /** Resolved viewBox (from explicit prop, registry, config default, or first layer). */
   private _resolvedViewBox?: string;
@@ -603,6 +626,7 @@ export class LeIcon {
           position: this._resolvedBadgePosition || defaultPos,
           scale: this._resolvedBadgeScale ?? defaultScale,
           opacity: this._resolvedBadgeOpacity,
+          color: this._resolvedBadgeColor,
         },
         data: this.badgeData,
       });
@@ -701,8 +725,15 @@ export class LeIcon {
 
     // Render base icon
     const baseContent = this.renderSVGContent(this.iconData?.children);
-    const baseGroup = hasMaskForBase
-      ? h('g', { mask: 'url(#m0)' }, ...baseContent)
+    const baseAttrs: any = {};
+    if (hasMaskForBase) {
+      baseAttrs.mask = 'url(#m0)';
+    }
+    if (this._resolvedBaseColor) {
+      baseAttrs.style = { color: this._resolvedBaseColor };
+    }
+    const baseGroup = Object.keys(baseAttrs).length > 0
+      ? h('g', baseAttrs, ...baseContent)
       : baseContent;
 
     // Render overlay layers
@@ -722,6 +753,9 @@ export class LeIcon {
       };
       if (info.layer.config.opacity != null) {
         groupAttrs.opacity = String(info.layer.config.opacity);
+      }
+      if (info.layer.config.color) {
+        groupAttrs.style = { color: info.layer.config.color };
       }
 
       const layerContent = h(

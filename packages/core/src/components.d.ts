@@ -1113,6 +1113,10 @@ export namespace Components {
          */
         "badge"?: string;
         /**
+          * Optional color for the badge icon (CSS color or variable).
+         */
+        "badgeColor"?: string;
+        /**
           * Optional opacity for the badge icon (0 to 1).
          */
         "badgeOpacity"?: number;
@@ -1127,6 +1131,10 @@ export namespace Components {
           * Scale factor for the badge icon. Default: 1.0. Badge icons are designed at their natural display size, so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink.
          */
         "badgeScale"?: number;
+        /**
+          * Optional color for the base icon (CSS color or variable).
+         */
+        "baseColor"?: string;
         /**
           * Whether to use filled variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultFilled`).
          */
@@ -5405,6 +5413,10 @@ declare namespace LocalJSX {
          */
         "badge"?: string;
         /**
+          * Optional color for the badge icon (CSS color or variable).
+         */
+        "badgeColor"?: string;
+        /**
           * Optional opacity for the badge icon (0 to 1).
          */
         "badgeOpacity"?: number;
@@ -5419,6 +5431,10 @@ declare namespace LocalJSX {
           * Scale factor for the badge icon. Default: 1.0. Badge icons are designed at their natural display size, so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink.
          */
         "badgeScale"?: number;
+        /**
+          * Optional color for the base icon (CSS color or variable).
+         */
+        "baseColor"?: string;
         /**
           * Whether to use filled variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultFilled`).
          */
@@ -7401,6 +7417,8 @@ declare namespace LocalJSX {
         "badgePosition": string;
         "badgeScale": number;
         "badgeOpacity": number;
+        "badgeColor": string;
+        "baseColor": string;
         "layers": string;
         "rounded": boolean;
         "sharp": boolean;

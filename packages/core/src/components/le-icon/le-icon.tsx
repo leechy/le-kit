@@ -10,6 +10,7 @@ import {
   getDefaultBadgeScale,
   getDefaultIconFilled,
   getDefaultIconRounded,
+  getDefaultIconThin,
   getDefaultViewBox,
 } from '../../global/app';
 import {
@@ -158,6 +159,12 @@ export class LeIcon {
    */
   @Prop({ reflect: true }) outlined?: boolean;
 
+  /**
+   * Whether to use thin variants of icon elements if defined in icon JSON.
+   * If not explicitly set, defaults to the global le-kit config (`icons.defaultThin`).
+   */
+  @Prop({ reflect: true }) thin?: boolean;
+
   @State() private iconData: any = null;
 
   @State() private badgeData: any = null;
@@ -173,6 +180,7 @@ export class LeIcon {
   @Watch('sharp')
   @Watch('filled')
   @Watch('outlined')
+  @Watch('thin')
   private async loadIconData(): Promise<void> {
     const { name, visible } = this;
 
@@ -191,6 +199,7 @@ export class LeIcon {
     let resolvedSharp = this.sharp;
     let resolvedFilled = this.filled;
     let resolvedOutlined = this.outlined;
+    let resolvedThin = this.thin;
 
     if (name) {
       let targetName = name;
@@ -234,6 +243,9 @@ export class LeIcon {
         }
         if (this.filled == null && composedDef.filled != null) {
           resolvedFilled = composedDef.filled;
+        }
+        if (this.thin == null && composedDef.thin != null) {
+          resolvedThin = composedDef.thin;
         }
         if (!this.layers && composedDef.layers) {
           resolvedLayers = JSON.stringify(composedDef.layers);
@@ -302,6 +314,7 @@ export class LeIcon {
     this._resolvedSharp = resolvedSharp;
     this._resolvedFilled = resolvedFilled;
     this._resolvedOutlined = resolvedOutlined;
+    this._resolvedThin = resolvedThin;
 
     await Promise.all(promises);
   }
@@ -328,6 +341,9 @@ export class LeIcon {
 
   /** Resolved outlined setting (from explicit prop or registry). */
   private _resolvedOutlined?: boolean;
+
+  /** Resolved thin setting (from explicit prop, registry, or config default). */
+  private _resolvedThin?: boolean;
 
   connectedCallback(): void {
     this.waitUntilVisible(() => {
@@ -374,11 +390,14 @@ export class LeIcon {
   }
 
   /**
-   * Resolves element descriptors, applying variant overrides (rounded, filled, rounded-filled)
-   * based on the component's current `rounded`, `sharp`, `filled`, and `outlined` state,
+   * Resolves element descriptors, applying variant overrides (rounded, filled, thin, and combinations)
+   * based on the component's current `rounded`, `sharp`, `filled`, `outlined`, and `thin` state,
    * with optional per-layer overrides.
    */
-  private resolveNode(node: any, overrides?: { rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean }): any {
+  private resolveNode(
+    node: any,
+    overrides?: { rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean; thin?: boolean },
+  ): any {
     if (!node) return node;
 
     let rounded = false;
@@ -415,10 +434,46 @@ export class LeIcon {
       filled = getDefaultIconFilled();
     }
 
+    let thin = false;
+    if (this.thin === true) {
+      thin = true;
+    } else if (overrides?.thin === true) {
+      thin = true;
+    } else if (this._resolvedThin === true) {
+      thin = true;
+    } else if (this.thin === false || overrides?.thin === false || this._resolvedThin === false) {
+      thin = false;
+    } else {
+      thin = getDefaultIconThin();
+    }
+
     let resolved = { ...node };
 
-    if (rounded && filled && resolved['rounded-filled']) {
+    if (rounded && filled && thin && resolved['rounded-filled-thin']) {
+      resolved = this.applyOverride(resolved, resolved['rounded-filled-thin']);
+    } else if (rounded && thin && resolved['rounded-thin']) {
+      resolved = this.applyOverride(resolved, resolved['rounded-thin']);
+      if (filled) {
+        if (resolved['filled-thin']) {
+          resolved = this.applyOverride(resolved, resolved['filled-thin']);
+        } else if (resolved['filled']) {
+          resolved = this.applyOverride(resolved, resolved['filled']);
+        }
+      }
+    } else if (filled && thin && resolved['filled-thin']) {
+      resolved = this.applyOverride(resolved, resolved['filled-thin']);
+      if (rounded) {
+        if (resolved['rounded-thin']) {
+          resolved = this.applyOverride(resolved, resolved['rounded-thin']);
+        } else if (resolved['rounded']) {
+          resolved = this.applyOverride(resolved, resolved['rounded']);
+        }
+      }
+    } else if (rounded && filled && resolved['rounded-filled']) {
       resolved = this.applyOverride(resolved, resolved['rounded-filled']);
+      if (thin && resolved['thin']) {
+        resolved = this.applyOverride(resolved, resolved['thin']);
+      }
     } else {
       if (rounded && resolved['rounded']) {
         resolved = this.applyOverride(resolved, resolved['rounded']);
@@ -426,11 +481,18 @@ export class LeIcon {
       if (filled && resolved['filled']) {
         resolved = this.applyOverride(resolved, resolved['filled']);
       }
+      if (thin && resolved['thin']) {
+        resolved = this.applyOverride(resolved, resolved['thin']);
+      }
     }
 
     delete resolved['rounded'];
     delete resolved['filled'];
+    delete resolved['thin'];
     delete resolved['rounded-filled'];
+    delete resolved['rounded-thin'];
+    delete resolved['filled-thin'];
+    delete resolved['rounded-filled-thin'];
 
     return resolved;
   }
@@ -450,7 +512,11 @@ export class LeIcon {
   /**
    * Creates a JSX element from a JSON node descriptor.
    */
-  private createElement(rawNode: any, inverseScale = 1, overrides?: { rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean }) {
+  private createElement(
+    rawNode: any,
+    inverseScale = 1,
+    overrides?: { rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean; thin?: boolean },
+  ) {
     if (!rawNode) return null;
 
     const node = this.resolveNode(rawNode, overrides);
@@ -473,7 +539,11 @@ export class LeIcon {
    *
    * @returns JSX.Element | null
    */
-  private renderSVGContent(children?: any[], inverseScale = 1, overrides?: { rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean }): any[] {
+  private renderSVGContent(
+    children?: any[],
+    inverseScale = 1,
+    overrides?: { rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean; thin?: boolean },
+  ): any[] {
     if (!children || children.length === 0) {
       return [];
     }
@@ -522,7 +592,11 @@ export class LeIcon {
   /**
    * Helper to render maskShape which can be a single node descriptor or an array of node descriptors.
    */
-  private renderMaskShape(maskShape: any, scale: number, overrides?: { rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean }): any[] {
+  private renderMaskShape(
+    maskShape: any,
+    scale: number,
+    overrides?: { rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean; thin?: boolean },
+  ): any[] {
     if (!maskShape) return [];
     if (Array.isArray(maskShape)) {
       return maskShape.map(node => this.createElement(node, scale, overrides));
@@ -570,6 +644,7 @@ export class LeIcon {
             sharp: info.layer.config.sharp,
             filled: info.layer.config.filled,
             outlined: info.layer.config.outlined,
+            thin: info.layer.config.thin,
           };
           maskShapes.push(
             h('g', { transform: info.transform }, 
@@ -617,6 +692,7 @@ export class LeIcon {
         sharp: info.layer.config.sharp,
         filled: info.layer.config.filled,
         outlined: info.layer.config.outlined,
+        thin: info.layer.config.thin,
       };
 
       const layerContent = h(

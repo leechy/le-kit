@@ -23,6 +23,7 @@ export interface LayerConfig {
   sharp?: boolean;
   filled?: boolean;
   outlined?: boolean;
+  thin?: boolean;
 }
 
 /**

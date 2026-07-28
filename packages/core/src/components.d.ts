@@ -1155,6 +1155,10 @@ export namespace Components {
          */
         "size": number;
         /**
+          * Whether to use thin variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultThin`).
+         */
+        "thin"?: boolean;
+        /**
           * Custom viewBox for the SVG. When set, overrides the viewBox from the loaded icon data. Useful for layer-only compositions without a base icon.
           * @example "0 0 16 16"
          */
@@ -5439,6 +5443,10 @@ declare namespace LocalJSX {
          */
         "size"?: number;
         /**
+          * Whether to use thin variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultThin`).
+         */
+        "thin"?: boolean;
+        /**
           * Custom viewBox for the SVG. When set, overrides the viewBox from the loaded icon data. Useful for layer-only compositions without a base icon.
           * @example "0 0 16 16"
          */
@@ -7389,6 +7397,7 @@ declare namespace LocalJSX {
         "sharp": boolean;
         "filled": boolean;
         "outlined": boolean;
+        "thin": boolean;
     }
     interface LeKitAttributes {
         "theme": string;

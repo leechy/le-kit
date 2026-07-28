@@ -27,6 +27,9 @@
         "opacity": "0.3",
         "stroke-opacity": "1",
         "fill": "currentColor"
+      },
+      "thin": {
+        "stroke-width": "0.75"
       }
     },
     {
@@ -42,6 +45,9 @@
       },
       "filled": {
         "fill": "currentColor"
+      },
+      "thin": {
+        "stroke-width": "0.75"
       }
     }
   ]

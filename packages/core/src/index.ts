@@ -31,6 +31,7 @@ export {
   getComposedIcon,
   getDefaultIconRounded,
   getDefaultIconFilled,
+  getDefaultIconThin,
 } from './global/app';
 export type { LeKitMode, LeKitTheme, ComposedIconDef, LeKitIconsConfig } from './global/app';
 

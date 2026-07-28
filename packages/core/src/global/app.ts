@@ -167,6 +167,8 @@ export interface ComposedIconDef {
   filled?: boolean;
   /** Optional outlined setting for this composed icon. */
   outlined?: boolean;
+  /** Optional thin setting for this composed icon. */
+  thin?: boolean;
   /** Optional additional layers. */
   layers?: Array<{
     name: string;
@@ -176,6 +178,7 @@ export interface ComposedIconDef {
     sharp?: boolean;
     filled?: boolean;
     outlined?: boolean;
+    thin?: boolean;
   }>;
 }
 
@@ -222,6 +225,14 @@ export interface LeKitIconsConfig {
    * Default: false
    */
   defaultFilled?: boolean;
+
+  /**
+   * Default thin setting for all icons.
+   * Can be overridden per icon via `thin` prop.
+   *
+   * Default: false
+   */
+  defaultThin?: boolean;
 
   /**
    * Registry of named composed icon definitions.
@@ -296,6 +307,7 @@ const DEFAULT_ICONS_CONFIG: LeKitIconsConfig = {
   defaultViewBox: '0 0 16 16',
   defaultRounded: false,
   defaultFilled: false,
+  defaultThin: false,
   composed: {},
 };
 
@@ -317,6 +329,7 @@ function getGlobalConfig(): LeKitConfig {
     if (!cfg.icons.defaultViewBox) cfg.icons.defaultViewBox = DEFAULT_ICONS_CONFIG.defaultViewBox;
     if (cfg.icons.defaultRounded == null) cfg.icons.defaultRounded = DEFAULT_ICONS_CONFIG.defaultRounded;
     if (cfg.icons.defaultFilled == null) cfg.icons.defaultFilled = DEFAULT_ICONS_CONFIG.defaultFilled;
+    if (cfg.icons.defaultThin == null) cfg.icons.defaultThin = DEFAULT_ICONS_CONFIG.defaultThin;
   } else {
     cfg.icons = { ...DEFAULT_ICONS_CONFIG };
   }
@@ -359,6 +372,9 @@ export function configureLeKit(config: Partial<LeKitConfig>): void {
     }
     if (iconsConfig.defaultFilled != null) {
       globalConfig.icons.defaultFilled = iconsConfig.defaultFilled;
+    }
+    if (iconsConfig.defaultThin != null) {
+      globalConfig.icons.defaultThin = iconsConfig.defaultThin;
     }
     // Apply non-icons config
     const { icons: _, ...rest } = config;
@@ -416,6 +432,13 @@ export function getDefaultIconRounded(): boolean {
  */
 export function getDefaultIconFilled(): boolean {
   return getGlobalConfig().icons.defaultFilled ?? false;
+}
+
+/**
+ * Get the default thin setting from config.
+ */
+export function getDefaultIconThin(): boolean {
+  return getGlobalConfig().icons.defaultThin ?? false;
 }
 
 /**

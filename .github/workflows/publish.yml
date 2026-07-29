@@ -33,7 +33,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.13.0'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
@@ -70,12 +70,12 @@ jobs:
         id: setup-node
         uses: actions/setup-node@v4
         with:
-          node-version: '22.13.0'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
 
       # Ensure npm 11.5.1 or later is installed
-      - name: Update and publish to npm
+      - name: Update npm to latest
         run: npm install -g npm@latest
 
       - name: Download build artifacts

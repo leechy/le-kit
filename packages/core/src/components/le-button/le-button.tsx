@@ -426,7 +426,7 @@ export class LeButton {
         <span class={classnames('icon-only', { 'is-visible': hasIconOnly })} part="icon-only">
           <slot name="icon-only">
             {typeof this.iconOnly === 'string' ? (
-              this.iconOnly.length <= 2 ? (
+              Array.from(this.iconOnly).length <= 2 ? (
                 this.iconOnly
               ) : (
                 <le-icon name={this.iconOnly} count={onlyCount}></le-icon>
@@ -445,7 +445,7 @@ export class LeButton {
               >
                 <slot name="icon-start">
                   {typeof this.iconStart === 'string' ? (
-                    this.iconStart.length <= 2 ? (
+                    Array.from(this.iconStart).length <= 2 ? (
                       this.iconStart
                     ) : (
                       <le-icon name={this.iconStart} count={startCount}></le-icon>
@@ -474,7 +474,7 @@ export class LeButton {
             >
               <slot name="icon-end">
                 {typeof this.iconEnd === 'string' ? (
-                  this.iconEnd.length <= 2 ? (
+                  Array.from(this.iconEnd).length <= 2 ? (
                     this.iconEnd
                   ) : (
                     <le-icon name={this.iconEnd} count={endCount}></le-icon>

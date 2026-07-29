@@ -101,4 +101,59 @@ describe('le-button e2e', () => {
     const activeId = await page.evaluate(() => document.activeElement?.id);
     expect(activeId).toBe('after');
   });
+
+  it('forwards icon-count to start icon in le-button', async () => {
+    const page = await newE2EPage();
+    await page.evaluateOnNewDocument(() => {
+      (window as any).LE_KIT_CONFIG = {
+        icons: {
+          file: { viewBox: '0 0 16 16', children: [] },
+        },
+      };
+    });
+    await page.setContent('<le-button icon-start="file" icon-count="4">Notifications</le-button>');
+
+    const icon = await page.find('le-button >>> le-icon');
+    expect(icon).not.toBeNull();
+    expect(await icon.getAttribute('count')).toBe('4');
+  });
+
+  it('forwards icon-only-count to icon-only in le-button', async () => {
+    const page = await newE2EPage();
+    await page.evaluateOnNewDocument(() => {
+      (window as any).LE_KIT_CONFIG = {
+        icons: {
+          folder: { viewBox: '0 0 16 16', children: [] },
+        },
+      };
+    });
+    await page.setContent('<le-button icon-only="folder" icon-only-count="12" label="Inbox"></le-button>');
+
+    const icon = await page.find('le-button >>> le-icon');
+    expect(icon).not.toBeNull();
+    expect(await icon.getAttribute('count')).toBe('12');
+  });
+
+  it('supports slot-specific icon-start-count and icon-end-count in le-button', async () => {
+    const page = await newE2EPage();
+    await page.evaluateOnNewDocument(() => {
+      (window as any).LE_KIT_CONFIG = {
+        icons: {
+          file: { viewBox: '0 0 16 16', children: [] },
+          'arrow-right': { viewBox: '0 0 16 16', children: [] },
+        },
+      };
+    });
+    await page.setContent(
+      '<le-button icon-start="file" icon-start-count="3" icon-end="arrow-right">Next</le-button>',
+    );
+
+    const startIcon = await page.find('le-button >>> .icon-start le-icon');
+    expect(startIcon).not.toBeNull();
+    expect(await startIcon.getAttribute('count')).toBe('3');
+
+    const endIcon = await page.find('le-button >>> .icon-end le-icon');
+    expect(endIcon).not.toBeNull();
+    expect(await endIcon.getAttribute('count')).toBeNull();
+  });
 });

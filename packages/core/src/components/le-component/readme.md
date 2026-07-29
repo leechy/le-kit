@@ -101,6 +101,7 @@ graph TD;
   le-string-input --> le-component
   le-tooltip --> le-component
   le-select --> le-component
+  le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
   le-checkbox --> le-component
   le-popup --> le-component

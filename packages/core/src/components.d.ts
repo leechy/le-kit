@@ -454,17 +454,33 @@ export namespace Components {
          */
         "href"?: string;
         /**
+          * Notification count for shorthand icons. Applies to start icon, or icon-only if set.
+         */
+        "iconCount"?: number;
+        /**
           * End icon image or emoji
          */
         "iconEnd"?: string | Node;
+        /**
+          * Count specifically for iconEnd.
+         */
+        "iconEndCount"?: number;
         /**
           * Icon only button image or emoji if this prop is set, the button will render only the icon slot
          */
         "iconOnly"?: string | Node;
         /**
+          * Count specifically for iconOnly.
+         */
+        "iconOnlyCount"?: number;
+        /**
           * Start icon image or emoji
          */
         "iconStart"?: string | Node;
+        /**
+          * Count specifically for iconStart.
+         */
+        "iconStartCount"?: number;
         /**
           * Optional label for the button, used for accessibility and tooltips when the button is icon-only.
          */
@@ -1113,7 +1129,7 @@ export namespace Components {
          */
         "badge"?: string;
         /**
-          * Optional color for the badge icon (CSS color or variable).
+          * Optional color for the badge icon or background (CSS color or variable). Defaults to 'transparent'.
          */
         "badgeColor"?: string;
         /**
@@ -1132,9 +1148,25 @@ export namespace Components {
          */
         "badgeScale"?: number;
         /**
+          * Optional text string for notification badge (e.g. "NEW"). Can also be set as boolean attribute `<le-icon badge-text></le-icon>` for an empty dot.
+         */
+        "badgeText"?: string | boolean;
+        /**
+          * Optional text/font color for the badge text.
+         */
+        "badgeTextColor"?: string;
+        /**
           * Optional color for the base icon (CSS color or variable).
          */
         "baseColor"?: string;
+        /**
+          * Optional numeric count for notification badge (e.g. 5 or 120).
+         */
+        "count"?: number;
+        /**
+          * Whether to display an empty circle dot badge.
+         */
+        "dot"?: boolean;
         /**
           * Whether to use filled variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultFilled`).
          */
@@ -1144,6 +1176,10 @@ export namespace Components {
           * @example '[{"name":"folder","position":"0,50%","scale":0.8}]'
          */
         "layers"?: string;
+        /**
+          * Optional max count threshold (e.g. 99 -> "99+").
+         */
+        "maxCount"?: number;
         /**
           * Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file.
           * @default undefined
@@ -4709,17 +4745,33 @@ declare namespace LocalJSX {
          */
         "href"?: string;
         /**
+          * Notification count for shorthand icons. Applies to start icon, or icon-only if set.
+         */
+        "iconCount"?: number;
+        /**
           * End icon image or emoji
          */
         "iconEnd"?: string | Node;
+        /**
+          * Count specifically for iconEnd.
+         */
+        "iconEndCount"?: number;
         /**
           * Icon only button image or emoji if this prop is set, the button will render only the icon slot
          */
         "iconOnly"?: string | Node;
         /**
+          * Count specifically for iconOnly.
+         */
+        "iconOnlyCount"?: number;
+        /**
           * Start icon image or emoji
          */
         "iconStart"?: string | Node;
+        /**
+          * Count specifically for iconStart.
+         */
+        "iconStartCount"?: number;
         /**
           * Optional label for the button, used for accessibility and tooltips when the button is icon-only.
          */
@@ -5413,7 +5465,7 @@ declare namespace LocalJSX {
          */
         "badge"?: string;
         /**
-          * Optional color for the badge icon (CSS color or variable).
+          * Optional color for the badge icon or background (CSS color or variable). Defaults to 'transparent'.
          */
         "badgeColor"?: string;
         /**
@@ -5432,9 +5484,25 @@ declare namespace LocalJSX {
          */
         "badgeScale"?: number;
         /**
+          * Optional text string for notification badge (e.g. "NEW"). Can also be set as boolean attribute `<le-icon badge-text></le-icon>` for an empty dot.
+         */
+        "badgeText"?: string | boolean;
+        /**
+          * Optional text/font color for the badge text.
+         */
+        "badgeTextColor"?: string;
+        /**
           * Optional color for the base icon (CSS color or variable).
          */
         "baseColor"?: string;
+        /**
+          * Optional numeric count for notification badge (e.g. 5 or 120).
+         */
+        "count"?: number;
+        /**
+          * Whether to display an empty circle dot badge.
+         */
+        "dot"?: boolean;
         /**
           * Whether to use filled variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultFilled`).
          */
@@ -5444,6 +5512,10 @@ declare namespace LocalJSX {
           * @example '[{"name":"folder","position":"0,50%","scale":0.8}]'
          */
         "layers"?: string;
+        /**
+          * Optional max count threshold (e.g. 99 -> "99+").
+         */
+        "maxCount"?: number;
         /**
           * Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file.
           * @default undefined
@@ -7303,10 +7375,14 @@ declare namespace LocalJSX {
         "motionPreset": 'none' | 'soft' | 'fluid' | 'spring';
         "iconOnly": string | Node;
         "iconStart": string | Node;
+        "iconCount": number;
+        "iconStartCount": number;
         "collapsible": boolean;
         "collapse": string;
         "collapsePriorityOffset": number;
         "iconEnd": string | Node;
+        "iconEndCount": number;
+        "iconOnlyCount": number;
         "disabled": boolean;
         "type": 'button' | 'submit' | 'reset';
         "href": string;
@@ -7417,6 +7493,11 @@ declare namespace LocalJSX {
         "badgePosition": string;
         "badgeScale": number;
         "badgeOpacity": number;
+        "count": number;
+        "maxCount": number;
+        "badgeText": string;
+        "dot": boolean;
+        "badgeTextColor": string;
         "badgeColor": string;
         "baseColor": string;
         "layers": string;

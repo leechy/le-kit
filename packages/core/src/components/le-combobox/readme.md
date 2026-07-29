@@ -80,6 +80,7 @@ Type: `Promise<void>`
 - [le-component](../le-component)
 - [le-dropdown-base](../le-dropdown-base)
 - [le-string-input](../le-string-input)
+- [le-icon](../le-icon)
 
 ### Graph
 ```mermaid
@@ -87,6 +88,7 @@ graph TD;
   le-combobox --> le-component
   le-combobox --> le-dropdown-base
   le-combobox --> le-string-input
+  le-combobox --> le-icon
   le-component --> le-button
   le-component --> le-select
   le-component --> le-checkbox
@@ -109,6 +111,8 @@ graph TD;
   le-select --> le-component
   le-select --> le-dropdown-base
   le-select --> le-button
+  le-select --> le-icon
+  le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
   le-checkbox --> le-component
   le-checkbox --> le-slot

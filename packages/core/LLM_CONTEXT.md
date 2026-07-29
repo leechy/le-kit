@@ -302,10 +302,14 @@ A flexible button component with multiple variants and states.
 | `motionPreset` | `'none' \| 'soft' \| 'fluid' \| 'spring' \| undefined` |  | Optional per-instance motion preset override. |
 | `iconOnly` | `string \| Node \| undefined` |  | Icon only button image or emoji if this prop is set, the button will render only the icon slot |
 | `iconStart` | `string \| Node \| undefined` |  | Start icon image or emoji |
+| `iconCount` | `number \| undefined` |  | Notification count for shorthand icons. Applies to start icon, or icon-only if set. |
+| `iconStartCount` | `number \| undefined` |  | Count specifically for iconStart. |
 | `collapsible` | `boolean` | `false` | Enables responsive collapse to icon-only when the toolbar applies `collapse="icon"`. |
 | `collapse` | `string \| undefined` |  | Runtime collapse state controlled by responsive containers. |
 | `collapsePriorityOffset` | `number` | `100` | Relative collapse priority offset for toolbar stepping. Higher numbers collapse earlier while keeping the button visible longer. |
 | `iconEnd` | `string \| Node \| undefined` |  | End icon image or emoji |
+| `iconEndCount` | `number \| undefined` |  | Count specifically for iconEnd. |
+| `iconOnlyCount` | `number \| undefined` |  | Count specifically for iconOnly. |
 | `disabled` | `boolean` | `false` | Whether the button is disabled |
 | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | The button type attribute |
 | `href` | `string \| undefined` |  | Optional href to make the button act as a link |
@@ -829,11 +833,20 @@ The header component updates that variable when it renders.
 | `badge` | `string \| undefined` |  | Name of a badge icon to overlay on top of the base icon. The badge icon is loaded and composed with mask-based knockout. |
 | `badgePosition` | `string \| undefined` |  | Position of the badge icon within the base icon's viewBox. Comma-separated x,y values in viewBox units or percentages. Positive values = from start/top, Negative values = from end/bottom. Percentages work like CSS background-position. Default: "-5, -5" (bottom-right area). |
 | `badgeScale` | `number \| undefined` |  | Scale factor for the badge icon. Default: 1.0. Badge icons are designed at their natural display size, so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink. |
+| `badgeOpacity` | `number \| undefined` |  | Optional opacity for the badge icon (0 to 1). |
+| `count` | `number \| undefined` |  | Optional numeric count for notification badge (e.g. 5 or 120). |
+| `maxCount` | `number \| undefined` |  | Optional max count threshold (e.g. 99 -> "99+"). |
+| `badgeText` | `string \| boolean \| undefined` |  | Optional text string for notification badge (e.g. "NEW"). Can also be set as boolean attribute `<le-icon badge-text></le-icon>` for an empty dot. |
+| `dot` | `boolean \| undefined` |  | Whether to display an empty circle dot badge. |
+| `badgeTextColor` | `string \| undefined` |  | Optional text/font color for the badge text. |
+| `badgeColor` | `string \| undefined` |  | Optional color for the badge icon or background (CSS color or variable). Defaults to 'transparent'. |
+| `baseColor` | `string \| undefined` |  | Optional color for the base icon (CSS color or variable). |
 | `layers` | `string \| undefined` |  | JSON string defining additional icon layers to compose on top of the base icon. Each layer has a name, optional position, and optional scale. Layers are rendered in order (first = bottom, last = top), and each layer's maskShape (if present) cuts through all layers below it. |
 | `rounded` | `boolean \| undefined` |  | Whether to use rounded variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultRounded`). |
 | `sharp` | `boolean \| undefined` |  | Whether to force sharp (non-rounded) variants of icon elements. Overrides `rounded` prop, registry settings, and global defaults. |
 | `filled` | `boolean \| undefined` |  | Whether to use filled variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultFilled`). |
 | `outlined` | `boolean \| undefined` |  | Whether to force outlined (non-filled) variants of icon elements. Overrides `filled` prop, registry settings, and global defaults. |
+| `thin` | `boolean \| undefined` |  | Whether to use thin variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultThin`). |
 
 ---
 

@@ -8,6 +8,8 @@ import {
   getComposedIcon,
   getDefaultBadgePosition,
   getDefaultBadgeScale,
+  getDefaultTextBadgePosition,
+  getDefaultTextBadgeScale,
   getDefaultIconFilled,
   getDefaultIconRounded,
   getDefaultIconThin,
@@ -130,7 +132,34 @@ export class LeIcon {
   @Prop({ reflect: true }) badgeOpacity?: number;
 
   /**
-   * Optional color for the badge icon (CSS color or variable).
+   * Optional numeric count for notification badge (e.g. 5 or 120).
+   */
+  @Prop({ reflect: true }) count?: number;
+
+  /**
+   * Optional max count threshold (e.g. 99 -> "99+").
+   */
+  @Prop({ reflect: true }) maxCount?: number;
+
+  /**
+   * Optional text string for notification badge (e.g. "NEW").
+   * Can also be set as boolean attribute `<le-icon badge-text></le-icon>` for an empty dot.
+   */
+  @Prop({ reflect: true }) badgeText?: string | boolean;
+
+  /**
+   * Whether to display an empty circle dot badge.
+   */
+  @Prop({ reflect: true }) dot?: boolean;
+
+  /**
+   * Optional text/font color for the badge text.
+   */
+  @Prop({ reflect: true }) badgeTextColor?: string;
+
+  /**
+   * Optional color for the badge icon or background (CSS color or variable).
+   * Defaults to 'transparent'.
    */
   @Prop({ reflect: true }) badgeColor?: string;
 
@@ -194,6 +223,11 @@ export class LeIcon {
   @Watch('badgeScale')
   @Watch('badgeOpacity')
   @Watch('badgeColor')
+  @Watch('badgeTextColor')
+  @Watch('count')
+  @Watch('maxCount')
+  @Watch('badgeText')
+  @Watch('dot')
   @Watch('baseColor')
   @Watch('layers')
   @Watch('rounded')
@@ -493,41 +527,31 @@ export class LeIcon {
 
     let resolved = { ...node };
 
+    // 1. Single-modifier base overrides
+    if (rounded && resolved['rounded']) {
+      resolved = this.applyOverride(resolved, resolved['rounded']);
+    }
+    if (filled && resolved['filled']) {
+      resolved = this.applyOverride(resolved, resolved['filled']);
+    }
+    if (thin && resolved['thin']) {
+      resolved = this.applyOverride(resolved, resolved['thin']);
+    }
+
+    // 2. Dual-modifier combination overrides
+    if (rounded && filled && resolved['rounded-filled']) {
+      resolved = this.applyOverride(resolved, resolved['rounded-filled']);
+    }
+    if (rounded && thin && resolved['rounded-thin']) {
+      resolved = this.applyOverride(resolved, resolved['rounded-thin']);
+    }
+    if (filled && thin && resolved['filled-thin']) {
+      resolved = this.applyOverride(resolved, resolved['filled-thin']);
+    }
+
+    // 3. Triple-modifier combination override
     if (rounded && filled && thin && resolved['rounded-filled-thin']) {
       resolved = this.applyOverride(resolved, resolved['rounded-filled-thin']);
-    } else if (rounded && thin && resolved['rounded-thin']) {
-      resolved = this.applyOverride(resolved, resolved['rounded-thin']);
-      if (filled) {
-        if (resolved['filled-thin']) {
-          resolved = this.applyOverride(resolved, resolved['filled-thin']);
-        } else if (resolved['filled']) {
-          resolved = this.applyOverride(resolved, resolved['filled']);
-        }
-      }
-    } else if (filled && thin && resolved['filled-thin']) {
-      resolved = this.applyOverride(resolved, resolved['filled-thin']);
-      if (rounded) {
-        if (resolved['rounded-thin']) {
-          resolved = this.applyOverride(resolved, resolved['rounded-thin']);
-        } else if (resolved['rounded']) {
-          resolved = this.applyOverride(resolved, resolved['rounded']);
-        }
-      }
-    } else if (rounded && filled && resolved['rounded-filled']) {
-      resolved = this.applyOverride(resolved, resolved['rounded-filled']);
-      if (thin && resolved['thin']) {
-        resolved = this.applyOverride(resolved, resolved['thin']);
-      }
-    } else {
-      if (rounded && resolved['rounded']) {
-        resolved = this.applyOverride(resolved, resolved['rounded']);
-      }
-      if (filled && resolved['filled']) {
-        resolved = this.applyOverride(resolved, resolved['filled']);
-      }
-      if (thin && resolved['thin']) {
-        resolved = this.applyOverride(resolved, resolved['thin']);
-      }
     }
 
     delete resolved['rounded'];
@@ -596,10 +620,36 @@ export class LeIcon {
   }
 
   /**
-   * Checks whether this icon has any overlay layers (badge or layers prop).
+   * Resolves the badge text from count, maxCount, dot, or badgeText props.
+   */
+  private getResolvedBadgeText(): string | null {
+    if (this.dot) {
+      return '';
+    }
+    if (this.count != null) {
+      const cnt = Number(this.count);
+      if (!isNaN(cnt)) {
+        if (this.maxCount != null && cnt > Number(this.maxCount)) {
+          return `${this.maxCount}+`;
+        }
+        return String(cnt);
+      }
+    }
+    if (this.badgeText != null) {
+      if (typeof this.badgeText === 'boolean') {
+        return this.badgeText ? '' : null;
+      }
+      const str = String(this.badgeText).trim();
+      return str;
+    }
+    return null;
+  }
+
+  /**
+   * Checks whether this icon has any overlay layers (badge, layers prop, or count/badgeText/dot).
    */
   private hasOverlays(): boolean {
-    return !!(this.badgeData || this.layersData.length > 0);
+    return !!(this.badgeData || this.layersData.length > 0 || this.getResolvedBadgeText() != null);
   }
 
   /**
@@ -658,6 +708,77 @@ export class LeIcon {
     const parentVB = parseViewBox(parentViewBox);
     const overlays = this.getOverlayLayers();
 
+    // Compute text / count badge if set
+    const textBadgeStr = this.getResolvedBadgeText();
+    let textBadgeMaskShape: any = null;
+    let textBadgeGroup: any = null;
+
+    if (textBadgeStr != null) {
+      const scale = this._resolvedBadgeScale ?? getDefaultTextBadgeScale();
+      const pos = parsePosition(
+        this._resolvedBadgePosition || getDefaultTextBadgePosition(),
+        parentVB.width,
+        parentVB.height,
+        0,
+        0,
+      );
+
+      const hVal = 5.5 * scale;
+      const rxVal = hVal / 2;
+      const len = textBadgeStr.length;
+      const charWidth = (len > 2 ? 1.9 : 2.0) * scale;
+      const wVal = len <= 1 ? hVal : hVal + (len - 1) * charWidth;
+
+      // Anchor top-right edge at (pos.x, pos.y), expanding to the left
+      const rxBox = pos.x - wVal;
+      const ryBox = pos.y;
+      const centerX = rxBox + wVal / 2;
+
+      // Clearance margin for mask knockout (0.5px margin, matching action badges)
+      const m = 0.5 * scale;
+      textBadgeMaskShape = h('rect', {
+        x: rxBox - m,
+        y: ryBox - m,
+        width: wVal + 2 * m,
+        height: hVal + 2 * m,
+        rx: (hVal + 2 * m) / 2,
+        ry: (hVal + 2 * m) / 2,
+        fill: 'black',
+      });
+
+      const isTransparent = this._resolvedBadgeColor === 'transparent' || this._resolvedBadgeColor === 'none';
+      const effectiveBgColor = isTransparent ? null : (this._resolvedBadgeColor || 'var(--le-color-danger, #ef4444)');
+      const bgRect = effectiveBgColor ? h('rect', { x: rxBox, y: ryBox, width: wVal, height: hVal, rx: rxVal, ry: rxVal, fill: effectiveBgColor }) : null;
+
+      const groupAttrs: any = {};
+      if (this._resolvedBadgeOpacity != null) {
+        groupAttrs.opacity = String(this._resolvedBadgeOpacity);
+      }
+
+      const textBadgeChildren: any[] = [];
+      if (bgRect) {
+        textBadgeChildren.push(bgRect);
+      }
+
+      if (len > 0) {
+        const fontSize = (len > 2 ? 3.2 : 3.5) * scale;
+        const textFill = this.badgeTextColor || (isTransparent ? 'currentColor' : '#ffffff');
+
+        const textEl = h('text', {
+          x: centerX,
+          y: ryBox + 2.7 * scale,
+          'text-anchor': 'middle',
+          'dominant-baseline': 'central',
+          'font-size': String(fontSize),
+          fill: textFill,
+        }, textBadgeStr);
+
+        textBadgeChildren.push(textEl);
+      }
+
+      textBadgeGroup = h('g', groupAttrs, ...textBadgeChildren);
+    }
+
     // Pre-compute positions and transforms for each overlay
     const overlayInfo = overlays.map(layer => {
       const layerVB = parseViewBox(layer.data.viewBox || '0 0 16 16');
@@ -700,6 +821,10 @@ export class LeIcon {
         }
       }
 
+      if (textBadgeMaskShape) {
+        maskShapes.push(textBadgeMaskShape);
+      }
+
       if (maskShapes.length > 0) {
         masks.push(
           h('mask', { id: `m${i}`, maskUnits: 'userSpaceOnUse' }, [
@@ -714,6 +839,22 @@ export class LeIcon {
           ]),
         );
       }
+    }
+
+    // If there's no action layer masks yet but textBadgeMaskShape exists, build mask m0 for base icon
+    if (masks.length === 0 && textBadgeMaskShape) {
+      masks.push(
+        h('mask', { id: 'm0', maskUnits: 'userSpaceOnUse' }, [
+          h('rect', {
+            x: parentVB.x,
+            y: parentVB.y,
+            width: parentVB.width,
+            height: parentVB.height,
+            fill: 'white',
+          }),
+          textBadgeMaskShape,
+        ]),
+      );
     }
 
     // Determine mask IDs for each rendered group
@@ -773,6 +914,7 @@ export class LeIcon {
       masks.length > 0 ? h('defs', {}, masks) : null,
       baseGroup,
       ...overlayGroups,
+      textBadgeGroup,
     ];
   }
 

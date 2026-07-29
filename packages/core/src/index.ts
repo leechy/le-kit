@@ -32,6 +32,8 @@ export {
   getDefaultIconRounded,
   getDefaultIconFilled,
   getDefaultIconThin,
+  getDefaultTextBadgePosition,
+  getDefaultTextBadgeScale,
 } from './global/app';
 export type { LeKitMode, LeKitTheme, ComposedIconDef, LeKitIconsConfig } from './global/app';
 

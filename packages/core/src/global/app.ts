@@ -161,8 +161,18 @@ export interface ComposedIconDef {
   badgeScale?: number;
   /** Optional badge opacity (0 to 1). */
   badgeOpacity?: number;
-  /** Optional badge color (CSS color string or variable). */
+  /** Optional badge color (CSS color string or variable). Defaults to 'transparent'. */
   badgeColor?: string;
+  /** Optional badge text/font color (CSS color string or variable). */
+  badgeTextColor?: string;
+  /** Optional numeric count for notification badge. */
+  count?: number;
+  /** Optional max count for notification badge (e.g. 99 -> 99+). */
+  maxCount?: number;
+  /** Optional arbitrary text string for notification badge. */
+  badgeText?: string;
+  /** Optional boolean to render an empty dot badge. */
+  dot?: boolean;
   /** Optional base icon color (CSS color string or variable). */
   baseColor?: string;
   /** Optional rounded setting for this composed icon. */
@@ -209,6 +219,22 @@ export interface LeKitIconsConfig {
    * Default: 1
    */
   defaultBadgeScale: number;
+
+  /**
+   * Default position for count and text badges.
+   * Can be overridden per-icon via badgePosition prop or registry entry.
+   *
+   * Default: 'top, right'
+   */
+  defaultTextBadgePosition?: string;
+
+  /**
+   * Default scale for count and text badges.
+   * Can be overridden per-icon via badgeScale prop or registry entry.
+   *
+   * Default: 1
+   */
+  defaultTextBadgeScale?: number;
 
   /**
    * Default viewBox for composed icons that have no base icon.
@@ -312,6 +338,8 @@ const LE_KIT_CONFIG_KEY = '__leKitConfig__';
 const DEFAULT_ICONS_CONFIG: LeKitIconsConfig = {
   defaultBadgePosition: '-4.5, -4.5',
   defaultBadgeScale: 1,
+  defaultTextBadgePosition: 'top, right',
+  defaultTextBadgeScale: 1,
   defaultViewBox: '0 0 16 16',
   defaultRounded: false,
   defaultFilled: false,
@@ -334,6 +362,8 @@ function getGlobalConfig(): LeKitConfig {
     if (!cfg.icons.composed) cfg.icons.composed = {};
     if (!cfg.icons.defaultBadgePosition) cfg.icons.defaultBadgePosition = DEFAULT_ICONS_CONFIG.defaultBadgePosition;
     if (cfg.icons.defaultBadgeScale == null) cfg.icons.defaultBadgeScale = DEFAULT_ICONS_CONFIG.defaultBadgeScale;
+    if (!cfg.icons.defaultTextBadgePosition) cfg.icons.defaultTextBadgePosition = DEFAULT_ICONS_CONFIG.defaultTextBadgePosition;
+    if (cfg.icons.defaultTextBadgeScale == null) cfg.icons.defaultTextBadgeScale = DEFAULT_ICONS_CONFIG.defaultTextBadgeScale;
     if (!cfg.icons.defaultViewBox) cfg.icons.defaultViewBox = DEFAULT_ICONS_CONFIG.defaultViewBox;
     if (cfg.icons.defaultRounded == null) cfg.icons.defaultRounded = DEFAULT_ICONS_CONFIG.defaultRounded;
     if (cfg.icons.defaultFilled == null) cfg.icons.defaultFilled = DEFAULT_ICONS_CONFIG.defaultFilled;
@@ -371,6 +401,12 @@ export function configureLeKit(config: Partial<LeKitConfig>): void {
     }
     if (iconsConfig.defaultBadgeScale != null) {
       globalConfig.icons.defaultBadgeScale = iconsConfig.defaultBadgeScale;
+    }
+    if (iconsConfig.defaultTextBadgePosition) {
+      globalConfig.icons.defaultTextBadgePosition = iconsConfig.defaultTextBadgePosition;
+    }
+    if (iconsConfig.defaultTextBadgeScale != null) {
+      globalConfig.icons.defaultTextBadgeScale = iconsConfig.defaultTextBadgeScale;
     }
     if (iconsConfig.defaultViewBox) {
       globalConfig.icons.defaultViewBox = iconsConfig.defaultViewBox;
@@ -419,6 +455,20 @@ export function getDefaultBadgePosition(): string {
  */
 export function getDefaultBadgeScale(): number {
   return getGlobalConfig().icons.defaultBadgeScale;
+}
+
+/**
+ * Get the default text/count badge position from config.
+ */
+export function getDefaultTextBadgePosition(): string {
+  return getGlobalConfig().icons.defaultTextBadgePosition ?? 'top, right';
+}
+
+/**
+ * Get the default text/count badge scale from config.
+ */
+export function getDefaultTextBadgeScale(): number {
+  return getGlobalConfig().icons.defaultTextBadgeScale ?? 1;
 }
 
 /**

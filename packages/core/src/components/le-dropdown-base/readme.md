@@ -111,11 +111,13 @@ Type: `Promise<void>`
 
 ### Depends on
 
+- [le-icon](../le-icon)
 - [le-popover](../le-popover)
 
 ### Graph
 ```mermaid
 graph TD;
+  le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
   le-combobox --> le-dropdown-base
   le-multiselect --> le-dropdown-base

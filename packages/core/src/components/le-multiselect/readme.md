@@ -79,6 +79,7 @@ Type: `Promise<void>`
 - [le-tag](../le-tag)
 - [le-component](../le-component)
 - [le-dropdown-base](../le-dropdown-base)
+- [le-icon](../le-icon)
 - [le-string-input](../le-string-input)
 
 ### Graph
@@ -87,6 +88,7 @@ graph TD;
   le-multiselect --> le-tag
   le-multiselect --> le-component
   le-multiselect --> le-dropdown-base
+  le-multiselect --> le-icon
   le-multiselect --> le-string-input
   le-tag --> le-component
   le-tag --> le-slot
@@ -114,6 +116,8 @@ graph TD;
   le-select --> le-component
   le-select --> le-dropdown-base
   le-select --> le-button
+  le-select --> le-icon
+  le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
   le-checkbox --> le-component
   le-checkbox --> le-slot

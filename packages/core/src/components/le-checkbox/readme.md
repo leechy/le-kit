@@ -69,6 +69,8 @@ graph TD;
   le-select --> le-component
   le-select --> le-dropdown-base
   le-select --> le-button
+  le-select --> le-icon
+  le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
   le-popup --> le-slot
   le-popup --> le-button

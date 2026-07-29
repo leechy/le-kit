@@ -67,6 +67,7 @@ Type: `Promise<void>`
 - [le-component](../le-component)
 - [le-dropdown-base](../le-dropdown-base)
 - [le-button](../le-button)
+- [le-icon](../le-icon)
 
 ### Graph
 ```mermaid
@@ -74,6 +75,7 @@ graph TD;
   le-select --> le-component
   le-select --> le-dropdown-base
   le-select --> le-button
+  le-select --> le-icon
   le-component --> le-select
   le-button --> le-icon
   le-button --> le-visibility
@@ -93,6 +95,7 @@ graph TD;
   le-popup --> le-slot
   le-popup --> le-button
   le-popup --> le-component
+  le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
   style le-select fill:#f9f,stroke:#333,stroke-width:4px
 ```

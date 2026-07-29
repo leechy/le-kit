@@ -5,6 +5,9 @@
   height: var(--le-icon-size);
 
   color: var(--le-icon-color, var(--le-color-text-primary));
+
+  --le-icon-badge-font-family: var(--le-font-sans, system-ui, -apple-system, sans-serif);
+  --le-icon-badge-font-weight: 700;
 }
 
 :host svg {
@@ -14,4 +17,9 @@
 
   transition: var(--le-icon-transition);
   transform: var(--le-icon-transform);
+}
+
+:host text {
+  font-family: var(--le-icon-badge-font-family);
+  font-weight: var(--le-icon-badge-font-weight);
 }

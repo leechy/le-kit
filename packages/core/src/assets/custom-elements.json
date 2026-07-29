@@ -1218,449 +1218,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-box/le-box.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible box component for use as a flex item within le-stack.\n\n`le-box` wraps content and provides flex item properties like grow, shrink,\nbasis, and self-alignment. It can also control its internal content alignment.",
-          "name": "LeBox",
-          "cssProperties": [
-            {
-              "description": "Background color",
-              "name": "--le-box-bg"
-            },
-            {
-              "description": "Padding inside the box",
-              "name": "--le-box-padding"
-            },
-            {
-              "description": "Border radius",
-              "name": "--le-box-border-radius"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main box container",
-              "name": "box"
-            },
-            {
-              "description": "The inner content wrapper",
-              "name": "content"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Default slot for box content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "grow",
-              "type": {
-                "text": "number"
-              },
-              "default": "0",
-              "description": "Flex grow factor - how much the item should grow relative to siblings"
-            },
-            {
-              "kind": "field",
-              "name": "shrink",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Flex shrink factor - how much the item should shrink relative to siblings"
-            },
-            {
-              "kind": "field",
-              "name": "basis",
-              "type": {
-                "text": "string"
-              },
-              "default": "'auto'",
-              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')"
-            },
-            {
-              "kind": "field",
-              "name": "width",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Width of the box (CSS value like '100px', '50%', 'auto')"
-            },
-            {
-              "kind": "field",
-              "name": "height",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Height of the box (CSS value)"
-            },
-            {
-              "kind": "field",
-              "name": "minWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Minimum width constraint"
-            },
-            {
-              "kind": "field",
-              "name": "maxWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Maximum width constraint"
-            },
-            {
-              "kind": "field",
-              "name": "minHeight",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Minimum height constraint"
-            },
-            {
-              "kind": "field",
-              "name": "maxHeight",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Maximum height constraint"
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')"
-            },
-            {
-              "kind": "field",
-              "name": "borderRadius",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')"
-            },
-            {
-              "kind": "field",
-              "name": "border",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')"
-            },
-            {
-              "kind": "field",
-              "name": "alignSelf",
-              "type": {
-                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
-              },
-              "default": "'auto'",
-              "description": "Self-alignment override for this item on the cross axis"
-            },
-            {
-              "kind": "field",
-              "name": "alignContent",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch'"
-              },
-              "default": "'stretch'",
-              "description": "Internal horizontal alignment of content"
-            },
-            {
-              "kind": "field",
-              "name": "justifyContent",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch'"
-              },
-              "default": "'start'",
-              "description": "Internal vertical alignment of content"
-            },
-            {
-              "kind": "field",
-              "name": "padding",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Padding inside the box (CSS value like '8px', '1rem')"
-            },
-            {
-              "kind": "field",
-              "name": "order",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Order in the flex container (lower values come first)"
-            },
-            {
-              "kind": "field",
-              "name": "displayFlex",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to display box content as flex (for internal alignment)"
-            },
-            {
-              "kind": "field",
-              "name": "innerDirection",
-              "type": {
-                "text": "'horizontal' | 'vertical'"
-              },
-              "default": "'vertical'",
-              "description": "Direction of internal flex layout when displayFlex is true"
-            },
-            {
-              "kind": "field",
-              "name": "innerGap",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Gap between internal flex items when displayFlex is true"
-            },
-            {
-              "kind": "method",
-              "name": "getAlignSelf",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getContentAlign",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getContentJustify",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "grow",
-              "fieldName": "grow",
-              "default": "0",
-              "description": "Flex grow factor - how much the item should grow relative to siblings",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "shrink",
-              "fieldName": "shrink",
-              "default": "1",
-              "description": "Flex shrink factor - how much the item should shrink relative to siblings",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "basis",
-              "fieldName": "basis",
-              "default": "'auto'",
-              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "width",
-              "fieldName": "width",
-              "description": "Width of the box (CSS value like '100px', '50%', 'auto')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "height",
-              "fieldName": "height",
-              "description": "Height of the box (CSS value)",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "min-width",
-              "fieldName": "minWidth",
-              "description": "Minimum width constraint",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "max-width",
-              "fieldName": "maxWidth",
-              "description": "Maximum width constraint",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "min-height",
-              "fieldName": "minHeight",
-              "description": "Minimum height constraint",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "max-height",
-              "fieldName": "maxHeight",
-              "description": "Maximum height constraint",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "background",
-              "fieldName": "background",
-              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "border-radius",
-              "fieldName": "borderRadius",
-              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "border",
-              "fieldName": "border",
-              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "align-self",
-              "fieldName": "alignSelf",
-              "default": "'auto'",
-              "description": "Self-alignment override for this item on the cross axis",
-              "type": {
-                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
-              }
-            },
-            {
-              "name": "align-content",
-              "fieldName": "alignContent",
-              "default": "'stretch'",
-              "description": "Internal horizontal alignment of content",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch'"
-              }
-            },
-            {
-              "name": "justify-content",
-              "fieldName": "justifyContent",
-              "default": "'start'",
-              "description": "Internal vertical alignment of content",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch'"
-              }
-            },
-            {
-              "name": "padding",
-              "fieldName": "padding",
-              "description": "Padding inside the box (CSS value like '8px', '1rem')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "order",
-              "fieldName": "order",
-              "description": "Order in the flex container (lower values come first)",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "display-flex",
-              "fieldName": "displayFlex",
-              "default": "false",
-              "description": "Whether to display box content as flex (for internal alignment)",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "inner-direction",
-              "fieldName": "innerDirection",
-              "default": "'vertical'",
-              "description": "Direction of internal flex layout when displayFlex is true",
-              "type": {
-                "text": "'horizontal' | 'vertical'"
-              }
-            },
-            {
-              "name": "inner-gap",
-              "fieldName": "innerGap",
-              "description": "Gap between internal flex items when displayFlex is true",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-box",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeBox",
-          "declaration": {
-            "name": "LeBox",
-            "module": "src/components/le-box/le-box.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-box",
-          "declaration": {
-            "name": "LeBox",
-            "module": "src/components/le-box/le-box.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-breadcrumbs/le-breadcrumbs.tsx",
       "declarations": [
         {
@@ -2250,6 +1807,22 @@
             },
             {
               "kind": "field",
+              "name": "iconCount",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Notification count for shorthand icons.\nApplies to start icon, or icon-only if set."
+            },
+            {
+              "kind": "field",
+              "name": "iconStartCount",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Count specifically for iconStart."
+            },
+            {
+              "kind": "field",
               "name": "collapsible",
               "type": {
                 "text": "boolean"
@@ -2281,6 +1854,22 @@
                 "text": "string | Node | undefined"
               },
               "description": "End icon image or emoji"
+            },
+            {
+              "kind": "field",
+              "name": "iconEndCount",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Count specifically for iconEnd."
+            },
+            {
+              "kind": "field",
+              "name": "iconOnlyCount",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Count specifically for iconOnly."
             },
             {
               "kind": "field",
@@ -2498,6 +2087,22 @@
               }
             },
             {
+              "name": "icon-count",
+              "fieldName": "iconCount",
+              "description": "Notification count for shorthand icons.\nApplies to start icon, or icon-only if set.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "icon-start-count",
+              "fieldName": "iconStartCount",
+              "description": "Count specifically for iconStart.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
               "name": "collapsible",
               "fieldName": "collapsible",
               "default": "false",
@@ -2529,6 +2134,22 @@
               "description": "End icon image or emoji",
               "type": {
                 "text": "string | Node"
+              }
+            },
+            {
+              "name": "icon-end-count",
+              "fieldName": "iconEndCount",
+              "description": "Count specifically for iconEnd.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "icon-only-count",
+              "fieldName": "iconOnlyCount",
+              "description": "Count specifically for iconOnly.",
+              "type": {
+                "text": "number"
               }
             },
             {
@@ -2609,60 +2230,40 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
+      "path": "src/components/le-box/le-box.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
+          "description": "A flexible box component for use as a flex item within le-stack.\n\n`le-box` wraps content and provides flex item properties like grow, shrink,\nbasis, and self-alignment. It can also control its internal content alignment.",
+          "name": "LeBox",
           "cssProperties": [
             {
-              "description": "Card background color",
-              "name": "--le-card-bg"
+              "description": "Background color",
+              "name": "--le-box-bg"
             },
             {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
+              "description": "Padding inside the box",
+              "name": "--le-box-padding"
             },
             {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
+              "description": "Border radius",
+              "name": "--le-box-border-radius"
             }
           ],
           "cssParts": [
             {
-              "description": "The main card container",
-              "name": "card"
+              "description": "The main box container",
+              "name": "box"
             },
             {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
+              "description": "The inner content wrapper",
               "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
             }
           ],
           "slots": [
             {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
+              "description": "Default slot for box content",
               "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
             }
           ],
           "members": [
@@ -2675,21 +2276,201 @@
             },
             {
               "kind": "field",
-              "name": "variant",
+              "name": "grow",
               "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
+                "text": "number"
               },
-              "default": "'default'",
-              "description": "Card variant style"
+              "default": "0",
+              "description": "Flex grow factor - how much the item should grow relative to siblings"
             },
             {
               "kind": "field",
-              "name": "interactive",
+              "name": "shrink",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Flex shrink factor - how much the item should shrink relative to siblings"
+            },
+            {
+              "kind": "field",
+              "name": "basis",
+              "type": {
+                "text": "string"
+              },
+              "default": "'auto'",
+              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')"
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Width of the box (CSS value like '100px', '50%', 'auto')"
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Height of the box (CSS value)"
+            },
+            {
+              "kind": "field",
+              "name": "minWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Minimum width constraint"
+            },
+            {
+              "kind": "field",
+              "name": "maxWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Maximum width constraint"
+            },
+            {
+              "kind": "field",
+              "name": "minHeight",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Minimum height constraint"
+            },
+            {
+              "kind": "field",
+              "name": "maxHeight",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Maximum height constraint"
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')"
+            },
+            {
+              "kind": "field",
+              "name": "borderRadius",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')"
+            },
+            {
+              "kind": "field",
+              "name": "border",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')"
+            },
+            {
+              "kind": "field",
+              "name": "alignSelf",
+              "type": {
+                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              },
+              "default": "'auto'",
+              "description": "Self-alignment override for this item on the cross axis"
+            },
+            {
+              "kind": "field",
+              "name": "alignContent",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              },
+              "default": "'stretch'",
+              "description": "Internal horizontal alignment of content"
+            },
+            {
+              "kind": "field",
+              "name": "justifyContent",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              },
+              "default": "'start'",
+              "description": "Internal vertical alignment of content"
+            },
+            {
+              "kind": "field",
+              "name": "padding",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Padding inside the box (CSS value like '8px', '1rem')"
+            },
+            {
+              "kind": "field",
+              "name": "order",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Order in the flex container (lower values come first)"
+            },
+            {
+              "kind": "field",
+              "name": "displayFlex",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the card is interactive (clickable)"
+              "description": "Whether to display box content as flex (for internal alignment)"
+            },
+            {
+              "kind": "field",
+              "name": "innerDirection",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'vertical'",
+              "description": "Direction of internal flex layout when displayFlex is true"
+            },
+            {
+              "kind": "field",
+              "name": "innerGap",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Gap between internal flex items when displayFlex is true"
+            },
+            {
+              "kind": "method",
+              "name": "getAlignSelf",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getContentAlign",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getContentJustify",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
             },
             {
               "kind": "method",
@@ -2698,25 +2479,175 @@
           ],
           "attributes": [
             {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
+              "name": "grow",
+              "fieldName": "grow",
+              "default": "0",
+              "description": "Flex grow factor - how much the item should grow relative to siblings",
               "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
+                "text": "number"
               }
             },
             {
-              "name": "interactive",
-              "fieldName": "interactive",
+              "name": "shrink",
+              "fieldName": "shrink",
+              "default": "1",
+              "description": "Flex shrink factor - how much the item should shrink relative to siblings",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "basis",
+              "fieldName": "basis",
+              "default": "'auto'",
+              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "width",
+              "fieldName": "width",
+              "description": "Width of the box (CSS value like '100px', '50%', 'auto')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "height",
+              "fieldName": "height",
+              "description": "Height of the box (CSS value)",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min-width",
+              "fieldName": "minWidth",
+              "description": "Minimum width constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-width",
+              "fieldName": "maxWidth",
+              "description": "Maximum width constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min-height",
+              "fieldName": "minHeight",
+              "description": "Minimum height constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-height",
+              "fieldName": "maxHeight",
+              "description": "Maximum height constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "background",
+              "fieldName": "background",
+              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "border-radius",
+              "fieldName": "borderRadius",
+              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "border",
+              "fieldName": "border",
+              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align-self",
+              "fieldName": "alignSelf",
+              "default": "'auto'",
+              "description": "Self-alignment override for this item on the cross axis",
+              "type": {
+                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              }
+            },
+            {
+              "name": "align-content",
+              "fieldName": "alignContent",
+              "default": "'stretch'",
+              "description": "Internal horizontal alignment of content",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              }
+            },
+            {
+              "name": "justify-content",
+              "fieldName": "justifyContent",
+              "default": "'start'",
+              "description": "Internal vertical alignment of content",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              }
+            },
+            {
+              "name": "padding",
+              "fieldName": "padding",
+              "description": "Padding inside the box (CSS value like '8px', '1rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "order",
+              "fieldName": "order",
+              "description": "Order in the flex container (lower values come first)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "display-flex",
+              "fieldName": "displayFlex",
               "default": "false",
-              "description": "Whether the card is interactive (clickable)",
+              "description": "Whether to display box content as flex (for internal alignment)",
               "type": {
                 "text": "boolean"
               }
+            },
+            {
+              "name": "inner-direction",
+              "fieldName": "innerDirection",
+              "default": "'vertical'",
+              "description": "Direction of internal flex layout when displayFlex is true",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              }
+            },
+            {
+              "name": "inner-gap",
+              "fieldName": "innerGap",
+              "description": "Gap between internal flex items when displayFlex is true",
+              "type": {
+                "text": "string"
+              }
             }
           ],
-          "tagName": "le-card",
+          "tagName": "le-box",
           "events": [],
           "customElement": true
         }
@@ -2724,18 +2655,18 @@
       "exports": [
         {
           "kind": "js",
-          "name": "LeCard",
+          "name": "LeBox",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LeBox",
+            "module": "src/components/le-box/le-box.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-card",
+          "name": "le-box",
           "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
+            "name": "LeBox",
+            "module": "src/components/le-box/le-box.tsx"
           }
         }
       ]
@@ -3324,6 +3255,139 @@
           "declaration": {
             "name": "LeButtonGroup",
             "module": "src/components/le-button-group/le-button-group.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
           }
         }
       ]
@@ -6734,6 +6798,70 @@
             },
             {
               "kind": "field",
+              "name": "badgeOpacity",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Optional opacity for the badge icon (0 to 1)."
+            },
+            {
+              "kind": "field",
+              "name": "count",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Optional numeric count for notification badge (e.g. 5 or 120)."
+            },
+            {
+              "kind": "field",
+              "name": "maxCount",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Optional max count threshold (e.g. 99 -> \"99+\")."
+            },
+            {
+              "kind": "field",
+              "name": "badgeText",
+              "type": {
+                "text": "string | boolean | undefined"
+              },
+              "description": "Optional text string for notification badge (e.g. \"NEW\").\nCan also be set as boolean attribute `<le-icon badge-text></le-icon>` for an empty dot."
+            },
+            {
+              "kind": "field",
+              "name": "dot",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "description": "Whether to display an empty circle dot badge."
+            },
+            {
+              "kind": "field",
+              "name": "badgeTextColor",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional text/font color for the badge text."
+            },
+            {
+              "kind": "field",
+              "name": "badgeColor",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional color for the badge icon or background (CSS color or variable).\nDefaults to 'transparent'."
+            },
+            {
+              "kind": "field",
+              "name": "baseColor",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional color for the base icon (CSS color or variable)."
+            },
+            {
+              "kind": "field",
               "name": "layers",
               "type": {
                 "text": "string | undefined"
@@ -6771,6 +6899,14 @@
                 "text": "boolean | undefined"
               },
               "description": "Whether to force outlined (non-filled) variants of icon elements.\nOverrides `filled` prop, registry settings, and global defaults."
+            },
+            {
+              "kind": "field",
+              "name": "thin",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "description": "Whether to use thin variants of icon elements if defined in icon JSON.\nIf not explicitly set, defaults to the global le-kit config (`icons.defaultThin`)."
             },
             {
               "kind": "field",
@@ -6846,6 +6982,33 @@
             },
             {
               "kind": "field",
+              "name": "_resolvedBadgeOpacity",
+              "type": {
+                "text": "number | undefined"
+              },
+              "privacy": "private",
+              "description": "Resolved badge opacity (from explicit prop or registry)."
+            },
+            {
+              "kind": "field",
+              "name": "_resolvedBadgeColor",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private",
+              "description": "Resolved badge color (from explicit prop or registry)."
+            },
+            {
+              "kind": "field",
+              "name": "_resolvedBaseColor",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private",
+              "description": "Resolved base icon color (from explicit prop or registry)."
+            },
+            {
+              "kind": "field",
               "name": "_resolvedViewBox",
               "type": {
                 "text": "string | undefined"
@@ -6890,6 +7053,15 @@
               "description": "Resolved outlined setting (from explicit prop or registry)."
             },
             {
+              "kind": "field",
+              "name": "_resolvedThin",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "privacy": "private",
+              "description": "Resolved thin setting (from explicit prop, registry, or config default)."
+            },
+            {
               "kind": "method",
               "name": "waitUntilVisible",
               "privacy": "private",
@@ -6922,9 +7094,16 @@
                   "type": {
                     "text": "any"
                   }
+                },
+                {
+                  "name": "overrides",
+                  "optional": true,
+                  "type": {
+                    "text": "{ rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean; thin?: boolean }"
+                  }
                 }
               ],
-              "description": "Resolves element descriptors, applying variant overrides (rounded, filled, rounded-filled)\nbased on the component's current `rounded`, `sharp`, `filled`, and `outlined` state."
+              "description": "Resolves element descriptors, applying variant overrides (rounded, filled, thin, and combinations)\nbased on the component's current `rounded`, `sharp`, `filled`, `outlined`, and `thin` state,\nwith optional per-layer overrides."
             },
             {
               "kind": "method",
@@ -6964,6 +7143,13 @@
                 {
                   "name": "inverseScale",
                   "default": "1"
+                },
+                {
+                  "name": "overrides",
+                  "optional": true,
+                  "type": {
+                    "text": "{ rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean; thin?: boolean }"
+                  }
                 }
               ],
               "description": "Creates a JSX element from a JSON node descriptor."
@@ -6988,9 +7174,27 @@
                 {
                   "name": "inverseScale",
                   "default": "1"
+                },
+                {
+                  "name": "overrides",
+                  "optional": true,
+                  "type": {
+                    "text": "{ rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean; thin?: boolean }"
+                  }
                 }
               ],
               "description": "Renders the SVG content out of a JSON data in a format:\n{ \"viewBox\": \"...\", children: [{ \"tag\": \"g\", \"\"children\": [ ... ], ...attrs }, ...] }"
+            },
+            {
+              "kind": "method",
+              "name": "getResolvedBadgeText",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string | null"
+                }
+              },
+              "description": "Resolves the badge text from count, maxCount, dot, or badgeText props."
             },
             {
               "kind": "method",
@@ -7001,7 +7205,7 @@
                   "text": "boolean"
                 }
               },
-              "description": "Checks whether this icon has any overlay layers (badge or layers prop)."
+              "description": "Checks whether this icon has any overlay layers (badge, layers prop, or count/badgeText/dot)."
             },
             {
               "kind": "method",
@@ -7013,6 +7217,38 @@
                 }
               },
               "description": "Builds the ordered list of overlay layers to render above the base icon.\nLayers from the `layers` prop come first, then the badge (always topmost)."
+            },
+            {
+              "kind": "method",
+              "name": "renderMaskShape",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "any[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "maskShape",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "scale",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "overrides",
+                  "optional": true,
+                  "type": {
+                    "text": "{ rounded?: boolean; sharp?: boolean; filled?: boolean; outlined?: boolean; thin?: boolean }"
+                  }
+                }
+              ],
+              "description": "Helper to render maskShape which can be a single node descriptor or an array of node descriptors."
             },
             {
               "kind": "method",
@@ -7088,6 +7324,70 @@
               }
             },
             {
+              "name": "badge-opacity",
+              "fieldName": "badgeOpacity",
+              "description": "Optional opacity for the badge icon (0 to 1).",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "count",
+              "fieldName": "count",
+              "description": "Optional numeric count for notification badge (e.g. 5 or 120).",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "max-count",
+              "fieldName": "maxCount",
+              "description": "Optional max count threshold (e.g. 99 -> \"99+\").",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "badge-text",
+              "fieldName": "badgeText",
+              "description": "Optional text string for notification badge (e.g. \"NEW\").\nCan also be set as boolean attribute `<le-icon badge-text></le-icon>` for an empty dot.",
+              "type": {
+                "text": "string | boolean"
+              }
+            },
+            {
+              "name": "dot",
+              "fieldName": "dot",
+              "description": "Whether to display an empty circle dot badge.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "badge-text-color",
+              "fieldName": "badgeTextColor",
+              "description": "Optional text/font color for the badge text.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "badge-color",
+              "fieldName": "badgeColor",
+              "description": "Optional color for the badge icon or background (CSS color or variable).\nDefaults to 'transparent'.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "base-color",
+              "fieldName": "baseColor",
+              "description": "Optional color for the base icon (CSS color or variable).",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
               "name": "layers",
               "fieldName": "layers",
               "description": "JSON string defining additional icon layers to compose on top\nof the base icon. Each layer has a name, optional position, and\noptional scale. Layers are rendered in order (first = bottom,\nlast = top), and each layer's maskShape (if present) cuts through\nall layers below it.",
@@ -7123,6 +7423,14 @@
               "name": "outlined",
               "fieldName": "outlined",
               "description": "Whether to force outlined (non-filled) variants of icon elements.\nOverrides `filled` prop, registry settings, and global defaults.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "thin",
+              "fieldName": "thin",
+              "description": "Whether to use thin variants of icon elements if defined in icon JSON.\nIf not explicitly set, defaults to the global le-kit config (`icons.defaultThin`).",
               "type": {
                 "text": "boolean"
               }
@@ -10732,6 +11040,456 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-popup/le-popup.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible popup/dialog component for alerts, confirms, prompts, and custom content.\n\nUses the native HTML <dialog> element for proper modal behavior, accessibility,\nand focus management. Can be used declaratively in HTML or programmatically\nvia leAlert(), leConfirm(), lePrompt().",
+          "name": "LePopup",
+          "slots": [
+            {
+              "description": "Default slot for custom body content",
+              "name": ""
+            },
+            {
+              "description": "Custom header content (replaces title)",
+              "name": "header"
+            },
+            {
+              "description": "Custom footer content (replaces default buttons)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "LeKitMode"
+              },
+              "default": "'default'",
+              "description": "The mode of the Le Kit (e.g., 'default' or 'admin')"
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the popup is currently visible"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "PopupType"
+              },
+              "default": "'alert'",
+              "description": "Type of popup: alert (OK only), confirm (OK/Cancel), prompt (input + OK/Cancel), custom"
+            },
+            {
+              "kind": "field",
+              "name": "popupTitle",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional title for the popup header"
+            },
+            {
+              "kind": "field",
+              "name": "message",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Message text to display (for alert/confirm/prompt types)"
+            },
+            {
+              "kind": "field",
+              "name": "modal",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether the popup is modal (blocks interaction with page behind)"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "PopupPosition"
+              },
+              "default": "'center'",
+              "description": "Position of the popup on screen"
+            },
+            {
+              "kind": "field",
+              "name": "confirmText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'OK'",
+              "description": "Text for the confirm/OK button"
+            },
+            {
+              "kind": "field",
+              "name": "cancelText",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Cancel'",
+              "description": "Text for the cancel button"
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Placeholder text for prompt input"
+            },
+            {
+              "kind": "field",
+              "name": "defaultValue",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Default value for prompt input"
+            },
+            {
+              "kind": "field",
+              "name": "closeOnBackdrop",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether clicking the backdrop closes the popup (modal only)"
+            },
+            {
+              "kind": "field",
+              "name": "inputValue",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Internal state for prompt input value"
+            },
+            {
+              "kind": "field",
+              "name": "dialogEl",
+              "type": {
+                "text": "HTMLDialogElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "inputEl",
+              "type": {
+                "text": "HTMLInputElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "resolvePromise",
+              "type": {
+                "text": "(result: PopupResult) => void | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDialogCancel",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "applyPopupActiveContext",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "active",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "clearPopupActiveContext",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDialogFocusIn",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDialogFocusOut",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "return": {
+                "type": {
+                  "text": "Promise<PopupResult>"
+                }
+              },
+              "description": "Opens the popup and returns a promise that resolves when closed"
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "parameters": [
+                {
+                  "name": "confirmed",
+                  "default": "false",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "Closes the popup with a result"
+            },
+            {
+              "kind": "field",
+              "name": "handleConfirm",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleCancel",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleBackdropClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleInputChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "hasSlot",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderHeader",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderBody",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderFooter",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "mode",
+              "fieldName": "mode",
+              "default": "'default'",
+              "description": "The mode of the Le Kit (e.g., 'default' or 'admin')",
+              "type": {
+                "text": "LeKitMode"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the popup is currently visible",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "type",
+              "fieldName": "type",
+              "default": "'alert'",
+              "description": "Type of popup: alert (OK only), confirm (OK/Cancel), prompt (input + OK/Cancel), custom",
+              "type": {
+                "text": "PopupType"
+              }
+            },
+            {
+              "name": "popup-title",
+              "fieldName": "popupTitle",
+              "description": "Optional title for the popup header",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "message",
+              "fieldName": "message",
+              "description": "Message text to display (for alert/confirm/prompt types)",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "modal",
+              "fieldName": "modal",
+              "default": "true",
+              "description": "Whether the popup is modal (blocks interaction with page behind)",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "position",
+              "fieldName": "position",
+              "default": "'center'",
+              "description": "Position of the popup on screen",
+              "type": {
+                "text": "PopupPosition"
+              }
+            },
+            {
+              "name": "confirm-text",
+              "fieldName": "confirmText",
+              "default": "'OK'",
+              "description": "Text for the confirm/OK button",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "cancel-text",
+              "fieldName": "cancelText",
+              "default": "'Cancel'",
+              "description": "Text for the cancel button",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "''",
+              "description": "Placeholder text for prompt input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "default-value",
+              "fieldName": "defaultValue",
+              "default": "''",
+              "description": "Default value for prompt input",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "close-on-backdrop",
+              "fieldName": "closeOnBackdrop",
+              "default": "true",
+              "description": "Whether clicking the backdrop closes the popup (modal only)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-popup",
+          "events": [
+            {
+              "name": "leConfirm",
+              "type": {
+                "text": "EventEmitter<PopupResult>"
+              },
+              "description": "Emitted when the popup is confirmed (OK clicked)"
+            },
+            {
+              "name": "leCancel",
+              "type": {
+                "text": "EventEmitter<PopupResult> | undefined"
+              },
+              "description": "Emitted when the popup is cancelled (Cancel clicked or dismissed)"
+            },
+            {
+              "name": "leOpen",
+              "type": {
+                "text": "EventEmitter<void> | undefined"
+              },
+              "description": "Emitted when the popup opens"
+            },
+            {
+              "name": "leClose",
+              "type": {
+                "text": "EventEmitter<PopupResult>"
+              },
+              "description": "Emitted when the popup closes"
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LePopup",
+          "declaration": {
+            "name": "LePopup",
+            "module": "src/components/le-popup/le-popup.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-popup",
+          "declaration": {
+            "name": "LePopup",
+            "module": "src/components/le-popup/le-popup.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-preview-frame/le-preview-frame.tsx",
       "declarations": [
         {
@@ -11468,456 +12226,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-popup/le-popup.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible popup/dialog component for alerts, confirms, prompts, and custom content.\n\nUses the native HTML <dialog> element for proper modal behavior, accessibility,\nand focus management. Can be used declaratively in HTML or programmatically\nvia leAlert(), leConfirm(), lePrompt().",
-          "name": "LePopup",
-          "slots": [
-            {
-              "description": "Default slot for custom body content",
-              "name": ""
-            },
-            {
-              "description": "Custom header content (replaces title)",
-              "name": "header"
-            },
-            {
-              "description": "Custom footer content (replaces default buttons)",
-              "name": "footer"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "LeKitMode"
-              },
-              "default": "'default'",
-              "description": "The mode of the Le Kit (e.g., 'default' or 'admin')"
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the popup is currently visible"
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "PopupType"
-              },
-              "default": "'alert'",
-              "description": "Type of popup: alert (OK only), confirm (OK/Cancel), prompt (input + OK/Cancel), custom"
-            },
-            {
-              "kind": "field",
-              "name": "popupTitle",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional title for the popup header"
-            },
-            {
-              "kind": "field",
-              "name": "message",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Message text to display (for alert/confirm/prompt types)"
-            },
-            {
-              "kind": "field",
-              "name": "modal",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether the popup is modal (blocks interaction with page behind)"
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "PopupPosition"
-              },
-              "default": "'center'",
-              "description": "Position of the popup on screen"
-            },
-            {
-              "kind": "field",
-              "name": "confirmText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'OK'",
-              "description": "Text for the confirm/OK button"
-            },
-            {
-              "kind": "field",
-              "name": "cancelText",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Cancel'",
-              "description": "Text for the cancel button"
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Placeholder text for prompt input"
-            },
-            {
-              "kind": "field",
-              "name": "defaultValue",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Default value for prompt input"
-            },
-            {
-              "kind": "field",
-              "name": "closeOnBackdrop",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether clicking the backdrop closes the popup (modal only)"
-            },
-            {
-              "kind": "field",
-              "name": "inputValue",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Internal state for prompt input value"
-            },
-            {
-              "kind": "field",
-              "name": "dialogEl",
-              "type": {
-                "text": "HTMLDialogElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "inputEl",
-              "type": {
-                "text": "HTMLInputElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "resolvePromise",
-              "type": {
-                "text": "(result: PopupResult) => void | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDialogCancel",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "applyPopupActiveContext",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "active",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "clearPopupActiveContext",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDialogFocusIn",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDialogFocusOut",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "show",
-              "return": {
-                "type": {
-                  "text": "Promise<PopupResult>"
-                }
-              },
-              "description": "Opens the popup and returns a promise that resolves when closed"
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "parameters": [
-                {
-                  "name": "confirmed",
-                  "default": "false",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ],
-              "description": "Closes the popup with a result"
-            },
-            {
-              "kind": "field",
-              "name": "handleConfirm",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleCancel",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleBackdropClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleInputChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "hasSlot",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "name",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "renderHeader",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "renderBody",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "renderFooter",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "mode",
-              "fieldName": "mode",
-              "default": "'default'",
-              "description": "The mode of the Le Kit (e.g., 'default' or 'admin')",
-              "type": {
-                "text": "LeKitMode"
-              }
-            },
-            {
-              "name": "open",
-              "fieldName": "open",
-              "default": "false",
-              "description": "Whether the popup is currently visible",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "type",
-              "fieldName": "type",
-              "default": "'alert'",
-              "description": "Type of popup: alert (OK only), confirm (OK/Cancel), prompt (input + OK/Cancel), custom",
-              "type": {
-                "text": "PopupType"
-              }
-            },
-            {
-              "name": "popup-title",
-              "fieldName": "popupTitle",
-              "description": "Optional title for the popup header",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "message",
-              "fieldName": "message",
-              "description": "Message text to display (for alert/confirm/prompt types)",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "modal",
-              "fieldName": "modal",
-              "default": "true",
-              "description": "Whether the popup is modal (blocks interaction with page behind)",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "position",
-              "fieldName": "position",
-              "default": "'center'",
-              "description": "Position of the popup on screen",
-              "type": {
-                "text": "PopupPosition"
-              }
-            },
-            {
-              "name": "confirm-text",
-              "fieldName": "confirmText",
-              "default": "'OK'",
-              "description": "Text for the confirm/OK button",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "cancel-text",
-              "fieldName": "cancelText",
-              "default": "'Cancel'",
-              "description": "Text for the cancel button",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "placeholder",
-              "fieldName": "placeholder",
-              "default": "''",
-              "description": "Placeholder text for prompt input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "default-value",
-              "fieldName": "defaultValue",
-              "default": "''",
-              "description": "Default value for prompt input",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "close-on-backdrop",
-              "fieldName": "closeOnBackdrop",
-              "default": "true",
-              "description": "Whether clicking the backdrop closes the popup (modal only)",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-popup",
-          "events": [
-            {
-              "name": "leConfirm",
-              "type": {
-                "text": "EventEmitter<PopupResult>"
-              },
-              "description": "Emitted when the popup is confirmed (OK clicked)"
-            },
-            {
-              "name": "leCancel",
-              "type": {
-                "text": "EventEmitter<PopupResult> | undefined"
-              },
-              "description": "Emitted when the popup is cancelled (Cancel clicked or dismissed)"
-            },
-            {
-              "name": "leOpen",
-              "type": {
-                "text": "EventEmitter<void> | undefined"
-              },
-              "description": "Emitted when the popup opens"
-            },
-            {
-              "name": "leClose",
-              "type": {
-                "text": "EventEmitter<PopupResult>"
-              },
-              "description": "Emitted when the popup closes"
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LePopup",
-          "declaration": {
-            "name": "LePopup",
-            "module": "src/components/le-popup/le-popup.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-popup",
-          "declaration": {
-            "name": "LePopup",
-            "module": "src/components/le-popup/le-popup.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-round-progress/le-round-progress.tsx",
       "declarations": [
         {
@@ -12636,6 +12944,359 @@
           "declaration": {
             "name": "LeSegmentedControl",
             "module": "src/components/le-segmented-control/le-segmented-control.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-select/le-select.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A select dropdown component for single selection.",
+          "name": "LeSelect",
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "LeOption[] | string"
+              },
+              "default": "[]",
+              "description": "The options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "LeOptionValue | undefined"
+              },
+              "description": "The currently selected value."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Select an option'",
+              "description": "Placeholder text when no option is selected."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the select is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether selection is required."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Size variant of the select."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'solid'"
+              },
+              "default": "'default'",
+              "description": "Visual variant of the select."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dropdown is currently open."
+            },
+            {
+              "kind": "field",
+              "name": "selectedOption",
+              "type": {
+                "text": "LeOption | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "declarativeOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "isDeclarativeMode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "dropdownEl",
+              "type": {
+                "text": "HTMLLeDropdownBaseElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "mutationObserver",
+              "type": {
+                "text": "MutationObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleOptionsChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleSlotChange"
+            },
+            {
+              "kind": "method",
+              "name": "syncDeclarativeOptionsAndSelection",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "buildDeclarativeOptions",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "parsedOptions",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "updateSelectedOption",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOptionSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleDropdownClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleTriggerKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "showDropdown",
+              "description": "Opens the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "hideDropdown",
+              "description": "Closes the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "renderIcon",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "icon",
+                  "type": {
+                    "text": "string | undefined"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "options",
+              "fieldName": "options",
+              "default": "[]",
+              "description": "The options to display in the dropdown.",
+              "type": {
+                "text": "LeOption[] | string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "The currently selected value.",
+              "type": {
+                "text": "LeOptionValue"
+              }
+            },
+            {
+              "name": "placeholder",
+              "fieldName": "placeholder",
+              "default": "'Select an option'",
+              "description": "Placeholder text when no option is selected.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the select is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "required",
+              "fieldName": "required",
+              "default": "false",
+              "description": "Whether selection is required.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "name",
+              "fieldName": "name",
+              "description": "Name attribute for form submission.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Size variant of the select.",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Visual variant of the select.",
+              "type": {
+                "text": "'default' | 'outlined' | 'solid'"
+              }
+            },
+            {
+              "name": "open",
+              "fieldName": "open",
+              "default": "false",
+              "description": "Whether the dropdown is currently open.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-select",
+          "events": [
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeOptionSelectDetail> | undefined"
+              },
+              "description": "Emitted when the selected value changes."
+            },
+            {
+              "name": "leOpen",
+              "type": {
+                "text": "EventEmitter<void> | undefined"
+              },
+              "description": "Emitted when the dropdown opens."
+            },
+            {
+              "name": "leClose",
+              "type": {
+                "text": "EventEmitter<void> | undefined"
+              },
+              "description": "Emitted when the dropdown closes."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeSelect",
+          "declaration": {
+            "name": "LeSelect",
+            "module": "src/components/le-select/le-select.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-select",
+          "declaration": {
+            "name": "LeSelect",
+            "module": "src/components/le-select/le-select.tsx"
           }
         }
       ]
@@ -13828,359 +14489,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-select/le-select.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A select dropdown component for single selection.",
-          "name": "LeSelect",
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "LeOption[] | string"
-              },
-              "default": "[]",
-              "description": "The options to display in the dropdown."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "LeOptionValue | undefined"
-              },
-              "description": "The currently selected value."
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Select an option'",
-              "description": "Placeholder text when no option is selected."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the select is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether selection is required."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Name attribute for form submission."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Size variant of the select."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'solid'"
-              },
-              "default": "'default'",
-              "description": "Visual variant of the select."
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the dropdown is currently open."
-            },
-            {
-              "kind": "field",
-              "name": "selectedOption",
-              "type": {
-                "text": "LeOption | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "declarativeOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "isDeclarativeMode",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "dropdownEl",
-              "type": {
-                "text": "HTMLLeDropdownBaseElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "mutationObserver",
-              "type": {
-                "text": "MutationObserver | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleValueChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleOptionsChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleSlotChange"
-            },
-            {
-              "kind": "method",
-              "name": "syncDeclarativeOptionsAndSelection",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "buildDeclarativeOptions",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "parsedOptions",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "updateSelectedOption",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleOptionSelect",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDropdownOpen",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleDropdownClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleTriggerKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "showDropdown",
-              "description": "Opens the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "hideDropdown",
-              "description": "Closes the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "renderIcon",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "icon",
-                  "type": {
-                    "text": "string | undefined"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "options",
-              "fieldName": "options",
-              "default": "[]",
-              "description": "The options to display in the dropdown.",
-              "type": {
-                "text": "LeOption[] | string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "The currently selected value.",
-              "type": {
-                "text": "LeOptionValue"
-              }
-            },
-            {
-              "name": "placeholder",
-              "fieldName": "placeholder",
-              "default": "'Select an option'",
-              "description": "Placeholder text when no option is selected.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the select is disabled.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "required",
-              "fieldName": "required",
-              "default": "false",
-              "description": "Whether selection is required.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "name",
-              "fieldName": "name",
-              "description": "Name attribute for form submission.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Size variant of the select.",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Visual variant of the select.",
-              "type": {
-                "text": "'default' | 'outlined' | 'solid'"
-              }
-            },
-            {
-              "name": "open",
-              "fieldName": "open",
-              "default": "false",
-              "description": "Whether the dropdown is currently open.",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-select",
-          "events": [
-            {
-              "name": "leChange",
-              "type": {
-                "text": "EventEmitter<LeOptionSelectDetail> | undefined"
-              },
-              "description": "Emitted when the selected value changes."
-            },
-            {
-              "name": "leOpen",
-              "type": {
-                "text": "EventEmitter<void> | undefined"
-              },
-              "description": "Emitted when the dropdown opens."
-            },
-            {
-              "name": "leClose",
-              "type": {
-                "text": "EventEmitter<void> | undefined"
-              },
-              "description": "Emitted when the dropdown closes."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeSelect",
-          "declaration": {
-            "name": "LeSelect",
-            "module": "src/components/le-select/le-select.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-select",
-          "declaration": {
-            "name": "LeSelect",
-            "module": "src/components/le-select/le-select.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-slot/le-slot.tsx",
       "declarations": [
         {
@@ -14879,418 +15187,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-tab/le-tab.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible tab component with multiple variants and states.",
-          "name": "LeTab",
-          "cssProperties": [
-            {
-              "description": "Tab background color",
-              "name": "--le-tab-bg"
-            },
-            {
-              "description": "Tab text color",
-              "name": "--le-tab-color"
-            },
-            {
-              "description": "Tab border radius",
-              "name": "--le-tab-border-radius"
-            },
-            {
-              "description": "Tab horizontal padding",
-              "name": "--le-tab-padding-x"
-            },
-            {
-              "description": "Tab vertical padding",
-              "name": "--le-tab-padding-y"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The native button element",
-              "name": "button"
-            },
-            {
-              "description": "The tab content wrapper",
-              "name": "content"
-            },
-            {
-              "description": "The start icon slot",
-              "name": "icon-start"
-            },
-            {
-              "description": "The end icon slot",
-              "name": "icon-end"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Tab text content",
-              "name": ""
-            },
-            {
-              "description": "Icon for icon-only tabs",
-              "name": "icon-only"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "'default' | 'admin'"
-              },
-              "default": "'default'",
-              "description": "Mode of the popover should be 'default' for internal use"
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Label if it is not provided via slot"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Value of the tab, defaults to label if not provided"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only'"
-              },
-              "default": "'underlined'",
-              "description": "Tab variant style"
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "'top' | 'bottom' | 'start' | 'end'"
-              },
-              "default": "'top'",
-              "description": "Position of the tabs when used within a le-tabs component"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Tab size"
-            },
-            {
-              "kind": "field",
-              "name": "focusable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether the tab can get focus\nneeded for accessibility when used in custom tab implementations"
-            },
-            {
-              "kind": "field",
-              "name": "selected",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the tab is in a selected/active state"
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the tab takes full width of its container"
-            },
-            {
-              "kind": "field",
-              "name": "icon",
-              "type": {
-                "text": "string | Node | undefined"
-              },
-              "description": "Icon only tab image or emoji\nif this prop is set, the tab will render only the icon slot"
-            },
-            {
-              "kind": "field",
-              "name": "showLabel",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to show the label when in icon-only mode"
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string | Node | undefined"
-              },
-              "description": "Start icon image or emoji"
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string | Node | undefined"
-              },
-              "description": "End icon image or emoji"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the tab is disabled"
-            },
-            {
-              "kind": "field",
-              "name": "href",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional href to make the tab act as a link"
-            },
-            {
-              "kind": "field",
-              "name": "target",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Link target when href is set"
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'start' | 'center' | 'space-between' | 'end'"
-              },
-              "default": "'center'",
-              "description": "Alignment of the tab label without the end icon"
-            },
-            {
-              "kind": "method",
-              "name": "getTabConfig",
-              "return": {
-                "type": {
-                  "text": "Promise<{\n    label?: string;\n    value?: string;\n    icon?: string | Node;\n    iconStart?: string | Node;\n    iconEnd?: string | Node;\n    disabled: boolean;\n  }>"
-                }
-              },
-              "description": "Get tab configuration for parent component"
-            },
-            {
-              "kind": "field",
-              "name": "handleClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "mode",
-              "fieldName": "mode",
-              "default": "'default'",
-              "description": "Mode of the popover should be 'default' for internal use",
-              "type": {
-                "text": "'default' | 'admin'"
-              }
-            },
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "Label if it is not provided via slot",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "Value of the tab, defaults to label if not provided",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'underlined'",
-              "description": "Tab variant style",
-              "type": {
-                "text": "'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only'"
-              }
-            },
-            {
-              "name": "position",
-              "fieldName": "position",
-              "default": "'top'",
-              "description": "Position of the tabs when used within a le-tabs component",
-              "type": {
-                "text": "'top' | 'bottom' | 'start' | 'end'"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Tab size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "focusable",
-              "fieldName": "focusable",
-              "default": "true",
-              "description": "Whether the tab can get focus\nneeded for accessibility when used in custom tab implementations",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "selected",
-              "fieldName": "selected",
-              "default": "false",
-              "description": "Whether the tab is in a selected/active state",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the tab takes full width of its container",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "icon",
-              "fieldName": "icon",
-              "description": "Icon only tab image or emoji\nif this prop is set, the tab will render only the icon slot",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "show-label",
-              "fieldName": "showLabel",
-              "default": "false",
-              "description": "Whether to show the label when in icon-only mode",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "icon-start",
-              "fieldName": "iconStart",
-              "description": "Start icon image or emoji",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "icon-end",
-              "fieldName": "iconEnd",
-              "description": "End icon image or emoji",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the tab is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "href",
-              "fieldName": "href",
-              "description": "Optional href to make the tab act as a link",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "target",
-              "fieldName": "target",
-              "description": "Link target when href is set",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'center'",
-              "description": "Alignment of the tab label without the end icon",
-              "type": {
-                "text": "'start' | 'center' | 'space-between' | 'end'"
-              }
-            }
-          ],
-          "tagName": "le-tab",
-          "events": [
-            {
-              "name": "click",
-              "type": {
-                "text": "EventEmitter<PointerEvent> | undefined"
-              },
-              "description": "Emitted when the tab is clicked.\nThis is a custom event that wraps the native click but ensures the target is the le-tab."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeTab",
-          "declaration": {
-            "name": "LeTab",
-            "module": "src/components/le-tab/le-tab.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-tab",
-          "declaration": {
-            "name": "LeTab",
-            "module": "src/components/le-tab/le-tab.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-string-input/le-string-input.tsx",
       "declarations": [
         {
@@ -15722,16 +15618,60 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-tab-panel/le-tab-panel.tsx",
+      "path": "src/components/le-tab/le-tab.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A tab panel component used as a child of le-tabs.\n\nEach le-tab-panel defines both the tab button label and the panel content.\nThe parent le-tabs component automatically reads these panels and creates\nthe tab interface.",
-          "name": "LeTabPanel",
+          "description": "A flexible tab component with multiple variants and states.",
+          "name": "LeTab",
+          "cssProperties": [
+            {
+              "description": "Tab background color",
+              "name": "--le-tab-bg"
+            },
+            {
+              "description": "Tab text color",
+              "name": "--le-tab-color"
+            },
+            {
+              "description": "Tab border radius",
+              "name": "--le-tab-border-radius"
+            },
+            {
+              "description": "Tab horizontal padding",
+              "name": "--le-tab-padding-x"
+            },
+            {
+              "description": "Tab vertical padding",
+              "name": "--le-tab-padding-y"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The native button element",
+              "name": "button"
+            },
+            {
+              "description": "The tab content wrapper",
+              "name": "content"
+            },
+            {
+              "description": "The start icon slot",
+              "name": "icon-start"
+            },
+            {
+              "description": "The end icon slot",
+              "name": "icon-end"
+            }
+          ],
           "slots": [
             {
-              "description": "Default slot for panel content",
+              "description": "Tab text content",
               "name": ""
+            },
+            {
+              "description": "Icon for icon-only tabs",
+              "name": "icon-only"
             }
           ],
           "members": [
@@ -15739,16 +15679,25 @@
               "kind": "field",
               "name": "el",
               "type": {
-                "text": "HTMLLeTabPanelElement"
+                "text": "HTMLElement"
               }
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin'"
+              },
+              "default": "'default'",
+              "description": "Mode of the popover should be 'default' for internal use"
             },
             {
               "kind": "field",
               "name": "label",
               "type": {
-                "text": "string"
+                "text": "string | undefined"
               },
-              "description": "The label displayed in the tab button."
+              "description": "Label if it is not provided via slot"
             },
             {
               "kind": "field",
@@ -15756,23 +15705,94 @@
               "type": {
                 "text": "string | undefined"
               },
-              "description": "The value used to identify this tab.\nDefaults to the label if not provided."
+              "description": "Value of the tab, defaults to label if not provided"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only'"
+              },
+              "default": "'underlined'",
+              "description": "Tab variant style"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "'top' | 'bottom' | 'start' | 'end'"
+              },
+              "default": "'top'",
+              "description": "Position of the tabs when used within a le-tabs component"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Tab size"
+            },
+            {
+              "kind": "field",
+              "name": "focusable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether the tab can get focus\nneeded for accessibility when used in custom tab implementations"
+            },
+            {
+              "kind": "field",
+              "name": "selected",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the tab is in a selected/active state"
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the tab takes full width of its container"
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "Icon only tab image or emoji\nif this prop is set, the tab will render only the icon slot"
+            },
+            {
+              "kind": "field",
+              "name": "showLabel",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to show the label when in icon-only mode"
             },
             {
               "kind": "field",
               "name": "iconStart",
               "type": {
-                "text": "string | undefined"
+                "text": "string | Node | undefined"
               },
-              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class."
+              "description": "Start icon image or emoji"
             },
             {
               "kind": "field",
               "name": "iconEnd",
               "type": {
-                "text": "string | undefined"
+                "text": "string | Node | undefined"
               },
-              "description": "Icon displayed at the end of the tab button."
+              "description": "End icon image or emoji"
             },
             {
               "kind": "field",
@@ -15781,90 +15801,47 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether this tab is disabled."
+              "description": "Whether the tab is disabled"
             },
             {
               "kind": "field",
-              "name": "lazy",
+              "name": "href",
               "type": {
-                "text": "boolean"
+                "text": "string | undefined"
               },
-              "default": "false",
-              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive."
+              "description": "Optional href to make the tab act as a link"
             },
             {
               "kind": "field",
-              "name": "active",
+              "name": "target",
               "type": {
-                "text": "boolean"
+                "text": "string | undefined"
               },
-              "default": "false",
-              "description": "Internal: Whether this panel is currently active (set by parent le-tabs)"
+              "description": "Link target when href is set"
             },
             {
               "kind": "field",
-              "name": "hasBeenActive",
+              "name": "align",
               "type": {
-                "text": "boolean"
+                "text": "'start' | 'center' | 'space-between' | 'end'"
               },
-              "default": "false",
-              "description": "Internal: Track if panel has ever been activated (for lazy rendering)"
-            },
-            {
-              "kind": "method",
-              "name": "activeChanged",
-              "parameters": [
-                {
-                  "name": "isActive",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getValue",
-              "return": {
-                "type": {
-                  "text": "Promise<string>"
-                }
-              },
-              "description": "Get the effective value (value or label as fallback)"
+              "default": "'center'",
+              "description": "Alignment of the tab label without the end icon"
             },
             {
               "kind": "method",
               "name": "getTabConfig",
               "return": {
                 "type": {
-                  "text": "Promise<{\n    label: string;\n    value: string;\n    iconStart?: string;\n    iconEnd?: string;\n    disabled: boolean;\n  }>"
+                  "text": "Promise<{\n    label?: string;\n    value?: string;\n    icon?: string | Node;\n    iconStart?: string | Node;\n    iconEnd?: string | Node;\n    disabled: boolean;\n  }>"
                 }
               },
               "description": "Get tab configuration for parent component"
             },
             {
-              "kind": "method",
-              "name": "setActive",
-              "parameters": [
-                {
-                  "name": "isActive",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ],
-              "description": "Set the active state (called by parent le-tabs)"
-            },
-            {
-              "kind": "method",
-              "name": "shouldRenderContent",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Check if panel should render content"
+              "kind": "field",
+              "name": "handleClick",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -15873,9 +15850,18 @@
           ],
           "attributes": [
             {
+              "name": "mode",
+              "fieldName": "mode",
+              "default": "'default'",
+              "description": "Mode of the popover should be 'default' for internal use",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
               "name": "label",
               "fieldName": "label",
-              "description": "The label displayed in the tab button.",
+              "description": "Label if it is not provided via slot",
               "type": {
                 "text": "string"
               }
@@ -15883,66 +15869,161 @@
             {
               "name": "value",
               "fieldName": "value",
-              "description": "The value used to identify this tab.\nDefaults to the label if not provided.",
+              "description": "Value of the tab, defaults to label if not provided",
               "type": {
                 "text": "string"
+              }
+            },
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'underlined'",
+              "description": "Tab variant style",
+              "type": {
+                "text": "'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only'"
+              }
+            },
+            {
+              "name": "position",
+              "fieldName": "position",
+              "default": "'top'",
+              "description": "Position of the tabs when used within a le-tabs component",
+              "type": {
+                "text": "'top' | 'bottom' | 'start' | 'end'"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Tab size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "focusable",
+              "fieldName": "focusable",
+              "default": "true",
+              "description": "Whether the tab can get focus\nneeded for accessibility when used in custom tab implementations",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "selected",
+              "fieldName": "selected",
+              "default": "false",
+              "description": "Whether the tab is in a selected/active state",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the tab takes full width of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "icon",
+              "fieldName": "icon",
+              "description": "Icon only tab image or emoji\nif this prop is set, the tab will render only the icon slot",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "show-label",
+              "fieldName": "showLabel",
+              "default": "false",
+              "description": "Whether to show the label when in icon-only mode",
+              "type": {
+                "text": "boolean"
               }
             },
             {
               "name": "icon-start",
               "fieldName": "iconStart",
-              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class.",
+              "description": "Start icon image or emoji",
               "type": {
-                "text": "string"
+                "text": "string | Node"
               }
             },
             {
               "name": "icon-end",
               "fieldName": "iconEnd",
-              "description": "Icon displayed at the end of the tab button.",
+              "description": "End icon image or emoji",
               "type": {
-                "text": "string"
+                "text": "string | Node"
               }
             },
             {
               "name": "disabled",
               "fieldName": "disabled",
               "default": "false",
-              "description": "Whether this tab is disabled.",
+              "description": "Whether the tab is disabled",
               "type": {
                 "text": "boolean"
               }
             },
             {
-              "name": "lazy",
-              "fieldName": "lazy",
-              "default": "false",
-              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive.",
+              "name": "href",
+              "fieldName": "href",
+              "description": "Optional href to make the tab act as a link",
               "type": {
-                "text": "boolean"
+                "text": "string"
+              }
+            },
+            {
+              "name": "target",
+              "fieldName": "target",
+              "description": "Link target when href is set",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'center'",
+              "description": "Alignment of the tab label without the end icon",
+              "type": {
+                "text": "'start' | 'center' | 'space-between' | 'end'"
               }
             }
           ],
-          "tagName": "le-tab-panel",
-          "events": [],
+          "tagName": "le-tab",
+          "events": [
+            {
+              "name": "click",
+              "type": {
+                "text": "EventEmitter<PointerEvent> | undefined"
+              },
+              "description": "Emitted when the tab is clicked.\nThis is a custom event that wraps the native click but ensures the target is the le-tab."
+            }
+          ],
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "LeTabPanel",
+          "name": "LeTab",
           "declaration": {
-            "name": "LeTabPanel",
-            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
+            "name": "LeTab",
+            "module": "src/components/le-tab/le-tab.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-tab-panel",
+          "name": "le-tab",
           "declaration": {
-            "name": "LeTabPanel",
-            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
+            "name": "LeTab",
+            "module": "src/components/le-tab/le-tab.tsx"
           }
         }
       ]
@@ -16324,51 +16405,57 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-tag/le-tag.tsx",
+      "path": "src/components/le-tab-panel/le-tab-panel.tsx",
       "declarations": [
         {
           "kind": "class",
-          "description": "A tag/chip component for displaying labels with optional dismiss functionality.",
-          "name": "LeTag",
+          "description": "A tab panel component used as a child of le-tabs.\n\nEach le-tab-panel defines both the tab button label and the panel content.\nThe parent le-tabs component automatically reads these panels and creates\nthe tab interface.",
+          "name": "LeTabPanel",
           "slots": [
             {
-              "description": "Default slot for custom content (overrides label prop)",
+              "description": "Default slot for panel content",
               "name": ""
             }
           ],
           "members": [
             {
               "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLLeTabPanelElement"
+              }
+            },
+            {
+              "kind": "field",
               "name": "label",
               "type": {
-                "text": "string | undefined"
+                "text": "string"
               },
-              "description": "The text label to display in the tag."
+              "description": "The label displayed in the tab button."
             },
             {
               "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "'default' | 'admin' | undefined"
-              },
-              "description": "Mode of the popover should be 'default' for internal use"
-            },
-            {
-              "kind": "field",
-              "name": "icon",
+              "name": "value",
               "type": {
                 "text": "string | undefined"
               },
-              "description": "Icon to display before the label.\nCan be an emoji, URL, or icon name."
+              "description": "The value used to identify this tab.\nDefaults to the label if not provided."
             },
             {
               "kind": "field",
-              "name": "dismissible",
+              "name": "iconStart",
               "type": {
-                "text": "boolean"
+                "text": "string | undefined"
               },
-              "default": "false",
-              "description": "Whether the tag can be dismissed (shows close button)."
+              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class."
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Icon displayed at the end of the tab button."
             },
             {
               "kind": "field",
@@ -16377,35 +16464,90 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the tag is disabled."
+              "description": "Whether this tab is disabled."
             },
             {
               "kind": "field",
-              "name": "size",
+              "name": "lazy",
               "type": {
-                "text": "'small' | 'medium' | 'large'"
+                "text": "boolean"
               },
-              "default": "'medium'",
-              "description": "The size of the tag."
+              "default": "false",
+              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive."
             },
             {
               "kind": "field",
-              "name": "color",
+              "name": "active",
               "type": {
-                "text": "| 'default'\n    | 'primary'\n    | 'success'\n    | 'warning'\n    | 'danger'\n    | 'secondary'\n    | 'info'"
+                "text": "boolean"
               },
-              "default": "'default'",
-              "description": "The color of the tag."
+              "default": "false",
+              "description": "Internal: Whether this panel is currently active (set by parent le-tabs)"
             },
             {
               "kind": "field",
-              "name": "handleDismiss",
-              "privacy": "private"
+              "name": "hasBeenActive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Internal: Track if panel has ever been activated (for lazy rendering)"
             },
             {
               "kind": "method",
-              "name": "renderIcon",
-              "privacy": "private"
+              "name": "activeChanged",
+              "parameters": [
+                {
+                  "name": "isActive",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getValue",
+              "return": {
+                "type": {
+                  "text": "Promise<string>"
+                }
+              },
+              "description": "Get the effective value (value or label as fallback)"
+            },
+            {
+              "kind": "method",
+              "name": "getTabConfig",
+              "return": {
+                "type": {
+                  "text": "Promise<{\n    label: string;\n    value: string;\n    iconStart?: string;\n    iconEnd?: string;\n    disabled: boolean;\n  }>"
+                }
+              },
+              "description": "Get tab configuration for parent component"
+            },
+            {
+              "kind": "method",
+              "name": "setActive",
+              "parameters": [
+                {
+                  "name": "isActive",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "Set the active state (called by parent le-tabs)"
+            },
+            {
+              "kind": "method",
+              "name": "shouldRenderContent",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Check if panel should render content"
             },
             {
               "kind": "method",
@@ -16416,92 +16558,74 @@
             {
               "name": "label",
               "fieldName": "label",
-              "description": "The text label to display in the tag.",
+              "description": "The label displayed in the tab button.",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "mode",
-              "fieldName": "mode",
-              "description": "Mode of the popover should be 'default' for internal use",
-              "type": {
-                "text": "'default' | 'admin'"
-              }
-            },
-            {
-              "name": "icon",
-              "fieldName": "icon",
-              "description": "Icon to display before the label.\nCan be an emoji, URL, or icon name.",
+              "name": "value",
+              "fieldName": "value",
+              "description": "The value used to identify this tab.\nDefaults to the label if not provided.",
               "type": {
                 "text": "string"
               }
             },
             {
-              "name": "dismissible",
-              "fieldName": "dismissible",
-              "default": "false",
-              "description": "Whether the tag can be dismissed (shows close button).",
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "description": "Icon displayed at the start of the tab button.\nCan be an emoji, URL, or icon class.",
               "type": {
-                "text": "boolean"
+                "text": "string"
+              }
+            },
+            {
+              "name": "icon-end",
+              "fieldName": "iconEnd",
+              "description": "Icon displayed at the end of the tab button.",
+              "type": {
+                "text": "string"
               }
             },
             {
               "name": "disabled",
               "fieldName": "disabled",
               "default": "false",
-              "description": "Whether the tag is disabled.",
+              "description": "Whether this tab is disabled.",
               "type": {
                 "text": "boolean"
               }
             },
             {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "The size of the tag.",
+              "name": "lazy",
+              "fieldName": "lazy",
+              "default": "false",
+              "description": "Whether to render the panel content only when active (lazy loading).\nWhen true, content is not rendered until the tab is first selected.\nWhen false (default), content is always in DOM but hidden when inactive.",
               "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "color",
-              "fieldName": "color",
-              "default": "'default'",
-              "description": "The color of the tag.",
-              "type": {
-                "text": "| 'default'\n    | 'primary'\n    | 'success'\n    | 'warning'\n    | 'danger'\n    | 'secondary'\n    | 'info'"
+                "text": "boolean"
               }
             }
           ],
-          "tagName": "le-tag",
-          "events": [
-            {
-              "name": "leDismiss",
-              "type": {
-                "text": "EventEmitter<void> | undefined"
-              },
-              "description": "Emitted when the dismiss button is clicked."
-            }
-          ],
+          "tagName": "le-tab-panel",
+          "events": [],
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "LeTag",
+          "name": "LeTabPanel",
           "declaration": {
-            "name": "LeTag",
-            "module": "src/components/le-tag/le-tag.tsx"
+            "name": "LeTabPanel",
+            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
           }
         },
         {
           "kind": "custom-element-definition",
-          "name": "le-tag",
+          "name": "le-tab-panel",
           "declaration": {
-            "name": "LeTag",
-            "module": "src/components/le-tag/le-tag.tsx"
+            "name": "LeTabPanel",
+            "module": "src/components/le-tab-panel/le-tab-panel.tsx"
           }
         }
       ]
@@ -16913,6 +17037,190 @@
           "declaration": {
             "name": "LeTabs",
             "module": "src/components/le-tabs/le-tabs.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-tag/le-tag.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A tag/chip component for displaying labels with optional dismiss functionality.",
+          "name": "LeTag",
+          "slots": [
+            {
+              "description": "Default slot for custom content (overrides label prop)",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The text label to display in the tag."
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin' | undefined"
+              },
+              "description": "Mode of the popover should be 'default' for internal use"
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Icon to display before the label.\nCan be an emoji, URL, or icon name."
+            },
+            {
+              "kind": "field",
+              "name": "dismissible",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the tag can be dismissed (shows close button)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the tag is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "The size of the tag."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "| 'default'\n    | 'primary'\n    | 'success'\n    | 'warning'\n    | 'danger'\n    | 'secondary'\n    | 'info'"
+              },
+              "default": "'default'",
+              "description": "The color of the tag."
+            },
+            {
+              "kind": "field",
+              "name": "handleDismiss",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderIcon",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "The text label to display in the tag.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "mode",
+              "fieldName": "mode",
+              "description": "Mode of the popover should be 'default' for internal use",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
+              "name": "icon",
+              "fieldName": "icon",
+              "description": "Icon to display before the label.\nCan be an emoji, URL, or icon name.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "dismissible",
+              "fieldName": "dismissible",
+              "default": "false",
+              "description": "Whether the tag can be dismissed (shows close button).",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the tag is disabled.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "The size of the tag.",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "color",
+              "fieldName": "color",
+              "default": "'default'",
+              "description": "The color of the tag.",
+              "type": {
+                "text": "| 'default'\n    | 'primary'\n    | 'success'\n    | 'warning'\n    | 'danger'\n    | 'secondary'\n    | 'info'"
+              }
+            }
+          ],
+          "tagName": "le-tag",
+          "events": [
+            {
+              "name": "leDismiss",
+              "type": {
+                "text": "EventEmitter<void> | undefined"
+              },
+              "description": "Emitted when the dismiss button is clicked."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeTag",
+          "declaration": {
+            "name": "LeTag",
+            "module": "src/components/le-tag/le-tag.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-tag",
+          "declaration": {
+            "name": "LeTag",
+            "module": "src/components/le-tag/le-tag.tsx"
           }
         }
       ]

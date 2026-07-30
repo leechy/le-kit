@@ -1,0 +1,54 @@
+{
+  "viewBox": "0 0 16 16",
+  "maskShape": [
+    {
+      "tag": "rect",
+      "x": "2.75",
+      "y": "5.75",
+      "width": "10.5",
+      "height": "8.5",
+      "fill": "black",
+      "fill-rule": "evenodd",
+      "rounded": {
+        "rx": "2"
+      }
+    },
+    {
+      "tag": "path",
+      "d": "M8,1.25 C10.0710678,1.25 11.75,2.92893219 11.75,5 L11.75,6.25 L11.75,6.25 L4.25,6.25 L4.25,5 C4.25,2.92893219 5.92893219,1.25 8,1.25 Z",
+      "fill": "black",
+      "fill-rule": "evenodd"
+    }
+  ],
+  "children": [
+    {
+      "tag": "path",
+      "d": "M8,2.5 C9.38071187,2.5 10.5,3.61928813 10.5,5 L10.5,7 L10.5,7 L5.5,7 L5.5,5 C5.5,3.61928813 6.61928813,2.5 8,2.5 Z",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.25",
+      "thin": {
+        "stroke-width": "0.75"
+      }
+    },
+    {
+      "tag": "rect",
+      "x": "4",
+      "y": "7",
+      "width": "8",
+      "height": "6",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.25",
+      "rounded": {
+        "rx": "1"
+      },
+      "filled": {
+        "fill": "currentColor"
+      },
+      "thin": {
+        "stroke-width": "0.75"
+      }
+    }
+  ]
+}

@@ -16,7 +16,8 @@ export interface Position {
 }
 
 export interface LayerConfig {
-  name: string;
+  name?: string;
+  icon?: string;
   position?: string;
   scale?: number;
   opacity?: number;
@@ -26,6 +27,8 @@ export interface LayerConfig {
   filled?: boolean;
   outlined?: boolean;
   thin?: boolean;
+  mask?: boolean;
+  isBadge?: boolean;
 }
 
 /**
@@ -167,10 +170,13 @@ export function computeLayerTransform(
   posY: number,
   scale: number,
   layerViewBox: ParsedViewBox,
-): string {
+): string | undefined {
   const tx = posX - (layerViewBox.width / 2) * scale;
   const ty = posY - (layerViewBox.height / 2) * scale;
 
+  if (scale === 1 && tx === 0 && ty === 0) {
+    return undefined;
+  }
   if (scale === 1) {
     return `translate(${tx}, ${ty})`;
   }
@@ -188,7 +194,10 @@ export function parseLayers(layersStr: string | undefined): LayerConfig[] {
   try {
     const parsed = JSON.parse(layersStr);
     if (Array.isArray(parsed)) {
-      return parsed;
+      return parsed.map(item => ({
+        ...item,
+        name: item.name || item.icon || '',
+      }));
     }
     return [];
   } catch {

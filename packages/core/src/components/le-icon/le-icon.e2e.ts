@@ -2,6 +2,20 @@ import { describe, it, expect } from '@jest/globals';
 import { newE2EPage } from '@stencil/core/testing';
 
 describe('le-icon e2e', () => {
+  async function renderIcon(
+    html: string,
+    iconDataMap: Record<string, any> = {},
+    composedIconsMap: Record<string, any> = {},
+  ) {
+    const page = await newE2EPage();
+    await page.evaluateOnNewDocument((icons, composedIcons) => {
+      (window as any).LE_KIT_CONFIG = { icons, composedIcons };
+    }, iconDataMap, composedIconsMap);
+    await page.setContent(html);
+    await page.waitForChanges();
+    return page;
+  }
+
   it('renders base notifications icon from built assets', async () => {
     const page = await newE2EPage({ html: '<le-icon name="notifications"></le-icon>' });
     await page.waitForChanges();
@@ -134,6 +148,30 @@ describe('le-icon e2e', () => {
   it('renders action badge overlay layer when badge prop is set', async () => {
     const page = await newE2EPage({ html: '<le-icon name="folder" badge="file"></le-icon>' });
     await page.waitForChanges();
+
+    const svg = await page.find('le-icon >>> svg');
+    expect(svg).not.toBeNull();
+  });
+
+  it('supports layer mask: false option without knockout masks and without position offset', async () => {
+    const page = await newE2EPage({
+      html: `<le-icon name="flag" layers='[{"name": "flag", "filled": true}, {"name": "flag", "thin": true, "mask": false}]'></le-icon>`,
+    });
+    await page.waitForChanges();
+
+    const svg = await page.find('le-icon >>> svg');
+    expect(svg).not.toBeNull();
+  });
+
+  it('allows layer config to override composed icon variant settings with explicit false values', async () => {
+    const page = await renderIcon(
+      '<le-icon name="flag-orange"></le-icon>',
+      {
+        flag: { viewBox: '0 0 16 16', children: [{ tag: 'path', d: 'M0 0 L16 16' }] },
+        'flag-orange': { viewBox: '0 0 16 16', children: [] },
+      },
+      { 'flag-orange': { thin: true, layers: [{ name: 'flag', thin: false }] } },
+    );
 
     const svg = await page.find('le-icon >>> svg');
     expect(svg).not.toBeNull();

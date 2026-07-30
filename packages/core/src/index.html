@@ -34,6 +34,20 @@
               { name: 'file', scale: 0.8, position: '-6.75px, 6.75px' },
             ]
           },
+          'inbox-count': {
+            icon: 'notifications',
+            badgeScale: 1.6,
+            badgeColor: 'var(--le-color-primary)',
+          },
+          'flag-orange': {
+            rounded: true,
+            thin: true,
+            layers: [
+              { name: 'flag', filled: true, color: 'var(--le-color-warning)' },
+              { name: 'flag', mask: false },
+              { name: 'slash', thin: false, scale: 0.9, position: '8px, 6px' }
+            ]
+          },
         },
       },
     };
@@ -402,6 +416,30 @@
       <le-icon name="notifications" thin filled size="48"></le-icon>
       <le-icon name="notifications" thin rounded filled size="48"></le-icon>
     </div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <le-icon name="flag" size="48"></le-icon>
+      <le-icon name="flag" rounded size="48"></le-icon>
+      <le-icon name="flag" filled size="48"></le-icon>
+      <le-icon name="flag" rounded filled size="48"></le-icon>
+      <le-icon name="flag" thin size="48"></le-icon>
+      <le-icon name="flag" thin rounded size="48"></le-icon>
+      <le-icon name="flag" thin filled size="48"></le-icon>
+      <le-icon name="flag" thin rounded filled size="48"></le-icon>
+      <le-icon name="flag" style="--le-icon-color: green" layers='[{"icon": "slash"}]' thin rounded filled
+        size="48"></le-icon>
+      <le-icon name="slash" thin rounded filled size="48"></le-icon>
+      <le-icon name="flag-orange" size="32"></le-icon>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <le-icon name="lock" size="32"></le-icon>
+      <le-icon name="lock" rounded size="32"></le-icon>
+      <le-icon name="lock" thin size="32"></le-icon>
+      <le-icon name="lock" rounded thin size="32"></le-icon>
+      <le-icon name="lock" filled size="32"></le-icon>
+      <le-icon name="lock" rounded filled size="32" dot></le-icon>
+      <le-icon name="lock" filled thin size="32"></le-icon>
+      <le-icon name="lock" rounded filled thin size="32"></le-icon>
+    </div>
 
     <h3>Registry Icons (configureLeKit)</h3>
     <p>These use names registered via configureLeKit({ icons: { ... } }):</p>
@@ -474,9 +512,10 @@
     <div style="display: flex; align-items: center; gap: 20px;">
       <le-icon name="file" count="9" base-color="var(--le-color-primary)" badge-color="var(--le-color-danger)"
         size="40"></le-icon>
-      <le-icon name="folder" count="99+" badge-opacity="0.85" badge-color="#10b981" size="40"></le-icon>
-      <le-button icon-start="notifications" icon-count="4">Notifications</le-button>
-      <le-button icon-only="folder" icon-only-count="12" label="Inbox"></le-button>
+      <le-icon name="noitifications" count="5" max-count="99" badge-opacity="0.85" badge-color="#10b981"
+        size="40"></le-icon>
+      <le-button icon-start="inbox-count" icon-count="4">Notifications</le-button>
+      <le-button icon-only="inbox-count" icon-only-count="12" label="Inbox"></le-button>
     </div>
     <span style="display: inline-block; width: 16px;"></span>
     <le-icon name="new" size="32"></le-icon>
@@ -549,7 +588,7 @@
       <le-button-group id="demo-button-group">
         <le-button variant="clear" priority="1" href="#save"
           tooltip="Save all the changes on this page">Save</le-button>
-        <le-button variant="clear" priority="3" onclick="alert('Publish')">Publish</le-button>
+        <le-button variant="clear" priority="3" onclick="alert(' Publish')">Publish</le-button>
         <le-button variant="clear" priority="2" onclick="alert('Preview')">Preview</le-button>
         <le-button variant="clear" href="#share">Share</le-button>
         <le-button variant="clear" onclick="alert('Duplicate')">Duplicate and Switch to the New One</le-button>

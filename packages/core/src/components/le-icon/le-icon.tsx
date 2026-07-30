@@ -355,14 +355,15 @@ export class LeIcon {
     // Layer icons
     const layerConfigs = parseLayers(resolvedLayers);
     if (layerConfigs.length > 0) {
-      const layerPromises = layerConfigs.map(config =>
-        fetchIcon({ name: config.name }).then(data => {
+      const layerPromises = layerConfigs.map(config => {
+        const layerName = config.name || config.icon || '';
+        return fetchIcon({ name: layerName }).then(data => {
           if (!data) {
-            console.warn(`le-icon: Layer icon "${config.name}" not found.`);
+            console.warn(`le-icon: Layer icon "${layerName}" not found.`);
           }
-          return { config, data };
-        }),
-      );
+          return { config: { ...config, name: layerName }, data };
+        });
+      });
       promises.push(
         Promise.all(layerPromises).then(resolved => {
           this.layersData = resolved;
@@ -479,48 +480,46 @@ export class LeIcon {
     if (!node) return node;
 
     let rounded = false;
-    if (this.sharp === true) {
+    if (typeof this.sharp === 'boolean' && this.sharp) {
       rounded = false;
-    } else if (this.rounded === true) {
-      rounded = true;
-    } else if (overrides?.sharp === true) {
+    } else if (typeof this.rounded === 'boolean') {
+      rounded = this.rounded;
+    } else if (typeof overrides?.sharp === 'boolean' && overrides.sharp) {
       rounded = false;
-    } else if (overrides?.rounded === true) {
-      rounded = true;
-    } else if (this._resolvedSharp === true) {
+    } else if (typeof overrides?.rounded === 'boolean') {
+      rounded = overrides.rounded;
+    } else if (typeof this._resolvedSharp === 'boolean' && this._resolvedSharp) {
       rounded = false;
-    } else if (this._resolvedRounded === true) {
-      rounded = true;
+    } else if (typeof this._resolvedRounded === 'boolean') {
+      rounded = this._resolvedRounded;
     } else {
       rounded = getDefaultIconRounded();
     }
 
     let filled = false;
-    if (this.outlined === true) {
+    if (typeof this.outlined === 'boolean' && this.outlined) {
       filled = false;
-    } else if (this.filled === true) {
-      filled = true;
-    } else if (overrides?.outlined === true) {
+    } else if (typeof this.filled === 'boolean') {
+      filled = this.filled;
+    } else if (typeof overrides?.outlined === 'boolean' && overrides.outlined) {
       filled = false;
-    } else if (overrides?.filled === true) {
-      filled = true;
-    } else if (this._resolvedOutlined === true) {
+    } else if (typeof overrides?.filled === 'boolean') {
+      filled = overrides.filled;
+    } else if (typeof this._resolvedOutlined === 'boolean' && this._resolvedOutlined) {
       filled = false;
-    } else if (this._resolvedFilled === true) {
-      filled = true;
+    } else if (typeof this._resolvedFilled === 'boolean') {
+      filled = this._resolvedFilled;
     } else {
       filled = getDefaultIconFilled();
     }
 
     let thin = false;
-    if (this.thin === true) {
-      thin = true;
-    } else if (overrides?.thin === true) {
-      thin = true;
-    } else if (this._resolvedThin === true) {
-      thin = true;
-    } else if (this.thin === false || overrides?.thin === false || this._resolvedThin === false) {
-      thin = false;
+    if (typeof this.thin === 'boolean') {
+      thin = this.thin;
+    } else if (typeof overrides?.thin === 'boolean') {
+      thin = overrides.thin;
+    } else if (typeof this._resolvedThin === 'boolean') {
+      thin = this._resolvedThin;
     } else {
       thin = getDefaultIconThin();
     }
@@ -677,6 +676,7 @@ export class LeIcon {
           scale: this._resolvedBadgeScale ?? defaultScale,
           opacity: this._resolvedBadgeOpacity,
           color: this._resolvedBadgeColor,
+          isBadge: true,
         },
         data: this.badgeData,
       });
@@ -783,8 +783,9 @@ export class LeIcon {
     const overlayInfo = overlays.map(layer => {
       const layerVB = parseViewBox(layer.data.viewBox || '0 0 16 16');
       const scale = layer.config.scale ?? 1;
+      const defaultPos = (layer.config as any).isBadge ? getDefaultBadgePosition() : '50%, 50%';
       const pos = parsePosition(
-        layer.config.position || getDefaultBadgePosition(),
+        layer.config.position || defaultPos,
         parentVB.width,
         parentVB.height,
         layerVB.width * scale,
@@ -805,16 +806,20 @@ export class LeIcon {
 
       for (let j = i; j < overlayInfo.length; j++) {
         const info = overlayInfo[j];
-        if (info.layer.data.maskShape) {
+        if (info.layer.config.mask !== false && info.layer.data.maskShape) {
           const layerOverrides = {
-            rounded: info.layer.config.rounded,
-            sharp: info.layer.config.sharp,
-            filled: info.layer.config.filled,
-            outlined: info.layer.config.outlined,
-            thin: info.layer.config.thin,
+            rounded: info.layer.config.rounded ?? this._resolvedRounded,
+            sharp: info.layer.config.sharp ?? this._resolvedSharp,
+            filled: info.layer.config.filled ?? this._resolvedFilled,
+            outlined: info.layer.config.outlined ?? this._resolvedOutlined,
+            thin: info.layer.config.thin ?? this._resolvedThin,
           };
+          const maskGroupAttrs: any = {};
+          if (info.transform) {
+            maskGroupAttrs.transform = info.transform;
+          }
           maskShapes.push(
-            h('g', { transform: info.transform }, 
+            h('g', maskGroupAttrs, 
               this.renderMaskShape(info.layer.data.maskShape, info.scale, layerOverrides),
             ),
           );
@@ -882,16 +887,17 @@ export class LeIcon {
       const maskIndex = i + 1;
       const hasMask = maskIndex < masks.length;
       const layerOverrides = {
-        rounded: info.layer.config.rounded,
-        sharp: info.layer.config.sharp,
-        filled: info.layer.config.filled,
-        outlined: info.layer.config.outlined,
-        thin: info.layer.config.thin,
+        rounded: info.layer.config.rounded ?? this._resolvedRounded,
+        sharp: info.layer.config.sharp ?? this._resolvedSharp,
+        filled: info.layer.config.filled ?? this._resolvedFilled,
+        outlined: info.layer.config.outlined ?? this._resolvedOutlined,
+        thin: info.layer.config.thin ?? this._resolvedThin,
       };
 
-      const groupAttrs: any = {
-        transform: info.transform,
-      };
+      const groupAttrs: any = {};
+      if (info.transform) {
+        groupAttrs.transform = info.transform;
+      }
       if (info.layer.config.opacity != null) {
         groupAttrs.opacity = String(info.layer.config.opacity);
       }

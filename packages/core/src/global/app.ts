@@ -1,4 +1,5 @@
 import { setMode } from '@stencil/core';
+import type { LayerConfig } from '../components/le-icon/icon-utils';
 
 export type LeKitMode = 'default' | 'admin' | string;
 export type LeKitTheme = 'default' | 'dark' | string;
@@ -185,19 +186,8 @@ export interface ComposedIconDef {
   outlined?: boolean;
   /** Optional thin setting for this composed icon. */
   thin?: boolean;
-  /** Optional additional layers. */
-  layers?: Array<{
-    name: string;
-    position?: string;
-    scale?: number;
-    opacity?: number;
-    color?: string;
-    rounded?: boolean;
-    sharp?: boolean;
-    filled?: boolean;
-    outlined?: boolean;
-    thin?: boolean;
-  }>;
+  /** Optional additional layers. Can be array of layer configs / preset names or comma-separated string. */
+  layers?: Array<LayerConfig | string> | string;
 }
 
 /**
@@ -267,6 +257,12 @@ export interface LeKitIconsConfig {
    * Default: false
    */
   defaultThin?: boolean;
+
+  /**
+   * Global registry of reusable layer preset configurations.
+   * Layers registered here can be referenced by name in `layers` props.
+   */
+  layers?: Record<string, LayerConfig>;
 
   /**
    * Registry of named composed icon definitions.
@@ -344,6 +340,7 @@ const DEFAULT_ICONS_CONFIG: LeKitIconsConfig = {
   defaultRounded: false,
   defaultFilled: false,
   defaultThin: false,
+  layers: {},
   composed: {},
 };
 
@@ -359,6 +356,7 @@ function getGlobalConfig(): LeKitConfig {
   // Ensure icons sub-object has all required defaults (for pre-set configs)
   const cfg = g[LE_KIT_CONFIG_KEY];
   if (cfg.icons) {
+    if (!cfg.icons.layers) cfg.icons.layers = {};
     if (!cfg.icons.composed) cfg.icons.composed = {};
     if (!cfg.icons.defaultBadgePosition) cfg.icons.defaultBadgePosition = DEFAULT_ICONS_CONFIG.defaultBadgePosition;
     if (cfg.icons.defaultBadgeScale == null) cfg.icons.defaultBadgeScale = DEFAULT_ICONS_CONFIG.defaultBadgeScale;
@@ -393,6 +391,9 @@ export function configureLeKit(config: Partial<LeKitConfig>): void {
   // Deep-merge icons config so multiple configureLeKit calls add to the registry
   if (config.icons) {
     const iconsConfig = config.icons as Partial<LeKitIconsConfig>;
+    if (iconsConfig.layers) {
+      globalConfig.icons.layers = { ...globalConfig.icons.layers, ...iconsConfig.layers };
+    }
     if (iconsConfig.composed) {
       globalConfig.icons.composed = { ...globalConfig.icons.composed, ...iconsConfig.composed };
     }
@@ -497,6 +498,28 @@ export function getDefaultIconFilled(): boolean {
  */
 export function getDefaultIconThin(): boolean {
   return getGlobalConfig().icons.defaultThin ?? false;
+}
+
+/**
+ * Register a single layer preset definition.
+ */
+export function registerLayer(name: string, def: LayerConfig): void {
+  const globalConfig = getGlobalConfig();
+  if (!globalConfig.icons.layers) {
+    globalConfig.icons.layers = {};
+  }
+  globalConfig.icons.layers[name] = def;
+}
+
+/**
+ * Register multiple layer preset definitions.
+ */
+export function registerLayers(layers: Record<string, LayerConfig>): void {
+  const globalConfig = getGlobalConfig();
+  if (!globalConfig.icons.layers) {
+    globalConfig.icons.layers = {};
+  }
+  Object.assign(globalConfig.icons.layers, layers);
 }
 
 /**

@@ -14,6 +14,7 @@ import {
   getDefaultIconRounded,
   getDefaultIconThin,
   getDefaultViewBox,
+  getLeKitConfig,
 } from '../../global/app';
 import {
   computeLayerTransform,
@@ -250,7 +251,7 @@ export class LeIcon {
     let resolvedBadgeOpacity = this.badgeOpacity;
     let resolvedBadgeColor = this.badgeColor;
     let resolvedBaseColor = this.baseColor;
-    let resolvedLayers = this.layers;
+    let resolvedLayers: string | Array<LayerConfig | string> | undefined = this.layers;
     let resolvedViewBox = this.viewBox;
     let resolvedRounded = this.rounded;
     let resolvedSharp = this.sharp;
@@ -314,7 +315,7 @@ export class LeIcon {
           resolvedThin = composedDef.thin;
         }
         if (!this.layers && composedDef.layers) {
-          resolvedLayers = JSON.stringify(composedDef.layers);
+          resolvedLayers = composedDef.layers;
         }
       } else {
         baseName = targetName;
@@ -353,7 +354,8 @@ export class LeIcon {
     }
 
     // Layer icons
-    const layerConfigs = parseLayers(resolvedLayers);
+    const globalLayersMap = getLeKitConfig()?.icons?.layers;
+    const layerConfigs = parseLayers(resolvedLayers, globalLayersMap);
     if (layerConfigs.length > 0) {
       const layerPromises = layerConfigs.map(config => {
         const layerName = config.name || config.icon || '';
@@ -480,14 +482,14 @@ export class LeIcon {
     if (!node) return node;
 
     let rounded = false;
-    if (typeof this.sharp === 'boolean' && this.sharp) {
-      rounded = false;
-    } else if (typeof this.rounded === 'boolean') {
-      rounded = this.rounded;
-    } else if (typeof overrides?.sharp === 'boolean' && overrides.sharp) {
+    if (typeof overrides?.sharp === 'boolean' && overrides.sharp) {
       rounded = false;
     } else if (typeof overrides?.rounded === 'boolean') {
       rounded = overrides.rounded;
+    } else if (typeof this.sharp === 'boolean' && this.sharp) {
+      rounded = false;
+    } else if (typeof this.rounded === 'boolean') {
+      rounded = this.rounded;
     } else if (typeof this._resolvedSharp === 'boolean' && this._resolvedSharp) {
       rounded = false;
     } else if (typeof this._resolvedRounded === 'boolean') {
@@ -497,14 +499,14 @@ export class LeIcon {
     }
 
     let filled = false;
-    if (typeof this.outlined === 'boolean' && this.outlined) {
-      filled = false;
-    } else if (typeof this.filled === 'boolean') {
-      filled = this.filled;
-    } else if (typeof overrides?.outlined === 'boolean' && overrides.outlined) {
+    if (typeof overrides?.outlined === 'boolean' && overrides.outlined) {
       filled = false;
     } else if (typeof overrides?.filled === 'boolean') {
       filled = overrides.filled;
+    } else if (typeof this.outlined === 'boolean' && this.outlined) {
+      filled = false;
+    } else if (typeof this.filled === 'boolean') {
+      filled = this.filled;
     } else if (typeof this._resolvedOutlined === 'boolean' && this._resolvedOutlined) {
       filled = false;
     } else if (typeof this._resolvedFilled === 'boolean') {
@@ -514,10 +516,10 @@ export class LeIcon {
     }
 
     let thin = false;
-    if (typeof this.thin === 'boolean') {
-      thin = this.thin;
-    } else if (typeof overrides?.thin === 'boolean') {
+    if (typeof overrides?.thin === 'boolean') {
       thin = overrides.thin;
+    } else if (typeof this.thin === 'boolean') {
+      thin = this.thin;
     } else if (typeof this._resolvedThin === 'boolean') {
       thin = this._resolvedThin;
     } else {
@@ -808,11 +810,11 @@ export class LeIcon {
         const info = overlayInfo[j];
         if (info.layer.config.mask !== false && info.layer.data.maskShape) {
           const layerOverrides = {
-            rounded: info.layer.config.rounded ?? this._resolvedRounded,
-            sharp: info.layer.config.sharp ?? this._resolvedSharp,
-            filled: info.layer.config.filled ?? this._resolvedFilled,
-            outlined: info.layer.config.outlined ?? this._resolvedOutlined,
-            thin: info.layer.config.thin ?? this._resolvedThin,
+            rounded: info.layer.config.rounded,
+            sharp: info.layer.config.sharp,
+            filled: info.layer.config.filled,
+            outlined: info.layer.config.outlined,
+            thin: info.layer.config.thin,
           };
           const maskGroupAttrs: any = {};
           if (info.transform) {
@@ -887,11 +889,11 @@ export class LeIcon {
       const maskIndex = i + 1;
       const hasMask = maskIndex < masks.length;
       const layerOverrides = {
-        rounded: info.layer.config.rounded ?? this._resolvedRounded,
-        sharp: info.layer.config.sharp ?? this._resolvedSharp,
-        filled: info.layer.config.filled ?? this._resolvedFilled,
-        outlined: info.layer.config.outlined ?? this._resolvedOutlined,
-        thin: info.layer.config.thin ?? this._resolvedThin,
+        rounded: info.layer.config.rounded,
+        sharp: info.layer.config.sharp,
+        filled: info.layer.config.filled,
+        outlined: info.layer.config.outlined,
+        thin: info.layer.config.thin,
       };
 
       const groupAttrs: any = {};

@@ -20,6 +20,10 @@
         defaultTextBadgePosition: 'top, right',
         defaultTextBadgeScale: 1,
         defaultViewBox: '0 0 16 16',
+        layers: {
+          slash: { name: 'slash', thin: false, rounded: true, color: 'currentColor' },
+          'flag-slash': { name: 'slash', thin: false, scale: 0.9, position: '8px, 6px' }
+        },
         composed: {
           'add-to-folder': { icon: 'folder', badge: 'add-badge' },
           'move-to': { icon: 'folder', badge: 'move-badge' },
@@ -45,7 +49,7 @@
             layers: [
               { name: 'flag', filled: true, color: 'var(--le-color-warning)' },
               { name: 'flag', mask: false },
-              { name: 'slash', thin: false, scale: 0.9, position: '8px, 6px' }
+              'flag-slash'
             ]
           },
         },
@@ -425,8 +429,7 @@
       <le-icon name="flag" thin rounded size="48"></le-icon>
       <le-icon name="flag" thin filled size="48"></le-icon>
       <le-icon name="flag" thin rounded filled size="48"></le-icon>
-      <le-icon name="flag" style="--le-icon-color: green" layers='[{"icon": "slash"}]' thin rounded filled
-        size="48"></le-icon>
+      <le-icon name="flag" style="--le-icon-color: green" layers="flag-slash" thin rounded filled size="48"></le-icon>
       <le-icon name="slash" thin rounded filled size="48"></le-icon>
       <le-icon name="flag-orange" size="32"></le-icon>
     </div>
@@ -535,23 +538,23 @@
     <span style="display: inline-block; width: 16px;"></span>
     <le-icon name="undo" size="32"></le-icon>
     <le-icon name="redo" size="32"></le-icon>
-    <span style="display: inline-block; width: 16px;"></span>
-    <le-icon name="align-left" size="32"></le-icon>
-    <le-icon name="align-center" size="32"></le-icon>
-    <le-icon name="align-right" size="32"></le-icon>
-    <le-icon name="align-justify" size="32"></le-icon>
+    <br />
+    <le-icon name="align-left" size="32" rounded thin></le-icon>
+    <le-icon name="align-center" size="32" rounded></le-icon>
+    <le-icon name="align-right" layers="slash" size="32" thin></le-icon>
+    <le-icon name="align-justify" size="32" rounded></le-icon>
     <le-icon name="line-spacing" size="32"></le-icon>
-    <span style="display: inline-block; width: 16px;"></span>
+    <br />
     <le-icon name="bullet-list" size="32"></le-icon>
     <le-icon name="numbered-list" size="32"></le-icon>
     <le-icon name="check-list" size="32"></le-icon>
     <le-icon name="increase-indent" size="32"></le-icon>
     <le-icon name="decrease-indent" size="32"></le-icon>
     <br />
-    <le-icon name="chevron-left" size="24"></le-icon>
-    <le-icon name="chevron-up" size="24"></le-icon>
-    <le-icon name="chevron-down" size="24"></le-icon>
-    <le-icon name="chevron-right" size="24"></le-icon>
+    <le-icon name="chevron-left" size="24" rounded></le-icon>
+    <le-icon name="chevron-up" size="24" rounded></le-icon>
+    <le-icon name="chevron-down" size="24" rounded></le-icon>
+    <le-icon name="chevron-right" size="24" rounded></le-icon>
     <br />
     <le-icon name="plus" size="24"></le-icon>
     <le-icon name="plus-square" size="24"></le-icon>

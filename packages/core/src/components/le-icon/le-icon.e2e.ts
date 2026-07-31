@@ -176,4 +176,32 @@ describe('le-icon e2e', () => {
     const svg = await page.find('le-icon >>> svg');
     expect(svg).not.toBeNull();
   });
+
+  it('supports concise comma-separated layers string syntax (e.g. layers="file, folder")', async () => {
+    const page = await newE2EPage({ html: '<le-icon name="file" layers="folder, notifications"></le-icon>' });
+    await page.waitForChanges();
+
+    const svg = await page.find('le-icon >>> svg');
+    expect(svg).not.toBeNull();
+  });
+
+  it('resolves global layer preset definitions registered via configureLeKit', async () => {
+    const page = await newE2EPage();
+    await page.evaluateOnNewDocument(() => {
+      (window as any).LE_KIT_CONFIG = {
+        icons: {
+          file: { viewBox: '0 0 16 16', children: [{ tag: 'path', d: 'M0 0 L16 16' }] },
+          folder: { viewBox: '0 0 16 16', children: [{ tag: 'path', d: 'M2 2 L14 14' }] },
+          layers: {
+            slash: { name: 'folder', thin: false, opacity: 0.8 },
+          },
+        },
+      };
+    });
+    await page.setContent('<le-icon name="file" layers="slash"></le-icon>');
+    await page.waitForChanges();
+
+    const svg = await page.find('le-icon >>> svg');
+    expect(svg).not.toBeNull();
+  });
 });

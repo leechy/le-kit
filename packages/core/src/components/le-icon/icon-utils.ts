@@ -184,24 +184,68 @@ export function computeLayerTransform(
 }
 
 /**
- * Parses the layers JSON string prop into an array of LayerConfig objects.
- * Returns an empty array if the input is falsy or invalid.
+ * Parses the layers prop (string, JSON array, or array of configs/names)
+ * into an array of resolved LayerConfig objects, applying any global layer presets.
  */
-export function parseLayers(layersStr: string | undefined): LayerConfig[] {
-  if (!layersStr) {
+export function parseLayers(
+  layersInput: string | Array<LayerConfig | string> | undefined,
+  globalLayersMap?: Record<string, LayerConfig>,
+): LayerConfig[] {
+  if (!layersInput) {
     return [];
   }
-  try {
-    const parsed = JSON.parse(layersStr);
-    if (Array.isArray(parsed)) {
-      return parsed.map(item => ({
-        ...item,
-        name: item.name || item.icon || '',
-      }));
+
+  let items: any[] = [];
+
+  if (typeof layersInput === 'string') {
+    const trimmed = layersInput.trim();
+    if (!trimmed) return [];
+    if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        items = Array.isArray(parsed) ? parsed : [parsed];
+      } catch {
+        console.error('le-icon: Invalid layers JSON:', layersInput);
+        return [];
+      }
+    } else {
+      // Comma-separated string format, e.g. "slash" or "slash, check"
+      items = trimmed.split(',').map(s => s.trim()).filter(Boolean);
     }
-    return [];
-  } catch {
-    console.error('le-icon: Invalid layers JSON:', layersStr);
-    return [];
+  } else if (Array.isArray(layersInput)) {
+    items = layersInput;
   }
+
+  const layersPresetMap = globalLayersMap || {};
+
+  return items.map(item => {
+    if (typeof item === 'string') {
+      const preset = layersPresetMap[item];
+      if (preset) {
+        return {
+          ...preset,
+          name: preset.name || item,
+        };
+      }
+      return { name: item };
+    }
+
+    if (item && typeof item === 'object') {
+      const rawName = item.name || item.icon || '';
+      const preset = layersPresetMap[rawName];
+      if (preset) {
+        return {
+          ...preset,
+          ...item,
+          name: item.name || item.icon || preset.name || rawName,
+        };
+      }
+      return {
+        ...item,
+        name: rawName,
+      };
+    }
+
+    return { name: '' };
+  });
 }

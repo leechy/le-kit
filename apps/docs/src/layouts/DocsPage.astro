@@ -16,14 +16,6 @@ const documentTitle = isDocsIndex
   ? "Le-Kit Documentation"
   : `${title} ⁃ Le-Kit Documentation`;
 
-const breadcrumbItems = isDocsIndex
-  ? [{ label: "Le-Kit", href: "/" }, { label: "Documentation" }]
-  : [
-      { label: "Le-Kit", href: "/" },
-      { label: "Documentation", href: "/docs" },
-      { label: title },
-    ];
-
 const escapeAttribute = (value: string) =>
   value
     .replaceAll("&", "&amp;")
@@ -54,7 +46,7 @@ const renderNavigationItems = (items: NavItem[]): string =>
 const navigationMarkup = renderNavigationItems(docsNavigationItems);
 ---
 
-<Layout title={documentTitle}>
+<Layout title={documentTitle} sidePanelId="docs-navigation">
   <le-side-panel
     panel-id="docs-navigation"
     persist-key="docs-panel"
@@ -62,6 +54,7 @@ const navigationMarkup = renderNavigationItems(docsNavigationItems);
     margin="var(--le-spacing-2)"
     collapse-at="900"
     collapse-behavior="overlay"
+    show-close-button={false}
     sticky
     full-height
     resizable
@@ -76,23 +69,6 @@ const navigationMarkup = renderNavigationItems(docsNavigationItems);
     </le-navigation>
 
     <div class="content">
-      <le-breadcrumbs
-        items={JSON.stringify(breadcrumbItems)}
-        class="site-navigation"
-      >
-        <le-side-panel-toggle
-          slot="start"
-          panel-id="docs-navigation"
-          action="toggle"
-          shortcut="Mod+B"
-          variant="clear"
-          icon-only="true"
-          style="--le-button-icon-only-padding: var(--le-spacing-1);"
-        >
-          <le-icon slot="icon-only" name="side-panel-start"></le-icon>
-        </le-side-panel-toggle>
-      </le-breadcrumbs>
-
       {
         pageType === "index" ? (
           <main class="bento-page">

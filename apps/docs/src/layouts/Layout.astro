@@ -11,9 +11,10 @@ import '@fontsource-variable/sofia-sans-semi-condensed/wght.css';
 
 interface Props {
   title: string;
+  sidePanelId?: string;
 }
 
-const { title } = Astro.props;
+const { title, sidePanelId } = Astro.props;
 const currentYear = new Date().getFullYear();
 
 let coreVersion = 'dev';
@@ -104,6 +105,19 @@ try {
           <img src="/le-kit.svg" alt="le-kit logo" class="header--logo" />
         </a>
         <span class="header--version">v{coreVersion}</span>
+        {
+          sidePanelId && (
+            <le-side-panel-toggle
+              panel-id={sidePanelId}
+              action="toggle"
+              shortcut="Mod+B"
+              variant="clear"
+              icon-only="true"
+            >
+              <le-icon slot="icon-only" name="side-panel-start" />
+            </le-side-panel-toggle>
+          )
+        }
       </div>
       <le-navigation slot="end" overflow-mode="hamburger" hamburger-align="end">
         {

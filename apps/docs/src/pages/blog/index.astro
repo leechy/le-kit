@@ -42,7 +42,7 @@ const monthLabel = (month: string) => {
 const dateFormatter = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
 ---
 
-<Layout title="Blog - Le-Kit">
+<Layout title="Blog - Le-Kit" sidePanelId="blog-navigation">
   <le-side-panel
     panel-id="blog-navigation"
     persist-key="blog-panel"
@@ -50,6 +50,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
     margin="var(--le-spacing-2)"
     collapse-at="900"
     collapse-behavior="overlay"
+    show-close-button={false}
     sticky
     full-height
     resizable
@@ -92,22 +93,6 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
     <div>
       <main class="blog-page">
         <header class="blog-hero">
-          <le-breadcrumbs
-            items='[{"label":"Le-Kit","href":"/"},{"label":"Blog"}]'
-          >
-            <le-side-panel-toggle
-              slot="start"
-              panel-id="blog-navigation"
-              action="toggle"
-              shortcut="Mod+B"
-              variant="clear"
-              icon-only="true"
-              style="--le-button-icon-only-padding: var(--le-space-xs);"
-            >
-              <le-icon slot="icon-only" name="side-panel-start"></le-icon>
-            </le-side-panel-toggle>
-          </le-breadcrumbs>
-
           <h1>Blog</h1>
           <p>Small notes, experiments, and updates about Le-Kit.</p>
         </header>

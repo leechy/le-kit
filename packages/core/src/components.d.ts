@@ -1198,10 +1198,9 @@ export namespace Components {
          */
         "sharp"?: boolean;
         /**
-          * Size of the icon in pixels. Default is 16.
-          * @default 16
+          * Size of the icon in pixels or CSS value. If omitted, controlled by CSS `--le-icon-size` (default: 16px).
          */
-        "size": number;
+        "size"?: number | string;
         /**
           * Whether to use thin variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultThin`).
          */
@@ -5534,10 +5533,9 @@ declare namespace LocalJSX {
          */
         "sharp"?: boolean;
         /**
-          * Size of the icon in pixels. Default is 16.
-          * @default 16
+          * Size of the icon in pixels or CSS value. If omitted, controlled by CSS `--le-icon-size` (default: 16px).
          */
-        "size"?: number;
+        "size"?: number | string;
         /**
           * Whether to use thin variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultThin`).
          */
@@ -7487,7 +7485,7 @@ declare namespace LocalJSX {
     }
     interface LeIconAttributes {
         "name": string;
-        "size": number;
+        "size": string;
         "viewBox": string;
         "badge": string;
         "badgePosition": string;

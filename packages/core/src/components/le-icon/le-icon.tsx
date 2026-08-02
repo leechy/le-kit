@@ -2,7 +2,7 @@
  * Based on the script from Paul Andreson's article:
  * https://paulcpederson.com/articles/stencil-icons/
  */
-import { Build, Component, Element, getAssetPath, h, Prop, State, Watch } from '@stencil/core';
+import { Build, Component, Element, getAssetPath, h, Host, Prop, State, Watch } from '@stencil/core';
 import {
   getAssetBasePath,
   getComposedIcon,
@@ -89,9 +89,9 @@ export class LeIcon {
   @Prop() name?: string = undefined;
 
   /**
-   * Size of the icon in pixels. Default is 16.
+   * Size of the icon in pixels or CSS value. If omitted, controlled by CSS `--le-icon-size` (default: 16px).
    */
-  @Prop() size: number = 16;
+  @Prop() size?: number | string;
 
   /**
    * Custom viewBox for the SVG. When set, overrides the viewBox from the loaded icon data.
@@ -964,19 +964,30 @@ export class LeIcon {
 
   render() {
     const viewBox = this.resolveViewBox();
+    const sizeStyle =
+      this.size !== undefined && this.size !== null && this.size !== ''
+        ? {
+            '--le-icon-size':
+              typeof this.size === 'number' || !isNaN(Number(this.size))
+                ? `${this.size}px`
+                : String(this.size),
+          }
+        : undefined;
 
     return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="currentColor"
-        height={this.size || 16}
-        width={this.size || 16}
-        viewBox={viewBox}
-      >
-        {this.hasOverlays()
-          ? this.renderComposed()
-          : this.renderSVGContent(this.iconData?.children)}
-      </svg>
+      <Host style={sizeStyle}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          width="100%"
+          height="100%"
+          viewBox={viewBox}
+        >
+          {this.hasOverlays()
+            ? this.renderComposed()
+            : this.renderSVGContent(this.iconData?.children)}
+        </svg>
+      </Host>
     );
   }
 }

@@ -828,7 +828,7 @@ The header component updates that variable when it renders.
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
 | `name` | `string \| undefined` | `undefined` | Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file. |
-| `size` | `number` | `16` | Size of the icon in pixels. Default is 16. |
+| `size` | `number \| string \| undefined` |  | Size of the icon in pixels or CSS value. If omitted, controlled by CSS `--le-icon-size` (default: 16px). |
 | `viewBox` | `string \| undefined` |  | Custom viewBox for the SVG. When set, overrides the viewBox from the loaded icon data. Useful for layer-only compositions without a base icon. |
 | `badge` | `string \| undefined` |  | Name of a badge icon to overlay on top of the base icon. The badge icon is loaded and composed with mask-based knockout. |
 | `badgePosition` | `string \| undefined` |  | Position of the badge icon within the base icon's viewBox. Comma-separated x,y values in viewBox units or percentages. Positive values = from start/top, Negative values = from end/bottom. Percentages work like CSS background-position. Default: "-5, -5" (bottom-right area). |

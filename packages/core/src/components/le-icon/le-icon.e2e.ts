@@ -204,4 +204,29 @@ describe('le-icon e2e', () => {
     const svg = await page.find('le-icon >>> svg');
     expect(svg).not.toBeNull();
   });
+
+  it('completely removes elements when variant sets tag to null or remove/hidden to true', async () => {
+    const page = await renderIcon(
+      '<le-icon name="side-panel-start" filled></le-icon>',
+      {
+        'side-panel-start': {
+          viewBox: '0 0 16 16',
+          children: [
+            { tag: 'path', d: 'M0 0 L16 16' },
+            { tag: 'rect', x: '0', y: '0', width: '10', height: '10', filled: { tag: null } },
+            { tag: 'circle', cx: '5', cy: '5', r: '2', filled: { remove: true } },
+          ],
+        },
+      },
+    );
+
+    const rects = await page.findAll('le-icon >>> rect');
+    expect(rects.length).toBe(0);
+    const circles = await page.findAll('le-icon >>> circle');
+    expect(circles.length).toBe(0);
+    const undefinedEls = await page.findAll('le-icon >>> undefined');
+    expect(undefinedEls.length).toBe(0);
+    const paths = await page.findAll('le-icon >>> path');
+    expect(paths.length).toBe(1);
+  });
 });

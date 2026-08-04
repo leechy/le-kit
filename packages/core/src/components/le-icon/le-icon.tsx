@@ -589,6 +589,10 @@ export class LeIcon {
     if (!rawNode) return null;
 
     const node = this.resolveNode(rawNode, overrides);
+    if (!node || !node.tag || node.remove === true || node.hidden === true) {
+      return null;
+    }
+
     const { tag, children, ...attrs } = node;
 
     // Adjust stroke-width to counteract the group transform scale
@@ -599,7 +603,11 @@ export class LeIcon {
       }
     }
 
-    return h(tag, attrs, children ? children.map((child: any) => this.createElement(child, inverseScale, overrides)) : null);
+    const renderedChildren = children
+      ? children.map((child: any) => this.createElement(child, inverseScale, overrides)).filter(Boolean)
+      : null;
+
+    return h(tag, attrs, renderedChildren);
   }
 
   /**
@@ -617,7 +625,7 @@ export class LeIcon {
       return [];
     }
 
-    return children.map(child => this.createElement(child, inverseScale, overrides));
+    return children.map(child => this.createElement(child, inverseScale, overrides)).filter(Boolean);
   }
 
   /**
@@ -697,9 +705,10 @@ export class LeIcon {
   ): any[] {
     if (!maskShape) return [];
     if (Array.isArray(maskShape)) {
-      return maskShape.map(node => this.createElement(node, scale, overrides));
+      return maskShape.map(node => this.createElement(node, scale, overrides)).filter(Boolean);
     }
-    return [this.createElement(maskShape, scale, overrides)];
+    const el = this.createElement(maskShape, scale, overrides);
+    return el ? [el] : [];
   }
 
   /**

@@ -918,6 +918,306 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-bento-grid/le-bento-grid.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A responsive bento-style CSS grid container.\n\n`le-bento-grid` creates a dense auto-filling grid using `auto-fill` with\n`minmax()` columns. Pair it with `le-bento-tile` children that declare\nhow many columns and rows they should span.\n\nAll sizing props can also be controlled purely via CSS custom properties —\nuseful when you want to configure from a stylesheet or a parent component.\nIf a prop is set, it writes the corresponding CSS custom property as an\ninline style (which overrides any external stylesheet value).",
+          "name": "LeBentoGrid",
+          "cssProperties": [
+            {
+              "description": "Minimum column track width (default 200px)",
+              "name": "--le-bento-col-min"
+            },
+            {
+              "description": "Maximum column track width (default 250px)",
+              "name": "--le-bento-col-max"
+            },
+            {
+              "description": "Minimum number of columns before overflow",
+              "name": "--le-bento-min-columns"
+            },
+            {
+              "description": "Maximum number of columns before wrapping",
+              "name": "--le-bento-max-columns"
+            },
+            {
+              "description": "Height of each row unit (default 110px)",
+              "name": "--le-bento-row-height"
+            },
+            {
+              "description": "Gap between tiles (default 12px)",
+              "name": "--le-bento-gap"
+            },
+            {
+              "description": "Maximum grid container width (default none)",
+              "name": "--le-bento-max-width"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The inner grid wrapper element",
+              "name": "grid"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Accepts `le-bento-tile` elements (or any block-level content)",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "columnMinWidth",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Minimum column width in pixels (maps to the `min` of CSS `minmax()`).\nControls how narrow a column can be before wrapping."
+            },
+            {
+              "kind": "field",
+              "name": "columnMaxWidth",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum column width in pixels (maps to the `max` of CSS `minmax()`).\nThe grid stops adding columns when dividing `max-width` by this value."
+            },
+            {
+              "kind": "field",
+              "name": "minColumns",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Minimum number of columns before overflow.\nSets component `min-width` as:\n`columnMinWidth * minColumns + gap * (minColumns - 1)`."
+            },
+            {
+              "kind": "field",
+              "name": "maxColumns",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum number of columns before the grid wraps.\n\nWhen set, this takes precedence over `maxWidth` and computes the grid's\neffective maximum width as:\n`maxColumns * columnMaxWidth + (maxColumns - 1) * gap`\n\nThis is useful when you want an explicit column cap without manually\naccounting for the gaps between tracks."
+            },
+            {
+              "kind": "field",
+              "name": "maxWidth",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum overall width of the grid in pixels.\n Ignored when `maxColumns` is set."
+            },
+            {
+              "kind": "field",
+              "name": "rowHeight",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Height of each row unit in pixels.\nA tile with `rows=\"2\"` will be `2 × rowHeight + gap` tall."
+            },
+            {
+              "kind": "field",
+              "name": "gap",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Gap between tiles in pixels."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "column-min-width",
+              "fieldName": "columnMinWidth",
+              "description": "Minimum column width in pixels (maps to the `min` of CSS `minmax()`).\nControls how narrow a column can be before wrapping.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "column-max-width",
+              "fieldName": "columnMaxWidth",
+              "description": "Maximum column width in pixels (maps to the `max` of CSS `minmax()`).\nThe grid stops adding columns when dividing `max-width` by this value.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "min-columns",
+              "fieldName": "minColumns",
+              "description": "Minimum number of columns before overflow.\nSets component `min-width` as:\n`columnMinWidth * minColumns + gap * (minColumns - 1)`.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "max-columns",
+              "fieldName": "maxColumns",
+              "description": "Maximum number of columns before the grid wraps.\n\nWhen set, this takes precedence over `maxWidth` and computes the grid's\neffective maximum width as:\n`maxColumns * columnMaxWidth + (maxColumns - 1) * gap`\n\nThis is useful when you want an explicit column cap without manually\naccounting for the gaps between tracks.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "max-width",
+              "fieldName": "maxWidth",
+              "description": "Maximum overall width of the grid in pixels.\n Ignored when `maxColumns` is set.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "row-height",
+              "fieldName": "rowHeight",
+              "description": "Height of each row unit in pixels.\nA tile with `rows=\"2\"` will be `2 × rowHeight + gap` tall.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "gap",
+              "fieldName": "gap",
+              "description": "Gap between tiles in pixels.",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-bento-grid",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeBentoGrid",
+          "declaration": {
+            "name": "LeBentoGrid",
+            "module": "src/components/le-bento-grid/le-bento-grid.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-bento-grid",
+          "declaration": {
+            "name": "LeBentoGrid",
+            "module": "src/components/le-bento-grid/le-bento-grid.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-bento-tile/le-bento-tile.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A single tile for use inside `le-bento-grid`.\n\nDeclares how many columns and rows it should span in the bento grid.\nVisual appearance (border-radius, shadow) is controlled via CSS custom\nproperties so themes can override them.",
+          "name": "LeBentoTile",
+          "cssProperties": [
+            {
+              "description": "Border radius (default: var(--le-radius-xl, 0.75rem))",
+              "name": "--le-bento-tile-radius"
+            },
+            {
+              "description": "Box shadow (default: subtle multi-layer shadow)",
+              "name": "--le-bento-tile-shadow"
+            },
+            {
+              "description": "Background color (default: transparent)",
+              "name": "--le-bento-tile-bg"
+            },
+            {
+              "description": "Inner padding (default: 0)",
+              "name": "--le-bento-tile-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The inner tile wrapper element",
+              "name": "tile"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Content displayed inside the tile",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "cols",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of grid columns this tile should span."
+            },
+            {
+              "kind": "field",
+              "name": "rows",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of grid rows this tile should span."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "cols",
+              "fieldName": "cols",
+              "default": "1",
+              "description": "Number of grid columns this tile should span.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "rows",
+              "fieldName": "rows",
+              "default": "1",
+              "description": "Number of grid rows this tile should span.",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-bento-tile",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeBentoTile",
+          "declaration": {
+            "name": "LeBentoTile",
+            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-bento-tile",
+          "declaration": {
+            "name": "LeBentoTile",
+            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-box/le-box.tsx",
       "declarations": [
         {
@@ -1355,1027 +1655,6 @@
           "declaration": {
             "name": "LeBox",
             "module": "src/components/le-box/le-box.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-bento-grid/le-bento-grid.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A responsive bento-style CSS grid container.\n\n`le-bento-grid` creates a dense auto-filling grid using `auto-fill` with\n`minmax()` columns. Pair it with `le-bento-tile` children that declare\nhow many columns and rows they should span.\n\nAll sizing props can also be controlled purely via CSS custom properties —\nuseful when you want to configure from a stylesheet or a parent component.\nIf a prop is set, it writes the corresponding CSS custom property as an\ninline style (which overrides any external stylesheet value).",
-          "name": "LeBentoGrid",
-          "cssProperties": [
-            {
-              "description": "Minimum column track width (default 200px)",
-              "name": "--le-bento-col-min"
-            },
-            {
-              "description": "Maximum column track width (default 250px)",
-              "name": "--le-bento-col-max"
-            },
-            {
-              "description": "Minimum number of columns before overflow",
-              "name": "--le-bento-min-columns"
-            },
-            {
-              "description": "Maximum number of columns before wrapping",
-              "name": "--le-bento-max-columns"
-            },
-            {
-              "description": "Height of each row unit (default 110px)",
-              "name": "--le-bento-row-height"
-            },
-            {
-              "description": "Gap between tiles (default 12px)",
-              "name": "--le-bento-gap"
-            },
-            {
-              "description": "Maximum grid container width (default none)",
-              "name": "--le-bento-max-width"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The inner grid wrapper element",
-              "name": "grid"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Accepts `le-bento-tile` elements (or any block-level content)",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "columnMinWidth",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Minimum column width in pixels (maps to the `min` of CSS `minmax()`).\nControls how narrow a column can be before wrapping."
-            },
-            {
-              "kind": "field",
-              "name": "columnMaxWidth",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum column width in pixels (maps to the `max` of CSS `minmax()`).\nThe grid stops adding columns when dividing `max-width` by this value."
-            },
-            {
-              "kind": "field",
-              "name": "minColumns",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Minimum number of columns before overflow.\nSets component `min-width` as:\n`columnMinWidth * minColumns + gap * (minColumns - 1)`."
-            },
-            {
-              "kind": "field",
-              "name": "maxColumns",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum number of columns before the grid wraps.\n\nWhen set, this takes precedence over `maxWidth` and computes the grid's\neffective maximum width as:\n`maxColumns * columnMaxWidth + (maxColumns - 1) * gap`\n\nThis is useful when you want an explicit column cap without manually\naccounting for the gaps between tracks."
-            },
-            {
-              "kind": "field",
-              "name": "maxWidth",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Maximum overall width of the grid in pixels.\n Ignored when `maxColumns` is set."
-            },
-            {
-              "kind": "field",
-              "name": "rowHeight",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Height of each row unit in pixels.\nA tile with `rows=\"2\"` will be `2 × rowHeight + gap` tall."
-            },
-            {
-              "kind": "field",
-              "name": "gap",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Gap between tiles in pixels."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "column-min-width",
-              "fieldName": "columnMinWidth",
-              "description": "Minimum column width in pixels (maps to the `min` of CSS `minmax()`).\nControls how narrow a column can be before wrapping.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "column-max-width",
-              "fieldName": "columnMaxWidth",
-              "description": "Maximum column width in pixels (maps to the `max` of CSS `minmax()`).\nThe grid stops adding columns when dividing `max-width` by this value.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "min-columns",
-              "fieldName": "minColumns",
-              "description": "Minimum number of columns before overflow.\nSets component `min-width` as:\n`columnMinWidth * minColumns + gap * (minColumns - 1)`.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "max-columns",
-              "fieldName": "maxColumns",
-              "description": "Maximum number of columns before the grid wraps.\n\nWhen set, this takes precedence over `maxWidth` and computes the grid's\neffective maximum width as:\n`maxColumns * columnMaxWidth + (maxColumns - 1) * gap`\n\nThis is useful when you want an explicit column cap without manually\naccounting for the gaps between tracks.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "max-width",
-              "fieldName": "maxWidth",
-              "description": "Maximum overall width of the grid in pixels.\n Ignored when `maxColumns` is set.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "row-height",
-              "fieldName": "rowHeight",
-              "description": "Height of each row unit in pixels.\nA tile with `rows=\"2\"` will be `2 × rowHeight + gap` tall.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "gap",
-              "fieldName": "gap",
-              "description": "Gap between tiles in pixels.",
-              "type": {
-                "text": "number"
-              }
-            }
-          ],
-          "tagName": "le-bento-grid",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeBentoGrid",
-          "declaration": {
-            "name": "LeBentoGrid",
-            "module": "src/components/le-bento-grid/le-bento-grid.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-bento-grid",
-          "declaration": {
-            "name": "LeBentoGrid",
-            "module": "src/components/le-bento-grid/le-bento-grid.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-bento-tile/le-bento-tile.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A single tile for use inside `le-bento-grid`.\n\nDeclares how many columns and rows it should span in the bento grid.\nVisual appearance (border-radius, shadow) is controlled via CSS custom\nproperties so themes can override them.",
-          "name": "LeBentoTile",
-          "cssProperties": [
-            {
-              "description": "Border radius (default: var(--le-radius-xl, 0.75rem))",
-              "name": "--le-bento-tile-radius"
-            },
-            {
-              "description": "Box shadow (default: subtle multi-layer shadow)",
-              "name": "--le-bento-tile-shadow"
-            },
-            {
-              "description": "Background color (default: transparent)",
-              "name": "--le-bento-tile-bg"
-            },
-            {
-              "description": "Inner padding (default: 0)",
-              "name": "--le-bento-tile-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The inner tile wrapper element",
-              "name": "tile"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Content displayed inside the tile",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "cols",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Number of grid columns this tile should span."
-            },
-            {
-              "kind": "field",
-              "name": "rows",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Number of grid rows this tile should span."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "cols",
-              "fieldName": "cols",
-              "default": "1",
-              "description": "Number of grid columns this tile should span.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "rows",
-              "fieldName": "rows",
-              "default": "1",
-              "description": "Number of grid rows this tile should span.",
-              "type": {
-                "text": "number"
-              }
-            }
-          ],
-          "tagName": "le-bento-tile",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeBentoTile",
-          "declaration": {
-            "name": "LeBentoTile",
-            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-bento-tile",
-          "declaration": {
-            "name": "LeBentoTile",
-            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
-          "cssProperties": [
-            {
-              "description": "Card background color",
-              "name": "--le-card-bg"
-            },
-            {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
-            },
-            {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
-              "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              }
-            },
-            {
-              "name": "interactive",
-              "fieldName": "interactive",
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-card",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCard",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-card",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-button-group/le-button-group.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Groups multiple `le-button` elements and optionally collapses low-priority actions\ninto an overflow \"more\" menu.",
-          "name": "LeButtonGroup",
-          "cssParts": [
-            {
-              "description": "The grouped buttons frame",
-              "name": "group"
-            },
-            {
-              "description": "The overflow trigger button",
-              "name": "more-button"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Group button elements (`le-button` children)",
-              "name": ""
-            },
-            {
-              "description": "Custom icon/content for the overflow trigger button",
-              "name": "more"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional label used when the whole group is represented as a parent item\ninside another component's overflow menu."
-            },
-            {
-              "kind": "field",
-              "name": "collapse",
-              "type": {
-                "text": "boolean | number | string | undefined"
-              },
-              "description": "Collapse mode.\n\n- `true`: show only the top-priority button\n- positive number: show top N buttons\n- `0`: show only the more button\n- negative number: hide abs(N) lowest-priority buttons\n\nNon-integers are rounded with `Math.round`."
-            },
-            {
-              "kind": "field",
-              "name": "overflowIcons",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When true, icons from collapsed buttons are shown in the overflow navigation list."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disabled attribute, when the button group is disabled,\nall buttons inside will be disabled and the overflow menu will not be accessible."
-            },
-            {
-              "kind": "field",
-              "name": "visibility",
-              "type": {
-                "text": "'visible' | 'collapsing' | 'collapsed' | 'expanding'"
-              },
-              "default": "'visible'",
-              "description": "Visibility state used by responsive containers such as le-toolbar."
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "'radio' | 'checkbox' | undefined"
-              },
-              "description": "Selection type: radio (single select) or checkbox (multi select)"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string | string[] | undefined"
-              },
-              "description": "Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[]."
-            },
-            {
-              "kind": "field",
-              "name": "overflowItems",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "hasOverflow",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "buttonSlots",
-              "type": {
-                "text": "string[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "mutationObserver",
-              "type": {
-                "text": "MutationObserver | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "instanceId",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "syncingLayout",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "pendingSync",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "hasAuthorCollapse",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "buttonMap",
-              "type": {
-                "text": "Map<string, HTMLElement>"
-              },
-              "privacy": "private",
-              "default": "new Map()"
-            },
-            {
-              "kind": "method",
-              "name": "handleCollapseChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleOverflowIconsChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleDisabledChange",
-              "parameters": [
-                {
-                  "name": "newValue",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleValueChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleTypeChange"
-            },
-            {
-              "kind": "method",
-              "name": "getItemsMeta",
-              "return": {
-                "type": {
-                  "text": "Promise<LeButtonGroupItemsMeta>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getToolbarOverflowGroupOption",
-              "return": {
-                "type": {
-                  "text": "Promise<LeOption>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "whenLayoutSettled",
-              "return": {
-                "type": {
-                  "text": "Promise<void>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getToolbarOverflowItems",
-              "return": {
-                "type": {
-                  "text": "Promise<LeOption[]>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getCollapseMeta",
-              "return": {
-                "type": {
-                  "text": "Promise<LeCollapseMeta>"
-                }
-              },
-              "description": "Returns collapse meta for toolbar integration."
-            },
-            {
-              "kind": "method",
-              "name": "getButtonChildren",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "HTMLElement[]"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "syncButtonSlots",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string[]"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "buttons",
-                  "type": {
-                    "text": "HTMLElement[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getVisibilityState",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "'visible' | 'collapsed'"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "string | null"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setDisabledState",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getGroupLabel",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "isFullyCollapsed",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getToolbarVisibleCountsSync",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "number[]"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getButtonId",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getButtonPriority",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "number"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "parseCollapseValue",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "{ active: boolean; visibleCount: number }"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "totalButtons",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildOverflowOption",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "Promise<LeOption>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "item",
-                  "type": {
-                    "text": "RankedButton"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getButtonValue",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "syncSelectionFromValue",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleFieldsetClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "selectRadioButton",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "clickedButton",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "toggleCheckboxButton",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "clickedButton",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "syncLayout",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleOverflowSelect",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "Optional label used when the whole group is represented as a parent item\ninside another component's overflow menu.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "collapse",
-              "fieldName": "collapse",
-              "description": "Collapse mode.\n\n- `true`: show only the top-priority button\n- positive number: show top N buttons\n- `0`: show only the more button\n- negative number: hide abs(N) lowest-priority buttons\n\nNon-integers are rounded with `Math.round`.",
-              "type": {
-                "text": "boolean | number | string"
-              }
-            },
-            {
-              "name": "overflow-icons",
-              "fieldName": "overflowIcons",
-              "default": "false",
-              "description": "When true, icons from collapsed buttons are shown in the overflow navigation list.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Disabled attribute, when the button group is disabled,\nall buttons inside will be disabled and the overflow menu will not be accessible.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "visibility",
-              "fieldName": "visibility",
-              "default": "'visible'",
-              "description": "Visibility state used by responsive containers such as le-toolbar.",
-              "type": {
-                "text": "'visible' | 'collapsing' | 'collapsed' | 'expanding'"
-              }
-            },
-            {
-              "name": "type",
-              "fieldName": "type",
-              "description": "Selection type: radio (single select) or checkbox (multi select)",
-              "type": {
-                "text": "'radio' | 'checkbox'"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[].",
-              "type": {
-                "text": "string | string[]"
-              }
-            }
-          ],
-          "tagName": "le-button-group",
-          "events": [
-            {
-              "name": "leOverflowSelect",
-              "type": {
-                "text": "EventEmitter<{ id: string }>"
-              }
-            },
-            {
-              "name": "leChange",
-              "type": {
-                "text": "EventEmitter<LeOptionSelectDetail | LeMultiOptionSelectDetail>"
-              }
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeButtonGroup",
-          "declaration": {
-            "name": "LeButtonGroup",
-            "module": "src/components/le-button-group/le-button-group.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-button-group",
-          "declaration": {
-            "name": "LeButtonGroup",
-            "module": "src/components/le-button-group/le-button-group.tsx"
           }
         }
       ]
@@ -3388,6 +2667,727 @@
           "declaration": {
             "name": "LeButton",
             "module": "src/components/le-button/le-button.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-button-group/le-button-group.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Groups multiple `le-button` elements and optionally collapses low-priority actions\ninto an overflow \"more\" menu.",
+          "name": "LeButtonGroup",
+          "cssParts": [
+            {
+              "description": "The grouped buttons frame",
+              "name": "group"
+            },
+            {
+              "description": "The overflow trigger button",
+              "name": "more-button"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Group button elements (`le-button` children)",
+              "name": ""
+            },
+            {
+              "description": "Custom icon/content for the overflow trigger button",
+              "name": "more"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional label used when the whole group is represented as a parent item\ninside another component's overflow menu."
+            },
+            {
+              "kind": "field",
+              "name": "collapse",
+              "type": {
+                "text": "boolean | number | string | undefined"
+              },
+              "description": "Collapse mode.\n\n- `true`: show only the top-priority button\n- positive number: show top N buttons\n- `0`: show only the more button\n- negative number: hide abs(N) lowest-priority buttons\n\nNon-integers are rounded with `Math.round`."
+            },
+            {
+              "kind": "field",
+              "name": "overflowIcons",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When true, icons from collapsed buttons are shown in the overflow navigation list."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disabled attribute, when the button group is disabled,\nall buttons inside will be disabled and the overflow menu will not be accessible."
+            },
+            {
+              "kind": "field",
+              "name": "visibility",
+              "type": {
+                "text": "'visible' | 'collapsing' | 'collapsed' | 'expanding'"
+              },
+              "default": "'visible'",
+              "description": "Visibility state used by responsive containers such as le-toolbar."
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'radio' | 'checkbox' | undefined"
+              },
+              "description": "Selection type: radio (single select) or checkbox (multi select)"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string | string[] | undefined"
+              },
+              "description": "Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[]."
+            },
+            {
+              "kind": "field",
+              "name": "overflowItems",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "hasOverflow",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "buttonSlots",
+              "type": {
+                "text": "string[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "mutationObserver",
+              "type": {
+                "text": "MutationObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "instanceId",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "syncingLayout",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "pendingSync",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "hasAuthorCollapse",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "buttonMap",
+              "type": {
+                "text": "Map<string, HTMLElement>"
+              },
+              "privacy": "private",
+              "default": "new Map()"
+            },
+            {
+              "kind": "method",
+              "name": "handleCollapseChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleOverflowIconsChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleDisabledChange",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleTypeChange"
+            },
+            {
+              "kind": "method",
+              "name": "getItemsMeta",
+              "return": {
+                "type": {
+                  "text": "Promise<LeButtonGroupItemsMeta>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getToolbarOverflowGroupOption",
+              "return": {
+                "type": {
+                  "text": "Promise<LeOption>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "whenLayoutSettled",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getToolbarOverflowItems",
+              "return": {
+                "type": {
+                  "text": "Promise<LeOption[]>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getCollapseMeta",
+              "return": {
+                "type": {
+                  "text": "Promise<LeCollapseMeta>"
+                }
+              },
+              "description": "Returns collapse meta for toolbar integration."
+            },
+            {
+              "kind": "method",
+              "name": "getButtonChildren",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "HTMLElement[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "syncButtonSlots",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "buttons",
+                  "type": {
+                    "text": "HTMLElement[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getVisibilityState",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "'visible' | 'collapsed'"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setDisabledState",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "disabled",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getGroupLabel",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isFullyCollapsed",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getToolbarVisibleCountsSync",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getButtonId",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getButtonPriority",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "parseCollapseValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "{ active: boolean; visibleCount: number }"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "totalButtons",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildOverflowOption",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Promise<LeOption>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "RankedButton"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getButtonValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "syncSelectionFromValue",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleFieldsetClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "selectRadioButton",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "clickedButton",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "toggleCheckboxButton",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "clickedButton",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "syncLayout",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOverflowSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "Optional label used when the whole group is represented as a parent item\ninside another component's overflow menu.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "collapse",
+              "fieldName": "collapse",
+              "description": "Collapse mode.\n\n- `true`: show only the top-priority button\n- positive number: show top N buttons\n- `0`: show only the more button\n- negative number: hide abs(N) lowest-priority buttons\n\nNon-integers are rounded with `Math.round`.",
+              "type": {
+                "text": "boolean | number | string"
+              }
+            },
+            {
+              "name": "overflow-icons",
+              "fieldName": "overflowIcons",
+              "default": "false",
+              "description": "When true, icons from collapsed buttons are shown in the overflow navigation list.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Disabled attribute, when the button group is disabled,\nall buttons inside will be disabled and the overflow menu will not be accessible.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "visibility",
+              "fieldName": "visibility",
+              "default": "'visible'",
+              "description": "Visibility state used by responsive containers such as le-toolbar.",
+              "type": {
+                "text": "'visible' | 'collapsing' | 'collapsed' | 'expanding'"
+              }
+            },
+            {
+              "name": "type",
+              "fieldName": "type",
+              "description": "Selection type: radio (single select) or checkbox (multi select)",
+              "type": {
+                "text": "'radio' | 'checkbox'"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[].",
+              "type": {
+                "text": "string | string[]"
+              }
+            }
+          ],
+          "tagName": "le-button-group",
+          "events": [
+            {
+              "name": "leOverflowSelect",
+              "type": {
+                "text": "EventEmitter<{ id: string }>"
+              }
+            },
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeOptionSelectDetail | LeMultiOptionSelectDetail>"
+              }
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeButtonGroup",
+          "declaration": {
+            "name": "LeButtonGroup",
+            "module": "src/components/le-button-group/le-button-group.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-button-group",
+          "declaration": {
+            "name": "LeButtonGroup",
+            "module": "src/components/le-button-group/le-button-group.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
           }
         }
       ]

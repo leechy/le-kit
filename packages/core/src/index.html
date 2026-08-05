@@ -472,108 +472,90 @@
       <le-button icon-start="file-copy::download-badge">Download</le-button>
     </div>
 
-    <h3>Component Controls</h3>
-    <le-icon name="side-panel" size="42" style="color: var(--le-color-primary);"></le-icon>
-    <le-icon name="side-panel-start" size="42" style="color: var(--le-color-primary);"></le-icon>
-    <le-icon name="side-panel-start" size="42" rounded></le-icon>
-    <le-icon name="side-panel-start" size="42" thin></le-icon>
-    <le-icon name="side-panel-start" size="42" rounded thin></le-icon>
-    <le-icon name="side-panel-start" size="42" filled></le-icon>
-    <le-icon name="side-panel-start" size="42" rounded filled></le-icon>
-    <le-icon name="side-panel-start" size="42" filled thin></le-icon>
-    <le-icon name="side-panel-start" size="42" rounded filled thin></le-icon>
-    <le-icon name="side-panel-end" size="42" style="color: var(--le-color-danger);"></le-icon>
-    <le-icon name="hamburger" size="42" style="color: var(--le-color-secondary);"></le-icon>
-    <le-icon name="ellipsis-horizontal" size="42" style="color: var(--le-color-danger);"></le-icon>
-    <le-icon name="ellipsis-vertical" size="42" style="color: var(--le-color-warning);"></le-icon>
-    <le-icon name="check" size="42" style="color: var(--le-color-success);"></le-icon>
-    <le-icon name="clear" size="42" style="color: var(--le-color-text);"></le-icon>
-    <br />
-    <le-icon name="arrow-left" badge="chevron-left" badge-scale="0.5" badge-opacity="0.8"
-      badge-color="var(--le-color-danger, #fc0)" size="32"></le-icon>
-    <le-icon name="arrow-right" size="32"></le-icon>
-
     <h3>Notification & Text Badges (count, max-count, badge-text, dot)</h3>
-    <p>1. Dot Badges (empty circle dot):</p>
     <div style="display: flex; align-items: center; gap: 20px;">
       <le-icon name="folder" dot size="32"></le-icon>
-      <le-icon name="file" badge-text size="32"></le-icon>
-      <le-icon name="file" dot badge-color="var(--le-color-primary)" size="32"></le-icon>
-    </div>
-
-    <p>2. Transparent Cutouts (default — cuts hole through icon to reveal background):</p>
-    <div style="display: flex; align-items: center; gap: 20px;">
-      <le-icon name="file" count="3" size="32"></le-icon>
-      <le-icon name="folder" badge-text=" " size="32"></le-icon>
-      <le-icon name="file" badge-text="!" size="32"></le-icon>
-    </div>
-
-    <p>2. Solid Colored Badges (custom badge-color & badge-text-color):</p>
-    <div style="display: flex; align-items: center; gap: 20px;">
-      <le-icon name="file" count="5" badge-color="var(--le-color-danger)" badge-text-color="#ffffff"
-        size="40"></le-icon>
-      <le-icon name="folder" count="128" max-count="99" badge-color="var(--le-color-primary)" badge-text-color="#ffffff"
-        size="40"></le-icon>
-      <le-icon name="file" badge-text="HOT" badge-color="#ef4444" badge-text-color="#ffffff" size="40"></le-icon>
-      <le-icon name="folder" badge-text="PRO" badge-color="#8b5cf6" badge-text-color="#ffffff" size="40"></le-icon>
-    </div>
-
-    <p>3. Styled Icons with Base Color, Opacity & Buttons:</p>
-    <div style="display: flex; align-items: center; gap: 20px;">
       <le-icon name="file" count="9" base-color="var(--le-color-primary)" badge-color="var(--le-color-danger)"
         size="40"></le-icon>
+      <le-icon name="folder" badge-text="PRO" badge-color="#8b5cf6" badge-text-color="#ffffff" size="40"></le-icon>
       <le-icon name="notifications" count="5" max-count="99" badge-opacity="0.85" badge-color="#10b981"
         size="40"></le-icon>
       <le-button icon-start="inbox-count" icon-count="4">Notifications</le-button>
       <le-button icon-only="inbox-count" icon-only-count="12" label="Inbox"></le-button>
     </div>
-    <span style="display: inline-block; width: 16px;"></span>
-    <le-icon name="new" size="32"></le-icon>
-    <le-icon name="open" size="32"></le-icon>
-    <le-icon name="save" size="32"></le-icon>
-    <le-icon name="download" size="32"></le-icon>
-    <le-icon name="upload" size="32"></le-icon>
-    <span style="display: inline-block; width: 16px;"></span>
-    <le-icon name="revert" size="32"></le-icon>
-    <le-icon name="reload" size="32"></le-icon>
-    <span style="display: inline-block; width: 16px;"></span>
-    <le-icon name="copy" size="32"></le-icon>
-    <le-icon name="paste" size="32"></le-icon>
-    <le-icon name="cut" size="32"></le-icon>
-    <le-icon name="delete" size="32"></le-icon>
-    <le-icon name="duplicate" size="32"></le-icon>
-    <span style="display: inline-block; width: 16px;"></span>
-    <le-icon name="undo" size="32"></le-icon>
-    <le-icon name="redo" size="32"></le-icon>
-    <br />
-    <le-icon name="align-left" size="32" rounded thin></le-icon>
-    <le-icon name="align-center" size="32" rounded></le-icon>
-    <le-icon name="align-right" layers="slash" size="32" thin></le-icon>
-    <le-icon name="align-justify" size="32" rounded></le-icon>
-    <le-icon name="line-spacing" size="32"></le-icon>
-    <br />
-    <le-icon name="bullet-list" size="32"></le-icon>
-    <le-icon name="numbered-list" size="32"></le-icon>
-    <le-icon name="check-list" size="32"></le-icon>
-    <le-icon name="increase-indent" size="32"></le-icon>
-    <le-icon name="decrease-indent" size="32"></le-icon>
-    <br />
-    <le-icon name="chevron-left" size="24" rounded></le-icon>
-    <le-icon name="chevron-up" size="24" rounded></le-icon>
-    <le-icon name="chevron-down" size="24" rounded></le-icon>
-    <le-icon name="chevron-right" size="24" rounded></le-icon>
-    <br />
-    <le-icon name="plus" size="24"></le-icon>
-    <le-icon name="plus-square" size="24"></le-icon>
-    <le-icon name="plus-circle" size="24"></le-icon>
-    <br />
-    <le-icon name="minus" size="24"></le-icon>
-    <le-icon name="minus-square" size="24"></le-icon>
-    <le-icon name="minus-circle" size="24"></le-icon>
-    <br />
-    <le-icon name="desktop" size="42"></le-icon>
-    <le-icon name="tablet" size="42"></le-icon>
-    <le-icon name="phone" size="42"></le-icon>
+
+    <h3>Component Controls</h3>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <le-icon name="side-panel-start" thin size="32" style="color: var(--le-color-primary);"></le-icon>
+      <le-icon name="side-panel-end" rounded size="32" style="color: var(--le-color-danger);"></le-icon>
+      <le-icon name="hamburger" size="32" style="color: var(--le-color-secondary);"></le-icon>
+      <le-icon name="ellipsis-horizontal" size="32" style="color: var(--le-color-danger);"></le-icon>
+      <le-icon name="ellipsis-vertical" rounded size="32" style="color: var(--le-color-warning);"></le-icon>
+      <le-icon name="check" size="32" style="color: var(--le-color-success);"></le-icon>
+      <le-icon name="clear" rounded size="32" style="color: var(--le-color-text);"></le-icon>
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <le-icon name="arrow-left" rounded badge="line-spacing" badge-scale="0.75" badge-opacity="0.4"
+        badge-color="var(--le-color-danger, #fc0)" size="32"></le-icon>
+      <le-icon name="arrow-up" rounded size="32"></le-icon>
+      <le-icon name="arrow-down" thin size="32"></le-icon>
+      <le-icon name="arrow-right" size="32"></le-icon>
+      <le-icon name="undo" size="32"></le-icon>
+      <le-icon name="redo" size="32"></le-icon>
+      <span style="display: inline-block; width: 16px;"></span>
+      <le-icon name="revert" size="32"></le-icon>
+      <le-icon name="reload" size="32"></le-icon>
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <le-icon name="new" size="32"></le-icon>
+      <le-icon name="open" size="32"></le-icon>
+      <le-icon name="save" size="32"></le-icon>
+      <le-icon name="download" size="32"></le-icon>
+      <le-icon name="upload" size="32"></le-icon>
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <le-icon name="copy" size="32"></le-icon>
+      <le-icon name="paste" size="32"></le-icon>
+      <le-icon name="cut" size="32"></le-icon>
+      <le-icon name="delete" size="32"></le-icon>
+      <le-icon name="duplicate" size="32"></le-icon>
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <le-icon name="align-left" size="32" rounded thin></le-icon>
+      <le-icon name="align-center" badge="download-badge" size="32" rounded></le-icon>
+      <le-icon name="align-right" layers="slash" size="32" thin></le-icon>
+      <le-icon name="align-justify" badge="disabled-badge" size="32" rounded></le-icon>
+      <le-icon name="line-spacing" size="32"></le-icon>
+      <le-icon name="line-spacing" thin rounded size="32"></le-icon>
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <le-icon name="bullet-list" size="32"></le-icon>
+      <le-icon name="numbered-list" size="32"></le-icon>
+      <le-icon name="check-list" size="32"></le-icon>
+      <le-icon name="increase-indent" size="32"></le-icon>
+      <le-icon name="decrease-indent" size="32"></le-icon>
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <le-icon name="chevron-left" size="24" rounded></le-icon>
+      <le-icon name="chevron-up" size="24" rounded></le-icon>
+      <le-icon name="chevron-down" size="24" rounded></le-icon>
+      <le-icon name="chevron-right" size="24" rounded></le-icon>
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <le-icon name="plus" size="24"></le-icon>
+      <le-icon name="plus-square" size="24"></le-icon>
+      <le-icon name="plus-circle" size="24"></le-icon>
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <le-icon name="minus" size="24"></le-icon>
+      <le-icon name="minus-square" size="24"></le-icon>
+      <le-icon name="minus-circle" size="24"></le-icon>
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <le-icon name="desktop" size="42"></le-icon>
+      <le-icon name="tablet" size="42"></le-icon>
+      <le-icon name="phone" size="42"></le-icon>
+    </div>
   </div>
 
 

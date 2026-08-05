@@ -1,5 +1,36 @@
 {
   "viewBox": "0 0 16 16",
+  "maskShape": [
+    {
+      "tag": "polyline",
+      "points": "6 3 3 6 6 9",
+      "fill": "none",
+      "stroke": "black",
+      "stroke-width": "2.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "2"
+      }
+    },
+    {
+      "tag": "path",
+      "d": "M4,6 L10.5,6 C12.157,6 13.5,7.343 13.5,9 C13.5,10.657 12.157,12 10.5,12 L8,12 L8,12",
+      "fill": "none",
+      "stroke": "black",
+      "stroke-width": "2.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "2"
+      }
+    }
+  ],
   "children": [
     {
       "tag": "polyline",
@@ -7,14 +38,28 @@
       "fill": "none",
       "stroke": "currentColor",
       "stroke-width": "1.5",
-      "stroke-linecap": "square"
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "1"
+      }
     },
     {
       "tag": "path",
-      "d": "M4,6 L10.5,6 C12.1568542,6 13.5,7.34314575 13.5,9 C13.5,10.6568542 12.1568542,12 10.5,12 L8,12 L8,12",
+      "d": "M4,6 L10.5,6 C12.157,6 13.5,7.343 13.5,9 C13.5,10.657 12.157,12 10.5,12 L8,12 L8,12",
       "fill": "none",
       "stroke": "currentColor",
-      "stroke-width": "1.5"
+      "stroke-width": "1.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "1"
+      }
     }
   ]
 }

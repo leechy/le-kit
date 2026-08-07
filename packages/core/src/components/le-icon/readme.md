@@ -42,6 +42,7 @@
  - [le-dropdown-base](../le-dropdown-base)
  - [le-multiselect](../le-multiselect)
  - [le-navigation](../le-navigation)
+ - [le-number-input](../le-number-input)
  - [le-overflow-menu](../le-overflow-menu)
  - [le-preview-frame](../le-preview-frame)
  - [le-select](../le-select)
@@ -60,6 +61,7 @@ graph TD;
   le-dropdown-base --> le-icon
   le-multiselect --> le-icon
   le-navigation --> le-icon
+  le-number-input --> le-icon
   le-overflow-menu --> le-icon
   le-preview-frame --> le-icon
   le-select --> le-icon

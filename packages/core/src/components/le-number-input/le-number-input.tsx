@@ -1,12 +1,13 @@
 import { Component, Prop, Event, EventEmitter, State, h, Element, Watch } from '@stencil/core';
-import { classnames } from '../../utils/utils';
+import { classnames, observeNamedSlotPresence, slotHasContent } from '../../utils/utils';
 
 /**
- * A number input component with validation, keyboard controls, and custom spinners.
+ * A number input component with validation, keyboard controls, and custom spinners or steppers.
  *
  * @slot - The label text for the input
  * @slot description - Additional description text displayed below the input
  * @slot icon-start - Icon to display at the start of the input
+ * @slot icon-end - Icon to display at the end of the input
  *
  * @cssprop --le-input-bg - Input background color
  * @cssprop --le-input-color - Input text color
@@ -100,9 +101,14 @@ export class LeNumberInput {
   @Prop() iconStart?: string;
 
   /**
-   * Whether to show the spinner controls
+   * Icon for the end icon
    */
-  @Prop() showSpinners: boolean = true;
+  @Prop() iconEnd?: string;
+
+  /**
+   * Controls type for numerical adjustment ('spinner' | 'stepper' | 'none')
+   */
+  @Prop() controls: 'spinner' | 'stepper' | 'none' = 'none';
 
   /**
    * External ID for linking with external systems
@@ -114,6 +120,10 @@ export class LeNumberInput {
    */
   @State() private isValid: boolean = true;
   @State() private validationMessage: string = '';
+
+  @State() private hasIconStartSlot = false;
+  @State() private hasIconEndSlot = false;
+  private disconnectSlotObserver?: () => void;
 
   /**
    * Emitted when the value changes (on blur or Enter)
@@ -134,6 +144,35 @@ export class LeNumberInput {
     externalId?: string;
     isValid: boolean;
   }>;
+
+  private initSlotObserver() {
+    if (this.disconnectSlotObserver) {
+      return;
+    }
+
+    this.disconnectSlotObserver = observeNamedSlotPresence(
+      this.el,
+      ['icon-start', 'icon-end'],
+      presence => {
+        this.hasIconStartSlot = !!presence['icon-start'];
+        this.hasIconEndSlot = !!presence['icon-end'];
+      },
+    );
+  }
+
+  componentWillLoad() {
+    this.hasIconStartSlot = slotHasContent(this.el, 'icon-start');
+    this.hasIconEndSlot = slotHasContent(this.el, 'icon-end');
+    this.initSlotObserver();
+  }
+
+  componentDidLoad() {
+    this.initSlotObserver();
+  }
+
+  disconnectedCallback() {
+    this.disconnectSlotObserver?.();
+  }
 
   @Watch('value')
   valueChanged() {
@@ -300,7 +339,20 @@ export class LeNumberInput {
     this.emitChange();
   };
 
+  private renderIconContent(icon?: string) {
+    if (!icon) return null;
+    if (Array.from(icon).length <= 2) {
+      return icon;
+    }
+    return <le-icon name={icon}></le-icon>;
+  }
+
   render() {
+    const hasIconStart = Boolean(this.iconStart || this.hasIconStartSlot);
+    const hasIconEnd = Boolean(this.iconEnd || this.hasIconEndSlot);
+    const isStepper = this.controls === 'stepper';
+    const isSpinner = this.controls === 'spinner';
+
     return (
       <le-component component="le-number-input" hostClass={classnames({ disabled: this.disabled })}>
         <div class="le-input-wrapper">
@@ -310,8 +362,34 @@ export class LeNumberInput {
             </label>
           )}
 
-          <div class={classnames('le-input-container', { 'has-error': !this.isValid })}>
-            {this.iconStart && <span class="icon-start">{this.iconStart}</span>}
+          <div
+            class={classnames('le-input-container', {
+              'has-error': !this.isValid,
+              'has-stepper': isStepper,
+            })}
+          >
+            {isStepper && (
+              <le-button
+                mode="default"
+                variant="clear"
+                icon-only="minus"
+                class="le-stepper-btn stepper-decrement"
+                onClick={this.decrement}
+                disabled={
+                  this.disabled ||
+                  this.readonly ||
+                  (this.min !== undefined && this.value !== undefined && this.value <= this.min)
+                }
+                tabindex="-1"
+              />
+            )}
+
+            <span
+              class={classnames('icon-start', { 'is-visible': hasIconStart })}
+              part="icon-start"
+            >
+              <slot name="icon-start">{this.renderIconContent(this.iconStart)}</slot>
+            </span>
 
             <input
               id={this.name}
@@ -329,9 +407,30 @@ export class LeNumberInput {
               onChange={this.handleChange}
               onKeyDown={this.handleKeyDown}
               onWheel={this.handleWheel}
+              part="input"
             />
 
-            {this.showSpinners && (
+            <span class={classnames('icon-end', { 'is-visible': hasIconEnd })} part="icon-end">
+              <slot name="icon-end">{this.renderIconContent(this.iconEnd)}</slot>
+            </span>
+
+            {isStepper && (
+              <le-button
+                mode="default"
+                variant="clear"
+                icon-only="plus"
+                class="le-stepper-btn stepper-increment"
+                onClick={this.increment}
+                disabled={
+                  this.disabled ||
+                  this.readonly ||
+                  (this.max !== undefined && this.value !== undefined && this.value >= this.max)
+                }
+                tabindex="-1"
+              />
+            )}
+
+            {isSpinner && (
               <div class="le-input-controls">
                 <le-button
                   mode="default"

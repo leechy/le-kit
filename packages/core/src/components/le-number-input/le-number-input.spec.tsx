@@ -52,7 +52,7 @@ describe('le-number-input', () => {
     await page.waitForChanges();
     expect(host.value).toBe(20);
 
-    // Alt + ArrowUp -> +0.1 (should correctly evaluate to 20.1, fixing the rounding bug!)
+    // Alt + ArrowUp -> +0.1
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', altKey: true, bubbles: true }));
     await page.waitForChanges();
     expect(host.value).toBe(20.1);
@@ -106,7 +106,7 @@ describe('le-number-input', () => {
   it('respects Shift and Alt modifier keys when clicking spinner buttons', async () => {
     const page = await newSpecPage({
       components: [LeNumberInput],
-      html: '<le-number-input value="10" step="1" show-spinners="true"></le-number-input>',
+      html: '<le-number-input value="10" step="1" controls="spinner"></le-number-input>',
     });
 
     const host = page.root as HTMLLeNumberInputElement;
@@ -123,5 +123,80 @@ describe('le-number-input', () => {
     downBtn.dispatchEvent(new CustomEvent('click', { detail: { altKey: true }, bubbles: true }));
     await page.waitForChanges();
     expect(host.value).toBe(19.9);
+  });
+
+  it('renders stepper controls when controls="stepper"', async () => {
+    const page = await newSpecPage({
+      components: [LeNumberInput],
+      html: '<le-number-input value="10" step="1" controls="stepper"></le-number-input>',
+    });
+
+    const host = page.root as HTMLLeNumberInputElement;
+    const container = host.shadowRoot?.querySelector('.le-input-container');
+    expect(container?.classList.contains('has-stepper')).toBe(true);
+
+    const decBtn = host.shadowRoot?.querySelector('.stepper-decrement') as HTMLElement;
+    const incBtn = host.shadowRoot?.querySelector('.stepper-increment') as HTMLElement;
+    expect(decBtn).not.toBeNull();
+    expect(incBtn).not.toBeNull();
+
+    // Click increment -> 11
+    incBtn.dispatchEvent(new CustomEvent('click', { bubbles: true }));
+    await page.waitForChanges();
+    expect(host.value).toBe(11);
+
+    // Click decrement -> 10
+    decBtn.dispatchEvent(new CustomEvent('click', { bubbles: true }));
+    await page.waitForChanges();
+    expect(host.value).toBe(10);
+  });
+
+  it('renders no control buttons when controls="none"', async () => {
+    const page = await newSpecPage({
+      components: [LeNumberInput],
+      html: '<le-number-input value="10" controls="none"></le-number-input>',
+    });
+
+    const host = page.root as HTMLLeNumberInputElement;
+    const spinners = host.shadowRoot?.querySelector('.le-input-controls');
+    const decBtn = host.shadowRoot?.querySelector('.stepper-decrement');
+    const incBtn = host.shadowRoot?.querySelector('.stepper-increment');
+
+    expect(spinners).toBeNull();
+    expect(decBtn).toBeNull();
+    expect(incBtn).toBeNull();
+  });
+
+  it('renders icon-start and icon-end correctly', async () => {
+    const page = await newSpecPage({
+      components: [LeNumberInput],
+      html: '<le-number-input value="10" icon-start="#" icon-end="$" controls="spinner"></le-number-input>',
+    });
+
+    const host = page.root as HTMLLeNumberInputElement;
+    const iconStart = host.shadowRoot?.querySelector('.icon-start');
+    const iconEnd = host.shadowRoot?.querySelector('.icon-end');
+
+    expect(iconStart?.textContent).toBe('#');
+    expect(iconEnd?.textContent).toBe('$');
+  });
+
+  it('supports slotted icon-start and icon-end content', async () => {
+    const page = await newSpecPage({
+      components: [LeNumberInput],
+      html: `
+        <le-number-input value="10">
+          <span slot="icon-start">Start</span>
+          <span slot="icon-end">End</span>
+        </le-number-input>
+      `,
+    });
+
+    const host = page.root as HTMLLeNumberInputElement;
+    const iconStart = host.shadowRoot?.querySelector('.icon-start');
+    const iconEnd = host.shadowRoot?.querySelector('.icon-end');
+
+    expect(iconStart).not.toBeNull();
+    expect(iconEnd).not.toBeNull();
   });
 });

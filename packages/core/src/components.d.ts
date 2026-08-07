@@ -1001,6 +1001,11 @@ export namespace Components {
          */
         "hide": () => Promise<void>;
         /**
+          * Whether to hide checkboxes (small sizes only).
+          * @default false
+         */
+        "hideCheckboxes": boolean;
+        /**
           * Maximum height of the dropdown list.
           * @default '300px'
          */
@@ -1025,10 +1030,10 @@ export namespace Components {
          */
         "show": () => Promise<void>;
         /**
-          * Whether to show checkboxes for multiselect mode.
-          * @default true
+          * Size of the dropdown.
+          * @default 'medium'
          */
-        "showCheckboxes": boolean;
+        "size": 'small' | 'medium' | 'large';
         /**
           * Toggles the dropdown.
          */
@@ -1448,7 +1453,7 @@ export namespace Components {
         "wrap": boolean;
     }
     /**
-     * A number input component with validation, keyboard controls, and custom spinners.
+     * A number input component with validation, keyboard controls, and custom spinners or steppers.
      * @cssprop --le-input-bg - Input background color
      * @cssprop --le-input-color - Input text color
      * @cssprop --le-input-border - Input border style
@@ -1467,6 +1472,11 @@ export namespace Components {
          */
         "altStep"?: number;
         /**
+          * Controls type for numerical adjustment ('spinner' | 'stepper' | 'none')
+          * @default 'none'
+         */
+        "controls": 'spinner' | 'stepper' | 'none';
+        /**
           * Whether the input is disabled
           * @default false
          */
@@ -1475,6 +1485,10 @@ export namespace Components {
           * External ID for linking with external systems
          */
         "externalId"?: string;
+        /**
+          * Icon for the end icon
+         */
+        "iconEnd"?: string;
         /**
           * Icon for the start icon
          */
@@ -1517,11 +1531,6 @@ export namespace Components {
           * Step value when holding Shift key
          */
         "shiftStep"?: number;
-        /**
-          * Whether to show the spinner controls
-          * @default true
-         */
-        "showSpinners": boolean;
         /**
           * Step value for increment/decrement
           * @default 1
@@ -1951,10 +1960,19 @@ export namespace Components {
      */
     interface LeSelect {
         /**
+          * Custom chevron icon name or text.
+         */
+        "chevron"?: string;
+        /**
           * Whether the select is disabled.
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Whether to hide the chevron icon completely.
+          * @default false
+         */
+        "hideChevron": boolean;
         /**
           * Closes the dropdown.
          */
@@ -3692,7 +3710,7 @@ declare global {
   };
     }
     /**
-     * A number input component with validation, keyboard controls, and custom spinners.
+     * A number input component with validation, keyboard controls, and custom spinners or steppers.
      * @cssprop --le-input-bg - Input background color
      * @cssprop --le-input-color - Input text color
      * @cssprop --le-input-border - Input border style
@@ -5335,6 +5353,11 @@ declare namespace LocalJSX {
          */
         "fullWidth"?: boolean;
         /**
+          * Whether to hide checkboxes (small sizes only).
+          * @default false
+         */
+        "hideCheckboxes"?: boolean;
+        /**
           * Maximum height of the dropdown list.
           * @default '300px'
          */
@@ -5367,10 +5390,10 @@ declare namespace LocalJSX {
          */
         "options"?: LeOption[];
         /**
-          * Whether to show checkboxes for multiselect mode.
-          * @default true
+          * Size of the dropdown.
+          * @default 'medium'
          */
-        "showCheckboxes"?: boolean;
+        "size"?: 'small' | 'medium' | 'large';
         /**
           * Current value(s) - single value or array for multiselect.
          */
@@ -5801,7 +5824,7 @@ declare namespace LocalJSX {
         "wrap"?: boolean;
     }
     /**
-     * A number input component with validation, keyboard controls, and custom spinners.
+     * A number input component with validation, keyboard controls, and custom spinners or steppers.
      * @cssprop --le-input-bg - Input background color
      * @cssprop --le-input-color - Input text color
      * @cssprop --le-input-border - Input border style
@@ -5820,6 +5843,11 @@ declare namespace LocalJSX {
          */
         "altStep"?: number;
         /**
+          * Controls type for numerical adjustment ('spinner' | 'stepper' | 'none')
+          * @default 'none'
+         */
+        "controls"?: 'spinner' | 'stepper' | 'none';
+        /**
           * Whether the input is disabled
           * @default false
          */
@@ -5828,6 +5856,10 @@ declare namespace LocalJSX {
           * External ID for linking with external systems
          */
         "externalId"?: string;
+        /**
+          * Icon for the end icon
+         */
+        "iconEnd"?: string;
         /**
           * Icon for the start icon
          */
@@ -5888,11 +5920,6 @@ declare namespace LocalJSX {
           * Step value when holding Shift key
          */
         "shiftStep"?: number;
-        /**
-          * Whether to show the spinner controls
-          * @default true
-         */
-        "showSpinners"?: boolean;
         /**
           * Step value for increment/decrement
           * @default 1
@@ -6320,10 +6347,19 @@ declare namespace LocalJSX {
      */
     interface LeSelect {
         /**
+          * Custom chevron icon name or text.
+         */
+        "chevron"?: string;
+        /**
           * Whether the select is disabled.
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Whether to hide the chevron icon completely.
+          * @default false
+         */
+        "hideChevron"?: boolean;
         /**
           * Name attribute for form submission.
          */
@@ -7500,10 +7536,11 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "filterQuery": string;
         "emptyText": string;
-        "showCheckboxes": boolean;
+        "hideCheckboxes": boolean;
         "maxHeight": string;
         "width": string;
         "fullWidth": boolean;
+        "size": 'small' | 'medium' | 'large';
         "closeOnClickOutside": boolean;
     }
     interface LeHeaderAttributes {
@@ -7592,7 +7629,8 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "readonly": boolean;
         "iconStart": string;
-        "showSpinners": boolean;
+        "iconEnd": string;
+        "controls": 'spinner' | 'stepper' | 'none';
         "externalId": string;
     }
     interface LeOverflowMenuAttributes {
@@ -7676,6 +7714,8 @@ declare namespace LocalJSX {
         "name": string;
         "size": 'small' | 'medium' | 'large';
         "variant": 'default' | 'outlined' | 'solid';
+        "chevron": string;
+        "hideChevron": boolean;
         "open": boolean;
     }
     interface LeSidePanelAttributes {
@@ -8237,7 +8277,7 @@ declare module "@stencil/core" {
              */
             "le-navigation": LocalJSX.IntrinsicElements["le-navigation"] & JSXBase.HTMLAttributes<HTMLLeNavigationElement>;
             /**
-             * A number input component with validation, keyboard controls, and custom spinners.
+             * A number input component with validation, keyboard controls, and custom spinners or steppers.
              * @cssprop --le-input-bg - Input background color
              * @cssprop --le-input-color - Input text color
              * @cssprop --le-input-border - Input border style

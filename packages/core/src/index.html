@@ -631,7 +631,7 @@
     <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--le-space-sm);">
       <label for="demo-button-group-collapse-input"
         style="font-size: var(--le-font-size-sm); color: var(--le-color-text-secondary);">Numeric collapse:</label>
-      <le-number-input id="demo-button-group-collapse-input" min="-10" max="10" value="2" step="1"
+      <le-number-input id="demo-button-group-collapse-input" min="-10" max="10" value="2" step="1" controls="stepper"
         external-id="qty-field"></le-number-input>
       <le-button size="small" variant="outlined" onclick="applyNumericButtonGroupCollapse()">apply number</le-button>
     </div>
@@ -1272,17 +1272,26 @@
         </div>
 
         <div class="text-slot-demo">
-          <label>Number Input:</label>
-          <le-number-input name="quantity" min="0" max="100" value="1" step="7" external-id="qty-field" label="Quantity"
-            icon-start="#">
+          <label>Number Input (Stepper Controls):</label>
+          <le-number-input name="quantity" min="0" max="100" value="1" step="1" controls="stepper"
+            external-id="qty-field" label="Quantity" icon-start="#">
+            <le-select slot="icon-end" size="small" value="pcs" variant="clear" hide-chevron>
+              <le-item value="pcs">pcs</le-item>
+              <le-item value="lbs">lbs</le-item>
+            </le-select>
             <span slot="description">Enter amount (0-100)</span>
           </le-number-input>
         </div>
 
         <div class="text-slot-demo">
-          <label>Price Input (Step 1.00):</label>
+          <label>Price Input (Spinner controls):</label>
           <le-number-input name="price" step="1" alt-step="0.01" min="0" value="19.99" external-id="price-field"
-            label="Price" icon-end="$" show-spinners="false">
+            label="Price" controls="spinner">
+            <le-select slot="icon-end" size="small" value="$" variant="clear">
+              <le-item value="$">$</le-item>
+              <le-item value="€">€</le-item>
+              <le-item value="¥">¥</le-item>
+            </le-select>
             <span slot="description">Use Shift+Up for +10, Alt+Up for +0.01</span>
           </le-number-input>
         </div>

@@ -714,10 +714,11 @@ Wraps le-popover for positioning and provides:
 | `filterFn` | `(option: LeOption, query: string) => boolean \| undefined` |  | Filter function for options. Return true to include the option. |
 | `filterQuery` | `string` | `''` | Current filter query string. |
 | `emptyText` | `string` | `'No options'` | Placeholder text when no options match filter. |
-| `showCheckboxes` | `boolean` | `true` | Whether to show checkboxes for multiselect mode. |
+| `hideCheckboxes` | `boolean` | `false` | Whether to hide checkboxes (small sizes only). |
 | `maxHeight` | `string` | `'300px'` | Maximum height of the dropdown list. |
 | `width` | `string \| undefined` |  | Width of the dropdown. If not set, matches trigger width. |
 | `fullWidth` | `boolean` | `false` | Sets the dropdown to full width of the trigger. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size of the dropdown. |
 | `closeOnClickOutside` | `boolean` | `true` | Whether to close the dropdown when clicking outside. (used to support combobox with input focus) |
 
 ### Events
@@ -962,7 +963,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 
 ## <le-number-input>
 
-A number input component with validation, keyboard controls, and custom spinners.
+A number input component with validation, keyboard controls, and custom spinners or steppers.
 
 ### Properties
 
@@ -984,7 +985,8 @@ A number input component with validation, keyboard controls, and custom spinners
 | `disabled` | `boolean` | `false` | Whether the input is disabled |
 | `readonly` | `boolean` | `false` | Whether the input is read-only |
 | `iconStart` | `string \| undefined` |  | Icon for the start icon |
-| `showSpinners` | `boolean` | `true` | Whether to show the spinner controls |
+| `iconEnd` | `string \| undefined` |  | Icon for the end icon |
+| `controls` | `'spinner' \| 'stepper' \| 'none'` | `'spinner'` | Controls type for numerical adjustment ('spinner' | 'stepper' | 'none') |
 | `externalId` | `string \| undefined` |  | External ID for linking with external systems |
 
 ### Events
@@ -1011,6 +1013,7 @@ A number input component with validation, keyboard controls, and custom spinners
 | Default | The label text for the input |
 | `"description"` | Additional description text displayed below the input |
 | `"icon-start"` | Icon to display at the start of the input |
+| `"icon-end"` | Icon to display at the end of the input |
 
 ### CSS Variables
 
@@ -1281,6 +1284,8 @@ A select dropdown component for single selection.
 | `name` | `string \| undefined` |  | Name attribute for form submission. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size variant of the select. |
 | `variant` | `'default' \| 'outlined' \| 'solid'` | `'default'` | Visual variant of the select. |
+| `chevron` | `string \| undefined` |  | Custom chevron icon name or text. |
+| `hideChevron` | `boolean` | `false` | Whether to hide the chevron icon completely. |
 | `open` | `boolean` | `false` | Whether the dropdown is currently open. |
 
 ### Events
@@ -1290,6 +1295,12 @@ A select dropdown component for single selection.
 | `leChange` | `EventEmitter<LeOptionSelectDetail> \| undefined` | Emitted when the selected value changes. |
 | `leOpen` | `EventEmitter<void> \| undefined` | Emitted when the dropdown opens. |
 | `leClose` | `EventEmitter<void> \| undefined` | Emitted when the dropdown closes. |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| `"chevron"` | Custom chevron icon to display at the end of the select trigger |
 
 ---
 

@@ -191,8 +191,11 @@ export class LeNumberInput {
     return str.split('.')[1]?.length || 0;
   }
 
-  private getEffectiveStep(ev?: { shiftKey?: boolean; altKey?: boolean }): number {
-    if (ev?.shiftKey) {
+  private getEffectiveStep(ev?: any): number {
+    const shiftKey = Boolean(ev?.shiftKey || ev?.detail?.shiftKey);
+    const altKey = Boolean(ev?.altKey || ev?.detail?.altKey);
+
+    if (shiftKey) {
       if (this.shiftStep !== undefined) {
         return this.shiftStep;
       }
@@ -201,7 +204,7 @@ export class LeNumberInput {
       }
       return this.step * 10;
     }
-    if (ev?.altKey) {
+    if (altKey) {
       if (this.altStep !== undefined) {
         return this.altStep;
       }

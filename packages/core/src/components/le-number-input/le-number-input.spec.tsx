@@ -102,4 +102,26 @@ describe('le-number-input', () => {
     await page.waitForChanges();
     expect(host.value).toBe(17);
   });
+
+  it('respects Shift and Alt modifier keys when clicking spinner buttons', async () => {
+    const page = await newSpecPage({
+      components: [LeNumberInput],
+      html: '<le-number-input value="10" step="1" show-spinners="true"></le-number-input>',
+    });
+
+    const host = page.root as HTMLLeNumberInputElement;
+    const buttons = host.shadowRoot?.querySelectorAll('.le-input-controls le-button');
+    const upBtn = buttons?.[0] as HTMLElement;
+    const downBtn = buttons?.[1] as HTMLElement;
+
+    // Shift + click increment -> +10
+    upBtn.dispatchEvent(new CustomEvent('click', { detail: { shiftKey: true }, bubbles: true }));
+    await page.waitForChanges();
+    expect(host.value).toBe(20);
+
+    // Alt + click decrement -> -0.1
+    downBtn.dispatchEvent(new CustomEvent('click', { detail: { altKey: true }, bubbles: true }));
+    await page.waitForChanges();
+    expect(host.value).toBe(19.9);
+  });
 });

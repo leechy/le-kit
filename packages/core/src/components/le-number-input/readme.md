@@ -11,21 +11,25 @@ A number input component with validation, keyboard controls, and custom spinners
 
 ## Properties
 
-| Property       | Attribute       | Description                                   | Type                  | Default     |
-| -------------- | --------------- | --------------------------------------------- | --------------------- | ----------- |
-| `disabled`     | `disabled`      | Whether the input is disabled                 | `boolean`             | `false`     |
-| `externalId`   | `external-id`   | External ID for linking with external systems | `string \| undefined` | `undefined` |
-| `iconStart`    | `icon-start`    | Icon for the start icon                       | `string \| undefined` | `undefined` |
-| `label`        | `label`         | Label for the input                           | `string \| undefined` | `undefined` |
-| `max`          | `max`           | Maximum allowed value                         | `number \| undefined` | `undefined` |
-| `min`          | `min`           | Minimum allowed value                         | `number \| undefined` | `undefined` |
-| `name`         | `name`          | The name of the input                         | `string \| undefined` | `undefined` |
-| `placeholder`  | `placeholder`   | Placeholder text                              | `string \| undefined` | `undefined` |
-| `readonly`     | `readonly`      | Whether the input is read-only                | `boolean`             | `false`     |
-| `required`     | `required`      | Whether the input is required                 | `boolean`             | `false`     |
-| `showSpinners` | `show-spinners` | Whether to show the spinner controls          | `boolean`             | `true`      |
-| `step`         | `step`          | Step value for increment/decrement            | `number`              | `1`         |
-| `value`        | `value`         | The value of the input                        | `number \| undefined` | `undefined` |
+| Property          | Attribute          | Description                                           | Type                  | Default     |
+| ----------------- | ------------------ | ----------------------------------------------------- | --------------------- | ----------- |
+| `altMultiplier`   | `alt-multiplier`   | Multiplier for step value when holding Alt/Option key | `number \| undefined` | `undefined` |
+| `altStep`         | `alt-step`         | Step value when holding Alt/Option key                | `number \| undefined` | `undefined` |
+| `disabled`        | `disabled`         | Whether the input is disabled                         | `boolean`             | `false`     |
+| `externalId`      | `external-id`      | External ID for linking with external systems         | `string \| undefined` | `undefined` |
+| `iconStart`       | `icon-start`       | Icon for the start icon                               | `string \| undefined` | `undefined` |
+| `label`           | `label`            | Label for the input                                   | `string \| undefined` | `undefined` |
+| `max`             | `max`              | Maximum allowed value                                 | `number \| undefined` | `undefined` |
+| `min`             | `min`              | Minimum allowed value                                 | `number \| undefined` | `undefined` |
+| `name`            | `name`             | The name of the input                                 | `string \| undefined` | `undefined` |
+| `placeholder`     | `placeholder`      | Placeholder text                                      | `string \| undefined` | `undefined` |
+| `readonly`        | `readonly`         | Whether the input is read-only                        | `boolean`             | `false`     |
+| `required`        | `required`         | Whether the input is required                         | `boolean`             | `false`     |
+| `shiftMultiplier` | `shift-multiplier` | Multiplier for step value when holding Shift key      | `number \| undefined` | `undefined` |
+| `shiftStep`       | `shift-step`       | Step value when holding Shift key                     | `number \| undefined` | `undefined` |
+| `showSpinners`    | `show-spinners`    | Whether to show the spinner controls                  | `boolean`             | `true`      |
+| `step`            | `step`             | Step value for increment/decrement                    | `number`              | `1`         |
+| `value`           | `value`            | The value of the input                                | `number \| undefined` | `undefined` |
 
 
 ## Events
@@ -51,7 +55,6 @@ A number input component with validation, keyboard controls, and custom spinners
 
 - [le-component](../le-component)
 - [le-button](../le-button)
-- [le-icon](../le-icon)
 - [le-slot](../le-slot)
 
 ### Graph
@@ -59,7 +62,6 @@ A number input component with validation, keyboard controls, and custom spinners
 graph TD;
   le-number-input --> le-component
   le-number-input --> le-button
-  le-number-input --> le-icon
   le-number-input --> le-slot
   le-component --> le-button
   le-component --> le-select

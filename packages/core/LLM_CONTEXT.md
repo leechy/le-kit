@@ -976,6 +976,10 @@ A number input component with validation, keyboard controls, and custom spinners
 | `min` | `number \| undefined` |  | Minimum allowed value |
 | `max` | `number \| undefined` |  | Maximum allowed value |
 | `step` | `number` | `1` | Step value for increment/decrement |
+| `shiftStep` | `number \| undefined` |  | Step value when holding Shift key |
+| `shiftMultiplier` | `number \| undefined` |  | Multiplier for step value when holding Shift key |
+| `altStep` | `number \| undefined` |  | Step value when holding Alt/Option key |
+| `altMultiplier` | `number \| undefined` |  | Multiplier for step value when holding Alt/Option key |
 | `required` | `boolean` | `false` | Whether the input is required |
 | `disabled` | `boolean` | `false` | Whether the input is disabled |
 | `readonly` | `boolean` | `false` | Whether the input is read-only |

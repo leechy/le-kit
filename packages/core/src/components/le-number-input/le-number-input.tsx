@@ -60,6 +60,26 @@ export class LeNumberInput {
   @Prop() step: number = 1;
 
   /**
+   * Step value when holding Shift key
+   */
+  @Prop() shiftStep?: number;
+
+  /**
+   * Multiplier for step value when holding Shift key
+   */
+  @Prop() shiftMultiplier?: number;
+
+  /**
+   * Step value when holding Alt/Option key
+   */
+  @Prop() altStep?: number;
+
+  /**
+   * Multiplier for step value when holding Alt/Option key
+   */
+  @Prop() altMultiplier?: number;
+
+  /**
    * Whether the input is required
    */
   @Prop() required: boolean = false;
@@ -162,11 +182,47 @@ export class LeNumberInput {
     });
   }
 
-  private updateValue(newValue: number) {
+  private getPrecision(num: number): number {
+    const str = num.toString();
+    if (str.includes('e-')) {
+      const parts = str.split('e-');
+      return parseInt(parts[1], 10);
+    }
+    return str.split('.')[1]?.length || 0;
+  }
+
+  private getEffectiveStep(ev?: { shiftKey?: boolean; altKey?: boolean }): number {
+    if (ev?.shiftKey) {
+      if (this.shiftStep !== undefined) {
+        return this.shiftStep;
+      }
+      if (this.shiftMultiplier !== undefined) {
+        return this.step * this.shiftMultiplier;
+      }
+      return this.step * 10;
+    }
+    if (ev?.altKey) {
+      if (this.altStep !== undefined) {
+        return this.altStep;
+      }
+      if (this.altMultiplier !== undefined) {
+        return this.step * this.altMultiplier;
+      }
+      return this.step * 0.1;
+    }
+    return this.step;
+  }
+
+  private updateValue(newValue: number, effectiveStep?: number) {
     if (this.disabled || this.readonly) return;
 
-    // Round to avoid floating point errors
-    const precision = this.step.toString().split('.')[1]?.length || 0;
+    const stepToUse = effectiveStep !== undefined ? effectiveStep : this.step;
+    // Round to avoid floating point errors while preserving decimal precision
+    const precision = Math.max(
+      this.getPrecision(this.step),
+      this.getPrecision(stepToUse),
+      this.getPrecision(this.value || 0)
+    );
     const rounded = parseFloat(newValue.toFixed(precision));
 
     this.value = rounded;
@@ -196,18 +252,15 @@ export class LeNumberInput {
   private handleKeyDown = (ev: KeyboardEvent) => {
     if (this.disabled || this.readonly) return;
 
-    let multiplier = 1;
-    if (ev.shiftKey) multiplier = 10;
-    if (ev.altKey) multiplier = 0.1;
-
     const current = this.value || 0;
+    const effectiveStep = this.getEffectiveStep(ev);
 
     if (ev.key === 'ArrowUp') {
       ev.preventDefault();
-      this.updateValue(current + this.step * multiplier);
+      this.updateValue(current + effectiveStep, effectiveStep);
     } else if (ev.key === 'ArrowDown') {
       ev.preventDefault();
-      this.updateValue(current - this.step * multiplier);
+      this.updateValue(current - effectiveStep, effectiveStep);
     }
   };
 
@@ -218,18 +271,20 @@ export class LeNumberInput {
 
     ev.preventDefault();
     const current = this.value || 0;
+    const effectiveStep = this.getEffectiveStep(ev);
 
     if (ev.deltaY < 0) {
-      this.updateValue(current + this.step);
+      this.updateValue(current + effectiveStep, effectiveStep);
     } else {
-      this.updateValue(current - this.step);
+      this.updateValue(current - effectiveStep, effectiveStep);
     }
   };
 
   private increment = (ev: Event) => {
     ev.preventDefault(); // Prevent focus loss
     const current = this.value || 0;
-    this.updateValue(current + this.step);
+    const effectiveStep = this.getEffectiveStep(ev as MouseEvent);
+    this.updateValue(current + effectiveStep, effectiveStep);
     // Trigger change event for buttons as they are "final" actions usually
     this.emitChange();
   };
@@ -237,7 +292,8 @@ export class LeNumberInput {
   private decrement = (ev: Event) => {
     ev.preventDefault();
     const current = this.value || 0;
-    this.updateValue(current - this.step);
+    const effectiveStep = this.getEffectiveStep(ev as MouseEvent);
+    this.updateValue(current - effectiveStep, effectiveStep);
     this.emitChange();
   };
 
@@ -278,7 +334,7 @@ export class LeNumberInput {
                   mode="default"
                   variant="clear"
                   size="small"
-                  icon-only
+                  icon-only="chevron-up"
                   class="le-input-control-btn"
                   onClick={this.increment}
                   disabled={
@@ -287,14 +343,12 @@ export class LeNumberInput {
                     (this.max !== undefined && this.value !== undefined && this.value >= this.max)
                   }
                   tabindex="-1"
-                >
-                  <le-icon name="chevron-up" size={12} slot="icon-only"></le-icon>
-                </le-button>
+                />
                 <le-button
                   mode="default"
                   variant="clear"
                   size="small"
-                  icon-only
+                  icon-only="chevron-down"
                   class="le-input-control-btn"
                   onClick={this.decrement}
                   disabled={
@@ -303,9 +357,7 @@ export class LeNumberInput {
                     (this.min !== undefined && this.value !== undefined && this.value <= this.min)
                   }
                   tabindex="-1"
-                >
-                  <le-icon name="chevron-down" size={12} slot="icon-only"></le-icon>
-                </le-button>
+                />
               </div>
             )}
           </div>

@@ -1459,6 +1459,14 @@ export namespace Components {
      */
     interface LeNumberInput {
         /**
+          * Multiplier for step value when holding Alt/Option key
+         */
+        "altMultiplier"?: number;
+        /**
+          * Step value when holding Alt/Option key
+         */
+        "altStep"?: number;
+        /**
           * Whether the input is disabled
           * @default false
          */
@@ -1501,6 +1509,14 @@ export namespace Components {
           * @default false
          */
         "required": boolean;
+        /**
+          * Multiplier for step value when holding Shift key
+         */
+        "shiftMultiplier"?: number;
+        /**
+          * Step value when holding Shift key
+         */
+        "shiftStep"?: number;
         /**
           * Whether to show the spinner controls
           * @default true
@@ -5796,6 +5812,14 @@ declare namespace LocalJSX {
      */
     interface LeNumberInput {
         /**
+          * Multiplier for step value when holding Alt/Option key
+         */
+        "altMultiplier"?: number;
+        /**
+          * Step value when holding Alt/Option key
+         */
+        "altStep"?: number;
+        /**
           * Whether the input is disabled
           * @default false
          */
@@ -5856,6 +5880,14 @@ declare namespace LocalJSX {
           * @default false
          */
         "required"?: boolean;
+        /**
+          * Multiplier for step value when holding Shift key
+         */
+        "shiftMultiplier"?: number;
+        /**
+          * Step value when holding Shift key
+         */
+        "shiftStep"?: number;
         /**
           * Whether to show the spinner controls
           * @default true
@@ -7552,6 +7584,10 @@ declare namespace LocalJSX {
         "min": number;
         "max": number;
         "step": number;
+        "shiftStep": number;
+        "shiftMultiplier": number;
+        "altStep": number;
+        "altMultiplier": number;
         "required": boolean;
         "disabled": boolean;
         "readonly": boolean;

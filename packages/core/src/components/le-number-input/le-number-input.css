@@ -54,7 +54,7 @@
 
 :host([disabled]) .le-input-container {
   opacity: 0.6;
-  background-color: rgba(0,0,0,0.05);
+  background-color: rgba(0, 0, 0, 0.05);
   cursor: not-allowed;
 }
 
@@ -69,8 +69,10 @@ input {
   font-family: inherit;
   font-size: inherit;
   outline: none;
-  text-align: end; /* Aligned to end */
-  appearance: textfield; /* Remove default spinners in Firefox */
+  text-align: end;
+  /* Aligned to end */
+  appearance: textfield;
+  /* Remove default spinners in Firefox */
 }
 
 /* Remove default spinners in Chrome/Safari/Edge */
@@ -84,7 +86,8 @@ input::placeholder {
   color: var(--le-input-placeholder-color);
 }
 
-.icon-start, .icon-end {
+.icon-start,
+.icon-end {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,6 +109,7 @@ input::placeholder {
   --le-button-small-font-size: 9.5px;
   --le-button-small-padding: 0 0.2rem;
   --le-button-icon-aspect-ratio: 2;
+  --le-icon-size: 10px;
 
   display: flex;
   align-items: center;
@@ -124,12 +128,12 @@ input::placeholder {
 }
 
 .le-input-control-btn:hover {
-  background-color: rgba(0,0,0,0.05);
+  background-color: rgba(0, 0, 0, 0.05);
   color: var(--le-color-primary, #007bff);
 }
 
 .le-input-control-btn:active {
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .le-input-description {

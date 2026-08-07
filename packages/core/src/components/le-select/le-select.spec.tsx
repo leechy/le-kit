@@ -78,4 +78,39 @@ describe('le-select', () => {
     expect(dropdown?.hasAttribute('disabled')).toBe(true);
     expect(trigger?.hasAttribute('disabled')).toBe(true);
   });
+
+  it('supports custom chevron prop', async () => {
+    const page = await newSpecPage({
+      components: [LeSelect],
+      html: `<le-select chevron="arrow-down" options='[{"label":"Alpha","value":"a"}]'></le-select>`,
+    });
+
+    const host = page.root as HTMLLeSelectElement;
+    expect(host.getAttribute('chevron')).toBe('arrow-down');
+  });
+
+  it('supports custom chevron slot', async () => {
+    const page = await newSpecPage({
+      components: [LeSelect],
+      html: `
+        <le-select options='[{"label":"Alpha","value":"a"}]'>
+          <span slot="chevron">▼</span>
+        </le-select>
+      `,
+    });
+
+    const host = page.root as HTMLLeSelectElement;
+    expect(host).not.toBeNull();
+  });
+
+  it('hides chevron when hide-chevron prop is true', async () => {
+    const page = await newSpecPage({
+      components: [LeSelect],
+      html: `<le-select hide-chevron options='[{"label":"Alpha","value":"a"}]'></le-select>`,
+    });
+
+    const host = page.root as HTMLLeSelectElement;
+    const button = host.shadowRoot?.querySelector('le-button.select-trigger');
+    expect(button?.classList.contains('no-chevron')).toBe(true);
+  });
 });

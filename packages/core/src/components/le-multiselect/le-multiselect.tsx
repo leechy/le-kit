@@ -447,7 +447,7 @@ export class LeMultiselect {
           filterFn={this.searchable ? this.filterOption : undefined}
           filterQuery={this.searchQuery}
           emptyText={this.emptyText}
-          showCheckboxes={true}
+          hideCheckboxes={false}
           fullWidth={this.fullWidth}
           onLeOptionSelect={this.handleOptionSelect}
           onLeDropdownOpen={this.handleDropdownOpen}

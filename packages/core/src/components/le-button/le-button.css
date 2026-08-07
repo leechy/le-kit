@@ -61,7 +61,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: var(--le-spacing-3);
+  gap: var(--le-button-icons-gap, --le-spacing-3);
   box-sizing: border-box;
   width: 100%;
   padding: var(--le-button-padding);

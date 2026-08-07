@@ -78,9 +78,9 @@ export class LeDropdownBase {
   @Prop() emptyText: string = 'No options';
 
   /**
-   * Whether to show checkboxes for multiselect mode.
+   * Whether to hide checkboxes (small sizes only).
    */
-  @Prop() showCheckboxes: boolean = true;
+  @Prop() hideCheckboxes: boolean = false;
 
   /**
    * Maximum height of the dropdown list.
@@ -96,6 +96,11 @@ export class LeDropdownBase {
    * Sets the dropdown to full width of the trigger.
    */
   @Prop() fullWidth: boolean = false;
+
+  /**
+   * Size of the dropdown.
+   */
+  @Prop() size: 'small' | 'medium' | 'large' = 'medium';
 
   /**
    * Whether to close the dropdown when clicking outside.
@@ -500,7 +505,7 @@ export class LeDropdownBase {
           {option.description && <span class="option-description">{option.description}</span>}
         </div>
         {this.renderIcon(option.iconEnd, 'option-icon-end')}
-        {(!this.multiple || this.showCheckboxes) && isSelected && (
+        {!this.hideCheckboxes && isSelected && (
           <span class="option-check">
             <le-icon name="check" size={16} />
           </span>
@@ -571,8 +576,8 @@ export class LeDropdownBase {
           closeOnClickOutside={this.closeOnClickOutside}
           closeOnEscape={true}
           offset={4}
-          width={dropdownWidth}
-          minWidth="150px"
+          width={this.size === 'small' ? undefined : dropdownWidth}
+          minWidth={this.size === 'small' ? "0" : "150px"}
           trigger-full-width={this.fullWidth}
           onLePopoverOpen={this.handlePopoverOpen}
           onLePopoverClose={this.handlePopoverClose}

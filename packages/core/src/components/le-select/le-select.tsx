@@ -11,13 +11,19 @@ import {
   h,
 } from '@stencil/core';
 import { LeOption, LeOptionValue, LeOptionSelectDetail } from '../../types/options';
-import { buildDeclarativeOptionsFromChildren, parseOptionInput } from '../../utils/utils';
+import {
+  buildDeclarativeOptionsFromChildren,
+  parseOptionInput,
+  slotHasContent,
+} from '../../utils/utils';
 
 /**
  * A select dropdown component for single selection.
  *
  * @cmsEditable true
  * @cmsCategory Form
+ *
+ * @slot chevron - Custom chevron icon to display at the end of the select trigger
  *
  * @example Basic select
  * ```html
@@ -96,6 +102,16 @@ export class LeSelect {
   @Prop({ reflect: true }) variant: 'default' | 'outlined' | 'solid' = 'default';
 
   /**
+   * Custom chevron icon name or text.
+   */
+  @Prop() chevron?: string;
+
+  /**
+   * Whether to hide the chevron icon completely.
+   */
+  @Prop({ reflect: true }) hideChevron: boolean = false;
+
+  /**
    * Whether the dropdown is currently open.
    */
   @Prop({ mutable: true, reflect: true }) open: boolean = false;
@@ -121,6 +137,8 @@ export class LeSelect {
 
   @State() private isDeclarativeMode: boolean = false;
 
+  @State() private hasChevronSlot: boolean = false;
+
   private dropdownEl?: HTMLLeDropdownBaseElement;
 
   private mutationObserver?: MutationObserver;
@@ -136,11 +154,13 @@ export class LeSelect {
   }
 
   async componentWillLoad() {
+    this.hasChevronSlot = slotHasContent(this.el, 'chevron');
     await this.syncDeclarativeOptionsAndSelection();
   }
 
   connectedCallback() {
     this.mutationObserver = new MutationObserver(() => {
+      this.hasChevronSlot = slotHasContent(this.el, 'chevron');
       void this.syncDeclarativeOptionsAndSelection();
     });
     this.mutationObserver.observe(this.el, {
@@ -155,6 +175,7 @@ export class LeSelect {
 
   @Listen('slotchange')
   handleSlotChange() {
+    this.hasChevronSlot = slotHasContent(this.el, 'chevron');
     void this.syncDeclarativeOptionsAndSelection();
   }
 
@@ -253,6 +274,21 @@ export class LeSelect {
     return <span class="trigger-icon">{icon}</span>;
   }
 
+  private renderChevron() {
+    if (this.hasChevronSlot) {
+      return <slot slot="icon-end" name="chevron"></slot>;
+    }
+
+    if (this.chevron) {
+      if (Array.from(this.chevron).length <= 2) {
+        return <span slot="icon-end" class="chevron">{this.chevron}</span>;
+      }
+      return <le-icon slot="icon-end" name={this.chevron} size={16} class="chevron" />;
+    }
+
+    return <le-icon slot="icon-end" name="chevron-down" size={16} class="chevron" />;
+  }
+
   render() {
     const hasValue = this.selectedOption !== undefined;
 
@@ -267,6 +303,8 @@ export class LeSelect {
           onLeDropdownOpen={this.handleDropdownOpen}
           onLeDropdownClose={this.handleDropdownClose}
           full-width
+          hideCheckboxes={this.size === 'small'}
+          size={this.size}
         >
           <le-button
             variant={this.variant && this.variant !== 'default' ? this.variant : 'outlined'}
@@ -276,6 +314,7 @@ export class LeSelect {
               'select-trigger': true,
               'has-value': hasValue,
               'is-open': this.open,
+              'no-chevron': this.hideChevron,
             }}
             mode="default"
             size={this.size}
@@ -290,13 +329,11 @@ export class LeSelect {
                 ? this.renderIcon(this.selectedOption.iconStart)
                 : undefined
             }
-            iconEnd={
-              <le-icon name="chevron-down" size={16} class="chevron" />
-            }
           >
             <span class="trigger-label">
               {hasValue ? this.selectedOption!.label : this.placeholder}
             </span>
+            {!this.hideChevron && this.renderChevron()}
           </le-button>
         </le-dropdown-base>
 

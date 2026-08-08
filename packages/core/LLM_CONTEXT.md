@@ -986,7 +986,7 @@ A number input component with validation, keyboard controls, and custom spinners
 | `readonly` | `boolean` | `false` | Whether the input is read-only |
 | `iconStart` | `string \| undefined` |  | Icon for the start icon |
 | `iconEnd` | `string \| undefined` |  | Icon for the end icon |
-| `controls` | `'spinner' \| 'stepper' \| 'none'` | `'spinner'` | Controls type for numerical adjustment ('spinner' | 'stepper' | 'none') |
+| `controls` | `'spinner' \| 'stepper' \| 'none'` | `'none'` | Controls type for numerical adjustment ('spinner' | 'stepper' | 'none') |
 | `externalId` | `string \| undefined` |  | External ID for linking with external systems |
 
 ### Events

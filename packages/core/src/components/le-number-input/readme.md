@@ -15,7 +15,7 @@ A number input component with validation, keyboard controls, and custom spinners
 | ----------------- | ------------------ | ------------------------------------------------------------------------- | ---------------------------------- | ----------- |
 | `altMultiplier`   | `alt-multiplier`   | Multiplier for step value when holding Alt/Option key                     | `number \| undefined`              | `undefined` |
 | `altStep`         | `alt-step`         | Step value when holding Alt/Option key                                    | `number \| undefined`              | `undefined` |
-| `controls`        | `controls`         | Controls type for numerical adjustment ('spinner' \| 'stepper' \| 'none') | `"none" \| "spinner" \| "stepper"` | `'spinner'` |
+| `controls`        | `controls`         | Controls type for numerical adjustment ('spinner' \| 'stepper' \| 'none') | `"none" \| "spinner" \| "stepper"` | `'none'`    |
 | `disabled`        | `disabled`         | Whether the input is disabled                                             | `boolean`                          | `false`     |
 | `externalId`      | `external-id`      | External ID for linking with external systems                             | `string \| undefined`              | `undefined` |
 | `iconEnd`         | `icon-end`         | Icon for the end icon                                                     | `string \| undefined`              | `undefined` |

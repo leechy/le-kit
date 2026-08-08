@@ -170,7 +170,68 @@ export class LeNumberInput {
     this.initSlotObserver();
   }
 
+  private repeatTimeout?: any;
+  private repeatInterval?: any;
+  private lastPressTime = 0;
+
+  private stopRepeat = () => {
+    if (this.repeatTimeout) {
+      clearTimeout(this.repeatTimeout);
+      this.repeatTimeout = undefined;
+    }
+    if (this.repeatInterval) {
+      clearInterval(this.repeatInterval);
+      this.repeatInterval = undefined;
+    }
+    window.removeEventListener('pointerup', this.stopRepeat);
+    window.removeEventListener('pointercancel', this.stopRepeat);
+    window.removeEventListener('mouseup', this.stopRepeat);
+  };
+
+  private startRepeat = (action: 'inc' | 'dec', ev: UIEvent) => {
+    if ('button' in ev && (ev as MouseEvent).button !== 0) return;
+
+    const now = Date.now();
+    if (now - this.lastPressTime < 100 && ev.type === 'mousedown') {
+      ev.preventDefault();
+      return;
+    }
+    this.lastPressTime = now;
+
+    ev.preventDefault();
+    this.stopRepeat();
+
+    if (action === 'inc') {
+      this.increment(ev);
+    } else {
+      this.decrement(ev);
+    }
+
+    window.addEventListener('pointerup', this.stopRepeat, { once: true });
+    window.addEventListener('pointercancel', this.stopRepeat, { once: true });
+    window.addEventListener('mouseup', this.stopRepeat, { once: true });
+
+    this.repeatTimeout = setTimeout(() => {
+      this.repeatInterval = setInterval(() => {
+        if (action === 'inc') {
+          if (this.max !== undefined && this.value !== undefined && this.value >= this.max) {
+            this.stopRepeat();
+            return;
+          }
+          this.increment(ev);
+        } else {
+          if (this.min !== undefined && this.value !== undefined && this.value <= this.min) {
+            this.stopRepeat();
+            return;
+          }
+          this.decrement(ev);
+        }
+      }, 60);
+    }, 400);
+  };
+
   disconnectedCallback() {
+    this.stopRepeat();
     this.disconnectSlotObserver?.();
   }
 
@@ -299,10 +360,20 @@ export class LeNumberInput {
 
     if (ev.key === 'ArrowUp') {
       ev.preventDefault();
-      this.updateValue(current + effectiveStep, effectiveStep);
+      if (this.max !== undefined && this.value !== undefined && this.value >= this.max) {
+        return;
+      }
+      const nextVal =
+        this.max !== undefined ? Math.min(this.max, current + effectiveStep) : current + effectiveStep;
+      this.updateValue(nextVal, effectiveStep);
     } else if (ev.key === 'ArrowDown') {
       ev.preventDefault();
-      this.updateValue(current - effectiveStep, effectiveStep);
+      if (this.min !== undefined && this.value !== undefined && this.value <= this.min) {
+        return;
+      }
+      const nextVal =
+        this.min !== undefined ? Math.max(this.min, current - effectiveStep) : current - effectiveStep;
+      this.updateValue(nextVal, effectiveStep);
     }
   };
 
@@ -316,26 +387,58 @@ export class LeNumberInput {
     const effectiveStep = this.getEffectiveStep(ev);
 
     if (ev.deltaY < 0) {
-      this.updateValue(current + effectiveStep, effectiveStep);
+      if (this.max !== undefined && this.value !== undefined && this.value >= this.max) {
+        return;
+      }
+      const nextVal =
+        this.max !== undefined ? Math.min(this.max, current + effectiveStep) : current + effectiveStep;
+      this.updateValue(nextVal, effectiveStep);
     } else {
-      this.updateValue(current - effectiveStep, effectiveStep);
+      if (this.min !== undefined && this.value !== undefined && this.value <= this.min) {
+        return;
+      }
+      const nextVal =
+        this.min !== undefined ? Math.max(this.min, current - effectiveStep) : current - effectiveStep;
+      this.updateValue(nextVal, effectiveStep);
+    }
+  };
+
+  private handleClick = (action: 'inc' | 'dec', ev: any) => {
+    ev.preventDefault();
+    if (Date.now() - this.lastPressTime < 300) {
+      return;
+    }
+    if (action === 'inc') {
+      this.increment(ev);
+    } else {
+      this.decrement(ev);
     }
   };
 
   private increment = (ev: Event) => {
     ev.preventDefault(); // Prevent focus loss
+    if (this.max !== undefined && this.value !== undefined && this.value >= this.max) {
+      return;
+    }
     const current = this.value || 0;
     const effectiveStep = this.getEffectiveStep(ev as MouseEvent);
-    this.updateValue(current + effectiveStep, effectiveStep);
+    const nextVal =
+      this.max !== undefined ? Math.min(this.max, current + effectiveStep) : current + effectiveStep;
+    this.updateValue(nextVal, effectiveStep);
     // Trigger change event for buttons as they are "final" actions usually
     this.emitChange();
   };
 
   private decrement = (ev: Event) => {
     ev.preventDefault();
+    if (this.min !== undefined && this.value !== undefined && this.value <= this.min) {
+      return;
+    }
     const current = this.value || 0;
     const effectiveStep = this.getEffectiveStep(ev as MouseEvent);
-    this.updateValue(current - effectiveStep, effectiveStep);
+    const nextVal =
+      this.min !== undefined ? Math.max(this.min, current - effectiveStep) : current - effectiveStep;
+    this.updateValue(nextVal, effectiveStep);
     this.emitChange();
   };
 
@@ -363,7 +466,7 @@ export class LeNumberInput {
           )}
 
           <div
-            class={classnames('le-input-container', {
+            class={classnames('le-input-container', 'le-control-focus', {
               'has-error': !this.isValid,
               'has-stepper': isStepper,
               'has-spinner': isSpinner,
@@ -375,7 +478,11 @@ export class LeNumberInput {
                 variant="clear"
                 icon-only="minus"
                 class="le-stepper-btn stepper-decrement"
-                onClick={this.decrement}
+                onMouseDown={(ev: any) => this.startRepeat('dec', ev)}
+                onPointerDown={(ev: any) => this.startRepeat('dec', ev)}
+                onPointerUp={this.stopRepeat}
+                onPointerLeave={this.stopRepeat}
+                onClick={(ev: any) => this.handleClick('dec', ev)}
                 disabled={
                   this.disabled ||
                   this.readonly ||
@@ -421,7 +528,11 @@ export class LeNumberInput {
                 variant="clear"
                 icon-only="plus"
                 class="le-stepper-btn stepper-increment"
-                onClick={this.increment}
+                onMouseDown={(ev: any) => this.startRepeat('inc', ev)}
+                onPointerDown={(ev: any) => this.startRepeat('inc', ev)}
+                onPointerUp={this.stopRepeat}
+                onPointerLeave={this.stopRepeat}
+                onClick={(ev: any) => this.handleClick('inc', ev)}
                 disabled={
                   this.disabled ||
                   this.readonly ||
@@ -439,7 +550,11 @@ export class LeNumberInput {
                   size="small"
                   icon-only="chevron-up"
                   class="le-input-control-btn"
-                  onClick={this.increment}
+                  onMouseDown={(ev: any) => this.startRepeat('inc', ev)}
+                  onPointerDown={(ev: any) => this.startRepeat('inc', ev)}
+                  onPointerUp={this.stopRepeat}
+                  onPointerLeave={this.stopRepeat}
+                  onClick={(ev: any) => this.handleClick('inc', ev)}
                   disabled={
                     this.disabled ||
                     this.readonly ||
@@ -453,7 +568,11 @@ export class LeNumberInput {
                   size="small"
                   icon-only="chevron-down"
                   class="le-input-control-btn"
-                  onClick={this.decrement}
+                  onMouseDown={(ev: any) => this.startRepeat('dec', ev)}
+                  onPointerDown={(ev: any) => this.startRepeat('dec', ev)}
+                  onPointerUp={this.stopRepeat}
+                  onPointerLeave={this.stopRepeat}
+                  onClick={(ev: any) => this.handleClick('dec', ev)}
                   disabled={
                     this.disabled ||
                     this.readonly ||

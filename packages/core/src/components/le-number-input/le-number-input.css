@@ -30,8 +30,8 @@
 }
 
 .le-input-container {
-  position: relative;
   display: flex;
+  position: relative;
   align-items: center;
   background: var(--le-input-bg);
   border: var(--le-input-border);
@@ -40,13 +40,14 @@
   outline-offset: 0;
   transition:
     border-color 0.2s ease,
-    outline var(--le-input-transition),
-    outline-offset var(--le-input-transition);
+    background-color 0.2s ease,
+    outline var(--le-control-focus-transition, 0.2s ease),
+    outline-offset var(--le-control-focus-transition, 0.2s ease);
 }
 
 .le-input-container:focus-within {
-  outline: 2px solid var(--le-color-focus);
-  outline-offset: 2px;
+  outline: var(--le-input-border-focus, 2px solid var(--le-color-focus));
+  outline-offset: var(--le-input-border-focus-offset, -1px);
 }
 
 .le-input-container.has-error {

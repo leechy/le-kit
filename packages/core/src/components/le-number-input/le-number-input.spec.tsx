@@ -199,4 +199,36 @@ describe('le-number-input', () => {
     expect(iconStart).not.toBeNull();
     expect(iconEnd).not.toBeNull();
   });
+
+  it('clamps and stops keyboard navigation at min and max limits', async () => {
+    const page = await newSpecPage({
+      components: [LeNumberInput],
+      html: '<le-number-input value="95" min="0" max="100" step="1" shift-step="10"></le-number-input>',
+    });
+
+    const host = page.root as HTMLLeNumberInputElement;
+    const input = host.shadowRoot?.querySelector('input') as HTMLInputElement;
+
+    // Shift + ArrowUp from 95 with step 10 -> clamped to max 100
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', shiftKey: true }));
+    await page.waitForChanges();
+    expect(host.value).toBe(100);
+
+    // ArrowUp at max 100 -> stays at 100
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+    await page.waitForChanges();
+    expect(host.value).toBe(100);
+
+    // Shift + ArrowDown from 100 to 0 limit
+    host.value = 5;
+    await page.waitForChanges();
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', shiftKey: true }));
+    await page.waitForChanges();
+    expect(host.value).toBe(0);
+
+    // ArrowDown at min 0 -> stays at 0
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    await page.waitForChanges();
+    expect(host.value).toBe(0);
+  });
 });

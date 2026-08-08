@@ -366,6 +366,7 @@ export class LeNumberInput {
             class={classnames('le-input-container', {
               'has-error': !this.isValid,
               'has-stepper': isStepper,
+              'has-spinner': isSpinner,
             })}
           >
             {isStepper && (

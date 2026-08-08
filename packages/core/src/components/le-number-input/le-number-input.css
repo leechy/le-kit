@@ -5,6 +5,7 @@
   --le-input-border: var(--le-border-width, 2px) solid var(--le-color-border-input, #007bff);
   --le-input-radius: var(--le-radius-sm, 4px);
   --le-input-padding: 2px;
+  --le-input-inline-padding: 8px;
   --le-input-height: 1.5rem;
   --le-input-label-color: var(--le-color-text-primary, #333333);
   --le-input-desc-color: var(--le-color-text-secondary, #666666);
@@ -69,10 +70,10 @@ input {
   font-family: inherit;
   font-size: inherit;
   outline: none;
-  text-align: end;
   /* Aligned to end */
-  appearance: textfield;
+  text-align: end;
   /* Remove default spinners in Firefox */
+  appearance: textfield;
 }
 
 /* Remove default spinners in Chrome/Safari/Edge */
@@ -86,6 +87,15 @@ input::placeholder {
   color: var(--le-input-placeholder-color);
 }
 
+.icon-start:not(.is-visible)+input {
+  padding-inline-start: var(--le-input-inline-padding, 8px);
+}
+
+input:has(+ .icon-end:not(.is-visible)) {
+  padding-inline-end: var(--le-input-inline-padding, 8px);
+}
+
+
 .icon-start,
 .icon-end {
   display: none;
@@ -97,15 +107,15 @@ input::placeholder {
 .icon-start.is-visible,
 .icon-end.is-visible {
   display: flex;
-  padding: var(--le-input-icon-padding, 2px 8px);
+  padding-inline: var(--le-input-inline-padding, 8px);
 }
 
 .icon-start.is-visible {
-  padding-right: var(--le-input-icon-inner-padding, 2px);
+  padding-inline-end: var(--le-input-padding, 2px);
 }
 
 .icon-end.is-visible {
-  padding-left: var(--le-input-icon-inner-padding, 2px);
+  padding-inline-start: var(--le-input-padding, 2px);
 }
 
 .le-input-controls {

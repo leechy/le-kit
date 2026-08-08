@@ -1273,26 +1273,31 @@
 
         <div class="text-slot-demo">
           <label>Number Input (Stepper Controls):</label>
-          <le-number-input name="quantity" min="0" max="100" value="1" step="1" controls="stepper"
-            external-id="qty-field" label="Quantity" icon-start="#">
-            <le-select slot="icon-end" size="small" value="pcs" variant="clear" hide-chevron>
-              <le-item value="pcs">pcs</le-item>
+          <le-number-input name="weight" min="0" max="100" value="3" step="1" controls="stepper" label="Weight"
+            style="max-width: 9rem;">
+            <le-select slot="icon-end" size="small" value="kg" variant="clear" hide-chevron>
+              <le-item value="kg">kg</le-item>
               <le-item value="lbs">lbs</le-item>
             </le-select>
-            <span slot="description">Enter amount (0-100)</span>
+          </le-number-input>
+          <le-number-input name="weight2" min="0" max="100" value="3" step="1" controls="stepper" label="Weight"
+            style="max-width: 9rem;">
+          </le-number-input>
+          <le-number-input name="weight3" min="0" max="100" value="3" step="1" controls="none" label="Weight"
+            style="max-width: 9rem;">
           </le-number-input>
         </div>
 
         <div class="text-slot-demo">
           <label>Price Input (Spinner controls):</label>
-          <le-number-input name="price" step="1" alt-step="0.01" min="0" value="19.99" external-id="price-field"
-            label="Price" controls="spinner">
-            <le-select slot="icon-end" size="small" value="$" variant="clear">
+          <le-number-input name="price" step="1" shift-step="100" alt-step="0.01" min="0" value="19.99"
+            external-id="price-field" label="Price" controls="spinner">
+            <le-select slot="icon-end" size="small" value="$" variant="clear" hide-chevron>
               <le-item value="$">$</le-item>
               <le-item value="€">€</le-item>
               <le-item value="¥">¥</le-item>
             </le-select>
-            <span slot="description">Use Shift+Up for +10, Alt+Up for +0.01</span>
+            <span slot="description">Use Shift+Up for +100, Alt+Up for +0.01</span>
           </le-number-input>
         </div>
 

@@ -171,6 +171,7 @@ Type: `Promise<LeOption>`
 
  - [le-breadcrumbs](../le-breadcrumbs)
  - [le-component](../le-component)
+ - [le-empty](../le-empty)
  - [le-number-input](../le-number-input)
  - [le-overflow-menu](../le-overflow-menu)
  - [le-popup](../le-popup)
@@ -208,6 +209,7 @@ graph TD;
   le-popup --> le-button
   le-tooltip --> le-component
   le-breadcrumbs --> le-button
+  le-empty --> le-button
   le-number-input --> le-button
   le-overflow-menu --> le-button
   le-preview-frame --> le-button

@@ -133,14 +133,26 @@ export function observeNamedSlotPresence(
     });
   };
 
+  const checkLightDomPresence = (slotName: string): boolean => {
+    return Array.from(host.children).some(child => {
+      if (!slotName) {
+        return !child.hasAttribute('slot');
+      }
+      return child.getAttribute('slot') === slotName;
+    });
+  };
+
   const emitState = () => {
     const root = host.shadowRoot;
     const presence: SlotPresenceMap = {};
 
     for (const slotName of slotNames) {
+      const hasLightDom = checkLightDomPresence(slotName);
       const selector = slotName ? `slot[name="${slotName}"]` : 'slot:not([name])';
       const slot = root?.querySelector(selector) as HTMLSlotElement | null;
-      presence[slotName] = !!slot && hasAssignedContent(slot);
+      const hasShadowAssigned = !!slot && hasAssignedContent(slot);
+
+      presence[slotName] = hasLightDom || hasShadowAssigned;
     }
 
     onChange(presence);
@@ -174,6 +186,10 @@ export function observeNamedSlotPresence(
     bindSlotListeners();
   });
 
+  const lightDomObserver = new MutationObserver(() => {
+    emitState();
+  });
+
   if (host.shadowRoot) {
     shadowObserver.observe(host.shadowRoot, {
       childList: true,
@@ -181,8 +197,16 @@ export function observeNamedSlotPresence(
     });
   }
 
+  lightDomObserver.observe(host, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['slot'],
+  });
+
   return () => {
     shadowObserver.disconnect();
+    lightDomObserver.disconnect();
     for (const [slot, listener] of slotListeners) {
       slot.removeEventListener('slotchange', listener);
     }
@@ -410,7 +434,7 @@ export function classnames(...classes: any[]): string {
 export function parseOptionInput(
   input: LeOption[] | string,
   context: string,
-  inputName: 'items' | 'options' = 'options',
+  inputName: string = 'options',
 ): LeOption[] {
   if (typeof input === 'string') {
     try {

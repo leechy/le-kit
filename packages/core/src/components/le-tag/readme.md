@@ -40,6 +40,7 @@ A tag/chip component for displaying labels with optional dismiss functionality.
 
 ### Used by
 
+ - [le-list](../le-list)
  - [le-multiselect](../le-multiselect)
  - [le-preview-frame](../le-preview-frame)
 
@@ -87,6 +88,7 @@ graph TD;
   le-popup --> le-slot
   le-popup --> le-button
   le-popup --> le-component
+  le-list --> le-tag
   le-multiselect --> le-tag
   le-preview-frame --> le-tag
   style le-tag fill:#f9f,stroke:#333,stroke-width:4px

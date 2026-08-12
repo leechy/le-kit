@@ -22,11 +22,13 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-current-heading](#le-current-heading)
 - [le-drag-handle](#le-drag-handle)
 - [le-dropdown-base](#le-dropdown-base)
+- [le-empty](#le-empty)
 - [le-header](#le-header)
 - [le-header-placeholder](#le-header-placeholder)
 - [le-icon](#le-icon)
 - [le-item](#le-item)
 - [le-kit](#le-kit)
+- [le-list](#le-list)
 - [le-multiselect](#le-multiselect)
 - [le-navigation](#le-navigation)
 - [le-number-input](#le-number-input)
@@ -282,7 +284,8 @@ A flexible button component with multiple variants and states.
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
 | `mode` | `'default' \| 'admin' \| undefined` |  | Mode of the popover should be 'default' for internal use |
-| `variant` | `'solid' \| 'outlined' \| 'clear' \| 'system'` | `'outlined'` | Button variant style |
+| `variant` | `'solid' \| 'filled' \| 'outlined' \| 'clear' \| 'system'` | `'outlined'` | Button variant style |
+| `filled` | `boolean` | `false` | Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API). |
 | `color` | `\| 'primary'
     \| 'secondary'
     \| 'success'
@@ -737,6 +740,39 @@ Wraps le-popover for positioning and provides:
 
 ---
 
+## <le-empty>
+
+An empty state component inspired by SwiftUI ContentUnavailableView.
+Used for displaying empty lists, search results, or unavailable states.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `icon` | `string \| undefined` |  | Optional icon name, URL, or emoji character. |
+| `label` | `string \| undefined` |  | Main label text for the empty state. |
+| `message` | `string \| undefined` |  | Secondary descriptive message. |
+| `actionLabel` | `string \| undefined` |  | Label for optional action button. |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leAction` | `EventEmitter<MouseEvent>` | Emitted when the action button is clicked. |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | Default slot for custom body content |
+| `"icon"` | Custom icon slot |
+| `"label"` | Custom label/title slot |
+| `"message"` | Custom message/description slot |
+| `"action"` | Custom action buttons slot |
+
+---
+
 ## <le-header>
 
 A functional page header with scroll-aware behaviors.
@@ -879,6 +915,34 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `watchModals` | `boolean` | `true` | Whether this instance reacts to descendant modal popup open/close events. |
 | `storageKey` | `string` | `'le-kit'` | Local storage namespace for persisted values. |
 | `persist` | `string` | `'theme appearance'` | Persistence keys as a space-separated list: `all`, `none`, `theme`, `appearance`. |
+
+---
+
+## <le-list>
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `data` | `LeOption[] \| string` | `[]` | Data items to display in the list. Can be an array of `LeOption` objects or a JSON string. If omitted or empty, top-level `<le-item>` child elements will be parsed. |
+| `columns` | `LeColumn[] \| string` | `[]` | Column configuration for the list table view. Can be an array of `LeColumn` objects or a JSON string. If omitted, columns will be automatically generated from data item properties. |
+| `allowClearSort` | `boolean` | `true` | Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true. |
+| `defaultSortIconPosition` | `'start' \| 'end' \| 'none' \| undefined` |  | Default sort icon placement across columns ('start' | 'end' | 'none'). If omitted, right-aligned columns default to 'start' and left/center columns default to 'end'. |
+| `emptyLabel` | `string \| undefined` |  | Main label text for default empty state (<le-empty>). |
+| `emptyTitle` | `string \| undefined` |  | Title text for default empty state (<le-empty>). |
+| `emptyMessage` | `string \| undefined` |  | Secondary description text for default empty state (<le-empty>). |
+| `emptyIcon` | `string \| undefined` |  | Icon for default empty state (<le-empty>). |
+| `parsedOptions` | `LeOption[]` | `[]` |  |
+| `parsedColumns` | `LeColumn[]` | `[]` |  |
+| `sortColumnKey` | `string \| undefined` |  |  |
+| `sortDirection` | `'asc' \| 'desc' \| undefined` |  |  |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leSortChange` | `EventEmitter<{ key?: string; column?: LeColumn; direction?: 'asc' \| 'desc' }>` | Emitted when column sorting changes. |
 
 ---
 

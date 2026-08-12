@@ -41,6 +41,7 @@
  - [le-combobox](../le-combobox)
  - [le-dropdown-base](../le-dropdown-base)
  - [le-empty](../le-empty)
+ - [le-list](../le-list)
  - [le-multiselect](../le-multiselect)
  - [le-navigation](../le-navigation)
  - [le-number-input](../le-number-input)
@@ -61,6 +62,7 @@ graph TD;
   le-combobox --> le-icon
   le-dropdown-base --> le-icon
   le-empty --> le-icon
+  le-list --> le-icon
   le-multiselect --> le-icon
   le-navigation --> le-icon
   le-number-input --> le-icon

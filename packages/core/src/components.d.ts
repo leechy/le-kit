@@ -15,6 +15,7 @@ import { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-g
 import { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 import { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 import { LeActiveContext } from "./components/le-kit/le-kit";
+import { LeColumn } from "./types/list";
 import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 import { LeKitMode } from "./global/app";
@@ -34,6 +35,7 @@ export { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-g
 export { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 export { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 export { LeActiveContext } from "./components/le-kit/le-kit";
+export { LeColumn } from "./types/list";
 export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 export { LeKitMode } from "./global/app";
@@ -434,6 +436,11 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API).
+          * @default false
+         */
+        "filled": boolean;
+        /**
           * Whether the button takes full width of its container
           * @default false
          */
@@ -531,10 +538,10 @@ export namespace Components {
         "value"?: string;
         /**
           * Button variant style
-          * @allowedValues solid | outlined | clear
+          * @allowedValues solid | filled | outlined | clear | system
           * @default 'outlined'
          */
-        "variant": 'solid' | 'outlined' | 'clear' | 'system';
+        "variant": 'solid' | 'filled' | 'outlined' | 'clear' | 'system';
         /**
           * Visibility state used by responsive containers to animate show/hide transitions.
           * @allowedValues visible | collapsing | collapsed | expanding
@@ -1052,6 +1059,28 @@ export namespace Components {
         "width"?: string;
     }
     /**
+     * An empty state component inspired by SwiftUI ContentUnavailableView.
+     * Used for displaying empty lists, search results, or unavailable states.
+     */
+    interface LeEmpty {
+        /**
+          * Label for optional action button.
+         */
+        "actionLabel"?: string;
+        /**
+          * Optional icon name, URL, or emoji character.
+         */
+        "icon"?: string;
+        /**
+          * Main label text for the empty state.
+         */
+        "label"?: string;
+        /**
+          * Secondary descriptive message.
+         */
+        "message"?: string;
+    }
+    /**
      * A functional page header with scroll-aware behaviors.
      * Features:
      * - Static (default), sticky, or fixed positioning
@@ -1264,6 +1293,43 @@ export namespace Components {
           * @default true
          */
         "watchWindow": boolean;
+    }
+    interface LeList {
+        /**
+          * Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true.
+          * @default true
+         */
+        "allowClearSort": boolean;
+        /**
+          * Column configuration for the list table view. Can be an array of `LeColumn` objects or a JSON string. If omitted, columns will be automatically generated from data item properties.
+          * @default []
+         */
+        "columns": LeColumn[] | string;
+        /**
+          * Data items to display in the list. Can be an array of `LeOption` objects or a JSON string. If omitted or empty, top-level `<le-item>` child elements will be parsed.
+          * @default []
+         */
+        "data": LeOption[] | string;
+        /**
+          * Default sort icon placement across columns ('start' | 'end' | 'none'). If omitted, right-aligned columns default to 'start' and left/center columns default to 'end'.
+         */
+        "defaultSortIconPosition"?: 'start' | 'end' | 'none';
+        /**
+          * Icon for default empty state (<le-empty>).
+         */
+        "emptyIcon"?: string;
+        /**
+          * Main label text for default empty state (<le-empty>).
+         */
+        "emptyLabel"?: string;
+        /**
+          * Secondary description text for default empty state (<le-empty>).
+         */
+        "emptyMessage"?: string;
+        /**
+          * Title text for default empty state (<le-empty>).
+         */
+        "emptyTitle"?: string;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -3012,9 +3078,17 @@ export interface LeDropdownBaseCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeDropdownBaseElement;
 }
+export interface LeEmptyCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeEmptyElement;
+}
 export interface LeHeaderCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeHeaderElement;
+}
+export interface LeListCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeListElement;
 }
 export interface LeMultiselectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3528,6 +3602,27 @@ declare global {
         prototype: HTMLLeDropdownBaseElement;
         new (): HTMLLeDropdownBaseElement;
     };
+    interface HTMLLeEmptyElementEventMap {
+        "leAction": MouseEvent;
+    }
+    /**
+     * An empty state component inspired by SwiftUI ContentUnavailableView.
+     * Used for displaying empty lists, search results, or unavailable states.
+     */
+    interface HTMLLeEmptyElement extends Components.LeEmpty, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeEmptyElementEventMap>(type: K, listener: (this: HTMLLeEmptyElement, ev: LeEmptyCustomEvent<HTMLLeEmptyElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeEmptyElementEventMap>(type: K, listener: (this: HTMLLeEmptyElement, ev: LeEmptyCustomEvent<HTMLLeEmptyElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeEmptyElement: {
+        prototype: HTMLLeEmptyElement;
+        new (): HTMLLeEmptyElement;
+    };
     interface HTMLLeHeaderElementEventMap {
         "leHeaderState": {
     y: number;
@@ -3621,6 +3716,23 @@ declare global {
     var HTMLLeKitElement: {
         prototype: HTMLLeKitElement;
         new (): HTMLLeKitElement;
+    };
+    interface HTMLLeListElementEventMap {
+        "leSortChange": { key?: string; column?: LeColumn; direction?: 'asc' | 'desc' };
+    }
+    interface HTMLLeListElement extends Components.LeList, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeListElementEventMap>(type: K, listener: (this: HTMLLeListElement, ev: LeListCustomEvent<HTMLLeListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeListElementEventMap>(type: K, listener: (this: HTMLLeListElement, ev: LeListCustomEvent<HTMLLeListElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeListElement: {
+        prototype: HTMLLeListElement;
+        new (): HTMLLeListElement;
     };
     interface HTMLLeMultiselectElementEventMap {
         "leChange": LeMultiOptionSelectDetail;
@@ -4336,11 +4448,13 @@ declare global {
         "le-current-heading": HTMLLeCurrentHeadingElement;
         "le-drag-handle": HTMLLeDragHandleElement;
         "le-dropdown-base": HTMLLeDropdownBaseElement;
+        "le-empty": HTMLLeEmptyElement;
         "le-header": HTMLLeHeaderElement;
         "le-header-placeholder": HTMLLeHeaderPlaceholderElement;
         "le-icon": HTMLLeIconElement;
         "le-item": HTMLLeItemElement;
         "le-kit": HTMLLeKitElement;
+        "le-list": HTMLLeListElement;
         "le-multiselect": HTMLLeMultiselectElement;
         "le-navigation": HTMLLeNavigationElement;
         "le-number-input": HTMLLeNumberInputElement;
@@ -4763,6 +4877,11 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API).
+          * @default false
+         */
+        "filled"?: boolean;
+        /**
           * Whether the button takes full width of its container
           * @default false
          */
@@ -4859,10 +4978,10 @@ declare namespace LocalJSX {
         "value"?: string;
         /**
           * Button variant style
-          * @allowedValues solid | outlined | clear
+          * @allowedValues solid | filled | outlined | clear | system
           * @default 'outlined'
          */
-        "variant"?: 'solid' | 'outlined' | 'clear' | 'system';
+        "variant"?: 'solid' | 'filled' | 'outlined' | 'clear' | 'system';
         /**
           * Visibility state used by responsive containers to animate show/hide transitions.
           * @allowedValues visible | collapsing | collapsed | expanding
@@ -5404,6 +5523,32 @@ declare namespace LocalJSX {
         "width"?: string;
     }
     /**
+     * An empty state component inspired by SwiftUI ContentUnavailableView.
+     * Used for displaying empty lists, search results, or unavailable states.
+     */
+    interface LeEmpty {
+        /**
+          * Label for optional action button.
+         */
+        "actionLabel"?: string;
+        /**
+          * Optional icon name, URL, or emoji character.
+         */
+        "icon"?: string;
+        /**
+          * Main label text for the empty state.
+         */
+        "label"?: string;
+        /**
+          * Secondary descriptive message.
+         */
+        "message"?: string;
+        /**
+          * Emitted when the action button is clicked.
+         */
+        "onLeAction"?: (event: LeEmptyCustomEvent<MouseEvent>) => void;
+    }
+    /**
      * A functional page header with scroll-aware behaviors.
      * Features:
      * - Static (default), sticky, or fixed positioning
@@ -5629,6 +5774,47 @@ declare namespace LocalJSX {
           * @default true
          */
         "watchWindow"?: boolean;
+    }
+    interface LeList {
+        /**
+          * Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true.
+          * @default true
+         */
+        "allowClearSort"?: boolean;
+        /**
+          * Column configuration for the list table view. Can be an array of `LeColumn` objects or a JSON string. If omitted, columns will be automatically generated from data item properties.
+          * @default []
+         */
+        "columns"?: LeColumn[] | string;
+        /**
+          * Data items to display in the list. Can be an array of `LeOption` objects or a JSON string. If omitted or empty, top-level `<le-item>` child elements will be parsed.
+          * @default []
+         */
+        "data"?: LeOption[] | string;
+        /**
+          * Default sort icon placement across columns ('start' | 'end' | 'none'). If omitted, right-aligned columns default to 'start' and left/center columns default to 'end'.
+         */
+        "defaultSortIconPosition"?: 'start' | 'end' | 'none';
+        /**
+          * Icon for default empty state (<le-empty>).
+         */
+        "emptyIcon"?: string;
+        /**
+          * Main label text for default empty state (<le-empty>).
+         */
+        "emptyLabel"?: string;
+        /**
+          * Secondary description text for default empty state (<le-empty>).
+         */
+        "emptyMessage"?: string;
+        /**
+          * Title text for default empty state (<le-empty>).
+         */
+        "emptyTitle"?: string;
+        /**
+          * Emitted when column sorting changes.
+         */
+        "onLeSortChange"?: (event: LeListCustomEvent<{ key?: string; column?: LeColumn; direction?: 'asc' | 'desc' }>) => void;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -7421,7 +7607,8 @@ declare namespace LocalJSX {
     }
     interface LeButtonAttributes {
         "mode": 'default' | 'admin';
-        "variant": 'solid' | 'outlined' | 'clear' | 'system';
+        "variant": 'solid' | 'filled' | 'outlined' | 'clear' | 'system';
+        "filled": boolean;
         "color": | 'primary'
     | 'secondary'
     | 'success'
@@ -7543,6 +7730,12 @@ declare namespace LocalJSX {
         "size": 'small' | 'medium' | 'large';
         "closeOnClickOutside": boolean;
     }
+    interface LeEmptyAttributes {
+        "icon": string;
+        "label": string;
+        "message": string;
+        "actionLabel": string;
+    }
     interface LeHeaderAttributes {
         "isStatic": boolean;
         "sticky": boolean;
@@ -7582,6 +7775,16 @@ declare namespace LocalJSX {
         "watchModals": boolean;
         "storageKey": string;
         "persist": string;
+    }
+    interface LeListAttributes {
+        "data": LeOption[] | string;
+        "columns": LeColumn[] | string;
+        "allowClearSort": boolean;
+        "defaultSortIconPosition": 'start' | 'end' | 'none';
+        "emptyLabel": string;
+        "emptyTitle": string;
+        "emptyMessage": string;
+        "emptyIcon": string;
     }
     interface LeMultiselectAttributes {
         "options": LeOption[] | string;
@@ -7931,11 +8134,13 @@ declare namespace LocalJSX {
         "le-current-heading": Omit<LeCurrentHeading, keyof LeCurrentHeadingAttributes> & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes]?: LeCurrentHeading[K] } & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes as `attr:${K}`]?: LeCurrentHeadingAttributes[K] } & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes as `prop:${K}`]?: LeCurrentHeading[K] };
         "le-drag-handle": Omit<LeDragHandle, keyof LeDragHandleAttributes> & { [K in keyof LeDragHandle & keyof LeDragHandleAttributes]?: LeDragHandle[K] } & { [K in keyof LeDragHandle & keyof LeDragHandleAttributes as `attr:${K}`]?: LeDragHandleAttributes[K] } & { [K in keyof LeDragHandle & keyof LeDragHandleAttributes as `prop:${K}`]?: LeDragHandle[K] };
         "le-dropdown-base": Omit<LeDropdownBase, keyof LeDropdownBaseAttributes> & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes]?: LeDropdownBase[K] } & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes as `attr:${K}`]?: LeDropdownBaseAttributes[K] } & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes as `prop:${K}`]?: LeDropdownBase[K] };
+        "le-empty": Omit<LeEmpty, keyof LeEmptyAttributes> & { [K in keyof LeEmpty & keyof LeEmptyAttributes]?: LeEmpty[K] } & { [K in keyof LeEmpty & keyof LeEmptyAttributes as `attr:${K}`]?: LeEmptyAttributes[K] } & { [K in keyof LeEmpty & keyof LeEmptyAttributes as `prop:${K}`]?: LeEmpty[K] };
         "le-header": Omit<LeHeader, keyof LeHeaderAttributes> & { [K in keyof LeHeader & keyof LeHeaderAttributes]?: LeHeader[K] } & { [K in keyof LeHeader & keyof LeHeaderAttributes as `attr:${K}`]?: LeHeaderAttributes[K] } & { [K in keyof LeHeader & keyof LeHeaderAttributes as `prop:${K}`]?: LeHeader[K] };
         "le-header-placeholder": LeHeaderPlaceholder;
         "le-icon": Omit<LeIcon, keyof LeIconAttributes> & { [K in keyof LeIcon & keyof LeIconAttributes]?: LeIcon[K] } & { [K in keyof LeIcon & keyof LeIconAttributes as `attr:${K}`]?: LeIconAttributes[K] } & { [K in keyof LeIcon & keyof LeIconAttributes as `prop:${K}`]?: LeIcon[K] };
         "le-item": LeItem;
         "le-kit": Omit<LeKit, keyof LeKitAttributes> & { [K in keyof LeKit & keyof LeKitAttributes]?: LeKit[K] } & { [K in keyof LeKit & keyof LeKitAttributes as `attr:${K}`]?: LeKitAttributes[K] } & { [K in keyof LeKit & keyof LeKitAttributes as `prop:${K}`]?: LeKit[K] };
+        "le-list": Omit<LeList, keyof LeListAttributes> & { [K in keyof LeList & keyof LeListAttributes]?: LeList[K] } & { [K in keyof LeList & keyof LeListAttributes as `attr:${K}`]?: LeListAttributes[K] } & { [K in keyof LeList & keyof LeListAttributes as `prop:${K}`]?: LeList[K] };
         "le-multiselect": Omit<LeMultiselect, keyof LeMultiselectAttributes> & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes]?: LeMultiselect[K] } & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes as `attr:${K}`]?: LeMultiselectAttributes[K] } & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes as `prop:${K}`]?: LeMultiselect[K] };
         "le-navigation": Omit<LeNavigation, keyof LeNavigationAttributes> & { [K in keyof LeNavigation & keyof LeNavigationAttributes]?: LeNavigation[K] } & { [K in keyof LeNavigation & keyof LeNavigationAttributes as `attr:${K}`]?: LeNavigationAttributes[K] } & { [K in keyof LeNavigation & keyof LeNavigationAttributes as `prop:${K}`]?: LeNavigation[K] };
         "le-number-input": Omit<LeNumberInput, keyof LeNumberInputAttributes> & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes]?: LeNumberInput[K] } & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes as `attr:${K}`]?: LeNumberInputAttributes[K] } & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes as `prop:${K}`]?: LeNumberInput[K] };
@@ -8188,6 +8393,11 @@ declare module "@stencil/core" {
              */
             "le-dropdown-base": LocalJSX.IntrinsicElements["le-dropdown-base"] & JSXBase.HTMLAttributes<HTMLLeDropdownBaseElement>;
             /**
+             * An empty state component inspired by SwiftUI ContentUnavailableView.
+             * Used for displaying empty lists, search results, or unavailable states.
+             */
+            "le-empty": LocalJSX.IntrinsicElements["le-empty"] & JSXBase.HTMLAttributes<HTMLLeEmptyElement>;
+            /**
              * A functional page header with scroll-aware behaviors.
              * Features:
              * - Static (default), sticky, or fixed positioning
@@ -8238,6 +8448,7 @@ declare module "@stencil/core" {
              * @cmsCategory System
              */
             "le-kit": LocalJSX.IntrinsicElements["le-kit"] & JSXBase.HTMLAttributes<HTMLLeKitElement>;
+            "le-list": LocalJSX.IntrinsicElements["le-list"] & JSXBase.HTMLAttributes<HTMLLeListElement>;
             /**
              * A multiselect component for selecting multiple options.
              * Displays selected items as tags with optional search filtering.

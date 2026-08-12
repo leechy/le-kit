@@ -10,6 +10,8 @@
 | Property                  | Attribute                    | Description                                                                                                                                                                          | Type                                      | Default     |
 | ------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- | ----------- |
 | `allowClearSort`          | `allow-clear-sort`           | Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true.                                                                                | `boolean`                                 | `true`      |
+| `allowColumnToggle`       | `allow-column-toggle`        | Alias for columnVisibilityToggle.                                                                                                                                                    | `boolean`                                 | `false`     |
+| `columnVisibilityToggle`  | `column-visibility-toggle`   | Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false.                                                                       | `boolean`                                 | `false`     |
 | `columns`                 | `columns`                    | Column configuration for the list table view. Can be an array of `LeColumn` objects or a JSON string. If omitted, columns will be automatically generated from data item properties. | `LeColumn[] \| string`                    | `[]`        |
 | `data`                    | `data`                       | Data items to display in the list. Can be an array of `LeOption` objects or a JSON string. If omitted or empty, top-level `<le-item>` child elements will be parsed.                 | `LeOption[] \| string`                    | `[]`        |
 | `defaultSortIconPosition` | `default-sort-icon-position` | Default sort icon placement across columns ('start' \| 'end' \| 'none'). If omitted, right-aligned columns default to 'start' and left/center columns default to 'end'.              | `"end" \| "none" \| "start" \| undefined` | `undefined` |
@@ -21,15 +23,17 @@
 
 ## Events
 
-| Event          | Description                          | Type                                                                                                                    |
-| -------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| `leSortChange` | Emitted when column sorting changes. | `CustomEvent<{ key?: string \| undefined; column?: LeColumn \| undefined; direction?: "desc" \| "asc" \| undefined; }>` |
+| Event                      | Description                                                  | Type                                                                                                                    |
+| -------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| `leColumnVisibilityChange` | Emitted when column visibility changes via the context menu. | `CustomEvent<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean; }>`                                       |
+| `leSortChange`             | Emitted when column sorting changes.                         | `CustomEvent<{ key?: string \| undefined; column?: LeColumn \| undefined; direction?: "desc" \| "asc" \| undefined; }>` |
 
 
 ## Shadow Parts
 
 | Part            | Description |
 | --------------- | ----------- |
+| `"header"`      |             |
 | `"header-cell"` |             |
 
 
@@ -40,6 +44,7 @@
 - [le-icon](../le-icon)
 - [le-tag](../le-tag)
 - [le-empty](../le-empty)
+- [le-context-menu](../le-context-menu)
 
 ### Graph
 ```mermaid
@@ -47,6 +52,7 @@ graph TD;
   le-list --> le-icon
   le-list --> le-tag
   le-list --> le-empty
+  le-list --> le-context-menu
   le-tag --> le-component
   le-tag --> le-slot
   le-tag --> le-button
@@ -83,6 +89,21 @@ graph TD;
   le-popup --> le-component
   le-empty --> le-icon
   le-empty --> le-button
+  le-context-menu --> le-popover
+  le-context-menu --> le-navigation
+  le-navigation --> le-icon
+  le-navigation --> le-string-input
+  le-navigation --> le-collapse
+  le-navigation --> le-popover
+  le-navigation --> le-bar
+  le-navigation --> le-component
+  le-collapse --> le-component
+  le-bar --> le-icon
+  le-bar --> le-overflow-menu
+  le-overflow-menu --> le-navigation
+  le-overflow-menu --> le-popover
+  le-overflow-menu --> le-button
+  le-overflow-menu --> le-icon
   style le-list fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

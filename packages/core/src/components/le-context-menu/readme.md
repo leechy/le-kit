@@ -87,6 +87,10 @@ Type: `Promise<void>`
 
 ## Dependencies
 
+### Used by
+
+ - [le-list](../le-list)
+
 ### Depends on
 
 - [le-popover](../le-popover)
@@ -140,6 +144,7 @@ graph TD;
   le-overflow-menu --> le-popover
   le-overflow-menu --> le-button
   le-overflow-menu --> le-icon
+  le-list --> le-context-menu
   style le-context-menu fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

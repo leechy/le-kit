@@ -38,6 +38,17 @@ export class LeList {
   @Prop() defaultSortIconPosition?: 'start' | 'end' | 'none';
 
   /**
+   * Whether to enable right-click context menu on table header row to toggle column visibility.
+   * Defaults to false.
+   */
+  @Prop() columnVisibilityToggle: boolean = false;
+
+  /**
+   * Alias for columnVisibilityToggle.
+   */
+  @Prop() allowColumnToggle: boolean = false;
+
+  /**
    * Main label text for default empty state (<le-empty>).
    */
   @Prop() emptyLabel?: string;
@@ -67,6 +78,11 @@ export class LeList {
    * Emitted when column sorting changes.
    */
   @Event() leSortChange!: EventEmitter<{ key?: string; column?: LeColumn; direction?: 'asc' | 'desc' }>;
+
+  /**
+   * Emitted when column visibility changes via the context menu.
+   */
+  @Event() leColumnVisibilityChange!: EventEmitter<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>;
 
   private childrenObserver?: MutationObserver;
   private disconnectSlotObserver?: () => void;
@@ -413,6 +429,51 @@ export class LeList {
     return String(rawVal);
   }
 
+  private getColumnContextMenuItems(): LeOption[] {
+    const visibleCount = this.parsedColumns.filter(c => !c.hidden).length;
+
+    return this.parsedColumns.map(col => {
+      const isHidden = !!col.hidden;
+      const isNonToggleable = col.toggleable === false;
+      const isLastRemainingVisible = !isHidden && visibleCount <= 1;
+
+      return {
+        id: col.key,
+        value: col.key,
+        label: col.label || this.capitalize(col.key.replace('data.', '')),
+        checked: !isHidden,
+        disabled: isNonToggleable || isLastRemainingVisible,
+      };
+    });
+  }
+
+  private handleColumnVisibilityToggle(item: LeOption) {
+    const targetKey = item.value || item.id;
+    if (!targetKey) return;
+
+    const visibleCount = this.parsedColumns.filter(c => !c.hidden).length;
+
+    let toggledCol: LeColumn | undefined;
+    const updatedCols = this.parsedColumns.map(col => {
+      if (col.key === targetKey) {
+        if (col.toggleable === false) return col;
+        if (!col.hidden && visibleCount <= 1) return col;
+        toggledCol = { ...col, hidden: !col.hidden };
+        return toggledCol;
+      }
+      return col;
+    });
+
+    if (toggledCol) {
+      this.parsedColumns = updatedCols;
+      this.leColumnVisibilityChange.emit({
+        columns: [...this.parsedColumns],
+        toggledColumn: toggledCol,
+        hidden: !!toggledCol.hidden,
+      });
+    }
+  }
+
   private renderEmptyState(colSpan: number) {
     const hasSlot = this.slotPresence['empty'];
     const hasEmptyProps = !!(this.emptyLabel || this.emptyTitle || this.emptyMessage || this.emptyIcon);
@@ -456,6 +517,14 @@ export class LeList {
     const visibleColumns = this.parsedColumns.filter(c => !c.hidden);
     const displayOptions = this.getSortedOptions();
 
+    const isColumnToggleEnabled = this.columnVisibilityToggle || this.allowColumnToggle;
+
+    const headerRow = (
+      <thead class="le-list-thead" part="header">
+        <tr>{visibleColumns.map(col => this.renderHeaderCell(col))}</tr>
+      </thead>
+    );
+
     return (
       <Host>
         {/* Hidden slot for declarative child options */}
@@ -466,9 +535,16 @@ export class LeList {
         <div class="le-list-table-container">
           <div class="le-list-table-scroll">
             <table class="le-list-table">
-              <thead class="le-list-thead">
-                <tr>{visibleColumns.map(col => this.renderHeaderCell(col))}</tr>
-              </thead>
+              {isColumnToggleEnabled ? (
+                <le-context-menu
+                  items={this.getColumnContextMenuItems()}
+                  onLeContextMenuSelect={(e) => this.handleColumnVisibilityToggle(e.detail.item)}
+                >
+                  {headerRow}
+                </le-context-menu>
+              ) : (
+                headerRow
+              )}
               <tbody class="le-list-tbody">
                 {displayOptions.length === 0
                   ? this.renderEmptyState(visibleColumns.length)

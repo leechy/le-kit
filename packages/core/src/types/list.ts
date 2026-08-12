@@ -34,6 +34,12 @@ export interface LeColumn {
   hidden?: boolean;
 
   /**
+   * Whether this column's visibility can be toggled by the user in the context menu.
+   * Defaults to true if omitted. If set to false, the column appears in the context menu but is disabled.
+   */
+  toggleable?: boolean;
+
+  /**
    * Column width (e.g., '150px', '20%', 'minmax(100px, 1fr)').
    */
   width?: string;

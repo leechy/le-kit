@@ -365,14 +365,14 @@
 
     <br />
 
-    <h3>2. Data-Driven List (Columns &amp; JS Data with Nested Properties)</h3>
-    <le-list id="demo-data-list"></le-list>
+    <h3>2. Data-Driven List (Columns &amp; JS Data with Right-Click Header Column Toggle)</h3>
+    <le-list id="demo-data-list" column-visibility-toggle></le-list>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const listEl = document.getElementById('demo-data-list');
         if (listEl) {
           listEl.columns = [
-            { key: 'label', label: 'Member', sortable: true },
+            { key: 'label', label: 'Member', sortable: true, toggleable: false },
             { key: 'data.department', label: 'Department', type: 'badge', sortable: true },
             { key: 'data.role', label: 'Role', sortable: true, sortIconPosition: 'none' },
             { key: 'data.projectsCount', label: 'Projects', type: 'number', sortable: true, align: 'right', defaultSortDirection: 'desc', sortIconPosition: 'start' },
@@ -426,6 +426,11 @@
           // Listen for leSortChange event for server-side sorting integrations
           listEl.addEventListener('leSortChange', (e) => {
             console.log('[le-list leSortChange event]', e.detail);
+          });
+
+          // Listen for leColumnVisibilityChange event
+          listEl.addEventListener('leColumnVisibilityChange', (e) => {
+            console.log('[le-list leColumnVisibilityChange event]', e.detail);
           });
         }
       });

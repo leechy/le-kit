@@ -1301,6 +1301,16 @@ export namespace Components {
          */
         "allowClearSort": boolean;
         /**
+          * Alias for columnVisibilityToggle.
+          * @default false
+         */
+        "allowColumnToggle": boolean;
+        /**
+          * Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false.
+          * @default false
+         */
+        "columnVisibilityToggle": boolean;
+        /**
           * Column configuration for the list table view. Can be an array of `LeColumn` objects or a JSON string. If omitted, columns will be automatically generated from data item properties.
           * @default []
          */
@@ -3719,6 +3729,7 @@ declare global {
     };
     interface HTMLLeListElementEventMap {
         "leSortChange": { key?: string; column?: LeColumn; direction?: 'asc' | 'desc' };
+        "leColumnVisibilityChange": { columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean };
     }
     interface HTMLLeListElement extends Components.LeList, HTMLStencilElement {
         addEventListener<K extends keyof HTMLLeListElementEventMap>(type: K, listener: (this: HTMLLeListElement, ev: LeListCustomEvent<HTMLLeListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5782,6 +5793,16 @@ declare namespace LocalJSX {
          */
         "allowClearSort"?: boolean;
         /**
+          * Alias for columnVisibilityToggle.
+          * @default false
+         */
+        "allowColumnToggle"?: boolean;
+        /**
+          * Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false.
+          * @default false
+         */
+        "columnVisibilityToggle"?: boolean;
+        /**
           * Column configuration for the list table view. Can be an array of `LeColumn` objects or a JSON string. If omitted, columns will be automatically generated from data item properties.
           * @default []
          */
@@ -5811,6 +5832,10 @@ declare namespace LocalJSX {
           * Title text for default empty state (<le-empty>).
          */
         "emptyTitle"?: string;
+        /**
+          * Emitted when column visibility changes via the context menu.
+         */
+        "onLeColumnVisibilityChange"?: (event: LeListCustomEvent<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>) => void;
         /**
           * Emitted when column sorting changes.
          */
@@ -7781,6 +7806,8 @@ declare namespace LocalJSX {
         "columns": LeColumn[] | string;
         "allowClearSort": boolean;
         "defaultSortIconPosition": 'start' | 'end' | 'none';
+        "columnVisibilityToggle": boolean;
+        "allowColumnToggle": boolean;
         "emptyLabel": string;
         "emptyTitle": string;
         "emptyMessage": string;

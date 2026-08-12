@@ -929,6 +929,8 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `columns` | `LeColumn[] \| string` | `[]` | Column configuration for the list table view. Can be an array of `LeColumn` objects or a JSON string. If omitted, columns will be automatically generated from data item properties. |
 | `allowClearSort` | `boolean` | `true` | Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true. |
 | `defaultSortIconPosition` | `'start' \| 'end' \| 'none' \| undefined` |  | Default sort icon placement across columns ('start' | 'end' | 'none'). If omitted, right-aligned columns default to 'start' and left/center columns default to 'end'. |
+| `columnVisibilityToggle` | `boolean` | `false` | Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false. |
+| `allowColumnToggle` | `boolean` | `false` | Alias for columnVisibilityToggle. |
 | `emptyLabel` | `string \| undefined` |  | Main label text for default empty state (<le-empty>). |
 | `emptyTitle` | `string \| undefined` |  | Title text for default empty state (<le-empty>). |
 | `emptyMessage` | `string \| undefined` |  | Secondary description text for default empty state (<le-empty>). |
@@ -943,6 +945,7 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | Event | Type | Description |
 |-------|------|-------------|
 | `leSortChange` | `EventEmitter<{ key?: string; column?: LeColumn; direction?: 'asc' \| 'desc' }>` | Emitted when column sorting changes. |
+| `leColumnVisibilityChange` | `EventEmitter<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>` | Emitted when column visibility changes via the context menu. |
 
 ---
 

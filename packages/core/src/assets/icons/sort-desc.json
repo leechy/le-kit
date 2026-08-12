@@ -3,7 +3,7 @@
   "maskShape": [
     {
       "tag": "path",
-      "d": "M5 7L8 4L11 7",
+      "d": "M5 8.5L8 11.5L11 8.5",
       "fill": "none",
       "stroke": "black",
       "stroke-width": "2.8",
@@ -21,7 +21,7 @@
   "children": [
     {
       "tag": "path",
-      "d": "M5 7L8 4L11 7",
+      "d": "M5 8.5L8 11.5L11 8.5",
       "fill": "none",
       "stroke": "currentColor",
       "stroke-width": "1.8",

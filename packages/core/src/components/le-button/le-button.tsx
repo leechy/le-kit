@@ -58,9 +58,14 @@ export class LeButton {
 
   /**
    * Button variant style
-   * @allowedValues solid | outlined | clear
+   * @allowedValues solid | filled | outlined | clear | system
    */
-  @Prop() variant: 'solid' | 'outlined' | 'clear' | 'system' = 'outlined';
+  @Prop() variant: 'solid' | 'filled' | 'outlined' | 'clear' | 'system' = 'outlined';
+
+  /**
+   * Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API).
+   */
+  @Prop({ reflect: true }) filled: boolean = false;
 
   /**
    * Button color theme (uses theme semantic colors)
@@ -390,8 +395,12 @@ export class LeButton {
       !!this.tooltip || (!!compactTooltipText && (this.collapsible || hasIconOnly));
     const tooltipDisabled = !this.tooltip && !isCompactPresentation;
 
+    const isFilled = this.filled || this.variant === 'filled' || this.variant === 'solid';
+    const effectiveVariant = isFilled ? 'solid' : this.variant;
+
     const classes = classnames(
-      `variant-${this.variant}`,
+      `variant-${effectiveVariant}`,
+      isFilled ? 'variant-filled' : null,
       this.color ? `color-${this.color}` : null,
       `size-${this.size}`,
       {

@@ -1,0 +1,39 @@
+{
+  "viewBox": "0 0 16 16",
+  "maskShape": [
+    {
+      "tag": "path",
+      "d": "M5 7L8 4L11 7",
+      "fill": "none",
+      "stroke": "black",
+      "stroke-width": "2.8",
+      "stroke-linecap": "square",
+      "stroke-linejoin": "square",
+      "rounded": {
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "2"
+      }
+    }
+  ],
+  "children": [
+    {
+      "tag": "path",
+      "d": "M5 7L8 4L11 7",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.8",
+      "stroke-linecap": "square",
+      "stroke-linejoin": "square",
+      "rounded": {
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "1"
+      }
+    }
+  ]
+}

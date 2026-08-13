@@ -73,7 +73,7 @@ export class LeEmpty {
       return <span style={{ display: 'none' }}><slot name="icon" /></span>;
     }
 
-    const isEmojiOrChar = this.icon && this.icon.length <= 4 && !this.icon.includes('-') && !this.icon.includes('/');
+    const isEmojiOrChar = this.icon && this.icon.length < 3 && !this.icon.includes('-') && !this.icon.includes('/');
 
     return (
       <div class="le-empty-icon-wrapper" part="icon-container">

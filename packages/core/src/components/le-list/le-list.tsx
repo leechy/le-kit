@@ -411,10 +411,10 @@ export class LeList {
         <div class="le-list-cell-inner">
           {iconName && (
             <span class="le-list-icon">
-              {iconName.length <= 4 && !iconName.includes('-') && !iconName.includes('/') ? (
+              {iconName.length < 4 && !iconName.includes('-') && !iconName.includes('/') ? (
                 <span>{iconName}</span>
               ) : (
-                <le-icon name={iconName} size="18" />
+                <le-icon name={iconName} />
               )}
             </span>
           )}

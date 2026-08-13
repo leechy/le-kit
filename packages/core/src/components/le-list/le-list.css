@@ -137,6 +137,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  font-size: 20px;
+  --le-icon-size: 24px;
 }
 
 /* Alignment utilities */

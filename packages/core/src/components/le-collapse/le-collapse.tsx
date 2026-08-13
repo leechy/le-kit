@@ -55,8 +55,7 @@ export class LeCollapse {
   @State() private headerShrunk: boolean = false;
   @State() private isExpanded: boolean = false;
 
-  componentDidLoad() {
-    this.applyOpenState();
+  componentWillLoad() {
     if (this.shouldBeOpen()) {
       this.isExpanded = true;
     }
@@ -90,9 +89,8 @@ export class LeCollapse {
   private applyOpenState() {
     const nextOpen = this.shouldBeOpen();
     this.isExpanded = false;
-    this.el.toggleAttribute('data-open', nextOpen);
 
-    if (nextOpen) {
+    if (nextOpen && this.el) {
       // Fallback if transition duration is 0s or prefers-reduced-motion is active
       const durationStr = window.getComputedStyle(this.el).transitionDuration;
       const duration = parseFloat(durationStr) * (durationStr.endsWith('ms') ? 1 : 1000);

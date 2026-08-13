@@ -50,7 +50,7 @@
   
   background: transparent;
   border: none;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
 }
 
 .tab-disabled {

@@ -117,7 +117,7 @@
 
 .nav-toggle {
   background: transparent;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
   opacity: 0.4;
 }
 
@@ -168,7 +168,7 @@
   font-family: var(--le-font-family-base);
   font-size: var(--le-font-size, var(--le-font-size-md));
   line-height: var(--le-line-height-tight);
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
 }
 
 .nav-item:hover {
@@ -428,7 +428,7 @@
   border-radius: var(--le-nav-radius);
   background: transparent;
   color: currentColor;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
 }
 
 .h-submenu-toggle:hover {
@@ -445,7 +445,7 @@
   border: 1px solid transparent;
   background: transparent;
   color: var(--le-nav-color);
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
   font-family: var(--le-font-family-base);
   font-size: var(--le-font-size-trigger, var(--le-font-size-md));
 }

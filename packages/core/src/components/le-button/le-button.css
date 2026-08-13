@@ -74,7 +74,7 @@
   font-weight: var(--le-button-font-weight);
   line-height: var(--le-line-height-tight);
   text-decoration: none;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
   transition:
     background-color var(--le-button-transition),
     border-color var(--le-button-transition),
@@ -346,7 +346,7 @@
   display: none;
   align-items: center;
   justify-content: center;
-  transform: scale(1.25);
+  transform: scale(var(--le-controls-icon-scale));
 }
 
 .icon-start.is-visible,

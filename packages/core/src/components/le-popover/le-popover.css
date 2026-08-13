@@ -20,7 +20,7 @@
 
 .le-popover-trigger {
   display: inline-flex;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
 }
 
 .le-popover-trigger-full-width {
@@ -40,7 +40,7 @@
   background: var(--le-color-surface, #fff);
   color: var(--le-color-text-secondary, #666);
   font-size: 16px;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
   transition: all var(--le-transition-fast, 0.15s) var(--le-transition-easing, ease);
 }
 
@@ -137,7 +137,7 @@
   color: var(--le-color-text-secondary, #666);
   font-size: 18px;
   line-height: 1;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
   border-radius: var(--le-radius-sm, 4px);
   transition: background-color 0.15s, color 0.15s;
 }

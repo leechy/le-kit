@@ -64,7 +64,7 @@
   background: none;
   padding: 0;
   color: inherit;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
 }
 
 .hidden-slot {

@@ -193,7 +193,7 @@
   border: none;
   border-radius: var(--le-toolbar-border-radius);
   color: inherit;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
   line-height: 1;
 }
 

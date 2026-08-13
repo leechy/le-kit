@@ -139,7 +139,7 @@ input:has(+ .icon-end:not(.is-visible)) {
   align-items: center;
   justify-content: center;
   height: 50%;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
   background: none;
   border: none;
   color: var(--le-input-desc-color);

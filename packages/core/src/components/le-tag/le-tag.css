@@ -127,7 +127,7 @@
   background: transparent;
   color: currentColor;
   opacity: 0.6;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
   border-radius: 50%;
   transition: opacity 0.15s ease, background-color 0.15s ease;
 

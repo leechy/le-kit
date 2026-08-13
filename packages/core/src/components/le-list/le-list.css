@@ -51,7 +51,7 @@
 }
 
 .le-list-th.sortable {
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
 }
 
 .le-list-th.sortable:hover {

@@ -79,7 +79,7 @@
 
 .nav-list {
   list-style: none;
-  margin: calc(var(--le-nav-drop-line-width) / 2) 0;
+  margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;

@@ -53,19 +53,32 @@ export class LeCollapse {
   }
 
   @State() private headerShrunk: boolean = false;
+  @State() private isExpanded: boolean = false;
 
   componentDidLoad() {
     this.applyOpenState();
+    if (this.shouldBeOpen()) {
+      this.isExpanded = true;
+    }
   }
 
-  @Watch('open')
-  protected onOpenChange() {
+  @Watch('closed')
+  protected onClosedChange() {
     this.applyOpenState();
   }
 
   @Watch('headerShrunk')
   protected onDrivenStateChange() {
     this.applyOpenState();
+  }
+
+  @Listen('transitionend')
+  protected handleTransitionEnd(ev: TransitionEvent) {
+    if (ev.propertyName === 'grid-template-rows') {
+      if (this.shouldBeOpen()) {
+        this.isExpanded = true;
+      }
+    }
   }
 
   private shouldBeOpen() {
@@ -76,12 +89,26 @@ export class LeCollapse {
 
   private applyOpenState() {
     const nextOpen = this.shouldBeOpen();
+    this.isExpanded = false;
     this.el.toggleAttribute('data-open', nextOpen);
+
+    if (nextOpen) {
+      // Fallback if transition duration is 0s or prefers-reduced-motion is active
+      const durationStr = window.getComputedStyle(this.el).transitionDuration;
+      const duration = parseFloat(durationStr) * (durationStr.endsWith('ms') ? 1 : 1000);
+      if (!duration || duration <= 0) {
+        this.isExpanded = true;
+      }
+    }
   }
 
   render() {
+    const isOpen = this.shouldBeOpen();
     return (
-      <Host data-open={this.shouldBeOpen() ? 'true' : 'false'}>
+      <Host
+        data-open={isOpen ? 'true' : 'false'}
+        data-expanded={isOpen && this.isExpanded ? 'true' : 'false'}
+      >
         <le-component component="le-collapse">
           <div class={{ 'region': true, 'scroll-down': this.scrollDown }} part="region">
             <slot></slot>

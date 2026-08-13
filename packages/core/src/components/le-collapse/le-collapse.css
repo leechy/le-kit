@@ -26,6 +26,10 @@
   overflow: hidden;
 }
 
+:host([data-expanded="true"]) .region {
+  overflow: visible;
+}
+
 .region.scroll-down {
   justify-content: flex-start;
 }

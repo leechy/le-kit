@@ -27,4 +27,6 @@ le-navigation {
   --le-nav-item-padding-x: var(--le-spacing-3);
   --le-nav-item-indent: var(--le-spacing-3);
   --le-font-size: var(--le-font-size-sm);
+  --le-nav-toggle-size: 0;
+  --le-nav-toggle-end-size: var(--le-spacing-5);
 }

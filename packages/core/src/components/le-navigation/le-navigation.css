@@ -115,6 +115,15 @@
   color: inherit;
 }
 
+.nav-toggle--end {
+  /* For le-overflow-menu the spacing is important and we're removing
+     the space at the start, but the end togle should be seen as usual */
+  width: var(--le-nav-toggle-end-size, var(--le-nav-toggle-size));
+  --le-icon-size: var(--le-nav-toggle-end-size, var(--le-nav-toggle-size));
+  min-width: var(--le-nav-toggle-end-size, var(--le-nav-toggle-size));
+
+}
+
 .nav-toggle {
   background: transparent;
   cursor: var(--le-controls-cursor, pointer);

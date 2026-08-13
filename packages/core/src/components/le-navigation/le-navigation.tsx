@@ -1925,7 +1925,7 @@ export class LeNavigation {
                     )}
                     {topLevelEndToggles && hasChildren && (
                       <span
-                        class={classnames('nav-toggle', { open })}
+                        class={classnames('nav-toggle', 'nav-toggle--end', { open })}
                         aria-label={open ? 'Collapse' : 'Expand'}
                         aria-expanded={open ? 'true' : 'false'}
                         tabIndex={-1}
@@ -2387,7 +2387,7 @@ export class LeNavigation {
                   </span>
                 )}
                 {this.draggedHasToggle && this.togglePosition === 'end' && (
-                  <span class="nav-toggle" aria-hidden="true">
+                  <span class="nav-toggle nav-toggle--end" aria-hidden="true">
                     <le-icon
                       name="chevron-down"
                       class={classnames('nav-chevron', { open: this.draggedToggleIsOpen, end: true })}

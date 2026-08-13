@@ -246,9 +246,13 @@ export class LeNavigation {
   @State() private activeDragId?: string;
   @State() private dropTargetId?: string;
   @State() private dropPosition?: 'before' | 'inside' | 'after';
+  @State() private overrideDropDepth?: number;
   @State() private ghostX: number = 0;
   @State() private ghostY: number = 0;
   @State() private isDraggingActive: boolean = false;
+
+  private outdentBaselineX?: number;
+  private outdentTargetId?: string;
 
   private pendingDragId?: string;
   private pendingDragItem?: LeOption;
@@ -1098,7 +1102,7 @@ export class LeNavigation {
     const targetId = targetEl.getAttribute('data-nav-id');
     const targetParentId = targetEl.getAttribute('data-parent-id') || undefined;
 
-    if (!targetId || targetId === this.activeDragId) {
+    if (!targetId) {
       this.dropTargetId = undefined;
       this.dropPosition = undefined;
       this.clearAutoExpandTimer();
@@ -1137,6 +1141,36 @@ export class LeNavigation {
       const topLimit = Math.max(0.05, Math.min(0.45, ratios.top));
       const bottomLimit = 1 - Math.max(0.05, Math.min(0.45, ratios.bottom));
 
+      const isSelfTarget = targetId === this.activeDragId;
+
+      if (isSelfTarget) {
+        if (ratio > bottomLimit) {
+          const outdentChain = this.getOutdentAncestors(items, targetId);
+          if (outdentChain.length > 0) {
+            if (this.outdentTargetId !== targetId || this.outdentBaselineX === undefined) {
+              this.outdentBaselineX = e.clientX;
+              this.outdentTargetId = targetId;
+            }
+            const deltaX = e.clientX - this.outdentBaselineX;
+            const steps = deltaX < 0 ? Math.floor(Math.abs(deltaX) / 24) : 0;
+            const chainIndex = Math.min(steps, outdentChain.length - 1);
+            const selected = outdentChain[chainIndex];
+            this.dropTargetId = selected.id;
+            this.dropPosition = 'after';
+            this.overrideDropDepth = selected.depth;
+            this.clearAutoExpandTimer();
+            return;
+          }
+        }
+        this.dropTargetId = undefined;
+        this.dropPosition = undefined;
+        this.outdentBaselineX = undefined;
+        this.outdentTargetId = undefined;
+        this.overrideDropDepth = undefined;
+        this.clearAutoExpandTimer();
+        return;
+      }
+
       const targetNode = this.findNodeInTree(items, targetId);
       const children = targetNode && Array.isArray(targetNode.item.children) ? targetNode.item.children : [];
       const hasChildren = children.length > 0;
@@ -1147,7 +1181,35 @@ export class LeNavigation {
       let pos: 'before' | 'inside' | 'after' = 'inside';
 
       if (ratio < topLimit) {
-        pos = 'before';
+        const prevItem = this.getPreviousVisibleItem(items, targetId);
+        const prevAncestors = prevItem ? this.getOutdentAncestors(items, prevItem.id!) : [];
+        if (prevAncestors.length > 1) {
+          if (this.outdentTargetId !== `top-${targetId}` || this.outdentBaselineX === undefined) {
+            this.outdentBaselineX = e.clientX;
+            this.outdentTargetId = `top-${targetId}`;
+          }
+          const targetDepth = this.getNodeDepth(items, targetId);
+          const topChain: Array<{ id: string; depth: number; pos: 'before' | 'after' }> = [
+            { id: targetId, depth: targetDepth, pos: 'before' },
+          ];
+          for (let i = prevAncestors.length - 2; i >= 0; i--) {
+            topChain.push({ id: prevAncestors[i].id, depth: prevAncestors[i].depth, pos: 'after' });
+          }
+
+          const deltaX = e.clientX - this.outdentBaselineX;
+          const steps = deltaX > 0 ? Math.floor(deltaX / 24) : 0;
+          const chainIndex = Math.min(steps, topChain.length - 1);
+          const selected = topChain[chainIndex];
+
+          finalTargetId = selected.id;
+          pos = selected.pos;
+          this.overrideDropDepth = selected.depth;
+        } else {
+          pos = 'before';
+          this.outdentBaselineX = undefined;
+          this.outdentTargetId = undefined;
+          this.overrideDropDepth = undefined;
+        }
       } else if (hasChildren) {
         if (isOpen) {
           if (firstChild && firstChild.id) {
@@ -1156,13 +1218,35 @@ export class LeNavigation {
           } else {
             pos = 'inside';
           }
+          this.outdentBaselineX = undefined;
+          this.outdentTargetId = undefined;
+          this.overrideDropDepth = undefined;
         } else {
           if (ratio > bottomLimit) {
-            if (firstChild && firstChild.id) {
-              finalTargetId = firstChild.id;
-              pos = 'before';
+            const outdentChain = this.getOutdentAncestors(items, targetId);
+            if (outdentChain.length > 1) {
+              if (this.outdentTargetId !== targetId || this.outdentBaselineX === undefined) {
+                this.outdentBaselineX = e.clientX;
+                this.outdentTargetId = targetId;
+              }
+              const deltaX = e.clientX - this.outdentBaselineX;
+              const steps = deltaX < 0 ? Math.floor(Math.abs(deltaX) / 24) : 0;
+              const chainIndex = Math.min(steps, outdentChain.length - 1);
+              const selected = outdentChain[chainIndex];
+
+              finalTargetId = selected.id;
+              pos = 'after';
+              this.overrideDropDepth = selected.depth;
             } else {
-              pos = 'inside';
+              if (firstChild && firstChild.id) {
+                finalTargetId = firstChild.id;
+                pos = 'before';
+              } else {
+                pos = 'inside';
+              }
+              this.outdentBaselineX = undefined;
+              this.outdentTargetId = undefined;
+              this.overrideDropDepth = undefined;
             }
             if (this.hoveredExpandId !== targetId) {
               this.clearAutoExpandTimer();
@@ -1173,6 +1257,9 @@ export class LeNavigation {
             }
           } else {
             pos = 'inside';
+            this.outdentBaselineX = undefined;
+            this.outdentTargetId = undefined;
+            this.overrideDropDepth = undefined;
             if (this.hoveredExpandId !== targetId) {
               this.clearAutoExpandTimer();
               this.hoveredExpandId = targetId;
@@ -1184,9 +1271,31 @@ export class LeNavigation {
         }
       } else {
         if (ratio > bottomLimit) {
-          pos = 'after';
+          const outdentChain = this.getOutdentAncestors(items, targetId);
+          if (outdentChain.length > 1) {
+            if (this.outdentTargetId !== targetId || this.outdentBaselineX === undefined) {
+              this.outdentBaselineX = e.clientX;
+              this.outdentTargetId = targetId;
+            }
+            const deltaX = e.clientX - this.outdentBaselineX;
+            const steps = deltaX < 0 ? Math.floor(Math.abs(deltaX) / 24) : 0;
+            const chainIndex = Math.min(steps, outdentChain.length - 1);
+            const selected = outdentChain[chainIndex];
+
+            finalTargetId = selected.id;
+            pos = 'after';
+            this.overrideDropDepth = selected.depth;
+          } else {
+            pos = 'after';
+            this.outdentBaselineX = undefined;
+            this.outdentTargetId = undefined;
+            this.overrideDropDepth = undefined;
+          }
         } else {
           pos = 'inside';
+          this.outdentBaselineX = undefined;
+          this.outdentTargetId = undefined;
+          this.overrideDropDepth = undefined;
         }
         this.clearAutoExpandTimer();
       }
@@ -1264,7 +1373,68 @@ export class LeNavigation {
     this.activeDragId = undefined;
     this.dropTargetId = undefined;
     this.dropPosition = undefined;
+    this.outdentBaselineX = undefined;
+    this.outdentTargetId = undefined;
+    this.overrideDropDepth = undefined;
   };
+
+  private getPreviousVisibleItem(items: LeOption[], targetId: string): LeOption | undefined {
+    const list: LeOption[] = [];
+    const traverse = (nodes: LeOption[]) => {
+      for (const node of nodes) {
+        list.push(node);
+        if (
+          Array.isArray(node.children) &&
+          node.children.length > 0 &&
+          (this.isOpen(node, node.id!) || this.openSubmenuId === node.id)
+        ) {
+          traverse(node.children);
+        }
+      }
+    };
+    traverse(items);
+    const idx = list.findIndex(item => item.id === targetId);
+    return idx > 0 ? list[idx - 1] : undefined;
+  }
+
+  private getNodeDepth(items: LeOption[], targetId: string, currentDepth = 0): number {
+    for (const item of items) {
+      if (item.id === targetId) return currentDepth;
+      if (Array.isArray(item.children) && item.children.length > 0) {
+        const d = this.getNodeDepth(item.children, targetId, currentDepth + 1);
+        if (d !== -1) return d;
+      }
+    }
+    return -1;
+  }
+
+  private getOutdentAncestors(
+    items: LeOption[],
+    targetId: string,
+  ): Array<{ id: string; depth: number; parentId?: string }> {
+    const chain: Array<{ id: string; depth: number; parentId?: string }> = [];
+    let currentId: string | undefined = targetId;
+
+    while (currentId) {
+      const node = this.findNodeInTree(items, currentId);
+      if (!node) break;
+
+      const depth = this.getNodeDepth(items, node.item.id!);
+      chain.push({
+        id: node.item.id!,
+        depth,
+        parentId: node.parentId,
+      });
+
+      if (node.parentId && node.index === node.parentList.length - 1) {
+        currentId = node.parentId;
+      } else {
+        break;
+      }
+    }
+
+    return chain;
+  }
 
   private findNodeInTree(
     items: LeOption[],
@@ -1798,7 +1968,12 @@ export class LeNavigation {
               const hasChildren = children.length > 0;
               const open = hasChildren && (this.isOpen(item, id) || openFromSearch.has(id));
               const paddingLeft = `calc(var(--le-nav-item-padding-x) + ${this.togglePosition === 'end' ? Math.max(depth - 1, 0) : depth} * var(--le-nav-item-indent))`;
-              const dropLinePaddingLeft = `calc(${this.togglePosition === 'end' ? Math.max(depth, 0) : depth + 1} * var(--le-nav-item-indent)`;
+              const isDropTarget = this.isDraggingActive && this.dropTargetId === id;
+              const activeDropDepth =
+                isDropTarget && this.dropPosition === 'after' && this.overrideDropDepth !== undefined
+                  ? this.overrideDropDepth
+                  : depth;
+              const dropLinePaddingLeft = `calc(${this.togglePosition === 'end' ? activeDropDepth : activeDropDepth + 1} * var(--le-nav-item-indent))`;
               const selected = this.isItemSelected(item);
               const itemPart = this.partFromOptionPart('item', item.part, {
                 selected,
@@ -1813,8 +1988,6 @@ export class LeNavigation {
                 TagType === 'a'
                   ? { href: item.href, target: item.target, role: 'treeitem' }
                   : { type: 'button', role: 'treeitem' };
-
-              const isDropTarget = this.isDraggingActive && this.dropTargetId === id;
               const isDraggedNode = this.isDraggingActive && this.activeDragId === id;
 
               // Single interactive control for the whole item row

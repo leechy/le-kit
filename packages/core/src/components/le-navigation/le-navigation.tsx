@@ -1222,10 +1222,9 @@ export class LeNavigation {
     const openFromSearch = autoOpenIds ?? new Set<string>();
     const filtered = query ? this.filterTree(items, query, pathPrefix, openFromSearch) : items;
     const ancestorLeadingSlots = leadingToggleAncestors ?? 0;
-    const levelHasChildren = filtered.some(item => this.getChildItems(item).length > 0);
     const hasCheckableItems = filtered.some(item => item.checked !== undefined);
     const topLevelEndToggles = depth === 0 && this.togglePosition === 'end';
-    const useLeadingToggleSlot = !topLevelEndToggles && levelHasChildren;
+    const useLeadingToggleSlot = !topLevelEndToggles;
     const firstEnabledId = filtered.find(item => !item.disabled)
       ? this.getItemId(
           filtered.find(item => !item.disabled) as LeOption,
@@ -1261,7 +1260,7 @@ export class LeNavigation {
               const children = this.getChildItems(item);
               const hasChildren = children.length > 0;
               const open = hasChildren && (this.isOpen(item, id) || openFromSearch.has(id));
-              const paddingLeft = `calc(var(--le-nav-item-padding-x) + ${this.togglePosition === 'end' ? Math.max(depth - 0.5, 0) : depth} * var(--le-nav-item-indent) + ${ancestorLeadingSlots} * var(--le-nav-toggle-size))`;
+              const paddingLeft = `calc(var(--le-nav-item-padding-x) + ${this.togglePosition === 'end' ? Math.max(depth - 1, 0) : depth} * var(--le-nav-item-indent))`;
               const selected = this.isItemSelected(item);
               const itemPart = this.partFromOptionPart('item', item.part, {
                 selected,

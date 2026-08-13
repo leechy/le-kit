@@ -8,9 +8,9 @@
   /* Vertical navigation items variables */
   --le-nav-item-padding-x: var(--le-spacing-1);
   --le-nav-item-padding-y: var(--le-spacing-2);
-  --le-nav-item-indent: var(--le-spacing-6);
-  --le-nav-toggle-size: var(--le-spacing-2);
+  --le-nav-toggle-size: var(--le-spacing-5);
   --le-nav-item-gap: var(--le-spacing-2);
+  --le-nav-item-indent: calc(var(--le-nav-toggle-size) + var(--le-nav-item-gap));
 
   /* Trigger items */
   --le-default-nav-trigger-color: var(--le-color-text-secondary);
@@ -84,7 +84,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--le-items-gap, var(--le-spacing-1));
+  gap: 0; /* gap is messing with reordering, use padding on items instead */
 }
 
 .nav-row {
@@ -106,6 +106,7 @@
 .nav-toggle-spacer {
   box-sizing: border-box;
   width: var(--le-nav-toggle-size);
+  --le-icon-size: var(--le-nav-toggle-size);
   min-width: var(--le-nav-toggle-size);
   display: inline-flex;
   align-items: center;
@@ -281,14 +282,12 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transform: scale(var(--le-controls-icon-scale));
+  min-width: var(--le-nav-toggle-size);
 }
 
 .nav-icon-end {
   margin-left: auto;
-}
-
-.nav-children {
-  margin-top: var(--le-spacing-1);
 }
 
 /* ==========================================

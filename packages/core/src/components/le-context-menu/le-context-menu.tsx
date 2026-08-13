@@ -13,7 +13,11 @@ import {
 import type { LeOption } from '../../types/options';
 import { parseOptionInput } from '../../utils/utils';
 import { LONG_PRESS_DURATION, LONG_PRESS_MOVE_THRESHOLD } from '../../utils/constants';
-import type { LeNavigationItemSelectDetail } from '../le-navigation/le-navigation';
+import type {
+  LeNavigationItemSelectDetail,
+  LeNavigationReorderMode,
+  LeNavigationItemReorderDetail,
+} from '../le-navigation/le-navigation';
 
 export interface LeContextMenuSelectDetail {
   id: string;
@@ -70,6 +74,15 @@ export class LeContextMenu {
   @Prop() backdrop: boolean = false;
 
   /**
+   * Enables manual drag-and-drop reordering of menu items.
+   * - 'none': Disabled (default)
+   * - 'siblings': Can only reorder within current parent/root siblings
+   * - 'nested': Can reorder across hierarchical levels
+   * Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+   */
+  @Prop({ reflect: true }) reorder: LeNavigationReorderMode | boolean = 'none';
+
+  /**
    * Behavior of the menu on page scroll:
    * - 'blocked': blocks page scroll
    * - 'menu-close': closes the menu automatically on scroll (default)
@@ -96,6 +109,11 @@ export class LeContextMenu {
    */
   @Event({ cancelable: true })
   leContextMenuSelect!: EventEmitter<LeContextMenuSelectDetail>;
+
+  /**
+   * Emitted when menu items are reordered via drag and drop.
+   */
+  @Event() leContextMenuReorder!: EventEmitter<LeNavigationItemReorderDetail>;
 
   /**
    * Emitted when the context menu is closed.
@@ -361,6 +379,10 @@ export class LeContextMenu {
     }
   };
 
+  private handleNavigationReorder = (event: CustomEvent<LeNavigationItemReorderDetail>) => {
+    this.leContextMenuReorder.emit(event.detail);
+  };
+
   render() {
     const parsedItems = this.parseItems(this.items);
 
@@ -437,7 +459,9 @@ export class LeContextMenu {
               orientation="vertical"
               toggle-position="end"
               items={parsedItems}
+              reorder={this.reorder}
               onLeNavItemSelect={this.handleNavigationSelect}
+              onLeNavItemReorder={this.handleNavigationReorder}
             />
           )}
         </le-popover>

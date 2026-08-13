@@ -241,7 +241,7 @@ export class LeNavigation {
   @State() private focusedItemId?: string;
   @State() private openSubmenuId?: string;
   @State() private showFocusRing: boolean = false;
-  @State() private visualFocusActive: boolean = false;
+  private visualFocusActive: boolean = false;
 
   @State() private activeDragId?: string;
   @State() private dropTargetId?: string;
@@ -349,11 +349,12 @@ export class LeNavigation {
   @Watch('wrap')
   @Watch('overflowMode')
   handleLayoutInputsChange() {
-    this.overflowIds = [];
-    this.hamburgerActive = false;
-    this.focusedItemId = undefined;
-    this.openSubmenuId = undefined;
-    this.showFocusRing = false;
+    this.userReorderedItems = undefined;
+    if (this.overflowIds.length > 0) this.overflowIds = [];
+    if (this.hamburgerActive) this.hamburgerActive = false;
+    if (this.focusedItemId !== undefined) this.focusedItemId = undefined;
+    if (this.openSubmenuId !== undefined) this.openSubmenuId = undefined;
+    if (this.showFocusRing) this.showFocusRing = false;
     this.visualFocusActive = false;
   }
 

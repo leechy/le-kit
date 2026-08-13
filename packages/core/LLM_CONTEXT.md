@@ -1010,6 +1010,9 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `submenuSearchable` | `boolean` | `false` | Whether submenu popovers should include a filter input. |
 | `activationMode` | `LeNavigationActivationMode` | `'manual'` | Whether keyboard focus only highlights, or also activates immediately. |
 | `autoScroll` | `boolean` | `false` | Automatically scroll the active item into view when the active URL changes or on initial load.  - Initial load: instant (no animation) - Subsequent `activeUrl` changes: smooth  Only applies to `vertical` orientation. |
+| `reorder` | `LeNavigationReorderMode \| boolean` | `'none'` | Enables manual drag-and-drop reordering of navigation items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none'). |
+| `reorderRatios` | `{ top: number; middle: number; bottom: number }` | `{ top: 0.4, middle: 0.2, bottom: 0.4, }` | Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after). |
+| `reorderExpandDelay` | `number` | `500` | Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop. |
 | `togglePosition` | `'start' \| 'end'` | `'start'` | Position of the toggle arrow for items with children: 'start' | 'end' |
 
 ### Events
@@ -1018,6 +1021,8 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 |-------|------|-------------|
 | `leNavItemSelect` | `EventEmitter<LeNavigationItemSelectDetail>` | Fired when a navigation item is activated.  This event is cancelable. Call `event.preventDefault()` to prevent default browser navigation and implement custom routing. |
 | `leNavItemToggle` | `EventEmitter<LeNavigationItemToggleDetail>` | Fired when a tree branch is toggled. |
+| `leNavItemReorder` | `EventEmitter<LeNavigationItemReorderDetail>` | Fired when navigation items are reordered via drag and drop. |
+| `leReorder` | `EventEmitter<LeNavigationItemReorderDetail>` | Alias for `leNavItemReorder`. |
 
 ### Slots
 

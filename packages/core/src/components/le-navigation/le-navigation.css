@@ -12,9 +12,8 @@
   --le-nav-item-gap: var(--le-spacing-2);
   --le-nav-item-indent: calc(var(--le-nav-toggle-size) + var(--le-nav-item-gap));
 
-  /* Trigger items */
-  --le-default-nav-trigger-color: var(--le-color-text-secondary);
-  --le-default-nav-trigger-font-size: var(--le-font-size-sm);
+  /* Reorder drop line */
+  --le-nav-drop-line-width: 3px;
 
   /* Horizontal navigation link variables */
   --le-nav-link-padding-x: var(--le-spacing-2);
@@ -80,7 +79,7 @@
 
 .nav-list {
   list-style: none;
-  margin: 0;
+  margin: calc(var(--le-nav-drop-line-width) / 2) 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -484,4 +483,109 @@ le-popover::part(content) {
   width: 16px;
   height: 16px;
   display: inline-block;
+}
+
+/* ==========================================
+ * Manual Drag and Drop Reordering
+ * ========================================== */
+
+.nav-vertical.is-reorderable .nav-item {
+  touch-action: none;
+}
+
+.nav-vertical.is-dragging .nav-item {
+  cursor: grabbing !important;
+}
+
+.nav-node {
+  position: relative;
+}
+
+/* Dragged item placeholder styling */
+.nav-item.is-dragged-item {
+  background-color: color-mix(in srgb, var(--le-color-primary, #3b82f6) 12%, transparent) !important;
+  border: 1px dashed color-mix(in srgb, var(--le-color-primary, #3b82f6) 45%, transparent) !important;
+  color: var(--le-color-primary, #3b82f6);
+}
+
+.nav-node.selected > .nav-item.is-dragged-item,
+.nav-item.selected.is-dragged-item {
+  background-color: color-mix(in srgb, var(--le-nav-selected-bg, var(--le-color-primary)) 25%, transparent) !important;
+  color: var(--le-color-primary, #3b82f6) !important;
+}
+
+.nav-node.color-secondary.selected > .nav-item.is-dragged-item {
+  background-color: color-mix(in srgb, var(--le-nav-selected-bg-secondary, var(--le-color-secondary)) 25%, transparent) !important;
+  color: var(--le-color-secondary) !important;
+}
+
+.nav-node.color-success.selected > .nav-item.is-dragged-item {
+  background-color: color-mix(in srgb, var(--le-nav-selected-bg-success, var(--le-color-success)) 25%, transparent) !important;
+  color: var(--le-color-success) !important;
+}
+
+.nav-node.color-warning.selected > .nav-item.is-dragged-item {
+  background-color: color-mix(in srgb, var(--le-nav-selected-bg-warning, var(--le-color-warning)) 25%, transparent) !important;
+  color: var(--le-color-warning) !important;
+}
+
+.nav-node.color-danger.selected > .nav-item.is-dragged-item {
+  background-color: color-mix(in srgb, var(--le-nav-selected-bg-danger, var(--le-color-danger)) 25%, transparent) !important;
+  color: var(--le-color-danger) !important;
+}
+
+.nav-node.color-info.selected > .nav-item.is-dragged-item {
+  background-color: color-mix(in srgb, var(--le-nav-selected-bg-info, var(--le-color-info)) 25%, transparent) !important;
+  color: var(--le-color-info) !important;
+}
+
+.nav-item.reorder-target-inside {
+  background-color: color-mix(in srgb, var(--le-color-primary, #3b82f6) 18%, transparent) !important;
+  outline: 2px solid var(--le-color-primary, #3b82f6) !important;
+  outline-offset: -2px;
+  border-radius: var(--le-nav-radius, 6px);
+}
+
+.reorder-drop-line {
+  position: absolute;
+  z-index: 100;
+  right: var(--le-spacing-2, 8px);
+  height: var(--le-nav-drop-line-width);
+  background-color: var(--le-color-primary, #3b82f6);
+  border-radius: 2px;
+  pointer-events: none;
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
+}
+
+.reorder-drop-line::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--le-nav-drop-line-width) / 2);
+  top: -8px;
+  width: var(--le-nav-drop-line-width);
+  height: 18px;
+  border-radius: 2px;
+  background-color: var(--le-color-primary, #3b82f6);
+  box-shadow: 0 0 4px rgba(59, 130, 246, 0.6);
+}
+
+.reorder-drop-line.line-before {
+  top: -1.5px;
+}
+
+.reorder-drop-line.line-after {
+  bottom: -1.5px;
+}
+
+.nav-item.reorder-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--le-color-surface-alt, var(--le-color-surface, #ffffff)) 40%, transparent) !important;
+  border: 1px solid var(--le-color-border, #e5e7eb);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.18), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  will-change: transform;
 }

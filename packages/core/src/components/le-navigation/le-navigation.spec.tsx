@@ -132,3 +132,71 @@ describe('le-navigation focus behavior', () => {
     expect(items[0].classList.contains('focused')).toBe(true);
   });
 });
+
+describe('le-navigation drag-and-drop reordering', () => {
+  it('supports reorder property and programmatic methods', async () => {
+    const page = await newSpecPage({
+      components: [LeNavigation],
+      html: `<le-navigation orientation="vertical" reorder="siblings"></le-navigation>`,
+    });
+
+    const host = page.rootInstance as LeNavigation;
+    expect(host.reorder).toBe('siblings');
+
+    await host.setReorder('nested');
+    await page.waitForChanges();
+    expect(host.reorder).toBe('nested');
+
+    await host.disableReorder();
+    await page.waitForChanges();
+    expect(host.reorder).toBe('none');
+
+    await host.enableReorder('siblings');
+    await page.waitForChanges();
+    expect(host.reorder).toBe('siblings');
+  });
+
+  it('renders reorderable class on container when reorder is enabled', async () => {
+    const page = await newSpecPage({
+      components: [LeNavigation],
+      html: `<le-navigation orientation="vertical" reorder="nested"></le-navigation>`,
+    });
+
+    const host = page.root as any;
+    host.items = [
+      { label: 'Item 1', id: 'item1' },
+      { label: 'Item 2', id: 'item2' },
+    ];
+    await page.waitForChanges();
+
+    const container = host.shadowRoot?.querySelector('.nav-vertical');
+    expect(container?.classList.contains('is-reorderable')).toBe(true);
+  });
+
+  it('programmatically reorders items via moveItem method', async () => {
+    const page = await newSpecPage({
+      components: [LeNavigation],
+      html: `<le-navigation orientation="vertical" reorder="nested"></le-navigation>`,
+    });
+
+    const host = page.root as any;
+    host.items = [
+      { label: 'Work', value: 'work' },
+      { label: 'Sent', value: 'sent' },
+      { label: 'Drafts', value: 'drafts' },
+    ];
+    await page.waitForChanges();
+
+    const instance = page.rootInstance as LeNavigation;
+    const result = await instance.moveItem('work', 'sent', 'after');
+    await page.waitForChanges();
+
+    expect(result.success).toBe(true);
+    const items = Array.from(host.shadowRoot?.querySelectorAll('.nav-label') ?? []).map(
+      (el: any) => el.textContent,
+    );
+    expect(items[0]).toBe('Sent');
+    expect(items[1]).toBe('Work');
+    expect(items[2]).toBe('Drafts');
+  });
+});

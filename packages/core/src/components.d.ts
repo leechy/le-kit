@@ -16,7 +16,7 @@ import { LeContextMenuSelectDetail } from "./components/le-context-menu/le-conte
 import { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 import { LeActiveContext } from "./components/le-kit/le-kit";
 import { LeColumn } from "./types/list";
-import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
+import { LeNavigationItemReorderDetail, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode } from "./components/le-navigation/le-navigation";
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
@@ -36,7 +36,7 @@ export { LeContextMenuSelectDetail } from "./components/le-context-menu/le-conte
 export { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 export { LeActiveContext } from "./components/le-kit/le-kit";
 export { LeColumn } from "./types/list";
-export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
+export { LeNavigationItemReorderDetail, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode } from "./components/le-navigation/le-navigation";
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
@@ -1476,10 +1476,18 @@ export namespace Components {
          */
         "autoScroll": boolean;
         /**
+          * Programmatically disable reordering.
+         */
+        "disableReorder": () => Promise<void>;
+        /**
           * Text shown when no items match the filter.
           * @default 'No results found'
          */
         "emptyText": string;
+        /**
+          * Programmatically enable reordering.
+         */
+        "enableReorder": (mode?: LeNavigationReorderMode) => Promise<void>;
         "focusActiveItem": () => Promise<void>;
         "focusFirstItem": () => Promise<void>;
         /**
@@ -1493,6 +1501,10 @@ export namespace Components {
          */
         "minVisibleItemsForMore": number;
         /**
+          * Programmatically move an item relative to another item in the navigation tree. Accepts item ID, value, or label for both dragged and target items.
+         */
+        "moveItem": (draggedQuery: string, targetQuery: string, position?: "before" | "inside" | "after") => Promise<{ success: boolean; detail?: LeNavigationItemReorderDetail; }>;
+        /**
           * Layout orientation.
           * @default 'horizontal'
          */
@@ -1503,6 +1515,21 @@ export namespace Components {
          */
         "overflowMode": 'more' | 'hamburger';
         /**
+          * Enables manual drag-and-drop reordering of navigation items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+          * @default 'none'
+         */
+        "reorder": LeNavigationReorderMode | boolean;
+        /**
+          * Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.
+          * @default 500
+         */
+        "reorderExpandDelay": number;
+        /**
+          * Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after).
+          * @default {     top: 0.35,     middle: 0.3,     bottom: 0.35,   }
+         */
+        "reorderRatios": { top: number; middle: number; bottom: number };
+        /**
           * Placeholder text for the search input.
           * @default 'Search...'
          */
@@ -1512,6 +1539,10 @@ export namespace Components {
           * @default false
          */
         "searchable": boolean;
+        /**
+          * Programmatically set the reorder mode ('none', 'siblings', 'nested', or boolean).
+         */
+        "setReorder": (mode: LeNavigationReorderMode | boolean) => Promise<void>;
         /**
           * Whether submenu popovers should include a filter input.
           * @default false
@@ -3795,6 +3826,8 @@ declare global {
     interface HTMLLeNavigationElementEventMap {
         "leNavItemSelect": LeNavigationItemSelectDetail;
         "leNavItemToggle": LeNavigationItemToggleDetail;
+        "leNavItemReorder": LeNavigationItemReorderDetail;
+        "leReorder": LeNavigationItemReorderDetail;
     }
     /**
      * Navigation component with vertical (tree) and horizontal (menu) layouts.
@@ -5991,6 +6024,10 @@ declare namespace LocalJSX {
          */
         "minVisibleItemsForMore"?: number;
         /**
+          * Fired when navigation items are reordered via drag and drop.
+         */
+        "onLeNavItemReorder"?: (event: LeNavigationCustomEvent<LeNavigationItemReorderDetail>) => void;
+        /**
           * Fired when a navigation item is activated.  This event is cancelable. Call `event.preventDefault()` to prevent default browser navigation and implement custom routing.
          */
         "onLeNavItemSelect"?: (event: LeNavigationCustomEvent<LeNavigationItemSelectDetail>) => void;
@@ -5998,6 +6035,10 @@ declare namespace LocalJSX {
           * Fired when a tree branch is toggled.
          */
         "onLeNavItemToggle"?: (event: LeNavigationCustomEvent<LeNavigationItemToggleDetail>) => void;
+        /**
+          * Alias for `leNavItemReorder`.
+         */
+        "onLeReorder"?: (event: LeNavigationCustomEvent<LeNavigationItemReorderDetail>) => void;
         /**
           * Layout orientation.
           * @default 'horizontal'
@@ -6008,6 +6049,21 @@ declare namespace LocalJSX {
           * @default 'more'
          */
         "overflowMode"?: 'more' | 'hamburger';
+        /**
+          * Enables manual drag-and-drop reordering of navigation items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+          * @default 'none'
+         */
+        "reorder"?: LeNavigationReorderMode | boolean;
+        /**
+          * Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.
+          * @default 500
+         */
+        "reorderExpandDelay"?: number;
+        /**
+          * Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after).
+          * @default {     top: 0.35,     middle: 0.3,     bottom: 0.35,   }
+         */
+        "reorderRatios"?: { top: number; middle: number; bottom: number };
         /**
           * Placeholder text for the search input.
           * @default 'Search...'
@@ -7841,6 +7897,8 @@ declare namespace LocalJSX {
         "submenuSearchable": boolean;
         "activationMode": LeNavigationActivationMode;
         "autoScroll": boolean;
+        "reorder": string;
+        "reorderExpandDelay": number;
         "togglePosition": 'start' | 'end';
     }
     interface LeNumberInputAttributes {

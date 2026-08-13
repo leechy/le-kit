@@ -12,7 +12,7 @@
       manifestFile: 'custom-elements.json',
       assetBasePath: '',
       icons: {
-        defaultRounded: false,
+        defaultRounded: true,
         defaultFilled: false,
         defaultThin: false,
         defaultBadgePosition: '-4.5, -4.5',
@@ -352,6 +352,108 @@
     <le-header-placeholder></le-header-placeholder> -->
 
   <div class="demo-section">
+    <h2>Navigation Reordering</h2>
+    <p>Since navigation is used in sidebars and menus, and we often need to be able to reorder items in places like this, for example,
+      folders in an email app, we're adding a new functionality to le-navigation to support this.</p>
+    <div style="display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap;">
+      <label>Reorder mode:</label>
+      <le-select id="demo-reorder-select" value="nested">
+        <le-item value="nested">nested</le-item>
+        <le-item value="siblings">siblings</le-item>
+        <le-item value="none">none (disabled)</le-item>
+      </le-select>
+      <le-button id="btn-reorder-toggle-method">
+        Toggle via setReorder()
+      </le-button>
+    </div>
+    <div style="display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap;">
+      <label>Move item:</label>
+      <le-select id="demo-reorder-source-select">
+        <le-item value="work">Work</le-item>
+        <le-item value="sent">Sent</le-item>
+        <le-item value="drafts">Drafts</le-item>
+        <le-item value="flagged">Flagged</le-item>
+        <le-item value="trash">Trash</le-item>
+      </le-select>
+      <le-select id="demo-reorder-position-select">
+        <le-item value="after">after</le-item>
+        <le-item value="before">before</le-item>
+      </le-select>
+      <le-select id="demo-reorder-target-select">
+        <le-item value="work">Work</le-item>
+        <le-item value="sent">Sent</le-item>
+        <le-item value="drafts">Drafts</le-item>
+        <le-item value="flagged">Flagged</le-item>
+        <le-item value="trash">Trash</le-item>
+      </le-select>
+      <le-button id="btn-reorder-move-method">
+        Move via moveItem()
+      </le-button>
+    </div>
+    <div style="display: flex; gap: var(--le-spacing-2)">
+      <div style="width: 320px; background-color: var(--le-color-surface-alt); border-radius: var(--le-radius-md);">
+        <le-navigation id="demo-reorder-nav" reorder="nested" orientation="vertical">
+          <le-item label="All Inboxes" icon-start="trays" value="inboxes" open>
+            <le-item label="Work" icon-start="tray" count="3" value="work"></le-item>
+            <le-item label="Personal" icon-start="tray" value="personal"></le-item>
+            <le-item label="Finance" icon-start="tray" value="finance"></le-item>
+          </le-item>
+          <le-item label="Sent" icon-start="folder" value="sent"></le-item>
+          <le-item label="Drafts" icon-start="file" value="drafts"></le-item>
+          <le-item label="Flagged" icon-start="flag" value="flagged"></le-item>
+          <le-item label="Trash" icon-start="delete" value="trash"></le-item>
+        </le-navigation>
+      </div>
+      <div style="width: 320px; background-color: var(--le-color-surface-alt); border-radius: var(--le-radius-md);">
+        <le-navigation id="demo-reorder-nav" reorder="nested" orientation="vertical" toggle-position="end">
+          <le-item label="All Inboxes" icon-start="trays" value="inboxes" open>
+            <le-item label="Work" icon-start="tray" count="3" value="work"></le-item>
+            <le-item label="Personal" icon-start="tray" value="personal"></le-item>
+            <le-item label="Finance" icon-start="tray" value="finance"></le-item>
+          </le-item>
+          <le-item label="Sent" icon-start="folder" value="sent"></le-item>
+          <le-item label="Drafts" icon-start="file" value="drafts"></le-item>
+          <le-item label="Flagged" icon-start="flag" value="flagged"></le-item>
+          <le-item label="Trash" icon-start="delete" value="trash"></le-item>
+        </le-navigation>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const nav = document.getElementById('demo-reorder-nav');
+        const select = document.getElementById('demo-reorder-select');
+        const toggleBtn = document.getElementById('btn-reorder-toggle-method');
+        const positionSelect = document.getElementById('demo-reorder-position-select');
+        const targetSelect = document.getElementById('demo-reorder-target-select');
+        const sourceSelect = document.getElementById('demo-reorder-source-select');
+        const moveBtn = document.getElementById('btn-reorder-move-method');
+
+        if (select && nav) {
+          select.addEventListener('leChange', (e) => {
+            nav.setAttribute('reorder', e.target.value);
+          });
+        }
+        if (toggleBtn && nav) {
+          toggleBtn.addEventListener('click', async () => {
+            const currentMode = nav.getAttribute('reorder') || 'nested';
+            const nextMode = currentMode === 'none' ? 'nested' : 'none';
+            await nav.setReorder(nextMode);
+            if (select) select.value = nextMode;
+          });
+        }
+        if (moveBtn && nav && sourceSelect && targetSelect && positionSelect) {
+          moveBtn.addEventListener('click', () => {
+            nav.moveItem(sourceSelect.value, targetSelect.value, positionSelect.value);
+          });
+        }
+        if (nav) {
+          nav.addEventListener('leNavItemReorder', (e) => {
+            console.log('leNavItemReorder event fired:', e.detail);
+          });
+        }
+      });
+    </script>
+
     <h2>List</h2>
     <p>Desktop table list view featuring macOS Finder-style alternating zebra rows, sortable columns, and flexible data sources.</p>
 

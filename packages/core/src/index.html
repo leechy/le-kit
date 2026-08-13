@@ -896,7 +896,7 @@
     </div>
 
     <div style="display: flex; justify-content: center; gap: var(--le-space-sm);">
-      <le-actions-sequence loop direction="alternate" loop-delay="3000" start-on="in-view" in-view-threshold="0.3"
+      <le-actions-sequence start-on="manual" loop direction="alternate" loop-delay="3000" start-on="in-view" in-view-threshold="0.3"
         debug="true" pause-on-hover="true" pause-on-interaction="true" steps='[
           { "target": "#demo-toolbar-frame", "action": "method", "name": "snapTo", "value": 320, "delay": 2000 },
           { "target": "#demo-toolbar", "action": "method", "name": "showOverflowMenu", "delay": 1000 },

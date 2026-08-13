@@ -1475,10 +1475,23 @@ export class LeNavigation {
     }
 
     const oldParentId = draggedNode.parentId;
+
+    if (draggedId === targetId && (position === 'before' || position === 'after')) {
+      return {
+        success: true,
+        newItems: cloned,
+        draggedItem: draggedNode.item,
+        targetItem: targetNode.item,
+        oldParentId,
+        newParentId: oldParentId,
+      };
+    }
+
     const itemToMove = draggedNode.parentList.splice(draggedNode.index, 1)[0];
 
     if (position === 'inside') {
-      const updatedTarget = this.findNodeInTree(cloned, targetId)!;
+      const updatedTarget = this.findNodeInTree(cloned, targetId);
+      if (!updatedTarget) return { success: false };
       if (!Array.isArray(updatedTarget.item.children)) {
         updatedTarget.item.children = [];
       }
@@ -1495,7 +1508,8 @@ export class LeNavigation {
       };
     }
 
-    const updatedTarget = this.findNodeInTree(cloned, targetId)!;
+    const updatedTarget = this.findNodeInTree(cloned, targetId);
+    if (!updatedTarget) return { success: false };
     const insertIdx = position === 'before' ? updatedTarget.index : updatedTarget.index + 1;
     updatedTarget.parentList.splice(insertIdx, 0, itemToMove);
 
@@ -1515,6 +1529,7 @@ export class LeNavigation {
     position?: 'before' | 'inside' | 'after',
   ) {
     if (!draggedItem || !targetItem || !position) return;
+    if (draggedItem === targetItem && (position === 'before' || position === 'after')) return;
     const draggedEl = getOptionElement(draggedItem);
     const targetEl = getOptionElement(targetItem);
 

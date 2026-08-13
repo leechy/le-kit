@@ -570,9 +570,9 @@ le-popover::part(content) {
   content: '';
   position: absolute;
   left: calc(-1 * var(--le-nav-drop-line-width) / 2);
-  top: -8px;
+  top: -6px;
   width: var(--le-nav-drop-line-width);
-  height: 18px;
+  height: 14px;
   border-radius: 2px;
   background-color: var(--le-color-primary, #3b82f6);
   box-shadow: 0 0 4px rgba(59, 130, 246, 0.6);

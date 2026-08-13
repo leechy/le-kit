@@ -633,6 +633,7 @@ when the user right-clicks or long-presses on its children.
 | `disabled` | `boolean` | `false` | Disables right-click and touch interactions. |
 | `items` | `LeOption[] \| string` | `[]` | List of menu items represented as options. |
 | `backdrop` | `boolean` | `false` | Whether to show a backdrop behind the menu, lifting the active item. |
+| `reorder` | `LeNavigationReorderMode \| boolean` | `'none'` | Enables manual drag-and-drop reordering of menu items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels Note: Can also be passed as boolean (true -> 'nested', false -> 'none'). |
 | `pageScrollBehavior` | `'blocked' \| 'menu-close' \| 'fixed-menu'` | `'menu-close'` | Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll (default) - 'fixed-menu': menu scrolls with the page |
 | `position` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'mouse'` | `'mouse'` | Position of the menu relative to the trigger. If 'mouse', positions next to mouse/touch coords. |
 | `align` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment of the menu relative to the trigger. |
@@ -642,6 +643,7 @@ when the user right-clicks or long-presses on its children.
 | Event | Type | Description |
 |-------|------|-------------|
 | `leContextMenuSelect` | `EventEmitter<LeContextMenuSelectDetail>` | Emitted when a menu item is selected. |
+| `leContextMenuReorder` | `EventEmitter<LeNavigationItemReorderDetail>` | Emitted when menu items are reordered via drag and drop. |
 | `leContextMenuClose` | `EventEmitter<void>` | Emitted when the context menu is closed. |
 
 ### Slots
@@ -931,6 +933,8 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `defaultSortIconPosition` | `'start' \| 'end' \| 'none' \| undefined` |  | Default sort icon placement across columns ('start' | 'end' | 'none'). If omitted, right-aligned columns default to 'start' and left/center columns default to 'end'. |
 | `columnVisibilityToggle` | `boolean` | `false` | Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false. |
 | `allowColumnToggle` | `boolean` | `false` | Alias for columnVisibilityToggle. |
+| `columnReorder` | `boolean` | `false` | Whether to allow column reordering via right-click header context menu. Defaults to false. |
+| `allowColumnReorder` | `boolean` | `false` | Alias for columnReorder. |
 | `emptyLabel` | `string \| undefined` |  | Main label text for default empty state (<le-empty>). |
 | `emptyTitle` | `string \| undefined` |  | Title text for default empty state (<le-empty>). |
 | `emptyMessage` | `string \| undefined` |  | Secondary description text for default empty state (<le-empty>). |
@@ -946,6 +950,7 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 |-------|------|-------------|
 | `leSortChange` | `EventEmitter<{ key?: string; column?: LeColumn; direction?: 'asc' \| 'desc' }>` | Emitted when column sorting changes. |
 | `leColumnVisibilityChange` | `EventEmitter<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>` | Emitted when column visibility changes via the context menu. |
+| `leColumnOrderChange` | `EventEmitter<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn }>` | Emitted when column order changes via the context menu. |
 
 ---
 
@@ -1011,7 +1016,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `activationMode` | `LeNavigationActivationMode` | `'manual'` | Whether keyboard focus only highlights, or also activates immediately. |
 | `autoScroll` | `boolean` | `false` | Automatically scroll the active item into view when the active URL changes or on initial load.  - Initial load: instant (no animation) - Subsequent `activeUrl` changes: smooth  Only applies to `vertical` orientation. |
 | `reorder` | `LeNavigationReorderMode \| boolean` | `'none'` | Enables manual drag-and-drop reordering of navigation items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none'). |
-| `reorderRatios` | `{ top: number; middle: number; bottom: number }` | `{ top: 0.4, middle: 0.2, bottom: 0.4, }` | Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after). |
+| `reorderRatios` | `{ top: number; middle: number; bottom: number }` | `{ top: 0.35, middle: 0.3, bottom: 0.35, }` | Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after). |
 | `reorderExpandDelay` | `number` | `500` | Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop. |
 | `togglePosition` | `'start' \| 'end'` | `'start'` | Position of the toggle arrow for items with children: 'start' | 'end' |
 

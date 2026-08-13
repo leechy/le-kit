@@ -49,6 +49,17 @@ export class LeList {
   @Prop() allowColumnToggle: boolean = false;
 
   /**
+   * Whether to allow column reordering via right-click header context menu.
+   * Defaults to false.
+   */
+  @Prop() columnReorder: boolean = false;
+
+  /**
+   * Alias for columnReorder.
+   */
+  @Prop() allowColumnReorder: boolean = false;
+
+  /**
    * Main label text for default empty state (<le-empty>).
    */
   @Prop() emptyLabel?: string;
@@ -83,6 +94,11 @@ export class LeList {
    * Emitted when column visibility changes via the context menu.
    */
   @Event() leColumnVisibilityChange!: EventEmitter<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>;
+
+  /**
+   * Emitted when column order changes via the context menu.
+   */
+  @Event() leColumnOrderChange!: EventEmitter<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn }>;
 
   private childrenObserver?: MutationObserver;
   private disconnectSlotObserver?: () => void;
@@ -474,6 +490,40 @@ export class LeList {
     }
   }
 
+  private handleColumnReorder(detail: any) {
+    if (!detail || !Array.isArray(detail.items)) return;
+
+    const newOrderKeys = detail.items.map((item: LeOption) => item.value || item.id);
+
+    const colMap = new Map(this.parsedColumns.map(c => [c.key, c]));
+    const reorderedCols: LeColumn[] = [];
+
+    for (const key of newOrderKeys) {
+      if (key && colMap.has(key)) {
+        reorderedCols.push(colMap.get(key)!);
+        colMap.delete(key);
+      }
+    }
+
+    for (const col of colMap.values()) {
+      reorderedCols.push(col);
+    }
+
+    this.parsedColumns = reorderedCols;
+
+    const draggedKey = detail.draggedId || (detail.item ? (detail.item.value || detail.item.id) : undefined);
+    const draggedCol = this.parsedColumns.find(c => c.key === draggedKey);
+    const targetCol = detail.targetId ? this.parsedColumns.find(c => c.key === detail.targetId) : undefined;
+
+    if (draggedCol) {
+      this.leColumnOrderChange.emit({
+        columns: [...this.parsedColumns],
+        draggedColumn: draggedCol,
+        targetColumn: targetCol,
+      });
+    }
+  }
+
   private renderEmptyState(colSpan: number) {
     const hasSlot = this.slotPresence['empty'];
     const hasEmptyProps = !!(this.emptyLabel || this.emptyTitle || this.emptyMessage || this.emptyIcon);
@@ -518,6 +568,7 @@ export class LeList {
     const displayOptions = this.getSortedOptions();
 
     const isColumnToggleEnabled = this.columnVisibilityToggle || this.allowColumnToggle;
+    const isColumnReorderEnabled = this.columnReorder || this.allowColumnReorder;
 
     const headerRow = (
       <thead class="le-list-thead" part="header">
@@ -535,10 +586,12 @@ export class LeList {
         <div class="le-list-table-container">
           <div class="le-list-table-scroll">
             <table class="le-list-table">
-              {isColumnToggleEnabled ? (
+              {isColumnToggleEnabled || isColumnReorderEnabled ? (
                 <le-context-menu
                   items={this.getColumnContextMenuItems()}
+                  reorder={isColumnReorderEnabled ? 'siblings' : 'none'}
                   onLeContextMenuSelect={(e) => this.handleColumnVisibilityToggle(e.detail.item)}
+                  onLeContextMenuReorder={(e) => this.handleColumnReorder(e.detail)}
                 >
                   {headerRow}
                 </le-context-menu>

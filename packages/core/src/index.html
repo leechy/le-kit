@@ -467,8 +467,8 @@
 
     <br />
 
-    <h3>2. Data-Driven List (Columns &amp; JS Data with Right-Click Header Column Toggle)</h3>
-    <le-list id="demo-data-list" column-visibility-toggle></le-list>
+    <h3>2. Data-Driven List (Columns &amp; JS Data with Right-Click Header Column Toggle &amp; Drag Reordering)</h3>
+    <le-list id="demo-data-list" column-visibility-toggle column-reorder></le-list>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const listEl = document.getElementById('demo-data-list');
@@ -533,6 +533,11 @@
           // Listen for leColumnVisibilityChange event
           listEl.addEventListener('leColumnVisibilityChange', (e) => {
             console.log('[le-list leColumnVisibilityChange event]', e.detail);
+          });
+
+          // Listen for leColumnOrderChange event
+          listEl.addEventListener('leColumnOrderChange', (e) => {
+            console.log('[le-list leColumnOrderChange event]', e.detail);
           });
         }
       });

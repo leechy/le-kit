@@ -12,11 +12,12 @@ import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcr
 import { TooltipPlacement } from ".";
 import { LeCollapseMeta } from "./types/toolbar";
 import { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-group";
+import { LeNavigationItemReorderDetail, LeNavigationReorderMode } from "./components/le-navigation/le-navigation";
 import { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 import { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 import { LeActiveContext } from "./components/le-kit/le-kit";
 import { LeColumn } from "./types/list";
-import { LeNavigationItemReorderDetail, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode } from "./components/le-navigation/le-navigation";
+import { LeNavigationItemReorderDetail as LeNavigationItemReorderDetail1, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode as LeNavigationReorderMode1 } from "./components/le-navigation/le-navigation";
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
@@ -32,11 +33,12 @@ export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcr
 export { TooltipPlacement } from ".";
 export { LeCollapseMeta } from "./types/toolbar";
 export { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-group";
+export { LeNavigationItemReorderDetail, LeNavigationReorderMode } from "./components/le-navigation/le-navigation";
 export { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 export { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 export { LeActiveContext } from "./components/le-kit/le-kit";
 export { LeColumn } from "./types/list";
-export { LeNavigationItemReorderDetail, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode } from "./components/le-navigation/le-navigation";
+export { LeNavigationItemReorderDetail as LeNavigationItemReorderDetail1, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode as LeNavigationReorderMode1 } from "./components/le-navigation/le-navigation";
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
@@ -929,6 +931,11 @@ export namespace Components {
           * @default 'mouse'
          */
         "position": 'top' | 'bottom' | 'left' | 'right' | 'mouse';
+        /**
+          * Enables manual drag-and-drop reordering of menu items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+          * @default 'none'
+         */
+        "reorder": LeNavigationReorderMode | boolean;
         "show": (x?: number, y?: number) => Promise<void>;
         "toggle": (x?: number, y?: number) => Promise<void>;
     }
@@ -1301,10 +1308,20 @@ export namespace Components {
          */
         "allowClearSort": boolean;
         /**
+          * Alias for columnReorder.
+          * @default false
+         */
+        "allowColumnReorder": boolean;
+        /**
           * Alias for columnVisibilityToggle.
           * @default false
          */
         "allowColumnToggle": boolean;
+        /**
+          * Whether to allow column reordering via right-click header context menu. Defaults to false.
+          * @default false
+         */
+        "columnReorder": boolean;
         /**
           * Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false.
           * @default false
@@ -1487,7 +1504,7 @@ export namespace Components {
         /**
           * Programmatically enable reordering.
          */
-        "enableReorder": (mode?: LeNavigationReorderMode) => Promise<void>;
+        "enableReorder": (mode?: LeNavigationReorderMode1) => Promise<void>;
         "focusActiveItem": () => Promise<void>;
         "focusFirstItem": () => Promise<void>;
         /**
@@ -1503,7 +1520,7 @@ export namespace Components {
         /**
           * Programmatically move an item relative to another item in the navigation tree. Accepts item ID, value, or label for both dragged and target items.
          */
-        "moveItem": (draggedQuery: string, targetQuery: string, position?: "before" | "inside" | "after") => Promise<{ success: boolean; detail?: LeNavigationItemReorderDetail; }>;
+        "moveItem": (draggedQuery: string, targetQuery: string, position?: "before" | "inside" | "after") => Promise<{ success: boolean; detail?: LeNavigationItemReorderDetail1; }>;
         /**
           * Layout orientation.
           * @default 'horizontal'
@@ -1518,7 +1535,7 @@ export namespace Components {
           * Enables manual drag-and-drop reordering of navigation items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
           * @default 'none'
          */
-        "reorder": LeNavigationReorderMode | boolean;
+        "reorder": LeNavigationReorderMode1 | boolean;
         /**
           * Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.
           * @default 500
@@ -1542,7 +1559,7 @@ export namespace Components {
         /**
           * Programmatically set the reorder mode ('none', 'siblings', 'nested', or boolean).
          */
-        "setReorder": (mode: LeNavigationReorderMode | boolean) => Promise<void>;
+        "setReorder": (mode: LeNavigationReorderMode1 | boolean) => Promise<void>;
         /**
           * Whether submenu popovers should include a filter input.
           * @default false
@@ -3570,6 +3587,7 @@ declare global {
     };
     interface HTMLLeContextMenuElementEventMap {
         "leContextMenuSelect": LeContextMenuSelectDetail;
+        "leContextMenuReorder": LeNavigationItemReorderDetail;
         "leContextMenuClose": void;
     }
     /**
@@ -3761,6 +3779,7 @@ declare global {
     interface HTMLLeListElementEventMap {
         "leSortChange": { key?: string; column?: LeColumn; direction?: 'asc' | 'desc' };
         "leColumnVisibilityChange": { columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean };
+        "leColumnOrderChange": { columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn };
     }
     interface HTMLLeListElement extends Components.LeList, HTMLStencilElement {
         addEventListener<K extends keyof HTMLLeListElementEventMap>(type: K, listener: (this: HTMLLeListElement, ev: LeListCustomEvent<HTMLLeListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3826,8 +3845,8 @@ declare global {
     interface HTMLLeNavigationElementEventMap {
         "leNavItemSelect": LeNavigationItemSelectDetail;
         "leNavItemToggle": LeNavigationItemToggleDetail;
-        "leNavItemReorder": LeNavigationItemReorderDetail;
-        "leReorder": LeNavigationItemReorderDetail;
+        "leNavItemReorder": LeNavigationItemReorderDetail1;
+        "leReorder": LeNavigationItemReorderDetail1;
     }
     /**
      * Navigation component with vertical (tree) and horizontal (menu) layouts.
@@ -5425,6 +5444,10 @@ declare namespace LocalJSX {
          */
         "onLeContextMenuClose"?: (event: LeContextMenuCustomEvent<void>) => void;
         /**
+          * Emitted when menu items are reordered via drag and drop.
+         */
+        "onLeContextMenuReorder"?: (event: LeContextMenuCustomEvent<LeNavigationItemReorderDetail>) => void;
+        /**
           * Emitted when a menu item is selected.
          */
         "onLeContextMenuSelect"?: (event: LeContextMenuCustomEvent<LeContextMenuSelectDetail>) => void;
@@ -5443,6 +5466,11 @@ declare namespace LocalJSX {
           * @default 'mouse'
          */
         "position"?: 'top' | 'bottom' | 'left' | 'right' | 'mouse';
+        /**
+          * Enables manual drag-and-drop reordering of menu items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+          * @default 'none'
+         */
+        "reorder"?: LeNavigationReorderMode | boolean;
     }
     /**
      * Shows a "smart" header title based on what has scrolled out of view.
@@ -5826,10 +5854,20 @@ declare namespace LocalJSX {
          */
         "allowClearSort"?: boolean;
         /**
+          * Alias for columnReorder.
+          * @default false
+         */
+        "allowColumnReorder"?: boolean;
+        /**
           * Alias for columnVisibilityToggle.
           * @default false
          */
         "allowColumnToggle"?: boolean;
+        /**
+          * Whether to allow column reordering via right-click header context menu. Defaults to false.
+          * @default false
+         */
+        "columnReorder"?: boolean;
         /**
           * Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false.
           * @default false
@@ -5865,6 +5903,10 @@ declare namespace LocalJSX {
           * Title text for default empty state (<le-empty>).
          */
         "emptyTitle"?: string;
+        /**
+          * Emitted when column order changes via the context menu.
+         */
+        "onLeColumnOrderChange"?: (event: LeListCustomEvent<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn }>) => void;
         /**
           * Emitted when column visibility changes via the context menu.
          */
@@ -6026,7 +6068,7 @@ declare namespace LocalJSX {
         /**
           * Fired when navigation items are reordered via drag and drop.
          */
-        "onLeNavItemReorder"?: (event: LeNavigationCustomEvent<LeNavigationItemReorderDetail>) => void;
+        "onLeNavItemReorder"?: (event: LeNavigationCustomEvent<LeNavigationItemReorderDetail1>) => void;
         /**
           * Fired when a navigation item is activated.  This event is cancelable. Call `event.preventDefault()` to prevent default browser navigation and implement custom routing.
          */
@@ -6038,7 +6080,7 @@ declare namespace LocalJSX {
         /**
           * Alias for `leNavItemReorder`.
          */
-        "onLeReorder"?: (event: LeNavigationCustomEvent<LeNavigationItemReorderDetail>) => void;
+        "onLeReorder"?: (event: LeNavigationCustomEvent<LeNavigationItemReorderDetail1>) => void;
         /**
           * Layout orientation.
           * @default 'horizontal'
@@ -6053,7 +6095,7 @@ declare namespace LocalJSX {
           * Enables manual drag-and-drop reordering of navigation items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
           * @default 'none'
          */
-        "reorder"?: LeNavigationReorderMode | boolean;
+        "reorder"?: LeNavigationReorderMode1 | boolean;
         /**
           * Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.
           * @default 500
@@ -7786,6 +7828,7 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "items": LeOption[] | string;
         "backdrop": boolean;
+        "reorder": string;
         "pageScrollBehavior": 'blocked' | 'menu-close' | 'fixed-menu';
         "position": 'top' | 'bottom' | 'left' | 'right' | 'mouse';
         "align": 'start' | 'center' | 'end';
@@ -7864,6 +7907,8 @@ declare namespace LocalJSX {
         "defaultSortIconPosition": 'start' | 'end' | 'none';
         "columnVisibilityToggle": boolean;
         "allowColumnToggle": boolean;
+        "columnReorder": boolean;
+        "allowColumnReorder": boolean;
         "emptyLabel": string;
         "emptyTitle": string;
         "emptyMessage": string;

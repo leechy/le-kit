@@ -547,7 +547,7 @@
 
     <h3>3. Hierarchical Collapsible Rows (&lt;le-list&gt; with Nested Children &amp; &lt;le-collapse&gt;)</h3>
     <p>Displays nested organizational data with chevron toggles, depth indentation, and smooth sliding animations.</p>
-    <le-list id="demo-nested-list" column-visibility-toggle></le-list>
+    <le-list id="demo-nested-list" column-separators="borders" column-visibility-toggle></le-list>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const nestedList = document.getElementById('demo-nested-list');
@@ -647,7 +647,48 @@
 
     <br />
 
-    <h3>4. Empty State with empty-* Attributes</h3>
+    <h3>4. Row &amp; Column Separators (Borders, Zebra &amp; Gridiron Checkered)</h3>
+    <p>Using <code>row-separators="zebra" column-separators="borders"</code> (Zebra + Vertical Borders):</p>
+    <le-list id="demo-sep-zebra-borders" row-separators="none" column-separators="zebra"></le-list>
+
+    <br />
+    <p>Using <code>row-separators="zebra" column-separators="zebra"</code> (Gridiron / Checkered Pattern):</p>
+    <le-list id="demo-sep-gridiron" row-separators="zebra" column-separators="zebra"></le-list>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const sampleCols = [
+          { key: 'label', label: 'Metric', width: '1.5fr' },
+          { key: 'data.q1', label: 'Q1', type: 'number', align: 'right', sortable: true },
+          { key: 'data.q2', label: 'Q2', type: 'number', align: 'right', sortable: true },
+          { key: 'data.q3', label: 'Q3', type: 'number', align: 'right', sortable: true },
+          { key: 'data.q4', label: 'Q4', type: 'number', align: 'right', sortable: true }
+        ];
+
+        const sampleData = [
+          { label: 'Revenue ($K)', data: { q1: 120, q2: 145, q3: 180, q4: 210 } },
+          { label: 'Operating Expenses ($K)', data: { q1: 85, q2: 90, q3: 95, q4: 105 } },
+          { label: 'Net Profit ($K)', data: { q1: 35, q2: 55, q3: 85, q4: 105 } },
+          { label: 'Active Users', data: { q1: 1200, q2: 1850, q3: 2400, q4: 3100 } }
+        ];
+
+        const listZebraBorders = document.getElementById('demo-sep-zebra-borders');
+        if (listZebraBorders) {
+          listZebraBorders.columns = sampleCols;
+          listZebraBorders.data = sampleData;
+        }
+
+        const listGridiron = document.getElementById('demo-sep-gridiron');
+        if (listGridiron) {
+          listGridiron.columns = sampleCols;
+          listGridiron.data = sampleData;
+        }
+      });
+    </script>
+
+    <br />
+
+    <h3>5. Empty State with empty-* Attributes</h3>
     <le-list
       empty-label="No Members Found"
       empty-message="There are no team members matching your filter criteria. Try adjusting your search query."

@@ -1323,6 +1323,11 @@ export namespace Components {
          */
         "columnReorder": boolean;
         /**
+          * Column separation style: 'none' | 'borders' | 'zebra'. Defaults to 'none'.
+          * @default 'none'
+         */
+        "columnSeparators": 'none' | 'borders' | 'zebra';
+        /**
           * Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false.
           * @default false
          */
@@ -1357,6 +1362,11 @@ export namespace Components {
           * Title text for default empty state (<le-empty>).
          */
         "emptyTitle"?: string;
+        /**
+          * Row separation style: 'none' | 'borders' | 'zebra'. Defaults to 'zebra'.
+          * @default 'zebra'
+         */
+        "rowSeparators": 'none' | 'borders' | 'zebra';
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -5870,6 +5880,11 @@ declare namespace LocalJSX {
          */
         "columnReorder"?: boolean;
         /**
+          * Column separation style: 'none' | 'borders' | 'zebra'. Defaults to 'none'.
+          * @default 'none'
+         */
+        "columnSeparators"?: 'none' | 'borders' | 'zebra';
+        /**
           * Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false.
           * @default false
          */
@@ -5920,6 +5935,11 @@ declare namespace LocalJSX {
           * Emitted when column sorting changes.
          */
         "onLeSortChange"?: (event: LeListCustomEvent<{ key?: string; column?: LeColumn; direction?: 'asc' | 'desc' }>) => void;
+        /**
+          * Row separation style: 'none' | 'borders' | 'zebra'. Defaults to 'zebra'.
+          * @default 'zebra'
+         */
+        "rowSeparators"?: 'none' | 'borders' | 'zebra';
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -7914,6 +7934,8 @@ declare namespace LocalJSX {
         "allowColumnToggle": boolean;
         "columnReorder": boolean;
         "allowColumnReorder": boolean;
+        "rowSeparators": 'none' | 'borders' | 'zebra';
+        "columnSeparators": 'none' | 'borders' | 'zebra';
         "emptyLabel": string;
         "emptyTitle": string;
         "emptyMessage": string;

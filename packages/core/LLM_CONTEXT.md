@@ -935,6 +935,8 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `allowColumnToggle` | `boolean` | `false` | Alias for columnVisibilityToggle. |
 | `columnReorder` | `boolean` | `false` | Whether to allow column reordering via right-click header context menu. Defaults to false. |
 | `allowColumnReorder` | `boolean` | `false` | Alias for columnReorder. |
+| `rowSeparators` | `'none' \| 'borders' \| 'zebra'` | `'zebra'` | Row separation style: 'none' | 'borders' | 'zebra'. Defaults to 'zebra'. |
+| `columnSeparators` | `'none' \| 'borders' \| 'zebra'` | `'none'` | Column separation style: 'none' | 'borders' | 'zebra'. Defaults to 'none'. |
 | `emptyLabel` | `string \| undefined` |  | Main label text for default empty state (<le-empty>). |
 | `emptyTitle` | `string \| undefined` |  | Title text for default empty state (<le-empty>). |
 | `emptyMessage` | `string \| undefined` |  | Secondary description text for default empty state (<le-empty>). |

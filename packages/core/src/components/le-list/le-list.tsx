@@ -60,6 +60,18 @@ export class LeList {
   @Prop() allowColumnReorder: boolean = false;
 
   /**
+   * Row separation style: 'none' | 'borders' | 'zebra'.
+   * Defaults to 'zebra'.
+   */
+  @Prop() rowSeparators: 'none' | 'borders' | 'zebra' = 'zebra';
+
+  /**
+   * Column separation style: 'none' | 'borders' | 'zebra'.
+   * Defaults to 'none'.
+   */
+  @Prop() columnSeparators: 'none' | 'borders' | 'zebra' = 'none';
+
+  /**
    * Main label text for default empty state (<le-empty>).
    */
   @Prop() emptyLabel?: string;
@@ -352,10 +364,11 @@ export class LeList {
     return sortTree(this.parsedOptions);
   }
 
-  private renderHeaderCell(col: LeColumn) {
+  private renderHeaderCell(col: LeColumn, colIndex: number) {
     const isSorted = this.sortColumnKey === col.key && !!this.sortDirection;
     const isRightAligned = col.align === 'right' || (col.type === 'number' && !col.align);
     const alignClass = `align-${col.align || (col.type === 'number' ? 'right' : 'left')}`;
+    const isColOdd = colIndex % 2 !== 0;
 
     const iconPos: 'start' | 'end' | 'none' =
       col.sortIconPosition ||
@@ -384,6 +397,8 @@ export class LeList {
           'le-list-th': true,
           'sortable': !!col.sortable,
           'sorted': isSorted,
+          'col-odd': isColOdd,
+          'col-even': !isColOdd,
           [alignClass]: true,
         }}
         onClick={() => this.handleSort(col)}
@@ -508,7 +523,17 @@ export class LeList {
       .join(' ');
   }
 
-  private renderRowItem(item: LeOption, depth = 0, path = '', isVisible = true): any {
+  private hasHierarchy(): boolean {
+    return this.parsedOptions.some(item => this.getChildItems(item).length > 0);
+  }
+
+  private renderRowItem(
+    item: LeOption,
+    depth = 0,
+    path = '',
+    isVisible = true,
+    isHierarchical = false
+  ): any {
     const visibleColumns = this.parsedColumns.filter(c => !c.hidden);
     const id = String(item.id ?? item.value ?? path);
     const children = this.getChildItems(item);
@@ -536,6 +561,7 @@ export class LeList {
         >
           {visibleColumns.map((col, colIndex) => {
             const isFirstCol = colIndex === 0;
+            const isColOdd = colIndex % 2 !== 0;
             const alignClass = `align-${col.align || (col.type === 'number' ? 'right' : 'left')}`;
             const indentCalc = `calc(var(--le-list-item-padding-x) + ${depth} * var(--le-list-item-indent))`;
 
@@ -544,11 +570,14 @@ export class LeList {
                 class={{
                   'le-list-td': true,
                   [alignClass]: true,
-                  'is-first-cell': isFirstCol,
+                  'is-first-cell': isFirstCol && isHierarchical,
+                  'col-odd': isColOdd,
+                  'col-even': !isColOdd,
                 }}
                 role="cell"
               >
                 {isFirstCol &&
+                  isHierarchical &&
                   (hasChildren ? (
                     <span
                       class="le-list-row-toggle"
@@ -578,7 +607,7 @@ export class LeList {
           <le-collapse closed={!isOpen} noFading={true}>
             <div class="le-list-row-children" role="rowgroup">
               {children.map((child, childIdx) =>
-                this.renderRowItem(child, depth + 1, `${id}.${childIdx}`, isVisible && isOpen)
+                this.renderRowItem(child, depth + 1, `${id}.${childIdx}`, isVisible && isOpen, isHierarchical)
               )}
             </div>
           </le-collapse>
@@ -705,13 +734,19 @@ export class LeList {
     const isColumnToggleEnabled = this.columnVisibilityToggle || this.allowColumnToggle;
     const isColumnReorderEnabled = this.columnReorder || this.allowColumnReorder;
 
+    const rowSep = this.rowSeparators || 'zebra';
+    const colSep = this.columnSeparators || 'none';
+    const isGridiron = rowSep === 'zebra' && colSep === 'zebra';
+
     const headerRow = (
       <div class="le-list-thead" part="header" role="rowgroup">
         <div class="le-list-tr" role="row">
-          {visibleColumns.map(col => this.renderHeaderCell(col))}
+          {visibleColumns.map((col, colIndex) => this.renderHeaderCell(col, colIndex))}
         </div>
       </div>
     );
+
+    const isHierarchical = this.hasHierarchy();
 
     return (
       <Host>
@@ -722,7 +757,17 @@ export class LeList {
 
         <div class="le-list-table-container">
           <div class="le-list-table-scroll">
-            <div class="le-list-table" role="table" style={{ '--le-list-grid-template': gridTemplate }}>
+            <div
+              class={{
+                'le-list-table': true,
+                'has-hierarchy': isHierarchical,
+                [`row-sep-${rowSep}`]: true,
+                [`col-sep-${colSep}`]: true,
+                'is-gridiron': isGridiron,
+              }}
+              role="table"
+              style={{ '--le-list-grid-template': gridTemplate }}
+            >
               {isColumnToggleEnabled || isColumnReorderEnabled ? (
                 <le-context-menu
                   items={this.getColumnContextMenuItems()}
@@ -738,7 +783,7 @@ export class LeList {
               <div class="le-list-tbody" role="rowgroup">
                 {displayOptions.length === 0
                   ? this.renderEmptyState()
-                  : displayOptions.map((item, rowIndex) => this.renderRowItem(item, 0, String(rowIndex)))}
+                  : displayOptions.map((item, rowIndex) => this.renderRowItem(item, 0, String(rowIndex), true, isHierarchical))}
               </div>
             </div>
           </div>

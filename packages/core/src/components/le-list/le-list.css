@@ -11,6 +11,11 @@
   --le-list-toggle-size: var(--le-spacing-5);
   --le-list-item-gap: var(--le-spacing-2);
   --le-list-item-indent: calc(var(--le-list-toggle-size) + var(--le-list-item-gap));
+
+  /* Separator & Checker Custom Properties */
+  --le-list-row-zebra-bg: var(--le-color-background-secondary);
+  --le-list-col-zebra-bg: var(--le-color-background-secondary);
+  --le-list-checker-intersection-bg: var(--le-color-surface);
 }
 
 :host.no-wrap .le-list-th,
@@ -109,7 +114,7 @@
   color: var(--le-color-primary);
 }
 
-/* Table body & rows (Finder alternating rows) */
+/* Table body & rows */
 .le-list-tbody {
   display: flex;
   flex-direction: column;
@@ -120,30 +125,88 @@
   flex-direction: column;
 }
 
-/* Alternating zebra row backgrounds */
-.le-list-row-main.row-odd {
+.le-list-row-children {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================
+ * Row Separator Variants ('none' | 'borders' | 'zebra')
+ * ========================================== */
+
+/* Default Row Separator: zebra */
+.le-list-table.row-sep-zebra .le-list-row-main.row-odd {
   background-color: var(--le-color-surface);
 }
 
-.le-list-row-main.row-even {
-  background-color: var(--le-color-background-secondary);
+.le-list-table.row-sep-zebra .le-list-row-main.row-even {
+  background-color: var(--le-list-row-zebra-bg);
+}
+
+.le-list-table.row-sep-borders .le-list-tbody .le-list-row-item:not(:last-child) > .le-list-row-main,
+.le-list-table.row-sep-borders .le-list-row-children .le-list-row-main {
+  border-bottom: 1px solid var(--le-color-border-light);
+}
+
+.le-list-table.row-sep-zebra .le-list-row-main,
+.le-list-table.row-sep-none .le-list-row-main {
+  border-bottom: none;
+}
+
+.le-list-table.row-sep-none .le-list-row-main {
+  background-color: transparent;
+}
+
+.le-list-table.row-sep-borders .le-list-row-main {
+  background-color: var(--le-color-surface);
 }
 
 .le-list-row-main:hover {
   background-color: color-mix(in srgb, var(--le-color-primary) 10%, var(--le-color-surface));
 }
 
-.le-list-tbody .le-list-row-item:not(:last-child) > .le-list-row-main {
-  border-bottom: 1px solid var(--le-color-border-light);
+/* ==========================================
+ * Column Separator Variants ('none' | 'borders' | 'zebra')
+ * ========================================== */
+
+/* Column vertical borders */
+.le-list-table.col-sep-borders .le-list-th:not(:last-child),
+.le-list-table.col-sep-borders .le-list-td:not(:last-child) {
+  border-right: 1px solid var(--le-color-border-light);
 }
 
-.le-list-row-children {
-  display: flex;
-  flex-direction: column;
+/* Column zebra (when row is not zebra) */
+.le-list-table.col-sep-zebra:not(.is-gridiron) .le-list-th.col-odd,
+.le-list-table.col-sep-zebra:not(.is-gridiron) .le-list-td.col-odd {
+  background-color: var(--le-list-col-zebra-bg);
 }
 
-.le-list-row-children .le-list-row-main {
-  border-bottom: 1px solid var(--le-color-border-light);
+/* ==========================================
+ * Gridiron / Checkered Pattern (both row & col zebra)
+ * ========================================== */
+.le-list-table.is-gridiron .le-list-row-main.row-odd .le-list-td.col-even {
+  background-color: var(--le-color-surface);
+}
+
+.le-list-table.is-gridiron .le-list-row-main.row-odd .le-list-td.col-odd {
+  background-color: var(--le-list-col-zebra-bg);
+}
+
+.le-list-table.is-gridiron .le-list-row-main.row-even .le-list-td.col-even {
+  background-color: var(--le-list-row-zebra-bg);
+}
+
+/* Intersections in checkered gridiron */
+.le-list-table.is-gridiron .le-list-row-main.row-even .le-list-td.col-odd {
+  background-color: var(--le-list-checker-intersection-bg);
+}
+
+.le-list-table.is-gridiron .le-list-thead .le-list-th.col-odd {
+  background-color: var(--le-color-background-tertiary);
+}
+
+.le-list-table.is-gridiron .le-list-row-main:hover .le-list-td {
+  background-color: color-mix(in srgb, var(--le-color-primary) 10%, transparent);
 }
 
 /* Table cells */

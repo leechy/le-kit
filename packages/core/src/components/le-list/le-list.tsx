@@ -84,6 +84,7 @@ export class LeList {
   @State() sortColumnKey: string | undefined;
   @State() sortDirection: 'asc' | 'desc' | undefined;
   @State() private slotPresence: Record<string, boolean> = {};
+  @State() private openState: Record<string, boolean> = {};
 
   /**
    * Emitted when column sorting changes.
@@ -100,8 +101,14 @@ export class LeList {
    */
   @Event() leColumnOrderChange!: EventEmitter<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn }>;
 
+  /**
+   * Emitted when a hierarchical row item is expanded or collapsed.
+   */
+  @Event() leItemToggle!: EventEmitter<{ item: LeOption; open: boolean; originalEvent?: MouseEvent }>;
+
   private childrenObserver?: MutationObserver;
   private disconnectSlotObserver?: () => void;
+  private renderedRowCount = 0;
 
   @Watch('data')
   async handleDataChange() {
@@ -162,74 +169,75 @@ export class LeList {
   }
 
   private async loadColumns() {
-    let cols: LeColumn[] = [];
+    if (Array.isArray(this.columns) && this.columns.length > 0) {
+      this.parsedColumns = this.columns;
+      return;
+    }
 
-    if (typeof this.columns === 'string') {
+    if (typeof this.columns === 'string' && this.columns.trim() !== '') {
       try {
-        cols = JSON.parse(this.columns);
-      } catch {
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-implied-eval
-          const fn = new Function(`return ${this.columns}`);
-          const evaluated = fn();
-          cols = Array.isArray(evaluated) ? evaluated : [];
-        } catch {
-          cols = [];
+        const parsed = JSON.parse(this.columns);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          this.parsedColumns = parsed;
+          return;
         }
+      } catch (err) {
+        console.warn('[le-list] Failed to parse columns JSON string:', err);
       }
-    } else if (Array.isArray(this.columns)) {
-      cols = this.columns;
     }
 
-    if (cols.length > 0) {
-      this.parsedColumns = cols;
-    } else {
-      this.parsedColumns = this.generateDefaultColumns();
-    }
+    // Auto-generate columns from data item properties if none provided
+    this.parsedColumns = this.generateFallbackColumns();
   }
 
-  private generateDefaultColumns(): LeColumn[] {
-    if (this.parsedOptions.length === 0) {
-      return [{ key: 'label', label: 'Label', sortable: true }];
+  private generateFallbackColumns(): LeColumn[] {
+    if (!this.parsedOptions || this.parsedOptions.length === 0) {
+      return [];
     }
 
     const firstItem = this.parsedOptions[0];
-    const cols: LeColumn[] = [];
+    const generated: LeColumn[] = [];
 
-    if (firstItem.label !== undefined) {
-      cols.push({ key: 'label', label: 'Label', sortable: true, type: 'string' });
-    }
+    // Always add label column first
+    generated.push({
+      key: 'label',
+      label: 'Label',
+      type: 'string',
+      sortable: true,
+    });
 
-    if (firstItem.description) {
-      cols.push({ key: 'description', label: 'Description', sortable: true, type: 'string' });
-    }
-
-    if (firstItem.value !== undefined && firstItem.value !== firstItem.label) {
-      cols.push({ key: 'value', label: 'Value', sortable: true, type: 'string' });
-    }
-
+    // Check properties inside `item.data`
     if (firstItem.data && typeof firstItem.data === 'object') {
-      Object.keys(firstItem.data).forEach(dataKey => {
-        const val = firstItem.data?.[dataKey];
-        let type: string = 'string';
-        if (typeof val === 'number') type = 'number';
-        else if (typeof val === 'boolean') type = 'boolean';
+      for (const [propKey, value] of Object.entries(firstItem.data)) {
+        let inferredType: 'string' | 'number' | 'date' | 'boolean' | 'badge' = 'string';
 
-        cols.push({
-          key: `data.${dataKey}`,
-          label: this.capitalize(dataKey),
+        if (typeof value === 'number') {
+          inferredType = 'number';
+        } else if (typeof value === 'boolean') {
+          inferredType = 'boolean';
+        } else if (typeof value === 'string') {
+          const dateTest = new Date(value);
+          if (!isNaN(dateTest.getTime()) && value.length >= 8 && (value.includes('-') || value.includes('/'))) {
+            inferredType = 'date';
+          }
+        }
+
+        generated.push({
+          key: `data.${propKey}`,
+          label: this.capitalize(propKey),
+          type: inferredType,
           sortable: true,
-          type,
+          align: inferredType === 'number' ? 'right' : inferredType === 'boolean' ? 'center' : 'left',
         });
-      });
+      }
     }
 
-    return cols.length > 0 ? cols : [{ key: 'label', label: 'Label', sortable: true }];
+    return generated;
   }
 
   private capitalize(str: string): string {
     if (!str) return '';
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    return str.charAt(0).toUpperCase() + str.slice(1).replace(/([A-Z])/g, ' $1').trim();
   }
 
   private getItemValue(item: LeOption, key: string): any {
@@ -301,33 +309,47 @@ export class LeList {
     const key = this.sortColumnKey;
     const isAsc = this.sortDirection === 'asc';
 
-    return [...this.parsedOptions].sort((a, b) => {
-      if (col?.sortFn) {
-        return col.sortFn(a, b, this.sortDirection!);
-      }
+    const sortTree = (items: LeOption[]): LeOption[] => {
+      const sorted = [...items].sort((a, b) => {
+        if (col?.sortFn) {
+          return col.sortFn(a, b, this.sortDirection!);
+        }
 
-      const valA = this.getItemValue(a, key);
-      const valB = this.getItemValue(b, key);
+        const valA = this.getItemValue(a, key);
+        const valB = this.getItemValue(b, key);
 
-      if (valA === undefined || valA === null) return isAsc ? 1 : -1;
-      if (valB === undefined || valB === null) return isAsc ? -1 : 1;
+        if (valA === undefined || valA === null) return isAsc ? 1 : -1;
+        if (valB === undefined || valB === null) return isAsc ? -1 : 1;
 
-      if (colType === 'number') {
-        const numA = Number(valA);
-        const numB = Number(valB);
-        return isAsc ? numA - numB : numB - numA;
-      }
+        if (colType === 'number') {
+          const numA = Number(valA);
+          const numB = Number(valB);
+          return isAsc ? numA - numB : numB - numA;
+        }
 
-      if (colType === 'date') {
-        const dateA = new Date(valA).getTime();
-        const dateB = new Date(valB).getTime();
-        return isAsc ? dateA - dateB : dateB - dateA;
-      }
+        if (colType === 'date') {
+          const dateA = new Date(valA).getTime();
+          const dateB = new Date(valB).getTime();
+          return isAsc ? dateA - dateB : dateB - dateA;
+        }
 
-      const strA = String(valA).toLowerCase();
-      const strB = String(valB).toLowerCase();
-      return isAsc ? strA.localeCompare(strB) : strB.localeCompare(strA);
-    });
+        const strA = String(valA).toLowerCase();
+        const strB = String(valB).toLowerCase();
+        return isAsc ? strA.localeCompare(strB) : strB.localeCompare(strA);
+      });
+
+      return sorted.map(item => {
+        if (Array.isArray(item.children) && item.children.length > 0) {
+          return {
+            ...item,
+            children: sortTree(item.children),
+          };
+        }
+        return item;
+      });
+    };
+
+    return sortTree(this.parsedOptions);
   }
 
   private renderHeaderCell(col: LeColumn) {
@@ -357,23 +379,23 @@ export class LeList {
     const headerLabel = col.label || this.capitalize(col.key.replace('data.', ''));
 
     return (
-      <th
+      <div
         class={{
           'le-list-th': true,
           'sortable': !!col.sortable,
           'sorted': isSorted,
           [alignClass]: true,
         }}
-        style={col.width ? { width: col.width } : undefined}
         onClick={() => this.handleSort(col)}
         part="header-cell"
+        role="columnheader"
       >
         <div class={`le-list-th-content icon-${iconPos}`}>
           {iconPos === 'start' && sortIconElement}
           <span>{headerLabel}</span>
           {iconPos === 'end' && sortIconElement}
         </div>
-      </th>
+      </div>
     );
   }
 
@@ -445,6 +467,126 @@ export class LeList {
     return String(rawVal);
   }
 
+  private getChildItems(item: LeOption): LeOption[] {
+    if (Array.isArray(item.children)) {
+      return item.children;
+    }
+    return [];
+  }
+
+  private isItemOpen(item: LeOption, id: string): boolean {
+    if (typeof this.openState[id] === 'boolean') {
+      return this.openState[id];
+    }
+    return !!item.open;
+  }
+
+  private handleToggleRow = (e: MouseEvent, item: LeOption, id: string) => {
+    e.stopPropagation();
+    const nextState = !this.isItemOpen(item, id);
+    this.openState = {
+      ...this.openState,
+      [id]: nextState,
+    };
+    this.leItemToggle.emit({
+      item,
+      open: nextState,
+      originalEvent: e,
+    });
+  };
+
+  private getGridTemplate(visibleColumns: LeColumn[]): string {
+    if (visibleColumns.length === 0) return '1fr';
+    return visibleColumns
+      .map(col => {
+        if (col.width) return col.width;
+        if (col.key === 'label' || col.key === 'name') {
+          return '1.5fr';
+        }
+        return '1fr';
+      })
+      .join(' ');
+  }
+
+  private renderRowItem(item: LeOption, depth = 0, path = '', isVisible = true): any {
+    const visibleColumns = this.parsedColumns.filter(c => !c.hidden);
+    const id = String(item.id ?? item.value ?? path);
+    const children = this.getChildItems(item);
+    const hasChildren = children.length > 0;
+    const isOpen = this.isItemOpen(item, id);
+
+    let isOdd = false;
+    if (isVisible) {
+      this.renderedRowCount++;
+      isOdd = this.renderedRowCount % 2 !== 0;
+    }
+
+    return (
+      <div class="le-list-row-item" key={id} role="none">
+        <div
+          class={{
+            'le-list-tr': true,
+            'le-list-row-main': true,
+            'row-odd': isVisible ? isOdd : false,
+            'row-even': isVisible ? !isOdd : false,
+            'has-children': hasChildren,
+            'is-open': isOpen,
+          }}
+          role="row"
+        >
+          {visibleColumns.map((col, colIndex) => {
+            const isFirstCol = colIndex === 0;
+            const alignClass = `align-${col.align || (col.type === 'number' ? 'right' : 'left')}`;
+            const indentCalc = `calc(var(--le-list-item-padding-x) + ${depth} * var(--le-list-item-indent))`;
+
+            return (
+              <div
+                class={{
+                  'le-list-td': true,
+                  [alignClass]: true,
+                  'is-first-cell': isFirstCol,
+                }}
+                role="cell"
+              >
+                {isFirstCol &&
+                  (hasChildren ? (
+                    <span
+                      class="le-list-row-toggle"
+                      style={{ paddingLeft: indentCalc }}
+                      onClick={(e) => this.handleToggleRow(e, item, id)}
+                      role="button"
+                      tabIndex={-1}
+                      aria-label={isOpen ? 'Collapse' : 'Expand'}
+                      aria-expanded={isOpen ? 'true' : 'false'}
+                    >
+                      <le-icon name="chevron-down" class={{ 'le-list-chevron': true, 'open': isOpen }} aria-hidden="true" />
+                    </span>
+                  ) : (
+                    <span
+                      class="le-list-toggle-spacer"
+                      style={{ paddingLeft: indentCalc }}
+                      aria-hidden="true"
+                    />
+                  ))}
+                {this.renderCellValue(col, item)}
+              </div>
+            );
+          })}
+        </div>
+
+        {hasChildren && (
+          <le-collapse closed={!isOpen} noFading={true}>
+            <div class="le-list-row-children" role="rowgroup">
+              {children.map((child, childIdx) =>
+                this.renderRowItem(child, depth + 1, `${id}.${childIdx}`, isVisible && isOpen)
+              )}
+            </div>
+          </le-collapse>
+        )}
+      </div>
+    );
+  }
+
   private getColumnContextMenuItems(): LeOption[] {
     const visibleCount = this.parsedColumns.filter(c => !c.hidden).length;
 
@@ -511,7 +653,7 @@ export class LeList {
 
     this.parsedColumns = reorderedCols;
 
-    const draggedKey = detail.draggedId || (detail.item ? (detail.item.value || detail.item.id) : undefined);
+    const draggedKey = detail.draggedId || (detail.item ? detail.item.value || detail.item.id : undefined);
     const draggedCol = this.parsedColumns.find(c => c.key === draggedKey);
     const targetCol = detail.targetId ? this.parsedColumns.find(c => c.key === detail.targetId) : undefined;
 
@@ -524,56 +666,51 @@ export class LeList {
     }
   }
 
-  private renderEmptyState(colSpan: number) {
+  private renderEmptyState() {
     const hasSlot = this.slotPresence['empty'];
     const hasEmptyProps = !!(this.emptyLabel || this.emptyTitle || this.emptyMessage || this.emptyIcon);
 
     if (hasSlot) {
       return (
-        <tr>
-          <td class="le-list-empty-cell" colSpan={colSpan}>
-            <slot name="empty" />
-          </td>
-        </tr>
+        <div class="le-list-empty-cell">
+          <slot name="empty" />
+        </div>
       );
     }
 
     if (hasEmptyProps) {
       return (
-        <tr>
-          <td class="le-list-empty-cell" colSpan={colSpan}>
-            <slot name="empty" />
-            <le-empty
-              icon={this.emptyIcon}
-              label={this.emptyLabel || this.emptyTitle}
-              message={this.emptyMessage}
-            />
-          </td>
-        </tr>
+        <div class="le-list-empty-cell">
+          <slot name="empty" />
+          <le-empty icon={this.emptyIcon} label={this.emptyLabel || this.emptyTitle} message={this.emptyMessage} />
+        </div>
       );
     }
 
-    // Always render <slot name="empty" /> in hidden row if unused, so slotted elements are detected & projected instantly
+    // Always render <slot name="empty" /> in hidden container if unused
     return (
-      <tr style={{ display: 'none' }}>
-        <td class="le-list-empty-cell" colSpan={colSpan}>
-          <slot name="empty" />
-        </td>
-      </tr>
+      <div style={{ display: 'none' }}>
+        <slot name="empty" />
+      </div>
     );
   }
 
   render() {
     const visibleColumns = this.parsedColumns.filter(c => !c.hidden);
     const displayOptions = this.getSortedOptions();
+    this.renderedRowCount = 0;
+
+    const gridTemplate = this.getGridTemplate(visibleColumns);
 
     const isColumnToggleEnabled = this.columnVisibilityToggle || this.allowColumnToggle;
     const isColumnReorderEnabled = this.columnReorder || this.allowColumnReorder;
 
     const headerRow = (
-      <thead class="le-list-thead" part="header">
-        <tr>{visibleColumns.map(col => this.renderHeaderCell(col))}</tr>
-      </thead>
+      <div class="le-list-thead" part="header" role="rowgroup">
+        <div class="le-list-tr" role="row">
+          {visibleColumns.map(col => this.renderHeaderCell(col))}
+        </div>
+      </div>
     );
 
     return (
@@ -585,7 +722,7 @@ export class LeList {
 
         <div class="le-list-table-container">
           <div class="le-list-table-scroll">
-            <table class="le-list-table">
+            <div class="le-list-table" role="table" style={{ '--le-list-grid-template': gridTemplate }}>
               {isColumnToggleEnabled || isColumnReorderEnabled ? (
                 <le-context-menu
                   items={this.getColumnContextMenuItems()}
@@ -598,19 +735,12 @@ export class LeList {
               ) : (
                 headerRow
               )}
-              <tbody class="le-list-tbody">
+              <div class="le-list-tbody" role="rowgroup">
                 {displayOptions.length === 0
-                  ? this.renderEmptyState(visibleColumns.length)
-                  : displayOptions.map((item, rowIndex) => (
-                      <tr key={item.id || item.value || rowIndex}>
-                        {visibleColumns.map(col => {
-                          const alignClass = `align-${col.align || (col.type === 'number' ? 'right' : 'left')}`;
-                          return <td class={`le-list-td ${alignClass}`}>{this.renderCellValue(col, item)}</td>;
-                        })}
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
+                  ? this.renderEmptyState()
+                  : displayOptions.map((item, rowIndex) => this.renderRowItem(item, 0, String(rowIndex)))}
+              </div>
+            </div>
           </div>
         </div>
       </Host>

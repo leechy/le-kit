@@ -545,7 +545,109 @@
 
     <br />
 
-    <h3>3. Empty State with empty-* Attributes</h3>
+    <h3>3. Hierarchical Collapsible Rows (&lt;le-list&gt; with Nested Children &amp; &lt;le-collapse&gt;)</h3>
+    <p>Displays nested organizational data with chevron toggles, depth indentation, and smooth sliding animations.</p>
+    <le-list id="demo-nested-list" column-visibility-toggle></le-list>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const nestedList = document.getElementById('demo-nested-list');
+        if (nestedList) {
+          nestedList.columns = [
+            { key: 'label', label: 'Organization / Name', width: '2fr' },
+            { key: 'data.role', label: 'Role / Type', type: 'badge' },
+            { key: 'data.projectsCount', label: 'Projects', type: 'number', sortable: true, align: 'right' },
+            { key: 'data.joined', label: 'Joined / Created', type: 'date', sortable: true, align: 'center' },
+            { key: 'data.active', label: 'Active', type: 'boolean', align: 'center', width: '70px' }
+          ];
+
+          nestedList.data = [
+            {
+              id: 'dept-eng',
+              label: 'Engineering Department',
+              description: 'Software and infrastructure teams',
+              color: 'primary',
+              open: true,
+              data: { role: 'Department', projectsCount: 41, joined: '2020-01-01', active: true },
+              children: [
+                {
+                  id: 'team-core',
+                  label: 'Core Infrastructure Team',
+                  description: 'Backend services & DevOps',
+                  color: 'info',
+                  open: true,
+                  data: { role: 'Team', projectsCount: 32, joined: '2021-03-01', active: true },
+                  children: [
+                    {
+                      id: 'eng-1',
+                      label: 'Alex Rivera',
+                      description: 'alex.rivera@example.com',
+                      color: 'primary',
+                      data: { role: 'Staff Engineer', projectsCount: 14, joined: '2022-03-15', active: true }
+                    },
+                    {
+                      id: 'eng-2',
+                      label: 'Elena Rostova',
+                      description: 'elena.r@example.com',
+                      color: 'info',
+                      data: { role: 'DevOps Lead', projectsCount: 18, joined: '2023-05-20', active: true }
+                    }
+                  ]
+                },
+                {
+                  id: 'team-frontend',
+                  label: 'Frontend Platform Team',
+                  description: 'Design system and client apps',
+                  color: 'success',
+                  open: false,
+                  data: { role: 'Team', projectsCount: 9, joined: '2021-08-01', active: true },
+                  children: [
+                    {
+                      id: 'eng-3',
+                      label: 'Sophia Chen',
+                      description: 'sophia.chen@example.com',
+                      color: 'success',
+                      data: { role: 'Lead Product Designer', projectsCount: 9, joined: '2021-08-01', active: true }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id: 'dept-growth',
+              label: 'Growth & Product Operations',
+              description: 'Cross-functional growth teams',
+              color: 'warning',
+              open: true,
+              data: { role: 'Department', projectsCount: 28, joined: '2020-06-01', active: true },
+              children: [
+                {
+                  id: 'prod-1',
+                  label: 'Marcus Vance',
+                  description: 'marcus.vance@example.com',
+                  color: 'warning',
+                  data: { role: 'Principal PM', projectsCount: 22, joined: '2020-01-10', active: false }
+                },
+                {
+                  id: 'mkt-1',
+                  label: 'David Kim',
+                  description: 'david.kim@example.com',
+                  color: 'danger',
+                  data: { role: 'Growth Strategist', projectsCount: 6, joined: '2024-02-01', active: true }
+                }
+              ]
+            }
+          ];
+
+          nestedList.addEventListener('leItemToggle', (e) => {
+            console.log('[le-list leItemToggle event]', e.detail);
+          });
+        }
+      });
+    </script>
+
+    <br />
+
+    <h3>4. Empty State with empty-* Attributes</h3>
     <le-list
       empty-label="No Members Found"
       empty-message="There are no team members matching your filter criteria. Try adjusting your search query."

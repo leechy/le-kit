@@ -40,6 +40,7 @@ Can optionally listen to the nearest `le-header` shrink events.
 
 ### Used by
 
+ - [le-list](../le-list)
  - [le-navigation](../le-navigation)
 
 ### Depends on
@@ -80,6 +81,7 @@ graph TD;
   le-popup --> le-slot
   le-popup --> le-button
   le-popup --> le-component
+  le-list --> le-collapse
   le-navigation --> le-collapse
   style le-collapse fill:#f9f,stroke:#333,stroke-width:4px
 ```

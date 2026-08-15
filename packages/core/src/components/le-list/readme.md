@@ -25,11 +25,12 @@
 
 ## Events
 
-| Event                      | Description                                                  | Type                                                                                                                    |
-| -------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| `leColumnOrderChange`      | Emitted when column order changes via the context menu.      | `CustomEvent<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn \| undefined; }>`                  |
-| `leColumnVisibilityChange` | Emitted when column visibility changes via the context menu. | `CustomEvent<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean; }>`                                       |
-| `leSortChange`             | Emitted when column sorting changes.                         | `CustomEvent<{ key?: string \| undefined; column?: LeColumn \| undefined; direction?: "desc" \| "asc" \| undefined; }>` |
+| Event                      | Description                                                    | Type                                                                                                                    |
+| -------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `leColumnOrderChange`      | Emitted when column order changes via the context menu.        | `CustomEvent<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn \| undefined; }>`                  |
+| `leColumnVisibilityChange` | Emitted when column visibility changes via the context menu.   | `CustomEvent<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean; }>`                                       |
+| `leItemToggle`             | Emitted when a hierarchical row item is expanded or collapsed. | `CustomEvent<{ item: LeOption; open: boolean; originalEvent?: MouseEvent \| undefined; }>`                              |
+| `leSortChange`             | Emitted when column sorting changes.                           | `CustomEvent<{ key?: string \| undefined; column?: LeColumn \| undefined; direction?: "desc" \| "asc" \| undefined; }>` |
 
 
 ## Shadow Parts
@@ -46,6 +47,7 @@
 
 - [le-icon](../le-icon)
 - [le-tag](../le-tag)
+- [le-collapse](../le-collapse)
 - [le-empty](../le-empty)
 - [le-context-menu](../le-context-menu)
 
@@ -54,6 +56,7 @@
 graph TD;
   le-list --> le-icon
   le-list --> le-tag
+  le-list --> le-collapse
   le-list --> le-empty
   le-list --> le-context-menu
   le-tag --> le-component
@@ -90,6 +93,7 @@ graph TD;
   le-popup --> le-slot
   le-popup --> le-button
   le-popup --> le-component
+  le-collapse --> le-component
   le-empty --> le-icon
   le-empty --> le-button
   le-context-menu --> le-popover
@@ -100,7 +104,6 @@ graph TD;
   le-navigation --> le-popover
   le-navigation --> le-bar
   le-navigation --> le-component
-  le-collapse --> le-component
   le-bar --> le-icon
   le-bar --> le-overflow-menu
   le-overflow-menu --> le-navigation

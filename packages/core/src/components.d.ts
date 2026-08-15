@@ -3780,6 +3780,7 @@ declare global {
         "leSortChange": { key?: string; column?: LeColumn; direction?: 'asc' | 'desc' };
         "leColumnVisibilityChange": { columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean };
         "leColumnOrderChange": { columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn };
+        "leItemToggle": { item: LeOption; open: boolean; originalEvent?: MouseEvent };
     }
     interface HTMLLeListElement extends Components.LeList, HTMLStencilElement {
         addEventListener<K extends keyof HTMLLeListElementEventMap>(type: K, listener: (this: HTMLLeListElement, ev: LeListCustomEvent<HTMLLeListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5911,6 +5912,10 @@ declare namespace LocalJSX {
           * Emitted when column visibility changes via the context menu.
          */
         "onLeColumnVisibilityChange"?: (event: LeListCustomEvent<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>) => void;
+        /**
+          * Emitted when a hierarchical row item is expanded or collapsed.
+         */
+        "onLeItemToggle"?: (event: LeListCustomEvent<{ item: LeOption; open: boolean; originalEvent?: MouseEvent }>) => void;
         /**
           * Emitted when column sorting changes.
          */

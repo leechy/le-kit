@@ -13,7 +13,7 @@
   --le-nav-item-indent: calc(var(--le-nav-toggle-size) + var(--le-nav-item-gap));
 
   /* Reorder drop line */
-  --le-nav-drop-line-width: 3px;
+  --le-nav-drop-line-width: 2px;
 
   /* Horizontal navigation link variables */
   --le-nav-link-padding-x: var(--le-spacing-2);
@@ -560,10 +560,10 @@ le-popover::part(content) {
   z-index: 100;
   right: var(--le-spacing-2, 8px);
   height: var(--le-nav-drop-line-width);
-  background-color: var(--le-color-primary, #3b82f6);
+  background-color: var(--le-color-primary, currentColor);
   border-radius: 2px;
   pointer-events: none;
-  box-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
+  box-shadow: 0 0 3px var(--le-color-primary-dark);
 }
 
 .reorder-drop-line::before {
@@ -574,8 +574,8 @@ le-popover::part(content) {
   width: var(--le-nav-drop-line-width);
   height: 14px;
   border-radius: 2px;
-  background-color: var(--le-color-primary, #3b82f6);
-  box-shadow: 0 0 4px rgba(59, 130, 246, 0.6);
+  background-color: var(--le-color-primary, currentColor);
+  box-shadow: 0 0 3px var(--le-color-primary-dark);
 }
 
 .reorder-drop-line.line-before {

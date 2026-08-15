@@ -951,6 +951,7 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `leSortChange` | `EventEmitter<{ key?: string; column?: LeColumn; direction?: 'asc' \| 'desc' }>` | Emitted when column sorting changes. |
 | `leColumnVisibilityChange` | `EventEmitter<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>` | Emitted when column visibility changes via the context menu. |
 | `leColumnOrderChange` | `EventEmitter<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn }>` | Emitted when column order changes via the context menu. |
+| `leItemToggle` | `EventEmitter<{ item: LeOption; open: boolean; originalEvent?: MouseEvent }>` | Emitted when a hierarchical row item is expanded or collapsed. |
 
 ---
 

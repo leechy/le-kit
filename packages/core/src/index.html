@@ -477,8 +477,8 @@
             { key: 'label', label: 'Member', sortable: true, toggleable: false },
             { key: 'data.department', label: 'Department', type: 'badge', sortable: true },
             { key: 'data.role', label: 'Role', sortable: true, sortIconPosition: 'none' },
-            { key: 'data.projectsCount', label: 'Projects', type: 'number', sortable: true, align: 'right', defaultSortDirection: 'desc', sortIconPosition: 'start' },
-            { key: 'data.joined', label: 'Joined', type: 'date', sortable: true, align: 'center', defaultSortDirection: 'desc' },
+            { key: 'data.projectsCount', label: 'Projects', type: 'number', sortable: true, align: 'right', sortStart: 'desc', sortIconPosition: 'start' },
+            { key: 'data.joined', label: 'Joined', type: 'date', sortable: true, align: 'center', sortStart: 'desc' },
             { key: 'data.active', label: 'Active', type: 'boolean', align: 'center' }
           ];
 
@@ -649,7 +649,7 @@
 
     <h3>4. Row &amp; Column Separators (Borders, Zebra &amp; Gridiron Checkered)</h3>
     <p>Using <code>row-separators="zebra" column-separators="borders"</code> (Zebra + Vertical Borders):</p>
-    <le-list id="demo-sep-zebra-borders" row-separators="none" column-separators="zebra"></le-list>
+    <le-list id="demo-sep-zebra-borders" row-separators="borders" column-separators="zebra" default-sort-direction="desc"></le-list>
 
     <br />
     <p>Using <code>row-separators="zebra" column-separators="zebra"</code> (Gridiron / Checkered Pattern):</p>

@@ -38,6 +38,13 @@ export class LeList {
   @Prop() defaultSortIconPosition?: 'start' | 'end' | 'none';
 
   /**
+   * Default initial sort direction for sortable columns on first click ('asc' | 'desc').
+   * Individual columns can override this via their `sortStart` property.
+   * Defaults to 'asc'.
+   */
+  @Prop() defaultSortDirection: 'asc' | 'desc' = 'asc';
+
+  /**
    * Whether to enable right-click context menu on table header row to toggle column visibility.
    * Defaults to false.
    */
@@ -282,7 +289,7 @@ export class LeList {
   private handleSort(col: LeColumn) {
     if (!col.sortable) return;
 
-    const initialDir: 'asc' | 'desc' = col.defaultSortDirection || 'asc';
+    const initialDir: 'asc' | 'desc' = col.sortStart || this.defaultSortDirection || 'asc';
     const oppositeDir: 'asc' | 'desc' = initialDir === 'asc' ? 'desc' : 'asc';
     const canClear = col.allowClearSort ?? this.allowClearSort;
 

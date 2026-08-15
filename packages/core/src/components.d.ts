@@ -1343,6 +1343,11 @@ export namespace Components {
          */
         "data": LeOption[] | string;
         /**
+          * Default initial sort direction for sortable columns on first click ('asc' | 'desc'). Individual columns can override this via their `sortStart` property. Defaults to 'asc'.
+          * @default 'asc'
+         */
+        "defaultSortDirection": 'asc' | 'desc';
+        /**
           * Default sort icon placement across columns ('start' | 'end' | 'none'). If omitted, right-aligned columns default to 'start' and left/center columns default to 'end'.
          */
         "defaultSortIconPosition"?: 'start' | 'end' | 'none';
@@ -5900,6 +5905,11 @@ declare namespace LocalJSX {
          */
         "data"?: LeOption[] | string;
         /**
+          * Default initial sort direction for sortable columns on first click ('asc' | 'desc'). Individual columns can override this via their `sortStart` property. Defaults to 'asc'.
+          * @default 'asc'
+         */
+        "defaultSortDirection"?: 'asc' | 'desc';
+        /**
           * Default sort icon placement across columns ('start' | 'end' | 'none'). If omitted, right-aligned columns default to 'start' and left/center columns default to 'end'.
          */
         "defaultSortIconPosition"?: 'start' | 'end' | 'none';
@@ -7930,6 +7940,7 @@ declare namespace LocalJSX {
         "columns": LeColumn[] | string;
         "allowClearSort": boolean;
         "defaultSortIconPosition": 'start' | 'end' | 'none';
+        "defaultSortDirection": 'asc' | 'desc';
         "columnVisibilityToggle": boolean;
         "allowColumnToggle": boolean;
         "columnReorder": boolean;

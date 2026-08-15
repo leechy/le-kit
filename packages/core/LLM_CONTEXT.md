@@ -931,6 +931,7 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `columns` | `LeColumn[] \| string` | `[]` | Column configuration for the list table view. Can be an array of `LeColumn` objects or a JSON string. If omitted, columns will be automatically generated from data item properties. |
 | `allowClearSort` | `boolean` | `true` | Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true. |
 | `defaultSortIconPosition` | `'start' \| 'end' \| 'none' \| undefined` |  | Default sort icon placement across columns ('start' | 'end' | 'none'). If omitted, right-aligned columns default to 'start' and left/center columns default to 'end'. |
+| `defaultSortDirection` | `'asc' \| 'desc'` | `'asc'` | Default initial sort direction for sortable columns on first click ('asc' | 'desc'). Individual columns can override this via their `sortStart` property. Defaults to 'asc'. |
 | `columnVisibilityToggle` | `boolean` | `false` | Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false. |
 | `allowColumnToggle` | `boolean` | `false` | Alias for columnVisibilityToggle. |
 | `columnReorder` | `boolean` | `false` | Whether to allow column reordering via right-click header context menu. Defaults to false. |

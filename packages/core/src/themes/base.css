@@ -90,7 +90,7 @@
    * CONTROLS
    * ============================================ */
   /* Cursor for the interactive controls, web use 'pointer', but native app stick to the default cursor */
-  --le-controls-cursor: default;
+  --le-controls-cursor: pointer; /* default */
 
   /* Icons scale for the controls like buttons, menu items, etc. */
   --le-controls-icon-scale: 1.25;

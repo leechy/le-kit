@@ -73,7 +73,7 @@ export interface LeColumn {
    * Initial sort direction on the first header click.
    * Defaults to 'asc' (or 'desc' if specified).
    */
-  defaultSortDirection?: 'asc' | 'desc';
+  sortStart?: 'asc' | 'desc';
 
   /**
    * Whether clicking a sorted column header a 3rd time clears sorting back to unsorted.

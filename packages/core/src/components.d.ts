@@ -1357,6 +1357,11 @@ export namespace Components {
          */
         "defaultSortIconPosition"?: 'start' | 'end' | 'none';
         /**
+          * Whether to disable row highlighting on hover. Defaults to false (row hover highlighting is enabled by default).
+          * @default false
+         */
+        "disableRowHover": boolean;
+        /**
           * Icon for default empty state (<le-empty>).
          */
         "emptyIcon"?: string;
@@ -1372,11 +1377,6 @@ export namespace Components {
           * Title text for default empty state (<le-empty>).
          */
         "emptyTitle"?: string;
-        /**
-          * Whether rows highlight on hover. Defaults to true.
-          * @default true
-         */
-        "rowHover": boolean;
         /**
           * Row separation style: 'none' | 'borders' | 'zebra'. Defaults to 'zebra'.
           * @default 'zebra'
@@ -5934,6 +5934,11 @@ declare namespace LocalJSX {
          */
         "defaultSortIconPosition"?: 'start' | 'end' | 'none';
         /**
+          * Whether to disable row highlighting on hover. Defaults to false (row hover highlighting is enabled by default).
+          * @default false
+         */
+        "disableRowHover"?: boolean;
+        /**
           * Icon for default empty state (<le-empty>).
          */
         "emptyIcon"?: string;
@@ -5965,11 +5970,6 @@ declare namespace LocalJSX {
           * Emitted when column sorting changes.
          */
         "onLeSortChange"?: (event: LeListCustomEvent<{ key?: string; column?: LeColumn; direction?: 'asc' | 'desc' }>) => void;
-        /**
-          * Whether rows highlight on hover. Defaults to true.
-          * @default true
-         */
-        "rowHover"?: boolean;
         /**
           * Row separation style: 'none' | 'borders' | 'zebra'. Defaults to 'zebra'.
           * @default 'zebra'
@@ -7982,7 +7982,7 @@ declare namespace LocalJSX {
         "emptyTitle": string;
         "emptyMessage": string;
         "emptyIcon": string;
-        "rowHover": boolean;
+        "disableRowHover": boolean;
     }
     interface LeMultiselectAttributes {
         "options": LeOption[] | string;

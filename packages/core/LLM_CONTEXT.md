@@ -943,7 +943,7 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `emptyTitle` | `string \| undefined` |  | Title text for default empty state (<le-empty>). |
 | `emptyMessage` | `string \| undefined` |  | Secondary description text for default empty state (<le-empty>). |
 | `emptyIcon` | `string \| undefined` |  | Icon for default empty state (<le-empty>). |
-| `rowHover` | `boolean` | `true` | Whether rows highlight on hover. Defaults to true. |
+| `disableRowHover` | `boolean` | `false` | Whether to disable row highlighting on hover. Defaults to false (row hover highlighting is enabled by default). |
 | `parsedOptions` | `LeOption[]` | `[]` |  |
 | `parsedColumns` | `LeColumn[]` | `[]` |  |
 | `sortColumnKey` | `string \| undefined` |  |  |

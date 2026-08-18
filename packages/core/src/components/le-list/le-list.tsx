@@ -99,10 +99,10 @@ export class LeList {
   @Prop() emptyIcon?: string;
 
   /**
-   * Whether rows highlight on hover.
-   * Defaults to true.
+   * Whether to disable row highlighting on hover.
+   * Defaults to false (row hover highlighting is enabled by default).
    */
-  @Prop({ reflect: true }) rowHover: boolean = true;
+  @Prop({ reflect: true }) disableRowHover: boolean = false;
 
   @State() parsedOptions: LeOption[] = [];
   @State() parsedColumns: LeColumn[] = [];
@@ -786,7 +786,7 @@ export class LeList {
               class={{
                 'le-list-table': true,
                 'has-hierarchy': isHierarchical,
-                'has-row-hover': this.rowHover,
+                'has-row-hover': !this.disableRowHover,
                 [`row-sep-${rowSep}`]: true,
                 [`col-sep-${colSep}`]: true,
                 'is-gridiron': isGridiron,

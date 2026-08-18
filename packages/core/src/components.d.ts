@@ -937,6 +937,11 @@ export namespace Components {
          */
         "reorder": LeNavigationReorderMode | boolean;
         "show": (x?: number, y?: number) => Promise<void>;
+        /**
+          * Whether to show the drag handle icon at the end of reorderable menu items.
+          * @default false
+         */
+        "showReorderHandle": boolean;
         "toggle": (x?: number, y?: number) => Promise<void>;
     }
     /**
@@ -1575,6 +1580,11 @@ export namespace Components {
           * Programmatically set the reorder mode ('none', 'siblings', 'nested', or boolean).
          */
         "setReorder": (mode: LeNavigationReorderMode1 | boolean) => Promise<void>;
+        /**
+          * Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable items. Default: false.
+          * @default false
+         */
+        "showReorderHandle": boolean;
         /**
           * Whether submenu popovers should include a filter input.
           * @default false
@@ -5487,6 +5497,11 @@ declare namespace LocalJSX {
           * @default 'none'
          */
         "reorder"?: LeNavigationReorderMode | boolean;
+        /**
+          * Whether to show the drag handle icon at the end of reorderable menu items.
+          * @default false
+         */
+        "showReorderHandle"?: boolean;
     }
     /**
      * Shows a "smart" header title based on what has scrolled out of view.
@@ -6151,6 +6166,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "searchable"?: boolean;
+        /**
+          * Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable items. Default: false.
+          * @default false
+         */
+        "showReorderHandle"?: boolean;
         /**
           * Whether submenu popovers should include a filter input.
           * @default false
@@ -7864,6 +7884,7 @@ declare namespace LocalJSX {
         "items": LeOption[] | string;
         "backdrop": boolean;
         "reorder": string;
+        "showReorderHandle": boolean;
         "pageScrollBehavior": 'blocked' | 'menu-close' | 'fixed-menu';
         "position": 'top' | 'bottom' | 'left' | 'right' | 'mouse';
         "align": 'start' | 'center' | 'end';
@@ -7981,6 +8002,7 @@ declare namespace LocalJSX {
         "activationMode": LeNavigationActivationMode;
         "autoScroll": boolean;
         "reorder": string;
+        "showReorderHandle": boolean;
         "reorderExpandDelay": number;
         "togglePosition": 'start' | 'end';
     }

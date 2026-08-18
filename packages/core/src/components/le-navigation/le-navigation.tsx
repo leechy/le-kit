@@ -188,6 +188,12 @@ export class LeNavigation {
   @Prop({ reflect: true, mutable: true }) reorder: LeNavigationReorderMode | boolean = 'none';
 
   /**
+   * Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable items.
+   * Default: false.
+   */
+  @Prop({ reflect: true }) showReorderHandle: boolean = false;
+
+  /**
    * Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones.
    * Default: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after).
    */
@@ -2130,6 +2136,11 @@ export class LeNavigation {
                         />
                       </span>
                     )}
+                    {this.showReorderHandle && this.activeReorderMode !== 'none' && (
+                      <span class="nav-icon nav-reorder-handle" aria-hidden="true">
+                        <le-icon name="reorder-horizontal" />
+                      </span>
+                    )}
                   </TagType>
                   {isDropTarget && this.dropPosition === 'after' && (
                     <div class="reorder-drop-line line-after" style={{ left: dropLinePaddingLeft }} />
@@ -2233,6 +2244,11 @@ export class LeNavigation {
             {item.iconEnd && (
               <span class="nav-icon nav-icon-end" aria-hidden="true">
                 {this.renderIcon(item.iconEnd)}
+              </span>
+            )}
+            {this.showReorderHandle && this.activeReorderMode !== 'none' && (
+              <span class="nav-icon nav-reorder-handle" aria-hidden="true">
+                <le-icon name="reorder-horizontal" />
               </span>
             )}
           </TagType>
@@ -2582,6 +2598,11 @@ export class LeNavigation {
                       class={classnames('nav-chevron', { open: this.draggedToggleIsOpen, end: true })}
                       aria-hidden="true"
                     />
+                  </span>
+                )}
+                {this.showReorderHandle && this.activeReorderMode !== 'none' && (
+                  <span class="nav-icon nav-reorder-handle" aria-hidden="true">
+                    <le-icon name="reorder-horizontal" />
                   </span>
                 )}
               </div>

@@ -83,6 +83,11 @@ export class LeContextMenu {
   @Prop({ reflect: true }) reorder: LeNavigationReorderMode | boolean = 'none';
 
   /**
+   * Whether to show the drag handle icon at the end of reorderable menu items.
+   */
+  @Prop() showReorderHandle: boolean = false;
+
+  /**
    * Behavior of the menu on page scroll:
    * - 'blocked': blocks page scroll
    * - 'menu-close': closes the menu automatically on scroll (default)
@@ -460,6 +465,7 @@ export class LeContextMenu {
               toggle-position="end"
               items={parsedItems}
               reorder={this.reorder}
+              show-reorder-handle={this.showReorderHandle}
               onLeNavItemSelect={this.handleNavigationSelect}
               onLeNavItemReorder={this.handleNavigationReorder}
             />

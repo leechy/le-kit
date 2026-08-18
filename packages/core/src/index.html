@@ -392,7 +392,7 @@
     </div>
     <div style="display: flex; gap: var(--le-spacing-2)">
       <div style="width: 320px; background-color: var(--le-color-surface-alt); border-radius: var(--le-radius-md);">
-        <le-navigation id="demo-reorder-nav" reorder="nested" orientation="vertical">
+        <le-navigation id="demo-reorder-nav" reorder="nested" orientation="vertical" show-reorder-handle>
           <le-item label="All Inboxes" icon-start="trays" value="inboxes" open>
             <le-item label="Work" icon-start="tray" count="3" value="work"></le-item>
             <le-item label="Personal" icon-start="tray" value="personal"></le-item>
@@ -479,7 +479,7 @@
             { key: 'data.role', label: 'Role', sortable: true, sortIconPosition: 'none' },
             { key: 'data.projectsCount', label: 'Projects', type: 'number', sortable: true, align: 'right', sortStart: 'desc', sortIconPosition: 'start' },
             { key: 'data.joined', label: 'Joined', type: 'date', sortable: true, align: 'center', sortStart: 'desc' },
-            { key: 'data.active', label: 'Active', type: 'boolean', align: 'center' }
+            { key: 'data.active', label: 'Active', type: 'boolean', align: 'center', width: '70px' }
           ];
 
           listEl.data = [
@@ -801,14 +801,14 @@
       <le-icon name="folder-open" rounded thin size="48"></le-icon>
     </div>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="notifications" size="48"></le-icon>
-      <le-icon name="notifications" rounded size="48" count="17"></le-icon>
-      <le-icon name="notifications" filled size="48"></le-icon>
-      <le-icon name="notifications" rounded filled size="48"></le-icon>
-      <le-icon name="notifications" thin size="48"></le-icon>
-      <le-icon name="notifications" thin rounded size="48"></le-icon>
-      <le-icon name="notifications" thin filled size="48"></le-icon>
-      <le-icon name="notifications" thin rounded filled size="48"></le-icon>
+      <le-icon name="reorder-horizontal" sharp size="48"></le-icon>
+      <le-icon name="reorder-horizontal" rounded size="48" count="17"></le-icon>
+      <le-icon name="reorder-horizontal" sharp filled size="48"></le-icon>
+      <le-icon name="reorder-horizontal" rounded filled size="48"></le-icon>
+      <le-icon name="reorder-horizontal" thin sharp size="48"></le-icon>
+      <le-icon name="reorder-horizontal" thin rounded size="48"></le-icon>
+      <le-icon name="reorder-horizontal" thin sharp filled size="48"></le-icon>
+      <le-icon name="reorder-horizontal" thin rounded filled size="48"></le-icon>
     </div>
     <div style="display: flex; align-items: center; gap: 16px;">
       <le-icon name="flag" size="48"></le-icon>

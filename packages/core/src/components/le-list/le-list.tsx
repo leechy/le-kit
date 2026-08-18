@@ -779,6 +779,7 @@ export class LeList {
                 <le-context-menu
                   items={this.getColumnContextMenuItems()}
                   reorder={isColumnReorderEnabled ? 'siblings' : 'none'}
+                  showReorderHandle={isColumnReorderEnabled}
                   onLeContextMenuSelect={(e) => this.handleColumnVisibilityToggle(e.detail.item)}
                   onLeContextMenuReorder={(e) => this.handleColumnReorder(e.detail)}
                 >

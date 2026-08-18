@@ -563,7 +563,6 @@ le-popover::part(content) {
   background-color: var(--le-color-primary, currentColor);
   border-radius: 2px;
   pointer-events: none;
-  box-shadow: 0 0 3px var(--le-color-primary-dark);
 }
 
 .reorder-drop-line::before {
@@ -575,7 +574,6 @@ le-popover::part(content) {
   height: 14px;
   border-radius: 2px;
   background-color: var(--le-color-primary, currentColor);
-  box-shadow: 0 0 3px var(--le-color-primary-dark);
 }
 
 .reorder-drop-line.line-before {

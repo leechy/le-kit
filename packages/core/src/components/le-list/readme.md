@@ -23,6 +23,7 @@
 | `emptyLabel`              | `empty-label`                | Main label text for default empty state (<le-empty>).                                                                                                                                | `string \| undefined`                     | `undefined` |
 | `emptyMessage`            | `empty-message`              | Secondary description text for default empty state (<le-empty>).                                                                                                                     | `string \| undefined`                     | `undefined` |
 | `emptyTitle`              | `empty-title`                | Title text for default empty state (<le-empty>).                                                                                                                                     | `string \| undefined`                     | `undefined` |
+| `rowHover`                | `row-hover`                  | Whether rows highlight on hover. Defaults to true.                                                                                                                                   | `boolean`                                 | `true`      |
 | `rowSeparators`           | `row-separators`             | Row separation style: 'none' \| 'borders' \| 'zebra'. Defaults to 'zebra'.                                                                                                           | `"borders" \| "none" \| "zebra"`          | `'zebra'`   |
 
 

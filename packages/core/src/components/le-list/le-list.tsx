@@ -98,6 +98,12 @@ export class LeList {
    */
   @Prop() emptyIcon?: string;
 
+  /**
+   * Whether rows highlight on hover.
+   * Defaults to true.
+   */
+  @Prop({ reflect: true }) rowHover: boolean = true;
+
   @State() parsedOptions: LeOption[] = [];
   @State() parsedColumns: LeColumn[] = [];
   @State() sortColumnKey: string | undefined;
@@ -142,6 +148,18 @@ export class LeList {
   async componentWillLoad() {
     await this.loadDataAndColumns();
   }
+
+  componentDidLoad() {
+    if (!this.el.hasAttribute('tabindex')) {
+      this.el.setAttribute('tabindex', '0');
+    }
+  }
+
+  private handleHostClick = () => {
+    if (document.activeElement !== this.el) {
+      this.el.focus();
+    }
+  };
 
   connectedCallback() {
     this.setupChildrenObserver();
@@ -756,7 +774,7 @@ export class LeList {
     const isHierarchical = this.hasHierarchy();
 
     return (
-      <Host>
+      <Host onClick={this.handleHostClick}>
         {/* Hidden slot for declarative child options */}
         <div style={{ display: 'none' }}>
           <slot />
@@ -768,6 +786,7 @@ export class LeList {
               class={{
                 'le-list-table': true,
                 'has-hierarchy': isHierarchical,
+                'has-row-hover': this.rowHover,
                 [`row-sep-${rowSep}`]: true,
                 [`col-sep-${colSep}`]: true,
                 'is-gridiron': isGridiron,

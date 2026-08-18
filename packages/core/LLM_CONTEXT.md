@@ -634,6 +634,7 @@ when the user right-clicks or long-presses on its children.
 | `items` | `LeOption[] \| string` | `[]` | List of menu items represented as options. |
 | `backdrop` | `boolean` | `false` | Whether to show a backdrop behind the menu, lifting the active item. |
 | `reorder` | `LeNavigationReorderMode \| boolean` | `'none'` | Enables manual drag-and-drop reordering of menu items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels Note: Can also be passed as boolean (true -> 'nested', false -> 'none'). |
+| `showReorderHandle` | `boolean` | `false` | Whether to show the drag handle icon at the end of reorderable menu items. |
 | `pageScrollBehavior` | `'blocked' \| 'menu-close' \| 'fixed-menu'` | `'menu-close'` | Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll (default) - 'fixed-menu': menu scrolls with the page |
 | `position` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'mouse'` | `'mouse'` | Position of the menu relative to the trigger. If 'mouse', positions next to mouse/touch coords. |
 | `align` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment of the menu relative to the trigger. |
@@ -942,6 +943,7 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `emptyTitle` | `string \| undefined` |  | Title text for default empty state (<le-empty>). |
 | `emptyMessage` | `string \| undefined` |  | Secondary description text for default empty state (<le-empty>). |
 | `emptyIcon` | `string \| undefined` |  | Icon for default empty state (<le-empty>). |
+| `rowHover` | `boolean` | `true` | Whether rows highlight on hover. Defaults to true. |
 | `parsedOptions` | `LeOption[]` | `[]` |  |
 | `parsedColumns` | `LeColumn[]` | `[]` |  |
 | `sortColumnKey` | `string \| undefined` |  |  |
@@ -1020,6 +1022,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `activationMode` | `LeNavigationActivationMode` | `'manual'` | Whether keyboard focus only highlights, or also activates immediately. |
 | `autoScroll` | `boolean` | `false` | Automatically scroll the active item into view when the active URL changes or on initial load.  - Initial load: instant (no animation) - Subsequent `activeUrl` changes: smooth  Only applies to `vertical` orientation. |
 | `reorder` | `LeNavigationReorderMode \| boolean` | `'none'` | Enables manual drag-and-drop reordering of navigation items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none'). |
+| `showReorderHandle` | `boolean` | `false` | Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable items. Default: false. |
 | `reorderRatios` | `{ top: number; middle: number; bottom: number }` | `{ top: 0.35, middle: 0.3, bottom: 0.35, }` | Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after). |
 | `reorderExpandDelay` | `number` | `500` | Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop. |
 | `togglePosition` | `'start' \| 'end'` | `'start'` | Position of the toggle arrow for items with children: 'start' | 'end' |

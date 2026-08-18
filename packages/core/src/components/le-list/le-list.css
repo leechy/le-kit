@@ -4,6 +4,7 @@
   box-sizing: border-box;
   container-type: inline-size;
   container-name: le-list-container;
+  outline: none;
 
   /* Sizing and indentation variables composed like le-navigation */
   --le-list-item-padding-x: var(--le-spacing-4);
@@ -16,6 +17,16 @@
   --le-list-row-zebra-bg: var(--le-color-background-secondary);
   --le-list-col-zebra-bg: var(--le-color-background-secondary);
   --le-list-checker-intersection-bg: var(--le-color-surface);
+
+  /* Hover & Header Focus Variables */
+  --le-list-hover-bg: color-mix(in srgb, var(--le-color-primary) 10%, var(--le-color-surface));
+  --le-list-header-unfocused-opacity: 0.5;
+}
+
+:host(:focus),
+:host(:focus-visible),
+:host(:focus-within) {
+  outline: none;
 }
 
 :host.no-wrap .le-list-th,
@@ -31,6 +42,7 @@
   overflow: hidden;
   background-color: var(--le-color-surface);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  outline: none;
 }
 
 .le-list-table-scroll {
@@ -47,6 +59,7 @@
   font-family: var(--le-font-family-base);
   font-size: var(--le-font-size-sm);
   color: var(--le-color-text-primary);
+  outline: none;
 }
 
 /* Header styles */
@@ -73,11 +86,19 @@
   color: var(--le-color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  transition: background-color var(--le-transition-fast) var(--le-transition-easing);
+  transition: 
+    opacity var(--le-transition-fast) var(--le-transition-easing),
+    background-color var(--le-transition-fast) var(--le-transition-easing);
   box-sizing: border-box;
   display: flex;
   align-items: center;
   overflow: hidden;
+  opacity: var(--le-list-header-unfocused-opacity);
+}
+
+:host(:focus) .le-list-th,
+:host(:focus-within) .le-list-th {
+  opacity: 1;
 }
 
 .le-list-th.sortable {
@@ -85,6 +106,7 @@
 }
 
 .le-list-th.sortable:hover {
+  opacity: 1;
   background-color: var(--le-color-background-tertiary);
   color: var(--le-color-text-primary);
 }
@@ -161,8 +183,9 @@
   background-color: var(--le-color-surface);
 }
 
-.le-list-row-main:hover {
-  background-color: color-mix(in srgb, var(--le-color-primary) 10%, var(--le-color-surface));
+/* Row hover (when has-row-hover is active) */
+.le-list-table.has-row-hover .le-list-row-main:hover {
+  background-color: var(--le-list-hover-bg);
 }
 
 /* ==========================================
@@ -179,6 +202,12 @@
 .le-list-table.col-sep-zebra:not(.is-gridiron) .le-list-th.col-odd,
 .le-list-table.col-sep-zebra:not(.is-gridiron) .le-list-td.col-odd {
   background-color: var(--le-list-col-zebra-bg);
+}
+
+/* Ensure row hover overrides cell backgrounds in column zebra and gridiron */
+.le-list-table.has-row-hover.col-sep-zebra .le-list-row-main:hover .le-list-td,
+.le-list-table.has-row-hover.is-gridiron .le-list-row-main:hover .le-list-td {
+  background-color: var(--le-list-hover-bg);
 }
 
 /* ==========================================
@@ -203,10 +232,6 @@
 
 .le-list-table.is-gridiron .le-list-thead .le-list-th.col-odd {
   background-color: var(--le-color-background-tertiary);
-}
-
-.le-list-table.is-gridiron .le-list-row-main:hover .le-list-td {
-  background-color: color-mix(in srgb, var(--le-color-primary) 10%, transparent);
 }
 
 /* Table cells */

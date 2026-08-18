@@ -1373,6 +1373,11 @@ export namespace Components {
          */
         "emptyTitle"?: string;
         /**
+          * Whether rows highlight on hover. Defaults to true.
+          * @default true
+         */
+        "rowHover": boolean;
+        /**
           * Row separation style: 'none' | 'borders' | 'zebra'. Defaults to 'zebra'.
           * @default 'zebra'
          */
@@ -5961,6 +5966,11 @@ declare namespace LocalJSX {
          */
         "onLeSortChange"?: (event: LeListCustomEvent<{ key?: string; column?: LeColumn; direction?: 'asc' | 'desc' }>) => void;
         /**
+          * Whether rows highlight on hover. Defaults to true.
+          * @default true
+         */
+        "rowHover"?: boolean;
+        /**
           * Row separation style: 'none' | 'borders' | 'zebra'. Defaults to 'zebra'.
           * @default 'zebra'
          */
@@ -7972,6 +7982,7 @@ declare namespace LocalJSX {
         "emptyTitle": string;
         "emptyMessage": string;
         "emptyIcon": string;
+        "rowHover": boolean;
     }
     interface LeMultiselectAttributes {
         "options": LeOption[] | string;

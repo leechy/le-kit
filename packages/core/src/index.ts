@@ -26,8 +26,16 @@ export {
   configureLeKit,
   getLeKitConfig,
   getAssetBasePath,
+  registerIcon,
+  registerIcons,
+  getComposedIcon,
+  getDefaultIconRounded,
+  getDefaultIconFilled,
+  getDefaultIconThin,
+  getDefaultTextBadgePosition,
+  getDefaultTextBadgeScale,
 } from './global/app';
-export type { LeKitMode, LeKitTheme } from './global/app';
+export type { LeKitMode, LeKitTheme, ComposedIconDef, LeKitIconsConfig } from './global/app';
 
 // Popup/dialog programmatic API
 export { leAlert, leConfirm, lePrompt } from './components/le-popup/le-popup.api';

@@ -16,7 +16,7 @@ import {
   LeMultiOptionSelectDetail,
   LeOptionSelectDetail,
 } from '../../types/options';
-import { buildDeclarativeOptionsFromChildren, parseOptionInput } from '../../utils/utils';
+import { buildDeclarativeOptionsFromChildren, classnames, parseOptionInput } from '../../utils/utils';
 
 /**
  * A multiselect component for selecting multiple options.
@@ -447,7 +447,7 @@ export class LeMultiselect {
           filterFn={this.searchable ? this.filterOption : undefined}
           filterQuery={this.searchQuery}
           emptyText={this.emptyText}
-          showCheckboxes={true}
+          hideCheckboxes={false}
           fullWidth={this.fullWidth}
           onLeOptionSelect={this.handleOptionSelect}
           onLeDropdownOpen={this.handleDropdownOpen}
@@ -455,12 +455,15 @@ export class LeMultiselect {
         >
           <div
             slot="trigger"
-            class={{
-              'multiselect-trigger': true,
-              'has-selections': hasSelections,
-              'is-open': this.open,
-              'is-disabled': this.disabled,
-            }}
+            class={classnames(
+              'multiselect-trigger',
+              'le-control-focus',
+              {
+                'has-selections': hasSelections,
+                'is-open': this.open,
+                'is-disabled': this.disabled,
+              },
+            )}
             tabIndex={this.disabled ? -1 : 0}
             role="combobox"
             aria-haspopup="listbox"
@@ -480,15 +483,11 @@ export class LeMultiselect {
                   aria-label="Clear all"
                   tabIndex={-1}
                 >
-                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4l8 8M12 4l-8 8" />
-                  </svg>
+                  <le-icon name="clear" size={16} />
                 </button>
               )}
               <span class="multiselect-arrow">
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 6l4 4 4-4" />
-                </svg>
+                <le-icon name="chevron-down" size={20} />
               </span>
             </div>
           </div>

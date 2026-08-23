@@ -1,12 +1,13 @@
 import { Component, Prop, Event, EventEmitter, State, h, Element, Watch } from '@stencil/core';
-import { classnames } from '../../utils/utils';
+import { classnames, observeNamedSlotPresence, slotHasContent } from '../../utils/utils';
 
 /**
- * A number input component with validation, keyboard controls, and custom spinners.
+ * A number input component with validation, keyboard controls, and custom spinners or steppers.
  *
  * @slot - The label text for the input
  * @slot description - Additional description text displayed below the input
  * @slot icon-start - Icon to display at the start of the input
+ * @slot icon-end - Icon to display at the end of the input
  *
  * @cssprop --le-input-bg - Input background color
  * @cssprop --le-input-color - Input text color
@@ -60,6 +61,26 @@ export class LeNumberInput {
   @Prop() step: number = 1;
 
   /**
+   * Step value when holding Shift key
+   */
+  @Prop() shiftStep?: number;
+
+  /**
+   * Multiplier for step value when holding Shift key
+   */
+  @Prop() shiftMultiplier?: number;
+
+  /**
+   * Step value when holding Alt/Option key
+   */
+  @Prop() altStep?: number;
+
+  /**
+   * Multiplier for step value when holding Alt/Option key
+   */
+  @Prop() altMultiplier?: number;
+
+  /**
    * Whether the input is required
    */
   @Prop() required: boolean = false;
@@ -80,9 +101,14 @@ export class LeNumberInput {
   @Prop() iconStart?: string;
 
   /**
-   * Whether to show the spinner controls
+   * Icon for the end icon
    */
-  @Prop() showSpinners: boolean = true;
+  @Prop() iconEnd?: string;
+
+  /**
+   * Controls type for numerical adjustment ('spinner' | 'stepper' | 'none')
+   */
+  @Prop() controls: 'spinner' | 'stepper' | 'none' = 'none';
 
   /**
    * External ID for linking with external systems
@@ -94,6 +120,10 @@ export class LeNumberInput {
    */
   @State() private isValid: boolean = true;
   @State() private validationMessage: string = '';
+
+  @State() private hasIconStartSlot = false;
+  @State() private hasIconEndSlot = false;
+  private disconnectSlotObserver?: () => void;
 
   /**
    * Emitted when the value changes (on blur or Enter)
@@ -114,6 +144,96 @@ export class LeNumberInput {
     externalId?: string;
     isValid: boolean;
   }>;
+
+  private initSlotObserver() {
+    if (this.disconnectSlotObserver) {
+      return;
+    }
+
+    this.disconnectSlotObserver = observeNamedSlotPresence(
+      this.el,
+      ['icon-start', 'icon-end'],
+      presence => {
+        this.hasIconStartSlot = !!presence['icon-start'];
+        this.hasIconEndSlot = !!presence['icon-end'];
+      },
+    );
+  }
+
+  componentWillLoad() {
+    this.hasIconStartSlot = slotHasContent(this.el, 'icon-start');
+    this.hasIconEndSlot = slotHasContent(this.el, 'icon-end');
+    this.initSlotObserver();
+  }
+
+  componentDidLoad() {
+    this.initSlotObserver();
+  }
+
+  private repeatTimeout?: any;
+  private repeatInterval?: any;
+  private lastPressTime = 0;
+
+  private stopRepeat = () => {
+    if (this.repeatTimeout) {
+      clearTimeout(this.repeatTimeout);
+      this.repeatTimeout = undefined;
+    }
+    if (this.repeatInterval) {
+      clearInterval(this.repeatInterval);
+      this.repeatInterval = undefined;
+    }
+    window.removeEventListener('pointerup', this.stopRepeat);
+    window.removeEventListener('pointercancel', this.stopRepeat);
+    window.removeEventListener('mouseup', this.stopRepeat);
+  };
+
+  private startRepeat = (action: 'inc' | 'dec', ev: UIEvent) => {
+    if ('button' in ev && (ev as MouseEvent).button !== 0) return;
+
+    const now = Date.now();
+    if (now - this.lastPressTime < 100 && ev.type === 'mousedown') {
+      ev.preventDefault();
+      return;
+    }
+    this.lastPressTime = now;
+
+    ev.preventDefault();
+    this.stopRepeat();
+
+    if (action === 'inc') {
+      this.increment(ev);
+    } else {
+      this.decrement(ev);
+    }
+
+    window.addEventListener('pointerup', this.stopRepeat, { once: true });
+    window.addEventListener('pointercancel', this.stopRepeat, { once: true });
+    window.addEventListener('mouseup', this.stopRepeat, { once: true });
+
+    this.repeatTimeout = setTimeout(() => {
+      this.repeatInterval = setInterval(() => {
+        if (action === 'inc') {
+          if (this.max !== undefined && this.value !== undefined && this.value >= this.max) {
+            this.stopRepeat();
+            return;
+          }
+          this.increment(ev);
+        } else {
+          if (this.min !== undefined && this.value !== undefined && this.value <= this.min) {
+            this.stopRepeat();
+            return;
+          }
+          this.decrement(ev);
+        }
+      }, 60);
+    }, 400);
+  };
+
+  disconnectedCallback() {
+    this.stopRepeat();
+    this.disconnectSlotObserver?.();
+  }
 
   @Watch('value')
   valueChanged() {
@@ -162,11 +282,50 @@ export class LeNumberInput {
     });
   }
 
-  private updateValue(newValue: number) {
+  private getPrecision(num: number): number {
+    const str = num.toString();
+    if (str.includes('e-')) {
+      const parts = str.split('e-');
+      return parseInt(parts[1], 10);
+    }
+    return str.split('.')[1]?.length || 0;
+  }
+
+  private getEffectiveStep(ev?: any): number {
+    const shiftKey = Boolean(ev?.shiftKey || ev?.detail?.shiftKey);
+    const altKey = Boolean(ev?.altKey || ev?.detail?.altKey);
+
+    if (shiftKey) {
+      if (this.shiftStep !== undefined) {
+        return this.shiftStep;
+      }
+      if (this.shiftMultiplier !== undefined) {
+        return this.step * this.shiftMultiplier;
+      }
+      return this.step * 10;
+    }
+    if (altKey) {
+      if (this.altStep !== undefined) {
+        return this.altStep;
+      }
+      if (this.altMultiplier !== undefined) {
+        return this.step * this.altMultiplier;
+      }
+      return this.step * 0.1;
+    }
+    return this.step;
+  }
+
+  private updateValue(newValue: number, effectiveStep?: number) {
     if (this.disabled || this.readonly) return;
 
-    // Round to avoid floating point errors
-    const precision = this.step.toString().split('.')[1]?.length || 0;
+    const stepToUse = effectiveStep !== undefined ? effectiveStep : this.step;
+    // Round to avoid floating point errors while preserving decimal precision
+    const precision = Math.max(
+      this.getPrecision(this.step),
+      this.getPrecision(stepToUse),
+      this.getPrecision(this.value || 0)
+    );
     const rounded = parseFloat(newValue.toFixed(precision));
 
     this.value = rounded;
@@ -196,18 +355,25 @@ export class LeNumberInput {
   private handleKeyDown = (ev: KeyboardEvent) => {
     if (this.disabled || this.readonly) return;
 
-    let multiplier = 1;
-    if (ev.shiftKey) multiplier = 10;
-    if (ev.altKey) multiplier = 0.1;
-
     const current = this.value || 0;
+    const effectiveStep = this.getEffectiveStep(ev);
 
     if (ev.key === 'ArrowUp') {
       ev.preventDefault();
-      this.updateValue(current + this.step * multiplier);
+      if (this.max !== undefined && this.value !== undefined && this.value >= this.max) {
+        return;
+      }
+      const nextVal =
+        this.max !== undefined ? Math.min(this.max, current + effectiveStep) : current + effectiveStep;
+      this.updateValue(nextVal, effectiveStep);
     } else if (ev.key === 'ArrowDown') {
       ev.preventDefault();
-      this.updateValue(current - this.step * multiplier);
+      if (this.min !== undefined && this.value !== undefined && this.value <= this.min) {
+        return;
+      }
+      const nextVal =
+        this.min !== undefined ? Math.max(this.min, current - effectiveStep) : current - effectiveStep;
+      this.updateValue(nextVal, effectiveStep);
     }
   };
 
@@ -218,30 +384,78 @@ export class LeNumberInput {
 
     ev.preventDefault();
     const current = this.value || 0;
+    const effectiveStep = this.getEffectiveStep(ev);
 
     if (ev.deltaY < 0) {
-      this.updateValue(current + this.step);
+      if (this.max !== undefined && this.value !== undefined && this.value >= this.max) {
+        return;
+      }
+      const nextVal =
+        this.max !== undefined ? Math.min(this.max, current + effectiveStep) : current + effectiveStep;
+      this.updateValue(nextVal, effectiveStep);
     } else {
-      this.updateValue(current - this.step);
+      if (this.min !== undefined && this.value !== undefined && this.value <= this.min) {
+        return;
+      }
+      const nextVal =
+        this.min !== undefined ? Math.max(this.min, current - effectiveStep) : current - effectiveStep;
+      this.updateValue(nextVal, effectiveStep);
+    }
+  };
+
+  private handleClick = (action: 'inc' | 'dec', ev: any) => {
+    ev.preventDefault();
+    if (Date.now() - this.lastPressTime < 300) {
+      return;
+    }
+    if (action === 'inc') {
+      this.increment(ev);
+    } else {
+      this.decrement(ev);
     }
   };
 
   private increment = (ev: Event) => {
     ev.preventDefault(); // Prevent focus loss
+    if (this.max !== undefined && this.value !== undefined && this.value >= this.max) {
+      return;
+    }
     const current = this.value || 0;
-    this.updateValue(current + this.step);
+    const effectiveStep = this.getEffectiveStep(ev as MouseEvent);
+    const nextVal =
+      this.max !== undefined ? Math.min(this.max, current + effectiveStep) : current + effectiveStep;
+    this.updateValue(nextVal, effectiveStep);
     // Trigger change event for buttons as they are "final" actions usually
     this.emitChange();
   };
 
   private decrement = (ev: Event) => {
     ev.preventDefault();
+    if (this.min !== undefined && this.value !== undefined && this.value <= this.min) {
+      return;
+    }
     const current = this.value || 0;
-    this.updateValue(current - this.step);
+    const effectiveStep = this.getEffectiveStep(ev as MouseEvent);
+    const nextVal =
+      this.min !== undefined ? Math.max(this.min, current - effectiveStep) : current - effectiveStep;
+    this.updateValue(nextVal, effectiveStep);
     this.emitChange();
   };
 
+  private renderIconContent(icon?: string) {
+    if (!icon) return null;
+    if (Array.from(icon).length <= 2) {
+      return icon;
+    }
+    return <le-icon name={icon}></le-icon>;
+  }
+
   render() {
+    const hasIconStart = Boolean(this.iconStart || this.hasIconStartSlot);
+    const hasIconEnd = Boolean(this.iconEnd || this.hasIconEndSlot);
+    const isStepper = this.controls === 'stepper';
+    const isSpinner = this.controls === 'spinner';
+
     return (
       <le-component component="le-number-input" hostClass={classnames({ disabled: this.disabled })}>
         <div class="le-input-wrapper">
@@ -251,8 +465,39 @@ export class LeNumberInput {
             </label>
           )}
 
-          <div class={classnames('le-input-container', { 'has-error': !this.isValid })}>
-            {this.iconStart && <span class="icon-start">{this.iconStart}</span>}
+          <div
+            class={classnames('le-input-container', 'le-control-focus', {
+              'has-error': !this.isValid,
+              'has-stepper': isStepper,
+              'has-spinner': isSpinner,
+            })}
+          >
+            {isStepper && (
+              <le-button
+                mode="default"
+                variant="clear"
+                icon-only="minus"
+                class="le-stepper-btn stepper-decrement"
+                onMouseDown={(ev: any) => this.startRepeat('dec', ev)}
+                onPointerDown={(ev: any) => this.startRepeat('dec', ev)}
+                onPointerUp={this.stopRepeat}
+                onPointerLeave={this.stopRepeat}
+                onClick={(ev: any) => this.handleClick('dec', ev)}
+                disabled={
+                  this.disabled ||
+                  this.readonly ||
+                  (this.min !== undefined && this.value !== undefined && this.value <= this.min)
+                }
+                tabindex="-1"
+              />
+            )}
+
+            <span
+              class={classnames('icon-start', { 'is-visible': hasIconStart })}
+              part="icon-start"
+            >
+              <slot name="icon-start">{this.renderIconContent(this.iconStart)}</slot>
+            </span>
 
             <input
               id={this.name}
@@ -270,42 +515,71 @@ export class LeNumberInput {
               onChange={this.handleChange}
               onKeyDown={this.handleKeyDown}
               onWheel={this.handleWheel}
+              part="input"
             />
 
-            {this.showSpinners && (
+            <span class={classnames('icon-end', { 'is-visible': hasIconEnd })} part="icon-end">
+              <slot name="icon-end">{this.renderIconContent(this.iconEnd)}</slot>
+            </span>
+
+            {isStepper && (
+              <le-button
+                mode="default"
+                variant="clear"
+                icon-only="plus"
+                class="le-stepper-btn stepper-increment"
+                onMouseDown={(ev: any) => this.startRepeat('inc', ev)}
+                onPointerDown={(ev: any) => this.startRepeat('inc', ev)}
+                onPointerUp={this.stopRepeat}
+                onPointerLeave={this.stopRepeat}
+                onClick={(ev: any) => this.handleClick('inc', ev)}
+                disabled={
+                  this.disabled ||
+                  this.readonly ||
+                  (this.max !== undefined && this.value !== undefined && this.value >= this.max)
+                }
+                tabindex="-1"
+              />
+            )}
+
+            {isSpinner && (
               <div class="le-input-controls">
                 <le-button
                   mode="default"
                   variant="clear"
                   size="small"
-                  icon-only
+                  icon-only="chevron-up"
                   class="le-input-control-btn"
-                  onClick={this.increment}
+                  onMouseDown={(ev: any) => this.startRepeat('inc', ev)}
+                  onPointerDown={(ev: any) => this.startRepeat('inc', ev)}
+                  onPointerUp={this.stopRepeat}
+                  onPointerLeave={this.stopRepeat}
+                  onClick={(ev: any) => this.handleClick('inc', ev)}
                   disabled={
                     this.disabled ||
                     this.readonly ||
                     (this.max !== undefined && this.value !== undefined && this.value >= this.max)
                   }
                   tabindex="-1"
-                >
-                  <le-icon name="chevron-up" size={12} slot="icon-only"></le-icon>
-                </le-button>
+                />
                 <le-button
                   mode="default"
                   variant="clear"
                   size="small"
-                  icon-only
+                  icon-only="chevron-down"
                   class="le-input-control-btn"
-                  onClick={this.decrement}
+                  onMouseDown={(ev: any) => this.startRepeat('dec', ev)}
+                  onPointerDown={(ev: any) => this.startRepeat('dec', ev)}
+                  onPointerUp={this.stopRepeat}
+                  onPointerLeave={this.stopRepeat}
+                  onClick={(ev: any) => this.handleClick('dec', ev)}
                   disabled={
                     this.disabled ||
                     this.readonly ||
                     (this.min !== undefined && this.value !== undefined && this.value <= this.min)
                   }
                   tabindex="-1"
-                >
-                  <le-icon name="chevron-down" size={12} slot="icon-only"></le-icon>
-                </le-button>
+                />
               </div>
             )}
           </div>

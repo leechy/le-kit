@@ -108,7 +108,7 @@ describe('le-button', () => {
   it('shows icon-start and icon-end from props', async () => {
     const page = await newSpecPage({
       components: [LeButton],
-      html: '<le-button icon-start="←" icon-end="→">Label</le-button>',
+      html: '<le-button icon-start="\u2190" icon-end="\u2192">Label</le-button>',
     });
 
     const host = page.root as HTMLLeButtonElement;

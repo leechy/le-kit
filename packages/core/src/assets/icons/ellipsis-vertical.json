@@ -1,14 +1,34 @@
 {
   "viewBox": "0 0 16 16",
+  "maskShape": [
+    {
+      "tag": "path",
+      "d": "M8 3h0 M8 8h0 M8 13h0",
+      "stroke": "black",
+      "stroke-width": "3.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "2.5"
+      }
+    }
+  ],
   "children": [
     {
       "tag": "path",
       "d": "M8 3h0 M8 8h0 M8 13h0",
       "fill": "none",
       "stroke": "currentColor",
-      "stroke-width": "3",
-      "stroke-linecap": "round",
-      "children": []
+      "stroke-width": "2.75",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "1.75"
+      }
     }
   ]
 }

@@ -92,9 +92,13 @@ A flexible button component with multiple variants and states.
 | `fullWidth`              | `full-width`               | Whether the button takes full width of its container                                                                             | `boolean`                                                                                                | `false`      |
 | `groupShape`             | `group-shape`              | Shape of the button when rendered inside grouped containers.                                                                     | `"end" \| "middle" \| "single" \| "start"`                                                               | `'single'`   |
 | `href`                   | `href`                     | Optional href to make the button act as a link                                                                                   | `string \| undefined`                                                                                    | `undefined`  |
+| `iconCount`              | `icon-count`               | Notification count for shorthand icons. Applies to start icon, or icon-only if set.                                              | `number \| undefined`                                                                                    | `undefined`  |
 | `iconEnd`                | `icon-end`                 | End icon image or emoji                                                                                                          | `Node \| string \| undefined`                                                                            | `undefined`  |
+| `iconEndCount`           | `icon-end-count`           | Count specifically for iconEnd.                                                                                                  | `number \| undefined`                                                                                    | `undefined`  |
 | `iconOnly`               | `icon-only`                | Icon only button image or emoji if this prop is set, the button will render only the icon slot                                   | `Node \| string \| undefined`                                                                            | `undefined`  |
+| `iconOnlyCount`          | `icon-only-count`          | Count specifically for iconOnly.                                                                                                 | `number \| undefined`                                                                                    | `undefined`  |
 | `iconStart`              | `icon-start`               | Start icon image or emoji                                                                                                        | `Node \| string \| undefined`                                                                            | `undefined`  |
+| `iconStartCount`         | `icon-start-count`         | Count specifically for iconStart.                                                                                                | `number \| undefined`                                                                                    | `undefined`  |
 | `label`                  | `label`                    | Optional label for the button, used for accessibility and tooltips when the button is icon-only.                                 | `string \| undefined`                                                                                    | `undefined`  |
 | `mode`                   | `mode`                     | Mode of the popover should be 'default' for internal use                                                                         | `"admin" \| "default" \| undefined`                                                                      | `undefined`  |
 | `motionPreset`           | `motion-preset`            | Optional per-instance motion preset override.                                                                                    | `"fluid" \| "none" \| "soft" \| "spring" \| undefined`                                                   | `undefined`  |
@@ -141,10 +145,12 @@ Type: `Promise<LeOption>`
 
 ## Slots
 
-| Slot          | Description                |
-| ------------- | -------------------------- |
-|               | Button text content        |
-| `"icon-only"` | Icon for icon-only buttons |
+| Slot           | Description                                |
+| -------------- | ------------------------------------------ |
+|                | Button text content                        |
+| `"icon-end"`   | Icon placed in the end of the button       |
+| `"icon-only"`  | Icon for icon-only buttons                 |
+| `"icon-start"` | Icon placed in the beginning of the button |
 
 
 ## Shadow Parts
@@ -194,6 +200,7 @@ graph TD;
   le-string-input --> le-button
   le-component --> le-button
   le-select --> le-button
+  le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
   le-checkbox --> le-component
   le-checkbox --> le-slot

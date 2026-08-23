@@ -1,21 +1,71 @@
 {
   "viewBox": "0 0 16 16",
-  "children": [
+  "maskShape": [
     {
       "tag": "polyline",
-      "points": "8 4 12 8 8 12",
+      "points": "8.5 4 12.5 8 8.5 12",
       "fill": "none",
-      "stroke": "currentColor",
-      "stroke-width": "1.8"
+      "stroke": "black",
+      "stroke-width": "2.8",
+      "stroke-linecap": "square",
+      "stroke-linejoin": "square",
+      "rounded": {
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "2"
+      }
     },
     {
       "tag": "line",
-      "x1": "4",
+      "x1": "3.25",
       "y1": "8",
-      "x2": "11",
+      "x2": "11.5",
+      "y2": "8",
+      "stroke": "black",
+      "stroke-width": "2.8",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "2"
+      }
+    }
+  ],
+  "children": [
+    {
+      "tag": "polyline",
+      "points": "8.5 4 12.5 8 8.5 12",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.8",
+      "stroke-linecap": "square",
+      "stroke-linejoin": "square",
+      "rounded": {
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "1"
+      }
+    },
+    {
+      "tag": "line",
+      "x1": "3.25",
+      "y1": "8",
+      "x2": "11.5",
       "y2": "8",
       "stroke": "currentColor",
-      "stroke-width": "1.8"
+      "stroke-width": "1.8",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "1"
+      }
     }
   ]
 }

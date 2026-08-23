@@ -1,20 +1,69 @@
 {
   "viewBox": "0 0 16 16",
-  "children": [
+  "maskShape": [
     {
       "tag": "polyline",
       "points": "9 2 11 4 9 6",
-      "stroke-width": "1.5",
-      "stroke": "currentColor",
-      "stroke-linecap": "square"
+      "fill": "none",
+      "stroke": "black",
+      "stroke-width": "2.5",
+      "stroke-linecap": "square",
+      "stroke-linejoin": "square",
+      "rounded": {
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "2"
+      }
     },
     {
       "tag": "path",
       "d": "M3.5,8.5 C3.5,10.9852814 5.51247342,13 7.99768762,13 C10.4829018,13 12.497566,10.9852814 12.497566,8.5 C12.497566,6.01471863 10.4829018,4 7.99768762,4 C6.34087815,4 5.67417094,4 5.997566,4",
-      "stroke-width": "1.5",
+      "fill": "none",
+      "transform": "translate(7.9988, 8.5) scale(-1, 1) translate(-7.9988, -8.5)",
+      "stroke": "black",
+      "stroke-width": "2.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "2"
+      }
+    }
+  ],
+  "children": [
+    {
+      "tag": "polyline",
+      "points": "9 2 11 4 9 6",
       "fill": "none",
       "stroke": "currentColor",
-      "transform": "translate(7.9988, 8.5) scale(-1, 1) translate(-7.9988, -8.5)"
+      "stroke-width": "1.5",
+      "stroke-linecap": "square",
+      "stroke-linejoin": "square",
+      "rounded": {
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "1"
+      }
+    },
+    {
+      "tag": "path",
+      "d": "M3.5,8.5 C3.5,10.9852814 5.51247342,13 7.99768762,13 C10.4829018,13 12.497566,10.9852814 12.497566,8.5 C12.497566,6.01471863 10.4829018,4 7.99768762,4 C6.34087815,4 5.67417094,4 5.997566,4",
+      "fill": "none",
+      "transform": "translate(7.9988, 8.5) scale(-1, 1) translate(-7.9988, -8.5)",
+      "stroke": "currentColor",
+      "stroke-width": "1.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "1"
+      }
     }
   ]
 }

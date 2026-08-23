@@ -226,7 +226,7 @@ export class LeStringInput {
             <slot name="label">{this.label}</slot>
           </label>
 
-          <div class="le-input-container" part="container">
+          <div class={classnames('le-input-container', 'le-control-focus')} part="container">
             <span class={classnames('icon-start', { 'is-visible': hasIconStart })}>
               <slot name="icon-start">{this.iconStart}</slot>
             </span>

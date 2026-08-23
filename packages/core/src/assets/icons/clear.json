@@ -1,25 +1,61 @@
 {
   "viewBox": "0 0 16 16",
-  "children": [
+  "maskShape": [
     {
       "tag": "line",
-      "x1": "4",
-      "y1": "12",
-      "x2": "12",
-      "y2": "4",
-      "fill": "none",
-      "stroke": "currentColor",
-      "stroke-width": "2"
+      "x1": "4.75",
+      "y1": "11.25",
+      "x2": "11.25",
+      "y2": "4.75",
+      "stroke": "black",
+      "stroke-width": "3",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      }
     },
     {
       "tag": "line",
-      "x1": "4",
-      "y1": "4",
-      "x2": "12",
-      "y2": "12",
+      "x1": "4.75",
+      "y1": "4.75",
+      "x2": "11.25",
+      "y2": "11.25",
+      "stroke": "black",
+      "stroke-width": "3",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      }
+    }
+  ],
+  "children": [
+    {
+      "tag": "line",
+      "x1": "4.75",
+      "y1": "11.25",
+      "x2": "11.25",
+      "y2": "4.75",
       "fill": "none",
       "stroke": "currentColor",
-      "stroke-width": "2"
+      "stroke-width": "2",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      }
+    },
+    {
+      "tag": "line",
+      "x1": "4.75",
+      "y1": "4.75",
+      "x2": "11.25",
+      "y2": "11.25",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "2",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      }
     }
   ]
 }

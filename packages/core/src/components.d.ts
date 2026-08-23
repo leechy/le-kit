@@ -454,17 +454,33 @@ export namespace Components {
          */
         "href"?: string;
         /**
+          * Notification count for shorthand icons. Applies to start icon, or icon-only if set.
+         */
+        "iconCount"?: number;
+        /**
           * End icon image or emoji
          */
         "iconEnd"?: string | Node;
+        /**
+          * Count specifically for iconEnd.
+         */
+        "iconEndCount"?: number;
         /**
           * Icon only button image or emoji if this prop is set, the button will render only the icon slot
          */
         "iconOnly"?: string | Node;
         /**
+          * Count specifically for iconOnly.
+         */
+        "iconOnlyCount"?: number;
+        /**
           * Start icon image or emoji
          */
         "iconStart"?: string | Node;
+        /**
+          * Count specifically for iconStart.
+         */
+        "iconStartCount"?: number;
         /**
           * Optional label for the button, used for accessibility and tooltips when the button is icon-only.
          */
@@ -985,6 +1001,11 @@ export namespace Components {
          */
         "hide": () => Promise<void>;
         /**
+          * Whether to hide checkboxes (small sizes only).
+          * @default false
+         */
+        "hideCheckboxes": boolean;
+        /**
           * Maximum height of the dropdown list.
           * @default '300px'
          */
@@ -1009,10 +1030,10 @@ export namespace Components {
          */
         "show": () => Promise<void>;
         /**
-          * Whether to show checkboxes for multiselect mode.
-          * @default true
+          * Size of the dropdown.
+          * @default 'medium'
          */
-        "showCheckboxes": boolean;
+        "size": 'small' | 'medium' | 'large';
         /**
           * Toggles the dropdown.
          */
@@ -1109,15 +1130,91 @@ export namespace Components {
     }
     interface LeIcon {
         /**
+          * Name of a badge icon to overlay on top of the base icon. The badge icon is loaded and composed with mask-based knockout.
+         */
+        "badge"?: string;
+        /**
+          * Optional color for the badge icon or background (CSS color or variable). Defaults to 'transparent'.
+         */
+        "badgeColor"?: string;
+        /**
+          * Optional opacity for the badge icon (0 to 1).
+         */
+        "badgeOpacity"?: number;
+        /**
+          * Position of the badge icon within the base icon's viewBox. Comma-separated x,y values in viewBox units or percentages. Positive values = from start/top, Negative values = from end/bottom. Percentages work like CSS background-position. Default: "-5, -5" (bottom-right area).
+          * @example "-2, -2"    → 2 units from right and bottom edges
+          * @example "100%, 0%"  → top-right corner
+          * @example "50%, 50%"  → centered
+         */
+        "badgePosition"?: string;
+        /**
+          * Scale factor for the badge icon. Default: 1.0. Badge icons are designed at their natural display size, so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink.
+         */
+        "badgeScale"?: number;
+        /**
+          * Optional text string for notification badge (e.g. "NEW"). Can also be set as boolean attribute `<le-icon badge-text></le-icon>` for an empty dot.
+         */
+        "badgeText"?: string | boolean;
+        /**
+          * Optional text/font color for the badge text.
+         */
+        "badgeTextColor"?: string;
+        /**
+          * Optional color for the base icon (CSS color or variable).
+         */
+        "baseColor"?: string;
+        /**
+          * Optional numeric count for notification badge (e.g. 5 or 120).
+         */
+        "count"?: number;
+        /**
+          * Whether to display an empty circle dot badge.
+         */
+        "dot"?: boolean;
+        /**
+          * Whether to use filled variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultFilled`).
+         */
+        "filled"?: boolean;
+        /**
+          * JSON string defining additional icon layers to compose on top of the base icon. Each layer has a name, optional position, and optional scale. Layers are rendered in order (first = bottom, last = top), and each layer's maskShape (if present) cuts through all layers below it.
+          * @example '[{"name":"folder","position":"0,50%","scale":0.8}]'
+         */
+        "layers"?: string;
+        /**
+          * Optional max count threshold (e.g. 99 -> "99+").
+         */
+        "maxCount"?: number;
+        /**
           * Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file.
           * @default undefined
          */
         "name"?: string;
         /**
-          * Size of the icon in pixels. Default is 16.
-          * @default 16
+          * Whether to force outlined (non-filled) variants of icon elements. Overrides `filled` prop, registry settings, and global defaults.
          */
-        "size": number;
+        "outlined"?: boolean;
+        /**
+          * Whether to use rounded variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultRounded`).
+         */
+        "rounded"?: boolean;
+        /**
+          * Whether to force sharp (non-rounded) variants of icon elements. Overrides `rounded` prop, registry settings, and global defaults.
+         */
+        "sharp"?: boolean;
+        /**
+          * Size of the icon in pixels or CSS value. If omitted, controlled by CSS `--le-icon-size` (default: 16px).
+         */
+        "size"?: number | string;
+        /**
+          * Whether to use thin variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultThin`).
+         */
+        "thin"?: boolean;
+        /**
+          * Custom viewBox for the SVG. When set, overrides the viewBox from the loaded icon data. Useful for layer-only compositions without a base icon.
+          * @example "0 0 16 16"
+         */
+        "viewBox"?: string;
     }
     interface LeItem {
         "getOption": () => Promise<LeOption>;
@@ -1356,7 +1453,7 @@ export namespace Components {
         "wrap": boolean;
     }
     /**
-     * A number input component with validation, keyboard controls, and custom spinners.
+     * A number input component with validation, keyboard controls, and custom spinners or steppers.
      * @cssprop --le-input-bg - Input background color
      * @cssprop --le-input-color - Input text color
      * @cssprop --le-input-border - Input border style
@@ -1367,6 +1464,19 @@ export namespace Components {
      */
     interface LeNumberInput {
         /**
+          * Multiplier for step value when holding Alt/Option key
+         */
+        "altMultiplier"?: number;
+        /**
+          * Step value when holding Alt/Option key
+         */
+        "altStep"?: number;
+        /**
+          * Controls type for numerical adjustment ('spinner' | 'stepper' | 'none')
+          * @default 'none'
+         */
+        "controls": 'spinner' | 'stepper' | 'none';
+        /**
           * Whether the input is disabled
           * @default false
          */
@@ -1375,6 +1485,10 @@ export namespace Components {
           * External ID for linking with external systems
          */
         "externalId"?: string;
+        /**
+          * Icon for the end icon
+         */
+        "iconEnd"?: string;
         /**
           * Icon for the start icon
          */
@@ -1410,10 +1524,13 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * Whether to show the spinner controls
-          * @default true
+          * Multiplier for step value when holding Shift key
          */
-        "showSpinners": boolean;
+        "shiftMultiplier"?: number;
+        /**
+          * Step value when holding Shift key
+         */
+        "shiftStep"?: number;
         /**
           * Step value for increment/decrement
           * @default 1
@@ -1843,10 +1960,19 @@ export namespace Components {
      */
     interface LeSelect {
         /**
+          * Custom chevron icon name or text.
+         */
+        "chevron"?: string;
+        /**
           * Whether the select is disabled.
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Whether to hide the chevron icon completely.
+          * @default false
+         */
+        "hideChevron": boolean;
         /**
           * Closes the dropdown.
          */
@@ -3584,7 +3710,7 @@ declare global {
   };
     }
     /**
-     * A number input component with validation, keyboard controls, and custom spinners.
+     * A number input component with validation, keyboard controls, and custom spinners or steppers.
      * @cssprop --le-input-bg - Input background color
      * @cssprop --le-input-color - Input text color
      * @cssprop --le-input-border - Input border style
@@ -4652,17 +4778,33 @@ declare namespace LocalJSX {
          */
         "href"?: string;
         /**
+          * Notification count for shorthand icons. Applies to start icon, or icon-only if set.
+         */
+        "iconCount"?: number;
+        /**
           * End icon image or emoji
          */
         "iconEnd"?: string | Node;
+        /**
+          * Count specifically for iconEnd.
+         */
+        "iconEndCount"?: number;
         /**
           * Icon only button image or emoji if this prop is set, the button will render only the icon slot
          */
         "iconOnly"?: string | Node;
         /**
+          * Count specifically for iconOnly.
+         */
+        "iconOnlyCount"?: number;
+        /**
           * Start icon image or emoji
          */
         "iconStart"?: string | Node;
+        /**
+          * Count specifically for iconStart.
+         */
+        "iconStartCount"?: number;
         /**
           * Optional label for the button, used for accessibility and tooltips when the button is icon-only.
          */
@@ -5211,6 +5353,11 @@ declare namespace LocalJSX {
          */
         "fullWidth"?: boolean;
         /**
+          * Whether to hide checkboxes (small sizes only).
+          * @default false
+         */
+        "hideCheckboxes"?: boolean;
+        /**
           * Maximum height of the dropdown list.
           * @default '300px'
          */
@@ -5243,10 +5390,10 @@ declare namespace LocalJSX {
          */
         "options"?: LeOption[];
         /**
-          * Whether to show checkboxes for multiselect mode.
-          * @default true
+          * Size of the dropdown.
+          * @default 'medium'
          */
-        "showCheckboxes"?: boolean;
+        "size"?: 'small' | 'medium' | 'large';
         /**
           * Current value(s) - single value or array for multiselect.
          */
@@ -5352,15 +5499,91 @@ declare namespace LocalJSX {
     }
     interface LeIcon {
         /**
+          * Name of a badge icon to overlay on top of the base icon. The badge icon is loaded and composed with mask-based knockout.
+         */
+        "badge"?: string;
+        /**
+          * Optional color for the badge icon or background (CSS color or variable). Defaults to 'transparent'.
+         */
+        "badgeColor"?: string;
+        /**
+          * Optional opacity for the badge icon (0 to 1).
+         */
+        "badgeOpacity"?: number;
+        /**
+          * Position of the badge icon within the base icon's viewBox. Comma-separated x,y values in viewBox units or percentages. Positive values = from start/top, Negative values = from end/bottom. Percentages work like CSS background-position. Default: "-5, -5" (bottom-right area).
+          * @example "-2, -2"    → 2 units from right and bottom edges
+          * @example "100%, 0%"  → top-right corner
+          * @example "50%, 50%"  → centered
+         */
+        "badgePosition"?: string;
+        /**
+          * Scale factor for the badge icon. Default: 1.0. Badge icons are designed at their natural display size, so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink.
+         */
+        "badgeScale"?: number;
+        /**
+          * Optional text string for notification badge (e.g. "NEW"). Can also be set as boolean attribute `<le-icon badge-text></le-icon>` for an empty dot.
+         */
+        "badgeText"?: string | boolean;
+        /**
+          * Optional text/font color for the badge text.
+         */
+        "badgeTextColor"?: string;
+        /**
+          * Optional color for the base icon (CSS color or variable).
+         */
+        "baseColor"?: string;
+        /**
+          * Optional numeric count for notification badge (e.g. 5 or 120).
+         */
+        "count"?: number;
+        /**
+          * Whether to display an empty circle dot badge.
+         */
+        "dot"?: boolean;
+        /**
+          * Whether to use filled variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultFilled`).
+         */
+        "filled"?: boolean;
+        /**
+          * JSON string defining additional icon layers to compose on top of the base icon. Each layer has a name, optional position, and optional scale. Layers are rendered in order (first = bottom, last = top), and each layer's maskShape (if present) cuts through all layers below it.
+          * @example '[{"name":"folder","position":"0,50%","scale":0.8}]'
+         */
+        "layers"?: string;
+        /**
+          * Optional max count threshold (e.g. 99 -> "99+").
+         */
+        "maxCount"?: number;
+        /**
           * Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file.
           * @default undefined
          */
         "name"?: string;
         /**
-          * Size of the icon in pixels. Default is 16.
-          * @default 16
+          * Whether to force outlined (non-filled) variants of icon elements. Overrides `filled` prop, registry settings, and global defaults.
          */
-        "size"?: number;
+        "outlined"?: boolean;
+        /**
+          * Whether to use rounded variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultRounded`).
+         */
+        "rounded"?: boolean;
+        /**
+          * Whether to force sharp (non-rounded) variants of icon elements. Overrides `rounded` prop, registry settings, and global defaults.
+         */
+        "sharp"?: boolean;
+        /**
+          * Size of the icon in pixels or CSS value. If omitted, controlled by CSS `--le-icon-size` (default: 16px).
+         */
+        "size"?: number | string;
+        /**
+          * Whether to use thin variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultThin`).
+         */
+        "thin"?: boolean;
+        /**
+          * Custom viewBox for the SVG. When set, overrides the viewBox from the loaded icon data. Useful for layer-only compositions without a base icon.
+          * @example "0 0 16 16"
+         */
+        "viewBox"?: string;
     }
     interface LeItem {
     }
@@ -5601,7 +5824,7 @@ declare namespace LocalJSX {
         "wrap"?: boolean;
     }
     /**
-     * A number input component with validation, keyboard controls, and custom spinners.
+     * A number input component with validation, keyboard controls, and custom spinners or steppers.
      * @cssprop --le-input-bg - Input background color
      * @cssprop --le-input-color - Input text color
      * @cssprop --le-input-border - Input border style
@@ -5612,6 +5835,19 @@ declare namespace LocalJSX {
      */
     interface LeNumberInput {
         /**
+          * Multiplier for step value when holding Alt/Option key
+         */
+        "altMultiplier"?: number;
+        /**
+          * Step value when holding Alt/Option key
+         */
+        "altStep"?: number;
+        /**
+          * Controls type for numerical adjustment ('spinner' | 'stepper' | 'none')
+          * @default 'none'
+         */
+        "controls"?: 'spinner' | 'stepper' | 'none';
+        /**
           * Whether the input is disabled
           * @default false
          */
@@ -5620,6 +5856,10 @@ declare namespace LocalJSX {
           * External ID for linking with external systems
          */
         "externalId"?: string;
+        /**
+          * Icon for the end icon
+         */
+        "iconEnd"?: string;
         /**
           * Icon for the start icon
          */
@@ -5673,10 +5913,13 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * Whether to show the spinner controls
-          * @default true
+          * Multiplier for step value when holding Shift key
          */
-        "showSpinners"?: boolean;
+        "shiftMultiplier"?: number;
+        /**
+          * Step value when holding Shift key
+         */
+        "shiftStep"?: number;
         /**
           * Step value for increment/decrement
           * @default 1
@@ -6104,10 +6347,19 @@ declare namespace LocalJSX {
      */
     interface LeSelect {
         /**
+          * Custom chevron icon name or text.
+         */
+        "chevron"?: string;
+        /**
           * Whether the select is disabled.
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Whether to hide the chevron icon completely.
+          * @default false
+         */
+        "hideChevron"?: boolean;
         /**
           * Name attribute for form submission.
          */
@@ -7189,10 +7441,14 @@ declare namespace LocalJSX {
         "motionPreset": 'none' | 'soft' | 'fluid' | 'spring';
         "iconOnly": string | Node;
         "iconStart": string | Node;
+        "iconCount": number;
+        "iconStartCount": number;
         "collapsible": boolean;
         "collapse": string;
         "collapsePriorityOffset": number;
         "iconEnd": string | Node;
+        "iconEndCount": number;
+        "iconOnlyCount": number;
         "disabled": boolean;
         "type": 'button' | 'submit' | 'reset';
         "href": string;
@@ -7280,10 +7536,11 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "filterQuery": string;
         "emptyText": string;
-        "showCheckboxes": boolean;
+        "hideCheckboxes": boolean;
         "maxHeight": string;
         "width": string;
         "fullWidth": boolean;
+        "size": 'small' | 'medium' | 'large';
         "closeOnClickOutside": boolean;
     }
     interface LeHeaderAttributes {
@@ -7297,7 +7554,25 @@ declare namespace LocalJSX {
     }
     interface LeIconAttributes {
         "name": string;
-        "size": number;
+        "size": string;
+        "viewBox": string;
+        "badge": string;
+        "badgePosition": string;
+        "badgeScale": number;
+        "badgeOpacity": number;
+        "count": number;
+        "maxCount": number;
+        "badgeText": string;
+        "dot": boolean;
+        "badgeTextColor": string;
+        "badgeColor": string;
+        "baseColor": string;
+        "layers": string;
+        "rounded": boolean;
+        "sharp": boolean;
+        "filled": boolean;
+        "outlined": boolean;
+        "thin": boolean;
     }
     interface LeKitAttributes {
         "theme": string;
@@ -7346,11 +7621,16 @@ declare namespace LocalJSX {
         "min": number;
         "max": number;
         "step": number;
+        "shiftStep": number;
+        "shiftMultiplier": number;
+        "altStep": number;
+        "altMultiplier": number;
         "required": boolean;
         "disabled": boolean;
         "readonly": boolean;
         "iconStart": string;
-        "showSpinners": boolean;
+        "iconEnd": string;
+        "controls": 'spinner' | 'stepper' | 'none';
         "externalId": string;
     }
     interface LeOverflowMenuAttributes {
@@ -7434,6 +7714,8 @@ declare namespace LocalJSX {
         "name": string;
         "size": 'small' | 'medium' | 'large';
         "variant": 'default' | 'outlined' | 'solid';
+        "chevron": string;
+        "hideChevron": boolean;
         "open": boolean;
     }
     interface LeSidePanelAttributes {
@@ -7995,7 +8277,7 @@ declare module "@stencil/core" {
              */
             "le-navigation": LocalJSX.IntrinsicElements["le-navigation"] & JSXBase.HTMLAttributes<HTMLLeNavigationElement>;
             /**
-             * A number input component with validation, keyboard controls, and custom spinners.
+             * A number input component with validation, keyboard controls, and custom spinners or steppers.
              * @cssprop --le-input-bg - Input background color
              * @cssprop --le-input-color - Input text color
              * @cssprop --le-input-border - Input border style

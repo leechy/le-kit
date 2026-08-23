@@ -1,0 +1,40 @@
+{
+  "viewBox": "0 0 16 16",
+  "children": [
+    {
+      "tag": "polyline",
+      "transform": "translate(6.5, 8.75) scale(-1, 1) translate(-6.5, -8.75)",
+      "stroke": "currentColor",
+      "stroke-width": "1",
+      "stroke-opacity": "0.7",
+      "points": "8.5 3.75 10 3.75 10 13.75 3 13.75",
+      "fill": "none",
+      "children": []
+    },
+    {
+      "tag": "polyline",
+      "stroke": "currentColor",
+      "stroke-width": "1.5",
+      "transform": "translate(9, 7.25) scale(-1, -1) translate(-9, -7.25)",
+      "points": "9.5 2.75 12.5 2.75 12.5 11.75 8.5 11.75 8.5 8.75 5.5 8.75 5.5 6",
+      "fill": "none",
+      "children": []
+    },
+    {
+      "tag": "polyline",
+      "stroke": "currentColor",
+      "stroke-width": "1.5",
+      "stroke-opacity": "0.7",
+      "points": "8.5 2.75 9.93614686 2.75 12.5 5.29229411 12.5 6.76554991",
+      "fill": "none",
+      "children": []
+    },
+    {
+      "tag": "path",
+      "d": "M11,7.5 C12.9329966,7.5 14.5,9.06700338 14.5,11 C14.5,12.9329966 12.9329966,14.5 11,14.5 C9.06700338,14.5 7.5,12.9329966 7.5,11 C7.5,9.06700338 9.06700338,7.5 11,7.5 Z M10.9393393,8.5 L10.2322326,9.20710678 L11.526,10.5 L9,10.5 L9,11.5 L11.487,11.5 L10.2322326,12.7548737 L10.9393393,13.4619805 L13.4142131,10.9871068 L13.408,10.981 L10.9393393,8.5 Z",
+      "fill": "currentColor",
+      "stroke": "none",
+      "children": []
+    }
+  ]
+}

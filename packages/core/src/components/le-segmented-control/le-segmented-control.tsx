@@ -109,6 +109,11 @@ export class LeSegmentedControl {
     void this.syncDeclarativeOptionsAndSegments();
   }
 
+  @Watch('value')
+  handleValueChange() {
+    this.buildSegmentsConfigs();
+  }
+
   @Listen('slotchange')
   handleSlotChange() {
     void this.syncDeclarativeOptionsAndSegments();
@@ -326,6 +331,10 @@ export class LeSegmentedControl {
                 </le-tab>
               );
             })}
+          </div>
+
+          <div style={{ display: 'none' }}>
+            <slot></slot>
           </div>
         </le-component>
       </Host>

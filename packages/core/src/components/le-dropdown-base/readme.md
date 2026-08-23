@@ -26,11 +26,12 @@ Wraps le-popover for positioning and provides:
 | `filterFn`            | --                       | Filter function for options. Return true to include the option.                                  | `((option: LeOption, query: string) => boolean) \| undefined` | `undefined`    |
 | `filterQuery`         | `filter-query`           | Current filter query string.                                                                     | `string`                                                      | `''`           |
 | `fullWidth`           | `full-width`             | Sets the dropdown to full width of the trigger.                                                  | `boolean`                                                     | `false`        |
+| `hideCheckboxes`      | `hide-checkboxes`        | Whether to hide checkboxes (small sizes only).                                                   | `boolean`                                                     | `false`        |
 | `maxHeight`           | `max-height`             | Maximum height of the dropdown list.                                                             | `string`                                                      | `'300px'`      |
 | `multiple`            | `multiple`               | Whether multiple selection is allowed.                                                           | `boolean`                                                     | `false`        |
 | `open`                | `open`                   | Whether the dropdown is open.                                                                    | `boolean`                                                     | `false`        |
 | `options`             | --                       | The options to display in the dropdown.                                                          | `LeOption[]`                                                  | `[]`           |
-| `showCheckboxes`      | `show-checkboxes`        | Whether to show checkboxes for multiselect mode.                                                 | `boolean`                                                     | `true`         |
+| `size`                | `size`                   | Size of the dropdown.                                                                            | `"large" \| "medium" \| "small"`                              | `'medium'`     |
 | `value`               | `value`                  | Current value(s) - single value or array for multiselect.                                        | `LeOptionValue[] \| number \| string \| undefined`            | `undefined`    |
 | `width`               | `width`                  | Width of the dropdown. If not set, matches trigger width.                                        | `string \| undefined`                                         | `undefined`    |
 
@@ -111,11 +112,13 @@ Type: `Promise<void>`
 
 ### Depends on
 
+- [le-icon](../le-icon)
 - [le-popover](../le-popover)
 
 ### Graph
 ```mermaid
 graph TD;
+  le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
   le-combobox --> le-dropdown-base
   le-multiselect --> le-dropdown-base

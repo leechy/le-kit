@@ -4,7 +4,8 @@
   --le-input-color: var(--le-color-text-primary, #333333);
   --le-input-border: var(--le-border-width, 2px) solid var(--le-color-border-input, #007bff);
   --le-input-radius: var(--le-radius-sm, 4px);
-  --le-input-padding: 2px 6px;
+  --le-input-padding: 2px;
+  --le-input-inline-padding: 8px;
   --le-input-height: 1.5rem;
   --le-input-label-color: var(--le-color-text-primary, #333333);
   --le-input-desc-color: var(--le-color-text-secondary, #666666);
@@ -29,8 +30,8 @@
 }
 
 .le-input-container {
-  position: relative;
   display: flex;
+  position: relative;
   align-items: center;
   background: var(--le-input-bg);
   border: var(--le-input-border);
@@ -39,13 +40,14 @@
   outline-offset: 0;
   transition:
     border-color 0.2s ease,
-    outline var(--le-input-transition),
-    outline-offset var(--le-input-transition);
+    background-color 0.2s ease,
+    outline var(--le-control-focus-transition, 0.2s ease),
+    outline-offset var(--le-control-focus-transition, 0.2s ease);
 }
 
 .le-input-container:focus-within {
-  outline: 2px solid var(--le-color-focus);
-  outline-offset: 2px;
+  outline: var(--le-input-border-focus, 2px solid var(--le-color-focus));
+  outline-offset: var(--le-input-border-focus-offset, -1px);
 }
 
 .le-input-container.has-error {
@@ -54,7 +56,7 @@
 
 :host([disabled]) .le-input-container {
   opacity: 0.6;
-  background-color: rgba(0,0,0,0.05);
+  background-color: rgba(0, 0, 0, 0.05);
   cursor: not-allowed;
 }
 
@@ -69,8 +71,10 @@ input {
   font-family: inherit;
   font-size: inherit;
   outline: none;
-  text-align: end; /* Aligned to end */
-  appearance: textfield; /* Remove default spinners in Firefox */
+  /* Aligned to end */
+  text-align: end;
+  /* Remove default spinners in Firefox */
+  appearance: textfield;
 }
 
 /* Remove default spinners in Chrome/Safari/Edge */
@@ -84,19 +88,42 @@ input::placeholder {
   color: var(--le-input-placeholder-color);
 }
 
-.icon-start, .icon-end {
-  display: flex;
+.icon-start:not(.is-visible)+input {
+  padding-inline-start: var(--le-input-inline-padding, 8px);
+}
+
+input:has(+ .icon-end:not(.is-visible)) {
+  padding-inline-end: var(--le-input-inline-padding, 8px);
+}
+
+
+.icon-start,
+.icon-end {
+  display: none;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
   color: var(--le-input-desc-color);
+}
+
+.icon-start.is-visible,
+.icon-end.is-visible {
+  display: flex;
+  padding-inline: var(--le-input-inline-padding, 8px);
+}
+
+.icon-start.is-visible {
+  padding-inline-end: var(--le-input-padding, 2px);
+}
+
+.icon-end.is-visible {
+  padding-inline-start: var(--le-input-padding, 2px);
 }
 
 .le-input-controls {
   display: flex;
   flex-direction: column;
   border-left: 1px solid var(--le-color-border, #cccccc);
-  height: 100%;
+  height: calc(var(--le-input-height) + var(--le-border-width, 1px));
 }
 
 .le-input-control-btn {
@@ -106,6 +133,7 @@ input::placeholder {
   --le-button-small-font-size: 9.5px;
   --le-button-small-padding: 0 0.2rem;
   --le-button-icon-aspect-ratio: 2;
+  --le-icon-size: 12px;
 
   display: flex;
   align-items: center;
@@ -124,12 +152,34 @@ input::placeholder {
 }
 
 .le-input-control-btn:hover {
-  background-color: rgba(0,0,0,0.05);
+  background-color: rgba(0, 0, 0, 0.05);
   color: var(--le-color-primary, #007bff);
 }
 
 .le-input-control-btn:active {
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.le-stepper-btn {
+  --le-button-border-radius: 0;
+  --le-button-icon-only-padding: var(--le-input-padding, 2px 8px);
+
+  height: calc(var(--le-input-height) + var(--le-border-width, 1px));
+  width: calc(var(--le-input-height) + var(--le-border-width, 1px));
+  align-self: center;
+  align-items: center;
+}
+
+.le-stepper-btn.stepper-decrement {
+  border-right: 1px solid var(--le-color-border, #cccccc);
+  border-top-left-radius: calc(var(--le-input-radius) - 1px);
+  border-bottom-left-radius: calc(var(--le-input-radius) - 1px);
+}
+
+.le-stepper-btn.stepper-increment {
+  border-left: 1px solid var(--le-color-border, #cccccc);
+  border-top-right-radius: calc(var(--le-input-radius) - 1px);
+  border-bottom-right-radius: calc(var(--le-input-radius) - 1px);
 }
 
 .le-input-description {

@@ -1,0 +1,13 @@
+{
+  "viewBox": "0 0 16 16",
+  "children": [
+    {
+      "tag": "rect",
+      "x": "0",
+      "y": "0",
+      "width": "16",
+      "height": "16",
+      "fill": "currentColor"
+    }
+  ]
+}

@@ -78,9 +78,9 @@ export class LeDropdownBase {
   @Prop() emptyText: string = 'No options';
 
   /**
-   * Whether to show checkboxes for multiselect mode.
+   * Whether to hide checkboxes (small sizes only).
    */
-  @Prop() showCheckboxes: boolean = true;
+  @Prop() hideCheckboxes: boolean = false;
 
   /**
    * Maximum height of the dropdown list.
@@ -96,6 +96,11 @@ export class LeDropdownBase {
    * Sets the dropdown to full width of the trigger.
    */
   @Prop() fullWidth: boolean = false;
+
+  /**
+   * Size of the dropdown.
+   */
+  @Prop() size: 'small' | 'medium' | 'large' = 'medium';
 
   /**
    * Whether to close the dropdown when clicking outside.
@@ -500,11 +505,9 @@ export class LeDropdownBase {
           {option.description && <span class="option-description">{option.description}</span>}
         </div>
         {this.renderIcon(option.iconEnd, 'option-icon-end')}
-        {(!this.multiple || this.showCheckboxes) && isSelected && (
+        {!this.hideCheckboxes && isSelected && (
           <span class="option-check">
-            <svg viewBox="0 0 16 16" fill="currentColor">
-              <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z" />
-            </svg>
+            <le-icon name="check" size={16} />
           </span>
         )}
       </div>
@@ -573,8 +576,8 @@ export class LeDropdownBase {
           closeOnClickOutside={this.closeOnClickOutside}
           closeOnEscape={true}
           offset={4}
-          width={dropdownWidth}
-          minWidth="150px"
+          width={this.size === 'small' ? undefined : dropdownWidth}
+          minWidth={this.size === 'small' ? "0" : "150px"}
           trigger-full-width={this.fullWidth}
           onLePopoverOpen={this.handlePopoverOpen}
           onLePopoverClose={this.handlePopoverClose}

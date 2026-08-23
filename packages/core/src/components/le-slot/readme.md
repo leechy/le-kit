@@ -84,9 +84,11 @@ graph TD;
   le-component --> le-string-input
   le-component --> le-popover
   le-component --> le-popup
+  le-select --> le-icon
   le-select --> le-component
   le-select --> le-dropdown-base
   le-select --> le-button
+  le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
   le-checkbox --> le-slot
   le-string-input --> le-slot

@@ -136,9 +136,11 @@ graph TD;
   le-string-input --> le-icon
   le-string-input --> le-slot
   le-tooltip --> le-component
+  le-select --> le-icon
   le-select --> le-component
   le-select --> le-dropdown-base
   le-select --> le-button
+  le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
   le-checkbox --> le-component
   le-checkbox --> le-slot

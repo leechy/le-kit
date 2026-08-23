@@ -302,10 +302,14 @@ A flexible button component with multiple variants and states.
 | `motionPreset` | `'none' \| 'soft' \| 'fluid' \| 'spring' \| undefined` |  | Optional per-instance motion preset override. |
 | `iconOnly` | `string \| Node \| undefined` |  | Icon only button image or emoji if this prop is set, the button will render only the icon slot |
 | `iconStart` | `string \| Node \| undefined` |  | Start icon image or emoji |
+| `iconCount` | `number \| undefined` |  | Notification count for shorthand icons. Applies to start icon, or icon-only if set. |
+| `iconStartCount` | `number \| undefined` |  | Count specifically for iconStart. |
 | `collapsible` | `boolean` | `false` | Enables responsive collapse to icon-only when the toolbar applies `collapse="icon"`. |
 | `collapse` | `string \| undefined` |  | Runtime collapse state controlled by responsive containers. |
 | `collapsePriorityOffset` | `number` | `100` | Relative collapse priority offset for toolbar stepping. Higher numbers collapse earlier while keeping the button visible longer. |
 | `iconEnd` | `string \| Node \| undefined` |  | End icon image or emoji |
+| `iconEndCount` | `number \| undefined` |  | Count specifically for iconEnd. |
+| `iconOnlyCount` | `number \| undefined` |  | Count specifically for iconOnly. |
 | `disabled` | `boolean` | `false` | Whether the button is disabled |
 | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | The button type attribute |
 | `href` | `string \| undefined` |  | Optional href to make the button act as a link |
@@ -710,10 +714,11 @@ Wraps le-popover for positioning and provides:
 | `filterFn` | `(option: LeOption, query: string) => boolean \| undefined` |  | Filter function for options. Return true to include the option. |
 | `filterQuery` | `string` | `''` | Current filter query string. |
 | `emptyText` | `string` | `'No options'` | Placeholder text when no options match filter. |
-| `showCheckboxes` | `boolean` | `true` | Whether to show checkboxes for multiselect mode. |
+| `hideCheckboxes` | `boolean` | `false` | Whether to hide checkboxes (small sizes only). |
 | `maxHeight` | `string` | `'300px'` | Maximum height of the dropdown list. |
 | `width` | `string \| undefined` |  | Width of the dropdown. If not set, matches trigger width. |
 | `fullWidth` | `boolean` | `false` | Sets the dropdown to full width of the trigger. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size of the dropdown. |
 | `closeOnClickOutside` | `boolean` | `true` | Whether to close the dropdown when clicking outside. (used to support combobox with input focus) |
 
 ### Events
@@ -824,7 +829,25 @@ The header component updates that variable when it renders.
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
 | `name` | `string \| undefined` | `undefined` | Name of the icon to display. Corresponds to a JSON file in the assets folder. For example, "search" will load the "search.json" file. |
-| `size` | `number` | `16` | Size of the icon in pixels. Default is 16. |
+| `size` | `number \| string \| undefined` |  | Size of the icon in pixels or CSS value. If omitted, controlled by CSS `--le-icon-size` (default: 16px). |
+| `viewBox` | `string \| undefined` |  | Custom viewBox for the SVG. When set, overrides the viewBox from the loaded icon data. Useful for layer-only compositions without a base icon. |
+| `badge` | `string \| undefined` |  | Name of a badge icon to overlay on top of the base icon. The badge icon is loaded and composed with mask-based knockout. |
+| `badgePosition` | `string \| undefined` |  | Position of the badge icon within the base icon's viewBox. Comma-separated x,y values in viewBox units or percentages. Positive values = from start/top, Negative values = from end/bottom. Percentages work like CSS background-position. Default: "-5, -5" (bottom-right area). |
+| `badgeScale` | `number \| undefined` |  | Scale factor for the badge icon. Default: 1.0. Badge icons are designed at their natural display size, so 1.0 means no scaling. Use >1 to enlarge, <1 to shrink. |
+| `badgeOpacity` | `number \| undefined` |  | Optional opacity for the badge icon (0 to 1). |
+| `count` | `number \| undefined` |  | Optional numeric count for notification badge (e.g. 5 or 120). |
+| `maxCount` | `number \| undefined` |  | Optional max count threshold (e.g. 99 -> "99+"). |
+| `badgeText` | `string \| boolean \| undefined` |  | Optional text string for notification badge (e.g. "NEW"). Can also be set as boolean attribute `<le-icon badge-text></le-icon>` for an empty dot. |
+| `dot` | `boolean \| undefined` |  | Whether to display an empty circle dot badge. |
+| `badgeTextColor` | `string \| undefined` |  | Optional text/font color for the badge text. |
+| `badgeColor` | `string \| undefined` |  | Optional color for the badge icon or background (CSS color or variable). Defaults to 'transparent'. |
+| `baseColor` | `string \| undefined` |  | Optional color for the base icon (CSS color or variable). |
+| `layers` | `string \| undefined` |  | JSON string defining additional icon layers to compose on top of the base icon. Each layer has a name, optional position, and optional scale. Layers are rendered in order (first = bottom, last = top), and each layer's maskShape (if present) cuts through all layers below it. |
+| `rounded` | `boolean \| undefined` |  | Whether to use rounded variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultRounded`). |
+| `sharp` | `boolean \| undefined` |  | Whether to force sharp (non-rounded) variants of icon elements. Overrides `rounded` prop, registry settings, and global defaults. |
+| `filled` | `boolean \| undefined` |  | Whether to use filled variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultFilled`). |
+| `outlined` | `boolean \| undefined` |  | Whether to force outlined (non-filled) variants of icon elements. Overrides `filled` prop, registry settings, and global defaults. |
+| `thin` | `boolean \| undefined` |  | Whether to use thin variants of icon elements if defined in icon JSON. If not explicitly set, defaults to the global le-kit config (`icons.defaultThin`). |
 
 ---
 
@@ -940,7 +963,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 
 ## <le-number-input>
 
-A number input component with validation, keyboard controls, and custom spinners.
+A number input component with validation, keyboard controls, and custom spinners or steppers.
 
 ### Properties
 
@@ -954,11 +977,16 @@ A number input component with validation, keyboard controls, and custom spinners
 | `min` | `number \| undefined` |  | Minimum allowed value |
 | `max` | `number \| undefined` |  | Maximum allowed value |
 | `step` | `number` | `1` | Step value for increment/decrement |
+| `shiftStep` | `number \| undefined` |  | Step value when holding Shift key |
+| `shiftMultiplier` | `number \| undefined` |  | Multiplier for step value when holding Shift key |
+| `altStep` | `number \| undefined` |  | Step value when holding Alt/Option key |
+| `altMultiplier` | `number \| undefined` |  | Multiplier for step value when holding Alt/Option key |
 | `required` | `boolean` | `false` | Whether the input is required |
 | `disabled` | `boolean` | `false` | Whether the input is disabled |
 | `readonly` | `boolean` | `false` | Whether the input is read-only |
 | `iconStart` | `string \| undefined` |  | Icon for the start icon |
-| `showSpinners` | `boolean` | `true` | Whether to show the spinner controls |
+| `iconEnd` | `string \| undefined` |  | Icon for the end icon |
+| `controls` | `'spinner' \| 'stepper' \| 'none'` | `'none'` | Controls type for numerical adjustment ('spinner' | 'stepper' | 'none') |
 | `externalId` | `string \| undefined` |  | External ID for linking with external systems |
 
 ### Events
@@ -985,6 +1013,7 @@ A number input component with validation, keyboard controls, and custom spinners
 | Default | The label text for the input |
 | `"description"` | Additional description text displayed below the input |
 | `"icon-start"` | Icon to display at the start of the input |
+| `"icon-end"` | Icon to display at the end of the input |
 
 ### CSS Variables
 
@@ -1255,6 +1284,8 @@ A select dropdown component for single selection.
 | `name` | `string \| undefined` |  | Name attribute for form submission. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size variant of the select. |
 | `variant` | `'default' \| 'outlined' \| 'solid'` | `'default'` | Visual variant of the select. |
+| `chevron` | `string \| undefined` |  | Custom chevron icon name or text. |
+| `hideChevron` | `boolean` | `false` | Whether to hide the chevron icon completely. |
 | `open` | `boolean` | `false` | Whether the dropdown is currently open. |
 
 ### Events
@@ -1264,6 +1295,12 @@ A select dropdown component for single selection.
 | `leChange` | `EventEmitter<LeOptionSelectDetail> \| undefined` | Emitted when the selected value changes. |
 | `leOpen` | `EventEmitter<void> \| undefined` | Emitted when the dropdown opens. |
 | `leClose` | `EventEmitter<void> \| undefined` | Emitted when the dropdown closes. |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| `"chevron"` | Custom chevron icon to display at the end of the select trigger |
 
 ---
 

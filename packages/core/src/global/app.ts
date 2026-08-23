@@ -1,4 +1,5 @@
 import { setMode } from '@stencil/core';
+import type { LayerConfig } from '../components/le-icon/icon-utils';
 
 export type LeKitMode = 'default' | 'admin' | string;
 export type LeKitTheme = 'default' | 'dark' | string;
@@ -145,6 +146,144 @@ export function setGlobalTheme(theme: LeKitTheme): void {
 }
 
 /**
+ * Definition of a composed icon in the registry.
+ * Used to define icons that combine a base icon with badges or layers.
+ */
+export interface ComposedIconDef {
+  /** Base icon name (the JSON file to load). Optional — omit for layer-only compositions. */
+  icon?: string;
+  /** Optional viewBox for the composed icon (used when no base icon is set). */
+  viewBox?: string;
+  /** Optional badge icon name. */
+  badge?: string;
+  /** Optional badge position (overrides icons.defaultBadgePosition). */
+  badgePosition?: string;
+  /** Optional badge scale (overrides icons.defaultBadgeScale). */
+  badgeScale?: number;
+  /** Optional badge opacity (0 to 1). */
+  badgeOpacity?: number;
+  /** Optional badge color (CSS color string or variable). Defaults to 'transparent'. */
+  badgeColor?: string;
+  /** Optional badge text/font color (CSS color string or variable). */
+  badgeTextColor?: string;
+  /** Optional numeric count for notification badge. */
+  count?: number;
+  /** Optional max count for notification badge (e.g. 99 -> 99+). */
+  maxCount?: number;
+  /** Optional arbitrary text string for notification badge. */
+  badgeText?: string;
+  /** Optional boolean to render an empty dot badge. */
+  dot?: boolean;
+  /** Optional base icon color (CSS color string or variable). */
+  baseColor?: string;
+  /** Optional rounded setting for this composed icon. */
+  rounded?: boolean;
+  /** Optional sharp setting for this composed icon. */
+  sharp?: boolean;
+  /** Optional filled setting for this composed icon. */
+  filled?: boolean;
+  /** Optional outlined setting for this composed icon. */
+  outlined?: boolean;
+  /** Optional thin setting for this composed icon. */
+  thin?: boolean;
+  /** Optional additional layers. Can be array of layer configs / preset names or comma-separated string. */
+  layers?: Array<LayerConfig | string> | string;
+}
+
+/**
+ * Configuration for the icon registry and icon composition defaults.
+ */
+export interface LeKitIconsConfig {
+  /**
+   * Default badge position for all composed icons.
+   * Can be overridden per-icon via badgePosition prop or registry entry.
+   *
+   * Default: '-4.5, -4.5' (bottom-right area)
+   */
+  defaultBadgePosition: string;
+
+  /**
+   * Default badge scale for all composed icons.
+   * Can be overridden per-icon via badgeScale prop or registry entry.
+   *
+   * Default: 1
+   */
+  defaultBadgeScale: number;
+
+  /**
+   * Default position for count and text badges.
+   * Can be overridden per-icon via badgePosition prop or registry entry.
+   *
+   * Default: 'top, right'
+   */
+  defaultTextBadgePosition?: string;
+
+  /**
+   * Default scale for count and text badges.
+   * Can be overridden per-icon via badgeScale prop or registry entry.
+   *
+   * Default: 1
+   */
+  defaultTextBadgeScale?: number;
+
+  /**
+   * Default viewBox for composed icons that have no base icon.
+   * Fallback when neither the element nor the registry entry specifies a viewBox.
+   *
+   * Default: '0 0 16 16'
+   */
+  defaultViewBox: string;
+
+  /**
+   * Default rounded setting for all icons.
+   * Can be overridden per icon via `rounded` prop.
+   *
+   * Default: false
+   */
+  defaultRounded?: boolean;
+
+  /**
+   * Default filled setting for all icons.
+   * Can be overridden per icon via `filled` prop.
+   *
+   * Default: false
+   */
+  defaultFilled?: boolean;
+
+  /**
+   * Default thin setting for all icons.
+   * Can be overridden per icon via `thin` prop.
+   *
+   * Default: false
+   */
+  defaultThin?: boolean;
+
+  /**
+   * Global registry of reusable layer preset configurations.
+   * Layers registered here can be referenced by name in `layers` props.
+   */
+  layers?: Record<string, LayerConfig>;
+
+  /**
+   * Registry of named composed icon definitions.
+   * Icons registered here can be used by name in any component that accepts icon names.
+   *
+   * @example
+   * ```ts
+   * configureLeKit({
+   *   icons: {
+   *     composed: {
+   *       'move-to': { icon: 'folder', badge: 'move-badge' },
+   *       'new-file': { icon: 'file', badge: 'add-badge' },
+   *     },
+   *   },
+   * });
+   * ```
+   */
+  composed: Record<string, ComposedIconDef>;
+}
+
+/**
  * Type definition for le-kit configuration
  */
 export interface LeKitConfig {
@@ -177,6 +316,11 @@ export interface LeKitConfig {
    * ```
    */
   assetBasePath: string;
+
+  /**
+   * Icon registry and composition defaults.
+   */
+  icons: LeKitIconsConfig;
 }
 
 // Use a Symbol to avoid conflicts with other libraries
@@ -187,15 +331,45 @@ const LE_KIT_CONFIG_KEY = '__leKitConfig__';
  * Uses globalThis (window in browser) to ensure config is shared
  * across all module bundles.
  */
+const DEFAULT_ICONS_CONFIG: LeKitIconsConfig = {
+  defaultBadgePosition: '-4.5, -4.5',
+  defaultBadgeScale: 1,
+  defaultTextBadgePosition: 'top, right',
+  defaultTextBadgeScale: 1,
+  defaultViewBox: '0 0 16 16',
+  defaultRounded: false,
+  defaultFilled: false,
+  defaultThin: false,
+  layers: {},
+  composed: {},
+};
+
 function getGlobalConfig(): LeKitConfig {
   const g = globalThis as any;
   if (!g[LE_KIT_CONFIG_KEY]) {
     g[LE_KIT_CONFIG_KEY] = {
       manifestFile: 'custom-elements.json',
       assetBasePath: '',
+      icons: { ...DEFAULT_ICONS_CONFIG },
     };
   }
-  return g[LE_KIT_CONFIG_KEY];
+  // Ensure icons sub-object has all required defaults (for pre-set configs)
+  const cfg = g[LE_KIT_CONFIG_KEY];
+  if (cfg.icons) {
+    if (!cfg.icons.layers) cfg.icons.layers = {};
+    if (!cfg.icons.composed) cfg.icons.composed = {};
+    if (!cfg.icons.defaultBadgePosition) cfg.icons.defaultBadgePosition = DEFAULT_ICONS_CONFIG.defaultBadgePosition;
+    if (cfg.icons.defaultBadgeScale == null) cfg.icons.defaultBadgeScale = DEFAULT_ICONS_CONFIG.defaultBadgeScale;
+    if (!cfg.icons.defaultTextBadgePosition) cfg.icons.defaultTextBadgePosition = DEFAULT_ICONS_CONFIG.defaultTextBadgePosition;
+    if (cfg.icons.defaultTextBadgeScale == null) cfg.icons.defaultTextBadgeScale = DEFAULT_ICONS_CONFIG.defaultTextBadgeScale;
+    if (!cfg.icons.defaultViewBox) cfg.icons.defaultViewBox = DEFAULT_ICONS_CONFIG.defaultViewBox;
+    if (cfg.icons.defaultRounded == null) cfg.icons.defaultRounded = DEFAULT_ICONS_CONFIG.defaultRounded;
+    if (cfg.icons.defaultFilled == null) cfg.icons.defaultFilled = DEFAULT_ICONS_CONFIG.defaultFilled;
+    if (cfg.icons.defaultThin == null) cfg.icons.defaultThin = DEFAULT_ICONS_CONFIG.defaultThin;
+  } else {
+    cfg.icons = { ...DEFAULT_ICONS_CONFIG };
+  }
+  return cfg;
 }
 
 /**
@@ -213,7 +387,46 @@ function getGlobalConfig(): LeKitConfig {
  */
 export function configureLeKit(config: Partial<LeKitConfig>): void {
   const globalConfig = getGlobalConfig();
-  Object.assign(globalConfig, config);
+
+  // Deep-merge icons config so multiple configureLeKit calls add to the registry
+  if (config.icons) {
+    const iconsConfig = config.icons as Partial<LeKitIconsConfig>;
+    if (iconsConfig.layers) {
+      globalConfig.icons.layers = { ...globalConfig.icons.layers, ...iconsConfig.layers };
+    }
+    if (iconsConfig.composed) {
+      globalConfig.icons.composed = { ...globalConfig.icons.composed, ...iconsConfig.composed };
+    }
+    if (iconsConfig.defaultBadgePosition) {
+      globalConfig.icons.defaultBadgePosition = iconsConfig.defaultBadgePosition;
+    }
+    if (iconsConfig.defaultBadgeScale != null) {
+      globalConfig.icons.defaultBadgeScale = iconsConfig.defaultBadgeScale;
+    }
+    if (iconsConfig.defaultTextBadgePosition) {
+      globalConfig.icons.defaultTextBadgePosition = iconsConfig.defaultTextBadgePosition;
+    }
+    if (iconsConfig.defaultTextBadgeScale != null) {
+      globalConfig.icons.defaultTextBadgeScale = iconsConfig.defaultTextBadgeScale;
+    }
+    if (iconsConfig.defaultViewBox) {
+      globalConfig.icons.defaultViewBox = iconsConfig.defaultViewBox;
+    }
+    if (iconsConfig.defaultRounded != null) {
+      globalConfig.icons.defaultRounded = iconsConfig.defaultRounded;
+    }
+    if (iconsConfig.defaultFilled != null) {
+      globalConfig.icons.defaultFilled = iconsConfig.defaultFilled;
+    }
+    if (iconsConfig.defaultThin != null) {
+      globalConfig.icons.defaultThin = iconsConfig.defaultThin;
+    }
+    // Apply non-icons config
+    const { icons: _, ...rest } = config;
+    Object.assign(globalConfig, rest);
+  } else {
+    Object.assign(globalConfig, config);
+  }
 }
 
 /**
@@ -229,4 +442,118 @@ export function getLeKitConfig(): LeKitConfig {
  */
 export function getAssetBasePath(): string {
   return getGlobalConfig().assetBasePath;
+}
+
+/**
+ * Get the default badge position from config.
+ */
+export function getDefaultBadgePosition(): string {
+  return getGlobalConfig().icons.defaultBadgePosition;
+}
+
+/**
+ * Get the default badge scale from config.
+ */
+export function getDefaultBadgeScale(): number {
+  return getGlobalConfig().icons.defaultBadgeScale;
+}
+
+/**
+ * Get the default text/count badge position from config.
+ */
+export function getDefaultTextBadgePosition(): string {
+  return getGlobalConfig().icons.defaultTextBadgePosition ?? 'top, right';
+}
+
+/**
+ * Get the default text/count badge scale from config.
+ */
+export function getDefaultTextBadgeScale(): number {
+  return getGlobalConfig().icons.defaultTextBadgeScale ?? 1;
+}
+
+/**
+ * Get the default viewBox from config.
+ */
+export function getDefaultViewBox(): string {
+  return getGlobalConfig().icons.defaultViewBox;
+}
+
+/**
+ * Get the default rounded setting from config.
+ */
+export function getDefaultIconRounded(): boolean {
+  return getGlobalConfig().icons.defaultRounded ?? false;
+}
+
+/**
+ * Get the default filled setting from config.
+ */
+export function getDefaultIconFilled(): boolean {
+  return getGlobalConfig().icons.defaultFilled ?? false;
+}
+
+/**
+ * Get the default thin setting from config.
+ */
+export function getDefaultIconThin(): boolean {
+  return getGlobalConfig().icons.defaultThin ?? false;
+}
+
+/**
+ * Register a single layer preset definition.
+ */
+export function registerLayer(name: string, def: LayerConfig): void {
+  const globalConfig = getGlobalConfig();
+  if (!globalConfig.icons.layers) {
+    globalConfig.icons.layers = {};
+  }
+  globalConfig.icons.layers[name] = def;
+}
+
+/**
+ * Register multiple layer preset definitions.
+ */
+export function registerLayers(layers: Record<string, LayerConfig>): void {
+  const globalConfig = getGlobalConfig();
+  if (!globalConfig.icons.layers) {
+    globalConfig.icons.layers = {};
+  }
+  Object.assign(globalConfig.icons.layers, layers);
+}
+
+/**
+ * Register a single composed icon definition.
+ * Can be called at any time to add icons to the registry.
+ *
+ * @example
+ * ```ts
+ * registerIcon('move-to', { icon: 'folder', badge: 'move-badge' });
+ * ```
+ */
+export function registerIcon(name: string, def: ComposedIconDef): void {
+  getGlobalConfig().icons.composed[name] = def;
+}
+
+/**
+ * Register multiple composed icon definitions at once.
+ *
+ * @example
+ * ```ts
+ * registerIcons({
+ *   'move-to': { icon: 'folder', badge: 'move-badge' },
+ *   'new-file': { icon: 'file', badge: 'add-badge' },
+ * });
+ * ```
+ */
+export function registerIcons(icons: Record<string, ComposedIconDef>): void {
+  Object.assign(getGlobalConfig().icons.composed, icons);
+}
+
+/**
+ * Look up a composed icon definition by name.
+ * Returns undefined if the name is not registered.
+ */
+export function getComposedIcon(name: string): ComposedIconDef | undefined {
+  return getGlobalConfig().icons.composed[name];
 }

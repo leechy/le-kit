@@ -1,0 +1,37 @@
+{
+  "viewBox": "0 0 16 16",
+  "maskShape": {
+    "tag": "line",
+    "x1": "2.5",
+    "y1": "2.5",
+    "x2": "13.5",
+    "y2": "13.5",
+    "stroke": "black",
+    "stroke-width": "2.25",
+    "stroke-linecap": "square",
+    "rounded": {
+      "stroke-linecap": "round"
+    },
+    "thin": {
+      "stroke-width": "1.5"
+    }
+  },
+  "children": [
+    {
+      "tag": "line",
+      "x1": "2.5",
+      "y1": "2.5",
+      "x2": "13.5",
+      "y2": "13.5",
+      "stroke": "currentColor",
+      "stroke-width": "1.25",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "0.75"
+      }
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import { describe, it } from '@jest/globals';
 import { newE2EPage } from '@stencil/core/testing';
 
-const WRAPPER = `<style>body { margin: 0; padding: 24px; display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; background: var(--le-color-bg, #fff); }</style>`;
+const WRAPPER = `<meta charset="utf-8"><style>body { margin: 0; padding: 24px; display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; background: var(--le-color-bg, #fff); }</style>`;
 const VIEWPORTS = {
   sm: { width: 320, height: 100 },
   md: { width: 400, height: 120 },
@@ -100,7 +100,7 @@ describe('le-button screenshots', () => {
   it('with icon-start', async () => {
     const page = await newE2EPage();
     await page.setViewport(VIEWPORTS.sm);
-    await page.setContent(`${WRAPPER}<le-button icon-start="→">Save</le-button>`);
+    await page.setContent(`${WRAPPER}<le-button icon-start="\u2192">Save</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
   });
@@ -108,7 +108,7 @@ describe('le-button screenshots', () => {
   it('with icon-end', async () => {
     const page = await newE2EPage();
     await page.setViewport(VIEWPORTS.sm);
-    await page.setContent(`${WRAPPER}<le-button icon-end="→">Next</le-button>`);
+    await page.setContent(`${WRAPPER}<le-button icon-end="\u2192">Next</le-button>`);
     await page.waitForChanges();
     expect(await page.compareScreenshot()).toMatchScreenshot();
   });

@@ -438,7 +438,14 @@ export async function buildDeclarativeOptionsFromChildren(
   host: HTMLElement,
   context: string,
 ): Promise<{ isDeclarativeMode: boolean; options: LeOption[] }> {
-  const items = Array.from(host.querySelectorAll(':scope > le-item')) as HTMLElement[];
+  let items: HTMLElement[] = [];
+  try {
+    items = Array.from(host.querySelectorAll(':scope > le-item')) as HTMLElement[];
+  } catch {
+    items = Array.from(host.children).filter(
+      child => child.tagName.toLowerCase() === 'le-item',
+    ) as HTMLElement[];
+  }
 
   if (items.length === 0) {
     return {

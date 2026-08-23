@@ -20,7 +20,7 @@
   --le-transition-easing: ease-in-out;
   --le-button-icon-aspect-ratio: 1;
   --le-button-color: var(--le-color-primary-contrast);
-  
+
   /* Internal state variables - set by color classes */
   --_btn-bg: var(--le-color-primary-dark);
   --_btn-bg-hover: var(--le-color-primary-dark);
@@ -61,7 +61,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: var(--le-spacing-3);
+  gap: var(--le-button-icons-gap, --le-spacing-3);
   box-sizing: border-box;
   width: 100%;
   padding: var(--le-button-padding);
@@ -346,7 +346,7 @@
   display: none;
   align-items: center;
   justify-content: center;
-  transform: scale(1.3);
+  transform: scale(1.25);
 }
 
 .icon-start.is-visible,
@@ -376,12 +376,15 @@ span.icon-only.is-visible {
 .le-button-align-start {
   justify-content: flex-start;
 }
+
 .le-button-align-center {
   justify-content: center;
 }
+
 .le-button-align-space-between {
   justify-content: space-between;
 }
+
 .le-button-align-end {
   justify-content: flex-end;
 }

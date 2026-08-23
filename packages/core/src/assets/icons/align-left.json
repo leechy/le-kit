@@ -1,41 +1,123 @@
 {
   "viewBox": "0 0 16 16",
+  "maskShape": [
+    {
+      "tag": "line",
+      "x1": "2.75",
+      "y1": "3.5",
+      "x2": "12.25",
+      "y2": "3.5",
+      "stroke": "black",
+      "stroke-width": "2.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      }
+    },
+    {
+      "tag": "line",
+      "x1": "2.75",
+      "y1": "6.5",
+      "x2": "13.25",
+      "y2": "6.5",
+      "stroke": "black",
+      "stroke-width": "2.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      }
+    },
+    {
+      "tag": "line",
+      "x1": "2.75",
+      "y1": "9.5",
+      "x2": "7.25",
+      "y2": "9.5",
+      "stroke": "black",
+      "stroke-width": "2.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      }
+    },
+    {
+      "tag": "line",
+      "x1": "2.75",
+      "y1": "12.5",
+      "x2": "9.25",
+      "y2": "12.5",
+      "stroke": "black",
+      "stroke-width": "2.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      }
+    }
+  ],
   "children": [
     {
       "tag": "line",
-      "x1": "2",
+      "x1": "2.75",
       "y1": "3.5",
-      "x2": "13",
+      "x2": "12.25",
       "y2": "3.5",
       "stroke": "currentColor",
-      "stroke-width": "1.5"
+      "stroke-width": "1.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "1"
+      }
     },
     {
       "tag": "line",
-      "x1": "2",
+      "x1": "2.75",
       "y1": "6.5",
-      "x2": "14",
+      "x2": "13.25",
       "y2": "6.5",
       "stroke": "currentColor",
-      "stroke-width": "1.5"
+      "stroke-width": "1.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "1"
+      }
     },
     {
       "tag": "line",
-      "x1": "2",
+      "x1": "2.75",
       "y1": "9.5",
-      "x2": "8",
+      "x2": "7.25",
       "y2": "9.5",
       "stroke": "currentColor",
-      "stroke-width": "1.5"
+      "stroke-width": "1.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "1"
+      }
     },
     {
       "tag": "line",
-      "x1": "2",
+      "x1": "2.75",
       "y1": "12.5",
-      "x2": "10",
+      "x2": "9.25",
       "y2": "12.5",
       "stroke": "currentColor",
-      "stroke-width": "1.5"
+      "stroke-width": "1.5",
+      "stroke-linecap": "square",
+      "rounded": {
+        "stroke-linecap": "round"
+      },
+      "thin": {
+        "stroke-width": "1"
+      }
     }
   ]
 }

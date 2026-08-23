@@ -144,6 +144,17 @@ export class LeButton {
   @Prop() iconStart?: string | Node;
 
   /**
+   * Notification count for shorthand icons.
+   * Applies to start icon, or icon-only if set.
+   */
+  @Prop() iconCount?: number;
+
+  /**
+   * Count specifically for iconStart.
+   */
+  @Prop() iconStartCount?: number;
+
+  /**
    * Enables responsive collapse to icon-only when the toolbar applies
    * `collapse="icon"`.
    */
@@ -164,6 +175,16 @@ export class LeButton {
    * End icon image or emoji
    */
   @Prop() iconEnd?: string | Node;
+
+  /**
+   * Count specifically for iconEnd.
+   */
+  @Prop() iconEndCount?: number;
+
+  /**
+   * Count specifically for iconOnly.
+   */
+  @Prop() iconOnlyCount?: number;
 
   /**
    * Whether the button is disabled
@@ -387,6 +408,10 @@ export class LeButton {
       ? { href: this.href, target: this.target, role: 'button' }
       : { type: this.type, disabled: this.disabled };
 
+    const onlyCount = this.iconOnlyCount ?? (typeof this.iconOnly === 'string' ? this.iconCount : undefined);
+    const startCount = this.iconStartCount ?? (typeof this.iconStart === 'string' ? this.iconCount : undefined);
+    const endCount = this.iconEndCount ?? (typeof this.iconEnd === 'string' && !this.iconStart ? this.iconCount : undefined);
+
     const renderButton = () => (
       <TagType
         class={classnames(
@@ -401,11 +426,10 @@ export class LeButton {
         <span class={classnames('icon-only', { 'is-visible': hasIconOnly })} part="icon-only">
           <slot name="icon-only">
             {typeof this.iconOnly === 'string' ? (
-              this.iconOnly.length <= 2 ? (
+              Array.from(this.iconOnly).length <= 2 ? (
                 this.iconOnly
               ) : (
-                // assuming that if the string is longer than 2 characters, it's an icon name rather than an emoji
-                <le-icon name={this.iconOnly}></le-icon>
+                <le-icon name={this.iconOnly} count={onlyCount}></le-icon>
               )
             ) : null}
           </slot>
@@ -421,13 +445,12 @@ export class LeButton {
               >
                 <slot name="icon-start">
                   {typeof this.iconStart === 'string' ? (
-                    this.iconStart.length <= 2 ? (
+                    Array.from(this.iconStart).length <= 2 ? (
                       this.iconStart
                     ) : (
-                      // assuming that if the string is longer than 2 characters, it's an icon name rather than an emoji
-                      <le-icon name={this.iconStart}></le-icon>
+                      <le-icon name={this.iconStart} count={startCount}></le-icon>
                     )
-                  ) : null}
+                  ) : this.iconStart}
                 </slot>
               </span>
               <le-visibility
@@ -449,7 +472,15 @@ export class LeButton {
               class={classnames('icon-end', { 'is-visible': hasIconEnd && !isCollapsedToIcon })}
               part="icon-end"
             >
-              <slot name="icon-end">{this.iconEnd}</slot>
+              <slot name="icon-end">
+                {typeof this.iconEnd === 'string' ? (
+                  Array.from(this.iconEnd).length <= 2 ? (
+                    this.iconEnd
+                  ) : (
+                    <le-icon name={this.iconEnd} count={endCount}></le-icon>
+                  )
+                ) : this.iconEnd}
+              </slot>
             </span>
           </Fragment>
         )}

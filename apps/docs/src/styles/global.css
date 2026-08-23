@@ -20,7 +20,7 @@
   /* Custom colors */
   --background-lines-color: rgba(255, 255, 255, 0.2);
   --background-lines-grid-size: 16px;
-  
+
   /* Code highlighting colors (Shiki github-light theme) */
   --code-keyword: #d73a49;
   --code-string: #032f62;
@@ -86,7 +86,7 @@ body {
   color: var(--le-color-text-primary);
 
   background-color: var(--le-color-background);
-  background-image: 
+  background-image:
     linear-gradient(var(--background-lines-color) 1px, transparent 1px),
     linear-gradient(90deg, var(--background-lines-color) 1px, transparent 1px);
   background-size: var(--background-lines-grid-size) var(--background-lines-grid-size);
@@ -110,8 +110,7 @@ le-breadcrumbs.site-navigation {
   backdrop-filter: blur(20px);
 
   @media (min-width: 900px) {
-    margin: var(--le-spacing-4) 0 var(--le-spacing-4)
-      calc(-1 * var(--le-spacing-4));
+    margin: var(--le-spacing-4) 0 var(--le-spacing-4) calc(-1 * var(--le-spacing-4));
   }
 }
 
@@ -132,7 +131,7 @@ le-breadcrumbs.site-navigation {
     border-bottom: none;
   }
 
-  + .code-block pre {
+  +.code-block pre {
     margin-top: 0;
   }
 
@@ -179,7 +178,9 @@ body {
   font-size: calc(var(--background-lines-grid-size) * 1.2);
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: var(--le-font-family-display);
   line-height: 1;
   scroll-margin-top: calc(var(--le-header-height) + var(--le-spacing-4));
@@ -203,13 +204,30 @@ h3 {
 
 @media (min-width: 900px) {
   article:not(.bento-grid) {
-    h1 { text-indent: calc(-1 * var(--le-spacing-8)); }
-    h2 { text-indent: calc(-1 * var(--le-spacing-6)); }
-    h3 { text-indent: calc(-1 * var(--le-spacing-4)); }
+    h1 {
+      text-indent: calc(-1 * var(--le-spacing-8));
+    }
+
+    h2 {
+      text-indent: calc(-1 * var(--le-spacing-6));
+    }
+
+    h3 {
+      text-indent: calc(-1 * var(--le-spacing-4));
+    }
   }
-  h1.indent { text-indent: calc(-1 * var(--le-spacing-8)); }
-  h2.indent { text-indent: calc(-1 * var(--le-spacing-6)); }
-  h3.indent { text-indent: calc(-1 * var(--le-spacing-4)); }
+
+  h1.indent {
+    text-indent: calc(-1 * var(--le-spacing-8));
+  }
+
+  h2.indent {
+    text-indent: calc(-1 * var(--le-spacing-6));
+  }
+
+  h3.indent {
+    text-indent: calc(-1 * var(--le-spacing-4));
+  }
 }
 
 p {
@@ -281,7 +299,8 @@ pre {
   font-weight: 500;
   letter-spacing: -0.5px;
   line-height: 1.4;
-  background-color: #213553 !important; /* Override background from AstroCode */
+  background-color: #213553 !important;
+  /* Override background from AstroCode */
 
   code {
     font-weight: 500;
@@ -292,6 +311,7 @@ pre {
 le-preview-frame {
   --le-preview-frame-bg: var(--le-color-blueprint);
 }
+
 le-preview-frame::part(viewport) {
   background-image:
     linear-gradient(var(--background-lines-color) 1px, transparent 1px),
@@ -325,6 +345,7 @@ le-bento-tile {
 
   background-color: color-mix(in srgb, var(--le-color-primary) 15%, transparent);
 }
+
 .bento-tile:any-link:hover,
 .tile-link-anchor:hover {
   background-color: color-mix(in srgb, var(--le-color-surface) 30%, transparent);
@@ -352,6 +373,7 @@ le-bento-tile {
   justify-content: flex-end;
   width: 100%;
 }
+
 .bento-tile-demo-container {
   display: inline-block;
   --le-color-surface: #e0f3f8;
@@ -363,6 +385,7 @@ le-bento-tile {
   h3 {
     margin: 0;
   }
+
   p {
     margin: var(--le-spacing-2) 0 0;
     font-size: var(--le-font-size-md);
@@ -370,12 +393,12 @@ le-bento-tile {
 }
 
 .home-section {
-  margin: 4rem auto;
+  margin: var(--le-spacing-8) auto;
   max-width: 1200px;
   padding: 0 50px;
 
-  > h2,
-  > p {
+  >h2,
+  >p {
     text-align: center;
   }
 }

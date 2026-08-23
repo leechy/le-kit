@@ -9,7 +9,7 @@
   /* Public tokens */
   --le-toolbar-gap: var(--le-spacing-1, 4px);
   --le-toolbar-padding-x: var(--le-spacing-2, 8px);
-  --le-toolbar-padding-y: var(--le-spacing-1, 4px);
+  --le-toolbar-padding-y: var(--le-spacing-2, 8px);
   --le-toolbar-bg: transparent;
   --le-toolbar-border-radius: var(--le-radius-md, 6px);
   --le-toolbar-item-gap: var(--le-toolbar-gap);
@@ -53,14 +53,14 @@
   width: 100%;
 }
 
-.toolbar-container:not(.toolbar-virtual) > .toolbar-item-visibility {
+.toolbar-container:not(.toolbar-virtual)>.toolbar-item-visibility {
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
   margin-inline: var(--le-toolbar-item-inner-margin, 0px);
 }
 
-.toolbar-container:not(.toolbar-virtual) > .toolbar-item-flex-spacer {
+.toolbar-container:not(.toolbar-virtual)>.toolbar-item-flex-spacer {
   display: inline-flex;
   align-items: stretch;
   flex: 1 1 auto;
@@ -68,15 +68,15 @@
   margin-inline: var(--le-toolbar-item-inner-margin, 0px);
 }
 
-.toolbar-container:not(.toolbar-virtual) > :first-child {
+.toolbar-container:not(.toolbar-virtual)> :first-child {
   margin-inline-start: 0;
 }
 
-.toolbar-container:not(.toolbar-virtual) > :last-child {
+.toolbar-container:not(.toolbar-virtual)> :last-child {
   margin-inline-end: 0;
 }
 
-.toolbar-container:not(.toolbar-virtual) > .toolbar-item-visibility.is-collapsed {
+.toolbar-container:not(.toolbar-virtual)>.toolbar-item-visibility.is-collapsed {
   margin-inline: 0;
 }
 
@@ -85,10 +85,21 @@
   width: auto;
 }
 
-.toolbar-container.align-start  { justify-content: flex-start; }
-.toolbar-container.align-center { justify-content: center; }
-.toolbar-container.align-end    { justify-content: flex-end; }
-.toolbar-container.align-stretch { justify-content: space-between; }
+.toolbar-container.align-start {
+  justify-content: flex-start;
+}
+
+.toolbar-container.align-center {
+  justify-content: center;
+}
+
+.toolbar-container.align-end {
+  justify-content: flex-end;
+}
+
+.toolbar-container.align-stretch {
+  justify-content: space-between;
+}
 
 /* ── Virtual toolbar (off-screen, inert) ─────────────────────── */
 

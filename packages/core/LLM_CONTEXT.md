@@ -944,15 +944,27 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `emptyMessage` | `string \| undefined` |  | Secondary description text for default empty state (<le-empty>). |
 | `emptyIcon` | `string \| undefined` |  | Icon for default empty state (<le-empty>). |
 | `disableRowHover` | `boolean` | `false` | Whether to disable row highlighting on hover. Defaults to false (row hover highlighting is enabled by default). |
+| `disableKeyboardNavigation` | `boolean` | `false` | Whether to disable keyboard navigation. Defaults to false. |
+| `selection` | `boolean \| 'single' \| 'multiple' \| 'none'` | `false` | Selection mode for rows: false / 'none' (disabled), true / 'single', or 'multiple'. Defaults to false. |
+| `showActionChevron` | `boolean` | `false` | Whether to display chevron-right icon at the end of rows that have actions or links. Defaults to false. |
+| `actionChevron` | `boolean` | `false` | Alias for showActionChevron. |
 | `parsedOptions` | `LeOption[]` | `[]` |  |
 | `parsedColumns` | `LeColumn[]` | `[]` |  |
 | `sortColumnKey` | `string \| undefined` |  |  |
 | `sortDirection` | `'asc' \| 'desc' \| undefined` |  |  |
+| `focusedRowId` | `string \| undefined` |  |  |
+| `selectedRowIds` | `string[]` | `[]` |  |
 
 ### Events
 
 | Event | Type | Description |
 |-------|------|-------------|
+| `leSelectionChange` | `EventEmitter<{
+    selectedIds: string[];
+    selectedItems: LeOption[];
+    isMultiple: boolean;
+  }>` | Emitted when row selection changes. |
+| `leAction` | `EventEmitter<{ action?: string; item: LeOption; id: string; originalEvent?: Event }>` | Emitted when a row action or link is executed. |
 | `leSortChange` | `EventEmitter<{ key?: string; column?: LeColumn; direction?: 'asc' \| 'desc' }>` | Emitted when column sorting changes. |
 | `leColumnVisibilityChange` | `EventEmitter<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>` | Emitted when column visibility changes via the context menu. |
 | `leColumnOrderChange` | `EventEmitter<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn }>` | Emitted when column order changes via the context menu. |

@@ -1,7 +1,7 @@
-import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import type { LeOption } from '../../types/options';
 import type { LeColumn } from '../../types/list';
-import { buildDeclarativeOptionsFromChildren, observeNamedSlotPresence, parseOptionInput } from '../../utils/utils';
+import { buildDeclarativeOptionsFromChildren, isEditableTarget, observeNamedSlotPresence, parseOptionInput } from '../../utils/utils';
 
 @Component({
   tag: 'le-list',
@@ -104,12 +104,55 @@ export class LeList {
    */
   @Prop({ reflect: true }) disableRowHover: boolean = false;
 
+  /**
+   * Whether to disable keyboard navigation.
+   * Defaults to false.
+   */
+  @Prop({ reflect: true }) disableKeyboardNavigation: boolean = false;
+
+  /**
+   * Selection mode for rows: false / 'none' (disabled), true / 'single', or 'multiple'.
+   * Defaults to false.
+   */
+  @Prop({ reflect: true }) selection: boolean | 'single' | 'multiple' | 'none' = false;
+
+  /**
+   * Whether to display chevron-right icon at the end of rows that have actions or links.
+   * Defaults to false.
+   */
+  @Prop({ reflect: true }) showActionChevron: boolean = false;
+
+  /**
+   * Alias for showActionChevron.
+   */
+  @Prop({ reflect: true }) actionChevron: boolean = false;
+
   @State() parsedOptions: LeOption[] = [];
   @State() parsedColumns: LeColumn[] = [];
   @State() sortColumnKey: string | undefined;
   @State() sortDirection: 'asc' | 'desc' | undefined;
+  @State() focusedRowId?: string;
+  @State() selectedRowIds: string[] = [];
+  @State() private isSelecting: boolean = false;
   @State() private slotPresence: Record<string, boolean> = {};
   @State() private openState: Record<string, boolean> = {};
+
+  private visualFocusActive: boolean = false;
+  private dragSelectionStartId?: string;
+
+  /**
+   * Emitted when row selection changes.
+   */
+  @Event() leSelectionChange!: EventEmitter<{
+    selectedIds: string[];
+    selectedItems: LeOption[];
+    isMultiple: boolean;
+  }>;
+
+  /**
+   * Emitted when a row action or link is executed.
+   */
+  @Event() leAction!: EventEmitter<{ action?: string; item: LeOption; id: string; originalEvent?: Event }>;
 
   /**
    * Emitted when column sorting changes.
@@ -161,6 +204,389 @@ export class LeList {
     }
   };
 
+  private getVisibleFlatRows(): Array<{
+    item: LeOption;
+    id: string;
+    depth: number;
+    hasChildren: boolean;
+    isOpen: boolean;
+    parentId?: string;
+  }> {
+    const rows: Array<{
+      item: LeOption;
+      id: string;
+      depth: number;
+      hasChildren: boolean;
+      isOpen: boolean;
+      parentId?: string;
+    }> = [];
+    const displayOptions = this.getSortedOptions();
+
+    const traverse = (items: LeOption[], depth: number, parentPath: string, parentId?: string) => {
+      items.forEach((item, index) => {
+        const path = parentPath ? `${parentPath}.${index}` : String(index);
+        const id = String(item.id ?? item.value ?? path);
+        const children = this.getChildItems(item);
+        const hasChildren = children.length > 0;
+        const isOpen = this.isItemOpen(item, id);
+
+        rows.push({
+          item,
+          id,
+          depth,
+          hasChildren,
+          isOpen,
+          parentId,
+        });
+
+        if (hasChildren && isOpen) {
+          traverse(children, depth + 1, id, id);
+        }
+      });
+    };
+
+    traverse(displayOptions, 0, '');
+    return rows;
+  }
+
+  private scrollToFocusedRow() {
+    requestAnimationFrame(() => {
+      const rowEl = this.el.shadowRoot?.querySelector(`[data-row-id="${this.focusedRowId}"]`) as HTMLElement | null;
+      if (rowEl) {
+        rowEl.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      }
+    });
+  }
+
+  private isSelectionEnabled(): boolean {
+    return this.selection === true || this.selection === 'single' || this.selection === 'multiple';
+  }
+
+  private hasActions(): boolean {
+    return this.parsedOptions.some(item => this.checkItemHasAction(item));
+  }
+
+  private checkItemHasAction(item: LeOption): boolean {
+    if (item.action || (item as any).actions?.length || item.href) return true;
+    const children = this.getChildItems(item);
+    return children.some(c => this.checkItemHasAction(c));
+  }
+
+  private canNavigateRows(): boolean {
+    if (this.disableKeyboardNavigation) return false;
+    return this.isSelectionEnabled() || this.hasHierarchy() || this.hasActions();
+  }
+
+  @Listen('keydown')
+  handleKeyDown(event: KeyboardEvent) {
+    if (!this.canNavigateRows() || isEditableTarget(event.target)) {
+      return;
+    }
+
+    const isNavKey = [
+      'ArrowDown',
+      'ArrowUp',
+      'ArrowLeft',
+      'ArrowRight',
+      'Home',
+      'End',
+      'Enter',
+      ' ',
+    ].includes(event.key);
+    if (!isNavKey && !((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a')) return;
+
+    const visibleRows = this.getVisibleFlatRows();
+    if (visibleRows.length === 0) return;
+
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a' && this.selection === 'multiple') {
+      event.preventDefault();
+      this.selectedRowIds = visibleRows.map(r => r.id);
+      this.emitSelectionChange();
+      return;
+    }
+
+    if (!this.visualFocusActive || !this.focusedRowId) {
+      event.preventDefault();
+      this.visualFocusActive = true;
+
+      const targetRow = this.focusedRowId
+        ? (visibleRows.find(r => r.id === this.focusedRowId) || (event.key === 'ArrowUp' ? visibleRows[visibleRows.length - 1] : visibleRows[0]))
+        : (event.key === 'ArrowUp' ? visibleRows[visibleRows.length - 1] : visibleRows[0]);
+
+      this.focusedRowId = targetRow.id;
+      if (this.isSelectionEnabled() && this.selectedRowIds.length === 0) {
+        this.selectedRowIds = [targetRow.id];
+        this.dragSelectionStartId = targetRow.id;
+        this.emitSelectionChange();
+      }
+      this.scrollToFocusedRow();
+      return;
+    }
+
+    const currentIndex = visibleRows.findIndex(r => r.id === this.focusedRowId);
+    const currentRow = currentIndex >= 0 ? visibleRows[currentIndex] : undefined;
+
+    switch (event.key) {
+      case 'ArrowDown': {
+        event.preventDefault();
+        const nextIndex = currentIndex >= 0 ? (currentIndex + 1) % visibleRows.length : 0;
+        const targetId = visibleRows[nextIndex].id;
+        this.focusedRowId = targetId;
+        this.scrollToFocusedRow();
+
+        if (this.selection === 'multiple' && event.shiftKey) {
+          const anchorId = this.dragSelectionStartId || (currentIndex >= 0 ? visibleRows[currentIndex].id : targetId);
+          if (!this.dragSelectionStartId) this.dragSelectionStartId = anchorId;
+          this.selectRange(anchorId, targetId);
+        } else if (this.isSelectionEnabled()) {
+          this.dragSelectionStartId = targetId;
+          this.selectedRowIds = [targetId];
+          this.emitSelectionChange();
+        }
+        break;
+      }
+
+      case 'ArrowUp': {
+        event.preventDefault();
+        const prevIndex =
+          currentIndex >= 0
+            ? (currentIndex - 1 + visibleRows.length) % visibleRows.length
+            : visibleRows.length - 1;
+        const targetId = visibleRows[prevIndex].id;
+        this.focusedRowId = targetId;
+        this.scrollToFocusedRow();
+
+        if (this.selection === 'multiple' && event.shiftKey) {
+          const anchorId = this.dragSelectionStartId || (currentIndex >= 0 ? visibleRows[currentIndex].id : targetId);
+          if (!this.dragSelectionStartId) this.dragSelectionStartId = anchorId;
+          this.selectRange(anchorId, targetId);
+        } else if (this.isSelectionEnabled()) {
+          this.dragSelectionStartId = targetId;
+          this.selectedRowIds = [targetId];
+          this.emitSelectionChange();
+        }
+        break;
+      }
+
+      case 'ArrowRight': {
+        event.preventDefault();
+        if (!currentRow) return;
+
+        if (currentRow.hasChildren && !currentRow.isOpen) {
+          this.toggleRowOpen(currentRow.item, currentRow.id, true, event);
+        } else if (currentRow.hasChildren && currentRow.isOpen) {
+          const nextIndex = currentIndex + 1;
+          if (nextIndex < visibleRows.length && visibleRows[nextIndex].parentId === currentRow.id) {
+            this.focusedRowId = visibleRows[nextIndex].id;
+            this.scrollToFocusedRow();
+          }
+        }
+        break;
+      }
+
+      case 'ArrowLeft': {
+        event.preventDefault();
+        if (!currentRow) return;
+
+        if (currentRow.hasChildren && currentRow.isOpen) {
+          this.toggleRowOpen(currentRow.item, currentRow.id, false, event);
+        } else if (currentRow.depth > 0 && currentRow.parentId) {
+          this.focusedRowId = currentRow.parentId;
+          this.scrollToFocusedRow();
+        }
+        break;
+      }
+
+      case 'Home': {
+        event.preventDefault();
+        const targetId = visibleRows[0].id;
+        this.focusedRowId = targetId;
+        this.scrollToFocusedRow();
+        if (this.isSelectionEnabled() && !event.shiftKey) {
+          this.dragSelectionStartId = targetId;
+          this.selectedRowIds = [targetId];
+          this.emitSelectionChange();
+        }
+        break;
+      }
+
+      case 'End': {
+        event.preventDefault();
+        const targetId = visibleRows[visibleRows.length - 1].id;
+        this.focusedRowId = targetId;
+        this.scrollToFocusedRow();
+        if (this.isSelectionEnabled() && !event.shiftKey) {
+          this.dragSelectionStartId = targetId;
+          this.selectedRowIds = [targetId];
+          this.emitSelectionChange();
+        }
+        break;
+      }
+
+      case 'Enter': {
+        if (!currentRow) return;
+        if (currentRow.item.action || currentRow.item.href) {
+          event.preventDefault();
+          this.executeItemAction(currentRow.item, currentRow.id, event);
+        } else if (currentRow.hasChildren) {
+          event.preventDefault();
+          this.toggleRowOpen(currentRow.item, currentRow.id, !currentRow.isOpen, event);
+        }
+        break;
+      }
+
+      case ' ': {
+        if (currentRow && currentRow.hasChildren) {
+          event.preventDefault();
+          this.toggleRowOpen(currentRow.item, currentRow.id, !currentRow.isOpen, event);
+        }
+        break;
+      }
+    }
+  }
+
+  private emitSelectionChange() {
+    const visibleRows = this.getVisibleFlatRows();
+    const selectedSet = new Set(this.selectedRowIds);
+    const selectedItems = visibleRows.filter(r => selectedSet.has(r.id)).map(r => r.item);
+
+    this.leSelectionChange.emit({
+      selectedIds: [...this.selectedRowIds],
+      selectedItems,
+      isMultiple: this.selection === 'multiple',
+    });
+  }
+
+  private selectRange(fromId: string, toId: string) {
+    const visibleRows = this.getVisibleFlatRows();
+    const fromIdx = visibleRows.findIndex(r => r.id === fromId);
+    const toIdx = visibleRows.findIndex(r => r.id === toId);
+    if (fromIdx < 0 || toIdx < 0) return;
+
+    const start = Math.min(fromIdx, toIdx);
+    const end = Math.max(fromIdx, toIdx);
+    const rangeIds = visibleRows.slice(start, end + 1).map(r => r.id);
+
+    this.selectedRowIds = rangeIds;
+    this.emitSelectionChange();
+  }
+
+  private attachDragListeners() {
+    window.addEventListener('pointerup', this.handleWindowPointerUp, { once: true });
+    window.addEventListener('pointercancel', this.handleWindowPointerUp, { once: true });
+  }
+
+  private handleWindowPointerUp = () => {
+    this.isSelecting = false;
+  };
+
+  private handleRowPointerDown = (e: PointerEvent, _item: LeOption, id: string) => {
+    if (e.button !== 0) return;
+
+    if ((e.target as HTMLElement).closest('.le-list-row-toggle')) {
+      return;
+    }
+
+    if (!this.canNavigateRows()) return;
+
+    // Prevent browser native text selection (especially on Shift+Click)
+    if (e.shiftKey || this.isSelectionEnabled()) {
+      e.preventDefault();
+      window.getSelection()?.removeAllRanges();
+    }
+
+    if (document.activeElement !== this.el) {
+      this.el.focus();
+    }
+
+    this.focusedRowId = id;
+    // Mouse clicks do not display keyboard focus ring; focus ring appears upon next keypress
+    this.visualFocusActive = false;
+
+    if (!this.isSelectionEnabled()) {
+      return;
+    }
+
+    const isMultiple = this.selection === 'multiple';
+    const isSingle = this.selection === true || this.selection === 'single';
+
+    if (isMultiple) {
+      if (e.shiftKey && this.selectedRowIds.length > 0) {
+        const anchorId = this.dragSelectionStartId || this.selectedRowIds[0];
+        this.selectRange(anchorId, id);
+      } else if (e.ctrlKey || e.metaKey) {
+        const next = new Set(this.selectedRowIds);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
+        this.selectedRowIds = Array.from(next);
+        this.dragSelectionStartId = id;
+        this.emitSelectionChange();
+      } else {
+        this.isSelecting = true;
+        this.dragSelectionStartId = id;
+        this.selectedRowIds = [id];
+        this.emitSelectionChange();
+        this.attachDragListeners();
+      }
+    } else if (isSingle) {
+      this.isSelecting = true;
+      this.dragSelectionStartId = id;
+      this.selectedRowIds = [id];
+      this.emitSelectionChange();
+      this.attachDragListeners();
+    }
+  };
+
+  private handleRowPointerEnter = (_e: PointerEvent, _item: LeOption, id: string) => {
+    if (!this.isSelecting) return;
+
+    this.focusedRowId = id;
+
+    const isMultiple = this.selection === 'multiple';
+    const isSingle = this.selection === true || this.selection === 'single';
+
+    if (isMultiple && this.dragSelectionStartId) {
+      this.selectRange(this.dragSelectionStartId, id);
+    } else if (isSingle) {
+      this.selectedRowIds = [id];
+      this.emitSelectionChange();
+    }
+  };
+
+  private executeItemAction(item: LeOption, id: string, event?: Event) {
+    if (item.disabled) return;
+
+    if (item.action) {
+      this.leAction.emit({
+        action: item.action,
+        item,
+        id,
+        originalEvent: event,
+      });
+    }
+
+    if (item.href) {
+      if (item.target === '_blank') {
+        window.open(item.href, '_blank');
+      } else if (item.target) {
+        window.open(item.href, item.target);
+      } else {
+        window.location.href = item.href;
+      }
+    }
+  }
+
+  private handleRowClick = (e: MouseEvent, item: LeOption, id: string) => {
+    if (!this.canNavigateRows()) return;
+
+    if (item.action || item.href) {
+      this.executeItemAction(item, id, e);
+    }
+  };
+
   connectedCallback() {
     this.setupChildrenObserver();
     this.disconnectSlotObserver = observeNamedSlotPresence(
@@ -175,6 +601,8 @@ export class LeList {
   disconnectedCallback() {
     this.childrenObserver?.disconnect();
     this.disconnectSlotObserver?.();
+    window.removeEventListener('pointerup', this.handleWindowPointerUp);
+    window.removeEventListener('pointercancel', this.handleWindowPointerUp);
   }
 
   private setupChildrenObserver() {
@@ -200,6 +628,27 @@ export class LeList {
     } else {
       const declarative = await buildDeclarativeOptionsFromChildren(this.el, 'le-list');
       this.parsedOptions = declarative.options;
+    }
+
+    // Initialize selected rows from items if selection enabled and selectedRowIds is empty
+    if (this.isSelectionEnabled() && this.selectedRowIds.length === 0) {
+      const initialSelected: string[] = [];
+      const collectSelected = (items: LeOption[], path: string) => {
+        items.forEach((item, index) => {
+          const itemPath = path ? `${path}.${index}` : String(index);
+          const id = String(item.id ?? item.value ?? itemPath);
+          if (item.selected) {
+            initialSelected.push(id);
+          }
+          if (Array.isArray(item.children)) {
+            collectSelected(item.children, id);
+          }
+        });
+      };
+      collectSelected(this.parsedOptions, '');
+      if (initialSelected.length > 0) {
+        this.selectedRowIds = this.selection === 'multiple' ? initialSelected : [initialSelected[0]];
+      }
     }
 
     await this.loadColumns();
@@ -521,35 +970,61 @@ export class LeList {
     return !!item.open;
   }
 
-  private handleToggleRow = (e: MouseEvent, item: LeOption, id: string) => {
-    e.stopPropagation();
-    const nextState = !this.isItemOpen(item, id);
+  private toggleRowOpen = (item: LeOption, id: string, open: boolean, event?: Event) => {
     this.openState = {
       ...this.openState,
-      [id]: nextState,
+      [id]: open,
     };
     this.leItemToggle.emit({
       item,
-      open: nextState,
-      originalEvent: e,
+      open,
+      originalEvent: event instanceof MouseEvent ? event : undefined,
     });
   };
 
+  private handleToggleRow = (e: MouseEvent, item: LeOption, id: string) => {
+    e.stopPropagation();
+    this.toggleRowOpen(item, id, !this.isItemOpen(item, id), e);
+  };
+
   private getGridTemplate(visibleColumns: LeColumn[]): string {
-    if (visibleColumns.length === 0) return '1fr';
-    return visibleColumns
-      .map(col => {
-        if (col.width) return col.width;
-        if (col.key === 'label' || col.key === 'name') {
-          return '1.5fr';
-        }
-        return '1fr';
-      })
-      .join(' ');
+    const hasActionCol = this.showActionChevron || this.actionChevron;
+    if (visibleColumns.length === 0) {
+      return hasActionCol ? '1fr calc(var(--le-list-toggle-size) + var(--le-list-item-padding-x) * 2)' : '1fr';
+    }
+    const cols = visibleColumns.map(col => {
+      if (col.width) return col.width;
+      if (col.key === 'label' || col.key === 'name') {
+        return '1.5fr';
+      }
+      return '1fr';
+    });
+    if (hasActionCol) {
+      cols.push('calc(var(--le-list-toggle-size) + var(--le-list-item-padding-x) * 2)');
+    }
+    return cols.join(' ');
   }
 
   private hasHierarchy(): boolean {
     return this.parsedOptions.some(item => this.getChildItems(item).length > 0);
+  }
+
+  private getSelectionPosition(id: string): { isFirst: boolean; isLast: boolean; isMiddle: boolean; isSingle: boolean } | undefined {
+    if (!this.isSelectionEnabled() || !this.selectedRowIds.includes(id)) return undefined;
+    const visibleRows = this.getVisibleFlatRows();
+    const selectedIdSet = new Set(this.selectedRowIds);
+    const idx = visibleRows.findIndex(r => r.id === id);
+    if (idx < 0) return undefined;
+
+    const prevSelected = idx > 0 && selectedIdSet.has(visibleRows[idx - 1].id);
+    const nextSelected = idx < visibleRows.length - 1 && selectedIdSet.has(visibleRows[idx + 1].id);
+
+    return {
+      isFirst: !prevSelected && nextSelected,
+      isLast: prevSelected && !nextSelected,
+      isMiddle: prevSelected && nextSelected,
+      isSingle: !prevSelected && !nextSelected,
+    };
   }
 
   private renderRowItem(
@@ -564,6 +1039,13 @@ export class LeList {
     const children = this.getChildItems(item);
     const hasChildren = children.length > 0;
     const isOpen = this.isItemOpen(item, id);
+    const isFocused = this.canNavigateRows() && this.visualFocusActive && this.focusedRowId === id;
+    const isSelected = this.isSelectionEnabled() && this.selectedRowIds.includes(id);
+    const selPos = isSelected ? this.getSelectionPosition(id) : undefined;
+    const hasAction = !item.disabled && !!(item.action || item.href);
+    const hasAnyActions = !item.disabled && (hasAction || (Array.isArray(item.actions) && item.actions.length > 0));
+    const hasActionCol = this.showActionChevron || this.actionChevron;
+    const actionColIsOdd = visibleColumns.length % 2 !== 0;
 
     let isOdd = false;
     if (isVisible) {
@@ -581,8 +1063,24 @@ export class LeList {
             'row-even': isVisible ? !isOdd : false,
             'has-children': hasChildren,
             'is-open': isOpen,
+            'is-focused': isFocused,
+            'is-selected': isSelected,
+            'selected-single': !!selPos?.isSingle,
+            'selected-start': !!selPos?.isFirst,
+            'selected-middle': !!selPos?.isMiddle,
+            'selected-end': !!selPos?.isLast,
+            'is-selected-single': !!selPos?.isSingle,
+            'is-selected-start': !!selPos?.isFirst,
+            'is-selected-middle': !!selPos?.isMiddle,
+            'is-selected-end': !!selPos?.isLast,
+            'has-action': hasAction,
           }}
+          data-row-id={id}
           role="row"
+          aria-selected={this.isSelectionEnabled() ? (isSelected ? 'true' : 'false') : undefined}
+          onPointerDown={(e) => this.handleRowPointerDown(e, item, id)}
+          onPointerEnter={(e) => this.handleRowPointerEnter(e, item, id)}
+          onClick={(e) => this.handleRowClick(e, item, id)}
         >
           {visibleColumns.map((col, colIndex) => {
             const isFirstCol = colIndex === 0;
@@ -626,6 +1124,24 @@ export class LeList {
               </div>
             );
           })}
+          {hasActionCol && (
+            <div
+              class={{
+                'le-list-td': true,
+                'le-list-td-action': true,
+                'align-center': true,
+                'col-odd': actionColIsOdd,
+                'col-even': !actionColIsOdd,
+              }}
+              role="cell"
+            >
+              {hasAnyActions && (
+                <span class="le-list-row-action-chevron" aria-hidden="true">
+                  <le-icon name="chevron-right" />
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {hasChildren && (
@@ -762,11 +1278,26 @@ export class LeList {
     const rowSep = this.rowSeparators || 'zebra';
     const colSep = this.columnSeparators || 'none';
     const isGridiron = rowSep === 'zebra' && colSep === 'zebra';
+    const hasActionCol = this.showActionChevron || this.actionChevron;
+    const actionColIndex = visibleColumns.length;
+    const actionColIsOdd = actionColIndex % 2 !== 0;
 
     const headerRow = (
       <div class="le-list-thead" part="header" role="rowgroup">
         <div class="le-list-tr" role="row">
           {visibleColumns.map((col, colIndex) => this.renderHeaderCell(col, colIndex))}
+          {hasActionCol && (
+            <div
+              class={{
+                'le-list-th': true,
+                'le-list-th-action': true,
+                'col-odd': actionColIsOdd,
+                'col-even': !actionColIsOdd,
+              }}
+              role="columnheader"
+              aria-hidden="true"
+            />
+          )}
         </div>
       </div>
     );
@@ -787,6 +1318,7 @@ export class LeList {
                 'le-list-table': true,
                 'has-hierarchy': isHierarchical,
                 'has-row-hover': !this.disableRowHover,
+                'is-selecting': this.isSelecting,
                 [`row-sep-${rowSep}`]: true,
                 [`col-sep-${colSep}`]: true,
                 'is-gridiron': isGridiron,

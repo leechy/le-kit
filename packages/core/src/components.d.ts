@@ -17,6 +17,7 @@ import { LeContextMenuSelectDetail } from "./components/le-context-menu/le-conte
 import { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 import { LeActiveContext } from "./components/le-kit/le-kit";
 import { LeColumn } from "./types/list";
+import { Event } from "@stencil/core";
 import { LeNavigationItemReorderDetail as LeNavigationItemReorderDetail1, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode as LeNavigationReorderMode1 } from "./components/le-navigation/le-navigation";
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 import { LeKitMode } from "./global/app";
@@ -38,6 +39,7 @@ export { LeContextMenuSelectDetail } from "./components/le-context-menu/le-conte
 export { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 export { LeActiveContext } from "./components/le-kit/le-kit";
 export { LeColumn } from "./types/list";
+export { Event } from "@stencil/core";
 export { LeNavigationItemReorderDetail as LeNavigationItemReorderDetail1, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode as LeNavigationReorderMode1 } from "./components/le-navigation/le-navigation";
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 export { LeKitMode } from "./global/app";
@@ -1308,6 +1310,11 @@ export namespace Components {
     }
     interface LeList {
         /**
+          * Alias for showActionChevron.
+          * @default false
+         */
+        "actionChevron": boolean;
+        /**
           * Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true.
           * @default true
          */
@@ -1357,6 +1364,11 @@ export namespace Components {
          */
         "defaultSortIconPosition"?: 'start' | 'end' | 'none';
         /**
+          * Whether to disable keyboard navigation. Defaults to false.
+          * @default false
+         */
+        "disableKeyboardNavigation": boolean;
+        /**
           * Whether to disable row highlighting on hover. Defaults to false (row hover highlighting is enabled by default).
           * @default false
          */
@@ -1382,6 +1394,16 @@ export namespace Components {
           * @default 'zebra'
          */
         "rowSeparators": 'none' | 'borders' | 'zebra';
+        /**
+          * Selection mode for rows: false / 'none' (disabled), true / 'single', or 'multiple'. Defaults to false.
+          * @default false
+         */
+        "selection": boolean | 'single' | 'multiple' | 'none';
+        /**
+          * Whether to display chevron-right icon at the end of rows that have actions or links. Defaults to false.
+          * @default false
+         */
+        "showActionChevron": boolean;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -3807,6 +3829,12 @@ declare global {
         new (): HTMLLeKitElement;
     };
     interface HTMLLeListElementEventMap {
+        "leSelectionChange": {
+    selectedIds: string[];
+    selectedItems: LeOption[];
+    isMultiple: boolean;
+  };
+        "leAction": { action?: string; item: LeOption; id: string; originalEvent?: Event };
         "leSortChange": { key?: string; column?: LeColumn; direction?: 'asc' | 'desc' };
         "leColumnVisibilityChange": { columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean };
         "leColumnOrderChange": { columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn };
@@ -5885,6 +5913,11 @@ declare namespace LocalJSX {
     }
     interface LeList {
         /**
+          * Alias for showActionChevron.
+          * @default false
+         */
+        "actionChevron"?: boolean;
+        /**
           * Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true.
           * @default true
          */
@@ -5934,6 +5967,11 @@ declare namespace LocalJSX {
          */
         "defaultSortIconPosition"?: 'start' | 'end' | 'none';
         /**
+          * Whether to disable keyboard navigation. Defaults to false.
+          * @default false
+         */
+        "disableKeyboardNavigation"?: boolean;
+        /**
           * Whether to disable row highlighting on hover. Defaults to false (row hover highlighting is enabled by default).
           * @default false
          */
@@ -5955,6 +5993,10 @@ declare namespace LocalJSX {
          */
         "emptyTitle"?: string;
         /**
+          * Emitted when a row action or link is executed.
+         */
+        "onLeAction"?: (event: LeListCustomEvent<{ action?: string; item: LeOption; id: string; originalEvent?: Event }>) => void;
+        /**
           * Emitted when column order changes via the context menu.
          */
         "onLeColumnOrderChange"?: (event: LeListCustomEvent<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn }>) => void;
@@ -5967,6 +6009,14 @@ declare namespace LocalJSX {
          */
         "onLeItemToggle"?: (event: LeListCustomEvent<{ item: LeOption; open: boolean; originalEvent?: MouseEvent }>) => void;
         /**
+          * Emitted when row selection changes.
+         */
+        "onLeSelectionChange"?: (event: LeListCustomEvent<{
+    selectedIds: string[];
+    selectedItems: LeOption[];
+    isMultiple: boolean;
+  }>) => void;
+        /**
           * Emitted when column sorting changes.
          */
         "onLeSortChange"?: (event: LeListCustomEvent<{ key?: string; column?: LeColumn; direction?: 'asc' | 'desc' }>) => void;
@@ -5975,6 +6025,16 @@ declare namespace LocalJSX {
           * @default 'zebra'
          */
         "rowSeparators"?: 'none' | 'borders' | 'zebra';
+        /**
+          * Selection mode for rows: false / 'none' (disabled), true / 'single', or 'multiple'. Defaults to false.
+          * @default false
+         */
+        "selection"?: boolean | 'single' | 'multiple' | 'none';
+        /**
+          * Whether to display chevron-right icon at the end of rows that have actions or links. Defaults to false.
+          * @default false
+         */
+        "showActionChevron"?: boolean;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -7983,6 +8043,10 @@ declare namespace LocalJSX {
         "emptyMessage": string;
         "emptyIcon": string;
         "disableRowHover": boolean;
+        "disableKeyboardNavigation": boolean;
+        "selection": string;
+        "showActionChevron": boolean;
+        "actionChevron": boolean;
     }
     interface LeMultiselectAttributes {
         "options": LeOption[] | string;

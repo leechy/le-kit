@@ -21,6 +21,16 @@
   /* Hover & Header Focus Variables */
   --le-list-hover-bg: color-mix(in srgb, var(--le-color-primary) 10%, var(--le-color-surface));
   --le-list-header-unfocused-opacity: 0.5;
+
+  /* Selection & Focus Outline Variables (macOS Finder style: Neutral Gray when unfocused, Vibrant Focus Primary when focused) */
+  --le-list-selection-border-color: var(--le-color-border-dark, var(--le-color-gray-400, #9ca3af));
+  --le-list-selection-border-width: 2px;
+  --le-list-row-radius: var(--le-radius-md);
+}
+
+:host(:focus),
+:host(:focus-within) {
+  --le-list-selection-border-color: var(--le-color-selection, var(--le-color-primary, #3b82f6));
 }
 
 :host(:focus),
@@ -38,7 +48,7 @@
 .le-list-table-container {
   width: 100%;
   border: 1px solid var(--le-color-border);
-  border-radius: var(--le-radius-lg);
+  border-radius: var(--le-radius-md);
   overflow: hidden;
   background-color: var(--le-color-surface);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
@@ -140,6 +150,8 @@
 .le-list-tbody {
   display: flex;
   flex-direction: column;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .le-list-row-item {
@@ -183,9 +195,74 @@
   background-color: var(--le-color-surface);
 }
 
+.le-list-row-main {
+  position: relative;
+}
+
 /* Row hover (when has-row-hover is active) */
 .le-list-table.has-row-hover .le-list-row-main:hover {
   background-color: var(--le-list-hover-bg);
+}
+
+/* Suppress text selection during drag selection */
+.le-list-table.is-selecting,
+.le-list-table.is-selecting * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* Selection & Focus Ring Outline Overlay (pure border, no background interference) */
+.le-list-row-main.is-selected::after,
+:host(:focus) .le-list-row-main.is-focused::after,
+:host(:focus-within) .le-list-row-main.is-focused::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  box-sizing: border-box;
+  transition: border-color var(--le-transition-fast) var(--le-transition-easing);
+}
+
+/* Single isolated selected row or standalone keyboard focused row */
+.le-list-row-main.is-selected.selected-single::after,
+.le-list-row-main.is-selected.is-selected-single::after,
+:host(:focus) .le-list-row-main.is-focused:not(.is-selected)::after,
+:host(:focus-within) .le-list-row-main.is-focused:not(.is-selected)::after {
+  border: var(--le-list-selection-border-width) solid var(--le-list-selection-border-color);
+  border-radius: var(--le-list-row-radius);
+}
+
+/* Contiguous group start (top row) */
+.le-list-row-main.is-selected.selected-start::after,
+.le-list-row-main.is-selected.is-selected-start::after {
+  border: var(--le-list-selection-border-width) solid var(--le-list-selection-border-color);
+  border-bottom: none;
+  border-top-left-radius: var(--le-list-row-radius);
+  border-top-right-radius: var(--le-list-row-radius);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Contiguous group middle rows (left & right borders only) */
+.le-list-row-main.is-selected.selected-middle::after,
+.le-list-row-main.is-selected.is-selected-middle::after {
+  border-left: var(--le-list-selection-border-width) solid var(--le-list-selection-border-color);
+  border-right: var(--le-list-selection-border-width) solid var(--le-list-selection-border-color);
+  border-top: none;
+  border-bottom: none;
+  border-radius: 0;
+}
+
+/* Contiguous group end (bottom row) */
+.le-list-row-main.is-selected.selected-end::after,
+.le-list-row-main.is-selected.is-selected-end::after {
+  border: var(--le-list-selection-border-width) solid var(--le-list-selection-border-color);
+  border-top: none;
+  border-bottom-left-radius: var(--le-list-row-radius);
+  border-bottom-right-radius: var(--le-list-row-radius);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 /* ==========================================
@@ -244,6 +321,12 @@
   align-items: center;
   min-width: 0;
   overflow: hidden;
+  position: relative;
+}
+
+.le-list-td > * {
+  position: relative;
+  z-index: 2;
 }
 
 .le-list-td.is-first-cell {
@@ -309,6 +392,12 @@
   opacity: 0.4;
   transition: opacity var(--le-transition-fast) var(--le-transition-easing), color var(--le-transition-fast) var(--le-transition-easing);
   color: inherit;
+  outline: none;
+}
+
+.le-list-row-toggle:focus,
+.le-list-row-toggle:focus-visible {
+  outline: none;
 }
 
 .le-list-row-toggle:hover {
@@ -326,6 +415,39 @@
 
 .le-list-chevron.open {
   transform: rotate(0deg);
+}
+
+/* Action column styling */
+.le-list-th.le-list-th-action {
+  padding: var(--le-list-item-padding-y) var(--le-list-item-padding-x);
+  box-sizing: border-box;
+  user-select: none;
+  pointer-events: none;
+}
+
+.le-list-td.le-list-td-action {
+  padding: var(--le-list-item-padding-y) var(--le-list-item-padding-x);
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.le-list-row-main.has-action {
+  cursor: var(--le-controls-cursor, pointer);
+}
+
+.le-list-row-action-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.35;
+  width: var(--le-list-toggle-size);
+  --le-icon-size: var(--le-list-toggle-size);
+  transition: opacity var(--le-transition-fast) var(--le-transition-easing), transform var(--le-transition-fast) var(--le-transition-easing);
+  flex-shrink: 0;
+}
+
+.le-list-row-main:hover .le-list-row-action-chevron {
+  opacity: 0.85;
 }
 
 /* Alignment utilities */

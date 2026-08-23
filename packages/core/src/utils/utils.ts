@@ -56,6 +56,15 @@ export function parseOptionFromItemElement(item: HTMLElement): LeOption {
     .map(child => parseOptionFromItemElement(child as HTMLElement));
   const group = item.getAttribute('group') || '';
   const separator = item.getAttribute('separator') as 'before' | 'after' | undefined;
+  let actions: any = undefined;
+  if (item.hasAttribute('actions')) {
+    const rawActions = item.getAttribute('actions') || '';
+    try {
+      actions = JSON.parse(rawActions);
+    } catch {
+      actions = rawActions.split(',').map(s => s.trim()).filter(Boolean);
+    }
+  }
 
   const option = {
     id: id || undefined,
@@ -63,6 +72,7 @@ export function parseOptionFromItemElement(item: HTMLElement): LeOption {
     value,
     href,
     action,
+    actions,
     target,
     part,
     color,
@@ -512,4 +522,12 @@ export function nextResize(element: HTMLElement): Promise<ResizeObserverEntry> {
     });
     observer.observe(element);
   });
+}
+
+/**
+ * Checks if an event target is an interactive editable element (e.g. input, textarea, contenteditable).
+ */
+export function isEditableTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof globalThis.Element)) return false;
+  return !!target.closest('input, textarea, [contenteditable="true"]');
 }

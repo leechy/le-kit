@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
   <title>Le-Kit Component Library</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
   <!-- Register composed icons in the global registry (must run before components) -->
   <script>
     window.__leKitConfig__ = {
@@ -67,6 +71,7 @@
     }
 
     body {
+      --le-font-family: Inter, sans-serif;
       font-family: var(--le-font-family);
       background: var(--le-color-background);
       color: var(--le-color-text);
@@ -467,8 +472,8 @@
 
     <br />
 
-    <h3>2. Data-Driven List (Columns &amp; JS Data with Right-Click Header Column Toggle &amp; Drag Reordering)</h3>
-    <le-list id="demo-data-list" column-visibility-toggle column-reorder></le-list>
+    <h3>2. Data-Driven List (Columns &amp; JS Data with Multiple Drag Selection &amp; Column Customization)</h3>
+    <le-list id="demo-data-list" column-visibility-toggle column-reorder selection="multiple"></le-list>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const listEl = document.getElementById('demo-data-list');
@@ -525,6 +530,11 @@
             }
           ];
 
+          // Listen for leSelectionChange event
+          listEl.addEventListener('leSelectionChange', (e) => {
+            console.log('🎯 [le-list leSelectionChange event]', e.detail);
+          });
+
           // Listen for leSortChange event for server-side sorting integrations
           listEl.addEventListener('leSortChange', (e) => {
             console.log('[le-list leSortChange event]', e.detail);
@@ -545,9 +555,9 @@
 
     <br />
 
-    <h3>3. Hierarchical Collapsible Rows (&lt;le-list&gt; with Nested Children &amp; &lt;le-collapse&gt;)</h3>
-    <p>Displays nested organizational data with chevron toggles, depth indentation, and smooth sliding animations.</p>
-    <le-list id="demo-nested-list" column-separators="borders" column-visibility-toggle></le-list>
+    <h3>3. Hierarchical Collapsible Rows (&lt;le-list&gt; with Nested Children, Actions &amp; &lt;le-collapse&gt;)</h3>
+    <p>Displays nested organizational data with chevron toggles, depth indentation, row actions with action chevrons, and smooth sliding animations.</p>
+    <le-list id="demo-nested-list" column-visibility-toggle show-action-chevron column-reorder selection="multiple"></le-list>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const nestedList = document.getElementById('demo-nested-list');
@@ -566,6 +576,7 @@
               label: 'Engineering Department',
               description: 'Software and infrastructure teams',
               color: 'primary',
+              action: 'view-dept-engineering',
               open: true,
               data: { role: 'Department', projectsCount: 41, joined: '2020-01-01', active: true },
               children: [
@@ -574,6 +585,7 @@
                   label: 'Core Infrastructure Team',
                   description: 'Backend services & DevOps',
                   color: 'info',
+                  action: 'view-team-core',
                   open: true,
                   data: { role: 'Team', projectsCount: 32, joined: '2021-03-01', active: true },
                   children: [
@@ -582,6 +594,7 @@
                       label: 'Alex Rivera',
                       description: 'alex.rivera@example.com',
                       color: 'primary',
+                      action: 'view-member-alex',
                       data: { role: 'Staff Engineer', projectsCount: 14, joined: '2022-03-15', active: true }
                     },
                     {
@@ -589,6 +602,7 @@
                       label: 'Elena Rostova',
                       description: 'elena.r@example.com',
                       color: 'info',
+                      action: 'view-member-elena',
                       data: { role: 'DevOps Lead', projectsCount: 18, joined: '2023-05-20', active: true }
                     }
                   ]
@@ -598,6 +612,7 @@
                   label: 'Frontend Platform Team',
                   description: 'Design system and client apps',
                   color: 'success',
+                  action: 'view-team-frontend',
                   open: false,
                   data: { role: 'Team', projectsCount: 9, joined: '2021-08-01', active: true },
                   children: [
@@ -606,6 +621,7 @@
                       label: 'Sophia Chen',
                       description: 'sophia.chen@example.com',
                       color: 'success',
+                      action: 'view-member-sophia',
                       data: { role: 'Lead Product Designer', projectsCount: 9, joined: '2021-08-01', active: true }
                     }
                   ]
@@ -617,6 +633,7 @@
               label: 'Growth & Product Operations',
               description: 'Cross-functional growth teams',
               color: 'warning',
+              action: 'view-dept-growth',
               open: true,
               data: { role: 'Department', projectsCount: 28, joined: '2020-06-01', active: true },
               children: [
@@ -625,6 +642,7 @@
                   label: 'Marcus Vance',
                   description: 'marcus.vance@example.com',
                   color: 'warning',
+                  action: 'view-member-marcus',
                   data: { role: 'Principal PM', projectsCount: 22, joined: '2020-01-10', active: false }
                 },
                 {
@@ -632,14 +650,24 @@
                   label: 'David Kim',
                   description: 'david.kim@example.com',
                   color: 'danger',
+                  action: 'view-member-david',
                   data: { role: 'Growth Strategist', projectsCount: 6, joined: '2024-02-01', active: true }
                 }
               ]
             }
           ];
 
+          nestedList.addEventListener('leAction', (e) => {
+            console.log('⚡ [le-list leAction event fired]:', {
+              action: e.detail.action,
+              id: e.detail.id,
+              item: e.detail.item,
+              originalEvent: e.detail.originalEvent
+            });
+          });
+
           nestedList.addEventListener('leItemToggle', (e) => {
-            console.log('[le-list leItemToggle event]', e.detail);
+            console.log('📁 [le-list leItemToggle event fired]:', e.detail);
           });
         }
       });
@@ -653,7 +681,7 @@
 
     <br />
     <p>Using <code>row-separators="zebra" column-separators="zebra"</code> (Gridiron / Checkered Pattern):</p>
-    <le-list id="demo-sep-gridiron" row-separators="zebra" column-separators="zebra"></le-list>
+    <le-list id="demo-sep-gridiron" row-separators="zebra" column-separators="zebra" disable-keyboard-navigation></le-list>
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
@@ -745,6 +773,48 @@
 
   <div class="demo-section">
     <h2>Icons</h2>
+    <h3>New Icons</h3>
+
+    <h4>&lt;le-icon name="tune"&gt;</h4>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <div style="font-size: 7px;">
+        sharp<br />
+        <le-icon name="tune" sharp size="32"></le-icon>
+      </div>
+      <div style="font-size: 7px;">
+        rounded<br />
+        <le-icon name="tune" rounded size="32"></le-icon>
+      </div>
+      <div style="font-size: 7px;">
+        thin<br />
+        <le-icon name="tune" sharp thin size="32"></le-icon>
+      </div>
+      <div style="font-size: 7px;">
+        rounded-thin<br />
+        <le-icon name="tune" rounded thin size="32"></le-icon>
+      </div>
+    </div>
+    <div style="font-size: 7px;">filled</div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <le-icon name="tune" sharp filled size="32"></le-icon>
+      <le-icon name="tune" rounded filled size="32"></le-icon>
+      <le-icon name="tune" sharp thin filled size="32"></le-icon>
+      <le-icon name="tune" rounded thin filled size="32"></le-icon>
+    </div>
+    <div style="font-size: 7px;">masks</div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <le-icon name="fill" layers="tune" sharp size="32"></le-icon>
+      <le-icon name="fill" layers="tune" rounded size="32"></le-icon>
+      <le-icon name="fill" layers="tune" sharp thin size="32"></le-icon>
+      <le-icon name="fill" layers="tune" rounded thin size="32"></le-icon>
+    </div>
+    <div style="font-size: 7px;"><br /></div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <le-icon name="fill" layers="tune" sharp filled size="32"></le-icon>
+      <le-icon name="fill" layers="tune" rounded filled size="32"></le-icon>
+      <le-icon name="fill" layers="tune" sharp thin filled size="32"></le-icon>
+      <le-icon name="fill" layers="tune" rounded thin filled size="32"></le-icon>
+    </div>
 
     <h3>Folders</h3>
     <div style="display: flex; align-items: center; gap: 16px;">

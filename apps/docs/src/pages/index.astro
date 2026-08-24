@@ -21,7 +21,7 @@ import TileLink from '../components/TileLink.astro';
           pause-on-hover="true"
           pause-on-interaction="true"
           steps='[
-            { "target": "#demo-frame", "action": "method", "name": "snapTo", "value": 375, "delay": 2000 },
+            { "target": "#demo-frame", "action": "method", "name": "snapTo", "value": 200, "delay": 2000 },
             { "target": "#homepage-toolbar", "action": "method", "name": "showOverflowMenu", "delay": 1500 },
             { "target": "#homepage-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowDown", "delay": 1000 },
             { "target": "#homepage-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowDown", "delay": 1000 },
@@ -34,19 +34,40 @@ import TileLink from '../components/TileLink.astro';
         >
           <le-preview-frame id="demo-frame" min-width="240" min-height="56" padding="16" show-controls="none">
               <le-toolbar id="homepage-toolbar">
-                <le-button priority="3" collapsible icon-start="new">
-                  New
-                </le-button>
-                <le-button priority="3" collapsible icon-start="open">
-                  Open
-                </le-button>
+                <le-button priority="3" collapsible icon-start="file::add-badge">New</le-button>
+                <le-button priority="3" collapsible icon-start="folder-open">Open</le-button>
+
                 <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
-                <le-button-group overflow-icons label="Actions" collapse="2">
+
+                <le-button-group overflow-icons label="History" collapse="2">
                   <le-button label="Undo" icon-only="undo"></le-button>
                   <le-button label="Redo" icon-only="redo"></le-button>
                 </le-button-group>
+
+                <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+                <le-button-group overflow-icons priority="2" label="Text">
+                  <le-button label="Align Left" icon-only="align-left"></le-button>
+                  <le-button label="Align Center" icon-only="align-center"></le-button>
+                  <le-button label="Align Right" icon-only="align-right"></le-button>
+                  <le-button label="Justify" icon-only="align-justify"></le-button>
+                  <le-button label="Line Spacing" icon-only="line-spacing"></le-button>
+                </le-button-group>
+
+                <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+                <le-button-group overflow-icons label="Lists">
+                  <le-button label="Bullet List" icon-only="bullet-list"></le-button>
+                  <le-button label="Numbered List" icon-only="numbered-list"></le-button>
+                  <le-button label="Checklist" icon-only="check-list"></le-button>
+                  <le-button label="Increase Indent" icon-only="increase-indent"></le-button>
+                  <le-button label="Decrease Indent" icon-only="decrease-indent"></le-button>
+                </le-button-group>
+
                 <le-toolbar-spacer></le-toolbar-spacer>
-                <le-button variant="solid" color="primary" collapsible icon-start="save">Save Document</le-button>
+
+                <le-button color="danger" collapsible icon-start="delete">Delete</le-button>
+                <le-button collapsible icon-start="tune">Settings</le-button>
               </le-toolbar>
 
           </le-preview-frame>

@@ -379,14 +379,8 @@ le-bento-tile {
 }
 
 .home-section {
-  margin: var(--le-spacing-8) auto;
-  max-width: 1200px;
-  padding: 0 50px;
-
-  >h2,
-  >p {
-    text-align: center;
-  }
+  margin: var(--le-spacing-4) auto;
+  max-width: calc(var(--le-bento-max-columns, 6) * var(--le-bento-col-max, 200px) + (var(--le-bento-max-columns, 6) - 1) * var(--le-bento-gap, 16px) - 2px);
 }
 
 .site-content {

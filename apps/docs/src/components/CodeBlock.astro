@@ -29,10 +29,202 @@ const html = await codeToHtml(normalizedCode, {
   lang: language,
   theme: "plastic",
 });
+
+const encodedCode = encodeURIComponent(normalizedCode);
 ---
 
-<div class="code-block">
+<script>
+  function initCodeBlocks() {
+    const codeBlocks = document.querySelectorAll('.code-block');
+
+    codeBlocks.forEach((block) => {
+      // Avoid double initialization
+      if (block.classList.contains('js-initialized')) return;
+      block.classList.add('js-initialized');
+
+      const inner = block.querySelector('.code-block__inner') as HTMLElement;
+      const content = block.querySelector('.code-block__content') as HTMLElement;
+      const expandBtn = block.querySelector('.code-block__expand') as HTMLElement;
+      const copyBtn = block.querySelector('.code-block__copy') as HTMLElement;
+
+      if (!inner || !content) return;
+
+      // Setup ResizeObserver to detect real rendered height vs max collapsed height (24rem = 384px)
+      // This is highly robust and triggers even when lazy styles load dynamically.
+      const observer = new ResizeObserver(() => {
+        const isOverflowing = inner.offsetHeight > 384;
+        if (isOverflowing) {
+          block.classList.add('code-block--has-overflow');
+        } else {
+          block.classList.remove('code-block--has-overflow');
+        }
+      });
+      observer.observe(inner);
+
+      if (expandBtn) {
+        expandBtn.addEventListener('click', () => {
+          const isExpanded = block.classList.toggle('code-block--expanded');
+
+          const label = expandBtn.querySelector('.btn-label');
+          if (label) {
+            label.textContent = isExpanded ? 'Show less' : 'Show more';
+          }
+          const icon = expandBtn.querySelector('le-icon');
+          if (icon) {
+            icon.setAttribute('name', isExpanded ? 'chevron-up' : 'chevron-down');
+          }
+        });
+      }
+
+      if (copyBtn) {
+        copyBtn.addEventListener('click', async () => {
+          const encodedCode = block.getAttribute('data-code') || '';
+          const codeText = decodeURIComponent(encodedCode);
+
+          try {
+            await navigator.clipboard.writeText(codeText);
+
+            const label = copyBtn.querySelector('.btn-label');
+            const icon = copyBtn.querySelector('le-icon');
+            const originalText = label ? label.textContent : 'Copy';
+
+            if (label) label.textContent = 'Copied!';
+            if (icon) icon.setAttribute('name', 'check');
+
+            setTimeout(() => {
+              if (label) label.textContent = originalText;
+              if (icon) icon.setAttribute('name', 'copy');
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy code: ', err);
+          }
+        });
+      }
+    });
+  }
+
+  // Initialize on page load
+  initCodeBlocks();
+
+  // Re-run on dynamic page navigations (Astro view transitions)
+  document.addEventListener('astro:page-load', initCodeBlocks);
+</script>
+
+<div class="code-block" data-code={encodedCode}>
   {title && <div class="code-block__title">{title}</div>}
-  <div set:html={html} />
+  <div class="code-block__content">
+    <div class="code-block__inner">
+      <div set:html={html} />
+    </div>
+  </div>
+  <div class="code-block__fade-overlay"></div>
+  <div class="code-block__actions">
+    <le-button class="code-block__copy" variant="filled" color="secondary">
+      <le-icon slot="icon-start" name="copy"></le-icon>
+      <span class="btn-label">Copy</span>
+    </le-button>
+    <le-button class="code-block__expand" variant="filled" color="secondary">
+      <le-icon slot="icon-start" name="chevron-down"></le-icon>
+      <span class="btn-label">Show more</span>
+    </le-button>
+  </div>
 </div>
+
+<style>
+  .code-block {
+    position: relative;
+    margin: var(--le-spacing-4) 0;
+    border: 2px solid var(--le-color-border);
+    background-color: #213553;
+    border-radius: var(--le-radius-md, 8px);
+    overflow: hidden;
+  }
+
+  .code-block__title {
+    padding: var(--le-spacing-2) var(--le-spacing-4);
+    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom: 2px solid var(--le-color-border);
+    font-family: var(--le-font-family-mono);
+    font-size: var(--le-font-size-sm);
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
+  }
+
+  .code-block__content {
+    max-height: 24rem;
+    overflow: auto;
+    transition: max-height 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    position: relative;
+  }
+
+  /* When expanded, transition to a large max-height limit to display the full height naturally */
+  .code-block--expanded .code-block__content {
+    max-height: 6000px;
+  }
+
+  /* Custom scrollbar */
+  .code-block__content::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .code-block__content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .code-block__content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+  }
+  .code-block__content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Ensure pre styles inside CodeBlock override global styles cleanly */
+  .code-block__content :global(pre) {
+    margin: 0 !important;
+    border: none !important;
+    background-color: transparent !important;
+  }
+
+  /* Fade overlay - only show when block has overflow and is NOT expanded */
+  .code-block__fade-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    background: linear-gradient(to bottom, transparent, #213553);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 5;
+  }
+
+  .code-block--has-overflow:not(.code-block--expanded) .code-block__fade-overlay {
+    opacity: 1;
+  }
+
+  .code-block__actions {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+  }
+
+  .code-block:hover .code-block__actions {
+    opacity: 1;
+  }
+
+  /* Default state: Hide expand button. Only show it if there is overflow */
+  .code-block__expand {
+    display: none;
+  }
+
+  .code-block--has-overflow .code-block__expand {
+    display: inline-flex;
+  }
+</style>
 

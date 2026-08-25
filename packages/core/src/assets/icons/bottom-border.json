@@ -1,0 +1,247 @@
+{
+  "viewBox": "0 0 16 16",
+  "maskShape": [
+    {
+      "tag": "rect",
+      "x": "2",
+      "y": "2",
+      "width": "12",
+      "height": "12",
+      "fill": "none",
+      "stroke": "black",
+      "stroke-width": "2.25",
+      "stroke-linejoin": "square",
+      "rounded": {
+        "tag": "path",
+        "x": null,
+        "y": null,
+        "width": null,
+        "height": null,
+        "d": "M2 4C2 2.89543 2.89543 2 4 2H12C13.1046 2 14 2.89543 14 4V14H2V4Z",
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "1.75"
+      }
+    },
+    {
+      "tag": "path",
+      "d": "M8 14V2",
+      "stroke": "black",
+      "stroke-width": "2",
+      "stroke-linecap": "square",
+      "thin": {
+        "stroke-width": "1.75"
+      }
+    },
+    {
+      "tag": "path",
+      "d": "M2 8H14",
+      "stroke": "black",
+      "stroke-width": "2",
+      "stroke-linecap": "square",
+      "thin": {
+        "stroke-width": "1.75"
+      }
+    }
+  ],
+  "children": [
+    {
+      "tag": "path",
+      "d": "M2 14H14",
+      "stroke": "currentColor",
+      "stroke-width": "1.25",
+      "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "top-1-start",
+      "tag": "path", "d": "M2 2V2",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "d": "M2.6 2.6V2.6", "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "top-2",
+      "tag": "path", "d": "M4 2V2",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "d": "M4.25 2V2", "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "top-3",
+      "tag": "path", "d": "M6 2V2",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "d": "M6.12 2V2", "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "top-4-center",
+      "tag": "path", "d": "M8 2V2",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "top-5",
+      "tag": "path", "d": "M10 2V2",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "d": "M9.88 2V2", "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "top-6",
+      "tag": "path", "d": "M12 2V2",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "d": "M11.75 2V2", "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "top-7-end",
+      "tag": "path", "d": "M14 2V2",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "d": "M13.4 2.6V2.6", "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+
+    {
+      "id": "left-2",
+      "tag": "path", "d": "M2 4V4",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "d": "M2 4.25V4.25", "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "left-3",
+      "tag": "path", "d": "M2 6V6",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "d": "M2 6.12V6.12", "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "left-4-center",
+      "tag": "path", "d": "M2 8V8",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "left-5",
+      "tag": "path", "d": "M2 10V10",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "left-6",
+      "tag": "path", "d": "M2 12V12",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+
+    {
+      "id": "middle-vertical-2",
+      "tag": "path", "d": "M8 4V4",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "middle-vertical-3",
+      "tag": "path", "d": "M8 6V6",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+
+    {
+      "id": "middle-4-center",
+      "tag": "path", "d": "M8 8V8",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+
+    {
+      "id": "middle-vertical-5",
+      "tag": "path", "d": "M8 10V10",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "middle-vertical-6",
+      "tag": "path", "d": "M8 12V12",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+
+    {
+      "id": "middle-horizontal-2",
+      "tag": "path", "d": "M4 8V8",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "middle-horizontal-3",
+      "tag": "path", "d": "M6 8V8",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "middle-horizontal-5",
+      "tag": "path", "d": "M10 8V8",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "middle-horizontal-6",
+      "tag": "path", "d": "M12 8V8",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+
+    {
+      "id": "right-2",
+      "tag": "path", "d": "M14 4V4",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "d": "M14 4.25V4.25", "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "right-3",
+      "tag": "path", "d": "M14 6V6",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "d": "M14 6.12V6.12", "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "right-4-center",
+      "tag": "path", "d": "M14 8V8",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "right-5",
+      "tag": "path", "d": "M14 10V10",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    },
+    {
+      "id": "right-6",
+      "tag": "path", "d": "M14 12V12",
+      "opacity": "0.5", "stroke": "currentColor", "stroke-width": "1", "stroke-linecap": "square",
+      "rounded": { "stroke-linecap": "round" },
+      "thin": { "stroke-width": "0.75" }
+    }
+  ]
+}

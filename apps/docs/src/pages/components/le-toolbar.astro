@@ -21,14 +21,8 @@ import CodeBlock from "../../components/CodeBlock.astro";
       handles="left,right"
     >
       <le-toolbar>
-        <le-button priority="3" collapsible>
-          <le-icon name="new" slot="icon-start" size="18"></le-icon>
-          New
-        </le-button>
-        <le-button priority="3" collapsible>
-          <le-icon name="open" slot="icon-start" size="18"></le-icon>
-          Open
-        </le-button>
+        <le-button priority="3" collapsible icon-start="file::add-badge">New</le-button>
+        <le-button priority="3" collapsible icon-start="folder-open">Open</le-button>
 
         <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
 
@@ -44,27 +38,34 @@ import CodeBlock from "../../components/CodeBlock.astro";
           <le-button label="Align Center" icon-only="align-center"></le-button>
           <le-button label="Align Right" icon-only="align-right"></le-button>
           <le-button label="Justify" icon-only="align-justify"></le-button>
+          <le-button label="Line Spacing" icon-only="line-spacing"></le-button>
         </le-button-group>
 
         <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
 
         <le-button-group overflow-icons label="Lists">
           <le-button label="Bullet List" icon-only="bullet-list"></le-button>
-          <le-button label="Numbered List" icon-only="numbered-list"
-          ></le-button>
+          <le-button label="Numbered List" icon-only="numbered-list"></le-button>
           <le-button label="Checklist" icon-only="check-list"></le-button>
-          <le-button label="Increase Indent" icon-only="increase-indent"
-          ></le-button>
-          <le-button label="Decrease Indent" icon-only="decrease-indent"
-          ></le-button>
+          <le-button label="Increase Indent" icon-only="increase-indent"></le-button>
+          <le-button label="Decrease Indent" icon-only="decrease-indent"></le-button>
+        </le-button-group>
+
+        <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+        <le-button-group overflow-icons label="Borders" collapse="1">
+          <le-button label="Outside Borders" icon-only="outside-borders"></le-button>
+          <le-button label="Clear Borders" icon-only="no-borders"></le-button>
+          <le-button label="Top Border" icon-only="top-border"></le-button>
+          <le-button label="Left Border" icon-only="left-border"></le-button>
+          <le-button label="Right Border" icon-only="right-border"></le-button>
+          <le-button label="Bottom Border" icon-only="bottom-border"></le-button>
         </le-button-group>
 
         <le-toolbar-spacer></le-toolbar-spacer>
 
-        <le-button color="danger" collapsible>
-          <le-icon name="delete" slot="icon-start" size="20"></le-icon>
-          Delete
-        </le-button>
+        <le-button color="danger" collapsible icon-start="delete">Delete</le-button>
+        <le-button collapsible icon-start="tune">Settings</le-button>
       </le-toolbar>
     </le-preview-frame>
   </div>
@@ -72,14 +73,8 @@ import CodeBlock from "../../components/CodeBlock.astro";
     language="html"
     code={`
 <le-toolbar>
-  <le-button priority="3" collapsible>
-    <le-icon name="new" slot="icon-start" size="18"></le-icon>
-    New
-  </le-button>
-  <le-button priority="3" collapsible>
-    <le-icon name="open" slot="icon-start" size="18"></le-icon>
-    Open
-  </le-button>
+  <le-button priority="3" collapsible icon-start="file::add-badge">New</le-button>
+  <le-button priority="3" collapsible icon-start="folder-open">Open</le-button>
 
   <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
 
@@ -95,27 +90,34 @@ import CodeBlock from "../../components/CodeBlock.astro";
     <le-button label="Align Center" icon-only="align-center"></le-button>
     <le-button label="Align Right" icon-only="align-right"></le-button>
     <le-button label="Justify" icon-only="align-justify"></le-button>
+    <le-button label="Line Spacing" icon-only="line-spacing"></le-button>
   </le-button-group>
 
   <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
 
   <le-button-group overflow-icons label="Lists">
     <le-button label="Bullet List" icon-only="bullet-list"></le-button>
-    <le-button label="Numbered List" icon-only="numbered-list"
-    ></le-button>
+    <le-button label="Numbered List" icon-only="numbered-list"></le-button>
     <le-button label="Checklist" icon-only="check-list"></le-button>
-    <le-button label="Increase Indent" icon-only="increase-indent"
-    ></le-button>
-    <le-button label="Decrease Indent" icon-only="decrease-indent"
-    ></le-button>
+    <le-button label="Increase Indent" icon-only="increase-indent"></le-button>
+    <le-button label="Decrease Indent" icon-only="decrease-indent"></le-button>
+  </le-button-group>
+
+  <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+  <le-button-group overflow-icons label="Borders" collapse="1">
+    <le-button label="Outside Borders" icon-only="outside-borders"></le-button>
+    <le-button label="Clear Borders" icon-only="no-borders"></le-button>
+    <le-button label="Top Border" icon-only="top-border"></le-button>
+    <le-button label="Left Border" icon-only="left-border"></le-button>
+    <le-button label="Right Border" icon-only="right-border"></le-button>
+    <le-button label="Bottom Border" icon-only="bottom-border"></le-button>
   </le-button-group>
 
   <le-toolbar-spacer></le-toolbar-spacer>
 
-  <le-button color="danger" collapsible>
-    <le-icon name="delete" slot="icon-start" size="20"></le-icon>
-    Delete
-  </le-button>
+  <le-button color="danger" collapsible icon-start="delete">Delete</le-button>
+  <le-button collapsible icon-start="tune">Settings</le-button>
 </le-toolbar>`}
   />
 

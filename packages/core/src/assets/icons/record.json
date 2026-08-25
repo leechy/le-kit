@@ -1,0 +1,34 @@
+{
+  "viewBox": "0 0 16 16",
+  "maskShape": [
+    {
+      "tag": "circle",
+      "cx": "8",
+      "cy": "8",
+      "r": "4",
+      "fill": "black",
+      "stroke": "black",
+      "stroke-width": "2.25",
+      "thin": {
+        "stroke-width": "1.75"
+      }
+    }
+  ],
+  "children": [
+    {
+      "tag": "circle",
+      "cx": "8",
+      "cy": "8",
+      "r": "4",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.25",
+      "thin": {
+        "stroke-width": "0.75"
+      },
+      "filled": {
+        "fill": "currentColor"
+      }
+    }
+  ]
+}

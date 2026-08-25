@@ -1,0 +1,65 @@
+{
+  "viewBox": "0 0 16 16",
+  "maskShape": [
+    {
+      "tag": "path",
+      "d": "M7.5 8L3 5V11L7.5 8Z",
+      "fill": "black",
+      "stroke": "black",
+      "stroke-width": "2.1",
+      "rounded": {
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "1.75"
+      }
+    },
+    {
+      "tag": "path",
+      "d": "M12.5 8L8 5V11L12.5 8Z",
+      "fill": "black",
+      "stroke": "black",
+      "stroke-width": "2.1",
+      "rounded": {
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "1.75"
+      }
+    }
+  ],
+  "children": [
+    {
+      "tag": "path",
+      "d": "M7.5 8L3 5V11L7.5 8Z",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.1",
+      "rounded": {
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "0.75"
+      },
+      "filled": {
+        "fill": "currentColor"
+      }
+    },
+    {
+      "tag": "path",
+      "d": "M12.5 8L8 5V11L12.5 8Z",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.1",
+      "rounded": {
+        "stroke-linejoin": "round"
+      },
+      "thin": {
+        "stroke-width": "0.75"
+      },
+      "filled": {
+        "fill": "currentColor"
+      }
+    }
+  ]
+}

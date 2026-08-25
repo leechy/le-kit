@@ -1,0 +1,42 @@
+{
+  "viewBox": "0 0 16 16",
+  "maskShape": [
+    {
+      "tag": "rect",
+      "x": "4",
+      "y": "4",
+      "width": "8",
+      "height": "8",
+      "fill": "black",
+      "stroke": "black",
+      "stroke-width": "2.25",
+      "rounded": {
+        "rx": "1.5"
+      },
+      "thin": {
+        "stroke-width": "1.75"
+      }
+    }
+  ],
+  "children": [
+    {
+      "tag": "rect",
+      "x": "4",
+      "y": "4",
+      "width": "8",
+      "height": "8",
+      "fill": "none",
+      "stroke": "currentColor",
+      "stroke-width": "1.25",
+      "rounded": {
+        "rx": "1.5"
+      },
+      "thin": {
+        "stroke-width": "0.75"
+      },
+      "filled": {
+        "fill": "currentColor"
+      }
+    }
+  ]
+}

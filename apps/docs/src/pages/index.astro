@@ -3,8 +3,78 @@ import Layout from '../layouts/Layout.astro';
 import TileLink from '../components/TileLink.astro';
 ---
 
-<Layout title="Le-Kit - The Editable Components Library (concept)">
+<Layout title="Le-Kit - the components that fit into any device">
   <main class="bento-page">
+    <section class="home-section">
+      <div class="component-example">
+        <div style="width: 100%; margin-bottom: var(--le-spacing-4);">
+          <h1 style="margin: 0; margin-bottom: var(--le-spacing-4);"><a href="/components/le-toolbar" style="text-decoration: none;">&lt;le-toolbar&gt;</a></h1>
+          <p>Component that holds all the available actions. And if there isn't enough space, they appear in an overflow menu.</p>
+        </div>
+        <le-actions-sequence
+          loop
+          direction="alternate"
+          loop-delay="3000"
+          start-on="in-view"
+          in-view-threshold="0.3"
+          {/* debug */}
+          pause-on-hover="true"
+          pause-on-interaction="true"
+          steps='[
+            { "target": "#demo-frame", "action": "method", "name": "snapTo", "value": 200, "delay": 2000 },
+            { "target": "#homepage-toolbar", "action": "method", "name": "showOverflowMenu", "delay": 1500 },
+            { "target": "#homepage-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowDown", "delay": 1000 },
+            { "target": "#homepage-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowDown", "delay": 1000 },
+            { "target": "#homepage-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowUp", "delay": 1000 },
+            { "target": "#homepage-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowUp", "delay": 1000 },
+            { "target": "#homepage-toolbar", "action": "method", "name": "hideOverflowMenu", "delay": 1500 },
+            { "target": "#demo-frame", "action": "method", "name": "snapTo", "value": 768, "delay": 2000 },
+            { "target": "#demo-frame", "action": "method", "name": "resetWidth", "delay": 2000 }
+          ]'
+        >
+          <le-preview-frame id="demo-frame" min-width="240" min-height="56" padding="16" show-controls="none">
+              <le-toolbar id="homepage-toolbar">
+                <le-button priority="3" collapsible icon-start="file::add-badge">New</le-button>
+                <le-button priority="3" collapsible icon-start="folder-open">Open</le-button>
+
+                <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+                <le-button-group overflow-icons label="History" collapse="2">
+                  <le-button label="Undo" icon-only="undo"></le-button>
+                  <le-button label="Redo" icon-only="redo"></le-button>
+                </le-button-group>
+
+                <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+                <le-button-group overflow-icons priority="2" label="Text">
+                  <le-button label="Align Left" icon-only="align-left"></le-button>
+                  <le-button label="Align Center" icon-only="align-center"></le-button>
+                  <le-button label="Align Right" icon-only="align-right"></le-button>
+                  <le-button label="Justify" icon-only="align-justify"></le-button>
+                  <le-button label="Line Spacing" icon-only="line-spacing"></le-button>
+                </le-button-group>
+
+                <le-toolbar-spacer width="var(--le-space-md)"></le-toolbar-spacer>
+
+                <le-button-group overflow-icons label="Lists">
+                  <le-button label="Bullet List" icon-only="bullet-list"></le-button>
+                  <le-button label="Numbered List" icon-only="numbered-list"></le-button>
+                  <le-button label="Checklist" icon-only="check-list"></le-button>
+                  <le-button label="Increase Indent" icon-only="increase-indent"></le-button>
+                  <le-button label="Decrease Indent" icon-only="decrease-indent"></le-button>
+                </le-button-group>
+
+                <le-toolbar-spacer></le-toolbar-spacer>
+
+                <le-button color="danger" collapsible icon-start="delete">Delete</le-button>
+                <le-button collapsible icon-start="tune">Settings</le-button>
+              </le-toolbar>
+
+          </le-preview-frame>
+        </le-actions-sequence>
+      </div>
+    </section>
+
     <le-bento-grid
       column-min-width="160"
       column-max-width="200"
@@ -47,7 +117,7 @@ import TileLink from '../components/TileLink.astro';
             <h1><img slot="header" src="/le-kit.svg" alt="Le-Kit logo" style="width: 50%;" /></h1>
           </div>
           <div class="bento-tile-content">
-            <h2>The components you can change on the fly</h2>
+            <h2>The components that fit into any device</h2>
           </div>
         </div>
       </le-bento-tile>
@@ -180,6 +250,7 @@ import TileLink from '../components/TileLink.astro';
       </le-bento-tile>
     </le-bento-grid>
 
+    {/*
     <section class="home-section">
       <h2>To Admin or not to Admin?</h2>
       <p>
@@ -261,6 +332,7 @@ import TileLink from '../components/TileLink.astro';
         })();
       </script>
     </section>
+    */}
   </main>
 
   <style>

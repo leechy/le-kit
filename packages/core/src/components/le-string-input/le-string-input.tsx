@@ -1,4 +1,4 @@
-import { Component, Prop, Event, EventEmitter, h, Element, State } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, h, Element, State, Host } from '@stencil/core';
 import { classnames, observeNamedSlotPresence, slotHasContent } from '../../utils/utils';
 
 /**
@@ -217,7 +217,7 @@ export class LeStringInput {
     const showClearButton = this.clearable && hasValue;
 
     return (
-      <le-component component="le-string-input" hostClass={classnames({ disabled: this.disabled })}>
+      <Host class={classnames({ disabled: this.disabled })}>
         <div class="le-input-wrapper">
           <label
             class={classnames('le-input-label', { 'is-visible': hasLabel })}
@@ -266,12 +266,10 @@ export class LeStringInput {
           </div>
 
           <div class={classnames('le-input-description', { 'is-visible': hasDescription })}>
-            <le-slot name="description" type="text" tag="p" label="Description">
-              <slot name="description">{this.description}</slot>
-            </le-slot>
+            <slot name="description">{this.description}</slot>
           </div>
         </div>
-      </le-component>
+      </Host>
     );
   }
 }

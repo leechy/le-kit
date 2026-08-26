@@ -216,20 +216,11 @@ export class LeBox {
 
     return (
       <Host style={hostStyle} class={hostClass}>
-        <le-component component="le-box">
-          <div class="box" part="box">
-            <div class="content" part="content" style={contentStyle}>
-              <le-slot
-                name=""
-                description="Content inside this flex item"
-                type="slot"
-                allowed-components="le-text,le-card,le-button,le-stack,le-box"
-              >
-                <slot></slot>
-              </le-slot>
-            </div>
+        <div class="box" part="box">
+          <div class="content" part="content" style={contentStyle}>
+            <slot></slot>
           </div>
-        </le-component>
+        </div>
       </Host>
     );
   }

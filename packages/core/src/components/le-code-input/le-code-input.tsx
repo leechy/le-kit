@@ -1,4 +1,4 @@
-import { Component, Prop, Event, EventEmitter, State, h, Element, Watch } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, State, h, Element, Watch, Host } from '@stencil/core';
 import { classnames } from '../../utils/utils';
 
 /**
@@ -219,10 +219,7 @@ export class LeCodeInput {
 
   render() {
     return (
-      <le-component
-        component="le-code-input"
-        hostClass={classnames({ 'disabled': this.disabled, 'has-error': this.error })}
-      >
+      <Host class={classnames({ 'disabled': this.disabled, 'has-error': this.error })}>
         <div class="le-code-input-wrapper">
           {this.label && (
             <label class="le-input-label" htmlFor={this.name}>
@@ -258,13 +255,11 @@ export class LeCodeInput {
 
           {!this.error && (
             <div class="le-input-description">
-              <le-slot name="description" type="text" tag="p" label="Description">
-                <slot name="description">{this.description}</slot>
-              </le-slot>
+              <slot name="description">{this.description}</slot>
             </div>
           )}
         </div>
-      </le-component>
+      </Host>
     );
   }
 }

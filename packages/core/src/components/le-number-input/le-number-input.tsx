@@ -1,4 +1,4 @@
-import { Component, Prop, Event, EventEmitter, State, h, Element, Watch } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, State, h, Element, Watch, Host } from '@stencil/core';
 import { classnames, observeNamedSlotPresence, slotHasContent } from '../../utils/utils';
 
 /**
@@ -457,7 +457,7 @@ export class LeNumberInput {
     const isSpinner = this.controls === 'spinner';
 
     return (
-      <le-component component="le-number-input" hostClass={classnames({ disabled: this.disabled })}>
+      <Host class={classnames({ disabled: this.disabled })}>
         <div class="le-input-wrapper">
           {this.label && (
             <label class="le-input-label" htmlFor={this.name}>
@@ -587,12 +587,10 @@ export class LeNumberInput {
           {!this.isValid && <div class="le-input-error">{this.validationMessage}</div>}
 
           <div class="le-input-description">
-            <le-slot name="description" type="text" tag="p" label="Description">
-              <slot name="description"></slot>
-            </le-slot>
+            <slot name="description"></slot>
           </div>
         </div>
-      </le-component>
+      </Host>
     );
   }
 }

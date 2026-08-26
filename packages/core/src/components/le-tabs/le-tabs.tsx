@@ -8,6 +8,7 @@ import {
   Element,
   Watch,
   Listen,
+  Host,
 } from '@stencil/core';
 import { LeOption, LeOptionValue, LeOptionSelectDetail } from '../../types/options';
 import { classnames } from '../../utils/utils';
@@ -367,7 +368,7 @@ export class LeTabs {
           : 'bottom';
 
     return (
-      <le-component component="le-tabs" hostClass={classnames(classes)}>
+      <Host class={classnames(classes)}>
         <div class={classes}>
           <div
             class={{
@@ -417,14 +418,7 @@ export class LeTabs {
           <div class="panels" part="panels">
             {isDeclarativeMode ? (
               // Declarative mode - render slot for le-tab-panel children
-              <le-slot
-                name=""
-                description="Tab panels"
-                type="slot"
-                allowedComponents="le-tab-panel"
-              >
-                <slot></slot>
-              </le-slot>
+              <slot></slot>
             ) : (
               // Programmatic mode - render named slots
               tabConfigs.map(config => {
@@ -453,7 +447,7 @@ export class LeTabs {
             )}
           </div>
         </div>
-      </le-component>
+      </Host>
     );
   }
 }

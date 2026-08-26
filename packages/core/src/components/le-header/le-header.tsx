@@ -372,73 +372,42 @@ export class LeHeader {
           this.scheduleUpdate(true);
         }}
       >
-        <le-component component="le-header">
-          <header
-            class="header"
-            part="header"
-            role="banner"
-            ref={el => {
-              const next = el as HTMLElement;
-              if (this.headerEl === next) return;
-              this.headerEl = next;
-              this.setupHeaderResizeObserver();
-              this.scheduleMeasure(true);
-            }}
-          >
-            <div class="inner" part="inner">
-              <div class="row" part="row">
-                <div class="start" part="start">
-                  <le-slot
-                    name="start"
-                    label="Start"
-                    description="Logo / back button / nav"
-                    allowed-components="le-button,le-text,le-tag,le-box,le-stack"
-                  >
-                    <slot name="start"></slot>
-                  </le-slot>
-                </div>
-
-                {this.layout === 'default' && (
-                  <div class="title" part="title">
-                    <le-slot
-                      name="title"
-                      label="Title"
-                      description="Header title"
-                      type="text"
-                      tag="span"
-                    >
-                      <span class="title-slot" part="title">
-                        <slot name="title"></slot>
-                      </span>
-                    </le-slot>
-                  </div>
-                )}
-
-                <div class="end" part="end">
-                  <le-slot
-                    name="end"
-                    label="End"
-                    description="Actions"
-                    allowed-components="le-button,le-text,le-tag,le-box,le-stack"
-                  >
-                    <slot name="end"></slot>
-                  </le-slot>
-                </div>
+        <header
+          class="header"
+          part="header"
+          role="banner"
+          ref={el => {
+            const next = el as HTMLElement;
+            if (this.headerEl === next) return;
+            this.headerEl = next;
+            this.setupHeaderResizeObserver();
+            this.scheduleMeasure(true);
+          }}
+        >
+          <div class="inner" part="inner">
+            <div class="row" part="row">
+              <div class="start" part="start">
+                <slot name="start"></slot>
               </div>
 
-              <div class="secondary" part="secondary">
-                <le-slot
-                  name=""
-                  label="Secondary"
-                  description="Secondary row content"
-                  allowed-components="le-tabs,le-tab-bar,le-select,le-combobox,le-text,le-stack,le-box"
-                >
-                  <slot></slot>
-                </le-slot>
+              {this.layout === 'default' && (
+                <div class="title" part="title">
+                  <span class="title-slot" part="title">
+                    <slot name="title"></slot>
+                  </span>
+                </div>
+              )}
+
+              <div class="end" part="end">
+                <slot name="end"></slot>
               </div>
             </div>
-          </header>
-        </le-component>
+
+            <div class="secondary" part="secondary">
+              <slot></slot>
+            </div>
+          </div>
+        </header>
       </Host>
     );
   }

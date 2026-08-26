@@ -6,7 +6,6 @@ import {
   Fragment,
   Event,
   EventEmitter,
-  Host,
   Method,
 } from '@stencil/core';
 import { classnames } from '../../utils/utils';
@@ -190,48 +189,36 @@ export class LeTab {
       : { disabled: this.disabled };
 
     return (
-      <Host>
-        <le-component component="le-tab">
-          <TagType
-            class={classnames('le-tab-container', `le-tab-align-${this.align}`, classes)}
-            part="button"
-            {...attrs}
-            onClick={this.handleClick}
-            tabIndex={this.focusable ? 0 : -1}
-          >
-            {this.icon !== undefined ? (
-              <div class="icon-only">
-                <div class="icon">{this.icon}</div>
-                {this.showLabel && <span class="icon-label">{this.label}</span>}
-              </div>
-            ) : (
-              <Fragment>
-                <span class="le-tab-label">
-                  {this.iconStart && (
-                    <span class="icon-start" part="icon-start">
-                      {this.iconStart}
-                    </span>
-                  )}
-                  <le-slot
-                    name=""
-                    description="Tab text"
-                    type="text"
-                    class="content"
-                    part="content"
-                  >
-                    <slot>{this.label}</slot>
-                  </le-slot>
+      <TagType
+        class={classnames('le-tab-container', `le-tab-align-${this.align}`, classes)}
+        part="button"
+        {...attrs}
+        onClick={this.handleClick}
+        tabIndex={this.focusable ? 0 : -1}
+      >
+        {this.icon !== undefined ? (
+          <div class="icon-only">
+            <div class="icon">{this.icon}</div>
+            {this.showLabel && <span class="icon-label">{this.label}</span>}
+          </div>
+        ) : (
+          <Fragment>
+            <span class="le-tab-label">
+              {this.iconStart && (
+                <span class="icon-start" part="icon-start">
+                  {this.iconStart}
                 </span>
-                {this.iconEnd && (
-                  <span class="icon-end" part="icon-end">
-                    {this.iconEnd}
-                  </span>
-                )}
-              </Fragment>
+              )}
+              <slot>{this.label}</slot>
+            </span>
+            {this.iconEnd && (
+              <span class="icon-end" part="icon-end">
+                {this.iconEnd}
+              </span>
             )}
-          </TagType>
-        </le-component>
-      </Host>
+          </Fragment>
+        )}
+      </TagType>
     );
   }
 }

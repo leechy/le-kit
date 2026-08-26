@@ -5,17 +5,19 @@
 :host {
   display: inline-flex;
   vertical-align: middle;
+  align-self: center;
   transform-origin: center center;
   max-width: 100%;
 
   /* Component-specific tokens */
   --le-button-border-radius: var(--le-radius-md);
   --le-button-padding-x: var(--le-spacing-3);
-  --le-button-padding-y: var(--le-spacing-1);
+  --le-button-padding-y: var(--le-spacing-2);
   --le-button-padding: var(--le-button-padding-y) var(--le-button-padding-x);
   --le-button-small-padding: 0.25rem;
   --le-button-font-size: var(--le-font-size-md);
   --le-button-font-weight: var(--le-font-weight-medium);
+  --le-button-content-min-height: var(--le-button-font-size);
   --le-button-transition: var(--le-transition-fast) var(--le-transition-easing, ease-in-out);
   --le-transition-easing: ease-in-out;
   --le-button-icon-aspect-ratio: 1;
@@ -111,6 +113,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--le-spacing-2);
+  min-height: var(--le-button-content-min-height);
 }
 
 /* ===========================================
@@ -288,7 +291,7 @@
 
 /* Icon only */
 :host(.icon-only) .le-button-container {
-  padding: var(--le-button-icon-only-padding, 0.33rem);
+  padding: var(--le-button-icon-only-padding, var(--le-spacing-2));
   aspect-ratio: var(--le-button-icon-aspect-ratio, 1);
 }
 
@@ -359,7 +362,7 @@
 }
 
 span.icon-only.is-visible {
-  width: calc(1.1em);
+  width: calc(1em);
   line-height: 0.5em;
 }
 
@@ -369,8 +372,6 @@ span.icon-only.is-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1.125em;
-  height: 1.125em;
 }
 
 /* ===========================================

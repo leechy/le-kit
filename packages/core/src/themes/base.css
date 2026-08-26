@@ -93,7 +93,7 @@
   --le-controls-cursor: pointer; /* default */
 
   /* Icons scale for the controls like buttons, menu items, etc. */
-  --le-controls-icon-scale: 1.25;
+  --le-controls-icon-scale: 1.5;
 
   /* ============================================
    * TRANSITIONS

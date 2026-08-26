@@ -294,6 +294,10 @@
   min-width: var(--le-nav-toggle-size);
 }
 
+.nav-icon-inner {
+  text-box: trim-end ex alphabetic;
+}
+
 .nav-icon-end {
   margin-left: auto;
 }

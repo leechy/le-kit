@@ -557,7 +557,7 @@
 
     <h3>3. Hierarchical Collapsible Rows (&lt;le-list&gt; with Nested Children, Actions &amp; &lt;le-collapse&gt;)</h3>
     <p>Displays nested organizational data with chevron toggles, depth indentation, row actions with action chevrons, and smooth sliding animations.</p>
-    <le-list id="demo-nested-list" column-visibility-toggle show-action-chevron column-reorder selection="multiple"></le-list>
+    <le-list id="demo-nested-list" column-visibility-toggle column-reorder selection="single"></le-list>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const nestedList = document.getElementById('demo-nested-list');
@@ -1223,7 +1223,7 @@
             <le-button variant="clear" label="Share" onclick="alert('Share')">Share</le-button>
             <le-button variant="clear" label="Duplicate" onclick="alert('Duplicate')">Duplicate</le-button>
             <le-button color="danger" collapsible priority="50">
-              <le-icon name="delete" slot="icon-start" size="20"></le-icon>
+              <le-icon name="delete" slot="icon-start"></le-icon>
               Delete
             </le-button>
 

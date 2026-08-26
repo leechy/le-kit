@@ -1,4 +1,4 @@
-import { Component, Prop, h, Element } from '@stencil/core';
+import { Component, Prop, h, Element, Host } from '@stencil/core';
 import { classnames } from '../../utils/utils';
 
 /**
@@ -46,42 +46,21 @@ export class LeCard {
 
   render() {
     return (
-      <le-component
-        component="le-card"
-        hostClass={classnames(`variant-${this.variant}`, { interactive: this.interactive })}
-      >
+      <Host class={classnames(`variant-${this.variant}`, { interactive: this.interactive })}>
         <div class="card" part="card">
           <div class="card-header" part="header">
-            <le-slot name="header" label="Header" description="Card title" type="text" tag="h3">
-              <slot name="header"></slot>
-            </le-slot>
+            <slot name="header"></slot>
           </div>
 
           <div class="card-content" part="content">
-            <le-slot
-              name=""
-              label="Content"
-              description="Card content"
-              type="textarea"
-              tag="p"
-              required
-            >
-              <slot></slot>
-            </le-slot>
+            <slot></slot>
           </div>
 
           <div class="card-footer" part="footer">
-            <le-slot
-              name="footer"
-              label="Footer"
-              description="Card footer with actions"
-              allowed-components="le-button,le-link"
-            >
-              <slot name="footer"></slot>
-            </le-slot>
+            <slot name="footer"></slot>
           </div>
         </div>
-      </le-component>
+      </Host>
     );
   }
 }

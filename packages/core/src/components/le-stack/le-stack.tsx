@@ -1,4 +1,4 @@
-import { Component, Prop, h, Element } from '@stencil/core';
+import { Component, Prop, h, Element, Host } from '@stencil/core';
 import { classnames } from '../../utils/utils';
 
 /**
@@ -164,22 +164,23 @@ export class LeStack {
     });
 
     // Slot style for admin mode - make items display in the same direction
-    const slotStyle = `display: flex; flex-direction: ${this.getFlexDirection()}; gap: ${this.gap || 'var(--le-space-md)'}; flex-wrap: ${this.wrap ? 'wrap' : 'nowrap'}; justify-content: ${this.getJustifyContent()}; align-items: ${this.getAlignItems()};`;
+    const slotStyle = {
+      display: 'flex',
+      flexDirection: this.getFlexDirection(),
+      gap: this.gap || 'var(--le-space-md)',
+      flexWrap: this.wrap ? 'wrap' : 'nowrap',
+      justifyContent: this.getJustifyContent(),
+      alignItems: this.getAlignItems(),
+    };
 
     return (
-      <le-component component="le-stack" hostClass={hostClass}>
+      <Host class={hostClass}>
         <div class="stack" part="stack" style={style}>
-          <le-slot
-            name=""
-            description={`Items arranged ${this.direction}ly${this.maxItems ? ` (max ${this.maxItems})` : ''}`}
-            type="slot"
-            allowed-components="le-text,le-box,le-card,le-button,le-stack"
-            slotStyle={slotStyle}
-          >
+          <span style={slotStyle}>
             <slot></slot>
-          </le-slot>
+          </span>
         </div>
-      </le-component>
+      </Host>
     );
   }
 }

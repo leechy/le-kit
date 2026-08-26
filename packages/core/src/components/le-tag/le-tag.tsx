@@ -115,37 +115,33 @@ export class LeTag {
 
   render() {
     return (
-      <le-component component="le-tag">
-        <span
-          class={classnames('tag', {
-            'tag-dismissible': this.dismissible,
-          })}
-        >
-          {this.renderIcon()}
-          <span class="tag-label">
-            <le-slot name="" tag="span" type="text">
-              <slot>{this.label}</slot>
-            </le-slot>
-          </span>
-          {this.dismissible && (
-            <le-button
-              type="button"
-              variant="clear"
-              class="tag-dismiss"
-              onClick={this.handleDismiss}
-              disabled={this.disabled}
-              aria-label="Remove"
-              color={this.color !== 'default' ? this.color : 'transparent'}
-            >
-              <le-icon
-                slot="icon-only"
-                name="clear"
-                size={this.size === 'small' ? 12 : this.size === 'large' ? 16 : 14}
-              ></le-icon>
-            </le-button>
-          )}
+      <span
+        class={classnames('tag', {
+          'tag-dismissible': this.dismissible,
+        })}
+      >
+        {this.renderIcon()}
+        <span class="tag-label">
+          <slot>{this.label}</slot>
         </span>
-      </le-component>
+        {this.dismissible && (
+          <le-button
+            type="button"
+            variant="clear"
+            class="tag-dismiss"
+            onClick={this.handleDismiss}
+            disabled={this.disabled}
+            aria-label="Remove"
+            color={this.color !== 'default' ? this.color : 'transparent'}
+          >
+            <le-icon
+              slot="icon-only"
+              name="clear"
+              size={this.size === 'small' ? 12 : this.size === 'large' ? 16 : 14}
+            ></le-icon>
+          </le-button>
+        )}
+      </span>
     );
   }
 }

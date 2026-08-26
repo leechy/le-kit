@@ -61,7 +61,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: var(--le-button-icons-gap, --le-spacing-3);
+  gap: var(--le-button-icons-gap, var(--le-spacing-2));
   box-sizing: border-box;
   width: 100%;
   padding: var(--le-button-padding);
@@ -318,6 +318,9 @@
 
 /* Make label collapse feel as snappy as toolbar item collapse. */
 .le-button-label-visibility {
+  /* Remove extra space from top and bottom of the text to center it more visually */
+  text-box: trim-both cap alphabetic;
+
   --le-motion-visibility-duration: var(--le-transition-fast);
   --le-motion-visibility-easing: var(--le-transition-easing, ease-in-out);
   --le-motion-visibility-scale-from: 1;

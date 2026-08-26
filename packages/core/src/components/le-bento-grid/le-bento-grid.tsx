@@ -90,14 +90,14 @@ export class LeBentoGrid {
 
   render() {
     const style: Record<string, string> = {};
-    const slotStyle = [
-      'display: grid',
-      'grid-auto-flow: dense',
-      'grid-template-columns: repeat(auto-fill, minmax(var(--le-bento-col-min, 200px), var(--le-bento-col-max, 250px)))',
-      'grid-auto-rows: var(--le-bento-row-height, 110px)',
-      'gap: var(--le-bento-gap, 12px)',
-      'width: 100%',
-    ].join('; ');
+    const slotStyle = {
+      display: 'grid',
+      gridAutoFlow: 'dense',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(var(--le-bento-col-min, 200px), var(--le-bento-col-max, 250px)))',
+      gridAutoRows: 'var(--le-bento-row-height, 110px)',
+      gap: 'var(--le-bento-gap, 12px)',
+      width: '100%',
+    };
 
     if (this.columnMinWidth !== undefined) style['--le-bento-col-min'] = `${this.columnMinWidth}px`;
     if (this.columnMaxWidth !== undefined) style['--le-bento-col-max'] = `${this.columnMaxWidth}px`;
@@ -109,19 +109,9 @@ export class LeBentoGrid {
 
     return (
       <Host style={style}>
-        <le-component component="le-bento-grid">
-          <div class="bento-grid" part="grid">
-            <le-slot
-              name=""
-              description="Bento tiles"
-              type="slot"
-              allowed-components="le-bento-tile,le-card,le-box,le-button,le-stack,le-text"
-              slotStyle={slotStyle}
-            >
-              <slot />
-            </le-slot>
-          </div>
-        </le-component>
+        <div class="bento-grid" part="grid" style={slotStyle}>
+          <slot />
+        </div>
       </Host>
     );
   }

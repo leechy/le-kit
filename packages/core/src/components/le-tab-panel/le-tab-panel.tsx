@@ -119,22 +119,18 @@ export class LeTabPanel {
     const shouldRender = this.shouldRenderContent();
 
     return (
-      <le-component component="le-tab-panel">
-        <div
-          class={{
-            'tab-panel': true,
-            'active': this.active,
-            'lazy-hidden': this.lazy && !this.active,
-          }}
-          role="tabpanel"
-          aria-hidden={!this.active ? 'true' : undefined}
-          tabIndex={this.active ? 0 : -1}
-        >
-          <le-slot name="" description="Tab panel content" type="slot">
-            {shouldRender && <slot></slot>}
-          </le-slot>
-        </div>
-      </le-component>
+      <div
+        class={{
+          'tab-panel': true,
+          'active': this.active,
+          'lazy-hidden': this.lazy && !this.active,
+        }}
+        role="tabpanel"
+        aria-hidden={!this.active ? 'true' : undefined}
+        tabIndex={this.active ? 0 : -1}
+      >
+        {shouldRender && <slot></slot>}
+      </div>
     );
   }
 }

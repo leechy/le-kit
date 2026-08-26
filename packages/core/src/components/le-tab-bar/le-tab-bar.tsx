@@ -307,46 +307,42 @@ export class LeTabBar {
 
     return (
       <Host class={classes}>
-        <le-component component="le-tab-bar">
-          <div
-            class="tablist"
-            role="tablist"
-            aria-orientation="horizontal"
-            part="tablist"
-            onKeyDown={this.handleKeyDown}
-          >
-            <le-slot name="" type="slot" allowedComponents="le-tab">
-              {tabConfigs.map(tab => {
-                const value = this.getTabValue(tab);
-                const isSelected = value === selected;
+        <div
+          class="tablist"
+          role="tablist"
+          aria-orientation="horizontal"
+          part="tablist"
+          onKeyDown={this.handleKeyDown}
+        >
+          {tabConfigs.map(tab => {
+            const value = this.getTabValue(tab);
+            const isSelected = value === selected;
 
-                return (
-                  <le-tab
-                    key={value}
-                    class="tab"
-                    role="tab"
-                    variant="icon-only"
-                    label={tab.label}
-                    value={tab.value}
-                    icon={tab.icon}
-                    href={tab.href}
-                    selected={isSelected}
-                    disabled={tab.disabled}
-                    showLabel={this.showLabels}
-                    size={size}
-                    part={isSelected ? 'tab tab-active' : 'tab'}
-                    aria-selected={isSelected ? 'true' : 'false'}
-                    aria-disabled={tab.disabled ? 'true' : undefined}
-                    tabIndex={-1}
-                    onClick={() => this.handleTabClick(tab)}
-                  >
-                    <span class="tab-label">{tab.label}</span>
-                  </le-tab>
-                );
-              })}
-            </le-slot>
-          </div>
-        </le-component>
+            return (
+              <le-tab
+                key={value}
+                class="tab"
+                role="tab"
+                variant="icon-only"
+                label={tab.label}
+                value={tab.value}
+                icon={tab.icon}
+                href={tab.href}
+                selected={isSelected}
+                disabled={tab.disabled}
+                showLabel={this.showLabels}
+                size={size}
+                part={isSelected ? 'tab tab-active' : 'tab'}
+                aria-selected={isSelected ? 'true' : 'false'}
+                aria-disabled={tab.disabled ? 'true' : undefined}
+                tabIndex={-1}
+                onClick={() => this.handleTabClick(tab)}
+              >
+                <span class="tab-label">{tab.label}</span>
+              </le-tab>
+            );
+          })}
+        </div>
       </Host>
     );
   }

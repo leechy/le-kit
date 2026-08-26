@@ -463,18 +463,10 @@ export class LeButton {
                 </slot>
               </span>
               <le-visibility
-                class="le-button-label-visibility"
+                class="le-button-label-visibility content"
                 state={isCollapsedToIcon ? 'collapsed' : 'visible'}
               >
-                <le-slot
-                  name=""
-                  description="Button text"
-                  type="text"
-                  class="content"
-                  part="content"
-                >
-                  <slot></slot>
-                </le-slot>
+                <slot></slot>
               </le-visibility>
             </span>
             <span
@@ -498,19 +490,17 @@ export class LeButton {
 
     return (
       <Host class={classes}>
-        <le-component component="le-button">
-          {shouldRenderTooltip ? (
-            <le-tooltip
-              text={tooltipText}
-              placement={this.tooltipPosition}
-              disabled={tooltipDisabled}
-            >
-              {renderButton()}
-            </le-tooltip>
-          ) : (
-            renderButton()
-          )}
-        </le-component>
+        {shouldRenderTooltip ? (
+          <le-tooltip
+            text={tooltipText}
+            placement={this.tooltipPosition}
+            disabled={tooltipDisabled}
+          >
+            {renderButton()}
+          </le-tooltip>
+        ) : (
+          renderButton()
+        )}
       </Host>
     );
   }

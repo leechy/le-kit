@@ -329,9 +329,7 @@ export class LePopup {
         )}
 
         {/* Default slot for custom content */}
-        <le-slot name="" tag="div" description="Custom popup content" type="slot">
-          <slot></slot>
-        </le-slot>
+        <slot></slot>
       </div>
     );
   }

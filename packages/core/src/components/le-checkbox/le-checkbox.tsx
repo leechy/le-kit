@@ -1,4 +1,4 @@
-import { Component, Prop, Event, EventEmitter, h, Element } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, h, Element, Host } from '@stencil/core';
 import { classnames } from '../../utils/utils';
 
 /**
@@ -82,7 +82,7 @@ export class LeCheckbox {
 
   render() {
     return (
-      <le-component component="le-checkbox" hostClass={classnames({ disabled: this.disabled })}>
+      <Host class={classnames({ disabled: this.disabled })}>
         <div class="le-checkbox-wrapper">
           <label class="le-checkbox-label" htmlFor={this.id}>
             <span class="le-checkbox-input">
@@ -97,19 +97,15 @@ export class LeCheckbox {
               />
             </span>
             <span class="le-checkbox-text">
-              <le-slot name="" type="text" tag="span">
-                <slot></slot>
-              </le-slot>
+              <slot></slot>
             </span>
           </label>
 
           <div class="le-checkbox-description">
-            <le-slot name="description" type="text" tag="div" label="Description">
-              <slot name="description"></slot>
-            </le-slot>
+            <slot name="description"></slot>
           </div>
         </div>
-      </le-component>
+      </Host>
     );
   }
 }

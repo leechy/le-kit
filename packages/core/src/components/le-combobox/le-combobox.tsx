@@ -9,6 +9,7 @@ import {
   Watch,
   h,
   Listen,
+  Host,
 } from '@stencil/core';
 import { LeOption, LeOptionValue, LeOptionSelectDetail } from '../../types/options';
 import { buildDeclarativeOptionsFromChildren, classnames, parseOptionInput } from '../../utils/utils';
@@ -337,7 +338,7 @@ export class LeCombobox {
     const hasValue = this.inputValue.length > 0;
 
     return (
-      <le-component component="le-combobox">
+      <Host>
         <le-dropdown-base
           ref={el => (this.dropdownEl = el)}
           options={this.parsedOptions}
@@ -393,7 +394,7 @@ export class LeCombobox {
         <div style={{ display: 'none' }}>
           <slot></slot>
         </div>
-      </le-component>
+      </Host>
     );
   }
 }

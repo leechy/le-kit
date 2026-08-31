@@ -9,6 +9,7 @@ import {
   Watch,
   Listen,
   h,
+  Host,
 } from '@stencil/core';
 import { LeOption, LeOptionValue, LeOptionSelectDetail } from '../../types/options';
 import {
@@ -293,7 +294,7 @@ export class LeSelect {
     const hasValue = this.selectedOption !== undefined;
 
     return (
-      <le-component component="le-select">
+      <Host>
         <le-dropdown-base
           ref={el => (this.dropdownEl = el)}
           options={this.parsedOptions}
@@ -343,7 +344,7 @@ export class LeSelect {
 
         {/* Hidden input for form submission */}
         {this.name && <input type="hidden" name={this.name} value={this.value?.toString() ?? ''} />}
-      </le-component>
+      </Host>
     );
   }
 }

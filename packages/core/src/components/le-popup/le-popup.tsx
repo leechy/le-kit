@@ -382,13 +382,11 @@ export class LePopup {
         ref={el => (this.dialogEl = el)}
         onClick={this.handleBackdropClick}
       >
-        <le-component component="le-popup">
-          <div class="le-popup-container" part="container">
-            {this.renderHeader()}
-            {this.renderBody()}
-            {this.renderFooter()}
-          </div>
-        </le-component>
+        <div class="le-popup-container" part="container">
+          {this.renderHeader()}
+          {this.renderBody()}
+          {this.renderFooter()}
+        </div>
       </dialog>
     );
   }

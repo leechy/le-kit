@@ -158,7 +158,6 @@ Type: `Promise<LeOption>`
 | Part           | Description |
 | -------------- | ----------- |
 | `"button"`     |             |
-| `"content"`    |             |
 | `"icon-end"`   |             |
 | `"icon-only"`  |             |
 | `"icon-start"` |             |
@@ -184,8 +183,6 @@ Type: `Promise<LeOption>`
 
 - [le-icon](../le-icon)
 - [le-visibility](../le-visibility)
-- [le-slot](../le-slot)
-- [le-component](../le-component)
 - [le-tooltip](../le-tooltip)
 
 ### Graph
@@ -193,24 +190,17 @@ Type: `Promise<LeOption>`
 graph TD;
   le-button --> le-icon
   le-button --> le-visibility
-  le-button --> le-slot
-  le-button --> le-component
   le-button --> le-tooltip
-  le-slot --> le-button
-  le-string-input --> le-button
-  le-component --> le-button
-  le-select --> le-button
-  le-dropdown-base --> le-icon
-  le-dropdown-base --> le-popover
-  le-checkbox --> le-component
-  le-checkbox --> le-slot
-  le-popup --> le-button
-  le-tooltip --> le-component
   le-breadcrumbs --> le-button
+  le-component --> le-button
   le-number-input --> le-button
   le-overflow-menu --> le-button
+  le-popup --> le-button
   le-preview-frame --> le-button
+  le-select --> le-button
   le-side-panel-toggle --> le-button
+  le-slot --> le-button
+  le-string-input --> le-button
   le-tag --> le-button
   style le-button fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -1763,34 +1763,30 @@ export class LeNavigation {
     if (this.orientation === 'horizontal') {
       return (
         <Host>
-          <le-component component="le-navigation">
-            {this.renderHorizontal()}
-            <div style={{ display: 'none' }}>
-              <slot></slot>
-            </div>
-          </le-component>
+          {this.renderHorizontal()}
+          <div style={{ display: 'none' }}>
+            <slot></slot>
+          </div>
         </Host>
       );
     }
 
     return (
       <Host>
-        <le-component component="le-navigation">
-          <div class="nav-vertical-wrapper">
-            {this.renderVerticalList(items, {
-              depth: 0,
-              pathPrefix: '',
-              leadingToggleAncestors: 0,
-              searchable: this.searchable,
-              searchQuery: this.searchQuery,
-              searchPlaceholder: this.searchPlaceholder,
-              emptyText: this.emptyText,
-            })}
-            <div style={{ display: 'none' }}>
-              <slot></slot>
-            </div>
+        <div class="nav-vertical-wrapper">
+          {this.renderVerticalList(items, {
+            depth: 0,
+            pathPrefix: '',
+            leadingToggleAncestors: 0,
+            searchable: this.searchable,
+            searchQuery: this.searchQuery,
+            searchPlaceholder: this.searchPlaceholder,
+            emptyText: this.emptyText,
+          })}
+          <div style={{ display: 'none' }}>
+            <slot></slot>
           </div>
-        </le-component>
+        </div>
       </Host>
     );
   }

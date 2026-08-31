@@ -67,40 +67,22 @@ A text input component with support for labels, descriptions, icons, and externa
 
 ### Depends on
 
-- [le-component](../le-component)
 - [le-button](../le-button)
 - [le-icon](../le-icon)
-- [le-slot](../le-slot)
 
 ### Graph
 ```mermaid
 graph TD;
-  le-string-input --> le-component
   le-string-input --> le-button
   le-string-input --> le-icon
-  le-string-input --> le-slot
-  le-component --> le-string-input
   le-button --> le-icon
   le-button --> le-visibility
-  le-button --> le-slot
-  le-button --> le-component
   le-button --> le-tooltip
-  le-slot --> le-string-input
-  le-tooltip --> le-component
-  le-select --> le-icon
-  le-select --> le-component
-  le-select --> le-dropdown-base
-  le-select --> le-button
-  le-dropdown-base --> le-icon
-  le-dropdown-base --> le-popover
-  le-checkbox --> le-component
-  le-checkbox --> le-slot
-  le-popup --> le-slot
-  le-popup --> le-button
-  le-popup --> le-component
   le-combobox --> le-string-input
+  le-component --> le-string-input
   le-multiselect --> le-string-input
   le-navigation --> le-string-input
+  le-slot --> le-string-input
   style le-string-input fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

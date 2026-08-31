@@ -77,7 +77,6 @@ Type: `Promise<void>`
 ### Depends on
 
 - [le-tag](../le-tag)
-- [le-component](../le-component)
 - [le-dropdown-base](../le-dropdown-base)
 - [le-icon](../le-icon)
 - [le-string-input](../le-string-input)
@@ -86,44 +85,18 @@ Type: `Promise<void>`
 ```mermaid
 graph TD;
   le-multiselect --> le-tag
-  le-multiselect --> le-component
   le-multiselect --> le-dropdown-base
   le-multiselect --> le-icon
   le-multiselect --> le-string-input
-  le-tag --> le-component
-  le-tag --> le-slot
   le-tag --> le-button
   le-tag --> le-icon
-  le-component --> le-button
-  le-component --> le-select
-  le-component --> le-checkbox
-  le-component --> le-string-input
-  le-component --> le-popover
-  le-component --> le-popup
   le-button --> le-icon
   le-button --> le-visibility
-  le-button --> le-slot
-  le-button --> le-component
   le-button --> le-tooltip
-  le-slot --> le-popover
-  le-slot --> le-button
-  le-slot --> le-string-input
-  le-string-input --> le-component
-  le-string-input --> le-button
-  le-string-input --> le-icon
-  le-string-input --> le-slot
-  le-tooltip --> le-component
-  le-select --> le-icon
-  le-select --> le-component
-  le-select --> le-dropdown-base
-  le-select --> le-button
   le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
-  le-checkbox --> le-component
-  le-checkbox --> le-slot
-  le-popup --> le-slot
-  le-popup --> le-button
-  le-popup --> le-component
+  le-string-input --> le-button
+  le-string-input --> le-icon
   style le-multiselect fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

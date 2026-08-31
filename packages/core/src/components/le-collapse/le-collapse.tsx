@@ -82,11 +82,9 @@ export class LeCollapse {
   render() {
     return (
       <Host data-open={this.shouldBeOpen() ? 'true' : 'false'}>
-        <le-component component="le-collapse">
-          <div class={{ 'region': true, 'scroll-down': this.scrollDown }} part="region">
-            <slot></slot>
-          </div>
-        </le-component>
+        <div class={{ 'region': true, 'scroll-down': this.scrollDown }} part="region">
+          <slot></slot>
+        </div>
       </Host>
     );
   }

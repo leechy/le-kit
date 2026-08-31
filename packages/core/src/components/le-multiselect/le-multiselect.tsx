@@ -9,6 +9,7 @@ import {
   Watch,
   Listen,
   h,
+  Host,
 } from '@stencil/core';
 import {
   LeOption,
@@ -437,7 +438,7 @@ export class LeMultiselect {
     const atMaxSelections = this.maxSelections && this.value.length >= this.maxSelections;
 
     return (
-      <le-component component="le-multiselect">
+      <Host>
         <le-dropdown-base
           ref={el => (this.dropdownEl = el)}
           options={this.effectiveOptions}
@@ -521,7 +522,7 @@ export class LeMultiselect {
         <div style={{ display: 'none' }}>
           <slot></slot>
         </div>
-      </le-component>
+      </Host>
     );
   }
 }

@@ -48,34 +48,6 @@ render() {
 
 ## Dependencies
 
-### Used by
-
- - [le-bento-grid](../le-bento-grid)
- - [le-box](../le-box)
- - [le-button](../le-button)
- - [le-button-group](../le-button-group)
- - [le-card](../le-card)
- - [le-checkbox](../le-checkbox)
- - [le-code-input](../le-code-input)
- - [le-collapse](../le-collapse)
- - [le-combobox](../le-combobox)
- - [le-header](../le-header)
- - [le-multiselect](../le-multiselect)
- - [le-navigation](../le-navigation)
- - [le-number-input](../le-number-input)
- - [le-popup](../le-popup)
- - [le-segmented-control](../le-segmented-control)
- - [le-select](../le-select)
- - [le-stack](../le-stack)
- - [le-string-input](../le-string-input)
- - [le-tab](../le-tab)
- - [le-tab-bar](../le-tab-bar)
- - [le-tab-panel](../le-tab-panel)
- - [le-tabs](../le-tabs)
- - [le-tag](../le-tag)
- - [le-text](../le-text)
- - [le-tooltip](../le-tooltip)
-
 ### Depends on
 
 - [le-button](../le-button)
@@ -94,36 +66,17 @@ graph TD;
   le-component --> le-string-input
   le-component --> le-popover
   le-component --> le-popup
-  le-button --> le-component
-  le-slot --> le-popover
-  le-slot --> le-button
-  le-slot --> le-string-input
-  le-string-input --> le-component
-  le-tooltip --> le-component
-  le-select --> le-component
+  le-button --> le-icon
+  le-button --> le-visibility
+  le-button --> le-tooltip
+  le-select --> le-icon
+  le-select --> le-dropdown-base
+  le-select --> le-button
   le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
-  le-checkbox --> le-component
-  le-popup --> le-component
-  le-bento-grid --> le-component
-  le-box --> le-component
-  le-button-group --> le-component
-  le-card --> le-component
-  le-code-input --> le-component
-  le-collapse --> le-component
-  le-combobox --> le-component
-  le-header --> le-component
-  le-multiselect --> le-component
-  le-navigation --> le-component
-  le-number-input --> le-component
-  le-segmented-control --> le-component
-  le-stack --> le-component
-  le-tab --> le-component
-  le-tab-bar --> le-component
-  le-tab-panel --> le-component
-  le-tabs --> le-component
-  le-tag --> le-component
-  le-text --> le-component
+  le-string-input --> le-button
+  le-string-input --> le-icon
+  le-popup --> le-button
   style le-component fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

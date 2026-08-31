@@ -481,31 +481,29 @@ export class LeText {
     if (this.adminMode) {
       return (
         <Host class="admin-mode">
-          <le-component component="le-text">
-            <div class="le-text-editor-wrapper">
-              {this.isFocused && this.renderToolbar()}
-              <Tag class={textClass} part="text" style={textStyle}>
-                <div
-                  ref={el => (this.editorRef = el)}
-                  class="le-text-editor"
-                  contentEditable={true}
-                  onInput={this.handleInput}
-                  onFocus={this.handleFocus}
-                  onBlur={this.handleBlur}
-                  onKeyUp={this.handleSelectionChange}
-                  onMouseUp={this.handleSelectionChange}
-                  innerHTML={this.content}
-                ></div>
-              </Tag>
-              {/* Hidden slot to receive light DOM content */}
-              <div class="hidden-slot">
-                <slot
-                  ref={el => (this.slotRef = el as HTMLSlotElement)}
-                  onSlotchange={() => this.readSlottedContent()}
-                ></slot>
-              </div>
+          <div class="le-text-editor-wrapper">
+            {this.isFocused && this.renderToolbar()}
+            <Tag class={textClass} part="text" style={textStyle}>
+              <div
+                ref={el => (this.editorRef = el)}
+                class="le-text-editor"
+                contentEditable={true}
+                onInput={this.handleInput}
+                onFocus={this.handleFocus}
+                onBlur={this.handleBlur}
+                onKeyUp={this.handleSelectionChange}
+                onMouseUp={this.handleSelectionChange}
+                innerHTML={this.content}
+              ></div>
+            </Tag>
+            {/* Hidden slot to receive light DOM content */}
+            <div class="hidden-slot">
+              <slot
+                ref={el => (this.slotRef = el as HTMLSlotElement)}
+                onSlotchange={() => this.readSlottedContent()}
+              ></slot>
             </div>
-          </le-component>
+          </div>
         </Host>
       );
     }

@@ -680,7 +680,7 @@
     </div>
 
     <div style="display: flex; justify-content: center; gap: var(--le-space-sm);">
-      <le-actions-sequence loop direction="alternate" loop-delay="3000" start-on="in-view" in-view-threshold="0.3"
+      <le-actions-sequence loop direction="alternate" loop-delay="3000" start-on="manual" in-view-threshold="0.3"
         debug="true" pause-on-hover="true" pause-on-interaction="true" steps='[
           { "target": "#demo-toolbar-frame", "action": "method", "name": "snapTo", "value": 320, "delay": 2000 },
           { "target": "#demo-toolbar", "action": "method", "name": "showOverflowMenu", "delay": 1000 },
@@ -693,8 +693,7 @@
           { "target": "#demo-toolbar-frame", "action": "method", "name": "snapTo", "value": 800, "delay": 2000 },
           { "target": "#demo-toolbar-frame", "action": "method", "name": "resetWidth", "delay": 2000 }
         ]'>
-        <le-preview-frame id="demo-toolbar-frame" min-width="200" min-height="56" padding="16" show-controls="width"
-          show-frame="hover">
+        <le-preview-frame id="demo-toolbar-frame" min-width="200" min-height="56" padding="16" show-controls="width">
           <!--
             debug-virtual-toolbar
             debug-pause-before-measure
@@ -1301,7 +1300,7 @@
           <label>Number Input (Stepper Controls):</label>
           <le-number-input name="weight" min="0" max="100" value="3" step="1" controls="stepper" label="Weight"
             style="max-width: 9rem;">
-            <le-select slot="icon-end" size="small" value="kg" variant="clear" hide-chevron>
+            <le-select slot="icon-end" value="kg" compact>
               <le-item value="kg">kg</le-item>
               <le-item value="lbs">lbs</le-item>
             </le-select>
@@ -1318,7 +1317,7 @@
           <label>Price Input (Spinner controls):</label>
           <le-number-input name="price" step="1" shift-step="100" alt-step="0.01" min="0" value="19.99"
             external-id="price-field" label="Price" controls="spinner">
-            <le-select slot="icon-end" size="small" value="$" variant="clear" hide-chevron>
+            <le-select slot="icon-end" value="$" compact>
               <le-item value="$">$</le-item>
               <le-item value="€">€</le-item>
               <le-item value="¥">¥</le-item>

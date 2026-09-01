@@ -11,6 +11,7 @@
 | ------------------ | -------------------- | ------------------------------------------ | ---------------------------------------- | ----------------------- |
 | `align`            | `align`              | Popover alignment relative to trigger.     | `"center" \| "end" \| "start"`           | `'end'`                 |
 | `disabled`         | `disabled`           | Disables trigger interactions.             | `boolean`                                | `false`                 |
+| `dragSelect`       | `drag-select`        | Whether to enable drag-select interaction. | `boolean`                                | `true`                  |
 | `icon`             | `icon`               | Fallback icon name for trigger.            | `string`                                 | `'ellipsis-horizontal'` |
 | `items`            | `items`              | List of menu items represented as options. | `LeOption[] \| string`                   | `[]`                    |
 | `minWidth`         | `min-width`          | Minimum popover width.                     | `string`                                 | `'160px'`               |

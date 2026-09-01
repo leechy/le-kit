@@ -104,6 +104,17 @@ export class LeCombobox {
   @Prop() emptyText: string = 'No results found';
 
   /**
+   * Whether the dropdown width should size automatically to its content rather than matching the trigger width.
+   */
+  @Prop({ reflect: true }) autoWidth: boolean = false;
+
+  /**
+   * Whether the dropdown should match the trigger width.
+   * Defaults to true. Setting autoWidth=true overrides this to false.
+   */
+  @Prop({ reflect: true }) matchTriggerWidth: boolean = true;
+
+  /**
    * Whether the dropdown is currently open.
    */
   @Prop({ mutable: true, reflect: true }) open: boolean = false;
@@ -348,6 +359,8 @@ export class LeCombobox {
           filterQuery={this.inputValue}
           emptyText={this.emptyText}
           fullWidth={this.fullWidth}
+          autoWidth={this.autoWidth}
+          matchTriggerWidth={this.autoWidth ? false : this.matchTriggerWidth}
           closeOnClickOutside={false}
           onLeOptionSelect={this.handleOptionSelect}
           onLeDropdownOpen={this.handleDropdownOpen}

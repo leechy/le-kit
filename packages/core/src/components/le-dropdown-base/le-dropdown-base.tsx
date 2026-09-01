@@ -8,7 +8,6 @@ import {
   Element,
   Watch,
   h,
-  Host,
 } from '@stencil/core';
 import { LeOption, LeOptionValue, LeOptionSelectDetail } from '../../types/options';
 import { generateId } from '../../utils/utils';
@@ -103,6 +102,21 @@ export class LeDropdownBase {
   @Prop() size: 'small' | 'medium' | 'large' = 'medium';
 
   /**
+   * Whether to enable drag-select interaction.
+   */
+  @Prop() dragSelect: boolean = true;
+
+  /**
+   * Whether the dropdown width should match the trigger width.
+   */
+  @Prop() matchTriggerWidth: boolean = true;
+
+  /**
+   * Whether the dropdown should size automatically to its content rather than matching the trigger width.
+   */
+  @Prop({ reflect: true }) autoWidth: boolean = false;
+
+  /**
    * Whether to close the dropdown when clicking outside.
    * (used to support combobox with input focus)
    */
@@ -128,7 +142,6 @@ export class LeDropdownBase {
 
   private popoverEl?: HTMLLePopoverElement;
   private listEl?: HTMLElement;
-  private triggerWidth: number = 0;
   private typeaheadBuffer: string = '';
   private typeaheadResetTimer?: ReturnType<typeof setTimeout>;
   private readonly typeaheadResetMs: number = 750;
@@ -422,12 +435,6 @@ export class LeDropdownBase {
   async show() {
     if (this.disabled) return;
 
-    // Capture trigger width for matching dropdown width
-    const trigger = this.el.querySelector('[slot="trigger"]') as HTMLElement;
-    if (trigger) {
-      this.triggerWidth = trigger.offsetWidth;
-    }
-
     await this.popoverEl?.show();
   }
 
@@ -564,37 +571,36 @@ export class LeDropdownBase {
   }
 
   render() {
-    const dropdownWidth = this.width || (this.triggerWidth ? `${this.triggerWidth}px` : undefined);
-
     return (
-      <Host>
-        <le-popover
-          ref={el => (this.popoverEl = el)}
-          position="bottom"
-          align="start"
-          showClose={false}
-          closeOnClickOutside={this.closeOnClickOutside}
-          closeOnEscape={true}
-          offset={4}
-          width={this.size === 'small' ? undefined : dropdownWidth}
-          minWidth={this.size === 'small' ? "0" : "150px"}
-          trigger-full-width={this.fullWidth}
-          onLePopoverOpen={this.handlePopoverOpen}
-          onLePopoverClose={this.handlePopoverClose}
+      <le-popover
+        ref={el => (this.popoverEl = el)}
+        position="bottom"
+        align="start"
+        showClose={false}
+        closeOnClickOutside={this.closeOnClickOutside}
+        closeOnEscape={true}
+        dragSelect={this.dragSelect}
+        matchTriggerWidth={this.matchTriggerWidth}
+        autoWidth={this.autoWidth}
+        offset={4}
+        width={this.width}
+        minWidth={this.matchTriggerWidth && !this.autoWidth ? (this.size === 'small' ? '0' : '150px') : undefined}
+        trigger-full-width={this.fullWidth}
+        onLePopoverOpen={this.handlePopoverOpen}
+        onLePopoverClose={this.handlePopoverClose}
+      >
+        <slot name="trigger" slot="trigger" />
+        <slot name="header" />
+        <div
+          class="dropdown-list"
+          role="listbox"
+          aria-multiselectable={this.multiple ? 'true' : undefined}
+          ref={el => (this.listEl = el)}
+          style={{ maxHeight: this.maxHeight }}
         >
-          <slot name="trigger" slot="trigger" />
-          <slot name="header" />
-          <div
-            class="dropdown-list"
-            role="listbox"
-            aria-multiselectable={this.multiple ? 'true' : undefined}
-            ref={el => (this.listEl = el)}
-            style={{ maxHeight: this.maxHeight }}
-          >
-            {this.renderOptions()}
-          </div>
-        </le-popover>
-      </Host>
+          {this.renderOptions()}
+        </div>
+      </le-popover>
     );
   }
 }

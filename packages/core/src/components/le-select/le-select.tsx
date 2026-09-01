@@ -100,7 +100,7 @@ export class LeSelect {
   /**
    * Visual variant of the select.
    */
-  @Prop({ reflect: true }) variant: 'default' | 'outlined' | 'solid' = 'default';
+  @Prop({ reflect: true }) variant: 'default' | 'outlined' | 'solid' | 'clear' = 'default';
 
   /**
    * Custom chevron icon name or text.
@@ -111,6 +111,28 @@ export class LeSelect {
    * Whether to hide the chevron icon completely.
    */
   @Prop({ reflect: true }) hideChevron: boolean = false;
+
+  /**
+   * Compact mode shortcut: sets size="small", variant="clear", hideChevron=true, and autoWidth=true.
+   */
+  @Prop({ reflect: true }) compact: boolean = false;
+
+  /**
+   * Whether the select should take full width of its container.
+   */
+  @Prop({ reflect: true }) fullWidth: boolean = false;
+
+  /**
+   * Whether the dropdown width should size automatically to its content rather than matching the trigger width.
+   * Defaults to false.
+   */
+  @Prop({ reflect: true }) autoWidth: boolean = false;
+
+  /**
+   * Whether the dropdown should match the trigger width.
+   * Defaults to true. Setting autoWidth=true or compact=true overrides this to false.
+   */
+  @Prop({ reflect: true }) matchTriggerWidth: boolean = true;
 
   /**
    * Whether the dropdown is currently open.
@@ -227,12 +249,6 @@ export class LeSelect {
     this.leClose?.emit();
   };
 
-  private handleTriggerClick = () => {
-    if (!this.disabled) {
-      this.dropdownEl?.toggle();
-    }
-  };
-
   private handleTriggerKeyDown = (e: KeyboardEvent) => {
     if (this.disabled) return;
 
@@ -292,6 +308,11 @@ export class LeSelect {
 
   render() {
     const hasValue = this.selectedOption !== undefined;
+    const size = this.compact && this.size === 'medium' ? 'small' : this.size;
+    const variant = this.compact && this.variant === 'default' ? 'clear' : this.variant;
+    const hideChevron = this.compact ? true : this.hideChevron;
+    const autoWidth = this.autoWidth || this.compact;
+    const matchTriggerWidth = autoWidth ? false : this.matchTriggerWidth;
 
     return (
       <Host>
@@ -303,28 +324,29 @@ export class LeSelect {
           onLeOptionSelect={this.handleOptionSelect}
           onLeDropdownOpen={this.handleDropdownOpen}
           onLeDropdownClose={this.handleDropdownClose}
-          full-width
-          hideCheckboxes={this.size === 'small'}
-          size={this.size}
+          fullWidth={this.fullWidth}
+          autoWidth={autoWidth}
+          matchTriggerWidth={matchTriggerWidth}
+          hideCheckboxes={size === 'small'}
+          size={size}
         >
           <le-button
-            variant={this.variant && this.variant !== 'default' ? this.variant : 'outlined'}
+            variant={variant !== 'default' ? variant : 'outlined'}
             slot="trigger"
             align="space-between"
             class={{
               'select-trigger': true,
               'has-value': hasValue,
               'is-open': this.open,
-              'no-chevron': this.hideChevron,
+              'no-chevron': hideChevron,
             }}
             mode="default"
-            size={this.size}
+            size={size}
             disabled={this.disabled}
             aria-haspopup="listbox"
             aria-expanded={this.open ? 'true' : 'false'}
-            onClick={this.handleTriggerClick}
             onKeyDown={this.handleTriggerKeyDown}
-            full-width
+            fullWidth={this.fullWidth}
             iconStart={
               hasValue && this.selectedOption?.iconStart
                 ? this.renderIcon(this.selectedOption.iconStart)
@@ -334,7 +356,7 @@ export class LeSelect {
             <span class="trigger-label">
               {hasValue ? this.selectedOption!.label : this.placeholder}
             </span>
-            {!this.hideChevron && this.renderChevron()}
+            {!hideChevron && this.renderChevron()}
           </le-button>
         </le-dropdown-base>
 

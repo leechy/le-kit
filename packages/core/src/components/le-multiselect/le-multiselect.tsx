@@ -128,6 +128,17 @@ export class LeMultiselect {
   @Prop() emptyText: string = 'No results found';
 
   /**
+   * Whether the dropdown width should size automatically to its content rather than matching the trigger width.
+   */
+  @Prop({ reflect: true }) autoWidth: boolean = false;
+
+  /**
+   * Whether the dropdown should match the trigger width.
+   * Defaults to true. Setting autoWidth=true overrides this to false.
+   */
+  @Prop({ reflect: true }) matchTriggerWidth: boolean = true;
+
+  /**
    * Whether the dropdown is currently open.
    */
   @Prop({ mutable: true, reflect: true }) open: boolean = false;
@@ -349,12 +360,6 @@ export class LeMultiselect {
     this.leClose.emit();
   };
 
-  private handleTriggerClick = () => {
-    if (!this.disabled) {
-      this.dropdownEl?.toggle();
-    }
-  };
-
   private handleTriggerKeyDown = (e: KeyboardEvent) => {
     if (this.disabled) return;
 
@@ -450,6 +455,8 @@ export class LeMultiselect {
           emptyText={this.emptyText}
           hideCheckboxes={false}
           fullWidth={this.fullWidth}
+          autoWidth={this.autoWidth}
+          matchTriggerWidth={this.autoWidth ? false : this.matchTriggerWidth}
           onLeOptionSelect={this.handleOptionSelect}
           onLeDropdownOpen={this.handleDropdownOpen}
           onLeDropdownClose={this.handleDropdownClose}
@@ -470,7 +477,6 @@ export class LeMultiselect {
             aria-haspopup="listbox"
             aria-expanded={this.open ? 'true' : 'false'}
             aria-disabled={this.disabled ? 'true' : undefined}
-            onClick={this.handleTriggerClick}
             onKeyDown={this.handleTriggerKeyDown}
           >
             {this.renderTags()}

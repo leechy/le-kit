@@ -27,8 +27,14 @@
   width: 100%;
 }
 
-:host([size="small"]) {
+:host([size="small"]),
+:host([compact]),
+:host([auto-width]) {
   min-width: unset;
+}
+
+:host([compact]) {
+  --le-dropdown-list-padding: calc(var(--le-spacing-1) / 2);
 }
 
 /* Trigger button */

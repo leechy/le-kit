@@ -59,6 +59,11 @@ export class LeOverflowMenu {
   @Prop() icon: string = 'ellipsis-horizontal';
 
   /**
+   * Whether to enable drag-select interaction.
+   */
+  @Prop() dragSelect: boolean = true;
+
+  /**
    * Aria label for fallback trigger button.
    */
   @Prop() triggerAriaLabel: string = 'Open menu';
@@ -205,6 +210,7 @@ export class LeOverflowMenu {
           showClose={false}
           closeOnClickOutside={true}
           closeOnEscape={true}
+          dragSelect={this.dragSelect}
           open={this.open}
           position={this.position}
           align={this.align}

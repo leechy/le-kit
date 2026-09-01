@@ -14,6 +14,13 @@ import type { LeOption } from '../../types/options';
 import { parseOptionInput } from '../../utils/utils';
 import { LONG_PRESS_DURATION, LONG_PRESS_MOVE_THRESHOLD } from '../../utils/constants';
 import type { LeNavigationItemSelectDetail } from '../le-navigation/le-navigation';
+import {
+  deepElementFromPoint,
+  findActionableElement,
+  findScrollContainer,
+  createAutoScroller,
+  AutoScroller,
+} from '../../utils/dom-pointer';
 
 export interface LeContextMenuSelectDetail {
   id: string;
@@ -48,6 +55,13 @@ export class LeContextMenu {
   private initialTriggerRect?: DOMRect;
   private initialCoords = { x: 0, y: 0 };
   private isMenuOpen = false;
+
+  private autoScroller: AutoScroller = createAutoScroller();
+  private isDragSelecting = false;
+  private dragMoved = false;
+  private dragStartPosition = { x: 0, y: 0 };
+  private currentHoveredActionable?: HTMLElement;
+  private activeScrollContainer?: HTMLElement | null;
 
   /**
    * Whether the context menu is open.
@@ -137,6 +151,7 @@ export class LeContextMenu {
 
   disconnectedCallback() {
     this.removeScrollListener();
+    this.cleanUpDragSession();
   }
 
   @Method()
@@ -198,6 +213,7 @@ export class LeContextMenu {
 
   private handlePopoverClose = () => {
     if (!this.isMenuOpen) return;
+    this.cleanUpDragSession();
     this.isMenuOpen = false;
     this.open = false;
 
@@ -212,6 +228,7 @@ export class LeContextMenu {
 
   private handleScroll = () => {
     if (!this.isMenuOpen) return;
+    if (this.isLongPressActive) return;
 
     if (this.pageScrollBehavior === 'menu-close') {
       void this.hide();
@@ -277,12 +294,116 @@ export class LeContextMenu {
 
     this.lastTriggerType = event.type.startsWith('touch') ? 'touch' : 'mouse';
     this.coords = { x, y };
+    this.dragStartPosition = { x, y };
+    this.dragMoved = false;
+    this.isDragSelecting = true;
     this.open = true;
+
+    document.addEventListener('pointermove', this.handleDocumentPointerMove, { passive: false });
+    document.addEventListener('pointerup', this.handleDocumentPointerUp, true);
+    document.addEventListener('pointercancel', this.handleDocumentPointerCancel, true);
+    document.addEventListener('touchmove', this.handleDocumentTouchMove, { passive: false });
 
     requestAnimationFrame(() => {
       void this.popoverEl?.updatePosition();
       void this.navigationEl?.focusActiveItem();
     });
+  }
+
+  private handleDocumentTouchMove = (event: TouchEvent) => {
+    if (this.isDragSelecting || this.isLongPressActive) {
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+    }
+  };
+
+  private handleDocumentPointerMove = (event: PointerEvent) => {
+    if (!this.isDragSelecting) return;
+
+    if (event.cancelable) {
+      event.preventDefault();
+    }
+
+    const dx = Math.abs(event.clientX - this.dragStartPosition.x);
+    const dy = Math.abs(event.clientY - this.dragStartPosition.y);
+    if (dx > 6 || dy > 6) {
+      this.dragMoved = true;
+    }
+
+    const hit = deepElementFromPoint(event.clientX, event.clientY);
+    const actionable = findActionableElement(hit, this.popoverEl);
+
+    if (actionable !== this.currentHoveredActionable) {
+      if (this.currentHoveredActionable) {
+        this.currentHoveredActionable.classList.remove('is-drag-hovered', 'is-focused');
+        this.currentHoveredActionable.closest('.nav-row')?.classList.remove('is-drag-hovered', 'is-focused');
+        this.currentHoveredActionable.dispatchEvent(
+          new MouseEvent('mouseleave', { bubbles: true, cancelable: true }),
+        );
+      }
+      this.currentHoveredActionable = actionable || undefined;
+      if (actionable) {
+        actionable.classList.add('is-drag-hovered', 'is-focused');
+        actionable.closest('.nav-row')?.classList.add('is-drag-hovered', 'is-focused');
+        actionable.dispatchEvent(
+          new MouseEvent('mouseenter', { bubbles: true, cancelable: true }),
+        );
+      }
+    }
+
+    if (this.popoverEl) {
+      if (!this.activeScrollContainer || !this.popoverEl.contains(this.activeScrollContainer)) {
+        this.activeScrollContainer = findScrollContainer(this.popoverEl);
+      }
+      if (this.activeScrollContainer) {
+        this.autoScroller.update(event.clientY, this.activeScrollContainer);
+      }
+    }
+  };
+
+  private handleDocumentPointerUp = (event: PointerEvent) => {
+    if (!this.isDragSelecting) return;
+
+    this.cleanUpDragSession();
+
+    const hit = deepElementFromPoint(event.clientX, event.clientY);
+    const actionable = findActionableElement(hit, this.popoverEl);
+
+    if (actionable) {
+      actionable.click();
+      return;
+    }
+
+    // If pointer did not drag (quick right click or tap), keep context menu open
+    if (!this.dragMoved) {
+      return;
+    }
+
+    // Dragged outside -> close
+    void this.hide();
+  };
+
+  private handleDocumentPointerCancel = () => {
+    this.cleanUpDragSession();
+  };
+
+  private cleanUpDragSession() {
+    this.isDragSelecting = false;
+    this.autoScroller.stop();
+    this.activeScrollContainer = null;
+    if (this.currentHoveredActionable) {
+      this.currentHoveredActionable.classList.remove('is-drag-hovered', 'is-focused');
+      this.currentHoveredActionable.closest('.nav-row')?.classList.remove('is-drag-hovered', 'is-focused');
+      this.currentHoveredActionable.dispatchEvent(
+        new MouseEvent('mouseleave', { bubbles: true, cancelable: true }),
+      );
+      this.currentHoveredActionable = undefined;
+    }
+    document.removeEventListener('pointermove', this.handleDocumentPointerMove);
+    document.removeEventListener('pointerup', this.handleDocumentPointerUp, true);
+    document.removeEventListener('pointercancel', this.handleDocumentPointerCancel, true);
+    document.removeEventListener('touchmove', this.handleDocumentTouchMove);
   }
 
   private handleTouchStart = (e: TouchEvent) => {

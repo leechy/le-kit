@@ -11,6 +11,13 @@ import {
   Host,
 } from '@stencil/core';
 import { classnames } from '../../utils/utils';
+import {
+  deepElementFromPoint,
+  findActionableElement,
+  findScrollContainer,
+  createAutoScroller,
+  AutoScroller,
+} from '../../utils/dom-pointer';
 
 // Keep a simple stack so Escape closes the most recently opened popover first.
 // This also helps nested popovers behave naturally.
@@ -105,6 +112,21 @@ export class LePopover {
   @Prop() triggerFullWidth: boolean = false;
 
   /**
+   * Whether the popover width should match the trigger width
+   */
+  @Prop() matchTriggerWidth: boolean = false;
+
+  /**
+   * Whether the popover should size automatically to its content rather than matching the trigger width
+   */
+  @Prop({ reflect: true }) autoWidth: boolean = false;
+
+  /**
+   * Whether to enable press-drag-release selection
+   */
+  @Prop({ reflect: true }) dragSelect: boolean = false;
+
+  /**
    * Emitted when the popover opens
    */
   @Event() lePopoverOpen?: EventEmitter<void>;
@@ -130,6 +152,14 @@ export class LePopover {
   private scrollParents: Element[] = [];
 
   private isListeningForDismiss: boolean = false;
+  private autoScroller: AutoScroller = createAutoScroller();
+  private isDragSelecting: boolean = false;
+  private wasOpenOnPointerDown: boolean = false;
+  private currentHoveredActionable?: HTMLElement;
+  private activeScrollContainer?: HTMLElement | null;
+  private dragMoved: boolean = false;
+  private dragStartPosition: { x: number; y: number } = { x: 0, y: 0 };
+  private dragPointerId: number | null = null;
 
   private isNativePopoverOpen(): boolean {
     return !!(this.popoverEl && this.popoverEl.matches(':popover-open'));
@@ -200,6 +230,7 @@ export class LePopover {
     document.removeEventListener('le-popover-will-open', this.handleOtherPopoverOpen);
     this.removeScrollListeners();
     this.removeDismissListeners();
+    this.cleanUpDragSession();
   }
 
   private addDismissListeners() {
@@ -220,10 +251,17 @@ export class LePopover {
 
   private handleDocumentPointerDown = (event: PointerEvent) => {
     if (!this.open || !this.closeOnClickOutside) return;
+    if (event.button === 2) return;
 
     // If the click happens inside this popover component (trigger OR content), don't close.
     const path = (event.composedPath?.() ?? []) as EventTarget[];
     if (path.includes(this.el)) return;
+
+    // If this popover is hosted inside another shadow root (e.g. le-context-menu), check host
+    const root = this.el.getRootNode?.();
+    if (root instanceof ShadowRoot && path.includes(root.host)) {
+      return;
+    }
 
     this.hide();
   };
@@ -316,6 +354,7 @@ export class LePopover {
     this.isPositioned = false;
     this.removeScrollListeners();
     this.removeDismissListeners();
+    this.cleanUpDragSession();
 
     const index = openPopoverStack.indexOf(this.el);
     if (index >= 0) openPopoverStack.splice(index, 1);
@@ -401,8 +440,151 @@ export class LePopover {
     }
   }
 
+  private handleTriggerPointerDown = (event: PointerEvent) => {
+    if (!this.dragSelect) return;
+    if (event.button !== 0 && event.pointerType === 'mouse') return;
+
+    this.wasOpenOnPointerDown = this.open;
+    this.isDragSelecting = true;
+    this.dragMoved = false;
+    this.dragPointerId = event.pointerId;
+    this.dragStartPosition = { x: event.clientX, y: event.clientY };
+
+    try {
+      (event.target as HTMLElement)?.releasePointerCapture?.(event.pointerId);
+    } catch {}
+
+    if (event.pointerType === 'touch') {
+      event.preventDefault();
+    }
+
+    if (!this.open) {
+      void this.show();
+    }
+
+    document.addEventListener('pointermove', this.handleDocumentPointerMove, { passive: false });
+    document.addEventListener('pointerup', this.handleDocumentPointerUp, true);
+    document.addEventListener('pointercancel', this.handleDocumentPointerCancel, true);
+  };
+
+  private handleDocumentPointerMove = (event: PointerEvent) => {
+    if (!this.isDragSelecting) return;
+    if (this.dragPointerId !== null && event.pointerId !== this.dragPointerId) return;
+
+    const dx = Math.abs(event.clientX - this.dragStartPosition.x);
+    const dy = Math.abs(event.clientY - this.dragStartPosition.y);
+    if (dx > 4 || dy > 4) {
+      this.dragMoved = true;
+    }
+
+    const hit = deepElementFromPoint(event.clientX, event.clientY);
+    const actionable = findActionableElement(hit, this.popoverEl);
+
+    if (actionable !== this.currentHoveredActionable) {
+      if (this.currentHoveredActionable) {
+        this.currentHoveredActionable.classList.remove('is-drag-hovered', 'is-focused');
+        this.currentHoveredActionable.closest('.nav-row')?.classList.remove('is-drag-hovered', 'is-focused');
+        this.currentHoveredActionable.dispatchEvent(
+          new MouseEvent('mouseleave', { bubbles: true, cancelable: true }),
+        );
+      }
+      this.currentHoveredActionable = actionable || undefined;
+      if (actionable) {
+        actionable.classList.add('is-drag-hovered', 'is-focused');
+        actionable.closest('.nav-row')?.classList.add('is-drag-hovered', 'is-focused');
+        actionable.dispatchEvent(
+          new MouseEvent('mouseenter', { bubbles: true, cancelable: true }),
+        );
+      }
+    }
+
+    if (this.popoverEl) {
+      if (!this.activeScrollContainer || !this.popoverEl.contains(this.activeScrollContainer)) {
+        this.activeScrollContainer = findScrollContainer(this.popoverEl);
+      }
+      if (this.activeScrollContainer) {
+        this.autoScroller.update(event.clientY, this.activeScrollContainer);
+      }
+    }
+  };
+
+  private handleDocumentPointerUp = (event: PointerEvent) => {
+    if (!this.isDragSelecting) return;
+    if (this.dragPointerId !== null && event.pointerId !== this.dragPointerId) return;
+
+    this.cleanUpDragSession();
+
+    const hit = deepElementFromPoint(event.clientX, event.clientY);
+
+    // 1. Check if released on actionable interactive item inside popover
+    const actionable = findActionableElement(hit, this.popoverEl);
+    if (actionable) {
+      actionable.click();
+      return;
+    }
+
+    // 2. Check if released within trigger bounding box
+    const triggerRect = this.triggerEl?.getBoundingClientRect();
+    const isOverTrigger = triggerRect
+      ? event.clientX >= triggerRect.left &&
+        event.clientX <= triggerRect.right &&
+        event.clientY >= triggerRect.top &&
+        event.clientY <= triggerRect.bottom
+      : false;
+
+    if (isOverTrigger) {
+      if (this.wasOpenOnPointerDown && !this.dragMoved) {
+        void this.hide();
+      }
+      return;
+    }
+
+    // 3. Check if released within popover bounding box (e.g. header/background)
+    const popoverRect = this.popoverEl?.getBoundingClientRect();
+    const isOverPopover = popoverRect
+      ? event.clientX >= popoverRect.left &&
+        event.clientX <= popoverRect.right &&
+        event.clientY >= popoverRect.top &&
+        event.clientY <= popoverRect.bottom
+      : false;
+
+    if (isOverPopover) {
+      return;
+    }
+
+    // 4. Released outside -> dismiss popover
+    void this.hide();
+  };
+
+  private handleDocumentPointerCancel = (event: PointerEvent) => {
+    if (!this.isDragSelecting) return;
+    if (this.dragPointerId !== null && event.pointerId !== this.dragPointerId) return;
+    this.cleanUpDragSession();
+  };
+
+  private cleanUpDragSession() {
+    this.isDragSelecting = false;
+    this.dragPointerId = null;
+    this.autoScroller.stop();
+    this.activeScrollContainer = null;
+    if (this.currentHoveredActionable) {
+      this.currentHoveredActionable.classList.remove('is-drag-hovered', 'is-focused');
+      this.currentHoveredActionable.closest('.nav-row')?.classList.remove('is-drag-hovered', 'is-focused');
+      this.currentHoveredActionable.dispatchEvent(
+        new MouseEvent('mouseleave', { bubbles: true, cancelable: true }),
+      );
+      this.currentHoveredActionable = undefined;
+    }
+    document.removeEventListener('pointermove', this.handleDocumentPointerMove);
+    document.removeEventListener('pointerup', this.handleDocumentPointerUp, true);
+    document.removeEventListener('pointercancel', this.handleDocumentPointerCancel, true);
+  }
+
   private handleTriggerClick = (event: MouseEvent) => {
     event.stopPropagation();
+    if (this.dragSelect) {
+      return;
+    }
     this.toggle();
   };
 
@@ -591,6 +773,18 @@ export class LePopover {
     this.popoverEl.style.top = `${top}px`;
     this.popoverEl.style.left = `${left}px`;
 
+    const shouldMatchTriggerWidth = this.matchTriggerWidth && !this.autoWidth;
+    if (shouldMatchTriggerWidth && this.triggerEl) {
+      const triggerWidth = this.triggerEl.getBoundingClientRect().width;
+      if (triggerWidth > 0) {
+        this.popoverEl.style.width = `${triggerWidth}px`;
+        this.popoverEl.style.minWidth = `${triggerWidth}px`;
+      }
+    } else if (!this.autoWidth) {
+      this.popoverEl.style.width = this.width || '';
+      this.popoverEl.style.minWidth = this.minWidth || '';
+    }
+
     if (maxHeight !== null && maxHeight > 100) {
       this.popoverEl.style.maxHeight = `${maxHeight}px`;
       this.popoverEl.style.overflowY = 'auto';
@@ -602,23 +796,38 @@ export class LePopover {
     this.isPositioned = true;
   }
 
+  private handleTriggerContextMenu = (event: MouseEvent) => {
+    if (this.dragSelect) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
   render() {
     const popoverStyles: Record<string, string> = {
       visibility: this.isPositioned ? 'visible' : 'hidden',
     };
 
-    if (this.width) popoverStyles.width = this.width;
-    if (this.minWidth) popoverStyles.minWidth = this.minWidth;
-    if (this.maxWidth) popoverStyles.maxWidth = this.maxWidth;
+    if (this.width) {
+      popoverStyles.width = this.width;
+    }
+    if (this.minWidth && !this.autoWidth) {
+      popoverStyles.minWidth = this.minWidth;
+    }
+    if (this.maxWidth && !this.autoWidth) {
+      popoverStyles.maxWidth = this.maxWidth;
+    }
 
     return (
-      <Host trigger-full-width={this.triggerFullWidth}>
+      <Host trigger-full-width={this.triggerFullWidth} drag-select={this.dragSelect}>
         <div
           class={classnames('le-popover-trigger', {
             'le-popover-trigger-full-width': this.triggerFullWidth,
           })}
           ref={el => (this.triggerEl = el)}
           onClick={this.handleTriggerClick}
+          onPointerDown={this.handleTriggerPointerDown}
+          onContextMenu={this.handleTriggerContextMenu}
           part="trigger"
         >
           <slot name="trigger">

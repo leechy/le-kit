@@ -918,112 +918,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-bento-tile/le-bento-tile.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A single tile for use inside `le-bento-grid`.\n\nDeclares how many columns and rows it should span in the bento grid.\nVisual appearance (border-radius, shadow) is controlled via CSS custom\nproperties so themes can override them.",
-          "name": "LeBentoTile",
-          "cssProperties": [
-            {
-              "description": "Border radius (default: var(--le-radius-xl, 0.75rem))",
-              "name": "--le-bento-tile-radius"
-            },
-            {
-              "description": "Box shadow (default: subtle multi-layer shadow)",
-              "name": "--le-bento-tile-shadow"
-            },
-            {
-              "description": "Background color (default: transparent)",
-              "name": "--le-bento-tile-bg"
-            },
-            {
-              "description": "Inner padding (default: 0)",
-              "name": "--le-bento-tile-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The inner tile wrapper element",
-              "name": "tile"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Content displayed inside the tile",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "cols",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Number of grid columns this tile should span."
-            },
-            {
-              "kind": "field",
-              "name": "rows",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Number of grid rows this tile should span."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "cols",
-              "fieldName": "cols",
-              "default": "1",
-              "description": "Number of grid columns this tile should span.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "rows",
-              "fieldName": "rows",
-              "default": "1",
-              "description": "Number of grid rows this tile should span.",
-              "type": {
-                "text": "number"
-              }
-            }
-          ],
-          "tagName": "le-bento-tile",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeBentoTile",
-          "declaration": {
-            "name": "LeBentoTile",
-            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-bento-tile",
-          "declaration": {
-            "name": "LeBentoTile",
-            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-bento-grid/le-bento-grid.tsx",
       "declarations": [
         {
@@ -1565,1037 +1459,6 @@
           "declaration": {
             "name": "LeBreadcrumbs",
             "module": "src/components/le-breadcrumbs/le-breadcrumbs.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-box/le-box.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible box component for use as a flex item within le-stack.\n\n`le-box` wraps content and provides flex item properties like grow, shrink,\nbasis, and self-alignment. It can also control its internal content alignment.",
-          "name": "LeBox",
-          "cssProperties": [
-            {
-              "description": "Background color",
-              "name": "--le-box-bg"
-            },
-            {
-              "description": "Padding inside the box",
-              "name": "--le-box-padding"
-            },
-            {
-              "description": "Border radius",
-              "name": "--le-box-border-radius"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main box container",
-              "name": "box"
-            },
-            {
-              "description": "The inner content wrapper",
-              "name": "content"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Default slot for box content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "grow",
-              "type": {
-                "text": "number"
-              },
-              "default": "0",
-              "description": "Flex grow factor - how much the item should grow relative to siblings"
-            },
-            {
-              "kind": "field",
-              "name": "shrink",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Flex shrink factor - how much the item should shrink relative to siblings"
-            },
-            {
-              "kind": "field",
-              "name": "basis",
-              "type": {
-                "text": "string"
-              },
-              "default": "'auto'",
-              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')"
-            },
-            {
-              "kind": "field",
-              "name": "width",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Width of the box (CSS value like '100px', '50%', 'auto')"
-            },
-            {
-              "kind": "field",
-              "name": "height",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Height of the box (CSS value)"
-            },
-            {
-              "kind": "field",
-              "name": "minWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Minimum width constraint"
-            },
-            {
-              "kind": "field",
-              "name": "maxWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Maximum width constraint"
-            },
-            {
-              "kind": "field",
-              "name": "minHeight",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Minimum height constraint"
-            },
-            {
-              "kind": "field",
-              "name": "maxHeight",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Maximum height constraint"
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')"
-            },
-            {
-              "kind": "field",
-              "name": "borderRadius",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')"
-            },
-            {
-              "kind": "field",
-              "name": "border",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')"
-            },
-            {
-              "kind": "field",
-              "name": "alignSelf",
-              "type": {
-                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
-              },
-              "default": "'auto'",
-              "description": "Self-alignment override for this item on the cross axis"
-            },
-            {
-              "kind": "field",
-              "name": "alignContent",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch'"
-              },
-              "default": "'stretch'",
-              "description": "Internal horizontal alignment of content"
-            },
-            {
-              "kind": "field",
-              "name": "justifyContent",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch'"
-              },
-              "default": "'start'",
-              "description": "Internal vertical alignment of content"
-            },
-            {
-              "kind": "field",
-              "name": "padding",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Padding inside the box (CSS value like '8px', '1rem')"
-            },
-            {
-              "kind": "field",
-              "name": "order",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Order in the flex container (lower values come first)"
-            },
-            {
-              "kind": "field",
-              "name": "displayFlex",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to display box content as flex (for internal alignment)"
-            },
-            {
-              "kind": "field",
-              "name": "innerDirection",
-              "type": {
-                "text": "'horizontal' | 'vertical'"
-              },
-              "default": "'vertical'",
-              "description": "Direction of internal flex layout when displayFlex is true"
-            },
-            {
-              "kind": "field",
-              "name": "innerGap",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Gap between internal flex items when displayFlex is true"
-            },
-            {
-              "kind": "method",
-              "name": "getAlignSelf",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getContentAlign",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getContentJustify",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "grow",
-              "fieldName": "grow",
-              "default": "0",
-              "description": "Flex grow factor - how much the item should grow relative to siblings",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "shrink",
-              "fieldName": "shrink",
-              "default": "1",
-              "description": "Flex shrink factor - how much the item should shrink relative to siblings",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "basis",
-              "fieldName": "basis",
-              "default": "'auto'",
-              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "width",
-              "fieldName": "width",
-              "description": "Width of the box (CSS value like '100px', '50%', 'auto')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "height",
-              "fieldName": "height",
-              "description": "Height of the box (CSS value)",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "min-width",
-              "fieldName": "minWidth",
-              "description": "Minimum width constraint",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "max-width",
-              "fieldName": "maxWidth",
-              "description": "Maximum width constraint",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "min-height",
-              "fieldName": "minHeight",
-              "description": "Minimum height constraint",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "max-height",
-              "fieldName": "maxHeight",
-              "description": "Maximum height constraint",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "background",
-              "fieldName": "background",
-              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "border-radius",
-              "fieldName": "borderRadius",
-              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "border",
-              "fieldName": "border",
-              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "align-self",
-              "fieldName": "alignSelf",
-              "default": "'auto'",
-              "description": "Self-alignment override for this item on the cross axis",
-              "type": {
-                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
-              }
-            },
-            {
-              "name": "align-content",
-              "fieldName": "alignContent",
-              "default": "'stretch'",
-              "description": "Internal horizontal alignment of content",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch'"
-              }
-            },
-            {
-              "name": "justify-content",
-              "fieldName": "justifyContent",
-              "default": "'start'",
-              "description": "Internal vertical alignment of content",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch'"
-              }
-            },
-            {
-              "name": "padding",
-              "fieldName": "padding",
-              "description": "Padding inside the box (CSS value like '8px', '1rem')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "order",
-              "fieldName": "order",
-              "description": "Order in the flex container (lower values come first)",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "display-flex",
-              "fieldName": "displayFlex",
-              "default": "false",
-              "description": "Whether to display box content as flex (for internal alignment)",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "inner-direction",
-              "fieldName": "innerDirection",
-              "default": "'vertical'",
-              "description": "Direction of internal flex layout when displayFlex is true",
-              "type": {
-                "text": "'horizontal' | 'vertical'"
-              }
-            },
-            {
-              "name": "inner-gap",
-              "fieldName": "innerGap",
-              "description": "Gap between internal flex items when displayFlex is true",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-box",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeBox",
-          "declaration": {
-            "name": "LeBox",
-            "module": "src/components/le-box/le-box.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-box",
-          "declaration": {
-            "name": "LeBox",
-            "module": "src/components/le-box/le-box.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-button-group/le-button-group.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Groups multiple `le-button` elements and optionally collapses low-priority actions\ninto an overflow \"more\" menu.",
-          "name": "LeButtonGroup",
-          "cssParts": [
-            {
-              "description": "The grouped buttons frame",
-              "name": "group"
-            },
-            {
-              "description": "The overflow trigger button",
-              "name": "more-button"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Group button elements (`le-button` children)",
-              "name": ""
-            },
-            {
-              "description": "Custom icon/content for the overflow trigger button",
-              "name": "more"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional label used when the whole group is represented as a parent item\ninside another component's overflow menu."
-            },
-            {
-              "kind": "field",
-              "name": "collapse",
-              "type": {
-                "text": "boolean | number | string | undefined"
-              },
-              "description": "Collapse mode.\n\n- `true`: show only the top-priority button\n- positive number: show top N buttons\n- `0`: show only the more button\n- negative number: hide abs(N) lowest-priority buttons\n\nNon-integers are rounded with `Math.round`."
-            },
-            {
-              "kind": "field",
-              "name": "overflowIcons",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When true, icons from collapsed buttons are shown in the overflow navigation list."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disabled attribute, when the button group is disabled,\nall buttons inside will be disabled and the overflow menu will not be accessible."
-            },
-            {
-              "kind": "field",
-              "name": "visibility",
-              "type": {
-                "text": "'visible' | 'collapsing' | 'collapsed' | 'expanding'"
-              },
-              "default": "'visible'",
-              "description": "Visibility state used by responsive containers such as le-toolbar."
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "'radio' | 'checkbox' | undefined"
-              },
-              "description": "Selection type: radio (single select) or checkbox (multi select)"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string | string[] | undefined"
-              },
-              "description": "Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[]."
-            },
-            {
-              "kind": "field",
-              "name": "overflowItems",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "hasOverflow",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "buttonSlots",
-              "type": {
-                "text": "string[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "mutationObserver",
-              "type": {
-                "text": "MutationObserver | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "instanceId",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "syncingLayout",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "pendingSync",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "hasAuthorCollapse",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "buttonMap",
-              "type": {
-                "text": "Map<string, HTMLElement>"
-              },
-              "privacy": "private",
-              "default": "new Map()"
-            },
-            {
-              "kind": "method",
-              "name": "handleCollapseChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleOverflowIconsChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleDisabledChange",
-              "parameters": [
-                {
-                  "name": "newValue",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleValueChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleTypeChange"
-            },
-            {
-              "kind": "method",
-              "name": "getItemsMeta",
-              "return": {
-                "type": {
-                  "text": "Promise<LeButtonGroupItemsMeta>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getToolbarOverflowGroupOption",
-              "return": {
-                "type": {
-                  "text": "Promise<LeOption>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "whenLayoutSettled",
-              "return": {
-                "type": {
-                  "text": "Promise<void>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getToolbarOverflowItems",
-              "return": {
-                "type": {
-                  "text": "Promise<LeOption[]>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getCollapseMeta",
-              "return": {
-                "type": {
-                  "text": "Promise<LeCollapseMeta>"
-                }
-              },
-              "description": "Returns collapse meta for toolbar integration."
-            },
-            {
-              "kind": "method",
-              "name": "getButtonChildren",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "HTMLElement[]"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "syncButtonSlots",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string[]"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "buttons",
-                  "type": {
-                    "text": "HTMLElement[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getVisibilityState",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "'visible' | 'collapsed'"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "string | null"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setDisabledState",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getGroupLabel",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "isFullyCollapsed",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getToolbarVisibleCountsSync",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "number[]"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getButtonId",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getButtonPriority",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "number"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "parseCollapseValue",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "{ active: boolean; visibleCount: number }"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "totalButtons",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildOverflowOption",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "Promise<LeOption>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "item",
-                  "type": {
-                    "text": "RankedButton"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getButtonValue",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "syncSelectionFromValue",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleFieldsetClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "selectRadioButton",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "clickedButton",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "toggleCheckboxButton",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "clickedButton",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "syncLayout",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleOverflowSelect",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "Optional label used when the whole group is represented as a parent item\ninside another component's overflow menu.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "collapse",
-              "fieldName": "collapse",
-              "description": "Collapse mode.\n\n- `true`: show only the top-priority button\n- positive number: show top N buttons\n- `0`: show only the more button\n- negative number: hide abs(N) lowest-priority buttons\n\nNon-integers are rounded with `Math.round`.",
-              "type": {
-                "text": "boolean | number | string"
-              }
-            },
-            {
-              "name": "overflow-icons",
-              "fieldName": "overflowIcons",
-              "default": "false",
-              "description": "When true, icons from collapsed buttons are shown in the overflow navigation list.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Disabled attribute, when the button group is disabled,\nall buttons inside will be disabled and the overflow menu will not be accessible.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "visibility",
-              "fieldName": "visibility",
-              "default": "'visible'",
-              "description": "Visibility state used by responsive containers such as le-toolbar.",
-              "type": {
-                "text": "'visible' | 'collapsing' | 'collapsed' | 'expanding'"
-              }
-            },
-            {
-              "name": "type",
-              "fieldName": "type",
-              "description": "Selection type: radio (single select) or checkbox (multi select)",
-              "type": {
-                "text": "'radio' | 'checkbox'"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[].",
-              "type": {
-                "text": "string | string[]"
-              }
-            }
-          ],
-          "tagName": "le-button-group",
-          "events": [
-            {
-              "name": "leOverflowSelect",
-              "type": {
-                "text": "EventEmitter<{ id: string }>"
-              }
-            },
-            {
-              "name": "leChange",
-              "type": {
-                "text": "EventEmitter<LeOptionSelectDetail | LeMultiOptionSelectDetail>"
-              }
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeButtonGroup",
-          "declaration": {
-            "name": "LeButtonGroup",
-            "module": "src/components/le-button-group/le-button-group.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-button-group",
-          "declaration": {
-            "name": "LeButtonGroup",
-            "module": "src/components/le-button-group/le-button-group.tsx"
           }
         }
       ]
@@ -3255,6 +2118,1143 @@
           "declaration": {
             "name": "LeButton",
             "module": "src/components/le-button/le-button.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-box/le-box.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible box component for use as a flex item within le-stack.\n\n`le-box` wraps content and provides flex item properties like grow, shrink,\nbasis, and self-alignment. It can also control its internal content alignment.",
+          "name": "LeBox",
+          "cssProperties": [
+            {
+              "description": "Background color",
+              "name": "--le-box-bg"
+            },
+            {
+              "description": "Padding inside the box",
+              "name": "--le-box-padding"
+            },
+            {
+              "description": "Border radius",
+              "name": "--le-box-border-radius"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main box container",
+              "name": "box"
+            },
+            {
+              "description": "The inner content wrapper",
+              "name": "content"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Default slot for box content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "grow",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "description": "Flex grow factor - how much the item should grow relative to siblings"
+            },
+            {
+              "kind": "field",
+              "name": "shrink",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Flex shrink factor - how much the item should shrink relative to siblings"
+            },
+            {
+              "kind": "field",
+              "name": "basis",
+              "type": {
+                "text": "string"
+              },
+              "default": "'auto'",
+              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')"
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Width of the box (CSS value like '100px', '50%', 'auto')"
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Height of the box (CSS value)"
+            },
+            {
+              "kind": "field",
+              "name": "minWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Minimum width constraint"
+            },
+            {
+              "kind": "field",
+              "name": "maxWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Maximum width constraint"
+            },
+            {
+              "kind": "field",
+              "name": "minHeight",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Minimum height constraint"
+            },
+            {
+              "kind": "field",
+              "name": "maxHeight",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Maximum height constraint"
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')"
+            },
+            {
+              "kind": "field",
+              "name": "borderRadius",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')"
+            },
+            {
+              "kind": "field",
+              "name": "border",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')"
+            },
+            {
+              "kind": "field",
+              "name": "alignSelf",
+              "type": {
+                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              },
+              "default": "'auto'",
+              "description": "Self-alignment override for this item on the cross axis"
+            },
+            {
+              "kind": "field",
+              "name": "alignContent",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              },
+              "default": "'stretch'",
+              "description": "Internal horizontal alignment of content"
+            },
+            {
+              "kind": "field",
+              "name": "justifyContent",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              },
+              "default": "'start'",
+              "description": "Internal vertical alignment of content"
+            },
+            {
+              "kind": "field",
+              "name": "padding",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Padding inside the box (CSS value like '8px', '1rem')"
+            },
+            {
+              "kind": "field",
+              "name": "order",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Order in the flex container (lower values come first)"
+            },
+            {
+              "kind": "field",
+              "name": "displayFlex",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to display box content as flex (for internal alignment)"
+            },
+            {
+              "kind": "field",
+              "name": "innerDirection",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'vertical'",
+              "description": "Direction of internal flex layout when displayFlex is true"
+            },
+            {
+              "kind": "field",
+              "name": "innerGap",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Gap between internal flex items when displayFlex is true"
+            },
+            {
+              "kind": "method",
+              "name": "getAlignSelf",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getContentAlign",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getContentJustify",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "grow",
+              "fieldName": "grow",
+              "default": "0",
+              "description": "Flex grow factor - how much the item should grow relative to siblings",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "shrink",
+              "fieldName": "shrink",
+              "default": "1",
+              "description": "Flex shrink factor - how much the item should shrink relative to siblings",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "basis",
+              "fieldName": "basis",
+              "default": "'auto'",
+              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "width",
+              "fieldName": "width",
+              "description": "Width of the box (CSS value like '100px', '50%', 'auto')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "height",
+              "fieldName": "height",
+              "description": "Height of the box (CSS value)",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min-width",
+              "fieldName": "minWidth",
+              "description": "Minimum width constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-width",
+              "fieldName": "maxWidth",
+              "description": "Maximum width constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min-height",
+              "fieldName": "minHeight",
+              "description": "Minimum height constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-height",
+              "fieldName": "maxHeight",
+              "description": "Maximum height constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "background",
+              "fieldName": "background",
+              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "border-radius",
+              "fieldName": "borderRadius",
+              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "border",
+              "fieldName": "border",
+              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align-self",
+              "fieldName": "alignSelf",
+              "default": "'auto'",
+              "description": "Self-alignment override for this item on the cross axis",
+              "type": {
+                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              }
+            },
+            {
+              "name": "align-content",
+              "fieldName": "alignContent",
+              "default": "'stretch'",
+              "description": "Internal horizontal alignment of content",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              }
+            },
+            {
+              "name": "justify-content",
+              "fieldName": "justifyContent",
+              "default": "'start'",
+              "description": "Internal vertical alignment of content",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              }
+            },
+            {
+              "name": "padding",
+              "fieldName": "padding",
+              "description": "Padding inside the box (CSS value like '8px', '1rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "order",
+              "fieldName": "order",
+              "description": "Order in the flex container (lower values come first)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "display-flex",
+              "fieldName": "displayFlex",
+              "default": "false",
+              "description": "Whether to display box content as flex (for internal alignment)",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "inner-direction",
+              "fieldName": "innerDirection",
+              "default": "'vertical'",
+              "description": "Direction of internal flex layout when displayFlex is true",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              }
+            },
+            {
+              "name": "inner-gap",
+              "fieldName": "innerGap",
+              "description": "Gap between internal flex items when displayFlex is true",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-box",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeBox",
+          "declaration": {
+            "name": "LeBox",
+            "module": "src/components/le-box/le-box.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-box",
+          "declaration": {
+            "name": "LeBox",
+            "module": "src/components/le-box/le-box.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-bento-tile/le-bento-tile.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A single tile for use inside `le-bento-grid`.\n\nDeclares how many columns and rows it should span in the bento grid.\nVisual appearance (border-radius, shadow) is controlled via CSS custom\nproperties so themes can override them.",
+          "name": "LeBentoTile",
+          "cssProperties": [
+            {
+              "description": "Border radius (default: var(--le-radius-xl, 0.75rem))",
+              "name": "--le-bento-tile-radius"
+            },
+            {
+              "description": "Box shadow (default: subtle multi-layer shadow)",
+              "name": "--le-bento-tile-shadow"
+            },
+            {
+              "description": "Background color (default: transparent)",
+              "name": "--le-bento-tile-bg"
+            },
+            {
+              "description": "Inner padding (default: 0)",
+              "name": "--le-bento-tile-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The inner tile wrapper element",
+              "name": "tile"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Content displayed inside the tile",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "cols",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of grid columns this tile should span."
+            },
+            {
+              "kind": "field",
+              "name": "rows",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of grid rows this tile should span."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "cols",
+              "fieldName": "cols",
+              "default": "1",
+              "description": "Number of grid columns this tile should span.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "rows",
+              "fieldName": "rows",
+              "default": "1",
+              "description": "Number of grid rows this tile should span.",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-bento-tile",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeBentoTile",
+          "declaration": {
+            "name": "LeBentoTile",
+            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-bento-tile",
+          "declaration": {
+            "name": "LeBentoTile",
+            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-button-group/le-button-group.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Groups multiple `le-button` elements and optionally collapses low-priority actions\ninto an overflow \"more\" menu.",
+          "name": "LeButtonGroup",
+          "cssParts": [
+            {
+              "description": "The grouped buttons frame",
+              "name": "group"
+            },
+            {
+              "description": "The overflow trigger button",
+              "name": "more-button"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Group button elements (`le-button` children)",
+              "name": ""
+            },
+            {
+              "description": "Custom icon/content for the overflow trigger button",
+              "name": "more"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional label used when the whole group is represented as a parent item\ninside another component's overflow menu."
+            },
+            {
+              "kind": "field",
+              "name": "collapse",
+              "type": {
+                "text": "boolean | number | string | undefined"
+              },
+              "description": "Collapse mode.\n\n- `true`: show only the top-priority button\n- positive number: show top N buttons\n- `0`: show only the more button\n- negative number: hide abs(N) lowest-priority buttons\n\nNon-integers are rounded with `Math.round`."
+            },
+            {
+              "kind": "field",
+              "name": "overflowIcons",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When true, icons from collapsed buttons are shown in the overflow navigation list."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disabled attribute, when the button group is disabled,\nall buttons inside will be disabled and the overflow menu will not be accessible."
+            },
+            {
+              "kind": "field",
+              "name": "visibility",
+              "type": {
+                "text": "'visible' | 'collapsing' | 'collapsed' | 'expanding'"
+              },
+              "default": "'visible'",
+              "description": "Visibility state used by responsive containers such as le-toolbar."
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'radio' | 'checkbox' | undefined"
+              },
+              "description": "Selection type: radio (single select) or checkbox (multi select)"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string | string[] | undefined"
+              },
+              "description": "Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[]."
+            },
+            {
+              "kind": "field",
+              "name": "overflowItems",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "hasOverflow",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "buttonSlots",
+              "type": {
+                "text": "string[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "mutationObserver",
+              "type": {
+                "text": "MutationObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "instanceId",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "syncingLayout",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "pendingSync",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "hasAuthorCollapse",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "buttonMap",
+              "type": {
+                "text": "Map<string, HTMLElement>"
+              },
+              "privacy": "private",
+              "default": "new Map()"
+            },
+            {
+              "kind": "method",
+              "name": "handleCollapseChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleOverflowIconsChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleDisabledChange",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleTypeChange"
+            },
+            {
+              "kind": "method",
+              "name": "getItemsMeta",
+              "return": {
+                "type": {
+                  "text": "Promise<LeButtonGroupItemsMeta>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getToolbarOverflowGroupOption",
+              "return": {
+                "type": {
+                  "text": "Promise<LeOption>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "whenLayoutSettled",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getToolbarOverflowItems",
+              "return": {
+                "type": {
+                  "text": "Promise<LeOption[]>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getCollapseMeta",
+              "return": {
+                "type": {
+                  "text": "Promise<LeCollapseMeta>"
+                }
+              },
+              "description": "Returns collapse meta for toolbar integration."
+            },
+            {
+              "kind": "method",
+              "name": "getButtonChildren",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "HTMLElement[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "syncButtonSlots",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "buttons",
+                  "type": {
+                    "text": "HTMLElement[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getVisibilityState",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "'visible' | 'collapsed'"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setDisabledState",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "disabled",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getGroupLabel",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isFullyCollapsed",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getToolbarVisibleCountsSync",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getButtonId",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getButtonPriority",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "parseCollapseValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "{ active: boolean; visibleCount: number }"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "totalButtons",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildOverflowOption",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Promise<LeOption>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "RankedButton"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getButtonValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "syncSelectionFromValue",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleFieldsetClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "selectRadioButton",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "clickedButton",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "toggleCheckboxButton",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "clickedButton",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "syncLayout",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOverflowSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "Optional label used when the whole group is represented as a parent item\ninside another component's overflow menu.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "collapse",
+              "fieldName": "collapse",
+              "description": "Collapse mode.\n\n- `true`: show only the top-priority button\n- positive number: show top N buttons\n- `0`: show only the more button\n- negative number: hide abs(N) lowest-priority buttons\n\nNon-integers are rounded with `Math.round`.",
+              "type": {
+                "text": "boolean | number | string"
+              }
+            },
+            {
+              "name": "overflow-icons",
+              "fieldName": "overflowIcons",
+              "default": "false",
+              "description": "When true, icons from collapsed buttons are shown in the overflow navigation list.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Disabled attribute, when the button group is disabled,\nall buttons inside will be disabled and the overflow menu will not be accessible.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "visibility",
+              "fieldName": "visibility",
+              "default": "'visible'",
+              "description": "Visibility state used by responsive containers such as le-toolbar.",
+              "type": {
+                "text": "'visible' | 'collapsing' | 'collapsed' | 'expanding'"
+              }
+            },
+            {
+              "name": "type",
+              "fieldName": "type",
+              "description": "Selection type: radio (single select) or checkbox (multi select)",
+              "type": {
+                "text": "'radio' | 'checkbox'"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[].",
+              "type": {
+                "text": "string | string[]"
+              }
+            }
+          ],
+          "tagName": "le-button-group",
+          "events": [
+            {
+              "name": "leOverflowSelect",
+              "type": {
+                "text": "EventEmitter<{ id: string }>"
+              }
+            },
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeOptionSelectDetail | LeMultiOptionSelectDetail>"
+              }
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeButtonGroup",
+          "declaration": {
+            "name": "LeButtonGroup",
+            "module": "src/components/le-button-group/le-button-group.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-button-group",
+          "declaration": {
+            "name": "LeButtonGroup",
+            "module": "src/components/le-button-group/le-button-group.tsx"
           }
         }
       ]
@@ -5105,6 +5105,15 @@
                 "text": "HTMLElement | null | undefined"
               },
               "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "previousBodyUserSelect",
+              "type": {
+                "text": "{ userSelect: string; webkitUserSelect: string } | null"
+              },
+              "privacy": "private",
+              "default": "null"
             },
             {
               "kind": "field",

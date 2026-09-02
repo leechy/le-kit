@@ -1,9 +1,21 @@
 :host {
   display: contents;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .context-menu-trigger-zone {
   display: contents;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+::slotted(*) {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .le-context-menu-backdrop {
@@ -45,6 +57,9 @@ le-popover {
   position: fixed !important;
   pointer-events: none;
   z-index: 9999 !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 le-popover::part(content) {

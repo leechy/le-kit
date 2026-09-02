@@ -26,7 +26,7 @@ But keep in mind that all of them are based on `<le-popover>` component, where w
 
 Let's have a few examples.
 
-### `<le-select>`
+### [&lt;le-select&gt;](/components/le-select)
 
 Select with drag-through support. You can press down the select and drag to the desired item to select it with one gesture.
 
@@ -40,7 +40,7 @@ Select with drag-through support. You can press down the select and drag to the 
   </div>
 </div>
 
-### `<le-multiselect>`
+### [&lt;le-multiselect&gt;](/components/le-multiselect)
 
 Since multiselect gives you to select more than one item, the dropdown is not closed automatically and you can continue to select more items.
 
@@ -65,7 +65,7 @@ Notice that the dropdown scrolls automatically when you drag near the boundaries
   </div>
 </div>
 
-### `<le-overflow-menu>`
+### [&lt;le-overflow-menu&gt;](/components/le-overflow-menu)
 
 The overflow menus are implementing the same mechanics.
 
@@ -86,7 +86,7 @@ The overflow menus are implementing the same mechanics.
   ]'></le-overflow-menu>
 </div>
 
-### `<le-context-menu>`
+### [&lt;le-context-menu&gt;](/components/le-context-menu)
 
 Even when activated with a right click, or even a long press on touch interfaces, the drag-through interaction is the prefered way to interact with the context menus.
 

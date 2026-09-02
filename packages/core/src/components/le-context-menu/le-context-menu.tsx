@@ -62,6 +62,7 @@ export class LeContextMenu {
   private dragStartPosition = { x: 0, y: 0 };
   private currentHoveredActionable?: HTMLElement;
   private activeScrollContainer?: HTMLElement | null;
+  private previousBodyUserSelect: { userSelect: string; webkitUserSelect: string } | null = null;
 
   /**
    * Whether the context menu is open.
@@ -299,6 +300,19 @@ export class LeContextMenu {
     this.isDragSelecting = true;
     this.open = true;
 
+    try {
+      window.getSelection()?.removeAllRanges();
+    } catch {}
+
+    if (!this.previousBodyUserSelect) {
+      this.previousBodyUserSelect = {
+        userSelect: document.body.style.userSelect,
+        webkitUserSelect: document.body.style.webkitUserSelect,
+      };
+      document.body.style.userSelect = 'none';
+      document.body.style.webkitUserSelect = 'none';
+    }
+
     document.addEventListener('pointermove', this.handleDocumentPointerMove, { passive: false });
     document.addEventListener('pointerup', this.handleDocumentPointerUp, true);
     document.addEventListener('pointercancel', this.handleDocumentPointerCancel, true);
@@ -392,6 +406,17 @@ export class LeContextMenu {
     this.isDragSelecting = false;
     this.autoScroller.stop();
     this.activeScrollContainer = null;
+
+    if (this.previousBodyUserSelect) {
+      document.body.style.userSelect = this.previousBodyUserSelect.userSelect;
+      document.body.style.webkitUserSelect = this.previousBodyUserSelect.webkitUserSelect;
+      this.previousBodyUserSelect = null;
+    }
+
+    try {
+      window.getSelection()?.removeAllRanges();
+    } catch {}
+
     if (this.currentHoveredActionable) {
       this.currentHoveredActionable.classList.remove('is-drag-hovered', 'is-focused');
       this.currentHoveredActionable.closest('.nav-row')?.classList.remove('is-drag-hovered', 'is-focused');
@@ -417,6 +442,9 @@ export class LeContextMenu {
 
     this.touchTimeout = setTimeout(() => {
       this.isLongPressActive = true;
+      try {
+        window.getSelection()?.removeAllRanges();
+      } catch {}
       this.triggerMenu(touch.clientX, touch.clientY, e);
     }, LONG_PRESS_DURATION);
   };

@@ -353,7 +353,7 @@ export class LeContextMenu {
     }
 
     if (this.popoverEl) {
-      if (!this.activeScrollContainer || !this.popoverEl.contains(this.activeScrollContainer)) {
+      if (!this.activeScrollContainer) {
         this.activeScrollContainer = findScrollContainer(this.popoverEl);
       }
       if (this.activeScrollContainer) {

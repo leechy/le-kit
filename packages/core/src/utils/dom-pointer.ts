@@ -71,37 +71,45 @@ export function findActionableElement(
 }
 
 /**
- * Finds the active scroll container inside a popover.
+ * Finds the active scroll container inside or including a popover element.
+ * Recursively pierces shadow roots (e.g. when called on <le-popover>).
  */
 export function findScrollContainer(popoverContainer: HTMLElement): HTMLElement | null {
-  // 1. Check common inner containers first
-  const knownList = popoverContainer.querySelector(
-    '.dropdown-list, .le-navigation, [role="listbox"], [role="menu"]',
-  );
-  if (knownList instanceof HTMLElement) {
-    const style = window.getComputedStyle(knownList);
-    if (/(auto|scroll)/.test(style.overflowY) && knownList.scrollHeight > knownList.clientHeight) {
-      return knownList;
-    }
-  }
+  const isScrollable = (el: HTMLElement): boolean => {
+    const style = window.getComputedStyle(el);
+    return (
+      /(auto|scroll)/.test(style.overflowY) &&
+      el.scrollHeight > el.clientHeight &&
+      el.clientHeight > 0
+    );
+  };
 
-  // 2. Check the popover container itself
-  const popoverStyle = window.getComputedStyle(popoverContainer);
-  if (
-    /(auto|scroll)/.test(popoverStyle.overflowY) &&
-    popoverContainer.scrollHeight > popoverContainer.clientHeight
-  ) {
+  // If container itself is scrollable (e.g., .le-popover-content dialog)
+  if (isScrollable(popoverContainer)) {
     return popoverContainer;
   }
 
-  // 3. Search children with overflow-y auto/scroll
-  const allElements = popoverContainer.querySelectorAll('*');
-  for (let i = 0; i < allElements.length; i++) {
-    const child = allElements[i];
-    if (child instanceof HTMLElement) {
-      const style = window.getComputedStyle(child);
-      if (/(auto|scroll)/.test(style.overflowY) && child.scrollHeight > child.clientHeight) {
-        return child;
+  // Search across shadow DOM and light DOM
+  const queue: (Element | ShadowRoot)[] = [];
+
+  if (popoverContainer.shadowRoot) {
+    queue.push(popoverContainer.shadowRoot);
+  }
+  queue.push(popoverContainer);
+
+  while (queue.length > 0) {
+    const node = queue.shift()!;
+    const children = node.children;
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      if (child instanceof HTMLElement) {
+        if (isScrollable(child)) {
+          return child;
+        }
+        if (child.shadowRoot) {
+          queue.push(child.shadowRoot);
+        }
+        queue.push(child);
       }
     }
   }

@@ -7,19 +7,19 @@
 
 ## Properties
 
-| Property           | Attribute            | Description                                | Type                                     | Default                 |
-| ------------------ | -------------------- | ------------------------------------------ | ---------------------------------------- | ----------------------- |
-| `align`            | `align`              | Popover alignment relative to trigger.     | `"center" \| "end" \| "start"`           | `'end'`                 |
-| `disabled`         | `disabled`           | Disables trigger interactions.             | `boolean`                                | `false`                 |
-| `dragSelect`       | `drag-select`        | Whether to enable drag-select interaction. | `boolean`                                | `true`                  |
-| `icon`             | `icon`               | Fallback icon name for trigger.            | `string`                                 | `'ellipsis-horizontal'` |
-| `items`            | `items`              | List of menu items represented as options. | `LeOption[] \| string`                   | `[]`                    |
-| `minWidth`         | `min-width`          | Minimum popover width.                     | `string`                                 | `'160px'`               |
-| `offset`           | `offset`             | Popover offset in px.                      | `number`                                 | `8`                     |
-| `open`             | `open`               | Whether the menu popover is open.          | `boolean`                                | `false`                 |
-| `position`         | `position`           | Popover position.                          | `"bottom" \| "left" \| "right" \| "top"` | `'bottom'`              |
-| `triggerAriaLabel` | `trigger-aria-label` | Aria label for fallback trigger button.    | `string`                                 | `'Open menu'`           |
-| `triggerPart`      | `trigger-part`       | Part name for fallback trigger button.     | `string`                                 | `'trigger-button'`      |
+| Property           | Attribute            | Description                                 | Type                                     | Default                 |
+| ------------------ | -------------------- | ------------------------------------------- | ---------------------------------------- | ----------------------- |
+| `align`            | `align`              | Popover alignment relative to trigger.      | `"center" \| "end" \| "start"`           | `'end'`                 |
+| `disabled`         | `disabled`           | Disables trigger interactions.              | `boolean`                                | `false`                 |
+| `dragThrough`      | `drag-through`       | Whether to enable drag-through interaction. | `boolean`                                | `true`                  |
+| `icon`             | `icon`               | Fallback icon name for trigger.             | `string`                                 | `'ellipsis-horizontal'` |
+| `items`            | `items`              | List of menu items represented as options.  | `LeOption[] \| string`                   | `[]`                    |
+| `minWidth`         | `min-width`          | Minimum popover width.                      | `string`                                 | `'160px'`               |
+| `offset`           | `offset`             | Popover offset in px.                       | `number`                                 | `8`                     |
+| `open`             | `open`               | Whether the menu popover is open.           | `boolean`                                | `false`                 |
+| `position`         | `position`           | Popover position.                           | `"bottom" \| "left" \| "right" \| "top"` | `'bottom'`              |
+| `triggerAriaLabel` | `trigger-aria-label` | Aria label for fallback trigger button.     | `string`                                 | `'Open menu'`           |
+| `triggerPart`      | `trigger-part`       | Part name for fallback trigger button.      | `string`                                 | `'trigger-button'`      |
 
 
 ## Events

@@ -993,10 +993,10 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Whether to enable drag-select interaction.
+          * Whether to enable drag-through interaction.
           * @default true
          */
-        "dragSelect": boolean;
+        "dragThrough": boolean;
         /**
           * Placeholder text when no options match filter.
           * @default 'No options'
@@ -1588,10 +1588,10 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Whether to enable drag-select interaction.
+          * Whether to enable drag-through interaction.
           * @default true
          */
-        "dragSelect": boolean;
+        "dragThrough": boolean;
         "hide": () => Promise<void>;
         /**
           * Fallback icon name for trigger.
@@ -1671,7 +1671,7 @@ export namespace Components {
           * Whether to enable press-drag-release selection
           * @default false
          */
-        "dragSelect": boolean;
+        "dragThrough": boolean;
         /**
           * Closes the popover
          */
@@ -5424,10 +5424,10 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Whether to enable drag-select interaction.
+          * Whether to enable drag-through interaction.
           * @default true
          */
-        "dragSelect"?: boolean;
+        "dragThrough"?: boolean;
         /**
           * Placeholder text when no options match filter.
           * @default 'No options'
@@ -6052,10 +6052,10 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Whether to enable drag-select interaction.
+          * Whether to enable drag-through interaction.
           * @default true
          */
-        "dragSelect"?: boolean;
+        "dragThrough"?: boolean;
         /**
           * Fallback icon name for trigger.
           * @default 'ellipsis-horizontal'
@@ -6133,7 +6133,7 @@ declare namespace LocalJSX {
           * Whether to enable press-drag-release selection
           * @default false
          */
-        "dragSelect"?: boolean;
+        "dragThrough"?: boolean;
         /**
           * Whether the popover width should match the trigger width
           * @default false
@@ -7693,7 +7693,7 @@ declare namespace LocalJSX {
         "width": string;
         "fullWidth": boolean;
         "size": 'small' | 'medium' | 'large';
-        "dragSelect": boolean;
+        "dragThrough": boolean;
         "matchTriggerWidth": boolean;
         "autoWidth": boolean;
         "closeOnClickOutside": boolean;
@@ -7798,7 +7798,7 @@ declare namespace LocalJSX {
         "offset": number;
         "minWidth": string;
         "icon": string;
-        "dragSelect": boolean;
+        "dragThrough": boolean;
         "triggerAriaLabel": string;
         "triggerPart": string;
         "items": LeOverflowMenuItem[] | string;
@@ -7819,7 +7819,7 @@ declare namespace LocalJSX {
         "triggerFullWidth": boolean;
         "matchTriggerWidth": boolean;
         "autoWidth": boolean;
-        "dragSelect": boolean;
+        "dragThrough": boolean;
     }
     interface LePopupAttributes {
         "mode": LeKitMode;

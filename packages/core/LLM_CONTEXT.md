@@ -721,7 +721,7 @@ Wraps le-popover for positioning and provides:
 | `width` | `string \| undefined` |  | Width of the dropdown. If not set, matches trigger width. |
 | `fullWidth` | `boolean` | `false` | Sets the dropdown to full width of the trigger. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size of the dropdown. |
-| `dragSelect` | `boolean` | `true` | Whether to enable drag-select interaction. |
+| `dragThrough` | `boolean` | `true` | Whether to enable drag-through interaction. |
 | `matchTriggerWidth` | `boolean` | `true` | Whether the dropdown width should match the trigger width. |
 | `autoWidth` | `boolean` | `false` | Whether the dropdown should size automatically to its content rather than matching the trigger width. |
 | `closeOnClickOutside` | `boolean` | `true` | Whether to close the dropdown when clicking outside. (used to support combobox with input focus) |
@@ -1049,7 +1049,7 @@ A number input component with validation, keyboard controls, and custom spinners
 | `offset` | `number` | `8` | Popover offset in px. |
 | `minWidth` | `string` | `'160px'` | Minimum popover width. |
 | `icon` | `string` | `'ellipsis-horizontal'` | Fallback icon name for trigger. |
-| `dragSelect` | `boolean` | `true` | Whether to enable drag-select interaction. |
+| `dragThrough` | `boolean` | `true` | Whether to enable drag-through interaction. |
 | `triggerAriaLabel` | `string` | `'Open menu'` | Aria label for fallback trigger button. |
 | `triggerPart` | `string` | `'trigger-button'` | Part name for fallback trigger button. |
 | `items` | `LeOverflowMenuItem[] \| string` | `[]` | List of menu items represented as options. |
@@ -1090,7 +1090,7 @@ and other top-layer elements. Falls back gracefully in older browsers.
 | `triggerFullWidth` | `boolean` | `false` | Should the popover's trigger take full width of its container |
 | `matchTriggerWidth` | `boolean` | `false` | Whether the popover width should match the trigger width |
 | `autoWidth` | `boolean` | `false` | Whether the popover should size automatically to its content rather than matching the trigger width |
-| `dragSelect` | `boolean` | `false` | Whether to enable press-drag-release selection |
+| `dragThrough` | `boolean` | `false` | Whether to enable press-drag-release selection |
 
 ### Events
 

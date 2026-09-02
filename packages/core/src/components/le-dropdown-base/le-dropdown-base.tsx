@@ -102,9 +102,9 @@ export class LeDropdownBase {
   @Prop() size: 'small' | 'medium' | 'large' = 'medium';
 
   /**
-   * Whether to enable drag-select interaction.
+   * Whether to enable drag-through interaction.
    */
-  @Prop() dragSelect: boolean = true;
+  @Prop() dragThrough: boolean = true;
 
   /**
    * Whether the dropdown width should match the trigger width.
@@ -579,7 +579,7 @@ export class LeDropdownBase {
         showClose={false}
         closeOnClickOutside={this.closeOnClickOutside}
         closeOnEscape={true}
-        dragSelect={this.dragSelect}
+        dragThrough={this.dragThrough}
         matchTriggerWidth={this.matchTriggerWidth}
         autoWidth={this.autoWidth}
         offset={4}

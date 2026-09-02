@@ -1,5 +1,5 @@
 /**
- * DOM and Pointer utility functions for Drag-Select and Auto-scrolling
+ * DOM and Pointer utility functions for Drag-Through and Auto-scrolling
  */
 
 /**

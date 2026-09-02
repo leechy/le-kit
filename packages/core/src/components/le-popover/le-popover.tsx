@@ -124,7 +124,7 @@ export class LePopover {
   /**
    * Whether to enable press-drag-release selection
    */
-  @Prop({ reflect: true }) dragSelect: boolean = false;
+  @Prop({ reflect: true }) dragThrough: boolean = false;
 
   /**
    * Emitted when the popover opens
@@ -441,7 +441,7 @@ export class LePopover {
   }
 
   private handleTriggerPointerDown = (event: PointerEvent) => {
-    if (!this.dragSelect) return;
+    if (!this.dragThrough) return;
     if (event.button !== 0 && event.pointerType === 'mouse') return;
 
     this.wasOpenOnPointerDown = this.open;
@@ -582,7 +582,7 @@ export class LePopover {
 
   private handleTriggerClick = (event: MouseEvent) => {
     event.stopPropagation();
-    if (this.dragSelect) {
+    if (this.dragThrough) {
       return;
     }
     this.toggle();
@@ -797,7 +797,7 @@ export class LePopover {
   }
 
   private handleTriggerContextMenu = (event: MouseEvent) => {
-    if (this.dragSelect) {
+    if (this.dragThrough) {
       event.preventDefault();
       event.stopPropagation();
     }
@@ -819,7 +819,7 @@ export class LePopover {
     }
 
     return (
-      <Host trigger-full-width={this.triggerFullWidth} drag-select={this.dragSelect}>
+      <Host trigger-full-width={this.triggerFullWidth} drag-through={this.dragThrough}>
         <div
           class={classnames('le-popover-trigger', {
             'le-popover-trigger-full-width': this.triggerFullWidth,

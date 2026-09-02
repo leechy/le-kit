@@ -23,7 +23,7 @@
   cursor: pointer;
 }
 
-:host([drag-select]) .le-popover-trigger {
+:host([drag-through]) .le-popover-trigger {
   touch-action: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;

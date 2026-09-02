@@ -21,6 +21,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `autoScroll`             | `auto-scroll`                | Automatically scroll the active item into view when the active URL changes or on initial load.  - Initial load: instant (no animation) - Subsequent `activeUrl` changes: smooth  Only applies to `vertical` orientation.                                                                                          | `boolean`                                          | `false`                                                   |
 | `emptyText`              | `empty-text`                 | Text shown when no items match the filter.                                                                                                                                                                                                                                                                        | `string`                                           | `'No results found'`                                      |
 | `items`                  | `items`                      | Navigation items. Can be passed as an array or JSON string (same pattern as le-select).                                                                                                                                                                                                                           | `LeOption[] \| string`                             | `[]`                                                      |
+| `maxReorderDepth`        | `max-reorder-depth`          | Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).                                                                                                                                                  | `number \| undefined`                              | `undefined`                                               |
 | `minVisibleItemsForMore` | `min-visible-items-for-more` | Minimum number of visible top-level items required to use the "More" overflow. If fewer would be visible, the navigation falls back to hamburger.                                                                                                                                                                 | `number`                                           | `2`                                                       |
 | `orientation`            | `orientation`                | Layout orientation.                                                                                                                                                                                                                                                                                               | `"horizontal" \| "vertical"`                       | `'horizontal'`                                            |
 | `overflowMode`           | `overflow-mode`              | Overflow behavior for horizontal, non-wrapping menus. - more: moves overflow items into a "More" popover - hamburger: turns the whole nav into a hamburger popover                                                                                                                                                | `"hamburger" \| "more"`                            | `'more'`                                                  |
@@ -163,37 +164,26 @@ graph TD;
   le-navigation --> le-popover
   le-navigation --> le-bar
   le-navigation --> le-component
-  le-string-input --> le-component
   le-string-input --> le-button
   le-string-input --> le-icon
-  le-string-input --> le-slot
+  le-button --> le-icon
+  le-button --> le-visibility
+  le-button --> le-tooltip
+  le-tooltip --> le-component
   le-component --> le-button
   le-component --> le-select
   le-component --> le-checkbox
   le-component --> le-string-input
   le-component --> le-popover
   le-component --> le-popup
-  le-button --> le-icon
-  le-button --> le-visibility
-  le-button --> le-slot
-  le-button --> le-component
-  le-button --> le-tooltip
-  le-slot --> le-popover
-  le-slot --> le-button
-  le-slot --> le-string-input
-  le-tooltip --> le-component
   le-select --> le-icon
   le-select --> le-component
   le-select --> le-dropdown-base
   le-select --> le-button
   le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
-  le-checkbox --> le-component
-  le-checkbox --> le-slot
-  le-popup --> le-slot
   le-popup --> le-button
   le-popup --> le-component
-  le-collapse --> le-component
   le-bar --> le-icon
   le-bar --> le-overflow-menu
   le-overflow-menu --> le-navigation

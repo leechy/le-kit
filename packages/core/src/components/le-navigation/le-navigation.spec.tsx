@@ -199,4 +199,81 @@ describe('le-navigation drag-and-drop reordering', () => {
     expect(items[1]).toBe('Work');
     expect(items[2]).toBe('Drafts');
   });
+
+  it('respects maxReorderDepth on moveItem method', async () => {
+    const page = await newSpecPage({
+      components: [LeNavigation],
+      html: `<le-navigation orientation="vertical" reorder="nested" max-reorder-depth="1"></le-navigation>`,
+    });
+
+    const host = page.root as any;
+    host.items = [
+      {
+        label: 'Level 0',
+        value: 'lvl0',
+        children: [
+          { label: 'Level 1', value: 'lvl1' },
+        ],
+      },
+      { label: 'Other', value: 'other' },
+    ];
+    await page.waitForChanges();
+
+    const instance = page.rootInstance as LeNavigation;
+    // Trying to move inside 'lvl1' (which is at depth 1) should fail because maxReorderDepth is 1
+    const result = await instance.moveItem('other', 'lvl1', 'inside');
+    expect(result.success).toBe(false);
+
+    // Moving inside 'lvl0' (which is at depth 0) should succeed
+    const resultValid = await instance.moveItem('other', 'lvl0', 'inside');
+    expect(resultValid.success).toBe(true);
+  });
+
+  it('respects maxReorderDepth with dragged items that have children', async () => {
+    const page = await newSpecPage({
+      components: [LeNavigation],
+      html: `<le-navigation reorder="nested" max-reorder-depth="2"></le-navigation>`,
+    });
+
+    const host = page.root as any;
+    host.items = [
+      {
+        label: 'Level 0',
+        value: 'lvl0',
+        children: [
+          {
+            label: 'Level 1',
+            value: 'lvl1',
+            children: [
+              { label: 'Level 2', value: 'lvl2' },
+            ],
+          },
+        ],
+      },
+      {
+        label: 'Branch',
+        value: 'branch',
+        children: [
+          { label: 'Branch Child', value: 'branch_child' },
+        ],
+      },
+    ];
+    await page.waitForChanges();
+
+    const instance = page.rootInstance as LeNavigation;
+
+    // 'branch' has subtree depth 1.
+    // 'lvl1' is at depth 1. Moving 'branch' inside 'lvl1' places 'branch' at depth 2 and 'branch_child' at depth 3 > 2.
+    const resultInsideLvl1 = await instance.moveItem('branch', 'lvl1', 'inside');
+    expect(resultInsideLvl1.success).toBe(false);
+
+    // Moving 'branch' before 'lvl2' (depth 2) places 'branch' at depth 2 and 'branch_child' at depth 3 > 2.
+    const resultBeforeLvl2 = await instance.moveItem('branch', 'lvl2', 'before');
+    expect(resultBeforeLvl2.success).toBe(false);
+
+    // Moving 'branch' inside 'lvl0' (depth 0) places 'branch' at depth 1 and 'branch_child' at depth 2 <= 2.
+    const resultInsideLvl0 = await instance.moveItem('branch', 'lvl0', 'inside');
+    expect(resultInsideLvl0.success).toBe(true);
+  });
 });
+

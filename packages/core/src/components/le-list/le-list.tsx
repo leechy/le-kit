@@ -1,7 +1,16 @@
-import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Listen, Method, Prop, State, Watch, h } from '@stencil/core';
 import type { LeOption } from '../../types/options';
-import type { LeColumn } from '../../types/list';
+import type { LeColumn, LeListItemReorderDetail, LeListReorderMode } from '../../types/list';
 import { buildDeclarativeOptionsFromChildren, isEditableTarget, observeNamedSlotPresence, parseOptionInput } from '../../utils/utils';
+import {
+  findNodeInTree,
+  getNodeDepth,
+  getOutdentAncestors,
+  getSubtreeDepth,
+  isDescendantOf,
+  reorderDeclarativeDomNodes,
+  reorderTreeItem,
+} from '../../utils/tree';
 
 @Component({
   tag: 'le-list',
@@ -16,7 +25,7 @@ export class LeList {
    * Can be an array of `LeOption` objects or a JSON string.
    * If omitted or empty, top-level `<le-item>` child elements will be parsed.
    */
-  @Prop() data: LeOption[] | string = [];
+  @Prop({ mutable: true }) data: LeOption[] | string = [];
 
   /**
    * Column configuration for the list table view.
@@ -127,6 +136,42 @@ export class LeList {
    */
   @Prop({ reflect: true }) actionChevron: boolean = false;
 
+  /**
+   * Enables manual drag-and-drop reordering of list row items.
+   * - 'none': Disabled (default)
+   * - 'siblings': Can only reorder within current parent/root siblings
+   * - 'nested': Can reorder across hierarchical levels (inside/outside parents)
+   * Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+   */
+  @Prop({ reflect: true, mutable: true }) reorder: LeListReorderMode | boolean = 'none';
+
+  /**
+   * Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable rows.
+   * Default: false.
+   */
+  @Prop({ reflect: true }) showReorderHandle: boolean = false;
+
+  /**
+   * Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones.
+   * Default: { top: 0.35, middle: 0.3, bottom: 0.35 }.
+   */
+  @Prop() reorderRatios: { top: number; middle: number; bottom: number } = {
+    top: 0.35,
+    middle: 0.3,
+    bottom: 0.35,
+  };
+
+  /**
+   * Maximum allowed nesting depth for drag-and-drop reordering.
+   * When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
+   */
+  @Prop({ reflect: true }) maxReorderDepth?: number;
+
+  /**
+   * Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.
+   */
+  @Prop() reorderExpandDelay: number = 500;
+
   @State() parsedOptions: LeOption[] = [];
   @State() parsedColumns: LeColumn[] = [];
   @State() sortColumnKey: string | undefined;
@@ -137,8 +182,30 @@ export class LeList {
   @State() private slotPresence: Record<string, boolean> = {};
   @State() private openState: Record<string, boolean> = {};
 
+  @State() private userReorderedItems?: LeOption[];
+  @State() private activeDragId?: string;
+  @State() private dropTargetId?: string;
+  @State() private dropPosition?: 'before' | 'inside' | 'after';
+  @State() private isDraggingActive: boolean = false;
+  @State() private ghostX: number = 0;
+  @State() private ghostY: number = 0;
+  @State() private isDeclarativeMode: boolean = false;
+
   private visualFocusActive: boolean = false;
   private dragSelectionStartId?: string;
+  private pendingDragId?: string;
+  private pendingDragItem?: LeOption;
+  private dragStartX: number = 0;
+  private dragStartY: number = 0;
+  private dragOffsetX: number = 0;
+  private dragOffsetY: number = 0;
+  private dragItemRect?: DOMRect;
+  private dragJustEnded: boolean = false;
+  private outdentBaselineX?: number;
+  private outdentTargetId?: string;
+  private overrideDropDepth?: number;
+  private autoExpandTimer?: any;
+  private hoveredExpandId?: string;
 
   /**
    * Emitted when row selection changes.
@@ -174,9 +241,20 @@ export class LeList {
    */
   @Event() leItemToggle!: EventEmitter<{ item: LeOption; open: boolean; originalEvent?: MouseEvent }>;
 
+  /**
+   * Fired when list row items are reordered via drag and drop.
+   */
+  @Event() leItemReorder!: EventEmitter<LeListItemReorderDetail>;
+
+  /**
+   * Alias for `leItemReorder`.
+   */
+  @Event() leReorder!: EventEmitter<LeListItemReorderDetail>;
+
   private childrenObserver?: MutationObserver;
   private disconnectSlotObserver?: () => void;
   private renderedRowCount = 0;
+
 
   @Watch('data')
   async handleDataChange() {
@@ -480,11 +558,155 @@ export class LeList {
     this.isSelecting = false;
   };
 
-  private handleRowPointerDown = (e: PointerEvent, _item: LeOption, id: string) => {
+  /**
+   * Programmatically set the reorder mode ('none', 'siblings', 'nested', or boolean).
+   */
+  @Method()
+  async setReorder(mode: LeListReorderMode | boolean) {
+    this.reorder = mode;
+  }
+
+  /**
+   * Programmatically enable reordering.
+   */
+  @Method()
+  async enableReorder(mode: LeListReorderMode = 'nested') {
+    this.reorder = mode;
+  }
+
+  /**
+   * Programmatically disable reordering.
+   */
+  @Method()
+  async disableReorder() {
+    this.reorder = 'none';
+  }
+
+  /**
+   * Programmatically move an item relative to another item in the list tree.
+   * Accepts item ID, value, or label for both dragged and target items.
+   */
+  @Method()
+  async moveItem(
+    draggedQuery: string,
+    targetQuery: string,
+    position: 'before' | 'inside' | 'after' = 'after',
+  ): Promise<{ success: boolean; detail?: LeListItemReorderDetail }> {
+    const items = [...this.getEffectiveOptions()];
+    const draggedNode = findNodeInTree(items, draggedQuery);
+    const targetNode = findNodeInTree(items, targetQuery);
+
+    if (!draggedNode || !targetNode) {
+      console.warn(`[le-list] moveItem: item not found ("${draggedQuery}" or "${targetQuery}")`);
+      return { success: false };
+    }
+
+    const draggedId = String(draggedNode.item.id ?? draggedNode.item.value ?? '');
+    const targetId = String(targetNode.item.id ?? targetNode.item.value ?? '');
+
+    if (this.maxReorderDepth !== undefined) {
+      const draggedSubtreeDepth = getSubtreeDepth(draggedNode.item);
+      const targetDepth = getNodeDepth(items, targetId);
+      const finalDepth = position === 'inside' ? targetDepth + 1 : targetDepth;
+      if (finalDepth + draggedSubtreeDepth > this.maxReorderDepth) {
+        console.warn(
+          `[le-list] moveItem: cannot move item with subtree depth ${draggedSubtreeDepth} to depth ${finalDepth} (maxReorderDepth is ${this.maxReorderDepth})`,
+        );
+        return { success: false };
+      }
+    }
+
+    const reorderResult = reorderTreeItem(
+      items,
+      draggedId,
+      targetId,
+      position,
+      (id, open) => {
+        this.openState = { ...this.openState, [id]: open };
+      },
+    );
+
+    if (!reorderResult.success || !reorderResult.newItems) {
+      return { success: false };
+    }
+
+    this.userReorderedItems = reorderResult.newItems;
+    this.data = reorderResult.newItems;
+    this.parsedOptions = reorderResult.newItems;
+
+    if (this.isDeclarativeMode) {
+      reorderDeclarativeDomNodes(
+        reorderResult.draggedItem,
+        reorderResult.targetItem,
+        position,
+      );
+    }
+
+    const detail: LeListItemReorderDetail = {
+      item: reorderResult.draggedItem!,
+      draggedId,
+      targetItem: reorderResult.targetItem,
+      targetId,
+      position,
+      oldParentId: reorderResult.oldParentId,
+      newParentId: reorderResult.newParentId,
+      items: reorderResult.newItems,
+    };
+
+    this.leItemReorder.emit(detail);
+    this.leReorder.emit(detail);
+
+    return { success: true, detail };
+  }
+
+  private get activeReorderMode(): LeListReorderMode {
+    const val: any = this.reorder;
+    if (typeof val === 'boolean') {
+      return val ? 'nested' : 'none';
+    }
+    if (val === 'siblings' || val === 'nested') {
+      return val;
+    }
+    if (val === '' || val === true || val === 'true') {
+      return 'nested';
+    }
+    return 'none';
+  }
+
+  private getEffectiveOptions(): LeOption[] {
+    if (this.userReorderedItems) {
+      return this.userReorderedItems;
+    }
+    return this.parsedOptions;
+  }
+
+  private handleRowPointerDown = (e: PointerEvent, item: LeOption, id: string) => {
     if (e.button !== 0) return;
 
     if ((e.target as HTMLElement).closest('.le-list-row-toggle')) {
       return;
+    }
+
+    if (this.activeReorderMode !== 'none' && !item.disabled) {
+      this.pendingDragId = id;
+      this.pendingDragItem = item;
+      this.dragStartX = e.clientX;
+      this.dragStartY = e.clientY;
+
+      const targetEl = (e.currentTarget as HTMLElement).closest('.le-list-row-main') as HTMLElement;
+      if (targetEl) {
+        const rect = targetEl.getBoundingClientRect();
+        this.dragOffsetX = e.clientX - rect.left;
+        this.dragOffsetY = e.clientY - rect.top;
+        this.dragItemRect = rect;
+      } else {
+        this.dragOffsetX = 12;
+        this.dragOffsetY = 12;
+      }
+
+      window.addEventListener('pointermove', this.handleGlobalPointerMove);
+      window.addEventListener('pointerup', this.handleGlobalPointerUp);
+      window.addEventListener('pointercancel', this.handleGlobalPointerUp);
     }
 
     if (!this.canNavigateRows()) return;
@@ -500,7 +722,6 @@ export class LeList {
     }
 
     this.focusedRowId = id;
-    // Mouse clicks do not display keyboard focus ring; focus ring appears upon next keypress
     this.visualFocusActive = false;
 
     if (!this.isSelectionEnabled()) {
@@ -540,8 +761,470 @@ export class LeList {
     }
   };
 
+  private handleGlobalPointerMove = (e: PointerEvent) => {
+    if (!this.pendingDragId || !this.pendingDragItem) return;
+
+    if (!this.isDraggingActive) {
+      const dist = Math.hypot(e.clientX - this.dragStartX, e.clientY - this.dragStartY);
+      if (dist < 4) return;
+
+      this.isDraggingActive = true;
+      this.activeDragId = this.pendingDragId;
+      this.isSelecting = false;
+      this.dragSelectionStartId = undefined;
+    }
+
+    this.ghostX = e.clientX - this.dragOffsetX;
+    this.ghostY = e.clientY - this.dragOffsetY;
+
+    let targetEl: HTMLElement | null = null;
+
+    if (this.el.shadowRoot && typeof (this.el.shadowRoot as any).elementFromPoint === 'function') {
+      const shadowTarget = (this.el.shadowRoot as any).elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+      if (shadowTarget) {
+        targetEl = shadowTarget.closest('.le-list-row-main') as HTMLElement;
+      }
+    }
+
+    if (!targetEl) {
+      const elements = document.elementsFromPoint(e.clientX, e.clientY);
+      for (const el of elements) {
+        const itemEl = el.closest('.le-list-row-main') as HTMLElement;
+        if (itemEl && this.el.shadowRoot?.contains(itemEl)) {
+          targetEl = itemEl;
+          break;
+        }
+      }
+    }
+
+    if (!targetEl) {
+      this.dropTargetId = undefined;
+      this.dropPosition = undefined;
+      this.clearAutoExpandTimer();
+      return;
+    }
+
+    const targetId = targetEl.getAttribute('data-row-id');
+    const targetParentId = targetEl.getAttribute('data-parent-id') || undefined;
+
+    if (!targetId) {
+      this.dropTargetId = undefined;
+      this.dropPosition = undefined;
+      this.clearAutoExpandTimer();
+      return;
+    }
+
+    const items = this.getEffectiveOptions();
+    if (isDescendantOf(items, this.activeDragId!, targetId)) {
+      this.dropTargetId = undefined;
+      this.dropPosition = undefined;
+      this.clearAutoExpandTimer();
+      return;
+    }
+
+    const mode = this.activeReorderMode;
+    const targetRect = targetEl.getBoundingClientRect();
+    const relY = e.clientY - targetRect.top;
+    const ratio = relY / targetRect.height;
+
+    if (mode === 'siblings') {
+      const draggedNode = findNodeInTree(items, this.activeDragId!);
+      if (draggedNode && draggedNode.parentId !== targetParentId) {
+        this.dropTargetId = undefined;
+        this.dropPosition = undefined;
+        this.clearAutoExpandTimer();
+        return;
+      }
+      this.dropTargetId = targetId;
+      this.dropPosition = ratio < 0.5 ? 'before' : 'after';
+      this.clearAutoExpandTimer();
+      return;
+    }
+
+    if (mode === 'nested') {
+      const ratios = this.reorderRatios || { top: 0.35, middle: 0.3, bottom: 0.35 };
+      const topLimit = Math.max(0.05, Math.min(0.45, ratios.top));
+      const bottomLimit = 1 - Math.max(0.05, Math.min(0.45, ratios.bottom));
+
+      const draggedNode = findNodeInTree(items, this.activeDragId!);
+      const draggedSubtreeDepth = draggedNode ? getSubtreeDepth(draggedNode.item) : 0;
+      const targetDepth = getNodeDepth(items, targetId);
+      const cannotNestInside = this.maxReorderDepth !== undefined && (targetDepth + draggedSubtreeDepth >= this.maxReorderDepth);
+      const canPlaceAtTargetDepth = this.maxReorderDepth === undefined || (targetDepth + draggedSubtreeDepth <= this.maxReorderDepth);
+
+      const isSelfTarget = targetId === this.activeDragId;
+
+      if (isSelfTarget) {
+        const outdentThreshold = cannotNestInside ? 0.5 : bottomLimit;
+        if (ratio > outdentThreshold) {
+          const rawOutdentChain = getOutdentAncestors(items, targetId);
+          const outdentChain = rawOutdentChain.filter(
+            node => this.maxReorderDepth === undefined || node.depth + draggedSubtreeDepth <= this.maxReorderDepth,
+          );
+          if (outdentChain.length > 0) {
+            if (this.outdentTargetId !== targetId || this.outdentBaselineX === undefined) {
+              this.outdentBaselineX = e.clientX;
+              this.outdentTargetId = targetId;
+            }
+            const deltaX = e.clientX - this.outdentBaselineX;
+            const steps = deltaX < 0 ? Math.floor(Math.abs(deltaX) / 24) : 0;
+            const chainIndex = Math.min(steps, outdentChain.length - 1);
+            const selected = outdentChain[chainIndex];
+            this.dropTargetId = selected.id;
+            this.dropPosition = 'after';
+            this.overrideDropDepth = selected.depth;
+            this.clearAutoExpandTimer();
+            return;
+          }
+        }
+        this.dropTargetId = undefined;
+        this.dropPosition = undefined;
+        this.outdentBaselineX = undefined;
+        this.outdentTargetId = undefined;
+        this.overrideDropDepth = undefined;
+        this.clearAutoExpandTimer();
+        return;
+      }
+
+      // If cannot nest inside (because targetDepth + 1 + draggedSubtreeDepth > maxReorderDepth), disable 'inside' and split 50/50
+      if (cannotNestInside) {
+        this.clearAutoExpandTimer();
+        let finalTargetId: string | undefined = undefined;
+        let pos: 'before' | 'inside' | 'after' | undefined = undefined;
+
+        if (ratio < 0.5) {
+          const prevItem = this.getPreviousVisibleItem(items, targetId);
+          const prevAncestors = prevItem ? getOutdentAncestors(items, prevItem.id!) : [];
+          const topChain: Array<{ id: string; depth: number; pos: 'before' | 'after' }> = [];
+          if (canPlaceAtTargetDepth) {
+            topChain.push({ id: targetId, depth: targetDepth, pos: 'before' });
+          }
+          if (prevAncestors.length > 1) {
+            for (let i = prevAncestors.length - 2; i >= 0; i--) {
+              if (this.maxReorderDepth === undefined || prevAncestors[i].depth + draggedSubtreeDepth <= this.maxReorderDepth) {
+                topChain.push({ id: prevAncestors[i].id, depth: prevAncestors[i].depth, pos: 'after' });
+              }
+            }
+          }
+
+          if (topChain.length > 0) {
+            if (topChain.length > 1) {
+              if (this.outdentTargetId !== `top-${targetId}` || this.outdentBaselineX === undefined) {
+                this.outdentBaselineX = e.clientX;
+                this.outdentTargetId = `top-${targetId}`;
+              }
+              const deltaX = e.clientX - this.outdentBaselineX;
+              const steps = deltaX > 0 ? Math.floor(deltaX / 24) : 0;
+              const chainIndex = Math.min(steps, topChain.length - 1);
+              const selected = topChain[chainIndex];
+
+              finalTargetId = selected.id;
+              pos = selected.pos;
+              this.overrideDropDepth = selected.depth;
+            } else {
+              finalTargetId = topChain[0].id;
+              pos = topChain[0].pos;
+              this.overrideDropDepth = canPlaceAtTargetDepth ? undefined : topChain[0].depth;
+              this.outdentBaselineX = undefined;
+              this.outdentTargetId = undefined;
+            }
+          }
+        } else {
+          const rawOutdentChain = getOutdentAncestors(items, targetId);
+          const outdentChain = rawOutdentChain.filter(
+            node => this.maxReorderDepth === undefined || node.depth + draggedSubtreeDepth <= this.maxReorderDepth,
+          );
+          if (outdentChain.length > 0) {
+            if (outdentChain.length > 1) {
+              if (this.outdentTargetId !== targetId || this.outdentBaselineX === undefined) {
+                this.outdentBaselineX = e.clientX;
+                this.outdentTargetId = targetId;
+              }
+              const deltaX = e.clientX - this.outdentBaselineX;
+              const steps = deltaX < 0 ? Math.floor(Math.abs(deltaX) / 24) : 0;
+              const chainIndex = Math.min(steps, outdentChain.length - 1);
+              const selected = outdentChain[chainIndex];
+
+              finalTargetId = selected.id;
+              pos = 'after';
+              this.overrideDropDepth = selected.depth;
+            } else {
+              finalTargetId = outdentChain[0].id;
+              pos = 'after';
+              this.overrideDropDepth = canPlaceAtTargetDepth ? undefined : outdentChain[0].depth;
+              this.outdentBaselineX = undefined;
+              this.outdentTargetId = undefined;
+            }
+          }
+        }
+
+        this.dropTargetId = finalTargetId;
+        this.dropPosition = pos;
+        return;
+      }
+
+      const targetNode = findNodeInTree(items, targetId);
+      const children = targetNode && Array.isArray(targetNode.item.children) ? targetNode.item.children : [];
+      const hasChildren = children.length > 0;
+      const firstChild = hasChildren ? children[0] : undefined;
+      const isOpen = targetNode && this.isItemOpen(targetNode.item, targetId);
+
+      let finalTargetId: string | undefined = targetId;
+      let pos: 'before' | 'inside' | 'after' | undefined = 'inside';
+
+      if (ratio < topLimit) {
+        const prevItem = this.getPreviousVisibleItem(items, targetId);
+        const prevAncestors = prevItem ? getOutdentAncestors(items, prevItem.id!) : [];
+        const topChain: Array<{ id: string; depth: number; pos: 'before' | 'after' }> = [
+          { id: targetId, depth: targetDepth, pos: 'before' },
+        ];
+        if (prevAncestors.length > 1) {
+          for (let i = prevAncestors.length - 2; i >= 0; i--) {
+            if (this.maxReorderDepth === undefined || prevAncestors[i].depth + draggedSubtreeDepth <= this.maxReorderDepth) {
+              topChain.push({ id: prevAncestors[i].id, depth: prevAncestors[i].depth, pos: 'after' });
+            }
+          }
+        }
+
+        if (topChain.length > 1) {
+          if (this.outdentTargetId !== `top-${targetId}` || this.outdentBaselineX === undefined) {
+            this.outdentBaselineX = e.clientX;
+            this.outdentTargetId = `top-${targetId}`;
+          }
+          const deltaX = e.clientX - this.outdentBaselineX;
+          const steps = deltaX > 0 ? Math.floor(deltaX / 24) : 0;
+          const chainIndex = Math.min(steps, topChain.length - 1);
+          const selected = topChain[chainIndex];
+
+          finalTargetId = selected.id;
+          pos = selected.pos;
+          this.overrideDropDepth = selected.depth;
+        } else {
+          pos = 'before';
+          this.outdentBaselineX = undefined;
+          this.outdentTargetId = undefined;
+          this.overrideDropDepth = undefined;
+        }
+      } else if (hasChildren) {
+        if (isOpen) {
+          if (firstChild && firstChild.id && (this.maxReorderDepth === undefined || targetDepth + 1 + draggedSubtreeDepth <= this.maxReorderDepth)) {
+            finalTargetId = firstChild.id;
+            pos = 'before';
+          } else {
+            pos = 'inside';
+          }
+          this.outdentBaselineX = undefined;
+          this.outdentTargetId = undefined;
+          this.overrideDropDepth = undefined;
+        } else {
+          if (ratio > bottomLimit) {
+            const rawOutdentChain = getOutdentAncestors(items, targetId);
+            const outdentChain = rawOutdentChain.filter(
+              node => this.maxReorderDepth === undefined || node.depth + draggedSubtreeDepth <= this.maxReorderDepth,
+            );
+            if (outdentChain.length > 1) {
+              if (this.outdentTargetId !== targetId || this.outdentBaselineX === undefined) {
+                this.outdentBaselineX = e.clientX;
+                this.outdentTargetId = targetId;
+              }
+              const deltaX = e.clientX - this.outdentBaselineX;
+              const steps = deltaX < 0 ? Math.floor(Math.abs(deltaX) / 24) : 0;
+              const chainIndex = Math.min(steps, outdentChain.length - 1);
+              const selected = outdentChain[chainIndex];
+
+              finalTargetId = selected.id;
+              pos = 'after';
+              this.overrideDropDepth = selected.depth;
+            } else {
+              if (firstChild && firstChild.id && (this.maxReorderDepth === undefined || targetDepth + 1 + draggedSubtreeDepth <= this.maxReorderDepth)) {
+                finalTargetId = firstChild.id;
+                pos = 'before';
+              } else {
+                pos = 'inside';
+              }
+              this.outdentBaselineX = undefined;
+              this.outdentTargetId = undefined;
+              this.overrideDropDepth = undefined;
+            }
+            if (this.hoveredExpandId !== targetId) {
+              this.clearAutoExpandTimer();
+              this.hoveredExpandId = targetId;
+              this.autoExpandTimer = setTimeout(() => {
+                if (targetNode) {
+                  this.toggleRowOpen(targetNode.item, targetId, true);
+                }
+              }, this.reorderExpandDelay);
+            }
+          } else {
+            pos = 'inside';
+            this.outdentBaselineX = undefined;
+            this.outdentTargetId = undefined;
+            this.overrideDropDepth = undefined;
+            if (this.hoveredExpandId !== targetId) {
+              this.clearAutoExpandTimer();
+              this.hoveredExpandId = targetId;
+              this.autoExpandTimer = setTimeout(() => {
+                if (targetNode) {
+                  this.toggleRowOpen(targetNode.item, targetId, true);
+                }
+              }, this.reorderExpandDelay);
+            }
+          }
+        }
+      } else {
+        if (ratio > bottomLimit) {
+          const rawOutdentChain = getOutdentAncestors(items, targetId);
+          const outdentChain = rawOutdentChain.filter(
+            node => this.maxReorderDepth === undefined || node.depth + draggedSubtreeDepth <= this.maxReorderDepth,
+          );
+          if (outdentChain.length > 1) {
+            if (this.outdentTargetId !== targetId || this.outdentBaselineX === undefined) {
+              this.outdentBaselineX = e.clientX;
+              this.outdentTargetId = targetId;
+            }
+            const deltaX = e.clientX - this.outdentBaselineX;
+            const steps = deltaX < 0 ? Math.floor(Math.abs(deltaX) / 24) : 0;
+            const chainIndex = Math.min(steps, outdentChain.length - 1);
+            const selected = outdentChain[chainIndex];
+
+            finalTargetId = selected.id;
+            pos = 'after';
+            this.overrideDropDepth = selected.depth;
+          } else if (outdentChain.length === 1) {
+            finalTargetId = outdentChain[0].id;
+            pos = 'after';
+            this.overrideDropDepth = undefined;
+            this.outdentBaselineX = undefined;
+            this.outdentTargetId = undefined;
+          } else {
+            pos = 'inside';
+            this.outdentBaselineX = undefined;
+            this.outdentTargetId = undefined;
+            this.overrideDropDepth = undefined;
+          }
+        } else {
+          pos = 'inside';
+          this.outdentBaselineX = undefined;
+          this.outdentTargetId = undefined;
+          this.overrideDropDepth = undefined;
+          if (this.hoveredExpandId !== targetId) {
+            this.clearAutoExpandTimer();
+            this.hoveredExpandId = targetId;
+            this.autoExpandTimer = setTimeout(() => {
+              if (targetNode) {
+                this.toggleRowOpen(targetNode.item, targetId, true);
+              }
+            }, this.reorderExpandDelay);
+          }
+        }
+      }
+
+      if (pos !== 'inside' && ratio < topLimit) {
+        this.clearAutoExpandTimer();
+      }
+
+      this.dropTargetId = finalTargetId;
+      this.dropPosition = pos;
+    }
+  };
+
+  private clearAutoExpandTimer() {
+    if (this.autoExpandTimer) {
+      clearTimeout(this.autoExpandTimer);
+      this.autoExpandTimer = undefined;
+    }
+    this.hoveredExpandId = undefined;
+  }
+
+  private handleGlobalPointerUp = (e: PointerEvent) => {
+    window.removeEventListener('pointermove', this.handleGlobalPointerMove);
+    window.removeEventListener('pointerup', this.handleGlobalPointerUp);
+    window.removeEventListener('pointercancel', this.handleGlobalPointerUp);
+    this.clearAutoExpandTimer();
+
+    if (this.isDraggingActive && this.activeDragId && this.dropTargetId && this.dropPosition) {
+      this.dragJustEnded = true;
+      setTimeout(() => {
+        this.dragJustEnded = false;
+      }, 100);
+
+      const items = [...this.getEffectiveOptions()];
+      const reorderResult = reorderTreeItem(
+        items,
+        this.activeDragId,
+        this.dropTargetId,
+        this.dropPosition,
+        (id, open) => {
+          this.openState = { ...this.openState, [id]: open };
+        },
+      );
+
+      if (reorderResult.success && reorderResult.newItems) {
+        this.userReorderedItems = reorderResult.newItems;
+        this.data = reorderResult.newItems;
+        this.parsedOptions = reorderResult.newItems;
+
+        if (this.isDeclarativeMode) {
+          reorderDeclarativeDomNodes(
+            reorderResult.draggedItem,
+            reorderResult.targetItem,
+            this.dropPosition,
+          );
+        }
+
+        const detail: LeListItemReorderDetail = {
+          item: reorderResult.draggedItem!,
+          draggedId: this.activeDragId,
+          targetItem: reorderResult.targetItem,
+          targetId: this.dropTargetId,
+          position: this.dropPosition,
+          oldParentId: reorderResult.oldParentId,
+          newParentId: reorderResult.newParentId,
+          items: reorderResult.newItems,
+          originalEvent: e,
+        };
+
+        this.leItemReorder.emit(detail);
+        this.leReorder.emit(detail);
+      }
+    }
+
+    this.isDraggingActive = false;
+    this.pendingDragId = undefined;
+    this.pendingDragItem = undefined;
+    this.activeDragId = undefined;
+    this.dropTargetId = undefined;
+    this.dropPosition = undefined;
+    this.outdentBaselineX = undefined;
+    this.outdentTargetId = undefined;
+    this.overrideDropDepth = undefined;
+    this.isSelecting = false;
+    this.dragSelectionStartId = undefined;
+  };
+
+  private getPreviousVisibleItem(items: LeOption[], targetId: string): LeOption | undefined {
+    const list: LeOption[] = [];
+    const traverse = (nodes: LeOption[], parentPath: string) => {
+      nodes.forEach((node, index) => {
+        const path = parentPath ? `${parentPath}.${index}` : String(index);
+        const id = String(node.id ?? node.value ?? path);
+        list.push({ ...node, id });
+        if (
+          Array.isArray(node.children) &&
+          node.children.length > 0 &&
+          this.isItemOpen(node, id)
+        ) {
+          traverse(node.children, id);
+        }
+      });
+    };
+    traverse(items, '');
+    const idx = list.findIndex(item => item.id === targetId);
+    return idx > 0 ? list[idx - 1] : undefined;
+  }
+
   private handleRowPointerEnter = (_e: PointerEvent, _item: LeOption, id: string) => {
-    if (!this.isSelecting) return;
+    if (this.isDraggingActive || !this.isSelecting) return;
 
     this.focusedRowId = id;
 
@@ -580,6 +1263,12 @@ export class LeList {
   }
 
   private handleRowClick = (e: MouseEvent, item: LeOption, id: string) => {
+    if (item.disabled) return;
+    if (this.dragJustEnded) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
     if (!this.canNavigateRows()) return;
 
     if (item.action || item.href) {
@@ -601,8 +1290,10 @@ export class LeList {
   disconnectedCallback() {
     this.childrenObserver?.disconnect();
     this.disconnectSlotObserver?.();
-    window.removeEventListener('pointerup', this.handleWindowPointerUp);
-    window.removeEventListener('pointercancel', this.handleWindowPointerUp);
+    window.removeEventListener('pointermove', this.handleGlobalPointerMove);
+    window.removeEventListener('pointerup', this.handleGlobalPointerUp);
+    window.removeEventListener('pointercancel', this.handleGlobalPointerUp);
+    this.clearAutoExpandTimer();
   }
 
   private setupChildrenObserver() {
@@ -621,12 +1312,15 @@ export class LeList {
   }
 
   private async loadDataAndColumns() {
+    this.userReorderedItems = undefined;
     const rawDataOptions = parseOptionInput(this.data, 'le-list', 'data');
 
     if (rawDataOptions.length > 0) {
+      this.isDeclarativeMode = false;
       this.parsedOptions = rawDataOptions;
     } else {
       const declarative = await buildDeclarativeOptionsFromChildren(this.el, 'le-list');
+      this.isDeclarativeMode = declarative.isDeclarativeMode;
       this.parsedOptions = declarative.options;
     }
 
@@ -786,8 +1480,9 @@ export class LeList {
   }
 
   private getSortedOptions(): LeOption[] {
+    const baseOptions = this.getEffectiveOptions();
     if (!this.sortColumnKey || !this.sortDirection) {
-      return this.parsedOptions;
+      return baseOptions;
     }
 
     const col = this.parsedColumns.find(c => c.key === this.sortColumnKey);
@@ -835,7 +1530,7 @@ export class LeList {
       });
     };
 
-    return sortTree(this.parsedOptions);
+    return sortTree(baseOptions);
   }
 
   private renderHeaderCell(col: LeColumn, colIndex: number) {
@@ -989,8 +1684,12 @@ export class LeList {
 
   private getGridTemplate(visibleColumns: LeColumn[]): string {
     const hasActionCol = this.showActionChevron || this.actionChevron;
+    const hasReorderCol = this.showReorderHandle && this.activeReorderMode !== 'none';
     if (visibleColumns.length === 0) {
-      return hasActionCol ? '1fr calc(var(--le-list-toggle-size) + var(--le-list-item-padding-x) * 2)' : '1fr';
+      const extra: string[] = ['1fr'];
+      if (hasReorderCol) extra.push('calc(var(--le-list-toggle-size) + var(--le-list-item-padding-x) * 2)');
+      if (hasActionCol) extra.push('calc(var(--le-list-toggle-size) + var(--le-list-item-padding-x) * 2)');
+      return extra.join(' ');
     }
     const cols = visibleColumns.map(col => {
       if (col.width) return col.width;
@@ -999,6 +1698,9 @@ export class LeList {
       }
       return '1fr';
     });
+    if (hasReorderCol) {
+      cols.push('calc(var(--le-list-toggle-size) + var(--le-list-item-padding-x) * 2)');
+    }
     if (hasActionCol) {
       cols.push('calc(var(--le-list-toggle-size) + var(--le-list-item-padding-x) * 2)');
     }
@@ -1006,7 +1708,7 @@ export class LeList {
   }
 
   private hasHierarchy(): boolean {
-    return this.parsedOptions.some(item => this.getChildItems(item).length > 0);
+    return this.getEffectiveOptions().some(item => this.getChildItems(item).length > 0);
   }
 
   private getSelectionPosition(id: string): { isFirst: boolean; isLast: boolean; isMiddle: boolean; isSingle: boolean } | undefined {
@@ -1032,7 +1734,7 @@ export class LeList {
     depth = 0,
     path = '',
     isVisible = true,
-    isHierarchical = false
+    isHierarchical = false,
   ): any {
     const visibleColumns = this.parsedColumns.filter(c => !c.hidden);
     const id = String(item.id ?? item.value ?? path);
@@ -1045,7 +1747,19 @@ export class LeList {
     const hasAction = !item.disabled && !!(item.action || item.href);
     const hasAnyActions = !item.disabled && (hasAction || (Array.isArray(item.actions) && item.actions.length > 0));
     const hasActionCol = this.showActionChevron || this.actionChevron;
-    const actionColIsOdd = visibleColumns.length % 2 !== 0;
+    const hasReorderCol = this.showReorderHandle && this.activeReorderMode !== 'none';
+    const reorderColIndex = visibleColumns.length;
+    const reorderColIsOdd = reorderColIndex % 2 !== 0;
+    const actionColIndex = visibleColumns.length + (hasReorderCol ? 1 : 0);
+    const actionColIsOdd = actionColIndex % 2 !== 0;
+
+    const isDropTarget = this.isDraggingActive && this.dropTargetId === id;
+    const activeDropDepth =
+      isDropTarget && this.dropPosition === 'after' && this.overrideDropDepth !== undefined
+        ? this.overrideDropDepth
+        : depth;
+    const dropLinePaddingLeft = `calc(var(--le-list-item-padding-x) + ${activeDropDepth} * var(--le-list-item-indent))`;
+    const isDraggedNode = this.isDraggingActive && this.activeDragId === id;
 
     let isOdd = false;
     if (isVisible) {
@@ -1055,6 +1769,9 @@ export class LeList {
 
     return (
       <div class="le-list-row-item" key={id} role="none">
+        {isDropTarget && this.dropPosition === 'before' && (
+          <div class="reorder-drop-line line-before" style={{ left: dropLinePaddingLeft }} />
+        )}
         <div
           class={{
             'le-list-tr': true,
@@ -1074,8 +1791,13 @@ export class LeList {
             'is-selected-middle': !!selPos?.isMiddle,
             'is-selected-end': !!selPos?.isLast,
             'has-action': hasAction,
+            'reorder-target-inside': isDropTarget && this.dropPosition === 'inside',
+            'is-dragged-row': isDraggedNode,
+            'is-dragged-item': isDraggedNode,
           }}
           data-row-id={id}
+          data-parent-id={path.includes('.') ? path.substring(0, path.lastIndexOf('.')) : ''}
+          data-depth={String(depth)}
           role="row"
           aria-selected={this.isSelectionEnabled() ? (isSelected ? 'true' : 'false') : undefined}
           onPointerDown={(e) => this.handleRowPointerDown(e, item, id)}
@@ -1124,6 +1846,22 @@ export class LeList {
               </div>
             );
           })}
+          {hasReorderCol && (
+            <div
+              class={{
+                'le-list-td': true,
+                'le-list-td-reorder': true,
+                'align-center': true,
+                'col-odd': reorderColIsOdd,
+                'col-even': !reorderColIsOdd,
+              }}
+              role="cell"
+            >
+              <span class="le-list-reorder-handle" aria-hidden="true">
+                <le-icon name="reorder-horizontal" />
+              </span>
+            </div>
+          )}
           {hasActionCol && (
             <div
               class={{
@@ -1144,11 +1882,15 @@ export class LeList {
           )}
         </div>
 
+        {isDropTarget && this.dropPosition === 'after' && (
+          <div class="reorder-drop-line line-after" style={{ left: dropLinePaddingLeft }} />
+        )}
+
         {hasChildren && (
           <le-collapse closed={!isOpen} noFading={true}>
             <div class="le-list-row-children" role="rowgroup">
               {children.map((child, childIdx) =>
-                this.renderRowItem(child, depth + 1, `${id}.${childIdx}`, isVisible && isOpen, isHierarchical)
+                this.renderRowItem(child, depth + 1, `${id}.${childIdx}`, isVisible && isOpen, isHierarchical),
               )}
             </div>
           </le-collapse>
@@ -1279,13 +2021,28 @@ export class LeList {
     const colSep = this.columnSeparators || 'none';
     const isGridiron = rowSep === 'zebra' && colSep === 'zebra';
     const hasActionCol = this.showActionChevron || this.actionChevron;
-    const actionColIndex = visibleColumns.length;
+    const hasReorderCol = this.showReorderHandle && this.activeReorderMode !== 'none';
+    const reorderColIndex = visibleColumns.length;
+    const reorderColIsOdd = reorderColIndex % 2 !== 0;
+    const actionColIndex = visibleColumns.length + (hasReorderCol ? 1 : 0);
     const actionColIsOdd = actionColIndex % 2 !== 0;
 
     const headerRow = (
       <div class="le-list-thead" part="header" role="rowgroup">
         <div class="le-list-tr" role="row">
           {visibleColumns.map((col, colIndex) => this.renderHeaderCell(col, colIndex))}
+          {hasReorderCol && (
+            <div
+              class={{
+                'le-list-th': true,
+                'le-list-th-reorder': true,
+                'col-odd': reorderColIsOdd,
+                'col-even': !reorderColIsOdd,
+              }}
+              role="columnheader"
+              aria-hidden="true"
+            />
+          )}
           {hasActionCol && (
             <div
               class={{
@@ -1319,6 +2076,8 @@ export class LeList {
                 'has-hierarchy': isHierarchical,
                 'has-row-hover': !this.disableRowHover,
                 'is-selecting': this.isSelecting,
+                'is-reorderable': this.activeReorderMode !== 'none',
+                'is-dragging': this.isDraggingActive,
                 [`row-sep-${rowSep}`]: true,
                 [`col-sep-${colSep}`]: true,
                 'is-gridiron': isGridiron,
@@ -1347,6 +2106,44 @@ export class LeList {
             </div>
           </div>
         </div>
+
+        {this.isDraggingActive && this.pendingDragItem && (
+          <div
+            class="le-list-tr reorder-ghost"
+            style={{
+              transform: `translate3d(${this.ghostX}px, ${this.ghostY}px, 0)`,
+              width: `${this.dragItemRect?.width ?? 400}px`,
+              gridTemplateColumns: gridTemplate,
+            }}
+          >
+            {visibleColumns.map((col, colIndex) => {
+              const isFirstCol = colIndex === 0;
+              const alignClass = `align-${col.align || (col.type === 'number' ? 'right' : 'left')}`;
+              return (
+                <div class={{ 'le-list-td': true, [alignClass]: true }}>
+                  {isFirstCol && isHierarchical && (
+                    <span class="le-list-toggle-spacer" aria-hidden="true" />
+                  )}
+                  {this.renderCellValue(col, this.pendingDragItem!)}
+                </div>
+              );
+            })}
+            {hasReorderCol && (
+              <div class="le-list-td le-list-td-reorder align-center">
+                <span class="le-list-reorder-handle">
+                  <le-icon name="reorder-horizontal" />
+                </span>
+              </div>
+            )}
+            {hasActionCol && (
+              <div class="le-list-td le-list-td-action align-center">
+                <span class="le-list-row-action-chevron">
+                  <le-icon name="chevron-right" />
+                </span>
+              </div>
+            )}
+          </div>
+        )}
       </Host>
     );
   }

@@ -204,6 +204,12 @@ export class LeNavigation {
   };
 
   /**
+   * Maximum allowed nesting depth for drag-and-drop reordering.
+   * When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
+   */
+  @Prop({ reflect: true }) maxReorderDepth?: number;
+
+  /**
    * Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.
    */
   @Prop() reorderExpandDelay: number = 500;
@@ -979,6 +985,18 @@ export class LeNavigation {
     const draggedId = draggedNode.item.id!;
     const targetId = targetNode.item.id!;
 
+    if (this.maxReorderDepth !== undefined) {
+      const draggedSubtreeDepth = this.getSubtreeDepth(draggedNode.item);
+      const targetDepth = this.getNodeDepth(items, targetId);
+      const finalDepth = position === 'inside' ? targetDepth + 1 : targetDepth;
+      if (finalDepth + draggedSubtreeDepth > this.maxReorderDepth) {
+        console.warn(
+          `[le-navigation] moveItem: cannot move item with subtree depth ${draggedSubtreeDepth} to depth ${finalDepth} (maxReorderDepth is ${this.maxReorderDepth})`,
+        );
+        return { success: false };
+      }
+    }
+
     const reorderResult = this.reorderTreeItem(items, draggedId, targetId, position);
     if (!reorderResult.success || !reorderResult.newItems) {
       return { success: false };
@@ -1148,11 +1166,21 @@ export class LeNavigation {
       const topLimit = Math.max(0.05, Math.min(0.45, ratios.top));
       const bottomLimit = 1 - Math.max(0.05, Math.min(0.45, ratios.bottom));
 
+      const draggedNode = this.findNodeInTree(items, this.activeDragId!);
+      const draggedSubtreeDepth = draggedNode ? this.getSubtreeDepth(draggedNode.item) : 0;
+      const targetDepth = this.getNodeDepth(items, targetId);
+      const cannotNestInside = this.maxReorderDepth !== undefined && (targetDepth + draggedSubtreeDepth >= this.maxReorderDepth);
+      const canPlaceAtTargetDepth = this.maxReorderDepth === undefined || (targetDepth + draggedSubtreeDepth <= this.maxReorderDepth);
+
       const isSelfTarget = targetId === this.activeDragId;
 
       if (isSelfTarget) {
-        if (ratio > bottomLimit) {
-          const outdentChain = this.getOutdentAncestors(items, targetId);
+        const outdentThreshold = cannotNestInside ? 0.5 : bottomLimit;
+        if (ratio > outdentThreshold) {
+          const rawOutdentChain = this.getOutdentAncestors(items, targetId);
+          const outdentChain = rawOutdentChain.filter(
+            node => this.maxReorderDepth === undefined || node.depth + draggedSubtreeDepth <= this.maxReorderDepth,
+          );
           if (outdentChain.length > 0) {
             if (this.outdentTargetId !== targetId || this.outdentBaselineX === undefined) {
               this.outdentBaselineX = e.clientX;
@@ -1178,31 +1206,109 @@ export class LeNavigation {
         return;
       }
 
+      // If cannot nest inside (because targetDepth + 1 + draggedSubtreeDepth > maxReorderDepth), disable 'inside' and split 50/50
+      if (cannotNestInside) {
+        this.clearAutoExpandTimer();
+        let finalTargetId: string | undefined = undefined;
+        let pos: 'before' | 'inside' | 'after' | undefined = undefined;
+
+        if (ratio < 0.5) {
+          const prevItem = this.getPreviousVisibleItem(items, targetId);
+          const prevAncestors = prevItem ? this.getOutdentAncestors(items, prevItem.id!) : [];
+          const topChain: Array<{ id: string; depth: number; pos: 'before' | 'after' }> = [];
+          if (canPlaceAtTargetDepth) {
+            topChain.push({ id: targetId, depth: targetDepth, pos: 'before' });
+          }
+          if (prevAncestors.length > 1) {
+            for (let i = prevAncestors.length - 2; i >= 0; i--) {
+              if (this.maxReorderDepth === undefined || prevAncestors[i].depth + draggedSubtreeDepth <= this.maxReorderDepth) {
+                topChain.push({ id: prevAncestors[i].id, depth: prevAncestors[i].depth, pos: 'after' });
+              }
+            }
+          }
+
+          if (topChain.length > 0) {
+            if (topChain.length > 1) {
+              if (this.outdentTargetId !== `top-${targetId}` || this.outdentBaselineX === undefined) {
+                this.outdentBaselineX = e.clientX;
+                this.outdentTargetId = `top-${targetId}`;
+              }
+              const deltaX = e.clientX - this.outdentBaselineX;
+              const steps = deltaX > 0 ? Math.floor(deltaX / 24) : 0;
+              const chainIndex = Math.min(steps, topChain.length - 1);
+              const selected = topChain[chainIndex];
+
+              finalTargetId = selected.id;
+              pos = selected.pos;
+              this.overrideDropDepth = selected.depth;
+            } else {
+              finalTargetId = topChain[0].id;
+              pos = topChain[0].pos;
+              this.overrideDropDepth = canPlaceAtTargetDepth ? undefined : topChain[0].depth;
+              this.outdentBaselineX = undefined;
+              this.outdentTargetId = undefined;
+            }
+          }
+        } else {
+          const rawOutdentChain = this.getOutdentAncestors(items, targetId);
+          const outdentChain = rawOutdentChain.filter(
+            node => this.maxReorderDepth === undefined || node.depth + draggedSubtreeDepth <= this.maxReorderDepth,
+          );
+          if (outdentChain.length > 0) {
+            if (this.outdentTargetId !== targetId || this.outdentBaselineX === undefined) {
+              this.outdentBaselineX = e.clientX;
+              this.outdentTargetId = targetId;
+            }
+            const deltaX = e.clientX - this.outdentBaselineX;
+            const steps = deltaX < 0 ? Math.floor(Math.abs(deltaX) / 24) : 0;
+            const chainIndex = Math.min(steps, outdentChain.length - 1);
+            const selected = outdentChain[chainIndex];
+
+            finalTargetId = selected.id;
+            pos = 'after';
+            this.overrideDropDepth = selected.depth;
+          } else {
+            finalTargetId = outdentChain[0].id;
+            pos = 'after';
+            this.overrideDropDepth = canPlaceAtTargetDepth ? undefined : outdentChain[0].depth;
+            this.outdentBaselineX = undefined;
+            this.outdentTargetId = undefined;
+          }
+        }
+
+        this.dropTargetId = finalTargetId;
+        this.dropPosition = pos;
+        return;
+      }
+
       const targetNode = this.findNodeInTree(items, targetId);
       const children = targetNode && Array.isArray(targetNode.item.children) ? targetNode.item.children : [];
       const hasChildren = children.length > 0;
       const firstChild = hasChildren ? children[0] : undefined;
       const isOpen = targetNode && (this.isOpen(targetNode.item, targetId) || (this.openSubmenuId === targetId));
 
-      let finalTargetId = targetId;
-      let pos: 'before' | 'inside' | 'after' = 'inside';
+      let finalTargetId: string | undefined = targetId;
+      let pos: 'before' | 'inside' | 'after' | undefined = 'inside';
 
       if (ratio < topLimit) {
         const prevItem = this.getPreviousVisibleItem(items, targetId);
         const prevAncestors = prevItem ? this.getOutdentAncestors(items, prevItem.id!) : [];
+        const topChain: Array<{ id: string; depth: number; pos: 'before' | 'after' }> = [
+          { id: targetId, depth: targetDepth, pos: 'before' },
+        ];
         if (prevAncestors.length > 1) {
+          for (let i = prevAncestors.length - 2; i >= 0; i--) {
+            if (this.maxReorderDepth === undefined || prevAncestors[i].depth + draggedSubtreeDepth <= this.maxReorderDepth) {
+              topChain.push({ id: prevAncestors[i].id, depth: prevAncestors[i].depth, pos: 'after' });
+            }
+          }
+        }
+
+        if (topChain.length > 1) {
           if (this.outdentTargetId !== `top-${targetId}` || this.outdentBaselineX === undefined) {
             this.outdentBaselineX = e.clientX;
             this.outdentTargetId = `top-${targetId}`;
           }
-          const targetDepth = this.getNodeDepth(items, targetId);
-          const topChain: Array<{ id: string; depth: number; pos: 'before' | 'after' }> = [
-            { id: targetId, depth: targetDepth, pos: 'before' },
-          ];
-          for (let i = prevAncestors.length - 2; i >= 0; i--) {
-            topChain.push({ id: prevAncestors[i].id, depth: prevAncestors[i].depth, pos: 'after' });
-          }
-
           const deltaX = e.clientX - this.outdentBaselineX;
           const steps = deltaX > 0 ? Math.floor(deltaX / 24) : 0;
           const chainIndex = Math.min(steps, topChain.length - 1);
@@ -1219,7 +1325,7 @@ export class LeNavigation {
         }
       } else if (hasChildren) {
         if (isOpen) {
-          if (firstChild && firstChild.id) {
+          if (firstChild && firstChild.id && (this.maxReorderDepth === undefined || targetDepth + 1 + draggedSubtreeDepth <= this.maxReorderDepth)) {
             finalTargetId = firstChild.id;
             pos = 'before';
           } else {
@@ -1230,7 +1336,10 @@ export class LeNavigation {
           this.overrideDropDepth = undefined;
         } else {
           if (ratio > bottomLimit) {
-            const outdentChain = this.getOutdentAncestors(items, targetId);
+            const rawOutdentChain = this.getOutdentAncestors(items, targetId);
+            const outdentChain = rawOutdentChain.filter(
+              node => this.maxReorderDepth === undefined || node.depth + draggedSubtreeDepth <= this.maxReorderDepth,
+            );
             if (outdentChain.length > 1) {
               if (this.outdentTargetId !== targetId || this.outdentBaselineX === undefined) {
                 this.outdentBaselineX = e.clientX;
@@ -1245,7 +1354,7 @@ export class LeNavigation {
               pos = 'after';
               this.overrideDropDepth = selected.depth;
             } else {
-              if (firstChild && firstChild.id) {
+              if (firstChild && firstChild.id && (this.maxReorderDepth === undefined || targetDepth + 1 + draggedSubtreeDepth <= this.maxReorderDepth)) {
                 finalTargetId = firstChild.id;
                 pos = 'before';
               } else {
@@ -1278,7 +1387,10 @@ export class LeNavigation {
         }
       } else {
         if (ratio > bottomLimit) {
-          const outdentChain = this.getOutdentAncestors(items, targetId);
+          const rawOutdentChain = this.getOutdentAncestors(items, targetId);
+          const outdentChain = rawOutdentChain.filter(
+            node => this.maxReorderDepth === undefined || node.depth + draggedSubtreeDepth <= this.maxReorderDepth,
+          );
           if (outdentChain.length > 1) {
             if (this.outdentTargetId !== targetId || this.outdentBaselineX === undefined) {
               this.outdentBaselineX = e.clientX;
@@ -1292,8 +1404,14 @@ export class LeNavigation {
             finalTargetId = selected.id;
             pos = 'after';
             this.overrideDropDepth = selected.depth;
-          } else {
+          } else if (outdentChain.length === 1) {
+            finalTargetId = outdentChain[0].id;
             pos = 'after';
+            this.overrideDropDepth = undefined;
+            this.outdentBaselineX = undefined;
+            this.outdentTargetId = undefined;
+          } else {
+            pos = 'inside';
             this.outdentBaselineX = undefined;
             this.outdentTargetId = undefined;
             this.overrideDropDepth = undefined;
@@ -1303,8 +1421,14 @@ export class LeNavigation {
           this.outdentBaselineX = undefined;
           this.outdentTargetId = undefined;
           this.overrideDropDepth = undefined;
+          if (this.hoveredExpandId !== targetId) {
+            this.clearAutoExpandTimer();
+            this.hoveredExpandId = targetId;
+            this.autoExpandTimer = setTimeout(() => {
+              this.setOpen(targetId, true);
+            }, this.reorderExpandDelay);
+          }
         }
-        this.clearAutoExpandTimer();
       }
 
       if (pos !== 'inside' && ratio < topLimit) {
@@ -1314,6 +1438,7 @@ export class LeNavigation {
       this.dropTargetId = finalTargetId;
       this.dropPosition = pos;
     }
+
   };
 
   private clearAutoExpandTimer() {
@@ -1413,6 +1538,20 @@ export class LeNavigation {
       }
     }
     return -1;
+  }
+
+  private getSubtreeDepth(item?: LeOption): number {
+    if (!item || !Array.isArray(item.children) || item.children.length === 0) {
+      return 0;
+    }
+    let maxChildDepth = 0;
+    for (const child of item.children) {
+      const childDepth = this.getSubtreeDepth(child);
+      if (childDepth > maxChildDepth) {
+        maxChildDepth = childDepth;
+      }
+    }
+    return 1 + maxChildDepth;
   }
 
   private getOutdentAncestors(
@@ -1645,6 +1784,7 @@ export class LeNavigation {
   };
 
   private handleMouseEnterItem(id: string) {
+    if (this.isDraggingActive) return;
     const item = this.getRenderedNavItemById(id);
     if (!item || item.disabled) return;
     this.showFocusRing = false;

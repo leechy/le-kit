@@ -26,7 +26,11 @@
   --le-list-selection-border-color: var(--le-color-border-dark, var(--le-color-gray-400, #9ca3af));
   --le-list-selection-border-width: 2px;
   --le-list-row-radius: var(--le-radius-md);
+
+  /* Reorder drop line */
+  --le-list-drop-line-width: 3px;
 }
+
 
 :host(:focus),
 :host(:focus-within) {
@@ -199,8 +203,8 @@
   position: relative;
 }
 
-/* Row hover (when has-row-hover is active) */
-.le-list-table.has-row-hover .le-list-row-main:hover {
+/* Row hover (when has-row-hover is active and not dragging) */
+.le-list-table.has-row-hover:not(.is-dragging) .le-list-row-main:hover {
   background-color: var(--le-list-hover-bg);
 }
 
@@ -281,9 +285,9 @@
   background-color: var(--le-list-col-zebra-bg);
 }
 
-/* Ensure row hover overrides cell backgrounds in column zebra and gridiron */
-.le-list-table.has-row-hover.col-sep-zebra .le-list-row-main:hover .le-list-td,
-.le-list-table.has-row-hover.is-gridiron .le-list-row-main:hover .le-list-td {
+/* Ensure row hover overrides cell backgrounds in column zebra and gridiron (only when not dragging) */
+.le-list-table.has-row-hover:not(.is-dragging).col-sep-zebra .le-list-row-main:hover .le-list-td,
+.le-list-table.has-row-hover:not(.is-dragging).is-gridiron .le-list-row-main:hover .le-list-td {
   background-color: var(--le-list-hover-bg);
 }
 
@@ -400,7 +404,7 @@
   outline: none;
 }
 
-.le-list-row-toggle:hover {
+.le-list-table:not(.is-dragging) .le-list-row-toggle:hover {
   opacity: 1;
 }
 
@@ -446,7 +450,7 @@
   flex-shrink: 0;
 }
 
-.le-list-row-main:hover .le-list-row-action-chevron {
+.le-list-table:not(.is-dragging) .le-list-row-main:hover .le-list-row-action-chevron {
   opacity: 0.85;
 }
 
@@ -483,3 +487,117 @@
   padding: var(--le-spacing-4);
   text-align: center;
 }
+
+/* ==========================================
+ * Manual Drag and Drop Reordering
+ * ========================================== */
+
+.le-list-table.is-reorderable .le-list-row-main {
+  touch-action: none;
+}
+
+.le-list-table.is-dragging .le-list-row-main {
+  cursor: grabbing !important;
+}
+
+.le-list-row-item {
+  position: relative;
+}
+
+/* Dragged item placeholder styling */
+.le-list-row-main.is-dragged-row,
+.le-list-row-main.is-dragged-item {
+  background-color: color-mix(in srgb, var(--le-color-primary, #3b82f6) 12%, transparent) !important;
+  border: 1px dashed color-mix(in srgb, var(--le-color-primary, #3b82f6) 45%, transparent) !important;
+  color: var(--le-color-primary, #3b82f6);
+}
+
+.le-list-row-main.reorder-target-inside {
+  background-color: color-mix(in srgb, var(--le-color-primary, #3b82f6) 18%, transparent) !important;
+  outline: 2px solid var(--le-color-primary, #3b82f6) !important;
+  outline-offset: -2px;
+  border-radius: var(--le-list-row-radius, var(--le-radius-md, 6px));
+}
+
+/* Suppress selection/focus outline overlays during drag on dragged row, inside target or active dragging state */
+.le-list-row-main.is-dragged-row::after,
+.le-list-row-main.is-dragged-item::after,
+.le-list-row-main.reorder-target-inside::after {
+  display: none !important;
+}
+
+.le-list-table.is-dragging .le-list-row-main.is-focused::after {
+  display: none !important;
+}
+
+.reorder-drop-line {
+  position: absolute;
+  z-index: 100;
+  right: var(--le-spacing-2, 8px);
+  height: var(--le-list-drop-line-width, 3px);
+  background-color: var(--le-color-primary, currentColor);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.reorder-drop-line::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--le-list-drop-line-width, 3px) / 2);
+  top: -6px;
+  width: var(--le-list-drop-line-width, 3px);
+  height: 14px;
+  border-radius: 2px;
+  background-color: var(--le-color-primary, currentColor);
+}
+
+.reorder-drop-line.line-before {
+  top: -1.5px;
+}
+
+.reorder-drop-line.line-after {
+  bottom: -1.5px;
+}
+
+.le-list-tr.reorder-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--le-color-surface-alt, var(--le-color-surface, #ffffff)) 85%, transparent) !important;
+  border: 1px solid var(--le-color-border, #e5e7eb);
+  border-radius: var(--le-list-row-radius, var(--le-radius-md, 6px));
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.18), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  will-change: transform;
+  display: grid;
+}
+
+.le-list-reorder-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--le-color-text-secondary);
+  opacity: 0.5;
+  cursor: grab;
+  user-select: none;
+  font-size: var(--le-font-size-base, 16px);
+  transition: opacity var(--le-transition-fast) var(--le-transition-easing);
+}
+
+.le-list-table:not(.is-dragging) .le-list-row-main:hover .le-list-reorder-handle {
+  opacity: 0.9;
+}
+
+.le-list-td-reorder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--le-list-item-padding-y) var(--le-list-item-padding-x);
+}
+
+.le-list-th-reorder {
+  padding: var(--le-list-item-padding-y) var(--le-list-item-padding-x);
+}
+

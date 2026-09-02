@@ -367,6 +367,12 @@
         <le-item value="siblings">siblings</le-item>
         <le-item value="none">none (disabled)</le-item>
       </le-select>
+      <label>Max depth:</label>
+      <le-select id="demo-reorder-depth-select" value="none">
+        <le-item value="none">No limit</le-item>
+        <le-item value="1">1 (root + 1 nested level)</le-item>
+        <le-item value="2">2 (root + 2 nested levels)</le-item>
+      </le-select>
       <le-button id="btn-reorder-toggle-method">
         Toggle via setReorder()
       </le-button>
@@ -383,6 +389,7 @@
       <le-select id="demo-reorder-position-select">
         <le-item value="after">after</le-item>
         <le-item value="before">before</le-item>
+        <le-item value="inside">inside</le-item>
       </le-select>
       <le-select id="demo-reorder-target-select">
         <le-item value="work">Work</le-item>
@@ -397,7 +404,7 @@
     </div>
     <div style="display: flex; gap: var(--le-spacing-2)">
       <div style="width: 320px; background-color: var(--le-color-surface-alt); border-radius: var(--le-radius-md);">
-        <le-navigation id="demo-reorder-nav" reorder="nested" orientation="vertical" show-reorder-handle>
+        <le-navigation id="demo-reorder-nav-1" reorder="nested" orientation="vertical" show-reorder-handle>
           <le-item label="All Inboxes" icon-start="trays" value="inboxes" open>
             <le-item label="Work" icon-start="tray" count="3" value="work"></le-item>
             <le-item label="Personal" icon-start="tray" value="personal"></le-item>
@@ -410,7 +417,7 @@
         </le-navigation>
       </div>
       <div style="width: 320px; background-color: var(--le-color-surface-alt); border-radius: var(--le-radius-md);">
-        <le-navigation id="demo-reorder-nav" reorder="nested" orientation="vertical" toggle-position="end">
+        <le-navigation id="demo-reorder-nav-2" reorder="nested" orientation="vertical" toggle-position="end">
           <le-item label="All Inboxes" icon-start="trays" value="inboxes" open>
             <le-item label="Work" icon-start="tray" count="3" value="work"></le-item>
             <le-item label="Personal" icon-start="tray" value="personal"></le-item>
@@ -425,37 +432,53 @@
     </div>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const nav = document.getElementById('demo-reorder-nav');
+        const nav1 = document.getElementById('demo-reorder-nav-1');
+        const nav2 = document.getElementById('demo-reorder-nav-2');
         const select = document.getElementById('demo-reorder-select');
+        const depthSelect = document.getElementById('demo-reorder-depth-select');
         const toggleBtn = document.getElementById('btn-reorder-toggle-method');
         const positionSelect = document.getElementById('demo-reorder-position-select');
         const targetSelect = document.getElementById('demo-reorder-target-select');
         const sourceSelect = document.getElementById('demo-reorder-source-select');
         const moveBtn = document.getElementById('btn-reorder-move-method');
 
-        if (select && nav) {
+        const navs = [nav1, nav2].filter(Boolean);
+
+        if (select) {
           select.addEventListener('leChange', (e) => {
-            nav.setAttribute('reorder', e.target.value);
+            navs.forEach(nav => nav.setAttribute('reorder', e.target.value));
           });
         }
-        if (toggleBtn && nav) {
+        if (depthSelect) {
+          depthSelect.addEventListener('leChange', (e) => {
+            const val = e.target.value;
+            navs.forEach(nav => {
+              if (val === 'none') {
+                nav.removeAttribute('max-reorder-depth');
+              } else {
+                nav.setAttribute('max-reorder-depth', val);
+              }
+            });
+          });
+        }
+        if (toggleBtn && nav1) {
           toggleBtn.addEventListener('click', async () => {
-            const currentMode = nav.getAttribute('reorder') || 'nested';
+            const currentMode = nav1.getAttribute('reorder') || 'nested';
             const nextMode = currentMode === 'none' ? 'nested' : 'none';
-            await nav.setReorder(nextMode);
+            await Promise.all(navs.map(nav => nav.setReorder(nextMode)));
             if (select) select.value = nextMode;
           });
         }
-        if (moveBtn && nav && sourceSelect && targetSelect && positionSelect) {
+        if (moveBtn && nav1 && sourceSelect && targetSelect && positionSelect) {
           moveBtn.addEventListener('click', () => {
-            nav.moveItem(sourceSelect.value, targetSelect.value, positionSelect.value);
+            nav1.moveItem(sourceSelect.value, targetSelect.value, positionSelect.value);
           });
         }
-        if (nav) {
+        navs.forEach(nav => {
           nav.addEventListener('leNavItemReorder', (e) => {
             console.log('leNavItemReorder event fired:', e.detail);
           });
-        }
+        });
       });
     </script>
 
@@ -675,7 +698,156 @@
 
     <br />
 
-    <h3>4. Row &amp; Column Separators (Borders, Zebra &amp; Gridiron Checkered)</h3>
+    <h3>4. Drag-and-Drop Reordering in &lt;le-list&gt; (with max-reorder-depth="2" and show-reorder-handle)</h3>
+    <p>Reorder list rows across hierarchy levels (nested), or within siblings, with configurable <code>max-reorder-depth</code> limit, live drop indicator lines, bullet pips, and auto-expanding on hover.</p>
+
+    <div style="display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap;">
+      <label>Reorder mode:</label>
+      <le-select id="demo-list-reorder-select" value="nested">
+        <le-item value="nested">nested</le-item>
+        <le-item value="siblings">siblings</le-item>
+        <le-item value="none">none (disabled)</le-item>
+      </le-select>
+
+      <label>Max depth:</label>
+      <le-select id="demo-list-depth-select" value="2">
+        <le-item value="none">No limit</le-item>
+        <le-item value="1">1 (max 1 nested level)</le-item>
+        <le-item value="2">2 (max 2 nested levels)</le-item>
+      </le-select>
+
+      <le-button id="btn-list-reorder-toggle">
+        Toggle via setReorder()
+      </le-button>
+    </div>
+
+    <le-list id="demo-reorder-list" reorder="nested" max-reorder-depth="2" show-reorder-handle column-visibility-toggle column-reorder selection="single"></le-list>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const reorderList = document.getElementById('demo-reorder-list');
+        const reorderSelect = document.getElementById('demo-list-reorder-select');
+        const depthSelect = document.getElementById('demo-list-depth-select');
+        const toggleBtn = document.getElementById('btn-list-reorder-toggle');
+
+        if (reorderList) {
+          reorderList.columns = [
+            { key: 'label', label: 'Project Task / Subtask', width: '2fr' },
+            { key: 'data.status', label: 'Status', type: 'badge' },
+            { key: 'data.assignee', label: 'Assignee', type: 'string' },
+            { key: 'data.estimate', label: 'Estimate (hrs)', type: 'number', sortable: true, align: 'right' },
+            { key: 'data.done', label: 'Done', type: 'boolean', align: 'center', width: '70px' }
+          ];
+
+          reorderList.data = [
+            {
+              id: 'task-epic-1',
+              label: 'Design System 2.0 Rollout',
+              description: 'Core components modernization',
+              color: 'primary',
+              open: true,
+              data: { status: 'In Progress', assignee: 'Alex R.', estimate: 80, done: false },
+              children: [
+                {
+                  id: 'task-1-1',
+                  label: 'Navigation Component Reordering',
+                  description: 'Drag & drop tree reorder with maxReorderDepth',
+                  color: 'success',
+                  open: true,
+                  data: { status: 'Completed', assignee: 'Elena R.', estimate: 24, done: true },
+                  children: [
+                    {
+                      id: 'task-1-1-1',
+                      label: 'Shared tree reordering utilities (tree.ts)',
+                      color: 'success',
+                      data: { status: 'Completed', assignee: 'Elena R.', estimate: 8, done: true }
+                    },
+                    {
+                      id: 'task-1-1-2',
+                      label: 'Drop line indicators and pip styling',
+                      color: 'success',
+                      data: { status: 'Completed', assignee: 'Alex R.', estimate: 6, done: true }
+                    }
+                  ]
+                },
+                {
+                  id: 'task-1-2',
+                  label: 'Table List Component Reordering',
+                  description: 'Parity with navigation reordering mechanics',
+                  color: 'primary',
+                  open: true,
+                  data: { status: 'In Progress', assignee: 'Alex R.', estimate: 28, done: false },
+                  children: [
+                    {
+                      id: 'task-1-2-1',
+                      label: 'Grid template & reorder handle column',
+                      color: 'info',
+                      data: { status: 'Completed', assignee: 'Sophia C.', estimate: 10, done: true }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id: 'task-epic-2',
+              label: 'Platform Infrastructure & CI',
+              description: 'Automated test suites & builds',
+              color: 'warning',
+              open: true,
+              data: { status: 'Planned', assignee: 'Marcus V.', estimate: 45, done: false },
+              children: [
+                {
+                  id: 'task-2-1',
+                  label: 'Unit test coverage for reordering',
+                  color: 'warning',
+                  data: { status: 'Planned', assignee: 'David K.', estimate: 15, done: false }
+                }
+              ]
+            }
+          ];
+
+          reorderList.addEventListener('leItemReorder', (e) => {
+            console.log('🔄 [le-list leItemReorder event]:', {
+              draggedId: e.detail.draggedId,
+              targetId: e.detail.targetId,
+              position: e.detail.position,
+              oldParentId: e.detail.oldParentId,
+              newParentId: e.detail.newParentId
+            });
+          });
+
+          if (reorderSelect) {
+            reorderSelect.addEventListener('leChange', (e) => {
+              reorderList.setAttribute('reorder', e.target.value);
+            });
+          }
+
+          if (depthSelect) {
+            depthSelect.addEventListener('leChange', (e) => {
+              const val = e.target.value;
+              if (val === 'none') {
+                reorderList.removeAttribute('max-reorder-depth');
+              } else {
+                reorderList.setAttribute('max-reorder-depth', val);
+              }
+            });
+          }
+
+          if (toggleBtn) {
+            toggleBtn.addEventListener('click', async () => {
+              const currentMode = reorderList.getAttribute('reorder') || 'nested';
+              const nextMode = currentMode === 'none' ? 'nested' : 'none';
+              await reorderList.setReorder(nextMode);
+              if (reorderSelect) reorderSelect.value = nextMode;
+            });
+          }
+        }
+      });
+    </script>
+
+    <br />
+
+    <h3>5. Row &amp; Column Separators (Borders, Zebra &amp; Gridiron Checkered)</h3>
     <p>Using <code>row-separators="zebra" column-separators="borders"</code> (Zebra + Vertical Borders):</p>
     <le-list id="demo-sep-zebra-borders" row-separators="borders" column-separators="zebra" default-sort-direction="desc"></le-list>
 

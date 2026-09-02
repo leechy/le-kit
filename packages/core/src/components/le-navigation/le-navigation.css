@@ -93,7 +93,7 @@
   border-radius: var(--le-nav-radius);
 }
 
-.nav-row:hover {
+.nav-vertical:not(.is-dragging) .nav-row:hover {
   background: var(--le-nav-hover-bg);
 }
 
@@ -130,7 +130,7 @@
   opacity: 0.4;
 }
 
-.nav-toggle:hover:not(:disabled) {
+.nav-vertical:not(.is-dragging) .nav-toggle:hover:not(:disabled) {
   opacity: 1;
 }
 
@@ -180,7 +180,7 @@
   cursor: var(--le-controls-cursor, pointer);
 }
 
-.nav-item:hover {
+.nav-vertical:not(.is-dragging) .nav-item:hover {
   background: var(--le-nav-hover-bg);
 }
 

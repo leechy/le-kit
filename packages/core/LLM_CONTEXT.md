@@ -948,6 +948,11 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `selection` | `boolean \| 'single' \| 'multiple' \| 'none'` | `false` | Selection mode for rows: false / 'none' (disabled), true / 'single', or 'multiple'. Defaults to false. |
 | `showActionChevron` | `boolean` | `false` | Whether to display chevron-right icon at the end of rows that have actions or links. Defaults to false. |
 | `actionChevron` | `boolean` | `false` | Alias for showActionChevron. |
+| `reorder` | `LeListReorderMode \| boolean` | `'none'` | Enables manual drag-and-drop reordering of list row items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none'). |
+| `showReorderHandle` | `boolean` | `false` | Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable rows. Default: false. |
+| `reorderRatios` | `{ top: number; middle: number; bottom: number }` | `{ top: 0.35, middle: 0.3, bottom: 0.35, }` | Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.35, middle: 0.3, bottom: 0.35 }. |
+| `maxReorderDepth` | `number \| undefined` |  | Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50). |
+| `reorderExpandDelay` | `number` | `500` | Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop. |
 | `parsedOptions` | `LeOption[]` | `[]` |  |
 | `parsedColumns` | `LeColumn[]` | `[]` |  |
 | `sortColumnKey` | `string \| undefined` |  |  |
@@ -969,6 +974,8 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `leColumnVisibilityChange` | `EventEmitter<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>` | Emitted when column visibility changes via the context menu. |
 | `leColumnOrderChange` | `EventEmitter<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn }>` | Emitted when column order changes via the context menu. |
 | `leItemToggle` | `EventEmitter<{ item: LeOption; open: boolean; originalEvent?: MouseEvent }>` | Emitted when a hierarchical row item is expanded or collapsed. |
+| `leItemReorder` | `EventEmitter<LeListItemReorderDetail>` | Fired when list row items are reordered via drag and drop. |
+| `leReorder` | `EventEmitter<LeListItemReorderDetail>` | Alias for `leItemReorder`. |
 
 ---
 
@@ -1036,6 +1043,7 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `reorder` | `LeNavigationReorderMode \| boolean` | `'none'` | Enables manual drag-and-drop reordering of navigation items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none'). |
 | `showReorderHandle` | `boolean` | `false` | Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable items. Default: false. |
 | `reorderRatios` | `{ top: number; middle: number; bottom: number }` | `{ top: 0.35, middle: 0.3, bottom: 0.35, }` | Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after). |
+| `maxReorderDepth` | `number \| undefined` |  | Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50). |
 | `reorderExpandDelay` | `number` | `500` | Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop. |
 | `togglePosition` | `'start' \| 'end'` | `'start'` | Position of the toggle arrow for items with children: 'start' | 'end' |
 

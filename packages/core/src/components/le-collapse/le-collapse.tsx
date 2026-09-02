@@ -62,17 +62,30 @@ export class LeCollapse {
   }
 
   @Watch('closed')
-  protected onClosedChange() {
+  protected onClosedChange(newValue?: boolean, oldValue?: boolean) {
+    if (oldValue === undefined || newValue === oldValue) {
+      if (this.shouldBeOpen()) {
+        this.isExpanded = true;
+      }
+      return;
+    }
     this.applyOpenState();
   }
 
   @Watch('headerShrunk')
-  protected onDrivenStateChange() {
+  protected onDrivenStateChange(newValue?: boolean, oldValue?: boolean) {
+    if (oldValue === undefined || newValue === oldValue) {
+      if (this.shouldBeOpen()) {
+        this.isExpanded = true;
+      }
+      return;
+    }
     this.applyOpenState();
   }
 
   @Listen('transitionend')
   protected handleTransitionEnd(ev: TransitionEvent) {
+    if (ev.target !== this.el) return;
     if (ev.propertyName === 'grid-template-rows') {
       if (this.shouldBeOpen()) {
         this.isExpanded = true;
@@ -90,10 +103,11 @@ export class LeCollapse {
     const nextOpen = this.shouldBeOpen();
     this.isExpanded = false;
 
-    if (nextOpen && this.el) {
+    if (nextOpen && this.el && typeof window !== 'undefined' && window.getComputedStyle) {
       // Fallback if transition duration is 0s or prefers-reduced-motion is active
-      const durationStr = window.getComputedStyle(this.el).transitionDuration;
-      const duration = parseFloat(durationStr) * (durationStr.endsWith('ms') ? 1 : 1000);
+      const style = window.getComputedStyle(this.el);
+      const durationStr = style?.transitionDuration || '';
+      const duration = durationStr ? parseFloat(durationStr) * (durationStr.endsWith('ms') ? 1 : 1000) : 0;
       if (!duration || duration <= 0) {
         this.isExpanded = true;
       }
@@ -107,11 +121,9 @@ export class LeCollapse {
         data-open={isOpen ? 'true' : 'false'}
         data-expanded={isOpen && this.isExpanded ? 'true' : 'false'}
       >
-        <le-component component="le-collapse">
-          <div class={{ 'region': true, 'scroll-down': this.scrollDown }} part="region">
-            <slot></slot>
-          </div>
-        </le-component>
+        <div class={{ 'region': true, 'scroll-down': this.scrollDown }} part="region">
+          <slot></slot>
+        </div>
       </Host>
     );
   }

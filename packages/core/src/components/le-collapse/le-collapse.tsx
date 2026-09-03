@@ -107,11 +107,9 @@ export class LeCollapse {
         data-open={isOpen ? 'true' : 'false'}
         data-expanded={isOpen && this.isExpanded ? 'true' : 'false'}
       >
-        <le-component component="le-collapse">
-          <div class={{ 'region': true, 'scroll-down': this.scrollDown }} part="region">
-            <slot></slot>
-          </div>
-        </le-component>
+        <div class={{ 'region': true, 'scroll-down': this.scrollDown }} part="region">
+          <slot></slot>
+        </div>
       </Host>
     );
   }

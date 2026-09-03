@@ -610,37 +610,35 @@ export class LeTooltip {
 
     return (
       <Host>
-        <le-component component="le-tooltip">
-          <span
-            class="le-tooltip-trigger"
-            ref={el => (this.triggerEl = el)}
-            onPointerEnter={this.handleTriggerPointerEnter}
-            onPointerLeave={this.handleTriggerPointerLeave}
-            onPointerDown={this.handleTriggerPointerDown}
-            onPointerUp={this.handleTriggerPointerUp}
-            onPointerCancel={this.handleTriggerPointerCancel}
-            onPointerMove={this.handleTriggerPointerMove}
-            onFocusin={this.handleTriggerFocus}
-            onFocusout={this.handleTriggerBlur}
-            part="trigger"
-          >
-            <slot></slot>
-          </span>
+        <span
+          class="le-tooltip-trigger"
+          ref={el => (this.triggerEl = el)}
+          onPointerEnter={this.handleTriggerPointerEnter}
+          onPointerLeave={this.handleTriggerPointerLeave}
+          onPointerDown={this.handleTriggerPointerDown}
+          onPointerUp={this.handleTriggerPointerUp}
+          onPointerCancel={this.handleTriggerPointerCancel}
+          onPointerMove={this.handleTriggerPointerMove}
+          onFocusin={this.handleTriggerFocus}
+          onFocusout={this.handleTriggerBlur}
+          part="trigger"
+        >
+          <slot></slot>
+        </span>
 
-          <div
-            class={classnames('le-tooltip-content', `le-tooltip-variant-${this.variant}`)}
-            popover="manual"
-            role="tooltip"
-            ref={el => (this.tooltipEl = el)}
-            style={tooltipStyles}
-            data-fallback-open={this.supportsPopoverApi ? undefined : String(this.open)}
-            onPointerEnter={this.handleContentPointerEnter}
-            onPointerLeave={this.handleContentPointerLeave}
-            part="content"
-          >
-            <slot name="content">{this.text}</slot>
-          </div>
-        </le-component>
+        <div
+          class={classnames('le-tooltip-content', `le-tooltip-variant-${this.variant}`)}
+          popover="manual"
+          role="tooltip"
+          ref={el => (this.tooltipEl = el)}
+          style={tooltipStyles}
+          data-fallback-open={this.supportsPopoverApi ? undefined : String(this.open)}
+          onPointerEnter={this.handleContentPointerEnter}
+          onPointerLeave={this.handleContentPointerLeave}
+          part="content"
+        >
+          <slot name="content">{this.text}</slot>
+        </div>
       </Host>
     );
   }

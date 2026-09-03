@@ -93,7 +93,8 @@
   border-radius: var(--le-nav-radius);
 }
 
-.nav-row:hover {
+.nav-row:hover,
+.nav-row.is-drag-hovered {
   background: var(--le-nav-hover-bg);
 }
 
@@ -180,7 +181,8 @@
   cursor: var(--le-controls-cursor, pointer);
 }
 
-.nav-item:hover {
+.nav-item:hover,
+.nav-item.is-drag-hovered {
   background: var(--le-nav-hover-bg);
 }
 

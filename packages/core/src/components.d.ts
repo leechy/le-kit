@@ -788,6 +788,11 @@ export namespace Components {
          */
         "allowCustom": boolean;
         /**
+          * Whether the dropdown width should size automatically to its content rather than matching the trigger width.
+          * @default false
+         */
+        "autoWidth": boolean;
+        /**
           * Whether the combobox is disabled.
           * @default false
          */
@@ -810,6 +815,11 @@ export namespace Components {
           * Closes the dropdown.
          */
         "hideDropdown": () => Promise<void>;
+        /**
+          * Whether the dropdown should match the trigger width. Defaults to true. Setting autoWidth=true overrides this to false.
+          * @default true
+         */
+        "matchTriggerWidth": boolean;
         /**
           * Minimum characters before showing filtered results.
           * @default 0
@@ -989,6 +999,11 @@ export namespace Components {
      */
     interface LeDropdownBase {
         /**
+          * Whether the dropdown should size automatically to its content rather than matching the trigger width.
+          * @default false
+         */
+        "autoWidth": boolean;
+        /**
           * Whether to close the dropdown when clicking outside. (used to support combobox with input focus)
           * @default true
          */
@@ -998,6 +1013,11 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Whether to enable drag-through interaction.
+          * @default true
+         */
+        "dragThrough": boolean;
         /**
           * Placeholder text when no options match filter.
           * @default 'No options'
@@ -1026,6 +1046,11 @@ export namespace Components {
           * @default false
          */
         "hideCheckboxes": boolean;
+        /**
+          * Whether the dropdown width should match the trigger width.
+          * @default true
+         */
+        "matchTriggerWidth": boolean;
         /**
           * Maximum height of the dropdown list.
           * @default '300px'
@@ -1435,6 +1460,11 @@ export namespace Components {
      */
     interface LeMultiselect {
         /**
+          * Whether the dropdown width should size automatically to its content rather than matching the trigger width.
+          * @default false
+         */
+        "autoWidth": boolean;
+        /**
           * Clears all selections.
          */
         "clearSelection": () => Promise<void>;
@@ -1457,6 +1487,11 @@ export namespace Components {
           * Closes the dropdown.
          */
         "hideDropdown": () => Promise<void>;
+        /**
+          * Whether the dropdown should match the trigger width. Defaults to true. Setting autoWidth=true overrides this to false.
+          * @default true
+         */
+        "matchTriggerWidth": boolean;
         /**
           * Maximum number of selections allowed.
          */
@@ -1728,6 +1763,11 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Whether to enable drag-through interaction.
+          * @default true
+         */
+        "dragThrough": boolean;
         "hide": () => Promise<void>;
         /**
           * Fallback icon name for trigger.
@@ -1789,6 +1829,11 @@ export namespace Components {
          */
         "align": 'start' | 'center' | 'end';
         /**
+          * Whether the popover should size automatically to its content rather than matching the trigger width
+          * @default false
+         */
+        "autoWidth": boolean;
+        /**
           * Whether clicking outside closes the popover
           * @default true
          */
@@ -1799,9 +1844,19 @@ export namespace Components {
          */
         "closeOnEscape": boolean;
         /**
+          * Whether to enable press-drag-release selection
+          * @default false
+         */
+        "dragThrough": boolean;
+        /**
           * Closes the popover
          */
         "hide": () => Promise<void>;
+        /**
+          * Whether the popover width should match the trigger width
+          * @default false
+         */
+        "matchTriggerWidth": boolean;
         /**
           * Maximum width for the popover (e.g., '400px', '25rem')
          */
@@ -2136,14 +2191,29 @@ export namespace Components {
      */
     interface LeSelect {
         /**
+          * Whether the dropdown width should size automatically to its content rather than matching the trigger width. Defaults to false.
+          * @default false
+         */
+        "autoWidth": boolean;
+        /**
           * Custom chevron icon name or text.
          */
         "chevron"?: string;
+        /**
+          * Compact mode shortcut: sets size="small", variant="clear", hideChevron=true, and autoWidth=true.
+          * @default false
+         */
+        "compact": boolean;
         /**
           * Whether the select is disabled.
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Whether the select should take full width of its container.
+          * @default false
+         */
+        "fullWidth": boolean;
         /**
           * Whether to hide the chevron icon completely.
           * @default false
@@ -2153,6 +2223,11 @@ export namespace Components {
           * Closes the dropdown.
          */
         "hideDropdown": () => Promise<void>;
+        /**
+          * Whether the dropdown should match the trigger width. Defaults to true. Setting autoWidth=true or compact=true overrides this to false.
+          * @default true
+         */
+        "matchTriggerWidth": boolean;
         /**
           * Name attribute for form submission.
          */
@@ -2194,7 +2269,7 @@ export namespace Components {
           * Visual variant of the select.
           * @default 'default'
          */
-        "variant": 'default' | 'outlined' | 'solid';
+        "variant": 'default' | 'outlined' | 'solid' | 'clear';
     }
     interface LeSidePanel {
         /**
@@ -5365,6 +5440,11 @@ declare namespace LocalJSX {
          */
         "allowCustom"?: boolean;
         /**
+          * Whether the dropdown width should size automatically to its content rather than matching the trigger width.
+          * @default false
+         */
+        "autoWidth"?: boolean;
+        /**
           * Whether the combobox is disabled.
           * @default false
          */
@@ -5379,6 +5459,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "fullWidth"?: boolean;
+        /**
+          * Whether the dropdown should match the trigger width. Defaults to true. Setting autoWidth=true overrides this to false.
+          * @default true
+         */
+        "matchTriggerWidth"?: boolean;
         /**
           * Minimum characters before showing filtered results.
           * @default 0
@@ -5579,6 +5664,11 @@ declare namespace LocalJSX {
      */
     interface LeDropdownBase {
         /**
+          * Whether the dropdown should size automatically to its content rather than matching the trigger width.
+          * @default false
+         */
+        "autoWidth"?: boolean;
+        /**
           * Whether to close the dropdown when clicking outside. (used to support combobox with input focus)
           * @default true
          */
@@ -5588,6 +5678,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Whether to enable drag-through interaction.
+          * @default true
+         */
+        "dragThrough"?: boolean;
         /**
           * Placeholder text when no options match filter.
           * @default 'No options'
@@ -5612,6 +5707,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "hideCheckboxes"?: boolean;
+        /**
+          * Whether the dropdown width should match the trigger width.
+          * @default true
+         */
+        "matchTriggerWidth"?: boolean;
         /**
           * Maximum height of the dropdown list.
           * @default '300px'
@@ -6066,6 +6166,11 @@ declare namespace LocalJSX {
      */
     interface LeMultiselect {
         /**
+          * Whether the dropdown width should size automatically to its content rather than matching the trigger width.
+          * @default false
+         */
+        "autoWidth"?: boolean;
+        /**
           * Whether the multiselect is disabled.
           * @default false
          */
@@ -6080,6 +6185,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "fullWidth"?: boolean;
+        /**
+          * Whether the dropdown should match the trigger width. Defaults to true. Setting autoWidth=true overrides this to false.
+          * @default true
+         */
+        "matchTriggerWidth"?: boolean;
         /**
           * Maximum number of selections allowed.
          */
@@ -6376,6 +6486,11 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * Whether to enable drag-through interaction.
+          * @default true
+         */
+        "dragThrough"?: boolean;
+        /**
           * Fallback icon name for trigger.
           * @default 'ellipsis-horizontal'
          */
@@ -6434,6 +6549,11 @@ declare namespace LocalJSX {
          */
         "align"?: 'start' | 'center' | 'end';
         /**
+          * Whether the popover should size automatically to its content rather than matching the trigger width
+          * @default false
+         */
+        "autoWidth"?: boolean;
+        /**
           * Whether clicking outside closes the popover
           * @default true
          */
@@ -6443,6 +6563,16 @@ declare namespace LocalJSX {
           * @default true
          */
         "closeOnEscape"?: boolean;
+        /**
+          * Whether to enable press-drag-release selection
+          * @default false
+         */
+        "dragThrough"?: boolean;
+        /**
+          * Whether the popover width should match the trigger width
+          * @default false
+         */
+        "matchTriggerWidth"?: boolean;
         /**
           * Maximum width for the popover (e.g., '400px', '25rem')
          */
@@ -6781,19 +6911,39 @@ declare namespace LocalJSX {
      */
     interface LeSelect {
         /**
+          * Whether the dropdown width should size automatically to its content rather than matching the trigger width. Defaults to false.
+          * @default false
+         */
+        "autoWidth"?: boolean;
+        /**
           * Custom chevron icon name or text.
          */
         "chevron"?: string;
+        /**
+          * Compact mode shortcut: sets size="small", variant="clear", hideChevron=true, and autoWidth=true.
+          * @default false
+         */
+        "compact"?: boolean;
         /**
           * Whether the select is disabled.
           * @default false
          */
         "disabled"?: boolean;
         /**
+          * Whether the select should take full width of its container.
+          * @default false
+         */
+        "fullWidth"?: boolean;
+        /**
           * Whether to hide the chevron icon completely.
           * @default false
          */
         "hideChevron"?: boolean;
+        /**
+          * Whether the dropdown should match the trigger width. Defaults to true. Setting autoWidth=true or compact=true overrides this to false.
+          * @default true
+         */
+        "matchTriggerWidth"?: boolean;
         /**
           * Name attribute for form submission.
          */
@@ -6843,7 +6993,7 @@ declare namespace LocalJSX {
           * Visual variant of the select.
           * @default 'default'
          */
-        "variant"?: 'default' | 'outlined' | 'solid';
+        "variant"?: 'default' | 'outlined' | 'solid' | 'clear';
     }
     interface LeSidePanel {
         /**
@@ -7941,6 +8091,8 @@ declare namespace LocalJSX {
         "allowCustom": boolean;
         "minSearchLength": number;
         "emptyText": string;
+        "autoWidth": boolean;
+        "matchTriggerWidth": boolean;
         "open": boolean;
     }
     interface LeComponentAttributes {
@@ -7978,6 +8130,9 @@ declare namespace LocalJSX {
         "width": string;
         "fullWidth": boolean;
         "size": 'small' | 'medium' | 'large';
+        "dragThrough": boolean;
+        "matchTriggerWidth": boolean;
+        "autoWidth": boolean;
         "closeOnClickOutside": boolean;
     }
     interface LeEmptyAttributes {
@@ -8060,6 +8215,8 @@ declare namespace LocalJSX {
         "showSelectAll": string;
         "searchable": boolean;
         "emptyText": string;
+        "autoWidth": boolean;
+        "matchTriggerWidth": boolean;
         "open": boolean;
     }
     interface LeNavigationAttributes {
@@ -8109,6 +8266,7 @@ declare namespace LocalJSX {
         "offset": number;
         "minWidth": string;
         "icon": string;
+        "dragThrough": boolean;
         "triggerAriaLabel": string;
         "triggerPart": string;
         "items": LeOverflowMenuItem[] | string;
@@ -8127,6 +8285,9 @@ declare namespace LocalJSX {
         "minWidth": string;
         "maxWidth": string;
         "triggerFullWidth": boolean;
+        "matchTriggerWidth": boolean;
+        "autoWidth": boolean;
+        "dragThrough": boolean;
     }
     interface LePopupAttributes {
         "mode": LeKitMode;
@@ -8181,9 +8342,13 @@ declare namespace LocalJSX {
         "required": boolean;
         "name": string;
         "size": 'small' | 'medium' | 'large';
-        "variant": 'default' | 'outlined' | 'solid';
+        "variant": 'default' | 'outlined' | 'solid' | 'clear';
         "chevron": string;
         "hideChevron": boolean;
+        "compact": boolean;
+        "fullWidth": boolean;
+        "autoWidth": boolean;
+        "matchTriggerWidth": boolean;
         "open": boolean;
     }
     interface LeSidePanelAttributes {

@@ -23,6 +23,13 @@
   cursor: var(--le-controls-cursor, pointer);
 }
 
+:host([drag-through]) .le-popover-trigger {
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .le-popover-trigger-full-width {
   display: flex;
   width: 100%;
@@ -60,11 +67,11 @@
   padding: 0;
   border: none;
   background: transparent;
-  
+
   /* Positioning - will be set via JS */
   position: fixed;
   inset: unset;
-  
+
   /* Styling */
   background: var(--le-color-surface, #ffffff);
   border: 1px solid var(--le-color-border, #e0e0e0);
@@ -74,7 +81,7 @@
   font-family: var(--le-font-family, system-ui, -apple-system, sans-serif);
   font-size: var(--le-font-size-sm, 0.875rem);
   color: var(--le-color-text, #333);
-  
+
   /* Animation */
   opacity: 0;
   transform: scale(0.95);

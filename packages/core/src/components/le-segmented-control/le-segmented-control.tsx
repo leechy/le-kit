@@ -296,47 +296,45 @@ export class LeSegmentedControl {
 
     return (
       <Host class={`overflow-${this.overflow}`}>
-        <le-component component="le-segmented-control">
-          <div
-            class={classes}
-            ref={el => (this.containerRef = el)}
-            role="radiogroup"
-            part="container"
-            onKeyDown={this.handleKeyDown}
-            tabIndex={0}
-          >
-            {segmentConfigs.map(option => {
-              const optValue = this.getOptionValue(option);
-              const isSelected = optValue === value;
-              const isDisabled = option.disabled || disabled;
+        <div
+          class={classes}
+          ref={el => (this.containerRef = el)}
+          role="radiogroup"
+          part="container"
+          onKeyDown={this.handleKeyDown}
+          tabIndex={0}
+        >
+          {segmentConfigs.map(option => {
+            const optValue = this.getOptionValue(option);
+            const isSelected = optValue === value;
+            const isDisabled = option.disabled || disabled;
 
-              return (
-                <le-tab
-                  key={optValue}
-                  class="segment"
-                  role="radio"
-                  variant="enclosed"
-                  selected={isSelected}
-                  disabled={isDisabled}
-                  focusable={false}
-                  size={size}
-                  part={isSelected ? 'segment segment-active' : 'segment'}
-                  aria-checked={isSelected ? 'true' : 'false'}
-                  aria-disabled={isDisabled ? 'true' : undefined}
-                  onClick={() => this.handleClick(option)}
-                  iconStart={option.iconStart}
-                  iconEnd={option.iconEnd}
-                >
-                  <span class="segment-label">{option.label}</span>
-                </le-tab>
-              );
-            })}
-          </div>
+            return (
+              <le-tab
+                key={optValue}
+                class="segment"
+                role="radio"
+                variant="enclosed"
+                selected={isSelected}
+                disabled={isDisabled}
+                focusable={false}
+                size={size}
+                part={isSelected ? 'segment segment-active' : 'segment'}
+                aria-checked={isSelected ? 'true' : 'false'}
+                aria-disabled={isDisabled ? 'true' : undefined}
+                onClick={() => this.handleClick(option)}
+                iconStart={option.iconStart}
+                iconEnd={option.iconEnd}
+              >
+                <span class="segment-label">{option.label}</span>
+              </le-tab>
+            );
+          })}
+        </div>
 
-          <div style={{ display: 'none' }}>
-            <slot></slot>
-          </div>
-        </le-component>
+        <div style={{ display: 'none' }}>
+          <slot></slot>
+        </div>
       </Host>
     );
   }

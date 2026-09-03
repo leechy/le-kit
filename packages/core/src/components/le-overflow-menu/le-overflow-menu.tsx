@@ -59,6 +59,11 @@ export class LeOverflowMenu {
   @Prop() icon: string = 'ellipsis-horizontal';
 
   /**
+   * Whether to enable drag-through interaction.
+   */
+  @Prop() dragThrough: boolean = true;
+
+  /**
    * Aria label for fallback trigger button.
    */
   @Prop() triggerAriaLabel: string = 'Open menu';
@@ -205,6 +210,7 @@ export class LeOverflowMenu {
           showClose={false}
           closeOnClickOutside={true}
           closeOnEscape={true}
+          dragThrough={this.dragThrough}
           open={this.open}
           position={this.position}
           align={this.align}

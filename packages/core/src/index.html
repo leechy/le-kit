@@ -8,7 +8,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
 
   <!-- Register composed icons in the global registry (must run before components) -->
   <script>
@@ -358,7 +360,8 @@
 
   <div class="demo-section">
     <h2>Navigation Reordering</h2>
-    <p>Since navigation is used in sidebars and menus, and we often need to be able to reorder items in places like this, for example,
+    <p>Since navigation is used in sidebars and menus, and we often need to be able to reorder items in places like
+      this, for example,
       folders in an email app, we're adding a new functionality to le-navigation to support this.</p>
     <div style="display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap;">
       <label>Reorder mode:</label>
@@ -460,14 +463,19 @@
     </script>
 
     <h2>List</h2>
-    <p>Desktop table list view featuring macOS Finder-style alternating zebra rows, sortable columns, and flexible data sources.</p>
+    <p>Desktop table list view featuring macOS Finder-style alternating zebra rows, sortable columns, and flexible data
+      sources.</p>
 
     <h3>1. Declarative List with &lt;le-item&gt; Children</h3>
     <le-list>
-      <le-item label="Project Alpha" description="Core API redesign & performance optimization" icon="folder" value="p1"></le-item>
-      <le-item label="Design System v2" description="Updated color tokens & component specs" icon="folder-open" value="p2"></le-item>
-      <le-item label="Customer Portal" description="Self-service portal for Enterprise clients" icon="file" value="p3"></le-item>
-      <le-item label="Analytics Pipeline" description="Real-time data ingestion service" icon="gear-badge" value="p4"></le-item>
+      <le-item label="Project Alpha" description="Core API redesign & performance optimization" icon="folder"
+        value="p1"></le-item>
+      <le-item label="Design System v2" description="Updated color tokens & component specs" icon="folder-open"
+        value="p2"></le-item>
+      <le-item label="Customer Portal" description="Self-service portal for Enterprise clients" icon="file"
+        value="p3"></le-item>
+      <le-item label="Analytics Pipeline" description="Real-time data ingestion service" icon="gear-badge"
+        value="p4"></le-item>
     </le-list>
 
     <br />
@@ -556,7 +564,8 @@
     <br />
 
     <h3>3. Hierarchical Collapsible Rows (&lt;le-list&gt; with Nested Children, Actions &amp; &lt;le-collapse&gt;)</h3>
-    <p>Displays nested organizational data with chevron toggles, depth indentation, row actions with action chevrons, and smooth sliding animations.</p>
+    <p>Displays nested organizational data with chevron toggles, depth indentation, row actions with action chevrons,
+      and smooth sliding animations.</p>
     <le-list id="demo-nested-list" column-visibility-toggle column-reorder selection="single"></le-list>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
@@ -677,11 +686,13 @@
 
     <h3>4. Row &amp; Column Separators (Borders, Zebra &amp; Gridiron Checkered)</h3>
     <p>Using <code>row-separators="zebra" column-separators="borders"</code> (Zebra + Vertical Borders):</p>
-    <le-list id="demo-sep-zebra-borders" row-separators="borders" column-separators="zebra" default-sort-direction="desc"></le-list>
+    <le-list id="demo-sep-zebra-borders" row-separators="borders" column-separators="zebra"
+      default-sort-direction="desc"></le-list>
 
     <br />
     <p>Using <code>row-separators="zebra" column-separators="zebra"</code> (Gridiron / Checkered Pattern):</p>
-    <le-list id="demo-sep-gridiron" row-separators="zebra" column-separators="zebra" disable-keyboard-navigation></le-list>
+    <le-list id="demo-sep-gridiron" row-separators="zebra" column-separators="zebra"
+      disable-keyboard-navigation></le-list>
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
@@ -717,24 +728,17 @@
     <br />
 
     <h3>5. Empty State with empty-* Attributes</h3>
-    <le-list
-      empty-label="No Members Found"
+    <le-list empty-label="No Members Found"
       empty-message="There are no team members matching your filter criteria. Try adjusting your search query."
-      empty-icon="folder"
-    ></le-list>
+      empty-icon="folder"></le-list>
 
     <br />
 
     <h3>4. Empty State with Custom &lt;slot name="empty"&gt;</h3>
     <le-list>
-      <le-empty
-        slot="empty"
-        icon="reload"
-        label="Custom Empty View"
+      <le-empty slot="empty" icon="reload" label="Custom Empty View"
         message="This empty view is rendered using the custom 'empty' slot with an action button."
-        action-label="Add Item"
-        onLeAction="alert('Action button clicked!')"
-      ></le-empty>
+        action-label="Add Item" onLeAction="alert('Action button clicked!')"></le-empty>
     </le-list>
 
     <br />
@@ -747,25 +751,20 @@
 
   <div class="demo-section">
     <h2>Content Unavailable / Empty State (&lt;le-empty&gt;)</h2>
-    <p>SwiftUI ContentUnavailableView inspired component for displaying empty states, missing content, or search results.</p>
+    <p>SwiftUI ContentUnavailableView inspired component for displaying empty states, missing content, or search
+      results.</p>
 
-    <div style="display: flex; gap: 24px; flex-wrap: wrap; justify-content: space-around; border: 1px solid var(--le-color-border); padding: 24px; border-radius: var(--le-radius-lg);">
-      <le-empty
-        label="No Results Found"
+    <div
+      style="display: flex; gap: 24px; flex-wrap: wrap; justify-content: space-around; border: 1px solid var(--le-color-border); padding: 24px; border-radius: var(--le-radius-lg);">
+      <le-empty label="No Results Found"
         message="We couldn't find anything matching your search term. Please try another keyword."
-        action-label="Clear Search"
-        onLeAction="alert('Clear search clicked')"
-      >
+        action-label="Clear Search" onLeAction="alert('Clear search clicked')">
         <le-icon slot="icon" name="search" layers="back-slash" size="48"></le-icon>
       </le-empty>
 
-      <le-empty
-        icon="folder-open"
-        label="No Files Uploaded"
-        message="Upload your first document or drop files here to get started."
-        action-label="Upload File"
-        action-icon="upload"
-      ></le-empty>
+      <le-empty icon="folder-open" label="No Files Uploaded"
+        message="Upload your first document or drop files here to get started." action-label="Upload File"
+        action-icon="upload"></le-empty>
     </div>
   </div>
 
@@ -818,60 +817,28 @@
 
     <h3>New Icons: record, stop and pause</h3>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="record" size="32"></le-icon>
-      <le-icon name="skip-backwards" size="32"></le-icon>
-      <le-icon name="skip-forward" size="32"></le-icon>
-      <le-icon name="record" rounded size="32"></le-icon>
-      <le-icon name="skip-backwards" rounded size="32"></le-icon>
-      <le-icon name="skip-forward" rounded size="32"></le-icon>
-      <le-icon name="record" thin size="32"></le-icon>
-      <le-icon name="skip-backwards" thin size="32"></le-icon>
-      <le-icon name="skip-forward" thin size="32"></le-icon>
-      <le-icon name="record" rounded thin size="32"></le-icon>
-      <le-icon name="skip-backwards" rounded thin size="32"></le-icon>
-      <le-icon name="skip-forward" rounded thin size="32"></le-icon>
+      <le-icon name="delete" size="32"></le-icon>
+      <le-icon name="delete" rounded size="32"></le-icon>
+      <le-icon name="delete" thin size="32"></le-icon>
+      <le-icon name="delete" rounded thin size="32"></le-icon>
     </div>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="record" filled size="32"></le-icon>
-      <le-icon name="skip-backwards" filled size="32"></le-icon>
-      <le-icon name="skip-forward" filled size="32"></le-icon>
-      <le-icon name="record" rounded filled size="32"></le-icon>
-      <le-icon name="skip-backwards" rounded filled size="32"></le-icon>
-      <le-icon name="skip-forward" rounded filled size="32"></le-icon>
-      <le-icon name="record" thin filled size="32"></le-icon>
-      <le-icon name="skip-backwards" thin filled size="32"></le-icon>
-      <le-icon name="skip-forward" thin filled size="32"></le-icon>
-      <le-icon name="record" rounded thin filled size="32"></le-icon>
-      <le-icon name="skip-backwards" rounded thin filled size="32"></le-icon>
-      <le-icon name="skip-forward" rounded thin filled size="32"></le-icon>
+      <le-icon name="delete" filled size="32"></le-icon>
+      <le-icon name="delete" rounded filled size="32"></le-icon>
+      <le-icon name="delete" thin filled size="32"></le-icon>
+      <le-icon name="delete" rounded thin filled size="32"></le-icon>
     </div>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="record"></le-icon>
-      <le-icon name="skip-backwards"></le-icon>
-      <le-icon name="skip-forward"></le-icon>
-      <le-icon name="record" rounded></le-icon>
-      <le-icon name="skip-backwards" rounded></le-icon>
-      <le-icon name="skip-forward" rounded></le-icon>
-      <le-icon name="record" thin></le-icon>
-      <le-icon name="skip-backwards" thin></le-icon>
-      <le-icon name="skip-forward" thin></le-icon>
-      <le-icon name="record" rounded thin></le-icon>
-      <le-icon name="skip-backwards" rounded thin></le-icon>
-      <le-icon name="skip-forward" rounded thin></le-icon>
+      <le-icon name="delete"></le-icon>
+      <le-icon name="delete" rounded></le-icon>
+      <le-icon name="delete" thin></le-icon>
+      <le-icon name="delete" rounded thin></le-icon>
     </div>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="fill" layers="record" size="32"></le-icon>
-      <le-icon name="fill" layers="skip-backwards" size="32"></le-icon>
-      <le-icon name="fill" layers="skip-forward" size="32"></le-icon>
-      <le-icon name="fill" layers="record" rounded size="32"></le-icon>
-      <le-icon name="fill" layers="skip-backwards" rounded size="32"></le-icon>
-      <le-icon name="fill" layers="skip-forward" rounded size="32"></le-icon>
-      <le-icon name="fill" layers="record" thin size="32"></le-icon>
-      <le-icon name="fill" layers="skip-backwards" thin size="32"></le-icon>
-      <le-icon name="fill" layers="skip-forward" thin size="32"></le-icon>
-      <le-icon name="fill" layers="record" rounded thin size="32"></le-icon>
-      <le-icon name="fill" layers="skip-backwards" rounded thin size="32"></le-icon>
-      <le-icon name="fill" layers="skip-forward" rounded thin size="32"></le-icon>
+      <le-icon name="fill" layers="delete" size="32"></le-icon>
+      <le-icon name="fill" layers="delete" rounded size="32"></le-icon>
+      <le-icon name="fill" layers="delete" thin size="32"></le-icon>
+      <le-icon name="fill" layers="delete" rounded thin size="32"></le-icon>
     </div>
 
     <h3>Folders</h3>
@@ -1172,8 +1139,8 @@
     </div>
 
     <div style="display: flex; justify-content: center; gap: var(--le-space-sm);">
-      <le-actions-sequence start-on="manual" loop direction="alternate" loop-delay="3000" start-on="in-view" in-view-threshold="0.3"
-        debug="true" pause-on-hover="true" pause-on-interaction="true" steps='[
+      <le-actions-sequence start-on="manual" loop direction="alternate" loop-delay="3000" start-on="in-view"
+        in-view-threshold="0.3" debug="true" pause-on-hover="true" pause-on-interaction="true" steps='[
           { "target": "#demo-toolbar-frame", "action": "method", "name": "snapTo", "value": 320, "delay": 2000 },
           { "target": "#demo-toolbar", "action": "method", "name": "showOverflowMenu", "delay": 1000 },
           { "target": "#demo-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowDown", "delay": 500 },
@@ -1185,8 +1152,7 @@
           { "target": "#demo-toolbar-frame", "action": "method", "name": "snapTo", "value": 800, "delay": 2000 },
           { "target": "#demo-toolbar-frame", "action": "method", "name": "resetWidth", "delay": 2000 }
         ]'>
-        <le-preview-frame id="demo-toolbar-frame" min-width="200" min-height="56" padding="16" show-controls="width"
-          show-frame="hover">
+        <le-preview-frame id="demo-toolbar-frame" min-width="200" min-height="56" padding="16" show-controls="width">
           <!--
             debug-virtual-toolbar
             debug-pause-before-measure
@@ -1793,7 +1759,7 @@
           <label>Number Input (Stepper Controls):</label>
           <le-number-input name="weight" min="0" max="100" value="3" step="1" controls="stepper" label="Weight"
             style="max-width: 9rem;">
-            <le-select slot="icon-end" size="small" value="kg" variant="clear" hide-chevron>
+            <le-select slot="icon-end" value="kg" compact>
               <le-item value="kg">kg</le-item>
               <le-item value="lbs">lbs</le-item>
             </le-select>
@@ -1810,7 +1776,7 @@
           <label>Price Input (Spinner controls):</label>
           <le-number-input name="price" step="1" shift-step="100" alt-step="0.01" min="0" value="19.99"
             external-id="price-field" label="Price" controls="spinner">
-            <le-select slot="icon-end" size="small" value="$" variant="clear" hide-chevron>
+            <le-select slot="icon-end" value="$" compact>
               <le-item value="$">$</le-item>
               <le-item value="€">€</le-item>
               <le-item value="¥">¥</le-item>

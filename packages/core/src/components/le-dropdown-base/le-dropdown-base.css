@@ -7,7 +7,6 @@
 
 :host {
   display: block;
-  --le-dropdown-list-padding: var(--le-spacing-1);
   --le-dropdown-empty-padding: var(--le-spacing-4);
   --le-dropdown-option-radius: var(--le-radius-md);
   --le-dropdown-font-size: var(--le-font-size-sm);
@@ -24,7 +23,7 @@
 le-popover::part(content) {
   overflow-y: auto;
   overflow-x: hidden;
-  padding: var(--le-dropdown-list-padding, 0.25rem);
+  padding: var(--le-dropdown-list-padding, var(--le-spacing-1));
 }
 
 /* Empty state */
@@ -73,7 +72,8 @@ le-popover::part(content) {
 }
 
 .dropdown-option:hover,
-.dropdown-option.is-focused {
+.dropdown-option.is-focused,
+.dropdown-option.is-drag-hovered {
   border-color: var(--le-color-border-hover, #d1d5db);
 }
 

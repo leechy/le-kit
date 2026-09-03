@@ -564,6 +564,8 @@ filter options by typing or select from the list.
 | `allowCustom` | `boolean` | `false` | Whether to allow custom values not in the options list. |
 | `minSearchLength` | `number` | `0` | Minimum characters before showing filtered results. |
 | `emptyText` | `string` | `'No results found'` | Text to show when no options match the search. |
+| `autoWidth` | `boolean` | `false` | Whether the dropdown width should size automatically to its content rather than matching the trigger width. |
+| `matchTriggerWidth` | `boolean` | `true` | Whether the dropdown should match the trigger width. Defaults to true. Setting autoWidth=true overrides this to false. |
 | `open` | `boolean` | `false` | Whether the dropdown is currently open. |
 
 ### Events
@@ -725,6 +727,9 @@ Wraps le-popover for positioning and provides:
 | `width` | `string \| undefined` |  | Width of the dropdown. If not set, matches trigger width. |
 | `fullWidth` | `boolean` | `false` | Sets the dropdown to full width of the trigger. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size of the dropdown. |
+| `dragThrough` | `boolean` | `true` | Whether to enable drag-through interaction. |
+| `matchTriggerWidth` | `boolean` | `true` | Whether the dropdown width should match the trigger width. |
+| `autoWidth` | `boolean` | `false` | Whether the dropdown should size automatically to its content rather than matching the trigger width. |
 | `closeOnClickOutside` | `boolean` | `true` | Whether to close the dropdown when clicking outside. (used to support combobox with input focus) |
 
 ### Events
@@ -995,6 +1000,8 @@ Displays selected items as tags with optional search filtering.
 | `showSelectAll` | `boolean \| string \| string[]` | `false` | Whether to show a "Select All" option. Also accepts a string or array of strings to customize the label(s). |
 | `searchable` | `boolean` | `false` | Whether the input is searchable. |
 | `emptyText` | `string` | `'No results found'` | Text to show when no options match the search. |
+| `autoWidth` | `boolean` | `false` | Whether the dropdown width should size automatically to its content rather than matching the trigger width. |
+| `matchTriggerWidth` | `boolean` | `true` | Whether the dropdown should match the trigger width. Defaults to true. Setting autoWidth=true overrides this to false. |
 | `open` | `boolean` | `false` | Whether the dropdown is currently open. |
 
 ### Events
@@ -1138,6 +1145,7 @@ A number input component with validation, keyboard controls, and custom spinners
 | `offset` | `number` | `8` | Popover offset in px. |
 | `minWidth` | `string` | `'160px'` | Minimum popover width. |
 | `icon` | `string` | `'ellipsis-horizontal'` | Fallback icon name for trigger. |
+| `dragThrough` | `boolean` | `true` | Whether to enable drag-through interaction. |
 | `triggerAriaLabel` | `string` | `'Open menu'` | Aria label for fallback trigger button. |
 | `triggerPart` | `string` | `'trigger-button'` | Part name for fallback trigger button. |
 | `items` | `LeOverflowMenuItem[] \| string` | `[]` | List of menu items represented as options. |
@@ -1176,6 +1184,9 @@ and other top-layer elements. Falls back gracefully in older browsers.
 | `minWidth` | `string \| undefined` | `'200px'` | Minimum width for the popover (e.g., '200px', '15rem') |
 | `maxWidth` | `string \| undefined` |  | Maximum width for the popover (e.g., '400px', '25rem') |
 | `triggerFullWidth` | `boolean` | `false` | Should the popover's trigger take full width of its container |
+| `matchTriggerWidth` | `boolean` | `false` | Whether the popover width should match the trigger width |
+| `autoWidth` | `boolean` | `false` | Whether the popover should size automatically to its content rather than matching the trigger width |
+| `dragThrough` | `boolean` | `false` | Whether to enable press-drag-release selection |
 
 ### Events
 
@@ -1379,9 +1390,13 @@ A select dropdown component for single selection.
 | `required` | `boolean` | `false` | Whether selection is required. |
 | `name` | `string \| undefined` |  | Name attribute for form submission. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size variant of the select. |
-| `variant` | `'default' \| 'outlined' \| 'solid'` | `'default'` | Visual variant of the select. |
+| `variant` | `'default' \| 'outlined' \| 'solid' \| 'clear'` | `'default'` | Visual variant of the select. |
 | `chevron` | `string \| undefined` |  | Custom chevron icon name or text. |
 | `hideChevron` | `boolean` | `false` | Whether to hide the chevron icon completely. |
+| `compact` | `boolean` | `false` | Compact mode shortcut: sets size="small", variant="clear", hideChevron=true, and autoWidth=true. |
+| `fullWidth` | `boolean` | `false` | Whether the select should take full width of its container. |
+| `autoWidth` | `boolean` | `false` | Whether the dropdown width should size automatically to its content rather than matching the trigger width. Defaults to false. |
+| `matchTriggerWidth` | `boolean` | `true` | Whether the dropdown should match the trigger width. Defaults to true. Setting autoWidth=true or compact=true overrides this to false. |
 | `open` | `boolean` | `false` | Whether the dropdown is currently open. |
 
 ### Events

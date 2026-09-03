@@ -14,20 +14,22 @@ filter options by typing or select from the list.
 
 ## Properties
 
-| Property          | Attribute           | Description                                                      | Type                             | Default               |
-| ----------------- | ------------------- | ---------------------------------------------------------------- | -------------------------------- | --------------------- |
-| `allowCustom`     | `allow-custom`      | Whether to allow custom values not in the options list.          | `boolean`                        | `false`               |
-| `disabled`        | `disabled`          | Whether the combobox is disabled.                                | `boolean`                        | `false`               |
-| `emptyText`       | `empty-text`        | Text to show when no options match the search.                   | `string`                         | `'No results found'`  |
-| `fullWidth`       | `full-width`        | Whether the multiselect should take full width of its container. | `boolean`                        | `false`               |
-| `minSearchLength` | `min-search-length` | Minimum characters before showing filtered results.              | `number`                         | `0`                   |
-| `name`            | `name`              | Name attribute for form submission.                              | `string \| undefined`            | `undefined`           |
-| `open`            | `open`              | Whether the dropdown is currently open.                          | `boolean`                        | `false`               |
-| `options`         | `options`           | The options to display in the dropdown.                          | `LeOption[] \| string`           | `[]`                  |
-| `placeholder`     | `placeholder`       | Placeholder text for the input.                                  | `string`                         | `'Type to search...'` |
-| `required`        | `required`          | Whether selection is required.                                   | `boolean`                        | `false`               |
-| `size`            | `size`              | Size variant of the combobox.                                    | `"large" \| "medium" \| "small"` | `'medium'`            |
-| `value`           | `value`             | The currently selected value.                                    | `number \| string \| undefined`  | `undefined`           |
+| Property            | Attribute             | Description                                                                                                            | Type                             | Default               |
+| ------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------- | --------------------- |
+| `allowCustom`       | `allow-custom`        | Whether to allow custom values not in the options list.                                                                | `boolean`                        | `false`               |
+| `autoWidth`         | `auto-width`          | Whether the dropdown width should size automatically to its content rather than matching the trigger width.            | `boolean`                        | `false`               |
+| `disabled`          | `disabled`            | Whether the combobox is disabled.                                                                                      | `boolean`                        | `false`               |
+| `emptyText`         | `empty-text`          | Text to show when no options match the search.                                                                         | `string`                         | `'No results found'`  |
+| `fullWidth`         | `full-width`          | Whether the multiselect should take full width of its container.                                                       | `boolean`                        | `false`               |
+| `matchTriggerWidth` | `match-trigger-width` | Whether the dropdown should match the trigger width. Defaults to true. Setting autoWidth=true overrides this to false. | `boolean`                        | `true`                |
+| `minSearchLength`   | `min-search-length`   | Minimum characters before showing filtered results.                                                                    | `number`                         | `0`                   |
+| `name`              | `name`                | Name attribute for form submission.                                                                                    | `string \| undefined`            | `undefined`           |
+| `open`              | `open`                | Whether the dropdown is currently open.                                                                                | `boolean`                        | `false`               |
+| `options`           | `options`             | The options to display in the dropdown.                                                                                | `LeOption[] \| string`           | `[]`                  |
+| `placeholder`       | `placeholder`         | Placeholder text for the input.                                                                                        | `string`                         | `'Type to search...'` |
+| `required`          | `required`            | Whether selection is required.                                                                                         | `boolean`                        | `false`               |
+| `size`              | `size`                | Size variant of the combobox.                                                                                          | `"large" \| "medium" \| "small"` | `'medium'`            |
+| `value`             | `value`               | The currently selected value.                                                                                          | `number \| string \| undefined`  | `undefined`           |
 
 
 ## Events
@@ -77,7 +79,6 @@ Type: `Promise<void>`
 
 ### Depends on
 
-- [le-component](../le-component)
 - [le-dropdown-base](../le-dropdown-base)
 - [le-string-input](../le-string-input)
 - [le-icon](../le-icon)
@@ -85,40 +86,16 @@ Type: `Promise<void>`
 ### Graph
 ```mermaid
 graph TD;
-  le-combobox --> le-component
   le-combobox --> le-dropdown-base
   le-combobox --> le-string-input
   le-combobox --> le-icon
-  le-component --> le-button
-  le-component --> le-select
-  le-component --> le-checkbox
-  le-component --> le-string-input
-  le-component --> le-popover
-  le-component --> le-popup
-  le-button --> le-icon
-  le-button --> le-visibility
-  le-button --> le-slot
-  le-button --> le-component
-  le-button --> le-tooltip
-  le-slot --> le-popover
-  le-slot --> le-button
-  le-slot --> le-string-input
-  le-string-input --> le-component
-  le-string-input --> le-button
-  le-string-input --> le-icon
-  le-string-input --> le-slot
-  le-tooltip --> le-component
-  le-select --> le-icon
-  le-select --> le-component
-  le-select --> le-dropdown-base
-  le-select --> le-button
   le-dropdown-base --> le-icon
   le-dropdown-base --> le-popover
-  le-checkbox --> le-component
-  le-checkbox --> le-slot
-  le-popup --> le-slot
-  le-popup --> le-button
-  le-popup --> le-component
+  le-string-input --> le-button
+  le-string-input --> le-icon
+  le-button --> le-icon
+  le-button --> le-visibility
+  le-button --> le-tooltip
   style le-combobox fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

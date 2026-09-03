@@ -703,44 +703,42 @@ export class LeButtonGroup {
   render() {
     return (
       <Host onClick={this.handleFieldsetClick}>
-        <le-component component="le-button-group">
-          <fieldset class="button-group" part="group">
-            {this.buttonSlots.map(slotName => {
-              const button = this.getButtonChildren().find(
-                candidate => candidate.getAttribute('slot') === slotName,
-              );
-              const state = this.getVisibilityState(button?.getAttribute('visibility') ?? null);
-              const groupShape = button?.getAttribute('group-shape');
+        <fieldset class="button-group" part="group">
+          {this.buttonSlots.map(slotName => {
+            const button = this.getButtonChildren().find(
+              candidate => candidate.getAttribute('slot') === slotName,
+            );
+            const state = this.getVisibilityState(button?.getAttribute('visibility') ?? null);
+            const groupShape = button?.getAttribute('group-shape');
 
-              return (
-                <le-visibility
-                  class={{
-                    'button-group-item-visibility': true,
-                    'is-collapsed': state === 'collapsed',
-                    'is-middle': groupShape === 'middle',
-                    'is-end': groupShape === 'end',
-                  }}
-                  state={state}
-                  mode="width"
-                >
-                  <slot name={slotName} />
-                </le-visibility>
-              );
-            })}
+            return (
+              <le-visibility
+                class={{
+                  'button-group-item-visibility': true,
+                  'is-collapsed': state === 'collapsed',
+                  'is-middle': groupShape === 'middle',
+                  'is-end': groupShape === 'end',
+                }}
+                state={state}
+                mode="width"
+              >
+                <slot name={slotName} />
+              </le-visibility>
+            );
+          })}
 
-            <slot />
-            {this.hasOverflow && (
-              <le-overflow-menu
-                class="button-group-overflow"
-                items={this.overflowItems}
-                icon="chevron-down"
-                triggerAriaLabel="More actions"
-                triggerPart="more-button"
-                onLeOverflowMenuItemSelect={this.handleOverflowSelect}
-              ></le-overflow-menu>
-            )}
-          </fieldset>
-        </le-component>
+          <slot />
+          {this.hasOverflow && (
+            <le-overflow-menu
+              class="button-group-overflow"
+              items={this.overflowItems}
+              icon="chevron-down"
+              triggerAriaLabel="More actions"
+              triggerPart="more-button"
+              onLeOverflowMenuItemSelect={this.handleOverflowSelect}
+            ></le-overflow-menu>
+          )}
+        </fieldset>
       </Host>
     );
   }

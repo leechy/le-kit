@@ -189,7 +189,7 @@ h3 {
 }
 
 @media (min-width: 900px) {
-  article:not(.bento-grid) {
+  article:not(.bento-grid):not(.post-card) {
     h1 {
       text-indent: calc(-1 * var(--le-spacing-8));
     }

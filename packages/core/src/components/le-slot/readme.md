@@ -46,25 +46,6 @@ In non-admin mode, this component renders nothing and acts as a passthrough.
 
 ## Dependencies
 
-### Used by
-
- - [le-bento-grid](../le-bento-grid)
- - [le-box](../le-box)
- - [le-button](../le-button)
- - [le-card](../le-card)
- - [le-checkbox](../le-checkbox)
- - [le-code-input](../le-code-input)
- - [le-header](../le-header)
- - [le-number-input](../le-number-input)
- - [le-popup](../le-popup)
- - [le-stack](../le-stack)
- - [le-string-input](../le-string-input)
- - [le-tab](../le-tab)
- - [le-tab-bar](../le-tab-bar)
- - [le-tab-panel](../le-tab-panel)
- - [le-tabs](../le-tabs)
- - [le-tag](../le-tag)
-
 ### Depends on
 
 - [le-popover](../le-popover)
@@ -77,35 +58,11 @@ graph TD;
   le-slot --> le-popover
   le-slot --> le-button
   le-slot --> le-string-input
-  le-button --> le-slot
-  le-component --> le-button
-  le-component --> le-select
-  le-component --> le-checkbox
-  le-component --> le-string-input
-  le-component --> le-popover
-  le-component --> le-popup
-  le-select --> le-icon
-  le-select --> le-component
-  le-select --> le-dropdown-base
-  le-select --> le-button
-  le-dropdown-base --> le-icon
-  le-dropdown-base --> le-popover
-  le-checkbox --> le-slot
-  le-string-input --> le-slot
-  le-popup --> le-slot
-  le-tooltip --> le-component
-  le-bento-grid --> le-slot
-  le-box --> le-slot
-  le-card --> le-slot
-  le-code-input --> le-slot
-  le-header --> le-slot
-  le-number-input --> le-slot
-  le-stack --> le-slot
-  le-tab --> le-slot
-  le-tab-bar --> le-slot
-  le-tab-panel --> le-slot
-  le-tabs --> le-slot
-  le-tag --> le-slot
+  le-button --> le-icon
+  le-button --> le-visibility
+  le-button --> le-tooltip
+  le-string-input --> le-button
+  le-string-input --> le-icon
   style le-slot fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

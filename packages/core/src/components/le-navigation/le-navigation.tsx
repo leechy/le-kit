@@ -2524,92 +2524,86 @@ export class LeNavigation {
     if (this.orientation === 'horizontal') {
       return (
         <Host>
-          <le-component component="le-navigation">
-            {this.renderHorizontal()}
-            <div style={{ display: 'none' }}>
-              <slot></slot>
-            </div>
-          </le-component>
+          {this.renderHorizontal()}
+          <div style={{ display: 'none' }}>
+            <slot></slot>
+          </div>
         </Host>
       );
     }
 
     return (
-      <Host>
-        <le-component component="le-navigation">
-          <div class="nav-vertical-wrapper">
-            {this.renderVerticalList(items, {
-              depth: 0,
-              pathPrefix: '',
-              leadingToggleAncestors: 0,
-              searchable: this.searchable,
-              searchQuery: this.searchQuery,
-              searchPlaceholder: this.searchPlaceholder,
-              emptyText: this.emptyText,
+      <div class="nav-vertical-wrapper">
+        {this.renderVerticalList(items, {
+          depth: 0,
+          pathPrefix: '',
+          leadingToggleAncestors: 0,
+          searchable: this.searchable,
+          searchQuery: this.searchQuery,
+          searchPlaceholder: this.searchPlaceholder,
+          emptyText: this.emptyText,
+        })}
+        <div style={{ display: 'none' }}>
+          <slot></slot>
+        </div>
+        {this.isDraggingActive && this.pendingDragItem && (
+          <div
+            class={classnames('nav-item', 'reorder-ghost', {
+              'has-children': this.getChildItems(this.pendingDragItem).length > 0,
+              [`color-${this.pendingDragItem.color}`]: !!this.pendingDragItem.color,
             })}
-            <div style={{ display: 'none' }}>
-              <slot></slot>
-            </div>
-            {this.isDraggingActive && this.pendingDragItem && (
-              <div
-                class={classnames('nav-item', 'reorder-ghost', {
-                  'has-children': this.getChildItems(this.pendingDragItem).length > 0,
-                  [`color-${this.pendingDragItem.color}`]: !!this.pendingDragItem.color,
-                })}
-                style={{
-                  transform: `translate3d(${this.ghostX}px, ${this.ghostY}px, 0)`,
-                  width: `${this.dragItemRect?.width ?? 220}px`,
-                  paddingLeft: this.draggedPaddingLeft || 'var(--le-nav-item-padding-x)',
-                  paddingRight: this.draggedPaddingRight || 'var(--le-nav-item-padding-x)',
-                }}
-              >
-                {this.draggedHasToggle && this.togglePosition !== 'end' && (
-                  <span class="nav-toggle" aria-hidden="true">
-                    <le-icon
-                      name="chevron-down"
-                      class={classnames('nav-chevron', { open: this.draggedToggleIsOpen })}
-                      aria-hidden="true"
-                    />
-                  </span>
-                )}
-                {this.draggedHasToggleSpacer && this.togglePosition !== 'end' && (
-                  <span class="nav-toggle-spacer" aria-hidden="true" />
-                )}
-                {this.pendingDragItem.iconStart && (
-                  <span class="nav-icon" aria-hidden="true">
-                    {this.renderIcon(this.pendingDragItem.iconStart)}
-                  </span>
-                )}
-                <span class="nav-text">
-                  <span class="nav-label">{this.renderLabel(this.pendingDragItem.label)}</span>
-                  {this.pendingDragItem.description && (
-                    <span class="nav-description">{this.pendingDragItem.description}</span>
-                  )}
-                </span>
-                {this.pendingDragItem.iconEnd && (
-                  <span class="nav-icon nav-icon-end" aria-hidden="true">
-                    {this.renderIcon(this.pendingDragItem.iconEnd)}
-                  </span>
-                )}
-                {this.draggedHasToggle && this.togglePosition === 'end' && (
-                  <span class="nav-toggle nav-toggle--end" aria-hidden="true">
-                    <le-icon
-                      name="chevron-down"
-                      class={classnames('nav-chevron', { open: this.draggedToggleIsOpen, end: true })}
-                      aria-hidden="true"
-                    />
-                  </span>
-                )}
-                {this.showReorderHandle && this.activeReorderMode !== 'none' && (
-                  <span class="nav-icon nav-reorder-handle" aria-hidden="true">
-                    <le-icon name="reorder-horizontal" />
-                  </span>
-                )}
-              </div>
+            style={{
+              transform: `translate3d(${this.ghostX}px, ${this.ghostY}px, 0)`,
+              width: `${this.dragItemRect?.width ?? 220}px`,
+              paddingLeft: this.draggedPaddingLeft || 'var(--le-nav-item-padding-x)',
+              paddingRight: this.draggedPaddingRight || 'var(--le-nav-item-padding-x)',
+            }}
+          >
+            {this.draggedHasToggle && this.togglePosition !== 'end' && (
+              <span class="nav-toggle" aria-hidden="true">
+                <le-icon
+                  name="chevron-down"
+                  class={classnames('nav-chevron', { open: this.draggedToggleIsOpen })}
+                  aria-hidden="true"
+                />
+              </span>
+            )}
+            {this.draggedHasToggleSpacer && this.togglePosition !== 'end' && (
+              <span class="nav-toggle-spacer" aria-hidden="true" />
+            )}
+            {this.pendingDragItem.iconStart && (
+              <span class="nav-icon" aria-hidden="true">
+                {this.renderIcon(this.pendingDragItem.iconStart)}
+              </span>
+            )}
+            <span class="nav-text">
+              <span class="nav-label">{this.renderLabel(this.pendingDragItem.label)}</span>
+              {this.pendingDragItem.description && (
+                <span class="nav-description">{this.pendingDragItem.description}</span>
+              )}
+            </span>
+            {this.pendingDragItem.iconEnd && (
+              <span class="nav-icon nav-icon-end" aria-hidden="true">
+                {this.renderIcon(this.pendingDragItem.iconEnd)}
+              </span>
+            )}
+            {this.draggedHasToggle && this.togglePosition === 'end' && (
+              <span class="nav-toggle nav-toggle--end" aria-hidden="true">
+                <le-icon
+                  name="chevron-down"
+                  class={classnames('nav-chevron', { open: this.draggedToggleIsOpen, end: true })}
+                  aria-hidden="true"
+                />
+              </span>
+            )}
+            {this.showReorderHandle && this.activeReorderMode !== 'none' && (
+              <span class="nav-icon nav-reorder-handle" aria-hidden="true">
+                <le-icon name="reorder-horizontal" />
+              </span>
             )}
           </div>
-        </le-component>
-      </Host>
+        )}
+      </div>
     );
   }
 }

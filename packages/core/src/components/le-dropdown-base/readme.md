@@ -18,22 +18,25 @@ Wraps le-popover for positioning and provides:
 
 ## Properties
 
-| Property              | Attribute                | Description                                                                                      | Type                                                          | Default        |
-| --------------------- | ------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------- | -------------- |
-| `closeOnClickOutside` | `close-on-click-outside` | Whether to close the dropdown when clicking outside. (used to support combobox with input focus) | `boolean`                                                     | `true`         |
-| `disabled`            | `disabled`               | Whether the dropdown is disabled.                                                                | `boolean`                                                     | `false`        |
-| `emptyText`           | `empty-text`             | Placeholder text when no options match filter.                                                   | `string`                                                      | `'No options'` |
-| `filterFn`            | --                       | Filter function for options. Return true to include the option.                                  | `((option: LeOption, query: string) => boolean) \| undefined` | `undefined`    |
-| `filterQuery`         | `filter-query`           | Current filter query string.                                                                     | `string`                                                      | `''`           |
-| `fullWidth`           | `full-width`             | Sets the dropdown to full width of the trigger.                                                  | `boolean`                                                     | `false`        |
-| `hideCheckboxes`      | `hide-checkboxes`        | Whether to hide checkboxes (small sizes only).                                                   | `boolean`                                                     | `false`        |
-| `maxHeight`           | `max-height`             | Maximum height of the dropdown list.                                                             | `string`                                                      | `'300px'`      |
-| `multiple`            | `multiple`               | Whether multiple selection is allowed.                                                           | `boolean`                                                     | `false`        |
-| `open`                | `open`                   | Whether the dropdown is open.                                                                    | `boolean`                                                     | `false`        |
-| `options`             | --                       | The options to display in the dropdown.                                                          | `LeOption[]`                                                  | `[]`           |
-| `size`                | `size`                   | Size of the dropdown.                                                                            | `"large" \| "medium" \| "small"`                              | `'medium'`     |
-| `value`               | `value`                  | Current value(s) - single value or array for multiselect.                                        | `LeOptionValue[] \| number \| string \| undefined`            | `undefined`    |
-| `width`               | `width`                  | Width of the dropdown. If not set, matches trigger width.                                        | `string \| undefined`                                         | `undefined`    |
+| Property              | Attribute                | Description                                                                                           | Type                                                          | Default        |
+| --------------------- | ------------------------ | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | -------------- |
+| `autoWidth`           | `auto-width`             | Whether the dropdown should size automatically to its content rather than matching the trigger width. | `boolean`                                                     | `false`        |
+| `closeOnClickOutside` | `close-on-click-outside` | Whether to close the dropdown when clicking outside. (used to support combobox with input focus)      | `boolean`                                                     | `true`         |
+| `disabled`            | `disabled`               | Whether the dropdown is disabled.                                                                     | `boolean`                                                     | `false`        |
+| `dragThrough`         | `drag-through`           | Whether to enable drag-through interaction.                                                           | `boolean`                                                     | `true`         |
+| `emptyText`           | `empty-text`             | Placeholder text when no options match filter.                                                        | `string`                                                      | `'No options'` |
+| `filterFn`            | --                       | Filter function for options. Return true to include the option.                                       | `((option: LeOption, query: string) => boolean) \| undefined` | `undefined`    |
+| `filterQuery`         | `filter-query`           | Current filter query string.                                                                          | `string`                                                      | `''`           |
+| `fullWidth`           | `full-width`             | Sets the dropdown to full width of the trigger.                                                       | `boolean`                                                     | `false`        |
+| `hideCheckboxes`      | `hide-checkboxes`        | Whether to hide checkboxes (small sizes only).                                                        | `boolean`                                                     | `false`        |
+| `matchTriggerWidth`   | `match-trigger-width`    | Whether the dropdown width should match the trigger width.                                            | `boolean`                                                     | `true`         |
+| `maxHeight`           | `max-height`             | Maximum height of the dropdown list.                                                                  | `string`                                                      | `'300px'`      |
+| `multiple`            | `multiple`               | Whether multiple selection is allowed.                                                                | `boolean`                                                     | `false`        |
+| `open`                | `open`                   | Whether the dropdown is open.                                                                         | `boolean`                                                     | `false`        |
+| `options`             | --                       | The options to display in the dropdown.                                                               | `LeOption[]`                                                  | `[]`           |
+| `size`                | `size`                   | Size of the dropdown.                                                                                 | `"large" \| "medium" \| "small"`                              | `'medium'`     |
+| `value`               | `value`                  | Current value(s) - single value or array for multiselect.                                             | `LeOptionValue[] \| number \| string \| undefined`            | `undefined`    |
+| `width`               | `width`                  | Width of the dropdown. If not set, matches trigger width.                                             | `string \| undefined`                                         | `undefined`    |
 
 
 ## Events

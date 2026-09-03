@@ -65,34 +65,7 @@ graph TD;
   le-empty --> le-button
   le-button --> le-icon
   le-button --> le-visibility
-  le-button --> le-slot
-  le-button --> le-component
   le-button --> le-tooltip
-  le-slot --> le-popover
-  le-slot --> le-button
-  le-slot --> le-string-input
-  le-string-input --> le-component
-  le-string-input --> le-button
-  le-string-input --> le-icon
-  le-string-input --> le-slot
-  le-component --> le-button
-  le-component --> le-select
-  le-component --> le-checkbox
-  le-component --> le-string-input
-  le-component --> le-popover
-  le-component --> le-popup
-  le-select --> le-icon
-  le-select --> le-component
-  le-select --> le-dropdown-base
-  le-select --> le-button
-  le-dropdown-base --> le-icon
-  le-dropdown-base --> le-popover
-  le-checkbox --> le-component
-  le-checkbox --> le-slot
-  le-popup --> le-slot
-  le-popup --> le-button
-  le-popup --> le-component
-  le-tooltip --> le-component
   le-list --> le-empty
   style le-empty fill:#f9f,stroke:#333,stroke-width:4px
 ```

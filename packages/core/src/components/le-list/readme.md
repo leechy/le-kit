@@ -145,23 +145,6 @@ graph TD;
   le-button --> le-icon
   le-button --> le-visibility
   le-button --> le-tooltip
-  le-tooltip --> le-component
-  le-component --> le-button
-  le-component --> le-select
-  le-component --> le-checkbox
-  le-component --> le-string-input
-  le-component --> le-popover
-  le-component --> le-popup
-  le-select --> le-icon
-  le-select --> le-component
-  le-select --> le-dropdown-base
-  le-select --> le-button
-  le-dropdown-base --> le-icon
-  le-dropdown-base --> le-popover
-  le-string-input --> le-button
-  le-string-input --> le-icon
-  le-popup --> le-button
-  le-popup --> le-component
   le-empty --> le-icon
   le-empty --> le-button
   le-context-menu --> le-popover
@@ -171,7 +154,8 @@ graph TD;
   le-navigation --> le-collapse
   le-navigation --> le-popover
   le-navigation --> le-bar
-  le-navigation --> le-component
+  le-string-input --> le-button
+  le-string-input --> le-icon
   le-bar --> le-icon
   le-bar --> le-overflow-menu
   le-overflow-menu --> le-navigation

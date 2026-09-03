@@ -12,6 +12,21 @@ describe('le-collapse', () => {
     expect(page.root!.getAttribute('data-expanded')).toBe('true');
   });
 
+  it('should test le-collapse with closed=false prop', async () => {
+    const page = await newSpecPage({
+      components: [LeCollapse],
+      html: `<div></div>`,
+    });
+
+    const collapse = page.doc.createElement('le-collapse') as any;
+    collapse.closed = false;
+    page.body.appendChild(collapse);
+    await page.waitForChanges();
+
+    expect(collapse.getAttribute('data-open')).toBe('true');
+    expect(collapse.getAttribute('data-expanded')).toBe('true');
+  });
+
   it('should be closed and not expanded when closed prop is true', async () => {
     const page = await newSpecPage({
       components: [LeCollapse],

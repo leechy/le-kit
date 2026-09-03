@@ -189,9 +189,8 @@ describe('le-list drag-and-drop reordering', () => {
     await page.waitForChanges();
 
     const collapse = host.shadowRoot?.querySelector('le-collapse');
-    console.log('List row le-collapse HTML:', collapse?.outerHTML);
-    console.log('List row le-collapse data-expanded:', collapse?.getAttribute('data-expanded'));
-    console.log('List row le-collapse data-open:', collapse?.getAttribute('data-open'));
-    console.log('List row le-collapse closed prop:', collapse?.closed);
+    expect(collapse?.getAttribute('data-open')).toBe('true');
+    expect(collapse?.getAttribute('data-expanded')).toBe('true');
+    expect(collapse?.closed).toBe(false);
   });
 });

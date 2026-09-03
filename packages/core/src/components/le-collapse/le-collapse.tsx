@@ -53,9 +53,13 @@ export class LeCollapse {
   }
 
   @State() private headerShrunk: boolean = false;
-  @State() private isExpanded: boolean = false;
+  @State() private isExpanded: boolean = true;
 
   componentWillLoad() {
+    this.isExpanded = this.shouldBeOpen();
+  }
+
+  componentDidLoad() {
     if (this.shouldBeOpen()) {
       this.isExpanded = true;
     }
@@ -86,7 +90,7 @@ export class LeCollapse {
   @Listen('transitionend')
   protected handleTransitionEnd(ev: TransitionEvent) {
     if (ev.target !== this.el) return;
-    if (ev.propertyName === 'grid-template-rows') {
+    if (ev.propertyName === 'grid-template-rows' || ev.propertyName === 'opacity') {
       if (this.shouldBeOpen()) {
         this.isExpanded = true;
       }
@@ -101,15 +105,27 @@ export class LeCollapse {
 
   private applyOpenState() {
     const nextOpen = this.shouldBeOpen();
+    if (!nextOpen) {
+      this.isExpanded = false;
+      return;
+    }
+
     this.isExpanded = false;
 
-    if (nextOpen && this.el && typeof window !== 'undefined' && window.getComputedStyle) {
+    if (this.el && typeof window !== 'undefined') {
       // Fallback if transition duration is 0s or prefers-reduced-motion is active
-      const style = window.getComputedStyle(this.el);
+      const style = window.getComputedStyle?.(this.el);
       const durationStr = style?.transitionDuration || '';
       const duration = durationStr ? parseFloat(durationStr) * (durationStr.endsWith('ms') ? 1 : 1000) : 0;
       if (!duration || duration <= 0) {
         this.isExpanded = true;
+      } else {
+        // Safety timeout in case transitionend event does not fire
+        setTimeout(() => {
+          if (this.shouldBeOpen()) {
+            this.isExpanded = true;
+          }
+        }, duration + 50);
       }
     }
   }

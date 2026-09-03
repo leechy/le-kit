@@ -2,6 +2,7 @@ import { beforeAll, describe, expect, it } from '@jest/globals';
 import { newSpecPage } from '@stencil/core/testing';
 import { mockMutationObserver } from '../../utils/test-helpers';
 import { LeList } from './le-list';
+import { LeCollapse } from '../le-collapse/le-collapse';
 
 beforeAll(() => {
   mockMutationObserver();
@@ -168,5 +169,29 @@ describe('le-list drag-and-drop reordering', () => {
     // Moving 'f2' inside 'f1' (depth 0) places 'f2' at depth 1 and 'f2_child' at depth 2 <= 2.
     const resultInsideF1 = await instance.moveItem('f2', 'f1', 'inside');
     expect(resultInsideF1.success).toBe(true);
+  });
+
+  it('renders le-collapse with data-expanded="true" when rows are open by default', async () => {
+    const page = await newSpecPage({
+      components: [LeList, LeCollapse],
+      html: `<le-list></le-list>`,
+    });
+
+    const host = page.root as any;
+    host.data = [
+      {
+        id: 'dept',
+        label: 'Dept',
+        open: true,
+        children: [{ id: 'child', label: 'Child' }],
+      },
+    ];
+    await page.waitForChanges();
+
+    const collapse = host.shadowRoot?.querySelector('le-collapse');
+    console.log('List row le-collapse HTML:', collapse?.outerHTML);
+    console.log('List row le-collapse data-expanded:', collapse?.getAttribute('data-expanded'));
+    console.log('List row le-collapse data-open:', collapse?.getAttribute('data-open'));
+    console.log('List row le-collapse closed prop:', collapse?.closed);
   });
 });

@@ -1741,8 +1741,8 @@ export class LeList {
     const children = this.getChildItems(item);
     const hasChildren = children.length > 0;
     const isOpen = this.isItemOpen(item, id);
-    const isFocused = this.canNavigateRows() && this.visualFocusActive && this.focusedRowId === id;
-    const isSelected = this.isSelectionEnabled() && this.selectedRowIds.includes(id);
+    const isFocused = !this.isDraggingActive && this.canNavigateRows() && this.visualFocusActive && this.focusedRowId === id;
+    const isSelected = !this.isDraggingActive && this.isSelectionEnabled() && this.selectedRowIds.includes(id);
     const selPos = isSelected ? this.getSelectionPosition(id) : undefined;
     const hasAction = !item.disabled && !!(item.action || item.href);
     const hasAnyActions = !item.disabled && (hasAction || (Array.isArray(item.actions) && item.actions.length > 0));
@@ -1755,10 +1755,12 @@ export class LeList {
 
     const isDropTarget = this.isDraggingActive && this.dropTargetId === id;
     const activeDropDepth =
-      isDropTarget && this.dropPosition === 'after' && this.overrideDropDepth !== undefined
+      isDropTarget && this.overrideDropDepth !== undefined
         ? this.overrideDropDepth
         : depth;
-    const dropLinePaddingLeft = `calc(var(--le-list-item-padding-x) + ${activeDropDepth} * var(--le-list-item-indent))`;
+    const dropLinePaddingLeft = isHierarchical
+      ? `calc(var(--le-list-item-padding-x) + ${activeDropDepth} * var(--le-list-item-indent) + var(--le-list-toggle-size))`
+      : `calc(var(--le-list-item-padding-x) + ${activeDropDepth} * var(--le-list-item-indent))`;
     const isDraggedNode = this.isDraggingActive && this.activeDragId === id;
 
     let isOdd = false;
@@ -2119,11 +2121,32 @@ export class LeList {
             {visibleColumns.map((col, colIndex) => {
               const isFirstCol = colIndex === 0;
               const alignClass = `align-${col.align || (col.type === 'number' ? 'right' : 'left')}`;
+              const draggedNode = findNodeInTree(displayOptions, this.activeDragId || this.pendingDragId || '');
+              const draggedDepth = draggedNode ? getNodeDepth(displayOptions, String(draggedNode.item.id ?? draggedNode.item.value ?? '')) : 0;
+              const hasChildren = this.pendingDragItem && Array.isArray(this.pendingDragItem.children) && this.pendingDragItem.children.length > 0;
+              const indentCalc = `calc(var(--le-list-item-padding-x) + ${draggedDepth} * var(--le-list-item-indent))`;
+
               return (
-                <div class={{ 'le-list-td': true, [alignClass]: true }}>
-                  {isFirstCol && isHierarchical && (
-                    <span class="le-list-toggle-spacer" aria-hidden="true" />
-                  )}
+                <div
+                  class={{
+                    'le-list-td': true,
+                    [alignClass]: true,
+                    'is-first-cell': isFirstCol && isHierarchical,
+                  }}
+                >
+                  {isFirstCol &&
+                    isHierarchical &&
+                    (hasChildren ? (
+                      <span class="le-list-row-toggle" style={{ paddingLeft: indentCalc }}>
+                        <le-icon
+                          name="chevron-down"
+                          class={{ 'le-list-chevron': true, 'open': !!this.pendingDragItem?.open }}
+                          aria-hidden="true"
+                        />
+                      </span>
+                    ) : (
+                      <span class="le-list-toggle-spacer" style={{ paddingLeft: indentCalc }} aria-hidden="true" />
+                    ))}
                   {this.renderCellValue(col, this.pendingDragItem!)}
                 </div>
               );

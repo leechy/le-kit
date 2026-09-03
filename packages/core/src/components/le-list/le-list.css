@@ -4,6 +4,9 @@
   box-sizing: border-box;
   container-type: inline-size;
   container-name: le-list-container;
+  font-family: var(--le-font-family-base);
+  font-size: var(--le-font-size-sm);
+  color: var(--le-color-text-primary);
   outline: none;
 
   /* Sizing and indentation variables composed like le-navigation */
@@ -519,14 +522,20 @@
   border-radius: var(--le-list-row-radius, var(--le-radius-md, 6px));
 }
 
-/* Suppress selection/focus outline overlays during drag on dragged row, inside target or active dragging state */
-.le-list-row-main.is-dragged-row::after,
-.le-list-row-main.is-dragged-item::after,
-.le-list-row-main.reorder-target-inside::after {
-  display: none !important;
+/* Disable transitions during drag to eliminate lag and flicker */
+.le-list-table.is-dragging,
+.le-list-table.is-dragging * {
+  transition: none !important;
 }
 
-.le-list-table.is-dragging .le-list-row-main.is-focused::after {
+/* Suppress selection/focus/hover outline overlays during drag */
+.le-list-row-main.is-dragged-row::after,
+.le-list-row-main.is-dragged-item::after,
+.le-list-row-main.reorder-target-inside::after,
+.le-list-table.is-dragging .le-list-row-main::after,
+.le-list-table.is-dragging .le-list-row-main.is-selected::after,
+.le-list-table.is-dragging .le-list-row-main.is-focused::after,
+.le-list-table.is-dragging .le-list-row-main:hover::after {
   display: none !important;
 }
 
@@ -565,7 +574,11 @@
   left: 0;
   z-index: 99999;
   pointer-events: none;
-  background: color-mix(in srgb, var(--le-color-surface-alt, var(--le-color-surface, #ffffff)) 85%, transparent) !important;
+  font-family: var(--le-font-family-base);
+  font-size: var(--le-font-size-sm);
+  color: var(--le-color-text-primary);
+  text-align: left;
+  background: color-mix(in srgb, var(--le-color-surface-alt, var(--le-color-surface, #ffffff)) 25%, transparent) !important;
   border: 1px solid var(--le-color-border, #e5e7eb);
   border-radius: var(--le-list-row-radius, var(--le-radius-md, 6px));
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.18), 0 8px 10px -6px rgba(0, 0, 0, 0.1);

@@ -16,7 +16,7 @@ import { LeNavigationItemReorderDetail, LeNavigationReorderMode } from "./compon
 import { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 import { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 import { LeActiveContext } from "./components/le-kit/le-kit";
-import { LeColumn } from "./types/list";
+import { LeColumn, LeListItemReorderDetail, LeListReorderMode } from "./types/list";
 import { Event } from "@stencil/core";
 import { LeNavigationItemReorderDetail as LeNavigationItemReorderDetail1, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode as LeNavigationReorderMode1 } from "./components/le-navigation/le-navigation";
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
@@ -38,7 +38,7 @@ export { LeNavigationItemReorderDetail, LeNavigationReorderMode } from "./compon
 export { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 export { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 export { LeActiveContext } from "./components/le-kit/le-kit";
-export { LeColumn } from "./types/list";
+export { LeColumn, LeListItemReorderDetail, LeListReorderMode } from "./types/list";
 export { Event } from "@stencil/core";
 export { LeNavigationItemReorderDetail as LeNavigationItemReorderDetail1, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode as LeNavigationReorderMode1 } from "./components/le-navigation/le-navigation";
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
@@ -1394,6 +1394,10 @@ export namespace Components {
          */
         "disableKeyboardNavigation": boolean;
         /**
+          * Programmatically disable reordering.
+         */
+        "disableReorder": () => Promise<void>;
+        /**
           * Whether to disable row highlighting on hover. Defaults to false (row hover highlighting is enabled by default).
           * @default false
          */
@@ -1415,6 +1419,33 @@ export namespace Components {
          */
         "emptyTitle"?: string;
         /**
+          * Programmatically enable reordering.
+         */
+        "enableReorder": (mode?: LeListReorderMode) => Promise<void>;
+        /**
+          * Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
+         */
+        "maxReorderDepth"?: number;
+        /**
+          * Programmatically move an item relative to another item in the list tree. Accepts item ID, value, or label for both dragged and target items.
+         */
+        "moveItem": (draggedQuery: string, targetQuery: string, position?: "before" | "inside" | "after") => Promise<{ success: boolean; detail?: LeListItemReorderDetail; }>;
+        /**
+          * Enables manual drag-and-drop reordering of list row items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+          * @default 'none'
+         */
+        "reorder": LeListReorderMode | boolean;
+        /**
+          * Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.
+          * @default 500
+         */
+        "reorderExpandDelay": number;
+        /**
+          * Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.35, middle: 0.3, bottom: 0.35 }.
+          * @default {     top: 0.35,     middle: 0.3,     bottom: 0.35,   }
+         */
+        "reorderRatios": { top: number; middle: number; bottom: number };
+        /**
           * Row separation style: 'none' | 'borders' | 'zebra'. Defaults to 'zebra'.
           * @default 'zebra'
          */
@@ -1425,10 +1456,19 @@ export namespace Components {
          */
         "selection": boolean | 'single' | 'multiple' | 'none';
         /**
+          * Programmatically set the reorder mode ('none', 'siblings', 'nested', or boolean).
+         */
+        "setReorder": (mode: LeListReorderMode | boolean) => Promise<void>;
+        /**
           * Whether to display chevron-right icon at the end of rows that have actions or links. Defaults to false.
           * @default false
          */
         "showActionChevron": boolean;
+        /**
+          * Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable rows. Default: false.
+          * @default false
+         */
+        "showReorderHandle": boolean;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -1594,6 +1634,10 @@ export namespace Components {
           * @default []
          */
         "items": LeOption[] | string;
+        /**
+          * Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
+         */
+        "maxReorderDepth"?: number;
         /**
           * Minimum number of visible top-level items required to use the "More" overflow. If fewer would be visible, the navigation falls back to hamburger.
           * @default 2
@@ -3914,6 +3958,8 @@ declare global {
         "leColumnVisibilityChange": { columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean };
         "leColumnOrderChange": { columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn };
         "leItemToggle": { item: LeOption; open: boolean; originalEvent?: MouseEvent };
+        "leItemReorder": LeListItemReorderDetail;
+        "leReorder": LeListItemReorderDetail;
     }
     interface HTMLLeListElement extends Components.LeList, HTMLStencilElement {
         addEventListener<K extends keyof HTMLLeListElementEventMap>(type: K, listener: (this: HTMLLeListElement, ev: LeListCustomEvent<HTMLLeListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6093,6 +6139,10 @@ declare namespace LocalJSX {
          */
         "emptyTitle"?: string;
         /**
+          * Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
+         */
+        "maxReorderDepth"?: number;
+        /**
           * Emitted when a row action or link is executed.
          */
         "onLeAction"?: (event: LeListCustomEvent<{ action?: string; item: LeOption; id: string; originalEvent?: Event }>) => void;
@@ -6105,9 +6155,17 @@ declare namespace LocalJSX {
          */
         "onLeColumnVisibilityChange"?: (event: LeListCustomEvent<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>) => void;
         /**
+          * Fired when list row items are reordered via drag and drop.
+         */
+        "onLeItemReorder"?: (event: LeListCustomEvent<LeListItemReorderDetail>) => void;
+        /**
           * Emitted when a hierarchical row item is expanded or collapsed.
          */
         "onLeItemToggle"?: (event: LeListCustomEvent<{ item: LeOption; open: boolean; originalEvent?: MouseEvent }>) => void;
+        /**
+          * Alias for `leItemReorder`.
+         */
+        "onLeReorder"?: (event: LeListCustomEvent<LeListItemReorderDetail>) => void;
         /**
           * Emitted when row selection changes.
          */
@@ -6120,6 +6178,21 @@ declare namespace LocalJSX {
           * Emitted when column sorting changes.
          */
         "onLeSortChange"?: (event: LeListCustomEvent<{ key?: string; column?: LeColumn; direction?: 'asc' | 'desc' }>) => void;
+        /**
+          * Enables manual drag-and-drop reordering of list row items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+          * @default 'none'
+         */
+        "reorder"?: LeListReorderMode | boolean;
+        /**
+          * Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.
+          * @default 500
+         */
+        "reorderExpandDelay"?: number;
+        /**
+          * Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.35, middle: 0.3, bottom: 0.35 }.
+          * @default {     top: 0.35,     middle: 0.3,     bottom: 0.35,   }
+         */
+        "reorderRatios"?: { top: number; middle: number; bottom: number };
         /**
           * Row separation style: 'none' | 'borders' | 'zebra'. Defaults to 'zebra'.
           * @default 'zebra'
@@ -6135,6 +6208,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "showActionChevron"?: boolean;
+        /**
+          * Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable rows. Default: false.
+          * @default false
+         */
+        "showReorderHandle"?: boolean;
     }
     /**
      * A multiselect component for selecting multiple options.
@@ -6290,6 +6368,10 @@ declare namespace LocalJSX {
           * @default []
          */
         "items"?: LeOption[] | string;
+        /**
+          * Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
+         */
+        "maxReorderDepth"?: number;
         /**
           * Minimum number of visible top-level items required to use the "More" overflow. If fewer would be visible, the navigation falls back to hamburger.
           * @default 2
@@ -8202,6 +8284,10 @@ declare namespace LocalJSX {
         "selection": string;
         "showActionChevron": boolean;
         "actionChevron": boolean;
+        "reorder": string;
+        "showReorderHandle": boolean;
+        "maxReorderDepth": number;
+        "reorderExpandDelay": number;
     }
     interface LeMultiselectAttributes {
         "options": LeOption[] | string;
@@ -8235,6 +8321,7 @@ declare namespace LocalJSX {
         "autoScroll": boolean;
         "reorder": string;
         "showReorderHandle": boolean;
+        "maxReorderDepth": number;
         "reorderExpandDelay": number;
         "togglePosition": 'start' | 'end';
     }

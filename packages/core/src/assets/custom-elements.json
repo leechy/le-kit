@@ -1465,1276 +1465,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-box/le-box.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible box component for use as a flex item within le-stack.\n\n`le-box` wraps content and provides flex item properties like grow, shrink,\nbasis, and self-alignment. It can also control its internal content alignment.",
-          "name": "LeBox",
-          "cssProperties": [
-            {
-              "description": "Background color",
-              "name": "--le-box-bg"
-            },
-            {
-              "description": "Padding inside the box",
-              "name": "--le-box-padding"
-            },
-            {
-              "description": "Border radius",
-              "name": "--le-box-border-radius"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main box container",
-              "name": "box"
-            },
-            {
-              "description": "The inner content wrapper",
-              "name": "content"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Default slot for box content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "grow",
-              "type": {
-                "text": "number"
-              },
-              "default": "0",
-              "description": "Flex grow factor - how much the item should grow relative to siblings"
-            },
-            {
-              "kind": "field",
-              "name": "shrink",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Flex shrink factor - how much the item should shrink relative to siblings"
-            },
-            {
-              "kind": "field",
-              "name": "basis",
-              "type": {
-                "text": "string"
-              },
-              "default": "'auto'",
-              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')"
-            },
-            {
-              "kind": "field",
-              "name": "width",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Width of the box (CSS value like '100px', '50%', 'auto')"
-            },
-            {
-              "kind": "field",
-              "name": "height",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Height of the box (CSS value)"
-            },
-            {
-              "kind": "field",
-              "name": "minWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Minimum width constraint"
-            },
-            {
-              "kind": "field",
-              "name": "maxWidth",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Maximum width constraint"
-            },
-            {
-              "kind": "field",
-              "name": "minHeight",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Minimum height constraint"
-            },
-            {
-              "kind": "field",
-              "name": "maxHeight",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Maximum height constraint"
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')"
-            },
-            {
-              "kind": "field",
-              "name": "borderRadius",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')"
-            },
-            {
-              "kind": "field",
-              "name": "border",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')"
-            },
-            {
-              "kind": "field",
-              "name": "alignSelf",
-              "type": {
-                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
-              },
-              "default": "'auto'",
-              "description": "Self-alignment override for this item on the cross axis"
-            },
-            {
-              "kind": "field",
-              "name": "alignContent",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch'"
-              },
-              "default": "'stretch'",
-              "description": "Internal horizontal alignment of content"
-            },
-            {
-              "kind": "field",
-              "name": "justifyContent",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch'"
-              },
-              "default": "'start'",
-              "description": "Internal vertical alignment of content"
-            },
-            {
-              "kind": "field",
-              "name": "padding",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Padding inside the box (CSS value like '8px', '1rem')"
-            },
-            {
-              "kind": "field",
-              "name": "order",
-              "type": {
-                "text": "number | undefined"
-              },
-              "description": "Order in the flex container (lower values come first)"
-            },
-            {
-              "kind": "field",
-              "name": "displayFlex",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to display box content as flex (for internal alignment)"
-            },
-            {
-              "kind": "field",
-              "name": "innerDirection",
-              "type": {
-                "text": "'horizontal' | 'vertical'"
-              },
-              "default": "'vertical'",
-              "description": "Direction of internal flex layout when displayFlex is true"
-            },
-            {
-              "kind": "field",
-              "name": "innerGap",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Gap between internal flex items when displayFlex is true"
-            },
-            {
-              "kind": "method",
-              "name": "getAlignSelf",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getContentAlign",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getContentJustify",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "grow",
-              "fieldName": "grow",
-              "default": "0",
-              "description": "Flex grow factor - how much the item should grow relative to siblings",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "shrink",
-              "fieldName": "shrink",
-              "default": "1",
-              "description": "Flex shrink factor - how much the item should shrink relative to siblings",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "basis",
-              "fieldName": "basis",
-              "default": "'auto'",
-              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "width",
-              "fieldName": "width",
-              "description": "Width of the box (CSS value like '100px', '50%', 'auto')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "height",
-              "fieldName": "height",
-              "description": "Height of the box (CSS value)",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "min-width",
-              "fieldName": "minWidth",
-              "description": "Minimum width constraint",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "max-width",
-              "fieldName": "maxWidth",
-              "description": "Maximum width constraint",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "min-height",
-              "fieldName": "minHeight",
-              "description": "Minimum height constraint",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "max-height",
-              "fieldName": "maxHeight",
-              "description": "Maximum height constraint",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "background",
-              "fieldName": "background",
-              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "border-radius",
-              "fieldName": "borderRadius",
-              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "border",
-              "fieldName": "border",
-              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "align-self",
-              "fieldName": "alignSelf",
-              "default": "'auto'",
-              "description": "Self-alignment override for this item on the cross axis",
-              "type": {
-                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
-              }
-            },
-            {
-              "name": "align-content",
-              "fieldName": "alignContent",
-              "default": "'stretch'",
-              "description": "Internal horizontal alignment of content",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch'"
-              }
-            },
-            {
-              "name": "justify-content",
-              "fieldName": "justifyContent",
-              "default": "'start'",
-              "description": "Internal vertical alignment of content",
-              "type": {
-                "text": "'start' | 'center' | 'end' | 'stretch'"
-              }
-            },
-            {
-              "name": "padding",
-              "fieldName": "padding",
-              "description": "Padding inside the box (CSS value like '8px', '1rem')",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "order",
-              "fieldName": "order",
-              "description": "Order in the flex container (lower values come first)",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "display-flex",
-              "fieldName": "displayFlex",
-              "default": "false",
-              "description": "Whether to display box content as flex (for internal alignment)",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "inner-direction",
-              "fieldName": "innerDirection",
-              "default": "'vertical'",
-              "description": "Direction of internal flex layout when displayFlex is true",
-              "type": {
-                "text": "'horizontal' | 'vertical'"
-              }
-            },
-            {
-              "name": "inner-gap",
-              "fieldName": "innerGap",
-              "description": "Gap between internal flex items when displayFlex is true",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "tagName": "le-box",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeBox",
-          "declaration": {
-            "name": "LeBox",
-            "module": "src/components/le-box/le-box.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-box",
-          "declaration": {
-            "name": "LeBox",
-            "module": "src/components/le-box/le-box.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-bento-tile/le-bento-tile.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A single tile for use inside `le-bento-grid`.\n\nDeclares how many columns and rows it should span in the bento grid.\nVisual appearance (border-radius, shadow) is controlled via CSS custom\nproperties so themes can override them.",
-          "name": "LeBentoTile",
-          "cssProperties": [
-            {
-              "description": "Border radius (default: var(--le-radius-xl, 0.75rem))",
-              "name": "--le-bento-tile-radius"
-            },
-            {
-              "description": "Box shadow (default: subtle multi-layer shadow)",
-              "name": "--le-bento-tile-shadow"
-            },
-            {
-              "description": "Background color (default: transparent)",
-              "name": "--le-bento-tile-bg"
-            },
-            {
-              "description": "Inner padding (default: 0)",
-              "name": "--le-bento-tile-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The inner tile wrapper element",
-              "name": "tile"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Content displayed inside the tile",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "cols",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Number of grid columns this tile should span."
-            },
-            {
-              "kind": "field",
-              "name": "rows",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Number of grid rows this tile should span."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "cols",
-              "fieldName": "cols",
-              "default": "1",
-              "description": "Number of grid columns this tile should span.",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "name": "rows",
-              "fieldName": "rows",
-              "default": "1",
-              "description": "Number of grid rows this tile should span.",
-              "type": {
-                "text": "number"
-              }
-            }
-          ],
-          "tagName": "le-bento-tile",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeBentoTile",
-          "declaration": {
-            "name": "LeBentoTile",
-            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-bento-tile",
-          "declaration": {
-            "name": "LeBentoTile",
-            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-button-group/le-button-group.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Groups multiple `le-button` elements and optionally collapses low-priority actions\ninto an overflow \"more\" menu.",
-          "name": "LeButtonGroup",
-          "cssParts": [
-            {
-              "description": "The grouped buttons frame",
-              "name": "group"
-            },
-            {
-              "description": "The overflow trigger button",
-              "name": "more-button"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Group button elements (`le-button` children)",
-              "name": ""
-            },
-            {
-              "description": "Custom icon/content for the overflow trigger button",
-              "name": "more"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional label used when the whole group is represented as a parent item\ninside another component's overflow menu."
-            },
-            {
-              "kind": "field",
-              "name": "collapse",
-              "type": {
-                "text": "boolean | number | string | undefined"
-              },
-              "description": "Collapse mode.\n\n- `true`: show only the top-priority button\n- positive number: show top N buttons\n- `0`: show only the more button\n- negative number: hide abs(N) lowest-priority buttons\n\nNon-integers are rounded with `Math.round`."
-            },
-            {
-              "kind": "field",
-              "name": "overflowIcons",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When true, icons from collapsed buttons are shown in the overflow navigation list."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disabled attribute, when the button group is disabled,\nall buttons inside will be disabled and the overflow menu will not be accessible."
-            },
-            {
-              "kind": "field",
-              "name": "visibility",
-              "type": {
-                "text": "'visible' | 'collapsing' | 'collapsed' | 'expanding'"
-              },
-              "default": "'visible'",
-              "description": "Visibility state used by responsive containers such as le-toolbar."
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "'radio' | 'checkbox' | undefined"
-              },
-              "description": "Selection type: radio (single select) or checkbox (multi select)"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string | string[] | undefined"
-              },
-              "description": "Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[]."
-            },
-            {
-              "kind": "field",
-              "name": "overflowItems",
-              "type": {
-                "text": "LeOption[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "hasOverflow",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "buttonSlots",
-              "type": {
-                "text": "string[]"
-              },
-              "privacy": "private",
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "mutationObserver",
-              "type": {
-                "text": "MutationObserver | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "instanceId",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "syncingLayout",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "pendingSync",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "hasAuthorCollapse",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "buttonMap",
-              "type": {
-                "text": "Map<string, HTMLElement>"
-              },
-              "privacy": "private",
-              "default": "new Map()"
-            },
-            {
-              "kind": "method",
-              "name": "handleCollapseChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleOverflowIconsChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleDisabledChange",
-              "parameters": [
-                {
-                  "name": "newValue",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleValueChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleTypeChange"
-            },
-            {
-              "kind": "method",
-              "name": "getItemsMeta",
-              "return": {
-                "type": {
-                  "text": "Promise<LeButtonGroupItemsMeta>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getToolbarOverflowGroupOption",
-              "return": {
-                "type": {
-                  "text": "Promise<LeOption>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "whenLayoutSettled",
-              "return": {
-                "type": {
-                  "text": "Promise<void>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getToolbarOverflowItems",
-              "return": {
-                "type": {
-                  "text": "Promise<LeOption[]>"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getCollapseMeta",
-              "return": {
-                "type": {
-                  "text": "Promise<LeCollapseMeta>"
-                }
-              },
-              "description": "Returns collapse meta for toolbar integration."
-            },
-            {
-              "kind": "method",
-              "name": "getButtonChildren",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "HTMLElement[]"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "syncButtonSlots",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string[]"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "buttons",
-                  "type": {
-                    "text": "HTMLElement[]"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getVisibilityState",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "'visible' | 'collapsed'"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "string | null"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "setDisabledState",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getGroupLabel",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "isFullyCollapsed",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getToolbarVisibleCountsSync",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "number[]"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "getButtonId",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getButtonPriority",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "number"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "parseCollapseValue",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "{ active: boolean; visibleCount: number }"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "totalButtons",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "buildOverflowOption",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "Promise<LeOption>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "item",
-                  "type": {
-                    "text": "RankedButton"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "getButtonValue",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "button",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "syncSelectionFromValue",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleFieldsetClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "selectRadioButton",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "clickedButton",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "toggleCheckboxButton",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "clickedButton",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "syncLayout",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleOverflowSelect",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "Optional label used when the whole group is represented as a parent item\ninside another component's overflow menu.",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "collapse",
-              "fieldName": "collapse",
-              "description": "Collapse mode.\n\n- `true`: show only the top-priority button\n- positive number: show top N buttons\n- `0`: show only the more button\n- negative number: hide abs(N) lowest-priority buttons\n\nNon-integers are rounded with `Math.round`.",
-              "type": {
-                "text": "boolean | number | string"
-              }
-            },
-            {
-              "name": "overflow-icons",
-              "fieldName": "overflowIcons",
-              "default": "false",
-              "description": "When true, icons from collapsed buttons are shown in the overflow navigation list.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Disabled attribute, when the button group is disabled,\nall buttons inside will be disabled and the overflow menu will not be accessible.",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "visibility",
-              "fieldName": "visibility",
-              "default": "'visible'",
-              "description": "Visibility state used by responsive containers such as le-toolbar.",
-              "type": {
-                "text": "'visible' | 'collapsing' | 'collapsed' | 'expanding'"
-              }
-            },
-            {
-              "name": "type",
-              "fieldName": "type",
-              "description": "Selection type: radio (single select) or checkbox (multi select)",
-              "type": {
-                "text": "'radio' | 'checkbox'"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[].",
-              "type": {
-                "text": "string | string[]"
-              }
-            }
-          ],
-          "tagName": "le-button-group",
-          "events": [
-            {
-              "name": "leOverflowSelect",
-              "type": {
-                "text": "EventEmitter<{ id: string }>"
-              }
-            },
-            {
-              "name": "leChange",
-              "type": {
-                "text": "EventEmitter<LeOptionSelectDetail | LeMultiOptionSelectDetail>"
-              }
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeButtonGroup",
-          "declaration": {
-            "name": "LeButtonGroup",
-            "module": "src/components/le-button-group/le-button-group.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-button-group",
-          "declaration": {
-            "name": "LeButtonGroup",
-            "module": "src/components/le-button-group/le-button-group.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-card/le-card.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
-          "name": "LeCard",
-          "cssProperties": [
-            {
-              "description": "Card background color",
-              "name": "--le-card-bg"
-            },
-            {
-              "description": "Card border radius",
-              "name": "--le-card-border-radius"
-            },
-            {
-              "description": "Card box shadow",
-              "name": "--le-card-shadow"
-            },
-            {
-              "description": "Card content padding",
-              "name": "--le-card-padding"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The main card container",
-              "name": "card"
-            },
-            {
-              "description": "The card header section",
-              "name": "header"
-            },
-            {
-              "description": "The card content section",
-              "name": "content"
-            },
-            {
-              "description": "The card footer section",
-              "name": "footer"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Card header content (title, actions)",
-              "name": "header"
-            },
-            {
-              "description": "Default slot for main card content",
-              "name": ""
-            },
-            {
-              "description": "Card footer content (buttons, links)",
-              "name": "footer"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              },
-              "default": "'default'",
-              "description": "Card variant style"
-            },
-            {
-              "kind": "field",
-              "name": "interactive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'default'",
-              "description": "Card variant style",
-              "type": {
-                "text": "'default' | 'outlined' | 'elevated'"
-              }
-            },
-            {
-              "name": "interactive",
-              "fieldName": "interactive",
-              "default": "false",
-              "description": "Whether the card is interactive (clickable)",
-              "type": {
-                "text": "boolean"
-              }
-            }
-          ],
-          "tagName": "le-card",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeCard",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-card",
-          "declaration": {
-            "name": "LeCard",
-            "module": "src/components/le-card/le-card.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-button/le-button.tsx",
       "declarations": [
         {
@@ -3406,6 +2136,1276 @@
           "declaration": {
             "name": "LeButton",
             "module": "src/components/le-button/le-button.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-bento-tile/le-bento-tile.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A single tile for use inside `le-bento-grid`.\n\nDeclares how many columns and rows it should span in the bento grid.\nVisual appearance (border-radius, shadow) is controlled via CSS custom\nproperties so themes can override them.",
+          "name": "LeBentoTile",
+          "cssProperties": [
+            {
+              "description": "Border radius (default: var(--le-radius-xl, 0.75rem))",
+              "name": "--le-bento-tile-radius"
+            },
+            {
+              "description": "Box shadow (default: subtle multi-layer shadow)",
+              "name": "--le-bento-tile-shadow"
+            },
+            {
+              "description": "Background color (default: transparent)",
+              "name": "--le-bento-tile-bg"
+            },
+            {
+              "description": "Inner padding (default: 0)",
+              "name": "--le-bento-tile-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The inner tile wrapper element",
+              "name": "tile"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Content displayed inside the tile",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "cols",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of grid columns this tile should span."
+            },
+            {
+              "kind": "field",
+              "name": "rows",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of grid rows this tile should span."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "cols",
+              "fieldName": "cols",
+              "default": "1",
+              "description": "Number of grid columns this tile should span.",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "rows",
+              "fieldName": "rows",
+              "default": "1",
+              "description": "Number of grid rows this tile should span.",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "tagName": "le-bento-tile",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeBentoTile",
+          "declaration": {
+            "name": "LeBentoTile",
+            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-bento-tile",
+          "declaration": {
+            "name": "LeBentoTile",
+            "module": "src/components/le-bento-tile/le-bento-tile.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-box/le-box.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible box component for use as a flex item within le-stack.\n\n`le-box` wraps content and provides flex item properties like grow, shrink,\nbasis, and self-alignment. It can also control its internal content alignment.",
+          "name": "LeBox",
+          "cssProperties": [
+            {
+              "description": "Background color",
+              "name": "--le-box-bg"
+            },
+            {
+              "description": "Padding inside the box",
+              "name": "--le-box-padding"
+            },
+            {
+              "description": "Border radius",
+              "name": "--le-box-border-radius"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main box container",
+              "name": "box"
+            },
+            {
+              "description": "The inner content wrapper",
+              "name": "content"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Default slot for box content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "grow",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "description": "Flex grow factor - how much the item should grow relative to siblings"
+            },
+            {
+              "kind": "field",
+              "name": "shrink",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Flex shrink factor - how much the item should shrink relative to siblings"
+            },
+            {
+              "kind": "field",
+              "name": "basis",
+              "type": {
+                "text": "string"
+              },
+              "default": "'auto'",
+              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')"
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Width of the box (CSS value like '100px', '50%', 'auto')"
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Height of the box (CSS value)"
+            },
+            {
+              "kind": "field",
+              "name": "minWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Minimum width constraint"
+            },
+            {
+              "kind": "field",
+              "name": "maxWidth",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Maximum width constraint"
+            },
+            {
+              "kind": "field",
+              "name": "minHeight",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Minimum height constraint"
+            },
+            {
+              "kind": "field",
+              "name": "maxHeight",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Maximum height constraint"
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')"
+            },
+            {
+              "kind": "field",
+              "name": "borderRadius",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')"
+            },
+            {
+              "kind": "field",
+              "name": "border",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')"
+            },
+            {
+              "kind": "field",
+              "name": "alignSelf",
+              "type": {
+                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              },
+              "default": "'auto'",
+              "description": "Self-alignment override for this item on the cross axis"
+            },
+            {
+              "kind": "field",
+              "name": "alignContent",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              },
+              "default": "'stretch'",
+              "description": "Internal horizontal alignment of content"
+            },
+            {
+              "kind": "field",
+              "name": "justifyContent",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              },
+              "default": "'start'",
+              "description": "Internal vertical alignment of content"
+            },
+            {
+              "kind": "field",
+              "name": "padding",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Padding inside the box (CSS value like '8px', '1rem')"
+            },
+            {
+              "kind": "field",
+              "name": "order",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Order in the flex container (lower values come first)"
+            },
+            {
+              "kind": "field",
+              "name": "displayFlex",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to display box content as flex (for internal alignment)"
+            },
+            {
+              "kind": "field",
+              "name": "innerDirection",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'vertical'",
+              "description": "Direction of internal flex layout when displayFlex is true"
+            },
+            {
+              "kind": "field",
+              "name": "innerGap",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Gap between internal flex items when displayFlex is true"
+            },
+            {
+              "kind": "method",
+              "name": "getAlignSelf",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getContentAlign",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getContentJustify",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "grow",
+              "fieldName": "grow",
+              "default": "0",
+              "description": "Flex grow factor - how much the item should grow relative to siblings",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "shrink",
+              "fieldName": "shrink",
+              "default": "1",
+              "description": "Flex shrink factor - how much the item should shrink relative to siblings",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "basis",
+              "fieldName": "basis",
+              "default": "'auto'",
+              "description": "Flex basis - initial size before growing/shrinking (e.g., '200px', '25%', 'auto')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "width",
+              "fieldName": "width",
+              "description": "Width of the box (CSS value like '100px', '50%', 'auto')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "height",
+              "fieldName": "height",
+              "description": "Height of the box (CSS value)",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min-width",
+              "fieldName": "minWidth",
+              "description": "Minimum width constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-width",
+              "fieldName": "maxWidth",
+              "description": "Maximum width constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "min-height",
+              "fieldName": "minHeight",
+              "description": "Minimum height constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "max-height",
+              "fieldName": "maxHeight",
+              "description": "Maximum height constraint",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "background",
+              "fieldName": "background",
+              "description": "Background color or CSS value (e.g., '#f0f0f0', 'var(--le-color-primary-light)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "border-radius",
+              "fieldName": "borderRadius",
+              "description": "Border radius (e.g., '8px', 'var(--le-radius-md)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "border",
+              "fieldName": "border",
+              "description": "Border style (e.g., '1px solid #ccc', '2px dashed var(--le-color-border)')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align-self",
+              "fieldName": "alignSelf",
+              "default": "'auto'",
+              "description": "Self-alignment override for this item on the cross axis",
+              "type": {
+                "text": "'auto' | 'start' | 'center' | 'end' | 'stretch' | 'baseline'"
+              }
+            },
+            {
+              "name": "align-content",
+              "fieldName": "alignContent",
+              "default": "'stretch'",
+              "description": "Internal horizontal alignment of content",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              }
+            },
+            {
+              "name": "justify-content",
+              "fieldName": "justifyContent",
+              "default": "'start'",
+              "description": "Internal vertical alignment of content",
+              "type": {
+                "text": "'start' | 'center' | 'end' | 'stretch'"
+              }
+            },
+            {
+              "name": "padding",
+              "fieldName": "padding",
+              "description": "Padding inside the box (CSS value like '8px', '1rem')",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "order",
+              "fieldName": "order",
+              "description": "Order in the flex container (lower values come first)",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "display-flex",
+              "fieldName": "displayFlex",
+              "default": "false",
+              "description": "Whether to display box content as flex (for internal alignment)",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "inner-direction",
+              "fieldName": "innerDirection",
+              "default": "'vertical'",
+              "description": "Direction of internal flex layout when displayFlex is true",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              }
+            },
+            {
+              "name": "inner-gap",
+              "fieldName": "innerGap",
+              "description": "Gap between internal flex items when displayFlex is true",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "tagName": "le-box",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeBox",
+          "declaration": {
+            "name": "LeBox",
+            "module": "src/components/le-box/le-box.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-box",
+          "declaration": {
+            "name": "LeBox",
+            "module": "src/components/le-box/le-box.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-card/le-card.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible card component with header, content, and footer slots.\n\nThe card uses le-slot wrappers for each slot area. In admin mode,\nle-slot shows placeholders for CMS editing. In default mode,\nle-slot acts as a transparent passthrough.",
+          "name": "LeCard",
+          "cssProperties": [
+            {
+              "description": "Card background color",
+              "name": "--le-card-bg"
+            },
+            {
+              "description": "Card border radius",
+              "name": "--le-card-border-radius"
+            },
+            {
+              "description": "Card box shadow",
+              "name": "--le-card-shadow"
+            },
+            {
+              "description": "Card content padding",
+              "name": "--le-card-padding"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The main card container",
+              "name": "card"
+            },
+            {
+              "description": "The card header section",
+              "name": "header"
+            },
+            {
+              "description": "The card content section",
+              "name": "content"
+            },
+            {
+              "description": "The card footer section",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Card header content (title, actions)",
+              "name": "header"
+            },
+            {
+              "description": "Default slot for main card content",
+              "name": ""
+            },
+            {
+              "description": "Card footer content (buttons, links)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              },
+              "default": "'default'",
+              "description": "Card variant style"
+            },
+            {
+              "kind": "field",
+              "name": "interactive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'default'",
+              "description": "Card variant style",
+              "type": {
+                "text": "'default' | 'outlined' | 'elevated'"
+              }
+            },
+            {
+              "name": "interactive",
+              "fieldName": "interactive",
+              "default": "false",
+              "description": "Whether the card is interactive (clickable)",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "tagName": "le-card",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeCard",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-card",
+          "declaration": {
+            "name": "LeCard",
+            "module": "src/components/le-card/le-card.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-button-group/le-button-group.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Groups multiple `le-button` elements and optionally collapses low-priority actions\ninto an overflow \"more\" menu.",
+          "name": "LeButtonGroup",
+          "cssParts": [
+            {
+              "description": "The grouped buttons frame",
+              "name": "group"
+            },
+            {
+              "description": "The overflow trigger button",
+              "name": "more-button"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Group button elements (`le-button` children)",
+              "name": ""
+            },
+            {
+              "description": "Custom icon/content for the overflow trigger button",
+              "name": "more"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional label used when the whole group is represented as a parent item\ninside another component's overflow menu."
+            },
+            {
+              "kind": "field",
+              "name": "collapse",
+              "type": {
+                "text": "boolean | number | string | undefined"
+              },
+              "description": "Collapse mode.\n\n- `true`: show only the top-priority button\n- positive number: show top N buttons\n- `0`: show only the more button\n- negative number: hide abs(N) lowest-priority buttons\n\nNon-integers are rounded with `Math.round`."
+            },
+            {
+              "kind": "field",
+              "name": "overflowIcons",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When true, icons from collapsed buttons are shown in the overflow navigation list."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disabled attribute, when the button group is disabled,\nall buttons inside will be disabled and the overflow menu will not be accessible."
+            },
+            {
+              "kind": "field",
+              "name": "visibility",
+              "type": {
+                "text": "'visible' | 'collapsing' | 'collapsed' | 'expanding'"
+              },
+              "default": "'visible'",
+              "description": "Visibility state used by responsive containers such as le-toolbar."
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'radio' | 'checkbox' | undefined"
+              },
+              "description": "Selection type: radio (single select) or checkbox (multi select)"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string | string[] | undefined"
+              },
+              "description": "Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[]."
+            },
+            {
+              "kind": "field",
+              "name": "overflowItems",
+              "type": {
+                "text": "LeOption[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "hasOverflow",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "buttonSlots",
+              "type": {
+                "text": "string[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "mutationObserver",
+              "type": {
+                "text": "MutationObserver | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "instanceId",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "syncingLayout",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "pendingSync",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "hasAuthorCollapse",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "buttonMap",
+              "type": {
+                "text": "Map<string, HTMLElement>"
+              },
+              "privacy": "private",
+              "default": "new Map()"
+            },
+            {
+              "kind": "method",
+              "name": "handleCollapseChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleOverflowIconsChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleDisabledChange",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleValueChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleTypeChange"
+            },
+            {
+              "kind": "method",
+              "name": "getItemsMeta",
+              "return": {
+                "type": {
+                  "text": "Promise<LeButtonGroupItemsMeta>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getToolbarOverflowGroupOption",
+              "return": {
+                "type": {
+                  "text": "Promise<LeOption>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "whenLayoutSettled",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getToolbarOverflowItems",
+              "return": {
+                "type": {
+                  "text": "Promise<LeOption[]>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getCollapseMeta",
+              "return": {
+                "type": {
+                  "text": "Promise<LeCollapseMeta>"
+                }
+              },
+              "description": "Returns collapse meta for toolbar integration."
+            },
+            {
+              "kind": "method",
+              "name": "getButtonChildren",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "HTMLElement[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "syncButtonSlots",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "buttons",
+                  "type": {
+                    "text": "HTMLElement[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getVisibilityState",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "'visible' | 'collapsed'"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setDisabledState",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "disabled",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getGroupLabel",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "isFullyCollapsed",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getToolbarVisibleCountsSync",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getButtonId",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getButtonPriority",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "parseCollapseValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "{ active: boolean; visibleCount: number }"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "totalButtons",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "buildOverflowOption",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Promise<LeOption>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "item",
+                  "type": {
+                    "text": "RankedButton"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getButtonValue",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "button",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "syncSelectionFromValue",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleFieldsetClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "selectRadioButton",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "clickedButton",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "toggleCheckboxButton",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "clickedButton",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "syncLayout",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleOverflowSelect",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "Optional label used when the whole group is represented as a parent item\ninside another component's overflow menu.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "collapse",
+              "fieldName": "collapse",
+              "description": "Collapse mode.\n\n- `true`: show only the top-priority button\n- positive number: show top N buttons\n- `0`: show only the more button\n- negative number: hide abs(N) lowest-priority buttons\n\nNon-integers are rounded with `Math.round`.",
+              "type": {
+                "text": "boolean | number | string"
+              }
+            },
+            {
+              "name": "overflow-icons",
+              "fieldName": "overflowIcons",
+              "default": "false",
+              "description": "When true, icons from collapsed buttons are shown in the overflow navigation list.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Disabled attribute, when the button group is disabled,\nall buttons inside will be disabled and the overflow menu will not be accessible.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "visibility",
+              "fieldName": "visibility",
+              "default": "'visible'",
+              "description": "Visibility state used by responsive containers such as le-toolbar.",
+              "type": {
+                "text": "'visible' | 'collapsing' | 'collapsed' | 'expanding'"
+              }
+            },
+            {
+              "name": "type",
+              "fieldName": "type",
+              "description": "Selection type: radio (single select) or checkbox (multi select)",
+              "type": {
+                "text": "'radio' | 'checkbox'"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "Selected value(s). If type is 'radio', value is a string. If type is 'checkbox', value is a string or string[].",
+              "type": {
+                "text": "string | string[]"
+              }
+            }
+          ],
+          "tagName": "le-button-group",
+          "events": [
+            {
+              "name": "leOverflowSelect",
+              "type": {
+                "text": "EventEmitter<{ id: string }>"
+              }
+            },
+            {
+              "name": "leChange",
+              "type": {
+                "text": "EventEmitter<LeOptionSelectDetail | LeMultiOptionSelectDetail>"
+              }
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeButtonGroup",
+          "declaration": {
+            "name": "LeButtonGroup",
+            "module": "src/components/le-button-group/le-button-group.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-button-group",
+          "declaration": {
+            "name": "LeButtonGroup",
+            "module": "src/components/le-button-group/le-button-group.tsx"
           }
         }
       ]
@@ -4085,12 +4085,44 @@
             {
               "kind": "method",
               "name": "onClosedChange",
-              "privacy": "protected"
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "optional": true,
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "oldValue",
+                  "optional": true,
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
               "name": "onDrivenStateChange",
-              "privacy": "protected"
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "newValue",
+                  "optional": true,
+                  "type": {
+                    "text": "boolean"
+                  }
+                },
+                {
+                  "name": "oldValue",
+                  "optional": true,
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -5579,6 +5611,88 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/le-drag-handle/le-drag-handle.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Reusable drag handle used by resizable components.",
+          "name": "LeDragHandle",
+          "slots": [
+            {
+              "description": "Optional assistive text for screen readers.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "orientation",
+              "type": {
+                "text": "LeDragHandleOrientation"
+              },
+              "default": "'vertical'",
+              "description": "Handle orientation (vertical = width drag, horizontal = height drag)."
+            },
+            {
+              "kind": "field",
+              "name": "placement",
+              "type": {
+                "text": "LeDragHandlePlacement"
+              },
+              "default": "'end'",
+              "description": "Handle position on the owning edge."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "orientation",
+              "fieldName": "orientation",
+              "default": "'vertical'",
+              "description": "Handle orientation (vertical = width drag, horizontal = height drag).",
+              "type": {
+                "text": "LeDragHandleOrientation"
+              }
+            },
+            {
+              "name": "placement",
+              "fieldName": "placement",
+              "default": "'end'",
+              "description": "Handle position on the owning edge.",
+              "type": {
+                "text": "LeDragHandlePlacement"
+              }
+            }
+          ],
+          "tagName": "le-drag-handle",
+          "events": [],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeDragHandle",
+          "declaration": {
+            "name": "LeDragHandle",
+            "module": "src/components/le-drag-handle/le-drag-handle.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-drag-handle",
+          "declaration": {
+            "name": "LeDragHandle",
+            "module": "src/components/le-drag-handle/le-drag-handle.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/le-current-heading/le-current-heading.tsx",
       "declarations": [
         {
@@ -5679,88 +5793,6 @@
           "declaration": {
             "name": "LeCurrentHeading",
             "module": "src/components/le-current-heading/le-current-heading.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/le-drag-handle/le-drag-handle.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Reusable drag handle used by resizable components.",
-          "name": "LeDragHandle",
-          "slots": [
-            {
-              "description": "Optional assistive text for screen readers.",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "orientation",
-              "type": {
-                "text": "LeDragHandleOrientation"
-              },
-              "default": "'vertical'",
-              "description": "Handle orientation (vertical = width drag, horizontal = height drag)."
-            },
-            {
-              "kind": "field",
-              "name": "placement",
-              "type": {
-                "text": "LeDragHandlePlacement"
-              },
-              "default": "'end'",
-              "description": "Handle position on the owning edge."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "orientation",
-              "fieldName": "orientation",
-              "default": "'vertical'",
-              "description": "Handle orientation (vertical = width drag, horizontal = height drag).",
-              "type": {
-                "text": "LeDragHandleOrientation"
-              }
-            },
-            {
-              "name": "placement",
-              "fieldName": "placement",
-              "default": "'end'",
-              "description": "Handle position on the owning edge.",
-              "type": {
-                "text": "LeDragHandlePlacement"
-              }
-            }
-          ],
-          "tagName": "le-drag-handle",
-          "events": [],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeDragHandle",
-          "declaration": {
-            "name": "LeDragHandle",
-            "module": "src/components/le-drag-handle/le-drag-handle.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-drag-handle",
-          "declaration": {
-            "name": "LeDragHandle",
-            "module": "src/components/le-drag-handle/le-drag-handle.tsx"
           }
         }
       ]
@@ -8467,6 +8499,50 @@
             },
             {
               "kind": "field",
+              "name": "reorder",
+              "type": {
+                "text": "LeListReorderMode | boolean"
+              },
+              "default": "'none'",
+              "description": "Enables manual drag-and-drop reordering of list row items.\n- 'none': Disabled (default)\n- 'siblings': Can only reorder within current parent/root siblings\n- 'nested': Can reorder across hierarchical levels (inside/outside parents)\nNote: Can also be passed as boolean (true -> 'nested', false -> 'none')."
+            },
+            {
+              "kind": "field",
+              "name": "showReorderHandle",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable rows.\nDefault: false."
+            },
+            {
+              "kind": "field",
+              "name": "reorderRatios",
+              "type": {
+                "text": "{ top: number; middle: number; bottom: number }"
+              },
+              "default": "{ top: 0.35, middle: 0.3, bottom: 0.35, }",
+              "description": "Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones.\nDefault: { top: 0.35, middle: 0.3, bottom: 0.35 }."
+            },
+            {
+              "kind": "field",
+              "name": "maxReorderDepth",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum allowed nesting depth for drag-and-drop reordering.\nWhen hovering over items at or deeper than this depth, children cannot be added (items split 50/50)."
+            },
+            {
+              "kind": "field",
+              "name": "reorderExpandDelay",
+              "type": {
+                "text": "number"
+              },
+              "default": "500",
+              "description": "Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop."
+            },
+            {
+              "kind": "field",
               "name": "parsedOptions",
               "type": {
                 "text": "LeOption[]"
@@ -8539,6 +8615,74 @@
             },
             {
               "kind": "field",
+              "name": "userReorderedItems",
+              "type": {
+                "text": "LeOption[] | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "activeDragId",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "dropTargetId",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "dropPosition",
+              "type": {
+                "text": "'before' | 'inside' | 'after' | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "isDraggingActive",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "ghostX",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "ghostY",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "isDeclarativeMode",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
               "name": "visualFocusActive",
               "type": {
                 "text": "boolean"
@@ -8549,6 +8693,115 @@
             {
               "kind": "field",
               "name": "dragSelectionStartId",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "pendingDragId",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "pendingDragItem",
+              "type": {
+                "text": "LeOption | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "dragStartX",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "dragStartY",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "dragOffsetX",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "dragOffsetY",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "dragItemRect",
+              "type": {
+                "text": "DOMRect | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "dragJustEnded",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "outdentBaselineX",
+              "type": {
+                "text": "number | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "outdentTargetId",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "overrideDropDepth",
+              "type": {
+                "text": "number | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "autoExpandTimer",
+              "type": {
+                "text": "any | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "hoveredExpandId",
               "type": {
                 "text": "string | undefined"
               },
@@ -8702,9 +8955,130 @@
               "privacy": "private"
             },
             {
+              "kind": "method",
+              "name": "setReorder",
+              "parameters": [
+                {
+                  "name": "mode",
+                  "type": {
+                    "text": "LeListReorderMode | boolean"
+                  }
+                }
+              ],
+              "description": "Programmatically set the reorder mode ('none', 'siblings', 'nested', or boolean)."
+            },
+            {
+              "kind": "method",
+              "name": "enableReorder",
+              "parameters": [
+                {
+                  "name": "mode",
+                  "default": "'nested'",
+                  "type": {
+                    "text": "LeListReorderMode"
+                  }
+                }
+              ],
+              "description": "Programmatically enable reordering."
+            },
+            {
+              "kind": "method",
+              "name": "disableReorder",
+              "description": "Programmatically disable reordering."
+            },
+            {
+              "kind": "method",
+              "name": "moveItem",
+              "return": {
+                "type": {
+                  "text": "Promise<{ success: boolean; detail?: LeListItemReorderDetail }>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "draggedQuery",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "targetQuery",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "position",
+                  "default": "'after'",
+                  "type": {
+                    "text": "'before' | 'inside' | 'after'"
+                  }
+                }
+              ],
+              "description": "Programmatically move an item relative to another item in the list tree.\nAccepts item ID, value, or label for both dragged and target items."
+            },
+            {
+              "kind": "field",
+              "name": "activeReorderMode",
+              "type": {
+                "text": "LeListReorderMode"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "getEffectiveOptions",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "LeOption[]"
+                }
+              }
+            },
+            {
               "kind": "field",
               "name": "handleRowPointerDown",
               "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleGlobalPointerMove",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "clearAutoExpandTimer",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleGlobalPointerUp",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getPreviousVisibleItem",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "LeOption | undefined"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "items",
+                  "type": {
+                    "text": "LeOption[]"
+                  }
+                },
+                {
+                  "name": "targetId",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
             },
             {
               "kind": "field",
@@ -9242,6 +9616,50 @@
               "type": {
                 "text": "boolean"
               }
+            },
+            {
+              "name": "reorder",
+              "fieldName": "reorder",
+              "default": "'none'",
+              "description": "Enables manual drag-and-drop reordering of list row items.\n- 'none': Disabled (default)\n- 'siblings': Can only reorder within current parent/root siblings\n- 'nested': Can reorder across hierarchical levels (inside/outside parents)\nNote: Can also be passed as boolean (true -> 'nested', false -> 'none').",
+              "type": {
+                "text": "LeListReorderMode | boolean"
+              }
+            },
+            {
+              "name": "show-reorder-handle",
+              "fieldName": "showReorderHandle",
+              "default": "false",
+              "description": "Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable rows.\nDefault: false.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "reorder-ratios",
+              "fieldName": "reorderRatios",
+              "default": "{ top: 0.35, middle: 0.3, bottom: 0.35, }",
+              "description": "Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones.\nDefault: { top: 0.35, middle: 0.3, bottom: 0.35 }.",
+              "type": {
+                "text": "{ top: number; middle: number; bottom: number }"
+              }
+            },
+            {
+              "name": "max-reorder-depth",
+              "fieldName": "maxReorderDepth",
+              "description": "Maximum allowed nesting depth for drag-and-drop reordering.\nWhen hovering over items at or deeper than this depth, children cannot be added (items split 50/50).",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "reorder-expand-delay",
+              "fieldName": "reorderExpandDelay",
+              "default": "500",
+              "description": "Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.",
+              "type": {
+                "text": "number"
+              }
             }
           ],
           "tagName": "le-list",
@@ -9287,9 +9705,31 @@
                 "text": "EventEmitter<{ item: LeOption; open: boolean; originalEvent?: MouseEvent }>"
               },
               "description": "Emitted when a hierarchical row item is expanded or collapsed."
+            },
+            {
+              "name": "leItemReorder",
+              "type": {
+                "text": "EventEmitter<LeListItemReorderDetail>"
+              },
+              "description": "Fired when list row items are reordered via drag and drop."
+            },
+            {
+              "name": "leReorder",
+              "type": {
+                "text": "EventEmitter<LeListItemReorderDetail>"
+              },
+              "description": "Alias for `leItemReorder`."
             }
           ],
           "customElement": true
+        },
+        {
+          "kind": "variable",
+          "name": "targetId"
+        },
+        {
+          "kind": "variable",
+          "name": "draggedId"
         }
       ],
       "exports": [
@@ -10011,6 +10451,14 @@
               },
               "default": "{ top: 0.35, middle: 0.3, bottom: 0.35, }",
               "description": "Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones.\nDefault: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after)."
+            },
+            {
+              "kind": "field",
+              "name": "maxReorderDepth",
+              "type": {
+                "text": "number | undefined"
+              },
+              "description": "Maximum allowed nesting depth for drag-and-drop reordering.\nWhen hovering over items at or deeper than this depth, children cannot be added (items split 50/50)."
             },
             {
               "kind": "field",
@@ -11202,6 +11650,25 @@
             },
             {
               "kind": "method",
+              "name": "getSubtreeDepth",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "item",
+                  "optional": true,
+                  "type": {
+                    "text": "LeOption"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "getOutdentAncestors",
               "privacy": "private",
               "return": {
@@ -11801,6 +12268,14 @@
               "description": "Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones.\nDefault: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after).",
               "type": {
                 "text": "{ top: number; middle: number; bottom: number }"
+              }
+            },
+            {
+              "name": "max-reorder-depth",
+              "fieldName": "maxReorderDepth",
+              "description": "Maximum allowed nesting depth for drag-and-drop reordering.\nWhen hovering over items at or deeper than this depth, children cannot be added (items split 50/50).",
+              "type": {
+                "text": "number"
               }
             },
             {
@@ -17834,418 +18309,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/le-tab/le-tab.tsx",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A flexible tab component with multiple variants and states.",
-          "name": "LeTab",
-          "cssProperties": [
-            {
-              "description": "Tab background color",
-              "name": "--le-tab-bg"
-            },
-            {
-              "description": "Tab text color",
-              "name": "--le-tab-color"
-            },
-            {
-              "description": "Tab border radius",
-              "name": "--le-tab-border-radius"
-            },
-            {
-              "description": "Tab horizontal padding",
-              "name": "--le-tab-padding-x"
-            },
-            {
-              "description": "Tab vertical padding",
-              "name": "--le-tab-padding-y"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The native button element",
-              "name": "button"
-            },
-            {
-              "description": "The tab content wrapper",
-              "name": "content"
-            },
-            {
-              "description": "The start icon slot",
-              "name": "icon-start"
-            },
-            {
-              "description": "The end icon slot",
-              "name": "icon-end"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Tab text content",
-              "name": ""
-            },
-            {
-              "description": "Icon for icon-only tabs",
-              "name": "icon-only"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "el",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "mode",
-              "type": {
-                "text": "'default' | 'admin'"
-              },
-              "default": "'default'",
-              "description": "Mode of the popover should be 'default' for internal use"
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Label if it is not provided via slot"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Value of the tab, defaults to label if not provided"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only'"
-              },
-              "default": "'underlined'",
-              "description": "Tab variant style"
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "'top' | 'bottom' | 'start' | 'end'"
-              },
-              "default": "'top'",
-              "description": "Position of the tabs when used within a le-tabs component"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "Tab size"
-            },
-            {
-              "kind": "field",
-              "name": "focusable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether the tab can get focus\nneeded for accessibility when used in custom tab implementations"
-            },
-            {
-              "kind": "field",
-              "name": "selected",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the tab is in a selected/active state"
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the tab takes full width of its container"
-            },
-            {
-              "kind": "field",
-              "name": "icon",
-              "type": {
-                "text": "string | Node | undefined"
-              },
-              "description": "Icon only tab image or emoji\nif this prop is set, the tab will render only the icon slot"
-            },
-            {
-              "kind": "field",
-              "name": "showLabel",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether to show the label when in icon-only mode"
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string | Node | undefined"
-              },
-              "description": "Start icon image or emoji"
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string | Node | undefined"
-              },
-              "description": "End icon image or emoji"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the tab is disabled"
-            },
-            {
-              "kind": "field",
-              "name": "href",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Optional href to make the tab act as a link"
-            },
-            {
-              "kind": "field",
-              "name": "target",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Link target when href is set"
-            },
-            {
-              "kind": "field",
-              "name": "align",
-              "type": {
-                "text": "'start' | 'center' | 'space-between' | 'end'"
-              },
-              "default": "'center'",
-              "description": "Alignment of the tab label without the end icon"
-            },
-            {
-              "kind": "method",
-              "name": "getTabConfig",
-              "return": {
-                "type": {
-                  "text": "Promise<{\n    label?: string;\n    value?: string;\n    icon?: string | Node;\n    iconStart?: string | Node;\n    iconEnd?: string | Node;\n    disabled: boolean;\n  }>"
-                }
-              },
-              "description": "Get tab configuration for parent component"
-            },
-            {
-              "kind": "field",
-              "name": "handleClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "mode",
-              "fieldName": "mode",
-              "default": "'default'",
-              "description": "Mode of the popover should be 'default' for internal use",
-              "type": {
-                "text": "'default' | 'admin'"
-              }
-            },
-            {
-              "name": "label",
-              "fieldName": "label",
-              "description": "Label if it is not provided via slot",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "value",
-              "fieldName": "value",
-              "description": "Value of the tab, defaults to label if not provided",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "variant",
-              "fieldName": "variant",
-              "default": "'underlined'",
-              "description": "Tab variant style",
-              "type": {
-                "text": "'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only'"
-              }
-            },
-            {
-              "name": "position",
-              "fieldName": "position",
-              "default": "'top'",
-              "description": "Position of the tabs when used within a le-tabs component",
-              "type": {
-                "text": "'top' | 'bottom' | 'start' | 'end'"
-              }
-            },
-            {
-              "name": "size",
-              "fieldName": "size",
-              "default": "'medium'",
-              "description": "Tab size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              }
-            },
-            {
-              "name": "focusable",
-              "fieldName": "focusable",
-              "default": "true",
-              "description": "Whether the tab can get focus\nneeded for accessibility when used in custom tab implementations",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "selected",
-              "fieldName": "selected",
-              "default": "false",
-              "description": "Whether the tab is in a selected/active state",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "full-width",
-              "fieldName": "fullWidth",
-              "default": "false",
-              "description": "Whether the tab takes full width of its container",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "icon",
-              "fieldName": "icon",
-              "description": "Icon only tab image or emoji\nif this prop is set, the tab will render only the icon slot",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "show-label",
-              "fieldName": "showLabel",
-              "default": "false",
-              "description": "Whether to show the label when in icon-only mode",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "icon-start",
-              "fieldName": "iconStart",
-              "description": "Start icon image or emoji",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "icon-end",
-              "fieldName": "iconEnd",
-              "description": "End icon image or emoji",
-              "type": {
-                "text": "string | Node"
-              }
-            },
-            {
-              "name": "disabled",
-              "fieldName": "disabled",
-              "default": "false",
-              "description": "Whether the tab is disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "name": "href",
-              "fieldName": "href",
-              "description": "Optional href to make the tab act as a link",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "target",
-              "fieldName": "target",
-              "description": "Link target when href is set",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "align",
-              "fieldName": "align",
-              "default": "'center'",
-              "description": "Alignment of the tab label without the end icon",
-              "type": {
-                "text": "'start' | 'center' | 'space-between' | 'end'"
-              }
-            }
-          ],
-          "tagName": "le-tab",
-          "events": [
-            {
-              "name": "click",
-              "type": {
-                "text": "EventEmitter<PointerEvent> | undefined"
-              },
-              "description": "Emitted when the tab is clicked.\nThis is a custom event that wraps the native click but ensures the target is the le-tab."
-            }
-          ],
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "LeTab",
-          "declaration": {
-            "name": "LeTab",
-            "module": "src/components/le-tab/le-tab.tsx"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "le-tab",
-          "declaration": {
-            "name": "LeTab",
-            "module": "src/components/le-tab/le-tab.tsx"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/le-string-input/le-string-input.tsx",
       "declarations": [
         {
@@ -19684,6 +19747,418 @@
           "declaration": {
             "name": "LeTabs",
             "module": "src/components/le-tabs/le-tabs.tsx"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/le-tab/le-tab.tsx",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A flexible tab component with multiple variants and states.",
+          "name": "LeTab",
+          "cssProperties": [
+            {
+              "description": "Tab background color",
+              "name": "--le-tab-bg"
+            },
+            {
+              "description": "Tab text color",
+              "name": "--le-tab-color"
+            },
+            {
+              "description": "Tab border radius",
+              "name": "--le-tab-border-radius"
+            },
+            {
+              "description": "Tab horizontal padding",
+              "name": "--le-tab-padding-x"
+            },
+            {
+              "description": "Tab vertical padding",
+              "name": "--le-tab-padding-y"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The native button element",
+              "name": "button"
+            },
+            {
+              "description": "The tab content wrapper",
+              "name": "content"
+            },
+            {
+              "description": "The start icon slot",
+              "name": "icon-start"
+            },
+            {
+              "description": "The end icon slot",
+              "name": "icon-end"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Tab text content",
+              "name": ""
+            },
+            {
+              "description": "Icon for icon-only tabs",
+              "name": "icon-only"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "el",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "'default' | 'admin'"
+              },
+              "default": "'default'",
+              "description": "Mode of the popover should be 'default' for internal use"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Label if it is not provided via slot"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Value of the tab, defaults to label if not provided"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only'"
+              },
+              "default": "'underlined'",
+              "description": "Tab variant style"
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "'top' | 'bottom' | 'start' | 'end'"
+              },
+              "default": "'top'",
+              "description": "Position of the tabs when used within a le-tabs component"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "Tab size"
+            },
+            {
+              "kind": "field",
+              "name": "focusable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether the tab can get focus\nneeded for accessibility when used in custom tab implementations"
+            },
+            {
+              "kind": "field",
+              "name": "selected",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the tab is in a selected/active state"
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the tab takes full width of its container"
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "Icon only tab image or emoji\nif this prop is set, the tab will render only the icon slot"
+            },
+            {
+              "kind": "field",
+              "name": "showLabel",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to show the label when in icon-only mode"
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "Start icon image or emoji"
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string | Node | undefined"
+              },
+              "description": "End icon image or emoji"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the tab is disabled"
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Optional href to make the tab act as a link"
+            },
+            {
+              "kind": "field",
+              "name": "target",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Link target when href is set"
+            },
+            {
+              "kind": "field",
+              "name": "align",
+              "type": {
+                "text": "'start' | 'center' | 'space-between' | 'end'"
+              },
+              "default": "'center'",
+              "description": "Alignment of the tab label without the end icon"
+            },
+            {
+              "kind": "method",
+              "name": "getTabConfig",
+              "return": {
+                "type": {
+                  "text": "Promise<{\n    label?: string;\n    value?: string;\n    icon?: string | Node;\n    iconStart?: string | Node;\n    iconEnd?: string | Node;\n    disabled: boolean;\n  }>"
+                }
+              },
+              "description": "Get tab configuration for parent component"
+            },
+            {
+              "kind": "field",
+              "name": "handleClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "mode",
+              "fieldName": "mode",
+              "default": "'default'",
+              "description": "Mode of the popover should be 'default' for internal use",
+              "type": {
+                "text": "'default' | 'admin'"
+              }
+            },
+            {
+              "name": "label",
+              "fieldName": "label",
+              "description": "Label if it is not provided via slot",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "value",
+              "fieldName": "value",
+              "description": "Value of the tab, defaults to label if not provided",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "variant",
+              "fieldName": "variant",
+              "default": "'underlined'",
+              "description": "Tab variant style",
+              "type": {
+                "text": "'underlined' | 'solid' | 'pills' | 'enclosed' | 'icon-only'"
+              }
+            },
+            {
+              "name": "position",
+              "fieldName": "position",
+              "default": "'top'",
+              "description": "Position of the tabs when used within a le-tabs component",
+              "type": {
+                "text": "'top' | 'bottom' | 'start' | 'end'"
+              }
+            },
+            {
+              "name": "size",
+              "fieldName": "size",
+              "default": "'medium'",
+              "description": "Tab size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              }
+            },
+            {
+              "name": "focusable",
+              "fieldName": "focusable",
+              "default": "true",
+              "description": "Whether the tab can get focus\nneeded for accessibility when used in custom tab implementations",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "selected",
+              "fieldName": "selected",
+              "default": "false",
+              "description": "Whether the tab is in a selected/active state",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "full-width",
+              "fieldName": "fullWidth",
+              "default": "false",
+              "description": "Whether the tab takes full width of its container",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "icon",
+              "fieldName": "icon",
+              "description": "Icon only tab image or emoji\nif this prop is set, the tab will render only the icon slot",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "show-label",
+              "fieldName": "showLabel",
+              "default": "false",
+              "description": "Whether to show the label when in icon-only mode",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "icon-start",
+              "fieldName": "iconStart",
+              "description": "Start icon image or emoji",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "icon-end",
+              "fieldName": "iconEnd",
+              "description": "End icon image or emoji",
+              "type": {
+                "text": "string | Node"
+              }
+            },
+            {
+              "name": "disabled",
+              "fieldName": "disabled",
+              "default": "false",
+              "description": "Whether the tab is disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "href",
+              "fieldName": "href",
+              "description": "Optional href to make the tab act as a link",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "target",
+              "fieldName": "target",
+              "description": "Link target when href is set",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "align",
+              "fieldName": "align",
+              "default": "'center'",
+              "description": "Alignment of the tab label without the end icon",
+              "type": {
+                "text": "'start' | 'center' | 'space-between' | 'end'"
+              }
+            }
+          ],
+          "tagName": "le-tab",
+          "events": [
+            {
+              "name": "click",
+              "type": {
+                "text": "EventEmitter<PointerEvent> | undefined"
+              },
+              "description": "Emitted when the tab is clicked.\nThis is a custom event that wraps the native click but ensures the target is the le-tab."
+            }
+          ],
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "LeTab",
+          "declaration": {
+            "name": "LeTab",
+            "module": "src/components/le-tab/le-tab.tsx"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "le-tab",
+          "declaration": {
+            "name": "LeTab",
+            "module": "src/components/le-tab/le-tab.tsx"
           }
         }
       ]

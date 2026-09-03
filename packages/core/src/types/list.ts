@@ -81,3 +81,18 @@ export interface LeColumn {
    */
   allowClearSort?: boolean;
 }
+
+export type LeListReorderMode = 'none' | 'siblings' | 'nested';
+
+export interface LeListItemReorderDetail {
+  item: LeOption;
+  draggedId: string;
+  targetItem?: LeOption;
+  targetId?: string;
+  position: 'before' | 'inside' | 'after';
+  oldParentId?: string;
+  newParentId?: string;
+  items: LeOption[];
+  originalEvent?: PointerEvent | MouseEvent;
+}
+

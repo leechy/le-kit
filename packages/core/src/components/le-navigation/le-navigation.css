@@ -83,7 +83,8 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0; /* gap is messing with reordering, use padding on items instead */
+  gap: 0;
+  /* gap is messing with reordering, use padding on items instead */
 }
 
 .nav-row {
@@ -93,8 +94,7 @@
   border-radius: var(--le-nav-radius);
 }
 
-.nav-row:hover,
-.nav-row.is-drag-hovered {
+.nav-vertical:not(.is-dragging) .nav-row:hover {
   background: var(--le-nav-hover-bg);
 }
 
@@ -131,7 +131,7 @@
   opacity: 0.4;
 }
 
-.nav-toggle:hover:not(:disabled) {
+.nav-vertical:not(.is-dragging) .nav-toggle:hover:not(:disabled) {
   opacity: 1;
 }
 
@@ -181,8 +181,7 @@
   cursor: var(--le-controls-cursor, pointer);
 }
 
-.nav-item:hover,
-.nav-item.is-drag-hovered {
+.nav-vertical:not(.is-dragging) .nav-item:hover {
   background: var(--le-nav-hover-bg);
 }
 
@@ -208,62 +207,67 @@
   color: var(--le-color-primary);
   --le-icon-color: var(--le-color-primary);
 }
+
 .nav-item.color-secondary {
   color: var(--le-color-secondary);
   --le-icon-color: var(--le-color-secondary);
 }
+
 .nav-item.color-success {
   color: var(--le-color-success);
   --le-icon-color: var(--le-color-success);
 }
+
 .nav-item.color-warning {
   color: var(--le-color-warning);
   --le-icon-color: var(--le-color-warning);
 }
+
 .nav-item.color-danger {
   color: var(--le-color-danger);
   --le-icon-color: var(--le-color-danger);
 }
+
 .nav-item.color-info {
   color: var(--le-color-info);
   --le-icon-color: var(--le-color-info);
 }
 
-.nav-node.selected > .nav-item {
+.nav-node.selected>.nav-item {
   background: var(--le-nav-selected-bg);
   color: var(--le-nav-selected-color);
 }
 
-.nav-node.color-secondary.selected > .nav-item {
+.nav-node.color-secondary.selected>.nav-item {
   background: var(--le-nav-selected-bg-secondary);
   color: var(--le-nav-selected-color-secondary);
 }
 
-.nav-node.color-success.selected > .nav-item {
+.nav-node.color-success.selected>.nav-item {
   background: var(--le-nav-selected-bg-success);
   color: var(--le-nav-selected-color-success);
 }
 
-.nav-node.color-warning.selected > .nav-item {
+.nav-node.color-warning.selected>.nav-item {
   background: var(--le-nav-selected-bg-warning);
   color: var(--le-nav-selected-color-warning);
 }
 
-.nav-node.color-danger.selected > .nav-item {
+.nav-node.color-danger.selected>.nav-item {
   background: var(--le-nav-selected-bg-danger);
   color: var(--le-nav-selected-color-danger);
 }
 
-.nav-node.color-info.selected > .nav-item {
+.nav-node.color-info.selected>.nav-item {
   background: var(--le-nav-selected-bg-info);
   color: var(--le-nav-selected-color-info);
 }
 
-:host(:focus-within) .nav-node.selected > .nav-item.focused {
+:host(:focus-within) .nav-node.selected>.nav-item.focused {
   box-shadow: 0 0 0 2px color-mix(in srgb, white 45%, transparent) inset;
 }
 
-.nav-node.disabled > .nav-item {
+.nav-node.disabled>.nav-item {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -523,33 +527,33 @@ le-popover::part(content) {
   color: var(--le-color-primary, #3b82f6);
 }
 
-.nav-node.selected > .nav-item.is-dragged-item,
+.nav-node.selected>.nav-item.is-dragged-item,
 .nav-item.selected.is-dragged-item {
   background-color: color-mix(in srgb, var(--le-nav-selected-bg, var(--le-color-primary)) 25%, transparent) !important;
   color: var(--le-color-primary, #3b82f6) !important;
 }
 
-.nav-node.color-secondary.selected > .nav-item.is-dragged-item {
+.nav-node.color-secondary.selected>.nav-item.is-dragged-item {
   background-color: color-mix(in srgb, var(--le-nav-selected-bg-secondary, var(--le-color-secondary)) 25%, transparent) !important;
   color: var(--le-color-secondary) !important;
 }
 
-.nav-node.color-success.selected > .nav-item.is-dragged-item {
+.nav-node.color-success.selected>.nav-item.is-dragged-item {
   background-color: color-mix(in srgb, var(--le-nav-selected-bg-success, var(--le-color-success)) 25%, transparent) !important;
   color: var(--le-color-success) !important;
 }
 
-.nav-node.color-warning.selected > .nav-item.is-dragged-item {
+.nav-node.color-warning.selected>.nav-item.is-dragged-item {
   background-color: color-mix(in srgb, var(--le-nav-selected-bg-warning, var(--le-color-warning)) 25%, transparent) !important;
   color: var(--le-color-warning) !important;
 }
 
-.nav-node.color-danger.selected > .nav-item.is-dragged-item {
+.nav-node.color-danger.selected>.nav-item.is-dragged-item {
   background-color: color-mix(in srgb, var(--le-nav-selected-bg-danger, var(--le-color-danger)) 25%, transparent) !important;
   color: var(--le-color-danger) !important;
 }
 
-.nav-node.color-info.selected > .nav-item.is-dragged-item {
+.nav-node.color-info.selected>.nav-item.is-dragged-item {
   background-color: color-mix(in srgb, var(--le-nav-selected-bg-info, var(--le-color-info)) 25%, transparent) !important;
   color: var(--le-color-info) !important;
 }

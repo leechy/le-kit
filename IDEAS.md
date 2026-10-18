@@ -30,3 +30,14 @@ A backlog of ideas, feature explorations, and UX enhancements to investigate and
 - **Considerations**
   - This could be much more space-efficient for deeply nested menus.
   - Should we turn this option as a prop for the whole menu/navigation or per item basis, or both?
+
+---
+
+## Layout
+
+### 1. Drill-down navigation for hierarchical data
+
+- **Concept**: On narrow screens, tapping an item with children (in `<le-list>` cards, `<le-menu>`, etc.) opens the next level as a new view with a "back" control, like in mobile apps.
+- **Considerations**:
+  - This is not a single-component feature: it involves the page layout, navigation (back/title) and routing (URL per level, browser back button).
+  - `<le-list>` currently only renders a chevron on such items and emits an event — the real drill-down should be built on top of that.

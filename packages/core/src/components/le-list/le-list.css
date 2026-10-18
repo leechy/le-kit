@@ -769,3 +769,12 @@
   display: flex;
   align-items: center;
 }
+
+/* While values fly between the table and cards, nothing clips them on the way */
+.le-list-table-container.is-animating-layout,
+.le-list-table-container.is-animating-layout .le-list-table-scroll,
+.le-list-table-container.is-animating-layout .le-list-td,
+.le-list-table-container.is-animating-layout .le-list-card-start,
+.le-list-table-container.is-animating-layout .le-list-card-end {
+  overflow: visible;
+}

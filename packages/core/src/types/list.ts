@@ -164,6 +164,12 @@ export interface LeListCardConfig {
   separator?: string;
 
   /**
+   * Whether a visible actions column (`type: 'actions'`) is shown on the card as an overflow menu.
+   * Defaults to true. Actions stay available in the item context menu either way.
+   */
+  actions?: boolean;
+
+  /**
    * Fully custom card content. Return JSX or an HTML string.
    * Mark elements with `data-le-field="<key>"` to animate them between layouts.
    */

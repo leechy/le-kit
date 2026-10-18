@@ -215,13 +215,14 @@ export class LeList {
   @Prop() card?: LeListCardConfig | string;
 
   /**
-   * Experimental: animates switching between the table and cards with View Transitions,
-   * moving each value from its cell to its place in the card.
+   * Animates switching between the table and cards: values marked with `data-le-field`
+   * move from their cell to their place in the card and back.
    */
   @Prop() layoutTransition: boolean = false;
 
   @State() parsedOptions: LeOption[] = [];
   @State() private isCardLayout: boolean = false;
+  @State() private isAnimatingLayout: boolean = false;
   @State() parsedColumns: LeColumn[] = [];
   @State() parsedActions: LeListAction[] = [];
   @State() contextMenuItemActions: LeOption[] = [];
@@ -261,12 +262,10 @@ export class LeList {
   private autoExpandTimer?: any;
   private hoveredExpandId?: string;
   private resizeObserver?: ResizeObserver;
-  private tableContainerRef?: HTMLElement;
   private hostWidth: number = 0;
   private renderWaiters: Array<() => void> = [];
-  private static instanceCount = 0;
-  /** Prefix keeping view-transition-names unique across lists on the page */
-  private readonly transitionScope = `le-list-${++LeList.instanceCount}`;
+  private layoutAnimations: Animation[] = [];
+  private layoutRunId: number = 0;
 
   /**
    * Emitted when row selection changes.
@@ -393,72 +392,106 @@ export class LeList {
   }
 
   /**
-   * Runs a DOM update inside a View Transition when supported, so table cells and card
-   * values marked with `data-le-field` move between their positions.
+   * Applies a layout update with a FLIP animation: values marked with `data-le-field` move
+   * from their old position (table cell or card slot) to the new one.
+   *
+   * Rules that keep it compatible with other animated components:
+   * - only the marked element is animated, never rows, so transforms do not stack;
+   * - plain text can be scaled, elements holding components only move — `le-visibility`,
+   *   `le-toolbar` and `le-popover` measure with getBoundingClientRect(), and a scaled
+   *   ancestor would distort their sizes;
+   * - transforms are added on top of the element's own (`composite: 'add'`) and opacity is
+   *   left to components, so CSS transitions like `le-visibility`'s keep working;
+   * - a new switch cancels the running animation and starts from where values are now.
    */
   private async runLayoutTransition(update: () => void) {
-    // view-transition-name is tree-scoped: the transition has to start on an element inside
-    // the shadow root to see the names given to rows and fields there. The document-level
-    // fallback only cross-fades the whole list.
-    const scope = this.tableContainerRef as any;
-    const doc = typeof document !== 'undefined' ? (document as any) : undefined;
-    const start = scope?.startViewTransition
-      ? (cb: () => Promise<void>) => scope.startViewTransition(cb)
-      : doc?.startViewTransition
-        ? (cb: () => Promise<void>) => doc.startViewTransition(cb)
-        : undefined;
     const reducedMotion = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const canAnimate = typeof HTMLElement !== 'undefined' && typeof HTMLElement.prototype.animate === 'function';
 
-    if (!this.layoutTransition || !start || reducedMotion) {
+    if (!this.layoutTransition || reducedMotion || !canAnimate) {
       update();
       return;
     }
 
-    this.applyTransitionNames();
+    // Measure before cancelling, so an interrupted animation continues from the current spot
+    const before = this.measureLayoutFields();
+    this.layoutAnimations.forEach(animation => animation.cancel());
+    this.layoutAnimations = [];
+    const runId = ++this.layoutRunId;
+
+    const rendered = this.waitForRender();
+    this.isAnimatingLayout = true;
+    update();
+    await rendered;
+
+    // A newer switch started while this one waited for the render: it animates instead
+    if (runId !== this.layoutRunId) return;
+
+    const after = this.measureLayoutFields();
+    const timing = this.getLayoutAnimationTiming();
+    const animations: Animation[] = [];
+
+    after.forEach(({ el, rect, fontSize }, key) => {
+      const previous = before.get(key);
+      if (!previous) return;
+      const from = previous.rect;
+
+      const dx = from.left + from.width / 2 - (rect.left + rect.width / 2);
+      const dy = from.top + from.height / 2 - (rect.top + rect.height / 2);
+      // Text scales uniformly by the font size change: its box ratio differs between a wrapping
+      // cell and a single card line, and a non-uniform scale would stretch the glyphs
+      const scale = previous.fontSize && fontSize ? previous.fontSize / fontSize : 1;
+      if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && Math.abs(scale - 1) < 0.01) return;
+
+      const translate = `translate(${Math.round(dx)}px, ${Math.round(dy)}px)`;
+      const transform = Math.abs(scale - 1) >= 0.01 ? `${translate} scale(${+scale.toFixed(3)})` : translate;
+      animations.push(el.animate([{ transform }, { transform: 'none' }], { ...timing, composite: 'add' }));
+    });
+
+    this.layoutAnimations = animations;
     try {
-      const transition = start(async () => {
-        this.clearTransitionNames();
-        const rendered = this.waitForRender();
-        update();
-        await rendered;
-        this.applyTransitionNames();
-      });
-      await transition.finished;
+      await Promise.all(animations.map(animation => animation.finished));
     } catch {
-      // A skipped or failed transition still applies the update
-    } finally {
-      this.clearTransitionNames();
+      // Cancelled by a newer switch, which takes over
+      return;
+    }
+    if (runId === this.layoutRunId) {
+      this.layoutAnimations = [];
+      this.isAnimatingLayout = false;
     }
   }
 
   /**
-   * Gives every visible row and field a unique view-transition-name, scoped to this list.
+   * Positions of visible `data-le-field` values, keyed by row id and field.
+   * Values in collapsed groups and outside the viewport are skipped.
    */
-  private applyTransitionNames() {
+  private measureLayoutFields(): Map<string, { el: HTMLElement; rect: DOMRect; fontSize?: number }> {
+    const fields = new Map<string, { el: HTMLElement; rect: DOMRect; fontSize?: number }>();
     const root = this.el.shadowRoot;
-    if (!root) return;
+    if (!root) return fields;
     const viewportHeight = window.innerHeight;
-    const isVisible = (el: HTMLElement) => {
-      const rect = el.getBoundingClientRect();
-      return rect.width > 0 && rect.bottom > 0 && rect.top < viewportHeight;
-    };
-    const toName = (...parts: string[]) => parts.join('-').replace(/[^a-zA-Z0-9_-]/g, '_');
 
     root.querySelectorAll<HTMLElement>('.le-list-row-main[data-row-id]').forEach(row => {
-      if (!isVisible(row)) return;
-      const rowId = row.dataset.rowId || '';
-      row.style.setProperty('view-transition-name', toName(this.transitionScope, rowId));
-      row.querySelectorAll<HTMLElement>('[data-le-field]').forEach(field => {
-        if (field.closest('.le-list-row-main') !== row || !isVisible(field)) return;
-        field.style.setProperty('view-transition-name', toName(this.transitionScope, rowId, field.dataset.leField || ''));
+      if (row.closest('le-collapse[data-open="false"]')) return;
+      row.querySelectorAll<HTMLElement>('[data-le-field]').forEach(el => {
+        if (el.closest('.le-list-row-main') !== row) return;
+        const rect = el.getBoundingClientRect();
+        if (rect.width === 0 || rect.top + rect.height < 0 || rect.top > viewportHeight) return;
+        // Only plain text is scaled; elements holding components just move
+        const fontSize = el.children.length === 0 ? Number.parseFloat(getComputedStyle(el).fontSize) || undefined : undefined;
+        fields.set(`${row.dataset.rowId}\u0000${el.dataset.leField}`, { el, rect, fontSize });
       });
     });
+    return fields;
   }
 
-  private clearTransitionNames() {
-    this.el.shadowRoot
-      ?.querySelectorAll<HTMLElement>('[style*="view-transition-name"]')
-      .forEach(el => el.style.removeProperty('view-transition-name'));
+  private getLayoutAnimationTiming(): KeyframeAnimationOptions {
+    const styles = getComputedStyle(this.el);
+    const durationValue = styles.getPropertyValue('--le-transition-normal').trim();
+    const parsed = Number.parseFloat(durationValue);
+    const duration = Number.isFinite(parsed) ? (durationValue.endsWith('ms') ? parsed : parsed * 1000) : 250;
+    const easing = styles.getPropertyValue('--le-easing-standard').trim() || 'ease-in-out';
+    return { duration, easing };
   }
 
   private handleHostClick = () => {
@@ -1878,6 +1911,8 @@ export class LeList {
     this.childrenObserver?.disconnect();
     this.resizeObserver?.disconnect();
     this.resizeObserver = undefined;
+    this.layoutAnimations.forEach(animation => animation.cancel());
+    this.layoutAnimations = [];
     this.disconnectSlotObserver?.();
     this.unsubscribeTriggerAction?.();
     window.removeEventListener('pointermove', this.handleGlobalPointerMove);
@@ -2385,7 +2420,8 @@ export class LeList {
   }
 
   private renderCard(item: LeOption, id: string, isHierarchical: boolean, hasChildren: boolean, isOpen: boolean, hasAnyActions: boolean) {
-    const actionsCol = this.parsedColumns.find(c => c.type === 'actions' && !c.hidden);
+    const actionsCol =
+      this.getCardConfig().actions !== false ? this.parsedColumns.find(c => c.type === 'actions' && !c.hidden) : undefined;
     const hasActionChevron = this.showActionChevron || this.actionChevron;
 
     return (
@@ -2927,8 +2963,11 @@ export class LeList {
         </div>
 
         <div
-          class={{ 'le-list-table-container': true, 'is-cards': this.isCardLayout }}
-          ref={el => (this.tableContainerRef = el)}
+          class={{
+            'le-list-table-container': true,
+            'is-cards': this.isCardLayout,
+            'is-animating-layout': this.isAnimatingLayout,
+          }}
         >
           <div class="le-list-table-scroll">
             <div

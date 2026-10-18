@@ -1475,7 +1475,7 @@ export namespace Components {
          */
         "layout": LeListLayout;
         /**
-          * Experimental: animates switching between the table and cards with View Transitions, moving each value from its cell to its place in the card.
+          * Animates switching between the table and cards: values marked with `data-le-field` move from their cell to their place in the card and back.
           * @default false
          */
         "layoutTransition": boolean;
@@ -6245,7 +6245,7 @@ declare namespace LocalJSX {
          */
         "layout"?: LeListLayout;
         /**
-          * Experimental: animates switching between the table and cards with View Transitions, moving each value from its cell to its place in the card.
+          * Animates switching between the table and cards: values marked with `data-le-field` move from their cell to their place in the card and back.
           * @default false
          */
         "layoutTransition"?: boolean;

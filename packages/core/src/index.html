@@ -1120,8 +1120,8 @@
 
     <h3>6b. Card Layout (&lt;le-list layout="auto | table | cards"&gt;)</h3>
     <p>
-      CRM opportunities as cards. Card lines reference column keys, so values look the same as in the table. With the
-      experimental <code>layout-transition</code>, values move between their places when the layout changes.
+      CRM opportunities as cards. Card lines reference column keys, so values look the same as in the table. With
+      <code>layout-transition</code>, values move between their places when the layout changes.
       The <code>primary</code> column becomes the card title.
       In <b>auto</b> mode, drag the frame edge or use the width presets: below 600px the list switches to cards.
     </p>
@@ -1155,7 +1155,7 @@
           { key: 'data.country', label: 'Country' },
           { key: 'data.type', label: 'Type' },
           { key: 'data.created', label: 'Created', type: 'date', sortable: true },
-          { key: 'actions', label: 'Actions', type: 'actions', maxVisibleActions: 0, width: '90px' },
+          { key: 'actions', label: '', type: 'actions', maxVisibleActions: 0, width: '90px' },
         ];
         cardsList.card = {
           rows: [
@@ -1163,6 +1163,7 @@
             { start: 'label', end: 'data.status' },
             { start: ['data.country', 'data.type'] },
           ],
+          actions: false,
         };
         cardsList.actions = [
           { id: 'open', label: 'Open', icon: 'chevron-right', selectionMode: 'single' },

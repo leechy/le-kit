@@ -32,17 +32,14 @@ The actions system (`LeListAction`, `utils/action-bus.ts`, `item-context-menu`, 
 
 ---
 
-## 2. View Transitions between layouts
+## 2. Animation between layouts
 
-- [x] Values carry `data-le-field="<key>"` in cells and cards; during a transition rows and visible fields get list-scoped `view-transition-name`s.
-- [x] Behind the experimental `layout-transition` prop; reduced motion and missing support fall back to an instant switch.
-- Findings (Chrome 152, in the Claude browser pane):
-  - `view-transition-name` is tree-scoped: names inside the shadow root are ignored by `document.startViewTransition` and by a transition started on the host. A transition started on an element inside the shadow root does see them.
-  - Element-scoped transitions failed whenever named elements changed during the update ("Transition was aborted because of invalid state", sometimes a renderer crash) — even in plain light DOM. Document-level transitions with the same change worked.
-  - Confirmed in a regular Chrome window: the animation works only sometimes, otherwise "InvalidStateError: ... Prepaint layout check failed" or "AbortError: Transition was skipped. New ViewTransition started"; roughly every 6–7th switch crashes the tab ("This page is having a problem", error code 5).
-- [ ] Replace View Transitions with an own FLIP animation (Web Animations) over the same `data-le-field` marks; check interplay with `<le-visibility>`, `<le-collapse>` and toolbar collapsing first.
-- [ ] Style the transition pseudo-elements (text size change between cell and title).
-- [ ] Reuse for sorting, row reorder drop and expand/collapse, if cheap once the mechanism is in place.
+- [x] Values carry `data-le-field="<key>"` in cells and cards (custom render functions mark their own elements the same way).
+- [x] `layout-transition` prop: FLIP animation with Web Animations — values move from the old position to the new one; plain text scales uniformly by the font size change, values holding components only move. Reduced motion turns it off; a new switch cancels the running one.
+- [x] Compatible with other animated components: only the marked element is animated (never rows), transforms use `composite: 'add'`, opacity is left alone, cell/card `overflow` is lifted while values fly. `le-visibility` now measures the layout size (ResizeObserver box / offsetWidth), so ancestor transforms don't distort its cached width.
+- Why not View Transitions: `view-transition-name` is tree-scoped, so only a transition started inside the shadow root sees the names; element-scoped transitions in Chrome 152 were unreliable ("Prepaint layout check failed", "Transition was skipped") and crashed the tab every 6–7 switches.
+- [ ] Values present only in one layout appear/disappear without a fade (FLIP cannot animate removed elements).
+- [ ] Reuse for sorting, row reorder drop and expand/collapse.
 
 ---
 

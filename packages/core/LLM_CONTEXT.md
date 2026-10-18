@@ -965,7 +965,7 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `layout` | `LeListLayout` | `'table'` | Layout of the list: 'table' (default), 'cards', or 'auto' to switch to cards when the list is narrower than `cardBreakpoint`. |
 | `cardBreakpoint` | `number` | `600` | Width in pixels below which the 'auto' layout shows cards. |
 | `card` | `LeListCardConfig \| string \| undefined` |  | Card layout configuration: lines of column keys, or a custom render function. Can be a `LeListCardConfig` object or a JSON string. Without it, a card shows the label as the title and the description below. |
-| `layoutTransition` | `boolean` | `false` | Experimental: animates switching between the table and cards with View Transitions, moving each value from its cell to its place in the card. |
+| `layoutTransition` | `boolean` | `false` | Animates switching between the table and cards: values marked with `data-le-field` move from their cell to their place in the card and back. |
 | `parsedOptions` | `LeOption[]` | `[]` |  |
 | `parsedColumns` | `LeColumn[]` | `[]` |  |
 | `parsedActions` | `LeListAction[]` | `[]` |  |

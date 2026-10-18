@@ -179,11 +179,11 @@ export class LeContextMenu {
   }
 
   @Method()
-  async show(x?: number, y?: number) {
+  async show(x?: number, y?: number, triggerEvent?: MouseEvent | TouchEvent) {
     if (this.disabled) return;
     if (x !== undefined && y !== undefined) {
       this.coords = { x, y };
-      this.lastTriggerType = 'mouse';
+      this.lastTriggerType = triggerEvent?.type.startsWith('touch') ? 'touch' : 'mouse';
     } else {
       if (this.containerEl) {
         const rect = this.containerEl.getBoundingClientRect();
@@ -195,6 +195,10 @@ export class LeContextMenu {
       this.lastTriggerType = 'touch';
     }
     this.open = true;
+
+    if (x !== undefined && y !== undefined) {
+      this.startDragSession(x, y, triggerEvent);
+    }
 
     requestAnimationFrame(() => {
       void this.popoverEl?.updatePosition();
@@ -318,10 +322,29 @@ export class LeContextMenu {
 
     this.lastTriggerType = event.type.startsWith('touch') ? 'touch' : 'mouse';
     this.coords = { x, y };
+    this.open = true;
+
+    this.startDragSession(x, y, event);
+
+    requestAnimationFrame(() => {
+      void this.popoverEl?.updatePosition();
+      void this.navigationEl?.focusActiveItem();
+    });
+  }
+
+  private startDragSession(x: number, y: number, event?: MouseEvent | TouchEvent) {
+    // If opened via mouse click on a system where buttons is already 0, skip drag selection
+    if (event instanceof MouseEvent && event.buttons === 0) {
+      return;
+    }
+
+    if (this.isDragSelecting) {
+      this.cleanUpDragSession();
+    }
+
     this.dragStartPosition = { x, y };
     this.dragMoved = false;
     this.isDragSelecting = true;
-    this.open = true;
 
     try {
       window.getSelection()?.removeAllRanges();
@@ -340,11 +363,6 @@ export class LeContextMenu {
     document.addEventListener('pointerup', this.handleDocumentPointerUp, true);
     document.addEventListener('pointercancel', this.handleDocumentPointerCancel, true);
     document.addEventListener('touchmove', this.handleDocumentTouchMove, { passive: false });
-
-    requestAnimationFrame(() => {
-      void this.popoverEl?.updatePosition();
-      void this.navigationEl?.focusActiveItem();
-    });
   }
 
   private handleDocumentTouchMove = (event: TouchEvent) => {
@@ -357,6 +375,11 @@ export class LeContextMenu {
 
   private handleDocumentPointerMove = (event: PointerEvent) => {
     if (!this.isDragSelecting) return;
+
+    if (event.pointerType === 'mouse' && event.buttons === 0) {
+      this.cleanUpDragSession();
+      return;
+    }
 
     if (event.cancelable) {
       event.preventDefault();
@@ -374,7 +397,7 @@ export class LeContextMenu {
     if (actionable !== this.currentHoveredActionable) {
       if (this.currentHoveredActionable) {
         this.currentHoveredActionable.classList.remove('is-drag-hovered', 'is-focused');
-        this.currentHoveredActionable.closest('.nav-row')?.classList.remove('is-drag-hovered', 'is-focused');
+        this.currentHoveredActionable.closest('.nav-node')?.classList.remove('is-drag-hovered', 'is-focused');
         this.currentHoveredActionable.dispatchEvent(
           new MouseEvent('mouseleave', { bubbles: true, cancelable: true }),
         );
@@ -382,7 +405,7 @@ export class LeContextMenu {
       this.currentHoveredActionable = actionable || undefined;
       if (actionable) {
         actionable.classList.add('is-drag-hovered', 'is-focused');
-        actionable.closest('.nav-row')?.classList.add('is-drag-hovered', 'is-focused');
+        actionable.closest('.nav-node')?.classList.add('is-drag-hovered', 'is-focused');
         actionable.dispatchEvent(
           new MouseEvent('mouseenter', { bubbles: true, cancelable: true }),
         );
@@ -442,7 +465,7 @@ export class LeContextMenu {
 
     if (this.currentHoveredActionable) {
       this.currentHoveredActionable.classList.remove('is-drag-hovered', 'is-focused');
-      this.currentHoveredActionable.closest('.nav-row')?.classList.remove('is-drag-hovered', 'is-focused');
+      this.currentHoveredActionable.closest('.nav-node')?.classList.remove('is-drag-hovered', 'is-focused');
       this.currentHoveredActionable.dispatchEvent(
         new MouseEvent('mouseleave', { bubbles: true, cancelable: true }),
       );

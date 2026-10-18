@@ -275,5 +275,31 @@ describe('le-navigation drag-and-drop reordering', () => {
     const resultInsideLvl0 = await instance.moveItem('branch', 'lvl0', 'inside');
     expect(resultInsideLvl0.success).toBe(true);
   });
+
+  it('does not render separator before the first item or after the last item', async () => {
+    const page = await newSpecPage({
+      components: [LeNavigation],
+      html: `<le-navigation orientation="vertical"></le-navigation>`,
+    });
+
+    const nav = page.rootInstance as LeNavigation;
+    nav.items = [
+      { id: '1', label: 'Item 1', separator: 'before' },
+      { id: '2', label: 'Item 2', separator: 'before' },
+      { id: '3', label: 'Item 3', separator: 'after' },
+    ];
+    await page.waitForChanges();
+
+    const separators = page.root?.shadowRoot?.querySelectorAll('.nav-separator');
+    expect(separators?.length).toBe(1);
+
+    const listChildren = page.root?.shadowRoot?.querySelector('.nav-list')?.children;
+    expect(listChildren?.length).toBe(4);
+    expect(listChildren?.[0].classList.contains('nav-node')).toBe(true);
+    expect(listChildren?.[1].classList.contains('nav-separator')).toBe(true);
+    expect(listChildren?.[2].classList.contains('nav-node')).toBe(true);
+    expect(listChildren?.[3].classList.contains('nav-node')).toBe(true);
+  });
 });
+
 

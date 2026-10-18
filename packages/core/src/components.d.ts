@@ -16,7 +16,7 @@ import { LeNavigationItemReorderDetail, LeNavigationReorderMode } from "./compon
 import { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 import { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 import { LeActiveContext } from "./components/le-kit/le-kit";
-import { LeColumn, LeListItemReorderDetail, LeListReorderMode } from "./types/list";
+import { LeActionContext, LeColumn, LeListAction, LeListActionStateDetail, LeListItemReorderDetail, LeListReorderMode } from "./types/list";
 import { Event } from "@stencil/core";
 import { LeNavigationItemReorderDetail as LeNavigationItemReorderDetail1, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode as LeNavigationReorderMode1 } from "./components/le-navigation/le-navigation";
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
@@ -38,7 +38,7 @@ export { LeNavigationItemReorderDetail, LeNavigationReorderMode } from "./compon
 export { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 export { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 export { LeActiveContext } from "./components/le-kit/le-kit";
-export { LeColumn, LeListItemReorderDetail, LeListReorderMode } from "./types/list";
+export { LeActionContext, LeColumn, LeListAction, LeListActionStateDetail, LeListItemReorderDetail, LeListReorderMode } from "./types/list";
 export { Event } from "@stencil/core";
 export { LeNavigationItemReorderDetail as LeNavigationItemReorderDetail1, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode as LeNavigationReorderMode1 } from "./components/le-navigation/le-navigation";
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
@@ -404,11 +404,19 @@ export namespace Components {
      */
     interface LeButton {
         /**
+          * Action ID that this button triggers when bound to a list.
+         */
+        "action"?: string;
+        /**
           * Alignment of the button label without the end icon
           * @allowedValues start | center | space-between | end
           * @default 'center'
          */
         "align": 'start' | 'center' | 'space-between' | 'end';
+        /**
+          * Bound list ID(s) (comma-separated list of IDs). If omitted, inherits bind-list from the nearest parent <le-toolbar>.
+         */
+        "bindList"?: string;
         /**
           * Runtime collapse state controlled by responsive containers.
          */
@@ -505,6 +513,10 @@ export namespace Components {
           * @allowedValues none | soft | fluid | spring
          */
         "motionPreset"?: 'none' | 'soft' | 'fluid' | 'spring';
+        /**
+          * Refreshes the action binding and current enabled/disabled state.
+         */
+        "refreshActionState": () => Promise<void>;
         /**
           * Whether the button is in a selected/active state
           * @default false
@@ -948,7 +960,7 @@ export namespace Components {
           * @default 'none'
          */
         "reorder": LeNavigationReorderMode | boolean;
-        "show": (x?: number, y?: number) => Promise<void>;
+        "show": (x?: number, y?: number, triggerEvent?: MouseEvent | TouchEvent) => Promise<void>;
         /**
           * Whether to show the drag handle icon at the end of reorderable menu items.
           * @default false
@@ -1340,6 +1352,11 @@ export namespace Components {
          */
         "actionChevron": boolean;
         /**
+          * Actions available for the list items and external components. Can be an array of `LeListAction` objects or a JSON string.
+          * @default []
+         */
+        "actions": LeListAction[] | string;
+        /**
           * Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true.
           * @default true
          */
@@ -1354,6 +1371,10 @@ export namespace Components {
           * @default false
          */
         "allowColumnToggle": boolean;
+        /**
+          * Programmatically attach this list to an external toolbar by ID or element reference.
+         */
+        "attachToToolbar": (toolbarIdOrEl: string | HTMLElement) => Promise<void>;
         /**
           * Whether to allow column reordering via right-click header context menu. Defaults to false.
           * @default false
@@ -1389,6 +1410,10 @@ export namespace Components {
          */
         "defaultSortIconPosition"?: 'start' | 'end' | 'none';
         /**
+          * Programmatically detach this list from an external toolbar by ID or element reference.
+         */
+        "detachFromToolbar": (toolbarIdOrEl: string | HTMLElement) => Promise<void>;
+        /**
           * Whether to disable keyboard navigation. Defaults to false.
           * @default false
          */
@@ -1422,6 +1447,19 @@ export namespace Components {
           * Programmatically enable reordering.
          */
         "enableReorder": (mode?: LeListReorderMode) => Promise<void>;
+        /**
+          * Programmatically execute an action on target items or current selection.
+         */
+        "executeAction": (actionId: string, itemOrId?: string | LeOption | LeOption[], event?: Event) => Promise<boolean>;
+        /**
+          * Retrieve currently available actions, optionally filtered to target item or current selection.
+         */
+        "getAvailableActions": (target?: string | LeOption | boolean) => Promise<LeListAction[]>;
+        /**
+          * Whether to enable right-click context menu on item rows with their available actions. Defaults to false.
+          * @default false
+         */
+        "itemContextMenu": boolean;
         /**
           * Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
          */
@@ -1459,6 +1497,10 @@ export namespace Components {
           * Programmatically set the reorder mode ('none', 'siblings', 'nested', or boolean).
          */
         "setReorder": (mode: LeListReorderMode | boolean) => Promise<void>;
+        /**
+          * Programmatically set the currently selected row IDs.
+         */
+        "setSelectedRows": (ids: string[]) => Promise<void>;
         /**
           * Whether to display chevron-right icon at the end of rows that have actions or links. Defaults to false.
           * @default false
@@ -3090,6 +3132,14 @@ export namespace Components {
          */
         "alignItems": 'start' | 'center' | 'end' | 'stretch';
         /**
+          * Programmatically attach a list to this toolbar by ID.
+         */
+        "attachList": (listId: string) => Promise<void>;
+        /**
+          * Bound list ID(s) (comma-separated list of IDs).
+         */
+        "bindList"?: string;
+        /**
           * Temporary debug mode: stop before measuring virtual widths so the virtual DOM can be inspected before collapse simulation mutates it.
           * @default false
          */
@@ -3099,6 +3149,10 @@ export namespace Components {
           * @default false
          */
         "debugVirtualToolbar": boolean;
+        /**
+          * Programmatically detach a list from this toolbar by ID.
+         */
+        "detachList": (listId: string) => Promise<void>;
         /**
           * Disable the built-in overflow popover. The toolbar will still compute overflow state and emit events, but won't render its own menu. Useful for custom overflow handling.
           * @default false
@@ -3954,6 +4008,7 @@ declare global {
     isMultiple: boolean;
   };
         "leAction": { action?: string; item: LeOption; id: string; originalEvent?: Event };
+        "leActionStateChange": LeListActionStateDetail;
         "leSortChange": { key?: string; column?: LeColumn; direction?: 'asc' | 'desc' };
         "leColumnVisibilityChange": { columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean };
         "leColumnOrderChange": { columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn };
@@ -5084,11 +5139,19 @@ declare namespace LocalJSX {
      */
     interface LeButton {
         /**
+          * Action ID that this button triggers when bound to a list.
+         */
+        "action"?: string;
+        /**
           * Alignment of the button label without the end icon
           * @allowedValues start | center | space-between | end
           * @default 'center'
          */
         "align"?: 'start' | 'center' | 'space-between' | 'end';
+        /**
+          * Bound list ID(s) (comma-separated list of IDs). If omitted, inherits bind-list from the nearest parent <le-toolbar>.
+         */
+        "bindList"?: string;
         /**
           * Runtime collapse state controlled by responsive containers.
          */
@@ -6064,6 +6127,11 @@ declare namespace LocalJSX {
          */
         "actionChevron"?: boolean;
         /**
+          * Actions available for the list items and external components. Can be an array of `LeListAction` objects or a JSON string.
+          * @default []
+         */
+        "actions"?: LeListAction[] | string;
+        /**
           * Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true.
           * @default true
          */
@@ -6139,6 +6207,11 @@ declare namespace LocalJSX {
          */
         "emptyTitle"?: string;
         /**
+          * Whether to enable right-click context menu on item rows with their available actions. Defaults to false.
+          * @default false
+         */
+        "itemContextMenu"?: boolean;
+        /**
           * Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
          */
         "maxReorderDepth"?: number;
@@ -6146,6 +6219,10 @@ declare namespace LocalJSX {
           * Emitted when a row action or link is executed.
          */
         "onLeAction"?: (event: LeListCustomEvent<{ action?: string; item: LeOption; id: string; originalEvent?: Event }>) => void;
+        /**
+          * Emitted when available actions or selection state changes on the list.
+         */
+        "onLeActionStateChange"?: (event: LeListCustomEvent<LeListActionStateDetail>) => void;
         /**
           * Emitted when column order changes via the context menu.
          */
@@ -7876,6 +7953,10 @@ declare namespace LocalJSX {
          */
         "alignItems"?: 'start' | 'center' | 'end' | 'stretch';
         /**
+          * Bound list ID(s) (comma-separated list of IDs).
+         */
+        "bindList"?: string;
+        /**
           * Temporary debug mode: stop before measuring virtual widths so the virtual DOM can be inspected before collapse simulation mutates it.
           * @default false
          */
@@ -8086,6 +8167,8 @@ declare namespace LocalJSX {
         "minVisibleItems": number;
     }
     interface LeButtonAttributes {
+        "action": string;
+        "bindList": string;
         "mode": 'default' | 'admin';
         "variant": 'solid' | 'filled' | 'outlined' | 'clear' | 'system';
         "filled": boolean;
@@ -8284,6 +8367,8 @@ declare namespace LocalJSX {
         "selection": string;
         "showActionChevron": boolean;
         "actionChevron": boolean;
+        "actions": LeListAction[] | string;
+        "itemContextMenu": boolean;
         "reorder": string;
         "showReorderHandle": boolean;
         "maxReorderDepth": number;
@@ -8599,6 +8684,7 @@ declare namespace LocalJSX {
         "maxLines": number;
     }
     interface LeToolbarAttributes {
+        "bindList": string;
         "alignItems": 'start' | 'center' | 'end' | 'stretch';
         "itemGap": string;
         "overflowIcon": string;

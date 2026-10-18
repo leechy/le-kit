@@ -92,6 +92,7 @@ Type: `Promise<void>`
 
  - [le-bar](../le-bar)
  - [le-button-group](../le-button-group)
+ - [le-list](../le-list)
  - [le-toolbar](../le-toolbar)
 
 ### Depends on
@@ -120,6 +121,7 @@ graph TD;
   le-button --> le-tooltip
   le-bar --> le-overflow-menu
   le-button-group --> le-overflow-menu
+  le-list --> le-overflow-menu
   le-toolbar --> le-overflow-menu
   style le-overflow-menu fill:#f9f,stroke:#333,stroke-width:4px
 ```

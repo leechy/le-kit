@@ -21,6 +21,7 @@ footprint first before their contents are overflowed entirely.
 | Property                  | Attribute                    | Description                                                                                                                                                                | Type                                        | Default                                             |
 | ------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | --------------------------------------------------- |
 | `alignItems`              | `align-items`                | Alignment of items along the main axis.                                                                                                                                    | `"center" \| "end" \| "start" \| "stretch"` | `'start'`                                           |
+| `bindList`                | `bind-list`                  | Bound list ID(s) (comma-separated list of IDs).                                                                                                                            | `string \| undefined`                       | `undefined`                                         |
 | `debugPauseBeforeMeasure` | `debug-pause-before-measure` | Temporary debug mode: stop before measuring virtual widths so the virtual DOM can be inspected before collapse simulation mutates it.                                      | `boolean`                                   | `false`                                             |
 | `debugVirtualToolbar`     | `debug-virtual-toolbar`      | Temporary debug mode: render the virtual toolbar visibly above the live toolbar so collapse measurements can be inspected.                                                 | `boolean`                                   | `false`                                             |
 | `disablePopover`          | `disable-popover`            | Disable the built-in overflow popover. The toolbar will still compute overflow state and emit events, but won't render its own menu. Useful for custom overflow handling.  | `boolean`                                   | `false`                                             |
@@ -38,6 +39,38 @@ footprint first before their contents are overflowed entirely.
 
 
 ## Methods
+
+### `attachList(listId: string) => Promise<void>`
+
+Programmatically attach a list to this toolbar by ID.
+
+#### Parameters
+
+| Name     | Type     | Description |
+| -------- | -------- | ----------- |
+| `listId` | `string` |             |
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `detachList(listId: string) => Promise<void>`
+
+Programmatically detach a list from this toolbar by ID.
+
+#### Parameters
+
+| Name     | Type     | Description |
+| -------- | -------- | ----------- |
+| `listId` | `string` |             |
+
+#### Returns
+
+Type: `Promise<void>`
+
+
 
 ### `hideOverflowMenu() => Promise<void>`
 

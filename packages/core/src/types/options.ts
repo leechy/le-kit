@@ -132,7 +132,7 @@ export interface LeOption {
   /**
    * Add a visual separator line before or after this option.
    */
-  separator?: 'before' | 'after';
+  separator?: 'before' | 'after' | boolean;
 
   /**
    * URL to navigate to when the option is selected.

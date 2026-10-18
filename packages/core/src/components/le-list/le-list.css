@@ -614,3 +614,20 @@
   padding: var(--le-list-item-padding-y) var(--le-list-item-padding-x);
 }
 
+/* Actions Column Styles */
+.le-list-actions-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--le-spacing-1, 4px);
+  justify-content: flex-end;
+}
+
+.le-list-actions-cell le-button {
+  --le-button-padding-x: 4px;
+  --le-button-padding-y: 4px;
+}
+
+.le-list-actions-overflow {
+  display: inline-flex;
+}
+

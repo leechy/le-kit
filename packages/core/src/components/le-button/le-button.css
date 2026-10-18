@@ -232,12 +232,7 @@
   --le-button-padding-y: 0.3rem;
   --le-button-padding-top: 0.35rem;
   --le-button-font-size: var(--le-button-small-font-size, var(--le-font-size-xs));
-
-  .icon-start,
-  .icon-only,
-  .icon-end {
-    transform: scale(0.9);
-  }
+  --le-controls-icon-scale: calc(var(--le-controls-icon-scale) * 0.75);
 }
 
 :host(.size-large) {
@@ -291,7 +286,7 @@
 
 /* Icon only */
 :host(.icon-only) .le-button-container {
-  padding: var(--le-button-icon-only-padding, var(--le-spacing-2));
+  padding: var(--le-button-icon-only-padding, var(--le-spacing-1));
   aspect-ratio: var(--le-button-icon-aspect-ratio, 1);
 }
 
@@ -356,13 +351,17 @@
 }
 
 .icon-start.is-visible,
-.icon-only.is-visible,
 .icon-end.is-visible {
   display: flex;
 }
 
 span.icon-only.is-visible {
-  width: calc(1em);
+  display: block;
+  width: calc(
+    var(--le-icon-size, 16px) +
+    2 * var(--le-button-icon-only-padding, var(--le-spacing-1, 0.25rem)) +
+    2 * var(--le-button-border-width, 1px)
+  );
   line-height: 0.5em;
 }
 

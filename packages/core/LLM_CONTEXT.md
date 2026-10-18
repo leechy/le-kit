@@ -283,6 +283,8 @@ A flexible button component with multiple variants and states.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
+| `action` | `string \| undefined` |  | Action ID that this button triggers when bound to a list. |
+| `bindList` | `string \| undefined` |  | Bound list ID(s) (comma-separated list of IDs). If omitted, inherits bind-list from the nearest parent <le-toolbar>. |
 | `mode` | `'default' \| 'admin' \| undefined` |  | Mode of the popover should be 'default' for internal use |
 | `variant` | `'solid' \| 'filled' \| 'outlined' \| 'clear' \| 'system'` | `'outlined'` | Button variant style |
 | `filled` | `boolean` | `false` | Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API). |
@@ -953,6 +955,8 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `selection` | `boolean \| 'single' \| 'multiple' \| 'none'` | `false` | Selection mode for rows: false / 'none' (disabled), true / 'single', or 'multiple'. Defaults to false. |
 | `showActionChevron` | `boolean` | `false` | Whether to display chevron-right icon at the end of rows that have actions or links. Defaults to false. |
 | `actionChevron` | `boolean` | `false` | Alias for showActionChevron. |
+| `actions` | `LeListAction[] \| string` | `[]` | Actions available for the list items and external components. Can be an array of `LeListAction` objects or a JSON string. |
+| `itemContextMenu` | `boolean` | `false` | Whether to enable right-click context menu on item rows with their available actions. Defaults to false. |
 | `reorder` | `LeListReorderMode \| boolean` | `'none'` | Enables manual drag-and-drop reordering of list row items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none'). |
 | `showReorderHandle` | `boolean` | `false` | Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable rows. Default: false. |
 | `reorderRatios` | `{ top: number; middle: number; bottom: number }` | `{ top: 0.35, middle: 0.3, bottom: 0.35, }` | Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.35, middle: 0.3, bottom: 0.35 }. |
@@ -960,6 +964,8 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `reorderExpandDelay` | `number` | `500` | Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop. |
 | `parsedOptions` | `LeOption[]` | `[]` |  |
 | `parsedColumns` | `LeColumn[]` | `[]` |  |
+| `parsedActions` | `LeListAction[]` | `[]` |  |
+| `contextMenuItemActions` | `LeOption[]` | `[]` |  |
 | `sortColumnKey` | `string \| undefined` |  |  |
 | `sortDirection` | `'asc' \| 'desc' \| undefined` |  |  |
 | `focusedRowId` | `string \| undefined` |  |  |
@@ -975,6 +981,7 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
     isMultiple: boolean;
   }>` | Emitted when row selection changes. |
 | `leAction` | `EventEmitter<{ action?: string; item: LeOption; id: string; originalEvent?: Event }>` | Emitted when a row action or link is executed. |
+| `leActionStateChange` | `EventEmitter<LeListActionStateDetail>` | Emitted when available actions or selection state changes on the list. |
 | `leSortChange` | `EventEmitter<{ key?: string; column?: LeColumn; direction?: 'asc' \| 'desc' }>` | Emitted when column sorting changes. |
 | `leColumnVisibilityChange` | `EventEmitter<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>` | Emitted when column visibility changes via the context menu. |
 | `leColumnOrderChange` | `EventEmitter<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn }>` | Emitted when column order changes via the context menu. |
@@ -1905,6 +1912,7 @@ footprint first before their contents are overflowed entirely.
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
 | `items` | `unknown \| undefined` |  | Optional declarative items input.  The current implementation is slot-driven, but when this prop changes we still invalidate the slotted-items cache and recompute layout. |
+| `bindList` | `string \| undefined` |  | Bound list ID(s) (comma-separated list of IDs). |
 | `alignItems` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'start'` | Alignment of items along the main axis. |
 | `itemGap` | `string` | `'var(--le-toolbar-gap, var(--le-spacing-1, 4px))'` | Spacing between top-level toolbar items. Accepts any valid CSS length (e.g. `8px`, `0.5rem`, `var(--le-spacing-2)`). |
 | `overflowIcon` | `string` | `'ellipsis-horizontal'` | Icon for the overflow trigger button when no custom slot content is provided. |

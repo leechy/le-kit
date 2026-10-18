@@ -12,6 +12,7 @@ import {
   Host,
 } from '@stencil/core';
 import { classnames, generateId, nextFrame, nextResize } from '../../utils/utils';
+import { parseListIds } from '../../utils/action-bus';
 import { LeOverflowMenuItemSelectDetail } from '../le-overflow-menu/le-overflow-menu';
 import type { LeOption } from '../../types/options';
 import type { LeCollapseMeta } from '../../types/toolbar';
@@ -99,6 +100,11 @@ export class LeToolbar {
    * still invalidate the slotted-items cache and recompute layout.
    */
   @Prop() items?: unknown;
+
+  /**
+   * Bound list ID(s) (comma-separated list of IDs).
+   */
+  @Prop({ attribute: 'bind-list', reflect: true, mutable: true }) bindList?: string;
 
   /**
    * Alignment of items along the main axis.
@@ -220,10 +226,25 @@ export class LeToolbar {
     this.prepareToolbarItems();
   }
 
+  @Watch('bindList')
+  handleBindListChange() {
+    this.refreshChildButtonBindings();
+  }
+
+  private refreshChildButtonBindings() {
+    const buttons = Array.from(this.el.querySelectorAll('le-button'));
+    buttons.forEach((btn: any) => {
+      if (typeof btn.refreshActionState === 'function') {
+        void btn.refreshActionState();
+      }
+    });
+  }
+
   @Listen('slotchange')
   handleSlotChange() {
     // update virtual toolbar structure when items are changed
     this.prepareToolbarItems();
+    this.refreshChildButtonBindings();
   }
 
   connectedCallback() {
@@ -233,6 +254,7 @@ export class LeToolbar {
   componentDidLoad() {
     // create virtual toolbar structure for layout calculations
     this.prepareToolbarItems();
+    this.refreshChildButtonBindings();
   }
 
   disconnectedCallback() {
@@ -242,6 +264,32 @@ export class LeToolbar {
       cancelAnimationFrame(this.pendingRecalc);
       this.pendingRecalc = null;
     }
+  }
+
+  /**
+   * Programmatically attach a list to this toolbar by ID.
+   */
+  @Method()
+  async attachList(listId: string): Promise<void> {
+    if (!listId) return;
+    const current = parseListIds(this.bindList);
+    if (!current.includes(listId)) {
+      current.push(listId);
+      this.bindList = current.join(', ');
+      this.refreshChildButtonBindings();
+    }
+  }
+
+  /**
+   * Programmatically detach a list from this toolbar by ID.
+   */
+  @Method()
+  async detachList(listId: string): Promise<void> {
+    if (!listId) return;
+    const current = parseListIds(this.bindList);
+    const updated = current.filter(id => id !== listId);
+    this.bindList = updated.length > 0 ? updated.join(', ') : undefined;
+    this.refreshChildButtonBindings();
   }
 
   /**
@@ -507,8 +555,8 @@ export class LeToolbar {
   };
 
   private clearVirtualMeasurements() {
-    this.virtualItemsEl?.replaceChildren();
-    this.virtualTriggerEl?.replaceChildren();
+    clearChildren(this.virtualItemsEl);
+    clearChildren(this.virtualTriggerEl);
     this.setVirtualTriggerVisible(false);
   }
 
@@ -558,7 +606,7 @@ export class LeToolbar {
   private syncVirtualTriggerContent() {
     if (!this.virtualTriggerEl) return;
 
-    this.virtualTriggerEl.replaceChildren();
+    clearChildren(this.virtualTriggerEl);
 
     const slottedTriggerNodes = Array.from(this.el.children).filter(
       (node): node is HTMLElement =>
@@ -600,7 +648,7 @@ export class LeToolbar {
     const virtual = this.virtualItemsEl;
     if (!virtual) return;
 
-    virtual.replaceChildren();
+    clearChildren(virtual);
     this.syncVirtualTriggerContent();
 
     for (let index = 0; index < items.length; index += 1) {
@@ -1231,4 +1279,15 @@ function setsEqual(a: Set<string>, b: Set<string>): boolean {
     if (!b.has(id)) return false;
   }
   return true;
+}
+
+function clearChildren(el?: HTMLElement | null): void {
+  if (!el) return;
+  if (typeof (el as any).replaceChildren === 'function') {
+    el.replaceChildren();
+  } else {
+    while (el.firstChild) {
+      el.removeChild(el.firstChild);
+    }
+  }
 }

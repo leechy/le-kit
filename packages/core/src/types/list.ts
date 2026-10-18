@@ -9,13 +9,23 @@ export interface LeColumn {
    * Can reference top-level LeOption properties ('label', 'value', 'description', 'id', etc.)
    * or nested properties inside the item's `data` object (e.g. 'data.role', 'data.email', 'email').
    */
-  key: string;
+  key?: string;
+
+  /**
+   * Column identifier (alias for key).
+   */
+  id?: string;
 
   /**
    * Display label for column header.
    * If omitted, capitalized `key` will be used.
    */
   label?: string;
+
+  /**
+   * Display name for column header (alias for label).
+   */
+  name?: string;
 
   /**
    * Type of column data used for formatting and default sorting.
@@ -46,6 +56,7 @@ export interface LeColumn {
 
   /**
    * Text alignment for column cell values.
+   * Defaults to 'right' for number and actions columns, 'left' otherwise.
    */
   align?: 'left' | 'center' | 'right';
 
@@ -80,6 +91,20 @@ export interface LeColumn {
    * If omitted, falls back to list's `allowClearSort` prop (default: true).
    */
   allowClearSort?: boolean;
+
+  /**
+   * Custom cell render function returning JSX / VNode / DOM node or string.
+   * Gives full programmatic control over cell rendering.
+   */
+  render?: (value: any, item: LeOption, column: LeColumn, list: HTMLElement) => any;
+
+  /**
+   * Maximum number of action buttons rendered before overflowing into '...' dropdown.
+   * Applicable when type === 'actions'.
+   * If set to 0, only the overflow menu is visible.
+   * Defaults to 3.
+   */
+  maxVisibleActions?: number;
 }
 
 export type LeListReorderMode = 'none' | 'siblings' | 'nested';
@@ -94,5 +119,118 @@ export interface LeListItemReorderDetail {
   newParentId?: string;
   items: LeOption[];
   originalEvent?: PointerEvent | MouseEvent;
+}
+
+/**
+ * Context provided to action execution handlers and dynamic predicates.
+ */
+export interface LeActionContext {
+  /** Target item on which the action was invoked (if row-specific) */
+  item?: LeOption;
+  /** Currently selected items in the list */
+  selectedItems: LeOption[];
+  /** Currently selected item IDs */
+  selectedIds: string[];
+  /** Reference to the hosting le-list element */
+  list: HTMLElement;
+  /** Source event that triggered the action */
+  event?: Event;
+  /** Row index if applicable */
+  index?: number;
+  /** Count of selected items */
+  count?: number;
+}
+
+/**
+ * Definition of an action that can be performed on list items or the list as a whole.
+ */
+export interface LeListAction {
+  /** Unique action identifier (e.g., 'edit', 'delete', 'create-child', 'duplicate') */
+  id: string;
+
+  /** Display label for 1 item or default (e.g. 'Delete', 'Edit') */
+  label: string;
+
+  /**
+   * Label used when multiple items are selected.
+   * Can be a template string with "{count}" or a function: (count: number) => string.
+   * E.g. "Delete {count} items" or (count) => `Delete ${count} items`
+   */
+  labelMultiple?: string | ((count: number) => string);
+
+  /** Icon name, URL, or emoji (e.g. 'trash', 'pencil', 'plus') */
+  icon?: string;
+
+  /** Semantic color: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | string */
+  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | string;
+
+  /**
+   * Action execution handler. Can be asynchronous.
+   */
+  handler?: (item: LeOption, context: LeActionContext) => void | Promise<void>;
+
+  /**
+   * Dynamic disabled predicate or boolean.
+   */
+  disabled?: boolean | ((item: LeOption, context: LeActionContext) => boolean);
+
+  /**
+   * Dynamic hidden predicate or boolean.
+   */
+  hidden?: boolean | ((item: LeOption, context: LeActionContext) => boolean);
+
+  /**
+   * Selection requirements for external toolbars and multi-selection:
+   * - 'single': Enabled only when exactly 1 item is selected (e.g. 'edit', 'rename')
+   * - 'multiple': Enabled only when 2 or more items are selected (e.g. 'merge', 'compare')
+   * - 'both': Enabled when 1 or more items are selected (e.g. 'delete', 'archive')
+   * - 'none': Enabled only when nothing is selected (e.g. 'select-all')
+   * - 'any': Always enabled, regardless of selection (e.g. 'create-new', 'refresh'); same as not set
+   */
+  selectionMode?: 'single' | 'multiple' | 'both' | 'none' | 'any';
+
+  /**
+   * Visual separator line before or after this action in menus.
+   */
+  separator?: 'before' | 'after' | boolean;
+
+  /** Optional keyboard shortcut display representation (e.g. 'Del', 'Cmd+D') */
+  shortcut?: string;
+
+  /** Optional direct link URL if the action acts as navigation */
+  href?: string;
+  target?: string;
+
+  /** Custom metadata passthrough */
+  data?: Record<string, unknown>;
+}
+
+/**
+ * Event detail payload emitted on 'le-list:action-state'
+ */
+export interface LeListActionStateDetail {
+  listId: string;
+  selectedCount: number;
+  selectedItems: LeOption[];
+  selectedIds: string[];
+  actions: Record<
+    string,
+    {
+      action: LeListAction;
+      enabled: boolean;
+      hidden: boolean;
+      label: string;
+    }
+  >;
+  unloaded?: boolean;
+}
+
+/**
+ * Event detail payload emitted on 'le-list:trigger-action'
+ */
+export interface LeListTriggerActionDetail {
+  action: string;
+  listIds?: string[];
+  source?: HTMLElement;
 }
 

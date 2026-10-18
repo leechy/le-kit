@@ -515,6 +515,9 @@ export function nextFrame(): Promise<void> {
  * Helper that returns a promise resolving on the next resize of the given element.
  */
 export function nextResize(element: HTMLElement): Promise<ResizeObserverEntry> {
+  if (typeof ResizeObserver === 'undefined') {
+    return Promise.resolve({} as ResizeObserverEntry);
+  }
   return new Promise(resolve => {
     const observer = new ResizeObserver(([entry]) => {
       observer.disconnect(); // Remove observer after the first resize to avoid multiple triggers.

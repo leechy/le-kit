@@ -46,16 +46,17 @@ Type: `Promise<void>`
 
 
 
-### `show(x?: number, y?: number) => Promise<void>`
+### `show(x?: number, y?: number, triggerEvent?: MouseEvent | TouchEvent) => Promise<void>`
 
 
 
 #### Parameters
 
-| Name | Type                  | Description |
-| ---- | --------------------- | ----------- |
-| `x`  | `number \| undefined` |             |
-| `y`  | `number \| undefined` |             |
+| Name           | Type                                    | Description |
+| -------------- | --------------------------------------- | ----------- |
+| `x`            | `number \| undefined`                   |             |
+| `y`            | `number \| undefined`                   |             |
+| `triggerEvent` | `MouseEvent \| TouchEvent \| undefined` |             |
 
 #### Returns
 

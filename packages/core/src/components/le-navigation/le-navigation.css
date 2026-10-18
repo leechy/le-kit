@@ -87,6 +87,19 @@
   /* gap is messing with reordering, use padding on items instead */
 }
 
+.nav-separator {
+  height: 1px;
+  background-color: var(--le-color-border, #e5e7eb);
+  margin: var(--le-spacing-1, 4px) var(--le-nav-item-padding-x, 8px);
+  list-style: none;
+  pointer-events: none;
+}
+
+.nav-separator:first-child,
+.nav-separator:last-child {
+  display: none;
+}
+
 .nav-row {
   display: flex;
   align-items: stretch;
@@ -181,7 +194,8 @@
   cursor: var(--le-controls-cursor, pointer);
 }
 
-.nav-vertical:not(.is-dragging) .nav-item:hover {
+.nav-vertical:not(.is-dragging) .nav-item:hover,
+.nav-vertical:not(.is-dragging) .nav-item.is-drag-hovered {
   background: var(--le-nav-hover-bg);
 }
 

@@ -83,7 +83,9 @@ A flexible button component with multiple variants and states.
 
 | Property                 | Attribute                  | Description                                                                                                                      | Type                                                                                                     | Default      |
 | ------------------------ | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------ |
+| `action`                 | `action`                   | Action ID that this button triggers when bound to a list.                                                                        | `string \| undefined`                                                                                    | `undefined`  |
 | `align`                  | `align`                    | Alignment of the button label without the end icon                                                                               | `"center" \| "end" \| "space-between" \| "start"`                                                        | `'center'`   |
+| `bindList`               | `bind-list`                | Bound list ID(s) (comma-separated list of IDs). If omitted, inherits bind-list from the nearest parent <le-toolbar>.             | `string \| undefined`                                                                                    | `undefined`  |
 | `collapse`               | `collapse`                 | Runtime collapse state controlled by responsive containers.                                                                      | `string \| undefined`                                                                                    | `undefined`  |
 | `collapsePriorityOffset` | `collapse-priority-offset` | Relative collapse priority offset for toolbar stepping. Higher numbers collapse earlier while keeping the button visible longer. | `number`                                                                                                 | `100`        |
 | `collapsible`            | `collapsible`              | Enables responsive collapse to icon-only when the toolbar applies `collapse="icon"`.                                             | `boolean`                                                                                                | `false`      |
@@ -143,6 +145,16 @@ Type: `Promise<LeOption>`
 
 
 
+### `refreshActionState() => Promise<void>`
+
+Refreshes the action binding and current enabled/disabled state.
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 
 ## Slots
 
@@ -171,6 +183,7 @@ Type: `Promise<LeOption>`
  - [le-breadcrumbs](../le-breadcrumbs)
  - [le-component](../le-component)
  - [le-empty](../le-empty)
+ - [le-list](../le-list)
  - [le-number-input](../le-number-input)
  - [le-overflow-menu](../le-overflow-menu)
  - [le-popup](../le-popup)
@@ -196,6 +209,7 @@ graph TD;
   le-breadcrumbs --> le-button
   le-component --> le-button
   le-empty --> le-button
+  le-list --> le-button
   le-number-input --> le-button
   le-overflow-menu --> le-button
   le-popup --> le-button

@@ -899,7 +899,226 @@
 
     <br />
 
-    <h3>5. Empty State with empty-* Attributes</h3>
+    <h3>6. Actions System (Item Context Menus, Actions Column &amp; External Toolbar Auto-Binding)</h3>
+    <p>
+      Complete decoupled Actions System:
+      define actions with selection modes and i18n pluralization templates,
+      display them in <b>action columns</b> (with configurable <code>maxVisibleActions</code> and overflow menu),
+      right-click rows for an OS-style <b>item context menu</b>,
+      and auto-bind to an external <code>&lt;le-toolbar bind-list="..."&gt;</code> with dynamic labels and state synchronization.
+    </p>
+
+    <!-- Toolbar bound to the list -->
+    <div style="margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;">
+      <le-toolbar id="demo-actions-toolbar" bind-list="demo-actions-list">
+        <le-button action="item" icon-start="list-item::add-badge" color="primary" variant="solid">New Item</le-button>
+        <le-button action="sub-item" icon-start="list-sub-item::add-badge" color="primary" variant="solid">New Sub Item</le-button>
+        <le-button action="edit" icon-start="edit" variant="outlined">Edit</le-button>
+        <le-button action="duplicate" icon-start="duplicate" variant="outlined">Duplicate</le-button>
+        <le-button action="delete" icon-start="delete" color="danger" variant="outlined">Delete</le-button>
+        <le-button id="btn-toggle-toolbar-binding" variant="clear" style="margin-left: auto;">
+          Detach Toolbar
+        </le-button>
+      </le-toolbar>
+    </div>
+
+    <!-- The List with item-context-menu -->
+    <le-list id="demo-actions-list" item-context-menu selection="multiple" row-separators="borders"></le-list>
+
+    <!-- Real-time Action Event Log -->
+    <div style="margin-top: 12px; padding: 12px; background: var(--le-color-bg-secondary, #f4f4f5); border-radius: var(--le-radius-md, 6px); font-family: monospace; font-size: 13px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <strong>⚡ Live Action Event Log:</strong>
+        <span id="demo-action-status" style="color: var(--le-color-primary, #0066cc);">Ready (select items or right-click rows)</span>
+      </div>
+      <div id="demo-action-log" style="max-height: 80px; overflow-y: auto; color: var(--le-color-text-secondary, #666);">
+        <em>Waiting for actions to trigger...</em>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const actionsList = document.getElementById('demo-actions-list');
+        const actionsToolbar = document.getElementById('demo-actions-toolbar');
+        const toggleBindingBtn = document.getElementById('btn-toggle-toolbar-binding');
+        const logEl = document.getElementById('demo-action-log');
+        const statusEl = document.getElementById('demo-action-status');
+
+        function appendLog(text) {
+          if (!logEl) return;
+          const time = new Date().toLocaleTimeString();
+          const entry = document.createElement('div');
+          entry.textContent = `[${time}] ${text}`;
+          if (logEl.querySelector('em')) logEl.innerHTML = '';
+          logEl.prepend(entry);
+          if (statusEl) statusEl.textContent = text;
+        }
+
+        if (actionsList) {
+          // List-level (Global) Actions
+          actionsList.actions = [
+            {
+              id: 'item',
+              label: 'New Item',
+              icon: 'list-item::add-badge',
+              color: 'primary',
+              selectionMode: 'any',
+              handler: () => appendLog('➕ "New Item" action executed'),
+            },
+            {
+              id: 'sub-item',
+              label: 'New Sub Item',
+              icon: 'list-sub-item::add-badge',
+              color: 'primary',
+              selectionMode: 'single',
+              handler: () => appendLog('➕ "New Item" action executed'),
+            },
+            {
+              id: 'edit',
+              label: 'Edit',
+              icon: 'edit',
+              selectionMode: 'single',
+              handler: (item) => appendLog(`✏️ "Edit" action executed for: ${item.label}`),
+            },
+            {
+              id: 'duplicate',
+              label: 'Duplicate',
+              icon: 'duplicate',
+              selectionMode: 'single',
+              handler: (item) => appendLog(`📋 "Duplicate" action executed for: ${item.label}`),
+            },
+            {
+              id: 'delete',
+              label: 'Delete',
+              labelMultiple: 'Delete {count} items',
+              icon: 'delete',
+              color: 'danger',
+              selectionMode: 'both',
+              handler: (_item, ctx) => appendLog(`🗑️ "Delete" action executed for ${ctx.count} item(s)`),
+            },
+            {
+              id: 'export',
+              label: 'Export Data',
+              icon: 'download',
+              selectionMode: 'both',
+              handler: (_item, ctx) => appendLog(`📤 "Export" executed for ${ctx.count} item(s)`),
+            },
+          ];
+
+          // Columns including actions column and custom rendered column
+          actionsList.columns = [
+            { key: 'label', label: 'Item Name', width: '2fr' },
+            {
+              key: 'data.status',
+              label: 'Status',
+              render: (val, item) => {
+                const colors = {
+                  Published: '#10b981',
+                  Review: '#f59e0b',
+                  Draft: '#6b7280',
+                };
+                const bg = colors[val] || '#6b7280';
+                return `<span style="display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; color: #fff; background: ${bg};">${val}</span>`;
+              },
+            },
+            { key: 'data.owner', label: 'Owner' },
+            { key: 'data.updated', label: 'Last Modified', type: 'date' },
+            {
+              key: 'actions',
+              label: 'Actions',
+              type: 'actions',
+              maxVisibleActions: 2,
+              width: '140px',
+            },
+          ];
+
+          // Sample data with item-level custom actions
+          actionsList.data = [
+            {
+              id: 'item-1',
+              label: 'Production Deployment Service',
+              description: 'Kubernetes production cluster v1.28',
+              icon: 'cloud',
+              color: 'primary',
+              data: { status: 'Published', owner: 'DevOps Lead', updated: '2026-09-01' },
+              actions: [
+                {
+                  id: 'deploy',
+                  label: 'Deploy Now',
+                  icon: 'rocket',
+                  color: 'success',
+                  handler: (item) => appendLog(`🚀 Item-action "Deploy Now" triggered on ${item.label}`),
+                },
+                {
+                  id: 'restart',
+                  label: 'Restart Cluster',
+                  icon: 'reload',
+                  color: 'warning',
+                  handler: (item) => appendLog(`🔄 Item-action "Restart Cluster" triggered on ${item.label}`),
+                },
+              ],
+            },
+            {
+              id: 'item-2',
+              label: 'User Authentication API',
+              description: 'OAuth2 & OIDC microservice',
+              icon: 'lock',
+              color: 'info',
+              data: { status: 'Review', owner: 'Security Team', updated: '2026-09-03' },
+              actions: [
+                {
+                  id: 'audit',
+                  label: 'Run Security Audit',
+                  icon: 'protect',
+                  handler: (item) => appendLog(`🛡️ Item-action "Run Security Audit" triggered on ${item.label}`),
+                },
+              ],
+            },
+            {
+              id: 'item-3',
+              label: 'Billing & Payments Gateway',
+              description: 'Stripe integration backend',
+              icon: 'credit-card',
+              color: 'success',
+              data: { status: 'Published', owner: 'Finance Tech', updated: '2026-08-25' },
+            },
+            {
+              id: 'item-4',
+              label: 'Telemetry Pipeline v2',
+              description: 'OpenTelemetry collector and Jaeger tracing',
+              icon: 'analytics',
+              color: 'warning',
+              data: { status: 'Draft', owner: 'Infra Core', updated: '2026-08-30' },
+            },
+          ];
+
+          actionsList.addEventListener('leAction', (e) => {
+            appendLog(`CustomEvent [leAction]: "${e.detail.action}" on item "${e.detail.item?.label || e.detail.id}"`);
+          });
+
+          if (toggleBindingBtn && actionsToolbar) {
+            let isAttached = true;
+            toggleBindingBtn.addEventListener('click', async () => {
+              if (isAttached) {
+                await actionsToolbar.detachList('demo-actions-list');
+                toggleBindingBtn.textContent = 'Attach Toolbar';
+                appendLog('🔌 Toolbar detached from demo-actions-list (buttons disabled)');
+                isAttached = false;
+              } else {
+                await actionsToolbar.attachList('demo-actions-list');
+                toggleBindingBtn.textContent = 'Detach Toolbar';
+                appendLog('🔗 Toolbar re-attached to demo-actions-list (buttons synchronized)');
+                isAttached = true;
+              }
+            });
+          }
+        }
+      });
+    </script>
+
+    <br />
+
+    <h3>7. Empty State with empty-* Attributes</h3>
     <le-list empty-label="No Members Found"
       empty-message="There are no team members matching your filter criteria. Try adjusting your search query."
       empty-icon="folder"></le-list>
@@ -946,71 +1165,45 @@
     <h2>Icons</h2>
     <h3>New Icons</h3>
 
-    <h4>&lt;le-icon name="tune"&gt;</h4>
+    <h4>&lt;le-icon name="list-sub-item"&gt;</h4>
     <div style="display: flex; align-items: center; gap: 16px;">
       <div style="font-size: 7px;">
         sharp<br />
-        <le-icon name="tune" sharp size="32"></le-icon>
+        <le-icon name="list-sub-item" sharp size="32"></le-icon>
       </div>
       <div style="font-size: 7px;">
         rounded<br />
-        <le-icon name="tune" rounded size="32"></le-icon>
+        <le-icon name="list-sub-item" rounded size="32"></le-icon>
       </div>
       <div style="font-size: 7px;">
         thin<br />
-        <le-icon name="tune" sharp thin size="32"></le-icon>
+        <le-icon name="list-sub-item" sharp thin size="32"></le-icon>
       </div>
       <div style="font-size: 7px;">
         rounded-thin<br />
-        <le-icon name="tune" rounded thin size="32"></le-icon>
+        <le-icon name="list-sub-item" rounded thin size="32"></le-icon>
       </div>
     </div>
     <div style="font-size: 7px;">filled</div>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="tune" sharp filled size="32"></le-icon>
-      <le-icon name="tune" rounded filled size="32"></le-icon>
-      <le-icon name="tune" sharp thin filled size="32"></le-icon>
-      <le-icon name="tune" rounded thin filled size="32"></le-icon>
+      <le-icon name="list-sub-item" sharp filled size="32"></le-icon>
+      <le-icon name="list-sub-item" rounded filled size="32"></le-icon>
+      <le-icon name="list-sub-item" sharp thin filled size="32"></le-icon>
+      <le-icon name="list-sub-item" rounded thin filled size="32"></le-icon>
     </div>
     <div style="font-size: 7px;">masks</div>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="fill" layers="tune" sharp size="32"></le-icon>
-      <le-icon name="fill" layers="tune" rounded size="32"></le-icon>
-      <le-icon name="fill" layers="tune" sharp thin size="32"></le-icon>
-      <le-icon name="fill" layers="tune" rounded thin size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" sharp size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" rounded size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" sharp thin size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" rounded thin size="32"></le-icon>
     </div>
     <div style="font-size: 7px;"><br /></div>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="fill" layers="tune" sharp filled size="32"></le-icon>
-      <le-icon name="fill" layers="tune" rounded filled size="32"></le-icon>
-      <le-icon name="fill" layers="tune" sharp thin filled size="32"></le-icon>
-      <le-icon name="fill" layers="tune" rounded thin filled size="32"></le-icon>
-    </div>
-
-    <h3>New Icons: record, stop and pause</h3>
-    <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="delete" size="32"></le-icon>
-      <le-icon name="delete" rounded size="32"></le-icon>
-      <le-icon name="delete" thin size="32"></le-icon>
-      <le-icon name="delete" rounded thin size="32"></le-icon>
-    </div>
-    <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="delete" filled size="32"></le-icon>
-      <le-icon name="delete" rounded filled size="32"></le-icon>
-      <le-icon name="delete" thin filled size="32"></le-icon>
-      <le-icon name="delete" rounded thin filled size="32"></le-icon>
-    </div>
-    <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="delete"></le-icon>
-      <le-icon name="delete" rounded></le-icon>
-      <le-icon name="delete" thin></le-icon>
-      <le-icon name="delete" rounded thin></le-icon>
-    </div>
-    <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="fill" layers="delete" size="32"></le-icon>
-      <le-icon name="fill" layers="delete" rounded size="32"></le-icon>
-      <le-icon name="fill" layers="delete" thin size="32"></le-icon>
-      <le-icon name="fill" layers="delete" rounded thin size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" sharp filled size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" rounded filled size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" sharp thin filled size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" rounded thin filled size="32"></le-icon>
     </div>
 
     <h3>Folders</h3>
@@ -1127,6 +1320,7 @@
       <span style="display: inline-block; width: 16px;"></span>
       <le-button icon-only="folder::add-badge" filled label="Add to folder"></le-button>
       <le-button icon-start="file-copy::download-badge">Download</le-button>
+      <le-icon name="file::check-badge" thin size="32"></le-icon>
     </div>
 
     <h3>Notification & Text Badges (count, max-count, badge-text, dot)</h3>

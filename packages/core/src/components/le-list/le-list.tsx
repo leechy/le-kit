@@ -1,6 +1,15 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Method, Prop, State, Watch, h } from '@stencil/core';
 import type { LeOption } from '../../types/options';
-import type { LeColumn, LeListItemReorderDetail, LeListReorderMode } from '../../types/list';
+import type {
+  LeColumn,
+  LeListItemReorderDetail,
+  LeListReorderMode,
+  LeListAction,
+  LeActionContext,
+  LeListActionStateDetail,
+} from '../../types/list';
+import { dispatchActionState, subscribeTriggerAction } from '../../utils/action-bus';
+import type { LeOverflowMenuItemSelectDetail } from '../le-overflow-menu/le-overflow-menu';
 import { buildDeclarativeOptionsFromChildren, isEditableTarget, observeNamedSlotPresence, parseOptionInput } from '../../utils/utils';
 import {
   findNodeInTree,
@@ -32,7 +41,7 @@ export class LeList {
    * Can be an array of `LeColumn` objects or a JSON string.
    * If omitted, columns will be automatically generated from data item properties.
    */
-  @Prop() columns: LeColumn[] | string = [];
+  @Prop({ mutable: true }) columns: LeColumn[] | string = [];
 
   /**
    * Whether clicking a sorted column header a 3rd time clears sorting back to unsorted.
@@ -137,6 +146,18 @@ export class LeList {
   @Prop({ reflect: true }) actionChevron: boolean = false;
 
   /**
+   * Actions available for the list items and external components.
+   * Can be an array of `LeListAction` objects or a JSON string.
+   */
+  @Prop({ mutable: true }) actions: LeListAction[] | string = [];
+
+  /**
+   * Whether to enable right-click context menu on item rows with their available actions.
+   * Defaults to false.
+   */
+  @Prop({ reflect: true }) itemContextMenu: boolean = false;
+
+  /**
    * Enables manual drag-and-drop reordering of list row items.
    * - 'none': Disabled (default)
    * - 'siblings': Can only reorder within current parent/root siblings
@@ -174,6 +195,8 @@ export class LeList {
 
   @State() parsedOptions: LeOption[] = [];
   @State() parsedColumns: LeColumn[] = [];
+  @State() parsedActions: LeListAction[] = [];
+  @State() contextMenuItemActions: LeOption[] = [];
   @State() sortColumnKey: string | undefined;
   @State() sortDirection: 'asc' | 'desc' | undefined;
   @State() focusedRowId?: string;
@@ -191,6 +214,9 @@ export class LeList {
   @State() private ghostY: number = 0;
   @State() private isDeclarativeMode: boolean = false;
 
+  private contextMenuTargetItem?: LeOption;
+  private rowContextMenuRef?: HTMLElement;
+  private unsubscribeTriggerAction?: () => void;
   private visualFocusActive: boolean = false;
   private dragSelectionStartId?: string;
   private pendingDragId?: string;
@@ -220,6 +246,11 @@ export class LeList {
    * Emitted when a row action or link is executed.
    */
   @Event() leAction!: EventEmitter<{ action?: string; item: LeOption; id: string; originalEvent?: Event }>;
+
+  /**
+   * Emitted when available actions or selection state changes on the list.
+   */
+  @Event() leActionStateChange!: EventEmitter<LeListActionStateDetail>;
 
   /**
    * Emitted when column sorting changes.
@@ -264,6 +295,12 @@ export class LeList {
   @Watch('columns')
   async handleColumnsChange() {
     await this.loadColumns();
+  }
+
+  @Watch('actions')
+  handleActionsChange() {
+    this.parseActions();
+    this.emitActionState();
   }
 
   async componentWillLoad() {
@@ -523,16 +560,22 @@ export class LeList {
     }
   }
 
-  private emitSelectionChange() {
+  private getSelectedItems(): LeOption[] {
     const visibleRows = this.getVisibleFlatRows();
     const selectedSet = new Set(this.selectedRowIds);
-    const selectedItems = visibleRows.filter(r => selectedSet.has(r.id)).map(r => r.item);
+    return visibleRows.filter(r => selectedSet.has(r.id)).map(r => r.item);
+  }
+
+  private emitSelectionChange() {
+    const selectedItems = this.getSelectedItems();
 
     this.leSelectionChange.emit({
       selectedIds: [...this.selectedRowIds],
       selectedItems,
       isMultiple: this.selection === 'multiple',
     });
+
+    this.emitActionState();
   }
 
   private selectRange(fromId: string, toId: string) {
@@ -659,6 +702,343 @@ export class LeList {
     return { success: true, detail };
   }
 
+  private findItemById(id: string): LeOption | undefined {
+    const visibleRows = this.getVisibleFlatRows();
+    const row = visibleRows.find(r => r.id === id || String(r.item.id ?? r.item.value ?? '') === id);
+    if (row) return row.item;
+
+    if (Array.isArray(this.data)) {
+      const found = this.data.find((item: any) => String(item.id ?? item.value ?? '') === id);
+      if (found) return found;
+    }
+    return undefined;
+  }
+
+  /**
+   * Programmatically set the currently selected row IDs.
+   */
+  @Method()
+  async setSelectedRows(ids: string[]): Promise<void> {
+    this.selectedRowIds = [...ids];
+    this.emitSelectionChange();
+  }
+
+  /**
+   * Programmatically execute an action on target items or current selection.
+   */
+  @Method()
+  async executeAction(
+    actionId: string,
+    itemOrId?: string | LeOption | LeOption[],
+    event?: Event,
+  ): Promise<boolean> {
+    const selItems = this.getSelectedItems();
+    let targetItem: LeOption | undefined;
+
+    if (typeof itemOrId === 'string') {
+      targetItem = this.findItemById(itemOrId);
+    } else if (itemOrId) {
+      targetItem = Array.isArray(itemOrId) ? itemOrId[0] : itemOrId;
+    } else if (selItems.length > 0) {
+      targetItem = selItems[0];
+    }
+
+    let action: LeListAction | undefined;
+    if (targetItem) {
+      const itemActions = this.getResolvedItemActions(targetItem, selItems);
+      action = itemActions.find(a => a.id === actionId);
+    }
+    if (!action) {
+      action = this.parsedActions.find(a => a.id === actionId);
+    }
+
+    if (!action) {
+      console.warn(`[le-list] Action "${actionId}" not found.`);
+      return false;
+    }
+
+    if (this.isActionDisabled(action, targetItem)) {
+      return false;
+    }
+
+    // OS-like targeting: an explicit array is used as is; a single row that belongs to the
+    // current selection (or no row at all) acts on the whole selection; any other row acts alone.
+    const targetInSelection = !!targetItem && selItems.includes(targetItem);
+    const allTargets = Array.isArray(itemOrId)
+      ? itemOrId
+      : !itemOrId || targetInSelection
+        ? selItems
+        : targetItem
+          ? [targetItem]
+          : [];
+
+    const targetId = targetItem ? String(targetItem.id ?? targetItem.value ?? '') : '';
+
+    this.leAction.emit({
+      action: actionId,
+      item: targetItem || (allTargets[0] ?? ({} as LeOption)),
+      id: targetId,
+      originalEvent: event,
+    });
+
+    if (action.handler) {
+      const ctx: LeActionContext = {
+        item: targetItem,
+        selectedItems: allTargets,
+        selectedIds: allTargets.map(t => String(t.id ?? t.value ?? '')),
+        list: this.el,
+        event,
+        count: allTargets.length,
+      };
+      await action.handler(targetItem || allTargets[0] || ({} as LeOption), ctx);
+    }
+    return true;
+  }
+
+  /**
+   * Retrieve currently available actions, optionally filtered to target item or current selection.
+   */
+  @Method()
+  async getAvailableActions(target?: string | LeOption | boolean): Promise<LeListAction[]> {
+    let targetItem: LeOption | undefined;
+    if (typeof target === 'string') {
+      targetItem = this.findItemById(target);
+    } else if (target && typeof target === 'object') {
+      targetItem = target;
+    } else if (target === true) {
+      const sel = this.getSelectedItems();
+      targetItem = sel[0];
+    }
+
+    if (targetItem) {
+      const sel = this.getSelectedItems();
+      return this.getResolvedItemActions(targetItem, sel);
+    }
+
+    // Otherwise, resolve across list actions and selection
+    const sel = this.getSelectedItems();
+    if (sel.length > 0) {
+      return this.getResolvedItemActions(sel[0], sel);
+    }
+
+    const count = this.selectedRowIds.length;
+    return this.parsedActions
+      .filter(act => !this.isActionHidden(act))
+      .map(act => ({
+        ...act,
+        disabled: this.isActionDisabled(act),
+        label: this.resolveActionLabel(act, count),
+      }));
+  }
+
+  /**
+   * Programmatically attach this list to an external toolbar by ID or element reference.
+   */
+  @Method()
+  async attachToToolbar(toolbarIdOrEl: string | HTMLElement): Promise<void> {
+    const toolbar = typeof toolbarIdOrEl === 'string'
+      ? document.getElementById(toolbarIdOrEl) as any
+      : toolbarIdOrEl as any;
+    if (toolbar && typeof toolbar.attachList === 'function' && this.el.id) {
+      await toolbar.attachList(this.el.id);
+    }
+  }
+
+  /**
+   * Programmatically detach this list from an external toolbar by ID or element reference.
+   */
+  @Method()
+  async detachFromToolbar(toolbarIdOrEl: string | HTMLElement): Promise<void> {
+    const toolbar = typeof toolbarIdOrEl === 'string'
+      ? document.getElementById(toolbarIdOrEl) as any
+      : toolbarIdOrEl as any;
+    if (toolbar && typeof toolbar.detachList === 'function' && this.el.id) {
+      await toolbar.detachList(this.el.id);
+    }
+  }
+
+  private parseActions() {
+    if (Array.isArray(this.actions)) {
+      this.parsedActions = this.actions;
+      return;
+    }
+    if (typeof this.actions === 'string' && this.actions.trim() !== '') {
+      try {
+        const parsed = JSON.parse(this.actions);
+        if (Array.isArray(parsed)) {
+          this.parsedActions = parsed;
+          return;
+        }
+      } catch (err) {
+        console.warn('[le-list] Failed to parse actions JSON string:', err);
+      }
+    }
+    this.parsedActions = [];
+  }
+
+  private resolveActionLabel(action: LeListAction, count: number): string {
+    if (count > 1 && action.labelMultiple) {
+      if (typeof action.labelMultiple === 'function') {
+        return action.labelMultiple(count);
+      }
+      if (typeof action.labelMultiple === 'string') {
+        return action.labelMultiple.replace('{count}', String(count));
+      }
+      return `${action.label} (${count})`;
+    }
+    return action.label;
+  }
+
+  private isActionDisabled(action: LeListAction, item?: LeOption): boolean {
+    if (item?.disabled) return true;
+
+    const count = this.selectedRowIds.length;
+    const mode = action.selectionMode;
+
+    if (mode === 'single' && count !== 1) {
+      return true;
+    }
+    if (mode === 'multiple' && count <= 1) {
+      return true;
+    }
+    if (mode === 'both' && count < 1) {
+      return true;
+    }
+    if (mode === 'none' && count !== 0) {
+      return true;
+    }
+
+    if (typeof action.disabled === 'function') {
+      const baseItem = item || (this.getSelectedItems()[0] ?? ({} as LeOption));
+      const ctx: LeActionContext = {
+        item: baseItem,
+        selectedItems: this.getSelectedItems(),
+        selectedIds: this.selectedRowIds,
+        list: this.el,
+        count,
+      };
+      const hybridItem = Object.assign(Object.create(baseItem), ctx);
+      return action.disabled(hybridItem, ctx);
+    }
+
+    return !!action.disabled;
+  }
+
+  private isActionHidden(action: LeListAction, item?: LeOption): boolean {
+    if (typeof action.hidden === 'function') {
+      const count = this.selectedRowIds.length;
+      const baseItem = item || (this.getSelectedItems()[0] ?? ({} as LeOption));
+      const ctx: LeActionContext = {
+        item: baseItem,
+        selectedItems: this.getSelectedItems(),
+        selectedIds: this.selectedRowIds,
+        list: this.el,
+        count,
+      };
+      const hybridItem = Object.assign(Object.create(baseItem), ctx);
+      return action.hidden(hybridItem, ctx);
+    }
+    return !!action.hidden;
+  }
+
+  private getResolvedItemActions(item?: LeOption, _selectedItems: LeOption[] = []): LeListAction[] {
+    const itemActionsRaw = item && Array.isArray((item as any).actions) ? (item as any).actions : [];
+
+    // 1. Item-level actions FIRST
+    const itemActions: LeListAction[] = [];
+    for (const raw of itemActionsRaw) {
+      if (typeof raw === 'string') {
+        const found = this.parsedActions.find(a => a.id === raw);
+        if (found) itemActions.push(found);
+      } else if (raw && typeof raw === 'object' && raw.id) {
+        const base = this.parsedActions.find(a => a.id === raw.id) || {};
+        itemActions.push({ ...base, ...raw });
+      }
+    }
+
+    // 2. List-level actions SECOND (excluding any overridden by item-level)
+    const itemActionIds = new Set(itemActions.map(a => a.id));
+    const listActions: LeListAction[] = this.parsedActions.filter(a => !itemActionIds.has(a.id));
+
+    const combined: LeListAction[] = [...itemActions];
+
+    // If both exist, add separator before first list-level action
+    if (itemActions.length > 0 && listActions.length > 0) {
+      const firstList = listActions[0];
+      const withSep: LeListAction = {
+        ...firstList,
+        separator: firstList.separator ?? 'before',
+      };
+      combined.push(withSep, ...listActions.slice(1));
+    } else {
+      combined.push(...listActions);
+    }
+
+    const count = this.selectedRowIds.length;
+    // Filter hidden and resolve labels and disabled state
+    const visibleActions = combined.filter(act => !this.isActionHidden(act, item));
+
+    return visibleActions.map((act, index) => {
+      let sep = act.separator;
+      if (index === 0 && (sep === 'before' || sep === true)) {
+        sep = undefined;
+      } else if (index === visibleActions.length - 1 && sep === 'after') {
+        sep = undefined;
+      }
+      return {
+        ...act,
+        label: this.resolveActionLabel(act, count),
+        disabled: this.isActionDisabled(act, item),
+        separator: sep,
+      };
+    });
+  }
+
+  private emitActionState() {
+    if (!this.el) return;
+    const listId = this.el.id || '';
+    const selItems = this.getSelectedItems();
+    const count = selItems.length;
+
+    const actionsMap: Record<string, LeListAction> = {};
+    for (const act of this.parsedActions) {
+      actionsMap[act.id] = act;
+    }
+    for (const item of selItems) {
+      if (Array.isArray((item as any).actions)) {
+        for (const act of (item as any).actions) {
+          if (typeof act === 'object' && act.id) {
+            actionsMap[act.id] = act as LeListAction;
+          }
+        }
+      }
+    }
+
+    const actionStates: LeListActionStateDetail['actions'] = {};
+    for (const [id, act] of Object.entries(actionsMap)) {
+      const disabled = this.isActionDisabled(act, selItems[0]);
+      const hidden = this.isActionHidden(act, selItems[0]);
+      const label = this.resolveActionLabel(act, count);
+      actionStates[id] = {
+        action: act,
+        enabled: !disabled && !hidden,
+        hidden,
+        label,
+      };
+    }
+
+    const detail: LeListActionStateDetail = {
+      listId,
+      selectedCount: count,
+      selectedItems: selItems,
+      selectedIds: [...this.selectedRowIds],
+      actions: actionStates,
+    };
+
+    this.leActionStateChange.emit(detail);
+    dispatchActionState(this.el, detail);
+  }
+
   private get activeReorderMode(): LeListReorderMode {
     const val: any = this.reorder;
     if (typeof val === 'boolean') {
@@ -683,7 +1063,8 @@ export class LeList {
   private handleRowPointerDown = (e: PointerEvent, item: LeOption, id: string) => {
     if (e.button !== 0) return;
 
-    if ((e.target as HTMLElement).closest('.le-list-row-toggle')) {
+    // Toggles and action controls handle their own clicks: no selection change or drag start
+    if ((e.target as HTMLElement).closest('.le-list-row-toggle, .le-list-actions-cell, .le-list-actions-overflow')) {
       return;
     }
 
@@ -1276,6 +1657,48 @@ export class LeList {
     }
   };
 
+  private handleRowContextMenu = (e: MouseEvent, item: LeOption, id: string) => {
+    if (!this.itemContextMenu) return;
+    if (item.disabled) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    // OS-style behavior:
+    // If clicked row is NOT in selection, select it exclusively.
+    // If it IS already in selection, preserve the multi-selection.
+    if (!this.selectedRowIds.includes(id)) {
+      this.selectedRowIds = [id];
+      this.focusedRowId = id;
+      this.emitSelectionChange();
+    }
+
+    const selItems = this.getSelectedItems();
+    const actions = this.getResolvedItemActions(item, selItems);
+    if (!actions || actions.length === 0) return;
+
+    const count = this.selectedRowIds.length;
+    this.contextMenuItemActions = actions.map((act, index) => ({
+      id: act.id,
+      label: this.resolveActionLabel(act, count),
+      iconStart: act.icon,
+      color: act.color,
+      disabled: this.isActionDisabled(act, item),
+      separator:
+        index === 0 && (act.separator === 'before' || act.separator === true)
+          ? undefined
+          : index === actions.length - 1 && act.separator === 'after'
+          ? undefined
+          : act.separator,
+    }));
+    this.contextMenuTargetItem = item;
+
+    if (this.rowContextMenuRef) {
+      (this.rowContextMenuRef as any).items = this.contextMenuItemActions;
+      void (this.rowContextMenuRef as any).show(e.clientX, e.clientY, e);
+    }
+  };
+
   connectedCallback() {
     this.setupChildrenObserver();
     this.disconnectSlotObserver = observeNamedSlotPresence(
@@ -1285,15 +1708,33 @@ export class LeList {
         this.slotPresence = { ...presence };
       },
     );
+    this.unsubscribeTriggerAction = subscribeTriggerAction(this.el, detail => {
+      if (detail.listIds && detail.listIds.length > 0) {
+        if (!this.el.id || !detail.listIds.includes(this.el.id)) {
+          return;
+        }
+      }
+      void this.executeAction(detail.action);
+    });
   }
 
   disconnectedCallback() {
     this.childrenObserver?.disconnect();
     this.disconnectSlotObserver?.();
+    this.unsubscribeTriggerAction?.();
     window.removeEventListener('pointermove', this.handleGlobalPointerMove);
     window.removeEventListener('pointerup', this.handleGlobalPointerUp);
     window.removeEventListener('pointercancel', this.handleGlobalPointerUp);
     this.clearAutoExpandTimer();
+
+    dispatchActionState(this.el, {
+      listId: this.el.id || '',
+      selectedCount: 0,
+      selectedItems: [],
+      selectedIds: [],
+      actions: {},
+      unloaded: true,
+    });
   }
 
   private setupChildrenObserver() {
@@ -1346,6 +1787,8 @@ export class LeList {
     }
 
     await this.loadColumns();
+    this.parseActions();
+    this.emitActionState();
   }
 
   private async loadColumns() {
@@ -1536,7 +1979,7 @@ export class LeList {
   private renderHeaderCell(col: LeColumn, colIndex: number) {
     const isSorted = this.sortColumnKey === col.key && !!this.sortDirection;
     const isRightAligned = col.align === 'right' || (col.type === 'number' && !col.align);
-    const alignClass = `align-${col.align || (col.type === 'number' ? 'right' : 'left')}`;
+    const alignClass = `align-${col.align || (col.type === 'number' || col.type === 'actions' ? 'right' : 'left')}`;
     const isColOdd = colIndex % 2 !== 0;
 
     const iconPos: 'start' | 'end' | 'none' =
@@ -1558,7 +2001,8 @@ export class LeList {
       </span>
     ) : null;
 
-    const headerLabel = col.label || this.capitalize(col.key.replace('data.', ''));
+    const keyStr = col.key || col.id || '';
+    const headerLabel = col.label || (col as any).name || (keyStr ? this.capitalize(keyStr.replace('data.', '')) : '');
 
     return (
       <div
@@ -1592,10 +2036,23 @@ export class LeList {
   }
 
   private renderCellValue(col: LeColumn, item: LeOption) {
-    const rawVal = this.getItemValue(item, col.key);
+    const colKey = col.key || col.id || '';
+    const rawVal = colKey ? this.getItemValue(item, colKey) : undefined;
+
+    if (col.render) {
+      const rendered = col.render(rawVal, item, col, this.el);
+      if (typeof rendered === 'string' && rendered.includes('<')) {
+        return <span class="le-list-cell-custom" innerHTML={rendered} />;
+      }
+      return rendered;
+    }
 
     if (col.format) {
       return col.format(rawVal, item);
+    }
+
+    if (col.type === 'actions') {
+      return this.renderActionsCell(col, item);
     }
 
     if (rawVal === undefined || rawVal === null) {
@@ -1649,6 +2106,82 @@ export class LeList {
     }
 
     return String(rawVal);
+  }
+
+  private renderActionsCell(col: LeColumn, item: LeOption) {
+    const actions = this.getResolvedItemActions(item);
+    if (!actions || actions.length === 0) return null;
+
+    const maxVisible = col.maxVisibleActions !== undefined ? col.maxVisibleActions : 3;
+
+    if (maxVisible === 0) {
+      return (
+        <div class="le-list-actions-cell" onClick={e => e.stopPropagation()}>
+          {this.renderActionsOverflowMenu(actions, item)}
+        </div>
+      );
+    }
+
+    const visibleActions = actions.slice(0, maxVisible);
+    const overflowActions = actions.slice(maxVisible);
+
+    return (
+      <div class="le-list-actions-cell" onClick={e => e.stopPropagation()}>
+        {visibleActions.map(action => {
+          const disabled = this.isActionDisabled(action, item);
+          return (
+            <le-button
+              variant="clear"
+              color={action.color as any}
+              disabled={disabled}
+              title={action.label}
+              aria-label={action.label}
+              iconOnly={action.icon}
+              onClick={(e: any) => {
+                e.stopPropagation();
+                if (!disabled) {
+                  void this.executeAction(action.id, item, e);
+                }
+              }}
+            >
+              {!action.icon && action.label}
+            </le-button>
+          );
+        })}
+        {overflowActions.length > 0 && this.renderActionsOverflowMenu(overflowActions, item)}
+      </div>
+    );
+  }
+
+  private renderActionsOverflowMenu(actions: LeListAction[], item: LeOption) {
+    const menuItems: LeOption[] = actions.map((act, index) => ({
+      id: act.id,
+      label: act.label,
+      iconStart: act.icon,
+      color: act.color,
+      disabled: this.isActionDisabled(act, item),
+      separator:
+        index === 0 && (act.separator === 'before' || act.separator === true)
+          ? undefined
+          : index === actions.length - 1 && act.separator === 'after'
+          ? undefined
+          : act.separator,
+    }));
+
+    return (
+      <le-overflow-menu
+        class="le-list-actions-overflow"
+        items={menuItems}
+        position="bottom"
+        align="end"
+        icon="ellipsis-horizontal"
+        triggerAriaLabel="More actions"
+        onClick={(e: MouseEvent) => e.stopPropagation()}
+        onLeOverflowMenuItemSelect={(e: CustomEvent<LeOverflowMenuItemSelectDetail>) => {
+          void this.executeAction(e.detail.id, item, e.detail.originalEvent);
+        }}
+      />
+    );
   }
 
   private getChildItems(item: LeOption): LeOption[] {
@@ -1805,11 +2338,12 @@ export class LeList {
           onPointerDown={(e) => this.handleRowPointerDown(e, item, id)}
           onPointerEnter={(e) => this.handleRowPointerEnter(e, item, id)}
           onClick={(e) => this.handleRowClick(e, item, id)}
+          onContextMenu={(e) => this.handleRowContextMenu(e, item, id)}
         >
           {visibleColumns.map((col, colIndex) => {
             const isFirstCol = colIndex === 0;
             const isColOdd = colIndex % 2 !== 0;
-            const alignClass = `align-${col.align || (col.type === 'number' ? 'right' : 'left')}`;
+            const alignClass = `align-${col.align || (col.type === 'number' || col.type === 'actions' ? 'right' : 'left')}`;
             const indentCalc = `calc(var(--le-list-item-padding-x) + ${depth} * var(--le-list-item-indent))`;
 
             return (
@@ -1908,11 +2442,12 @@ export class LeList {
       const isHidden = !!col.hidden;
       const isNonToggleable = col.toggleable === false;
       const isLastRemainingVisible = !isHidden && visibleCount <= 1;
+      const colKey = col.key || col.id || '';
 
       return {
-        id: col.key,
-        value: col.key,
-        label: col.label || this.capitalize(col.key.replace('data.', '')),
+        id: colKey,
+        value: colKey,
+        label: col.label || col.name || (colKey ? this.capitalize(colKey.replace('data.', '')) : ''),
         checked: !isHidden,
         disabled: isNonToggleable || isLastRemainingVisible,
       };
@@ -2105,6 +2640,15 @@ export class LeList {
                   ? this.renderEmptyState()
                   : displayOptions.map((item, rowIndex) => this.renderRowItem(item, 0, String(rowIndex), true, isHierarchical))}
               </div>
+              {this.itemContextMenu && (
+                <le-context-menu
+                  ref={el => (this.rowContextMenuRef = el as any)}
+                  items={this.contextMenuItemActions}
+                  onLeContextMenuSelect={(e: CustomEvent) => {
+                    void this.executeAction(e.detail.id, this.contextMenuTargetItem, e.detail.originalEvent);
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -2120,7 +2664,7 @@ export class LeList {
           >
             {visibleColumns.map((col, colIndex) => {
               const isFirstCol = colIndex === 0;
-              const alignClass = `align-${col.align || (col.type === 'number' ? 'right' : 'left')}`;
+              const alignClass = `align-${col.align || (col.type === 'number' || col.type === 'actions' ? 'right' : 'left')}`;
               const draggedNode = findNodeInTree(displayOptions, this.activeDragId || this.pendingDragId || '');
               const draggedDepth = draggedNode ? getNodeDepth(displayOptions, String(draggedNode.item.id ?? draggedNode.item.value ?? '')) : 0;
               const hasChildren = this.pendingDragItem && Array.isArray(this.pendingDragItem.children) && this.pendingDragItem.children.length > 0;

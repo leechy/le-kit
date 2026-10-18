@@ -11,6 +11,7 @@ import {
   h,
   Host,
   Listen,
+  Fragment,
 } from '@stencil/core';
 import { LeOption } from '../../types/options';
 import {
@@ -2151,156 +2152,167 @@ export class LeNavigation {
                   ? { href: item.href, target: item.target, role: 'treeitem' }
                   : { type: 'button', role: 'treeitem' };
               const isDraggedNode = this.isDraggingActive && this.activeDragId === id;
+              const prevHadSepAfter = index > 0 && filtered[index - 1].separator === 'after';
+              const hasSepBefore =
+                index > 0 &&
+                !prevHadSepAfter &&
+                (item.separator === 'before' || item.separator === true);
+              const hasSepAfter =
+                index < filtered.length - 1 &&
+                item.separator === 'after';
 
               // Single interactive control for the whole item row
               return (
-                <li
-                  class={classnames('nav-node', {
-                    'disabled': item.disabled,
-                    selected,
-                    open,
-                    'has-children': hasChildren,
-                    'is-dragged-node': isDraggedNode,
-                    [`color-${item.color}`]: !!item.color,
-                  })}
-                  key={id}
-                  role="none"
-                >
-                  {isDropTarget && this.dropPosition === 'before' && (
-                    <div class="reorder-drop-line line-before" style={{ left: dropLinePaddingLeft }} />
-                  )}
-                  <TagType
-                    class={classnames(
-                      'nav-item',
-                      {
-                        'disabled': item.disabled,
-                        'focused': isFocused && this.showFocusRing,
-                        'has-children': hasChildren,
-                        'selected': selected,
-                        'reorder-target-inside': isDropTarget && this.dropPosition === 'inside',
-                        'is-dragged-item': isDraggedNode,
-                      },
-                      item.className,
-                    )}
-                    onMouseEnter={() => this.handleMouseEnterItem(id)}
-                    onPointerDown={(e: PointerEvent) => this.handlePointerDownItem(e, item, id)}
-                    onDragStart={(e: Event) => e.preventDefault()}
-                    part={itemPart}
-                    data-nav-id={id}
-                    data-parent-id={parentId ?? ''}
-                    data-depth={String(depth)}
-                    data-has-children={hasChildren ? 'true' : 'false'}
-                    data-open={open ? 'true' : 'false'}
-                    data-submenu-root={submenuRoot ?? submenuId ?? ''}
-                    data-auto-activatable={autoActivatable ? 'true' : 'false'}
-                    aria-disabled={item.disabled ? 'true' : undefined}
-                    aria-expanded={hasChildren ? (open ? 'true' : 'false') : undefined}
-                    tabIndex={item.disabled ? -1 : isFocused ? 0 : isDefaultTabStop ? 0 : -1}
-                    style={{
-                      paddingLeft,
-                    }}
-                    {...attrs}
-                    onFocus={() => this.handleInteractiveFocus(id)}
-                    onClick={(e: MouseEvent) => {
-                      if (item.disabled) return;
-                      if (this.dragJustEnded) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        return;
-                      }
-                      // If has children and click is on arrow, toggle children, else activate
-                      if (hasChildren && this.isToggleClick(e)) {
-                        this.handleToggle(e, item, id);
-                      } else {
-                        this.handleItemSelect(e, item, id, closePopover);
-                      }
-                    }}
+                <Fragment>
+                  {hasSepBefore && <li class="nav-separator" role="separator" aria-hidden="true" key={`sep-before-${id}`} />}
+                  <li
+                    class={classnames('nav-node', {
+                      'disabled': item.disabled,
+                      selected,
+                      open,
+                      'has-children': hasChildren,
+                      'is-dragged-node': isDraggedNode,
+                      [`color-${item.color}`]: !!item.color,
+                    })}
+                    key={id}
+                    role="none"
                   >
-                    {useLeadingToggleSlot && hasChildren && (
-                      <span
-                        class={classnames('nav-toggle', { open })}
-                        aria-label={open ? 'Collapse' : 'Expand'}
-                        aria-expanded={open ? 'true' : 'false'}
-                        tabIndex={-1}
-                        onClick={e => {
-                          // Only handle toggle, don't bubble to button
+                    {isDropTarget && this.dropPosition === 'before' && (
+                      <div class="reorder-drop-line line-before" style={{ left: dropLinePaddingLeft }} />
+                    )}
+                    <TagType
+                      class={classnames(
+                        'nav-item',
+                        {
+                          'disabled': item.disabled,
+                          'focused': isFocused && this.showFocusRing,
+                          'has-children': hasChildren,
+                          'selected': selected,
+                          'reorder-target-inside': isDropTarget && this.dropPosition === 'inside',
+                          'is-dragged-item': isDraggedNode,
+                        },
+                        item.className,
+                      )}
+                      onMouseEnter={() => this.handleMouseEnterItem(id)}
+                      onPointerDown={(e: PointerEvent) => this.handlePointerDownItem(e, item, id)}
+                      onDragStart={(e: Event) => e.preventDefault()}
+                      part={itemPart}
+                      data-nav-id={id}
+                      data-parent-id={parentId ?? ''}
+                      data-depth={String(depth)}
+                      data-has-children={hasChildren ? 'true' : 'false'}
+                      data-open={open ? 'true' : 'false'}
+                      data-submenu-root={submenuRoot ?? submenuId ?? ''}
+                      data-auto-activatable={autoActivatable ? 'true' : 'false'}
+                      aria-disabled={item.disabled ? 'true' : undefined}
+                      aria-expanded={hasChildren ? (open ? 'true' : 'false') : undefined}
+                      tabIndex={item.disabled ? -1 : isFocused ? 0 : isDefaultTabStop ? 0 : -1}
+                      style={{
+                        paddingLeft,
+                      }}
+                      {...attrs}
+                      onFocus={() => this.handleInteractiveFocus(id)}
+                      onClick={(e: MouseEvent) => {
+                        if (item.disabled) return;
+                        if (this.dragJustEnded) {
+                          e.preventDefault();
                           e.stopPropagation();
-                          this.handleToggle(e as any, item, id);
-                        }}
-                      >
-                        <le-icon
-                          name="chevron-down"
-                          class={classnames('nav-chevron', { open })}
-                          aria-hidden="true"
-                        />
+                          return;
+                        }
+                        // If has children and click is on arrow, toggle children, else activate
+                        if (hasChildren && this.isToggleClick(e)) {
+                          this.handleToggle(e, item, id);
+                        } else {
+                          this.handleItemSelect(e, item, id, closePopover);
+                        }
+                      }}
+                    >
+                      {useLeadingToggleSlot && hasChildren && (
+                        <span
+                          class={classnames('nav-toggle', 'nav-toggle--start', { open })}
+                          aria-label={open ? 'Collapse' : 'Expand'}
+                          aria-expanded={open ? 'true' : 'false'}
+                          tabIndex={-1}
+                          onClick={e => {
+                            e.stopPropagation();
+                            this.handleToggle(e as any, item, id);
+                          }}
+                        >
+                          <le-icon
+                            name="chevron-down"
+                            class={classnames('nav-chevron', { open })}
+                            aria-hidden="true"
+                          />
+                        </span>
+                      )}
+                      {useLeadingToggleSlot && !hasChildren && (
+                        <span class="nav-toggle-spacer" aria-hidden="true" />
+                      )}
+                      {hasCheckableItems &&
+                        (item.checked ? (
+                          <le-icon name="check" class="nav-check-icon" aria-hidden="true" />
+                        ) : (
+                          <span class="nav-check-spacer" aria-hidden="true" />
+                        ))}
+                      {item.iconStart && (
+                        <span class="nav-icon" aria-hidden="true">
+                          {this.renderIcon(item.iconStart)}
+                        </span>
+                      )}
+                      <span class="nav-text">
+                        <span class="nav-label">{this.renderLabel(item.label)}</span>
+                        {item.description && <span class="nav-description">{item.description}</span>}
                       </span>
+                      {item.iconEnd && (
+                        <span class="nav-icon nav-icon-end" aria-hidden="true">
+                          {this.renderIcon(item.iconEnd)}
+                        </span>
+                      )}
+                      {topLevelEndToggles && hasChildren && (
+                        <span
+                          class={classnames('nav-toggle', 'nav-toggle--end', { open })}
+                          aria-label={open ? 'Collapse' : 'Expand'}
+                          aria-expanded={open ? 'true' : 'false'}
+                          tabIndex={-1}
+                          onClick={e => {
+                            e.stopPropagation();
+                            this.handleToggle(e as any, item, id);
+                          }}
+                        >
+                          <le-icon
+                            name="chevron-down"
+                            class={classnames('nav-chevron', { open, end: true })}
+                            aria-hidden="true"
+                          />
+                        </span>
+                      )}
+                      {this.showReorderHandle && this.activeReorderMode !== 'none' && (
+                        <span class="nav-icon nav-reorder-handle" aria-hidden="true">
+                          <le-icon name="reorder-horizontal" />
+                        </span>
+                      )}
+                    </TagType>
+                    {isDropTarget && this.dropPosition === 'after' && (
+                      <div class="reorder-drop-line line-after" style={{ left: dropLinePaddingLeft }} />
                     )}
-                    {useLeadingToggleSlot && !hasChildren && (
-                      <span class="nav-toggle-spacer" aria-hidden="true" />
+                    {hasChildren && (
+                      <le-collapse class="nav-children" closed={!open} noFading={true} role="group">
+                        {this.renderVerticalList(children, {
+                          depth: depth + 1,
+                          pathPrefix: path,
+                          parentId: id,
+                          leadingToggleAncestors:
+                            ancestorLeadingSlots + (useLeadingToggleSlot ? 1 : 0),
+                          autoOpenIds: openFromSearch,
+                          submenuId,
+                          submenuRoot: submenuRoot ?? submenuId,
+                          closePopover,
+                        })}
+                      </le-collapse>
                     )}
-                    {hasCheckableItems &&
-                      (item.checked ? (
-                        <le-icon name="check" class="nav-check-icon" aria-hidden="true" />
-                      ) : (
-                        <span class="nav-check-spacer" aria-hidden="true" />
-                      ))}
-                    {item.iconStart && (
-                      <span class="nav-icon" aria-hidden="true">
-                        {this.renderIcon(item.iconStart)}
-                      </span>
-                    )}
-                    <span class="nav-text">
-                      <span class="nav-label">{this.renderLabel(item.label)}</span>
-                      {item.description && <span class="nav-description">{item.description}</span>}
-                    </span>
-                    {item.iconEnd && (
-                      <span class="nav-icon nav-icon-end" aria-hidden="true">
-                        {this.renderIcon(item.iconEnd)}
-                      </span>
-                    )}
-                    {topLevelEndToggles && hasChildren && (
-                      <span
-                        class={classnames('nav-toggle', 'nav-toggle--end', { open })}
-                        aria-label={open ? 'Collapse' : 'Expand'}
-                        aria-expanded={open ? 'true' : 'false'}
-                        tabIndex={-1}
-                        onClick={e => {
-                          e.stopPropagation();
-                          this.handleToggle(e as any, item, id);
-                        }}
-                      >
-                        <le-icon
-                          name="chevron-down"
-                          class={classnames('nav-chevron', { open, end: true })}
-                          aria-hidden="true"
-                        />
-                      </span>
-                    )}
-                    {this.showReorderHandle && this.activeReorderMode !== 'none' && (
-                      <span class="nav-icon nav-reorder-handle" aria-hidden="true">
-                        <le-icon name="reorder-horizontal" />
-                      </span>
-                    )}
-                  </TagType>
-                  {isDropTarget && this.dropPosition === 'after' && (
-                    <div class="reorder-drop-line line-after" style={{ left: dropLinePaddingLeft }} />
-                  )}
-                  {hasChildren && (
-                    <le-collapse class="nav-children" closed={!open} noFading={true} role="group">
-                      {this.renderVerticalList(children, {
-                        depth: depth + 1,
-                        pathPrefix: path,
-                        parentId: id,
-                        leadingToggleAncestors:
-                          ancestorLeadingSlots + (useLeadingToggleSlot ? 1 : 0),
-                        autoOpenIds: openFromSearch,
-                        submenuId,
-                        submenuRoot: submenuRoot ?? submenuId,
-                        closePopover,
-                      })}
-                    </le-collapse>
-                  )}
-                </li>
+                  </li>
+                  {hasSepAfter && <li class="nav-separator" role="separator" aria-hidden="true" key={`sep-after-${id}`} />}
+                </Fragment>
               );
             })}
           </ul>

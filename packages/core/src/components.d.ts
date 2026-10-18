@@ -16,7 +16,7 @@ import { LeNavigationItemReorderDetail, LeNavigationReorderMode } from "./compon
 import { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 import { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 import { LeActiveContext } from "./components/le-kit/le-kit";
-import { LeActionContext, LeColumn, LeListAction, LeListActionStateDetail, LeListItemReorderDetail, LeListReorderMode } from "./types/list";
+import { LeActionContext, LeColumn, LeListAction, LeListActionStateDetail, LeListCardConfig, LeListItemReorderDetail, LeListLayout, LeListReorderMode } from "./types/list";
 import { Event } from "@stencil/core";
 import { LeNavigationItemReorderDetail as LeNavigationItemReorderDetail1, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode as LeNavigationReorderMode1 } from "./components/le-navigation/le-navigation";
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
@@ -38,7 +38,7 @@ export { LeNavigationItemReorderDetail, LeNavigationReorderMode } from "./compon
 export { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 export { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 export { LeActiveContext } from "./components/le-kit/le-kit";
-export { LeActionContext, LeColumn, LeListAction, LeListActionStateDetail, LeListItemReorderDetail, LeListReorderMode } from "./types/list";
+export { LeActionContext, LeColumn, LeListAction, LeListActionStateDetail, LeListCardConfig, LeListItemReorderDetail, LeListLayout, LeListReorderMode } from "./types/list";
 export { Event } from "@stencil/core";
 export { LeNavigationItemReorderDetail as LeNavigationItemReorderDetail1, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode as LeNavigationReorderMode1 } from "./components/le-navigation/le-navigation";
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
@@ -1376,6 +1376,15 @@ export namespace Components {
          */
         "attachToToolbar": (toolbarIdOrEl: string | HTMLElement) => Promise<void>;
         /**
+          * Card layout configuration: lines of column keys, or a custom render function. Can be a `LeListCardConfig` object or a JSON string. Without it, a card shows the label as the title and the description below.
+         */
+        "card"?: LeListCardConfig | string;
+        /**
+          * Width in pixels below which the 'auto' layout shows cards.
+          * @default 600
+         */
+        "cardBreakpoint": number;
+        /**
           * Whether to allow column reordering via right-click header context menu. Defaults to false.
           * @default false
          */
@@ -1460,6 +1469,16 @@ export namespace Components {
           * @default false
          */
         "itemContextMenu": boolean;
+        /**
+          * Layout of the list: 'table' (default), 'cards', or 'auto' to switch to cards when the list is narrower than `cardBreakpoint`.
+          * @default 'table'
+         */
+        "layout": LeListLayout;
+        /**
+          * Experimental: animates switching between the table and cards with View Transitions, moving each value from its cell to its place in the card.
+          * @default false
+         */
+        "layoutTransition": boolean;
         /**
           * Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
          */
@@ -6147,6 +6166,15 @@ declare namespace LocalJSX {
          */
         "allowColumnToggle"?: boolean;
         /**
+          * Card layout configuration: lines of column keys, or a custom render function. Can be a `LeListCardConfig` object or a JSON string. Without it, a card shows the label as the title and the description below.
+         */
+        "card"?: LeListCardConfig | string;
+        /**
+          * Width in pixels below which the 'auto' layout shows cards.
+          * @default 600
+         */
+        "cardBreakpoint"?: number;
+        /**
           * Whether to allow column reordering via right-click header context menu. Defaults to false.
           * @default false
          */
@@ -6211,6 +6239,16 @@ declare namespace LocalJSX {
           * @default false
          */
         "itemContextMenu"?: boolean;
+        /**
+          * Layout of the list: 'table' (default), 'cards', or 'auto' to switch to cards when the list is narrower than `cardBreakpoint`.
+          * @default 'table'
+         */
+        "layout"?: LeListLayout;
+        /**
+          * Experimental: animates switching between the table and cards with View Transitions, moving each value from its cell to its place in the card.
+          * @default false
+         */
+        "layoutTransition"?: boolean;
         /**
           * Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
          */
@@ -8373,6 +8411,10 @@ declare namespace LocalJSX {
         "showReorderHandle": boolean;
         "maxReorderDepth": number;
         "reorderExpandDelay": number;
+        "layout": LeListLayout;
+        "cardBreakpoint": number;
+        "card": LeListCardConfig | string;
+        "layoutTransition": boolean;
     }
     interface LeMultiselectAttributes {
         "options": LeOption[] | string;

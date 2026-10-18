@@ -962,6 +962,10 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 | `reorderRatios` | `{ top: number; middle: number; bottom: number }` | `{ top: 0.35, middle: 0.3, bottom: 0.35, }` | Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.35, middle: 0.3, bottom: 0.35 }. |
 | `maxReorderDepth` | `number \| undefined` |  | Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50). |
 | `reorderExpandDelay` | `number` | `500` | Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop. |
+| `layout` | `LeListLayout` | `'table'` | Layout of the list: 'table' (default), 'cards', or 'auto' to switch to cards when the list is narrower than `cardBreakpoint`. |
+| `cardBreakpoint` | `number` | `600` | Width in pixels below which the 'auto' layout shows cards. |
+| `card` | `LeListCardConfig \| string \| undefined` |  | Card layout configuration: lines of column keys, or a custom render function. Can be a `LeListCardConfig` object or a JSON string. Without it, a card shows the label as the title and the description below. |
+| `layoutTransition` | `boolean` | `false` | Experimental: animates switching between the table and cards with View Transitions, moving each value from its cell to its place in the card. |
 | `parsedOptions` | `LeOption[]` | `[]` |  |
 | `parsedColumns` | `LeColumn[]` | `[]` |  |
 | `parsedActions` | `LeListAction[]` | `[]` |  |

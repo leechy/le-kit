@@ -105,6 +105,69 @@ export interface LeColumn {
    * Defaults to 3.
    */
   maxVisibleActions?: number;
+
+  /**
+   * Marks the column holding the main name of the entity.
+   * Rendered as the row header in the table and as the large title in cards.
+   */
+  primary?: boolean;
+}
+
+/**
+ * Layout of `<le-list>`:
+ * - 'table': rows with columns (default)
+ * - 'cards': each item is a card, see `LeListCardConfig`
+ * - 'auto': cards when the list is narrower than `cardBreakpoint`, table otherwise
+ */
+export type LeListLayout = 'auto' | 'table' | 'cards';
+
+/**
+ * One line of a card. Values are column keys (or item field paths) rendered the same way as in the table.
+ * An array puts several values next to each other, joined with the card separator (' · ' by default).
+ */
+export interface LeListCardRow {
+  /** Values aligned to the start of the line */
+  start?: string | string[];
+
+  /** Values aligned to the end of the line */
+  end?: string | string[];
+
+  /**
+   * Text size of the line. When not set on any line, the title is the line holding the
+   * `primary` column, or the 1st of 1–2 lines, or the 2nd of 3+ lines.
+   */
+  size?: 'title' | 'default';
+}
+
+/**
+ * Context passed to a custom card render function.
+ */
+export interface LeListCardRenderContext {
+  /**
+   * Renders a value the same way as its table cell, marked with `data-le-field`
+   * so it can move between the table and the card in layout transitions.
+   */
+  value: (key: string) => any;
+
+  /** Reference to the hosting le-list element */
+  list: HTMLElement;
+}
+
+/**
+ * Card layout configuration. Without it, a card shows the label as the title and the description below.
+ */
+export interface LeListCardConfig {
+  /** Card lines from top to bottom */
+  rows?: LeListCardRow[];
+
+  /** Separator between several values in one slot. Defaults to ' · '. */
+  separator?: string;
+
+  /**
+   * Fully custom card content. Return JSX or an HTML string.
+   * Mark elements with `data-le-field="<key>"` to animate them between layouts.
+   */
+  render?: (item: LeOption, context: LeListCardRenderContext) => any;
 }
 
 export type LeListReorderMode = 'none' | 'siblings' | 'nested';

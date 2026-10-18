@@ -7,6 +7,9 @@ import type {
   LeListAction,
   LeActionContext,
   LeListActionStateDetail,
+  LeListCardConfig,
+  LeListCardRow,
+  LeListLayout,
 } from '../../types/list';
 import { dispatchActionState, subscribeTriggerAction } from '../../utils/action-bus';
 import type { LeOverflowMenuItemSelectDetail } from '../le-overflow-menu/le-overflow-menu';
@@ -193,7 +196,32 @@ export class LeList {
    */
   @Prop() reorderExpandDelay: number = 500;
 
+  /**
+   * Layout of the list: 'table' (default), 'cards', or 'auto' to switch to cards
+   * when the list is narrower than `cardBreakpoint`.
+   */
+  @Prop({ reflect: true }) layout: LeListLayout = 'table';
+
+  /**
+   * Width in pixels below which the 'auto' layout shows cards.
+   */
+  @Prop() cardBreakpoint: number = 600;
+
+  /**
+   * Card layout configuration: lines of column keys, or a custom render function.
+   * Can be a `LeListCardConfig` object or a JSON string. Without it, a card shows
+   * the label as the title and the description below.
+   */
+  @Prop() card?: LeListCardConfig | string;
+
+  /**
+   * Experimental: animates switching between the table and cards with View Transitions,
+   * moving each value from its cell to its place in the card.
+   */
+  @Prop() layoutTransition: boolean = false;
+
   @State() parsedOptions: LeOption[] = [];
+  @State() private isCardLayout: boolean = false;
   @State() parsedColumns: LeColumn[] = [];
   @State() parsedActions: LeListAction[] = [];
   @State() contextMenuItemActions: LeOption[] = [];
@@ -232,6 +260,13 @@ export class LeList {
   private overrideDropDepth?: number;
   private autoExpandTimer?: any;
   private hoveredExpandId?: string;
+  private resizeObserver?: ResizeObserver;
+  private tableContainerRef?: HTMLElement;
+  private hostWidth: number = 0;
+  private renderWaiters: Array<() => void> = [];
+  private static instanceCount = 0;
+  /** Prefix keeping view-transition-names unique across lists on the page */
+  private readonly transitionScope = `le-list-${++LeList.instanceCount}`;
 
   /**
    * Emitted when row selection changes.
@@ -305,12 +340,125 @@ export class LeList {
 
   async componentWillLoad() {
     await this.loadDataAndColumns();
+    this.isCardLayout = this.shouldUseCards();
   }
 
   componentDidLoad() {
     if (!this.el.hasAttribute('tabindex')) {
       this.el.setAttribute('tabindex', '0');
     }
+  }
+
+  componentDidRender() {
+    const waiters = this.renderWaiters;
+    this.renderWaiters = [];
+    waiters.forEach(resolve => resolve());
+  }
+
+  @Watch('layout')
+  @Watch('cardBreakpoint')
+  handleLayoutChange() {
+    this.updateLayout();
+  }
+
+  private shouldUseCards(): boolean {
+    if (this.layout === 'cards') return true;
+    if (this.layout === 'auto') return this.hostWidth > 0 && this.hostWidth < this.cardBreakpoint;
+    return false;
+  }
+
+  private updateLayout(animate = true) {
+    const useCards = this.shouldUseCards();
+    if (useCards === this.isCardLayout) return;
+    if (!animate) {
+      this.isCardLayout = useCards;
+      return;
+    }
+    void this.runLayoutTransition(() => {
+      this.isCardLayout = useCards;
+    });
+  }
+
+  private handleResize = (entries: ResizeObserverEntry[]) => {
+    const entry = entries[entries.length - 1];
+    if (!entry) return;
+    const isFirstMeasure = this.hostWidth === 0;
+    this.hostWidth = entry.contentRect.width;
+    // The initial layout appears without animation
+    this.updateLayout(!isFirstMeasure);
+  };
+
+  private waitForRender(): Promise<void> {
+    return new Promise(resolve => this.renderWaiters.push(resolve));
+  }
+
+  /**
+   * Runs a DOM update inside a View Transition when supported, so table cells and card
+   * values marked with `data-le-field` move between their positions.
+   */
+  private async runLayoutTransition(update: () => void) {
+    // view-transition-name is tree-scoped: the transition has to start on an element inside
+    // the shadow root to see the names given to rows and fields there. The document-level
+    // fallback only cross-fades the whole list.
+    const scope = this.tableContainerRef as any;
+    const doc = typeof document !== 'undefined' ? (document as any) : undefined;
+    const start = scope?.startViewTransition
+      ? (cb: () => Promise<void>) => scope.startViewTransition(cb)
+      : doc?.startViewTransition
+        ? (cb: () => Promise<void>) => doc.startViewTransition(cb)
+        : undefined;
+    const reducedMotion = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    if (!this.layoutTransition || !start || reducedMotion) {
+      update();
+      return;
+    }
+
+    this.applyTransitionNames();
+    try {
+      const transition = start(async () => {
+        this.clearTransitionNames();
+        const rendered = this.waitForRender();
+        update();
+        await rendered;
+        this.applyTransitionNames();
+      });
+      await transition.finished;
+    } catch {
+      // A skipped or failed transition still applies the update
+    } finally {
+      this.clearTransitionNames();
+    }
+  }
+
+  /**
+   * Gives every visible row and field a unique view-transition-name, scoped to this list.
+   */
+  private applyTransitionNames() {
+    const root = this.el.shadowRoot;
+    if (!root) return;
+    const viewportHeight = window.innerHeight;
+    const isVisible = (el: HTMLElement) => {
+      const rect = el.getBoundingClientRect();
+      return rect.width > 0 && rect.bottom > 0 && rect.top < viewportHeight;
+    };
+    const toName = (...parts: string[]) => parts.join('-').replace(/[^a-zA-Z0-9_-]/g, '_');
+
+    root.querySelectorAll<HTMLElement>('.le-list-row-main[data-row-id]').forEach(row => {
+      if (!isVisible(row)) return;
+      const rowId = row.dataset.rowId || '';
+      row.style.setProperty('view-transition-name', toName(this.transitionScope, rowId));
+      row.querySelectorAll<HTMLElement>('[data-le-field]').forEach(field => {
+        if (field.closest('.le-list-row-main') !== row || !isVisible(field)) return;
+        field.style.setProperty('view-transition-name', toName(this.transitionScope, rowId, field.dataset.leField || ''));
+      });
+    });
+  }
+
+  private clearTransitionNames() {
+    this.el.shadowRoot
+      ?.querySelectorAll<HTMLElement>('[style*="view-transition-name"]')
+      .forEach(el => el.style.removeProperty('view-transition-name'));
   }
 
   private handleHostClick = () => {
@@ -1040,6 +1188,10 @@ export class LeList {
   }
 
   private get activeReorderMode(): LeListReorderMode {
+    // Drag-and-drop reordering is not supported in the card layout yet
+    if (this.isCardLayout) {
+      return 'none';
+    }
     const val: any = this.reorder;
     if (typeof val === 'boolean') {
       return val ? 'nested' : 'none';
@@ -1701,6 +1853,10 @@ export class LeList {
 
   connectedCallback() {
     this.setupChildrenObserver();
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(this.handleResize);
+      this.resizeObserver.observe(this.el);
+    }
     this.disconnectSlotObserver = observeNamedSlotPresence(
       this.el,
       ['empty'],
@@ -1720,6 +1876,8 @@ export class LeList {
 
   disconnectedCallback() {
     this.childrenObserver?.disconnect();
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = undefined;
     this.disconnectSlotObserver?.();
     this.unsubscribeTriggerAction?.();
     window.removeEventListener('pointermove', this.handleGlobalPointerMove);
@@ -2083,7 +2241,7 @@ export class LeList {
     }
 
     const iconName = item.icon || item.iconStart;
-    const isLabelColumn = col.key === 'label' || col.key === 'name';
+    const isLabelColumn = this.isLabelColumn(col);
 
     if (isLabelColumn) {
       return (
@@ -2098,14 +2256,166 @@ export class LeList {
             </span>
           )}
           <div class="le-list-cell-text-group">
-            <span class="le-list-cell-label">{String(rawVal)}</span>
-            {item.description && <span class="le-list-cell-description">{item.description}</span>}
+            <span class="le-list-cell-label" data-le-field={colKey}>{String(rawVal)}</span>
+            {item.description && (
+              <span class="le-list-cell-description" data-le-field="description">{item.description}</span>
+            )}
           </div>
         </div>
       );
     }
 
     return String(rawVal);
+  }
+
+  private isLabelColumn(col: LeColumn): boolean {
+    return col.key === 'label' || col.key === 'name';
+  }
+
+  /**
+   * Table cell content. Values get a `data-le-field` wrapper so they can move to their card
+   * position in layout transitions; the default label cell marks its own label and description.
+   */
+  private renderCellContent(col: LeColumn, item: LeOption) {
+    const content = this.renderCellValue(col, item);
+    const hasDefaultLabelMarkup = this.isLabelColumn(col) && !col.render && !col.format;
+    if (col.type === 'actions' || hasDefaultLabelMarkup) {
+      return content;
+    }
+    return (
+      <span class="le-list-field" data-le-field={col.key || col.id || ''}>
+        {content}
+      </span>
+    );
+  }
+
+  private getCardConfig(): LeListCardConfig {
+    if (typeof this.card === 'string') {
+      if (this.card.trim() === '') return {};
+      try {
+        return JSON.parse(this.card);
+      } catch (err) {
+        console.warn('[le-list] Failed to parse card JSON string:', err);
+        return {};
+      }
+    }
+    return this.card || {};
+  }
+
+  /**
+   * A single value in a card, rendered like its table cell. Returns null for empty values.
+   */
+  private renderCardField(key: string, item: LeOption) {
+    const col = this.parsedColumns.find(c => (c.key || c.id) === key);
+    const rawVal = this.getItemValue(item, key);
+    if (rawVal === undefined || rawVal === null || rawVal === '') {
+      return null;
+    }
+
+    let content: any;
+    if (!col || (this.isLabelColumn(col) && !col.render && !col.format)) {
+      content = String(rawVal);
+    } else {
+      content = this.renderCellValue(col, item);
+    }
+
+    return (
+      <span class="le-list-field" data-le-field={key}>
+        {content}
+      </span>
+    );
+  }
+
+  private renderCardSlot(keys: string | string[] | undefined, item: LeOption, separator: string) {
+    const fields = (Array.isArray(keys) ? keys : keys ? [keys] : [])
+      .map(key => this.renderCardField(key, item))
+      .filter(Boolean);
+
+    return fields.flatMap((field, index) =>
+      index === 0 ? [field] : [<span class="le-list-card-separator">{separator}</span>, field],
+    );
+  }
+
+  private getCardTitleLines(rows: LeListCardRow[]): boolean[] {
+    if (rows.some(row => row.size)) {
+      return rows.map(row => row.size === 'title');
+    }
+
+    const primaryKey = this.parsedColumns.find(c => c.primary)?.key;
+    const hasKey = (slot: string | string[] | undefined, key: string) =>
+      Array.isArray(slot) ? slot.includes(key) : slot === key;
+    const primaryIndex = primaryKey ? rows.findIndex(row => hasKey(row.start, primaryKey) || hasKey(row.end, primaryKey)) : -1;
+    const titleIndex = primaryIndex >= 0 ? primaryIndex : rows.length <= 2 ? 0 : 1;
+
+    return rows.map((_, index) => index === titleIndex);
+  }
+
+  private renderCardBody(item: LeOption) {
+    const config = this.getCardConfig();
+
+    if (config.render) {
+      const rendered = config.render(item, {
+        value: (key: string) => this.renderCardField(key, item),
+        list: this.el,
+      });
+      if (typeof rendered === 'string') {
+        return <div class="le-list-card-custom" innerHTML={rendered} />;
+      }
+      return <div class="le-list-card-custom">{rendered}</div>;
+    }
+
+    const rows: LeListCardRow[] = config.rows?.length
+      ? config.rows
+      : [{ start: 'label', size: 'title' }, { start: 'description' }];
+    const separator = config.separator ?? ' · ';
+    const titleLines = this.getCardTitleLines(rows);
+
+    return rows.map((row, index) => {
+      const start = this.renderCardSlot(row.start, item, separator);
+      const end = this.renderCardSlot(row.end, item, separator);
+      if (start.length === 0 && end.length === 0) return null;
+
+      return (
+        <div class={{ 'le-list-card-line': true, 'is-title': titleLines[index] }}>
+          <div class="le-list-card-start">{start}</div>
+          {end.length > 0 && <div class="le-list-card-end">{end}</div>}
+        </div>
+      );
+    });
+  }
+
+  private renderCard(item: LeOption, id: string, isHierarchical: boolean, hasChildren: boolean, isOpen: boolean, hasAnyActions: boolean) {
+    const actionsCol = this.parsedColumns.find(c => c.type === 'actions' && !c.hidden);
+    const hasActionChevron = this.showActionChevron || this.actionChevron;
+
+    return (
+      <div class="le-list-card" role="cell">
+        {isHierarchical &&
+          (hasChildren ? (
+            <span
+              class="le-list-row-toggle"
+              onClick={(e) => this.handleToggleRow(e, item, id)}
+              role="button"
+              tabIndex={-1}
+              aria-label={isOpen ? 'Collapse' : 'Expand'}
+              aria-expanded={isOpen ? 'true' : 'false'}
+            >
+              <le-icon name="chevron-down" class={{ 'le-list-chevron': true, 'open': isOpen }} aria-hidden="true" />
+            </span>
+          ) : (
+            <span class="le-list-toggle-spacer" aria-hidden="true" />
+          ))}
+        <div class="le-list-card-body">{this.renderCardBody(item)}</div>
+        {actionsCol && (
+          <div class="le-list-card-actions">{this.renderActionsCell({ ...actionsCol, maxVisibleActions: 0 }, item)}</div>
+        )}
+        {hasActionChevron && hasAnyActions && (
+          <span class="le-list-row-action-chevron" aria-hidden="true">
+            <le-icon name="chevron-right" />
+          </span>
+        )}
+      </div>
+    );
   }
 
   private renderActionsCell(col: LeColumn, item: LeOption) {
@@ -2269,7 +2579,6 @@ export class LeList {
     isVisible = true,
     isHierarchical = false,
   ): any {
-    const visibleColumns = this.parsedColumns.filter(c => !c.hidden);
     const id = String(item.id ?? item.value ?? path);
     const children = this.getChildItems(item);
     const hasChildren = children.length > 0;
@@ -2279,12 +2588,6 @@ export class LeList {
     const selPos = isSelected ? this.getSelectionPosition(id) : undefined;
     const hasAction = !item.disabled && !!(item.action || item.href);
     const hasAnyActions = !item.disabled && (hasAction || (Array.isArray(item.actions) && item.actions.length > 0));
-    const hasActionCol = this.showActionChevron || this.actionChevron;
-    const hasReorderCol = this.showReorderHandle && this.activeReorderMode !== 'none';
-    const reorderColIndex = visibleColumns.length;
-    const reorderColIsOdd = reorderColIndex % 2 !== 0;
-    const actionColIndex = visibleColumns.length + (hasReorderCol ? 1 : 0);
-    const actionColIsOdd = actionColIndex % 2 !== 0;
 
     const isDropTarget = this.isDraggingActive && this.dropTargetId === id;
     const activeDropDepth =
@@ -2340,82 +2643,9 @@ export class LeList {
           onClick={(e) => this.handleRowClick(e, item, id)}
           onContextMenu={(e) => this.handleRowContextMenu(e, item, id)}
         >
-          {visibleColumns.map((col, colIndex) => {
-            const isFirstCol = colIndex === 0;
-            const isColOdd = colIndex % 2 !== 0;
-            const alignClass = `align-${col.align || (col.type === 'number' || col.type === 'actions' ? 'right' : 'left')}`;
-            const indentCalc = `calc(var(--le-list-item-padding-x) + ${depth} * var(--le-list-item-indent))`;
-
-            return (
-              <div
-                class={{
-                  'le-list-td': true,
-                  [alignClass]: true,
-                  'is-first-cell': isFirstCol && isHierarchical,
-                  'col-odd': isColOdd,
-                  'col-even': !isColOdd,
-                }}
-                role="cell"
-              >
-                {isFirstCol &&
-                  isHierarchical &&
-                  (hasChildren ? (
-                    <span
-                      class="le-list-row-toggle"
-                      style={{ paddingLeft: indentCalc }}
-                      onClick={(e) => this.handleToggleRow(e, item, id)}
-                      role="button"
-                      tabIndex={-1}
-                      aria-label={isOpen ? 'Collapse' : 'Expand'}
-                      aria-expanded={isOpen ? 'true' : 'false'}
-                    >
-                      <le-icon name="chevron-down" class={{ 'le-list-chevron': true, 'open': isOpen }} aria-hidden="true" />
-                    </span>
-                  ) : (
-                    <span
-                      class="le-list-toggle-spacer"
-                      style={{ paddingLeft: indentCalc }}
-                      aria-hidden="true"
-                    />
-                  ))}
-                {this.renderCellValue(col, item)}
-              </div>
-            );
-          })}
-          {hasReorderCol && (
-            <div
-              class={{
-                'le-list-td': true,
-                'le-list-td-reorder': true,
-                'align-center': true,
-                'col-odd': reorderColIsOdd,
-                'col-even': !reorderColIsOdd,
-              }}
-              role="cell"
-            >
-              <span class="le-list-reorder-handle" aria-hidden="true">
-                <le-icon name="reorder-horizontal" />
-              </span>
-            </div>
-          )}
-          {hasActionCol && (
-            <div
-              class={{
-                'le-list-td': true,
-                'le-list-td-action': true,
-                'align-center': true,
-                'col-odd': actionColIsOdd,
-                'col-even': !actionColIsOdd,
-              }}
-              role="cell"
-            >
-              {hasAnyActions && (
-                <span class="le-list-row-action-chevron" aria-hidden="true">
-                  <le-icon name="chevron-right" />
-                </span>
-              )}
-            </div>
-          )}
+          {this.isCardLayout
+            ? this.renderCard(item, id, isHierarchical, hasChildren, isOpen, hasAnyActions)
+            : this.renderTableCells(item, id, depth, isHierarchical, hasChildren, isOpen, hasAnyActions)}
         </div>
 
         {isDropTarget && this.dropPosition === 'after' && (
@@ -2433,6 +2663,97 @@ export class LeList {
         )}
       </div>
     );
+  }
+
+  private renderTableCells(
+    item: LeOption,
+    id: string,
+    depth: number,
+    isHierarchical: boolean,
+    hasChildren: boolean,
+    isOpen: boolean,
+    hasAnyActions: boolean,
+  ) {
+    const visibleColumns = this.parsedColumns.filter(c => !c.hidden);
+    const hasActionCol = this.showActionChevron || this.actionChevron;
+    const hasReorderCol = this.showReorderHandle && this.activeReorderMode !== 'none';
+    const reorderColIsOdd = visibleColumns.length % 2 !== 0;
+    const actionColIsOdd = (visibleColumns.length + (hasReorderCol ? 1 : 0)) % 2 !== 0;
+
+    return [
+      ...visibleColumns.map((col, colIndex) => {
+        const isFirstCol = colIndex === 0;
+        const isColOdd = colIndex % 2 !== 0;
+        const alignClass = `align-${col.align || (col.type === 'number' || col.type === 'actions' ? 'right' : 'left')}`;
+        const indentCalc = `calc(var(--le-list-item-padding-x) + ${depth} * var(--le-list-item-indent))`;
+
+        return (
+          <div
+            class={{
+              'le-list-td': true,
+              [alignClass]: true,
+              'is-first-cell': isFirstCol && isHierarchical,
+              'col-odd': isColOdd,
+              'col-even': !isColOdd,
+            }}
+            role={col.primary ? 'rowheader' : 'cell'}
+          >
+            {isFirstCol &&
+              isHierarchical &&
+              (hasChildren ? (
+                <span
+                  class="le-list-row-toggle"
+                  style={{ paddingLeft: indentCalc }}
+                  onClick={(e) => this.handleToggleRow(e, item, id)}
+                  role="button"
+                  tabIndex={-1}
+                  aria-label={isOpen ? 'Collapse' : 'Expand'}
+                  aria-expanded={isOpen ? 'true' : 'false'}
+                >
+                  <le-icon name="chevron-down" class={{ 'le-list-chevron': true, 'open': isOpen }} aria-hidden="true" />
+                </span>
+              ) : (
+                <span class="le-list-toggle-spacer" style={{ paddingLeft: indentCalc }} aria-hidden="true" />
+              ))}
+            {this.renderCellContent(col, item)}
+          </div>
+        );
+      }),
+      hasReorderCol && (
+        <div
+          class={{
+            'le-list-td': true,
+            'le-list-td-reorder': true,
+            'align-center': true,
+            'col-odd': reorderColIsOdd,
+            'col-even': !reorderColIsOdd,
+          }}
+          role="cell"
+        >
+          <span class="le-list-reorder-handle" aria-hidden="true">
+            <le-icon name="reorder-horizontal" />
+          </span>
+        </div>
+      ),
+      hasActionCol && (
+        <div
+          class={{
+            'le-list-td': true,
+            'le-list-td-action': true,
+            'align-center': true,
+            'col-odd': actionColIsOdd,
+            'col-even': !actionColIsOdd,
+          }}
+          role="cell"
+        >
+          {hasAnyActions && (
+            <span class="le-list-row-action-chevron" aria-hidden="true">
+              <le-icon name="chevron-right" />
+            </span>
+          )}
+        </div>
+      ),
+    ];
   }
 
   private getColumnContextMenuItems(): LeOption[] {
@@ -2605,7 +2926,10 @@ export class LeList {
           <slot />
         </div>
 
-        <div class="le-list-table-container">
+        <div
+          class={{ 'le-list-table-container': true, 'is-cards': this.isCardLayout }}
+          ref={el => (this.tableContainerRef = el)}
+        >
           <div class="le-list-table-scroll">
             <div
               class={{
@@ -2615,14 +2939,16 @@ export class LeList {
                 'is-selecting': this.isSelecting,
                 'is-reorderable': this.activeReorderMode !== 'none',
                 'is-dragging': this.isDraggingActive,
-                [`row-sep-${rowSep}`]: true,
-                [`col-sep-${colSep}`]: true,
-                'is-gridiron': isGridiron,
+                // Separators are a table concern; cards have their own borders
+                [`row-sep-${rowSep}`]: !this.isCardLayout,
+                [`col-sep-${colSep}`]: !this.isCardLayout,
+                'is-gridiron': isGridiron && !this.isCardLayout,
+                'is-cards': this.isCardLayout,
               }}
               role="table"
               style={{ '--le-list-grid-template': gridTemplate }}
             >
-              {isColumnToggleEnabled || isColumnReorderEnabled ? (
+              {this.isCardLayout ? null : isColumnToggleEnabled || isColumnReorderEnabled ? (
                 <le-context-menu
                   items={this.getColumnContextMenuItems()}
                   reorder={isColumnReorderEnabled ? 'siblings' : 'none'}

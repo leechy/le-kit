@@ -20,21 +20,28 @@ The actions system (`LeListAction`, `utils/action-bus.ts`, `item-context-menu`, 
 
 ## 1. Card layout (narrow containers / mobile)
 
-- [ ] `layout: 'auto' | 'table' | 'cards'` prop. `auto` switches by the list's own width via `@container` (`:host` already has `container-type: inline-size`); breakpoint as a CSS variable.
-- [ ] Column role in a card: e.g. `LeColumn.card: 'title' | 'subtitle' | 'meta' | 'badge' | 'media' | 'hidden'`, with a sensible default when not set (first column → title, rest → meta).
-- [ ] No table header in cards: sorting and column visibility move to a menu (button above the list or the bound toolbar).
-- [ ] Hierarchy: nested cards with indent and expand/collapse, same as table rows.
-  - Groundwork for drill-down: a mode where items with children only show a chevron that hints there is something inside (emitting an event), without navigating. Real drill-down is a layout/navigation/routing concern — see `IDEAS.md`.
-- [ ] Selection, keyboard navigation, drag-and-drop reordering (via handle) and actions (overflow `…`) work in cards.
-- [ ] Empty state and loading state (see §4) in cards.
+- [x] `layout: 'auto' | 'table' | 'cards'` prop; `auto` switches by the list's own width (ResizeObserver) below `cardBreakpoint` (600px).
+- [x] `card` config: lines with `start`/`end` slots of column keys (arrays joined with `separator`), or a `render(item, ctx)` function; `ctx.value(key)` renders a value like its cell. Default card: label as the title, description below.
+- [x] `LeColumn.primary`: the line holding it is the card title (unless a line sets `size`); the cell is the row header in the table. Otherwise the 1st of 1–2 lines or the 2nd of 3+ lines is the title.
+- [x] Hierarchy: nested cards with indent and expand/collapse.
+- [x] Selection, keyboard navigation, context menu and actions (`…` from the actions column) work in cards.
+- [ ] No table header in cards: sorting and column visibility need a menu (button above the list or the bound toolbar).
+- [ ] Drag-and-drop reordering in cards (disabled for now).
+- [ ] Drill-down groundwork: a mode where items with children only show a chevron and emit an event. Real drill-down is a layout/navigation/routing concern — see `IDEAS.md`.
+- [ ] Loading state (see §4) in cards.
 
 ---
 
 ## 2. View Transitions between layouts
 
-- [ ] **Prototype first**: confirm how `view-transition-name` behaves inside shadow DOM and whether element-scoped transitions (`element.startViewTransition`) are usable in the target browsers. Decide the approach based on that.
-- [ ] Table ↔ cards: each row gets `view-transition-name` from its `id`, so a row morphs into its card.
-- [ ] Fallback: no animation where unsupported; respect `prefers-reduced-motion`.
+- [x] Values carry `data-le-field="<key>"` in cells and cards; during a transition rows and visible fields get list-scoped `view-transition-name`s.
+- [x] Behind the experimental `layout-transition` prop; reduced motion and missing support fall back to an instant switch.
+- Findings (Chrome 152, in the Claude browser pane):
+  - `view-transition-name` is tree-scoped: names inside the shadow root are ignored by `document.startViewTransition` and by a transition started on the host. A transition started on an element inside the shadow root does see them.
+  - Element-scoped transitions failed whenever named elements changed during the update ("Transition was aborted because of invalid state", sometimes a renderer crash) — even in plain light DOM. Document-level transitions with the same change worked.
+  - Confirmed in a regular Chrome window: the animation works only sometimes, otherwise "InvalidStateError: ... Prepaint layout check failed" or "AbortError: Transition was skipped. New ViewTransition started"; roughly every 6–7th switch crashes the tab ("This page is having a problem", error code 5).
+- [ ] Replace View Transitions with an own FLIP animation (Web Animations) over the same `data-le-field` marks; check interplay with `<le-visibility>`, `<le-collapse>` and toolbar collapsing first.
+- [ ] Style the transition pseudo-elements (text size change between cell and title).
 - [ ] Reuse for sorting, row reorder drop and expand/collapse, if cheap once the mechanism is in place.
 
 ---

@@ -1118,6 +1118,67 @@
 
     <br />
 
+    <h3>6b. Card Layout (&lt;le-list layout="auto | table | cards"&gt;)</h3>
+    <p>
+      CRM opportunities as cards. Card lines reference column keys, so values look the same as in the table. With the
+      experimental <code>layout-transition</code>, values move between their places when the layout changes.
+      The <code>primary</code> column becomes the card title.
+      In <b>auto</b> mode, drag the frame edge or use the width presets: below 600px the list switches to cards.
+    </p>
+    <le-preview-frame
+      id="demo-cards-frame"
+      min-width="280"
+      breakpoints='[{"label":"Table","width":900,"icon":"desktop"},{"label":"Breakpoint","width":600,"icon":"tablet"},{"label":"Cards","width":480,"icon":"phone"},{"label":"Phone","width":360,"icon":"phone"}]'
+    >
+      <div slot="controls" style="display: flex; gap: var(--le-spacing-1);">
+        <le-button size="small" variant="outlined" onclick="document.getElementById('demo-cards-list').layout = 'table'">Table</le-button>
+        <le-button size="small" variant="outlined" onclick="document.getElementById('demo-cards-list').layout = 'cards'">Cards</le-button>
+        <le-button size="small" variant="outlined" onclick="document.getElementById('demo-cards-list').layout = 'auto'">Auto</le-button>
+      </div>
+      <le-list id="demo-cards-list" layout="auto" layout-transition selection="multiple" item-context-menu></le-list>
+    </le-preview-frame>
+    <script>
+      customElements.whenDefined('le-list').then(() => {
+        const cardsList = document.getElementById('demo-cards-list');
+        if (!cardsList) return;
+        const statusColors = { New: '#0088ff', Approved: '#10b981', Pending: '#f59e0b', Lost: '#6b7280' };
+
+        cardsList.columns = [
+          { key: 'label', label: 'Client Company', primary: true, width: '2fr', sortable: true },
+          {
+            key: 'data.status',
+            label: 'Status',
+            render: (val) =>
+              `<span style="display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; color: #fff; background: ${statusColors[val] || '#6b7280'};">${val}</span>`,
+          },
+          { key: 'data.distributor', label: 'Distributor' },
+          { key: 'data.country', label: 'Country' },
+          { key: 'data.type', label: 'Type' },
+          { key: 'data.created', label: 'Created', type: 'date', sortable: true },
+          { key: 'actions', label: 'Actions', type: 'actions', maxVisibleActions: 0, width: '90px' },
+        ];
+        cardsList.card = {
+          rows: [
+            { start: 'data.distributor', end: 'data.created' },
+            { start: 'label', end: 'data.status' },
+            { start: ['data.country', 'data.type'] },
+          ],
+        };
+        cardsList.actions = [
+          { id: 'open', label: 'Open', icon: 'chevron-right', selectionMode: 'single' },
+          { id: 'delete', label: 'Delete', labelMultiple: 'Delete {count} items', icon: 'delete', color: 'danger', selectionMode: 'both' },
+        ];
+        cardsList.data = [
+          { id: 'opp-1', label: 'Nordic Scan Solutions', data: { status: 'New', distributor: 'Artec Europe', country: 'Norway', type: 'Reseller', created: '2026-09-02' } },
+          { id: 'opp-2', label: 'Precision Metrology GmbH', data: { status: 'Approved', distributor: 'DACH Partners', country: 'Germany', type: 'End user', created: '2026-08-21' } },
+          { id: 'opp-3', label: 'Pacific Dental Labs', data: { status: 'Pending', distributor: 'APAC Direct', country: 'Australia', type: 'Reseller', created: '2026-09-14' } },
+          { id: 'opp-4', label: 'Heritage 3D Museum Services', data: { status: 'Lost', distributor: 'Artec Europe', country: 'Italy', type: 'End user', created: '2026-07-30' } },
+        ];
+      });
+    </script>
+
+    <br />
+
     <h3>7. Empty State with empty-* Attributes</h3>
     <le-list empty-label="No Members Found"
       empty-message="There are no team members matching your filter criteria. Try adjusting your search query."

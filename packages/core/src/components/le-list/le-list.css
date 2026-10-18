@@ -32,6 +32,18 @@
 
   /* Reorder drop line */
   --le-list-drop-line-width: 3px;
+
+  /* Card layout */
+  --le-list-card-gap: var(--le-spacing-2);
+  --le-list-card-padding-x: var(--le-spacing-4);
+  --le-list-card-padding-y: var(--le-spacing-3);
+  --le-list-card-radius: var(--le-radius-lg);
+  --le-list-card-bg: var(--le-color-surface);
+  --le-list-card-border: 1px solid var(--le-color-border);
+  --le-list-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --le-list-card-title-size: var(--le-font-size-lg);
+  --le-list-card-line-gap: var(--le-spacing-1);
+  --le-list-card-indent: var(--le-spacing-5);
 }
 
 
@@ -631,3 +643,129 @@
   display: inline-flex;
 }
 
+
+/* ==========================================
+ * Field values (table cells and cards)
+ * ========================================== */
+.le-list-field {
+  min-width: 0;
+}
+
+/* ==========================================
+ * Card layout
+ * ========================================== */
+.le-list-table-container.is-cards {
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.le-list-table-container.is-cards .le-list-table-scroll {
+  overflow: visible;
+}
+
+.le-list-table.is-cards .le-list-tbody {
+  gap: var(--le-list-card-gap);
+}
+
+.le-list-table.is-cards .le-list-row-children {
+  gap: var(--le-list-card-gap);
+  padding-top: var(--le-list-card-gap);
+  padding-inline-start: var(--le-list-card-indent);
+}
+
+.le-list-table.is-cards .le-list-row-main {
+  display: block;
+  border: var(--le-list-card-border);
+  border-radius: var(--le-list-card-radius);
+  background-color: var(--le-list-card-bg);
+  box-shadow: var(--le-list-card-shadow);
+}
+
+/* Every selected card is outlined on its own, there are no contiguous groups */
+.le-list-table.is-cards .le-list-row-main.is-selected::after,
+:host(:focus) .le-list-table.is-cards .le-list-row-main.is-focused::after,
+:host(:focus-within) .le-list-table.is-cards .le-list-row-main.is-focused::after {
+  inset: -1px;
+  border: var(--le-list-selection-border-width) solid var(--le-list-selection-border-color);
+  border-radius: var(--le-list-card-radius);
+}
+
+.le-list-card {
+  display: flex;
+  align-items: center;
+  gap: var(--le-list-item-gap);
+  padding: var(--le-list-card-padding-y) var(--le-list-card-padding-x);
+  min-width: 0;
+}
+
+.le-list-card .le-list-row-toggle,
+.le-list-card .le-list-toggle-spacer {
+  align-self: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.le-list-card-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--le-list-card-line-gap);
+  min-width: 0;
+}
+
+.le-list-card-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--le-spacing-3);
+  min-width: 0;
+  font-size: var(--le-font-size-xs);
+  line-height: var(--le-line-height-normal);
+  color: var(--le-color-text-secondary);
+}
+
+.le-list-card-line.is-title {
+  font-size: var(--le-list-card-title-size);
+  font-weight: var(--le-font-weight-semibold);
+  line-height: var(--le-line-height-tight);
+  color: var(--le-color-text-primary);
+}
+
+.le-list-card-start,
+.le-list-card-end {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.le-list-card-start {
+  flex: 1 1 auto;
+}
+
+.le-list-card-end {
+  flex: 0 1 auto;
+  justify-content: flex-end;
+}
+
+.le-list-card-start > .le-list-field,
+.le-list-card-end > .le-list-field {
+  flex: 0 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.le-list-card-separator {
+  flex: 0 0 auto;
+  white-space: pre;
+}
+
+.le-list-card-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}

@@ -37,3 +37,8 @@ export function parseHash(hash: string): HashTarget {
 export function hashForTab(tab: PageTab): string {
   return tab === 'playground' ? '' : `#${tab}`;
 }
+
+/** The first recipe is the default view of the page, so it keeps a clean URL. */
+export function hashForRecipe(id: string, isFirst: boolean): string {
+  return isFirst ? '' : `#${RECIPE_PREFIX}${id}`;
+}

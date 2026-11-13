@@ -1,6 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseHash, hashForTab } from './page-hash.ts';
+import { parseHash, hashForTab, hashForRecipe } from './page-hash.ts';
+
+test('hashForRecipe', () => {
+  assert.equal(hashForRecipe('default', true), '');
+  assert.equal(hashForRecipe('with-icon', false), '#recipe-with-icon');
+});
 
 test('empty hash is none', () => {
   assert.deepEqual(parseHash(''), { kind: 'none' });

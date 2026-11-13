@@ -1124,11 +1124,18 @@
       <code>layout-transition</code>, values move between their places when the layout changes.
       The <code>primary</code> column becomes the card title.
       In <b>auto</b> mode, drag the frame edge or use the width presets: below 600px the list switches to cards.
+      Cards swipe by touch or by horizontal scrolling on a trackpad: read/unread on one side, reject and delete on the other;
+      pulling further runs read/unread or delete.
     </p>
     <le-preview-frame
       id="demo-cards-frame"
       min-width="280"
-      breakpoints='[{"label":"Table","width":900,"icon":"desktop"},{"label":"Breakpoint","width":600,"icon":"tablet"},{"label":"Cards","width":480,"icon":"phone"},{"label":"Phone","width":360,"icon":"phone"}]'
+      padding="16"
+      breakpoints='[
+        {"label": "Desktop", "width": 900, "icon": "desktop"},
+        {"label": "Tablet", "width": 768, "icon": "tablet"},
+        {"label": "Phone", "width": 480, "icon": "phone"}
+      ]'
     >
       <div slot="controls" style="display: flex; gap: var(--le-spacing-1);">
         <le-button size="small" variant="outlined" onclick="document.getElementById('demo-cards-list').layout = 'table'">Table</le-button>
@@ -1165,15 +1172,40 @@
           ],
           actions: false,
         };
+        // Swipes: read/unread toggle at the start (full swipe), reject + delete at the end (delete on full swipe)
+        const updateItem = (id, patch) => {
+          cardsList.data = cardsList.data.map(item => (item.id === id ? { ...item, data: { ...item.data, ...patch } } : item));
+        };
         cardsList.actions = [
           { id: 'open', label: 'Open', icon: 'chevron-right', selectionMode: 'single' },
-          { id: 'delete', label: 'Delete', labelMultiple: 'Delete {count} items', icon: 'delete', color: 'danger', selectionMode: 'both' },
+          {
+            id: 'mark-read', label: 'Mark as Read', icon: 'check::add-badge', color: 'primary', swipe: 'start', fullSwipe: true,
+            hidden: item => item.data?.read,
+            handler: (_item, ctx) => ctx.selectedItems.forEach(item => updateItem(item.id, { read: true })),
+          },
+          {
+            id: 'mark-unread', label: 'Mark as Unread', icon: 'check::remove-badge', color: 'info', swipe: 'start', fullSwipe: true,
+            hidden: item => !item.data?.read,
+            handler: (_item, ctx) => ctx.selectedItems.forEach(item => updateItem(item.id, { read: false })),
+          },
+          {
+            id: 'reject', label: 'Reject', icon: 'minus-circle', color: 'warning', swipe: 'end',
+            handler: (_item, ctx) => ctx.selectedItems.forEach(item => updateItem(item.id, { status: 'Lost' })),
+          },
+          {
+            id: 'delete', label: 'Delete', labelMultiple: 'Delete {count} items', icon: 'delete', color: 'danger',
+            selectionMode: 'both', swipe: 'end', fullSwipe: true,
+            handler: (_item, ctx) => {
+              const ids = new Set(ctx.selectedIds);
+              cardsList.data = cardsList.data.filter(item => !ids.has(item.id));
+            },
+          },
         ];
         cardsList.data = [
-          { id: 'opp-1', label: 'Nordic Scan Solutions', data: { status: 'New', distributor: 'Artec Europe', country: 'Norway', type: 'Reseller', created: '2026-09-02' } },
-          { id: 'opp-2', label: 'Precision Metrology GmbH', data: { status: 'Approved', distributor: 'DACH Partners', country: 'Germany', type: 'End user', created: '2026-08-21' } },
-          { id: 'opp-3', label: 'Pacific Dental Labs', data: { status: 'Pending', distributor: 'APAC Direct', country: 'Australia', type: 'Reseller', created: '2026-09-14' } },
-          { id: 'opp-4', label: 'Heritage 3D Museum Services', data: { status: 'Lost', distributor: 'Artec Europe', country: 'Italy', type: 'End user', created: '2026-07-30' } },
+          { id: 'opp-1', label: 'Nordic Scan Solutions', data: { read: false, status: 'New', distributor: 'Artec Europe', country: 'Norway', type: 'Reseller', created: '2026-09-02' } },
+          { id: 'opp-2', label: 'Precision Metrology GmbH', data: { read: true, status: 'Approved', distributor: 'DACH Partners', country: 'Germany', type: 'End user', created: '2026-08-21' } },
+          { id: 'opp-3', label: 'Pacific Dental Labs', data: { read: false, status: 'Pending', distributor: 'APAC Direct', country: 'Australia', type: 'Reseller', created: '2026-09-14' } },
+          { id: 'opp-4', label: 'Heritage 3D Museum Services', data: { read: true, status: 'Lost', distributor: 'Artec Europe', country: 'Italy', type: 'End user', created: '2026-07-30' } },
         ];
       });
     </script>

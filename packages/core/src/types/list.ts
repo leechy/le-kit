@@ -170,6 +170,13 @@ export interface LeListCardConfig {
   actions?: boolean;
 
   /**
+   * Whether right click / long press opens the item context menu on cards that have swipe actions.
+   * Defaults to false (swipes replace it); `item-context-menu` must be on as well. The keyboard
+   * (ContextMenu key, Shift+F10) always opens it.
+   */
+  contextMenu?: boolean;
+
+  /**
    * Fully custom card content. Return JSX or an HTML string.
    * Mark elements with `data-le-field="<key>"` to animate them between layouts.
    */
@@ -272,6 +279,19 @@ export interface LeListAction {
 
   /** Custom metadata passthrough */
   data?: Record<string, unknown>;
+
+  /**
+   * Shows the action behind the card when it is swiped (card layout only).
+   * 'start' is revealed by swiping towards the end (left → right in LTR), 'end' the other way.
+   * At most 3 actions per side are shown; 2 are recommended.
+   */
+  swipe?: 'start' | 'end';
+
+  /**
+   * Runs this action when the card is pulled past its swipe buttons. One per side;
+   * without it, the card stops at its buttons.
+   */
+  fullSwipe?: boolean;
 }
 
 /**

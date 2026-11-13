@@ -45,10 +45,22 @@ The actions system (`LeListAction`, `utils/action-bus.ts`, `item-context-menu`, 
 
 ## 3. Swipe actions (cards)
 
-- [ ] Separate component (working name `<le-swipe-actions>`), usable outside the list; `<le-list>` uses it in card layout.
-- [ ] Actions come from `LeListAction` with a new field, e.g. `swipe: 'start' | 'end'`.
-- [ ] Full swipe past a threshold triggers the primary action (e.g. delete), partial swipe reveals buttons.
-- [ ] Resolve conflicts: vertical scroll, drag-and-drop reorder, `touch-action`, RTL (start/end instead of left/right).
+Agreed design (2026-10-19):
+
+- **Actions.** Swipes reuse `LeListAction`: `swipe: 'start' | 'end'` puts an action on a side (logical: mirrored in RTL), `fullSwipe: true` marks the one action per side that runs when the card is pulled past the buttons. Without `fullSwipe` on a side, the card stops at its buttons. Deleting is a legitimate full-swipe action — undo/trash is the app's job.
+- **Limits.** At most 3 actions per side (2 recommended); extra ones are dropped with a console warning. A side without visible actions has no swipe. `hidden`/`disabled` are evaluated per item, so a read/unread toggle is two actions with opposite `hidden`.
+- **Look.** Revealed buttons are full-height, colored by `action.color`, with icon and label; the full-swipe action sits at the outer edge and grows to fill while the card is pulled further.
+- **Input.** Swipe = horizontal scrolling, not mouse dragging: touch drag (`touch-action: pan-y` keeps vertical scrolling native) and horizontal `wheel` from trackpads / Magic Mouse. Mouse drag stays selection. Horizontal wheel over swipeable cards is captured (`preventDefault`, `overscroll-behavior-x`) so Chrome's back/forward gesture doesn't fire.
+- **Settling.** Released or wheel-idle: back to closed, open on its buttons, or — past the full threshold with a `fullSwipe` action — run it. After an action the card closes; removing the item from data is the app's job. Opening one card closes the previously open one.
+- **Component.** The gesture is a standalone `<le-swipe>` wrapping any content; `<le-list>` wraps each card with it in the card layout.
+- **Context menu.** In cards with swipe actions the pointer context menu (right click / long press) is off by default; `card.contextMenu: true` turns it back on. `item-context-menu` stays the master switch. ContextMenu key / Shift+F10 on the focused row always opens the menu, so actions stay reachable from the keyboard.
+- Platform reference: iOS lets each edge have its own actions, the first one runs on a full swipe (`allowsFullSwipe`); Android's `SwipeToDismissBox` has one action per direction; design systems built on them cap at 3 per side.
+
+- [x] Types: `LeListAction.swipe`, `LeListAction.fullSwipe`, `LeListCardConfig.contextMenu`.
+- [x] `<le-swipe>` component: touch + wheel input, open/close/full settle, RTL, one open at a time.
+- [x] `<le-list>` cards: wrap with `<le-swipe>`, run actions through `executeAction` on the swiped card only, context menu rules, keyboard menu; touch selects on tap, not on touch start.
+- [x] Demo: CRM opportunities with read/unread (start, full) and reject + delete (end, delete full).
+- [ ] Check on real devices: iOS/Android touch, macOS trackpad momentum, Chrome back-gesture blocking, RTL.
 
 ---
 

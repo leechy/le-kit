@@ -13,6 +13,7 @@ import type {
 } from '../../types/list';
 import { dispatchActionState, subscribeTriggerAction } from '../../utils/action-bus';
 import type { LeOverflowMenuItemSelectDetail } from '../le-overflow-menu/le-overflow-menu';
+import type { LeSwipeAction, LeSwipeActionDetail } from '../le-swipe/le-swipe';
 import { buildDeclarativeOptionsFromChildren, isEditableTarget, observeNamedSlotPresence, parseOptionInput } from '../../utils/utils';
 import {
   findNodeInTree,
@@ -266,6 +267,8 @@ export class LeList {
   private renderWaiters: Array<() => void> = [];
   private layoutAnimations: Animation[] = [];
   private layoutRunId: number = 0;
+  /** Card touched last: it is selected on the following click, unless the touch became a swipe */
+  private touchSelectRowId?: string;
 
   /**
    * Emitted when row selection changes.
@@ -578,6 +581,8 @@ export class LeList {
     if (!this.canNavigateRows() || isEditableTarget(event.target)) {
       return;
     }
+
+    if (this.handleContextMenuKey(event)) return;
 
     const isNavKey = [
       'ArrowDown',
@@ -926,8 +931,7 @@ export class LeList {
 
     let action: LeListAction | undefined;
     if (targetItem) {
-      const itemActions = this.getResolvedItemActions(targetItem, selItems);
-      action = itemActions.find(a => a.id === actionId);
+      action = this.getCombinedItemActions(targetItem).find(a => a.id === actionId);
     }
     if (!action) {
       action = this.parsedActions.find(a => a.id === actionId);
@@ -938,7 +942,9 @@ export class LeList {
       return false;
     }
 
-    if (this.isActionDisabled(action, targetItem)) {
+    // An explicit array of targets (e.g. a swiped card) is the context; otherwise the selection
+    const explicitTargets = Array.isArray(itemOrId) ? itemOrId : undefined;
+    if (this.isActionHidden(action, targetItem, explicitTargets) || this.isActionDisabled(action, targetItem, explicitTargets)) {
       return false;
     }
 
@@ -1070,10 +1076,25 @@ export class LeList {
     return action.label;
   }
 
-  private isActionDisabled(action: LeListAction, item?: LeOption): boolean {
+  /**
+   * Context for action predicates: the given targets (e.g. a swiped card), or the current selection.
+   */
+  private getActionContext(item?: LeOption, targets?: LeOption[]): LeActionContext {
+    const selectedItems = targets ?? this.getSelectedItems();
+    const baseItem = item || (selectedItems[0] ?? ({} as LeOption));
+    return {
+      item: baseItem,
+      selectedItems,
+      selectedIds: targets ? targets.map(t => String(t.id ?? t.value ?? '')) : this.selectedRowIds,
+      list: this.el,
+      count: selectedItems.length,
+    };
+  }
+
+  private isActionDisabled(action: LeListAction, item?: LeOption, targets?: LeOption[]): boolean {
     if (item?.disabled) return true;
 
-    const count = this.selectedRowIds.length;
+    const count = targets ? targets.length : this.selectedRowIds.length;
     const mode = action.selectionMode;
 
     if (mode === 'single' && count !== 1) {
@@ -1090,39 +1111,49 @@ export class LeList {
     }
 
     if (typeof action.disabled === 'function') {
-      const baseItem = item || (this.getSelectedItems()[0] ?? ({} as LeOption));
-      const ctx: LeActionContext = {
-        item: baseItem,
-        selectedItems: this.getSelectedItems(),
-        selectedIds: this.selectedRowIds,
-        list: this.el,
-        count,
-      };
-      const hybridItem = Object.assign(Object.create(baseItem), ctx);
+      const ctx = this.getActionContext(item, targets);
+      const hybridItem = Object.assign(Object.create(ctx.item!), ctx);
       return action.disabled(hybridItem, ctx);
     }
 
     return !!action.disabled;
   }
 
-  private isActionHidden(action: LeListAction, item?: LeOption): boolean {
+  private isActionHidden(action: LeListAction, item?: LeOption, targets?: LeOption[]): boolean {
     if (typeof action.hidden === 'function') {
-      const count = this.selectedRowIds.length;
-      const baseItem = item || (this.getSelectedItems()[0] ?? ({} as LeOption));
-      const ctx: LeActionContext = {
-        item: baseItem,
-        selectedItems: this.getSelectedItems(),
-        selectedIds: this.selectedRowIds,
-        list: this.el,
-        count,
-      };
-      const hybridItem = Object.assign(Object.create(baseItem), ctx);
+      const ctx = this.getActionContext(item, targets);
+      const hybridItem = Object.assign(Object.create(ctx.item!), ctx);
       return action.hidden(hybridItem, ctx);
     }
     return !!action.hidden;
   }
 
   private getResolvedItemActions(item?: LeOption, _selectedItems: LeOption[] = []): LeListAction[] {
+    const combined = this.getCombinedItemActions(item);
+    const count = this.selectedRowIds.length;
+    // Filter hidden and resolve labels and disabled state
+    const visibleActions = combined.filter(act => !this.isActionHidden(act, item));
+
+    return visibleActions.map((act, index) => {
+      let sep = act.separator;
+      if (index === 0 && (sep === 'before' || sep === true)) {
+        sep = undefined;
+      } else if (index === visibleActions.length - 1 && sep === 'after') {
+        sep = undefined;
+      }
+      return {
+        ...act,
+        label: this.resolveActionLabel(act, count),
+        disabled: this.isActionDisabled(act, item),
+        separator: sep,
+      };
+    });
+  }
+
+  /**
+   * Item-level actions first, then list-level ones (with a separator between the groups).
+   */
+  private getCombinedItemActions(item?: LeOption): LeListAction[] {
     const itemActionsRaw = item && Array.isArray((item as any).actions) ? (item as any).actions : [];
 
     // 1. Item-level actions FIRST
@@ -1155,24 +1186,7 @@ export class LeList {
       combined.push(...listActions);
     }
 
-    const count = this.selectedRowIds.length;
-    // Filter hidden and resolve labels and disabled state
-    const visibleActions = combined.filter(act => !this.isActionHidden(act, item));
-
-    return visibleActions.map((act, index) => {
-      let sep = act.separator;
-      if (index === 0 && (sep === 'before' || sep === true)) {
-        sep = undefined;
-      } else if (index === visibleActions.length - 1 && sep === 'after') {
-        sep = undefined;
-      }
-      return {
-        ...act,
-        label: this.resolveActionLabel(act, count),
-        disabled: this.isActionDisabled(act, item),
-        separator: sep,
-      };
-    });
+    return combined;
   }
 
   private emitActionState() {
@@ -1250,6 +1264,12 @@ export class LeList {
 
     // Toggles and action controls handle their own clicks: no selection change or drag start
     if ((e.target as HTMLElement).closest('.le-list-row-toggle, .le-list-actions-cell, .le-list-actions-overflow')) {
+      return;
+    }
+
+    // A touch on a card may turn into a swipe or a scroll: select on tap (click) instead
+    if (e.pointerType === 'touch' && this.isCardLayout) {
+      this.touchSelectRowId = id;
       return;
     }
 
@@ -1837,6 +1857,16 @@ export class LeList {
     }
     if (!this.canNavigateRows()) return;
 
+    if (this.touchSelectRowId === id) {
+      this.touchSelectRowId = undefined;
+      this.focusedRowId = id;
+      if (this.isSelectionEnabled()) {
+        this.selectedRowIds = [id];
+        this.dragSelectionStartId = id;
+        this.emitSelectionChange();
+      }
+    }
+
     if (item.action || item.href) {
       this.executeItemAction(item, id, e);
     }
@@ -1845,10 +1875,18 @@ export class LeList {
   private handleRowContextMenu = (e: MouseEvent, item: LeOption, id: string) => {
     if (!this.itemContextMenu) return;
     if (item.disabled) return;
+    // Swipes replace the pointer context menu on cards, unless it is asked for explicitly
+    if (this.isCardLayout && this.getCardConfig().contextMenu !== true && this.hasSwipeActions(item)) return;
 
     e.preventDefault();
     e.stopPropagation();
+    this.openRowContextMenu(item, id, e.clientX, e.clientY, e);
+  };
 
+  /**
+   * Opens the item context menu at the given point; used by right click / long press and the keyboard.
+   */
+  private openRowContextMenu(item: LeOption, id: string, x: number, y: number, triggerEvent?: Event) {
     // OS-style behavior:
     // If clicked row is NOT in selection, select it exclusively.
     // If it IS already in selection, preserve the multi-selection.
@@ -1878,11 +1916,33 @@ export class LeList {
     }));
     this.contextMenuTargetItem = item;
 
-    if (this.rowContextMenuRef) {
-      (this.rowContextMenuRef as any).items = this.contextMenuItemActions;
-      void (this.rowContextMenuRef as any).show(e.clientX, e.clientY, e);
+    const menu = this.rowContextMenuRef as any;
+    if (menu) {
+      menu.items = this.contextMenuItemActions;
+      // The menu element may not be upgraded yet
+      if (typeof menu.show === 'function') void menu.show(x, y, triggerEvent);
     }
-  };
+  }
+
+  /**
+   * ContextMenu key / Shift+F10 open the menu of the focused row — always, so actions stay
+   * reachable from the keyboard even where swipes replace the pointer context menu.
+   */
+  private handleContextMenuKey(event: KeyboardEvent): boolean {
+    const isMenuKey = event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10');
+    if (!isMenuKey || !this.itemContextMenu || !this.focusedRowId) return false;
+
+    const row = this.getVisibleFlatRows().find(r => r.id === this.focusedRowId);
+    if (!row || row.item.disabled) return false;
+
+    event.preventDefault();
+    const rowEl = Array.from(this.el.shadowRoot?.querySelectorAll<HTMLElement>('.le-list-row-main') || []).find(
+      el => el.dataset.rowId === row.id,
+    );
+    const rect = rowEl?.getBoundingClientRect();
+    this.openRowContextMenu(row.item, row.id, rect ? rect.left + 16 : 0, rect ? rect.bottom : 0, event);
+    return true;
+  }
 
   connectedCallback() {
     this.setupChildrenObserver();
@@ -2419,6 +2479,56 @@ export class LeList {
     });
   }
 
+  /**
+   * Swipe actions of a card, evaluated for that card alone (not the current selection).
+   */
+  private getSwipeActions(item: LeOption): { start: LeSwipeAction[]; end: LeSwipeAction[] } {
+    const sides = { start: [] as LeSwipeAction[], end: [] as LeSwipeAction[] };
+    if (!this.isCardLayout || item.disabled) return sides;
+
+    const targets = [item];
+    for (const action of this.getCombinedItemActions(item)) {
+      if (!action.swipe || this.isActionHidden(action, item, targets)) continue;
+      sides[action.swipe].push({
+        id: action.id,
+        label: this.resolveActionLabel(action, 1),
+        icon: action.icon,
+        color: action.color,
+        disabled: this.isActionDisabled(action, item, targets),
+        full: !!action.fullSwipe,
+      });
+    }
+    return sides;
+  }
+
+  private hasSwipeActions(item: LeOption): boolean {
+    const { start, end } = this.getSwipeActions(item);
+    return start.length > 0 || end.length > 0;
+  }
+
+  private handleSwipeAction = (e: CustomEvent<LeSwipeActionDetail>, item: LeOption) => {
+    e.stopPropagation();
+    // The swiped card is the target even when it is part of a larger selection
+    void this.executeAction(e.detail.id, [item], e.detail.originalEvent);
+  };
+
+  private renderSwipeableCard(item: LeOption, id: string, isHierarchical: boolean, hasChildren: boolean, isOpen: boolean, hasAnyActions: boolean) {
+    const card = this.renderCard(item, id, isHierarchical, hasChildren, isOpen, hasAnyActions);
+    const { start, end } = this.getSwipeActions(item);
+    if (start.length === 0 && end.length === 0) return card;
+
+    return (
+      <le-swipe
+        class="le-list-card-swipe"
+        startActions={start}
+        endActions={end}
+        onLeSwipeAction={(e: CustomEvent<LeSwipeActionDetail>) => this.handleSwipeAction(e, item)}
+      >
+        {card}
+      </le-swipe>
+    );
+  }
+
   private renderCard(item: LeOption, id: string, isHierarchical: boolean, hasChildren: boolean, isOpen: boolean, hasAnyActions: boolean) {
     const actionsCol =
       this.getCardConfig().actions !== false ? this.parsedColumns.find(c => c.type === 'actions' && !c.hidden) : undefined;
@@ -2680,7 +2790,7 @@ export class LeList {
           onContextMenu={(e) => this.handleRowContextMenu(e, item, id)}
         >
           {this.isCardLayout
-            ? this.renderCard(item, id, isHierarchical, hasChildren, isOpen, hasAnyActions)
+            ? this.renderSwipeableCard(item, id, isHierarchical, hasChildren, isOpen, hasAnyActions)
             : this.renderTableCells(item, id, depth, isHierarchical, hasChildren, isOpen, hasAnyActions)}
         </div>
 

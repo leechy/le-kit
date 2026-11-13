@@ -50,6 +50,7 @@
  - [le-select](../le-select)
  - [le-side-panel](../le-side-panel)
  - [le-string-input](../le-string-input)
+ - [le-swipe](../le-swipe)
  - [le-tag](../le-tag)
  - [le-toolbar](../le-toolbar)
 
@@ -71,6 +72,7 @@ graph TD;
   le-select --> le-icon
   le-side-panel --> le-icon
   le-string-input --> le-icon
+  le-swipe --> le-icon
   le-tag --> le-icon
   le-toolbar --> le-icon
   style le-icon fill:#f9f,stroke:#333,stroke-width:4px

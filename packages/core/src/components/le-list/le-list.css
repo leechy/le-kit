@@ -778,3 +778,9 @@
 .le-list-table-container.is-animating-layout .le-list-card-end {
   overflow: visible;
 }
+
+/* Swipeable card: the content covers the action buttons with the card's own background */
+.le-list-card-swipe {
+  background-color: inherit;
+  border-radius: inherit;
+}

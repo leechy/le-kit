@@ -217,6 +217,7 @@ Type: `Promise<void>`
 
 - [le-icon](../le-icon)
 - [le-tag](../le-tag)
+- [le-swipe](../le-swipe)
 - [le-button](../le-button)
 - [le-overflow-menu](../le-overflow-menu)
 - [le-collapse](../le-collapse)
@@ -228,6 +229,7 @@ Type: `Promise<void>`
 graph TD;
   le-list --> le-icon
   le-list --> le-tag
+  le-list --> le-swipe
   le-list --> le-button
   le-list --> le-overflow-menu
   le-list --> le-collapse
@@ -238,6 +240,7 @@ graph TD;
   le-button --> le-icon
   le-button --> le-visibility
   le-button --> le-tooltip
+  le-swipe --> le-icon
   le-overflow-menu --> le-navigation
   le-overflow-menu --> le-popover
   le-overflow-menu --> le-button

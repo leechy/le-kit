@@ -45,6 +45,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-slot](#le-slot)
 - [le-stack](#le-stack)
 - [le-string-input](#le-string-input)
+- [le-swipe](#le-swipe)
 - [le-tab](#le-tab)
 - [le-tab-bar](#le-tab-bar)
 - [le-tab-panel](#le-tab-panel)
@@ -1643,6 +1644,47 @@ A text input component with support for labels, descriptions, icons, and externa
 | `--le-input-border-focus` | Input border style when focused |
 | `--le-input-radius` | Input border radius |
 | `--le-input-padding` | Input padding |
+
+---
+
+## <le-swipe>
+
+Reveals action buttons behind its content when swiped horizontally — by touch or by
+horizontal scrolling on a trackpad / Magic Mouse. Mouse dragging is left to the content
+(e.g. selection).
+
+'start' actions sit at the inline start (left in LTR) and are revealed by swiping towards
+the end; 'end' actions the other way. A side without actions does not swipe. Pulling past
+the buttons runs the side's `full` action.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `startActions` | `LeSwipeAction[]` | `[]` | Actions revealed at the inline start (left in LTR) |
+| `endActions` | `LeSwipeAction[]` | `[]` | Actions revealed at the inline end (right in LTR) |
+| `actionWidth` | `number` | `72` | Width of one action button in pixels |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leSwipeAction` | `EventEmitter<LeSwipeActionDetail>` | Emitted when an action runs, by tapping its button or by a full swipe |
+| `leSwipeChange` | `EventEmitter<{ open?: LeSwipeSide }>` | Emitted when the swipe opens on one side or closes |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | The swipeable content |
+
+### CSS Variables
+
+| Name | Description |
+|------|-------------|
+| `--le-swipe-action-width` | Width of one action button |
+| `--le-swipe-duration` | Settle animation duration |
 
 ---
 

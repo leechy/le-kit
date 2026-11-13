@@ -25,6 +25,7 @@ import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-
 import { LePreviewFrameBreakpoint, LePreviewFrameResizeDetail } from "./components/le-preview-frame/le-preview-frame";
 import { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side-panel/le-side-panel";
 import { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./components/le-side-panel-toggle/le-side-panel-toggle";
+import { LeSwipeAction, LeSwipeActionDetail, LeSwipeSide } from "./components/le-swipe/le-swipe";
 import { LeToolbarOverflowChangeDetail } from "./components/le-toolbar/le-toolbar";
 import { TooltipPlacement as TooltipPlacement1 } from "./components/le-tooltip/le-tooltip";
 export { ActionStep } from "./components/le-actions-sequence/le-actions-sequence";
@@ -47,6 +48,7 @@ export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-
 export { LePreviewFrameBreakpoint, LePreviewFrameResizeDetail } from "./components/le-preview-frame/le-preview-frame";
 export { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side-panel/le-side-panel";
 export { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./components/le-side-panel-toggle/le-side-panel-toggle";
+export { LeSwipeAction, LeSwipeActionDetail, LeSwipeSide } from "./components/le-swipe/le-swipe";
 export { LeToolbarOverflowChangeDetail } from "./components/le-toolbar/le-toolbar";
 export { TooltipPlacement as TooltipPlacement1 } from "./components/le-tooltip/le-tooltip";
 export namespace Components {
@@ -2738,6 +2740,41 @@ export namespace Components {
         "value"?: string;
     }
     /**
+     * Reveals action buttons behind its content when swiped horizontally — by touch or by
+     * horizontal scrolling on a trackpad / Magic Mouse. Mouse dragging is left to the content
+     * (e.g. selection).
+     * 'start' actions sit at the inline start (left in LTR) and are revealed by swiping towards
+     * the end; 'end' actions the other way. A side without actions does not swipe. Pulling past
+     * the buttons runs the side's `full` action.
+     * @cssprop --le-swipe-action-width - Width of one action button
+     * @cssprop --le-swipe-duration - Settle animation duration
+     */
+    interface LeSwipe {
+        /**
+          * Width of one action button in pixels
+          * @default 72
+         */
+        "actionWidth": number;
+        /**
+          * Closes the swipe
+         */
+        "close": () => Promise<void>;
+        /**
+          * Actions revealed at the inline end (right in LTR)
+          * @default []
+         */
+        "endActions": LeSwipeAction[];
+        /**
+          * Opens the swipe on the given side, showing its buttons
+         */
+        "open": (side: LeSwipeSide) => Promise<void>;
+        /**
+          * Actions revealed at the inline start (left in LTR)
+          * @default []
+         */
+        "startActions": LeSwipeAction[];
+    }
+    /**
      * A flexible tab component with multiple variants and states.
      * @cssprop --le-tab-bg - Tab background color
      * @cssprop --le-tab-color - Tab text color
@@ -3443,6 +3480,10 @@ export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
 export interface LeStringInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeStringInputElement;
+}
+export interface LeSwipeCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeSwipeElement;
 }
 export interface LeTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4484,6 +4525,34 @@ declare global {
         prototype: HTMLLeStringInputElement;
         new (): HTMLLeStringInputElement;
     };
+    interface HTMLLeSwipeElementEventMap {
+        "leSwipeAction": LeSwipeActionDetail;
+        "leSwipeChange": { open?: LeSwipeSide };
+    }
+    /**
+     * Reveals action buttons behind its content when swiped horizontally — by touch or by
+     * horizontal scrolling on a trackpad / Magic Mouse. Mouse dragging is left to the content
+     * (e.g. selection).
+     * 'start' actions sit at the inline start (left in LTR) and are revealed by swiping towards
+     * the end; 'end' actions the other way. A side without actions does not swipe. Pulling past
+     * the buttons runs the side's `full` action.
+     * @cssprop --le-swipe-action-width - Width of one action button
+     * @cssprop --le-swipe-duration - Settle animation duration
+     */
+    interface HTMLLeSwipeElement extends Components.LeSwipe, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeSwipeElementEventMap>(type: K, listener: (this: HTMLLeSwipeElement, ev: LeSwipeCustomEvent<HTMLLeSwipeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeSwipeElementEventMap>(type: K, listener: (this: HTMLLeSwipeElement, ev: LeSwipeCustomEvent<HTMLLeSwipeElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeSwipeElement: {
+        prototype: HTMLLeSwipeElement;
+        new (): HTMLLeSwipeElement;
+    };
     interface HTMLLeTabElementEventMap {
         "click": PointerEvent;
     }
@@ -4788,6 +4857,7 @@ declare global {
         "le-slot": HTMLLeSlotElement;
         "le-stack": HTMLLeStackElement;
         "le-string-input": HTMLLeStringInputElement;
+        "le-swipe": HTMLLeSwipeElement;
         "le-tab": HTMLLeTabElement;
         "le-tab-bar": HTMLLeTabBarElement;
         "le-tab-panel": HTMLLeTabPanelElement;
@@ -7578,6 +7648,41 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * Reveals action buttons behind its content when swiped horizontally — by touch or by
+     * horizontal scrolling on a trackpad / Magic Mouse. Mouse dragging is left to the content
+     * (e.g. selection).
+     * 'start' actions sit at the inline start (left in LTR) and are revealed by swiping towards
+     * the end; 'end' actions the other way. A side without actions does not swipe. Pulling past
+     * the buttons runs the side's `full` action.
+     * @cssprop --le-swipe-action-width - Width of one action button
+     * @cssprop --le-swipe-duration - Settle animation duration
+     */
+    interface LeSwipe {
+        /**
+          * Width of one action button in pixels
+          * @default 72
+         */
+        "actionWidth"?: number;
+        /**
+          * Actions revealed at the inline end (right in LTR)
+          * @default []
+         */
+        "endActions"?: LeSwipeAction[];
+        /**
+          * Emitted when an action runs, by tapping its button or by a full swipe
+         */
+        "onLeSwipeAction"?: (event: LeSwipeCustomEvent<LeSwipeActionDetail>) => void;
+        /**
+          * Emitted when the swipe opens on one side or closes
+         */
+        "onLeSwipeChange"?: (event: LeSwipeCustomEvent<{ open?: LeSwipeSide }>) => void;
+        /**
+          * Actions revealed at the inline start (left in LTR)
+          * @default []
+         */
+        "startActions"?: LeSwipeAction[];
+    }
+    /**
      * A flexible tab component with multiple variants and states.
      * @cssprop --le-tab-bg - Tab background color
      * @cssprop --le-tab-color - Tab text color
@@ -8648,6 +8753,9 @@ declare namespace LocalJSX {
         "readonly": boolean;
         "externalId": string;
     }
+    interface LeSwipeAttributes {
+        "actionWidth": number;
+    }
     interface LeTabAttributes {
         "mode": 'default' | 'admin';
         "label": string;
@@ -8802,6 +8910,7 @@ declare namespace LocalJSX {
         "le-slot": Omit<LeSlot, keyof LeSlotAttributes> & { [K in keyof LeSlot & keyof LeSlotAttributes]?: LeSlot[K] } & { [K in keyof LeSlot & keyof LeSlotAttributes as `attr:${K}`]?: LeSlotAttributes[K] } & { [K in keyof LeSlot & keyof LeSlotAttributes as `prop:${K}`]?: LeSlot[K] };
         "le-stack": Omit<LeStack, keyof LeStackAttributes> & { [K in keyof LeStack & keyof LeStackAttributes]?: LeStack[K] } & { [K in keyof LeStack & keyof LeStackAttributes as `attr:${K}`]?: LeStackAttributes[K] } & { [K in keyof LeStack & keyof LeStackAttributes as `prop:${K}`]?: LeStack[K] };
         "le-string-input": Omit<LeStringInput, keyof LeStringInputAttributes> & { [K in keyof LeStringInput & keyof LeStringInputAttributes]?: LeStringInput[K] } & { [K in keyof LeStringInput & keyof LeStringInputAttributes as `attr:${K}`]?: LeStringInputAttributes[K] } & { [K in keyof LeStringInput & keyof LeStringInputAttributes as `prop:${K}`]?: LeStringInput[K] };
+        "le-swipe": Omit<LeSwipe, keyof LeSwipeAttributes> & { [K in keyof LeSwipe & keyof LeSwipeAttributes]?: LeSwipe[K] } & { [K in keyof LeSwipe & keyof LeSwipeAttributes as `attr:${K}`]?: LeSwipeAttributes[K] } & { [K in keyof LeSwipe & keyof LeSwipeAttributes as `prop:${K}`]?: LeSwipe[K] };
         "le-tab": Omit<LeTab, keyof LeTabAttributes> & { [K in keyof LeTab & keyof LeTabAttributes]?: LeTab[K] } & { [K in keyof LeTab & keyof LeTabAttributes as `attr:${K}`]?: LeTabAttributes[K] } & { [K in keyof LeTab & keyof LeTabAttributes as `prop:${K}`]?: LeTab[K] };
         "le-tab-bar": Omit<LeTabBar, keyof LeTabBarAttributes> & { [K in keyof LeTabBar & keyof LeTabBarAttributes]?: LeTabBar[K] } & { [K in keyof LeTabBar & keyof LeTabBarAttributes as `attr:${K}`]?: LeTabBarAttributes[K] } & { [K in keyof LeTabBar & keyof LeTabBarAttributes as `prop:${K}`]?: LeTabBar[K] };
         "le-tab-panel": Omit<LeTabPanel, keyof LeTabPanelAttributes> & { [K in keyof LeTabPanel & keyof LeTabPanelAttributes]?: LeTabPanel[K] } & { [K in keyof LeTabPanel & keyof LeTabPanelAttributes as `attr:${K}`]?: LeTabPanelAttributes[K] } & { [K in keyof LeTabPanel & keyof LeTabPanelAttributes as `prop:${K}`]?: LeTabPanel[K] } & OneOf<"label", LeTabPanel["label"], LeTabPanelAttributes["label"]>;
@@ -9272,6 +9381,17 @@ declare module "@stencil/core" {
              * @cssprop --le-input-padding - Input padding
              */
             "le-string-input": LocalJSX.IntrinsicElements["le-string-input"] & JSXBase.HTMLAttributes<HTMLLeStringInputElement>;
+            /**
+             * Reveals action buttons behind its content when swiped horizontally — by touch or by
+             * horizontal scrolling on a trackpad / Magic Mouse. Mouse dragging is left to the content
+             * (e.g. selection).
+             * 'start' actions sit at the inline start (left in LTR) and are revealed by swiping towards
+             * the end; 'end' actions the other way. A side without actions does not swipe. Pulling past
+             * the buttons runs the side's `full` action.
+             * @cssprop --le-swipe-action-width - Width of one action button
+             * @cssprop --le-swipe-duration - Settle animation duration
+             */
+            "le-swipe": LocalJSX.IntrinsicElements["le-swipe"] & JSXBase.HTMLAttributes<HTMLLeSwipeElement>;
             /**
              * A flexible tab component with multiple variants and states.
              * @cssprop --le-tab-bg - Tab background color

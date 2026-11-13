@@ -22,11 +22,13 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-current-heading](#le-current-heading)
 - [le-drag-handle](#le-drag-handle)
 - [le-dropdown-base](#le-dropdown-base)
+- [le-empty](#le-empty)
 - [le-header](#le-header)
 - [le-header-placeholder](#le-header-placeholder)
 - [le-icon](#le-icon)
 - [le-item](#le-item)
 - [le-kit](#le-kit)
+- [le-list](#le-list)
 - [le-multiselect](#le-multiselect)
 - [le-navigation](#le-navigation)
 - [le-number-input](#le-number-input)
@@ -43,6 +45,7 @@ This file is auto-generated and contains documentation for all Le-Kit web compon
 - [le-slot](#le-slot)
 - [le-stack](#le-stack)
 - [le-string-input](#le-string-input)
+- [le-swipe](#le-swipe)
 - [le-tab](#le-tab)
 - [le-tab-bar](#le-tab-bar)
 - [le-tab-panel](#le-tab-panel)
@@ -281,8 +284,11 @@ A flexible button component with multiple variants and states.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
+| `action` | `string \| undefined` |  | Action ID that this button triggers when bound to a list. |
+| `bindList` | `string \| undefined` |  | Bound list ID(s) (comma-separated list of IDs). If omitted, inherits bind-list from the nearest parent <le-toolbar>. |
 | `mode` | `'default' \| 'admin' \| undefined` |  | Mode of the popover should be 'default' for internal use |
-| `variant` | `'solid' \| 'outlined' \| 'clear' \| 'system'` | `'outlined'` | Button variant style |
+| `variant` | `'solid' \| 'filled' \| 'outlined' \| 'clear' \| 'system'` | `'outlined'` | Button variant style |
+| `filled` | `boolean` | `false` | Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API). |
 | `color` | `\| 'primary'
     \| 'secondary'
     \| 'success'
@@ -632,6 +638,8 @@ when the user right-clicks or long-presses on its children.
 | `disabled` | `boolean` | `false` | Disables right-click and touch interactions. |
 | `items` | `LeOption[] \| string` | `[]` | List of menu items represented as options. |
 | `backdrop` | `boolean` | `false` | Whether to show a backdrop behind the menu, lifting the active item. |
+| `reorder` | `LeNavigationReorderMode \| boolean` | `'none'` | Enables manual drag-and-drop reordering of menu items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels Note: Can also be passed as boolean (true -> 'nested', false -> 'none'). |
+| `showReorderHandle` | `boolean` | `false` | Whether to show the drag handle icon at the end of reorderable menu items. |
 | `pageScrollBehavior` | `'blocked' \| 'menu-close' \| 'fixed-menu'` | `'menu-close'` | Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll (default) - 'fixed-menu': menu scrolls with the page |
 | `position` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'mouse'` | `'mouse'` | Position of the menu relative to the trigger. If 'mouse', positions next to mouse/touch coords. |
 | `align` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment of the menu relative to the trigger. |
@@ -641,6 +649,7 @@ when the user right-clicks or long-presses on its children.
 | Event | Type | Description |
 |-------|------|-------------|
 | `leContextMenuSelect` | `EventEmitter<LeContextMenuSelectDetail>` | Emitted when a menu item is selected. |
+| `leContextMenuReorder` | `EventEmitter<LeNavigationItemReorderDetail>` | Emitted when menu items are reordered via drag and drop. |
 | `leContextMenuClose` | `EventEmitter<void>` | Emitted when the context menu is closed. |
 
 ### Slots
@@ -739,6 +748,39 @@ Wraps le-popover for positioning and provides:
 | Name | Description |
 |------|-------------|
 | `"trigger"` | The element that triggers the dropdown |
+
+---
+
+## <le-empty>
+
+An empty state component inspired by SwiftUI ContentUnavailableView.
+Used for displaying empty lists, search results, or unavailable states.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `icon` | `string \| undefined` |  | Optional icon name, URL, or emoji character. |
+| `label` | `string \| undefined` |  | Main label text for the empty state. |
+| `message` | `string \| undefined` |  | Secondary descriptive message. |
+| `actionLabel` | `string \| undefined` |  | Label for optional action button. |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leAction` | `EventEmitter<MouseEvent>` | Emitted when the action button is clicked. |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | Default slot for custom body content |
+| `"icon"` | Custom icon slot |
+| `"label"` | Custom label/title slot |
+| `"message"` | Custom message/description slot |
+| `"action"` | Custom action buttons slot |
 
 ---
 
@@ -887,6 +929,73 @@ Components continue to work without this wrapper; `le-kit` is opt-in.
 
 ---
 
+## <le-list>
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `data` | `LeOption[] \| string` | `[]` | Data items to display in the list. Can be an array of `LeOption` objects or a JSON string. If omitted or empty, top-level `<le-item>` child elements will be parsed. |
+| `columns` | `LeColumn[] \| string` | `[]` | Column configuration for the list table view. Can be an array of `LeColumn` objects or a JSON string. If omitted, columns will be automatically generated from data item properties. |
+| `allowClearSort` | `boolean` | `true` | Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true. |
+| `defaultSortIconPosition` | `'start' \| 'end' \| 'none' \| undefined` |  | Default sort icon placement across columns ('start' | 'end' | 'none'). If omitted, right-aligned columns default to 'start' and left/center columns default to 'end'. |
+| `defaultSortDirection` | `'asc' \| 'desc'` | `'asc'` | Default initial sort direction for sortable columns on first click ('asc' | 'desc'). Individual columns can override this via their `sortStart` property. Defaults to 'asc'. |
+| `columnVisibilityToggle` | `boolean` | `false` | Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false. |
+| `allowColumnToggle` | `boolean` | `false` | Alias for columnVisibilityToggle. |
+| `columnReorder` | `boolean` | `false` | Whether to allow column reordering via right-click header context menu. Defaults to false. |
+| `allowColumnReorder` | `boolean` | `false` | Alias for columnReorder. |
+| `rowSeparators` | `'none' \| 'borders' \| 'zebra'` | `'zebra'` | Row separation style: 'none' | 'borders' | 'zebra'. Defaults to 'zebra'. |
+| `columnSeparators` | `'none' \| 'borders' \| 'zebra'` | `'none'` | Column separation style: 'none' | 'borders' | 'zebra'. Defaults to 'none'. |
+| `emptyLabel` | `string \| undefined` |  | Main label text for default empty state (<le-empty>). |
+| `emptyTitle` | `string \| undefined` |  | Title text for default empty state (<le-empty>). |
+| `emptyMessage` | `string \| undefined` |  | Secondary description text for default empty state (<le-empty>). |
+| `emptyIcon` | `string \| undefined` |  | Icon for default empty state (<le-empty>). |
+| `disableRowHover` | `boolean` | `false` | Whether to disable row highlighting on hover. Defaults to false (row hover highlighting is enabled by default). |
+| `disableKeyboardNavigation` | `boolean` | `false` | Whether to disable keyboard navigation. Defaults to false. |
+| `selection` | `boolean \| 'single' \| 'multiple' \| 'none'` | `false` | Selection mode for rows: false / 'none' (disabled), true / 'single', or 'multiple'. Defaults to false. |
+| `showActionChevron` | `boolean` | `false` | Whether to display chevron-right icon at the end of rows that have actions or links. Defaults to false. |
+| `actionChevron` | `boolean` | `false` | Alias for showActionChevron. |
+| `actions` | `LeListAction[] \| string` | `[]` | Actions available for the list items and external components. Can be an array of `LeListAction` objects or a JSON string. |
+| `itemContextMenu` | `boolean` | `false` | Whether to enable right-click context menu on item rows with their available actions. Defaults to false. |
+| `reorder` | `LeListReorderMode \| boolean` | `'none'` | Enables manual drag-and-drop reordering of list row items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none'). |
+| `showReorderHandle` | `boolean` | `false` | Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable rows. Default: false. |
+| `reorderRatios` | `{ top: number; middle: number; bottom: number }` | `{ top: 0.35, middle: 0.3, bottom: 0.35, }` | Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.35, middle: 0.3, bottom: 0.35 }. |
+| `maxReorderDepth` | `number \| undefined` |  | Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50). |
+| `reorderExpandDelay` | `number` | `500` | Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop. |
+| `layout` | `LeListLayout` | `'table'` | Layout of the list: 'table' (default), 'cards', or 'auto' to switch to cards when the list is narrower than `cardBreakpoint`. |
+| `cardBreakpoint` | `number` | `600` | Width in pixels below which the 'auto' layout shows cards. |
+| `card` | `LeListCardConfig \| string \| undefined` |  | Card layout configuration: lines of column keys, or a custom render function. Can be a `LeListCardConfig` object or a JSON string. Without it, a card shows the label as the title and the description below. |
+| `layoutTransition` | `boolean` | `false` | Animates switching between the table and cards: values marked with `data-le-field` move from their cell to their place in the card and back. |
+| `parsedOptions` | `LeOption[]` | `[]` |  |
+| `parsedColumns` | `LeColumn[]` | `[]` |  |
+| `parsedActions` | `LeListAction[]` | `[]` |  |
+| `contextMenuItemActions` | `LeOption[]` | `[]` |  |
+| `sortColumnKey` | `string \| undefined` |  |  |
+| `sortDirection` | `'asc' \| 'desc' \| undefined` |  |  |
+| `focusedRowId` | `string \| undefined` |  |  |
+| `selectedRowIds` | `string[]` | `[]` |  |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leSelectionChange` | `EventEmitter<{
+    selectedIds: string[];
+    selectedItems: LeOption[];
+    isMultiple: boolean;
+  }>` | Emitted when row selection changes. |
+| `leAction` | `EventEmitter<{ action?: string; item: LeOption; id: string; originalEvent?: Event }>` | Emitted when a row action or link is executed. |
+| `leActionStateChange` | `EventEmitter<LeListActionStateDetail>` | Emitted when available actions or selection state changes on the list. |
+| `leSortChange` | `EventEmitter<{ key?: string; column?: LeColumn; direction?: 'asc' \| 'desc' }>` | Emitted when column sorting changes. |
+| `leColumnVisibilityChange` | `EventEmitter<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>` | Emitted when column visibility changes via the context menu. |
+| `leColumnOrderChange` | `EventEmitter<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn }>` | Emitted when column order changes via the context menu. |
+| `leItemToggle` | `EventEmitter<{ item: LeOption; open: boolean; originalEvent?: MouseEvent }>` | Emitted when a hierarchical row item is expanded or collapsed. |
+| `leItemReorder` | `EventEmitter<LeListItemReorderDetail>` | Fired when list row items are reordered via drag and drop. |
+| `leReorder` | `EventEmitter<LeListItemReorderDetail>` | Alias for `leItemReorder`. |
+
+---
+
 ## <le-multiselect>
 
 A multiselect component for selecting multiple options.
@@ -950,6 +1059,11 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 | `submenuSearchable` | `boolean` | `false` | Whether submenu popovers should include a filter input. |
 | `activationMode` | `LeNavigationActivationMode` | `'manual'` | Whether keyboard focus only highlights, or also activates immediately. |
 | `autoScroll` | `boolean` | `false` | Automatically scroll the active item into view when the active URL changes or on initial load.  - Initial load: instant (no animation) - Subsequent `activeUrl` changes: smooth  Only applies to `vertical` orientation. |
+| `reorder` | `LeNavigationReorderMode \| boolean` | `'none'` | Enables manual drag-and-drop reordering of navigation items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none'). |
+| `showReorderHandle` | `boolean` | `false` | Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable items. Default: false. |
+| `reorderRatios` | `{ top: number; middle: number; bottom: number }` | `{ top: 0.35, middle: 0.3, bottom: 0.35, }` | Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after). |
+| `maxReorderDepth` | `number \| undefined` |  | Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50). |
+| `reorderExpandDelay` | `number` | `500` | Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop. |
 | `togglePosition` | `'start' \| 'end'` | `'start'` | Position of the toggle arrow for items with children: 'start' | 'end' |
 
 ### Events
@@ -958,6 +1072,8 @@ Navigation component with vertical (tree) and horizontal (menu) layouts.
 |-------|------|-------------|
 | `leNavItemSelect` | `EventEmitter<LeNavigationItemSelectDetail>` | Fired when a navigation item is activated.  This event is cancelable. Call `event.preventDefault()` to prevent default browser navigation and implement custom routing. |
 | `leNavItemToggle` | `EventEmitter<LeNavigationItemToggleDetail>` | Fired when a tree branch is toggled. |
+| `leNavItemReorder` | `EventEmitter<LeNavigationItemReorderDetail>` | Fired when navigation items are reordered via drag and drop. |
+| `leReorder` | `EventEmitter<LeNavigationItemReorderDetail>` | Alias for `leNavItemReorder`. |
 
 ### Slots
 
@@ -1531,6 +1647,47 @@ A text input component with support for labels, descriptions, icons, and externa
 
 ---
 
+## <le-swipe>
+
+Reveals action buttons behind its content when swiped horizontally — by touch or by
+horizontal scrolling on a trackpad / Magic Mouse. Mouse dragging is left to the content
+(e.g. selection).
+
+'start' actions sit at the inline start (left in LTR) and are revealed by swiping towards
+the end; 'end' actions the other way. A side without actions does not swipe. Pulling past
+the buttons runs the side's `full` action.
+
+### Properties
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `el` | `HTMLElement` |  |  |
+| `startActions` | `LeSwipeAction[]` | `[]` | Actions revealed at the inline start (left in LTR) |
+| `endActions` | `LeSwipeAction[]` | `[]` | Actions revealed at the inline end (right in LTR) |
+| `actionWidth` | `number` | `72` | Width of one action button in pixels |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `leSwipeAction` | `EventEmitter<LeSwipeActionDetail>` | Emitted when an action runs, by tapping its button or by a full swipe |
+| `leSwipeChange` | `EventEmitter<{ open?: LeSwipeSide }>` | Emitted when the swipe opens on one side or closes |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | The swipeable content |
+
+### CSS Variables
+
+| Name | Description |
+|------|-------------|
+| `--le-swipe-action-width` | Width of one action button |
+| `--le-swipe-duration` | Settle animation duration |
+
+---
+
 ## <le-tab>
 
 A flexible tab component with multiple variants and states.
@@ -1801,6 +1958,7 @@ footprint first before their contents are overflowed entirely.
 |------|------|---------|-------------|
 | `el` | `HTMLElement` |  |  |
 | `items` | `unknown \| undefined` |  | Optional declarative items input.  The current implementation is slot-driven, but when this prop changes we still invalidate the slotted-items cache and recompute layout. |
+| `bindList` | `string \| undefined` |  | Bound list ID(s) (comma-separated list of IDs). |
 | `alignItems` | `'start' \| 'center' \| 'end' \| 'stretch'` | `'start'` | Alignment of items along the main axis. |
 | `itemGap` | `string` | `'var(--le-toolbar-gap, var(--le-spacing-1, 4px))'` | Spacing between top-level toolbar items. Accepts any valid CSS length (e.g. `8px`, `0.5rem`, `var(--le-spacing-2)`). |
 | `overflowIcon` | `string` | `'ellipsis-horizontal'` | Icon for the overflow trigger button when no custom slot content is provided. |

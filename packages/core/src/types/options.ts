@@ -132,7 +132,7 @@ export interface LeOption {
   /**
    * Add a visual separator line before or after this option.
    */
-  separator?: 'before' | 'after';
+  separator?: 'before' | 'after' | boolean;
 
   /**
    * URL to navigate to when the option is selected.
@@ -144,6 +144,11 @@ export interface LeOption {
    * This remains serializable across array, JSON-string, and declarative inputs.
    */
   action?: string;
+
+  /**
+   * List of additional actions or links associated with this option.
+   */
+  actions?: Array<LeOptionAction | string>;
 
   /**
    * Specifies where to open the linked document (e.g., `_blank`, `_self`).
@@ -162,6 +167,24 @@ export interface LeOption {
    * Custom data passthrough for application-specific needs.
    * This data is included in selection events.
    */
+  data?: Record<string, unknown>;
+}
+
+/**
+ * Action item associated with a LeOption.
+ */
+export interface LeOptionAction {
+  id?: string;
+  label?: string;
+  action?: string;
+  href?: string;
+  target?: string;
+  icon?: string;
+  iconStart?: string;
+  iconEnd?: string;
+  disabled?: boolean;
+  color?: string;
+  className?: string;
   data?: Record<string, unknown>;
 }
 

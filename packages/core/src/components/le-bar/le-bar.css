@@ -148,7 +148,7 @@
   background: transparent;
   color: var(--le-bar-button-color);
   border-radius: var(--le-bar-button-border-radius);
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
   transition: background-color 0.15s ease;
 }
 
@@ -180,7 +180,7 @@
   background: transparent;
   color: var(--le-bar-button-color);
   border-radius: var(--le-bar-button-border-radius);
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
   transition: background-color 0.15s ease, opacity 0.15s ease;
 }
 
@@ -230,7 +230,7 @@
 }
 
 .bar-popover-item {
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
 }
 
 .bar-popover-item:hover {

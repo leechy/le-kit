@@ -327,4 +327,69 @@ describe('le-context-menu', () => {
     expect(popover.style.width).toBe('100px');
     expect(popover.style.height).toBe('50px');
   });
+
+  it('selects item on mouseup when dragging through', async () => {
+    const page = await newSpecPage({
+      components: [LeContextMenu, LePopover, LeNavigation],
+      html: `
+        <le-context-menu items='[{"id": "edit", "label": "Edit"}, {"id": "delete", "label": "Delete"}]'>
+          <div class="trigger">Right click me</div>
+        </le-context-menu>
+      `,
+    });
+
+    const host = page.root as any;
+    const selectSpy = jest.fn();
+    host.addEventListener('leContextMenuSelect', selectSpy);
+
+    const triggerZone = host.shadowRoot?.querySelector('.context-menu-trigger-zone') as HTMLElement;
+    const contextMenuEvent = new MouseEvent('contextmenu', {
+      bubbles: true,
+      cancelable: true,
+      clientX: 50,
+      clientY: 50,
+      buttons: 2,
+    });
+    triggerZone.dispatchEvent(contextMenuEvent);
+    await page.waitForChanges();
+
+    expect(host.open).toBe(true);
+
+    const nav = host.shadowRoot?.querySelector('le-navigation') as HTMLElement;
+    const buttons = nav.shadowRoot?.querySelectorAll('.nav-item') as NodeListOf<HTMLElement>;
+    expect(buttons.length).toBe(2);
+
+    const origElementFromPoint = document.elementFromPoint;
+    (document as any).elementFromPoint = () => buttons[0];
+
+    const PointerEventClass = (globalThis as any).PointerEvent || class extends MouseEvent {
+      pointerType = 'mouse';
+    };
+
+    const moveEvent = new PointerEventClass('pointermove', {
+      bubbles: true,
+      cancelable: true,
+      clientX: 50,
+      clientY: 70,
+      buttons: 2,
+    });
+    document.dispatchEvent(moveEvent);
+
+    const upEvent = new PointerEventClass('pointerup', {
+      bubbles: true,
+      cancelable: true,
+      clientX: 50,
+      clientY: 70,
+      buttons: 0,
+    });
+    document.dispatchEvent(upEvent);
+    await page.waitForChanges();
+
+    expect(selectSpy).toHaveBeenCalledTimes(1);
+    expect((selectSpy.mock.calls[0][0] as CustomEvent).detail.id).toBe('edit');
+    expect(host.open).toBe(false);
+
+    document.elementFromPoint = origElementFromPoint;
+  });
 });
+

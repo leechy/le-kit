@@ -83,12 +83,15 @@ A flexible button component with multiple variants and states.
 
 | Property                 | Attribute                  | Description                                                                                                                      | Type                                                                                                     | Default      |
 | ------------------------ | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------ |
+| `action`                 | `action`                   | Action ID that this button triggers when bound to a list.                                                                        | `string \| undefined`                                                                                    | `undefined`  |
 | `align`                  | `align`                    | Alignment of the button label without the end icon                                                                               | `"center" \| "end" \| "space-between" \| "start"`                                                        | `'center'`   |
+| `bindList`               | `bind-list`                | Bound list ID(s) (comma-separated list of IDs). If omitted, inherits bind-list from the nearest parent <le-toolbar>.             | `string \| undefined`                                                                                    | `undefined`  |
 | `collapse`               | `collapse`                 | Runtime collapse state controlled by responsive containers.                                                                      | `string \| undefined`                                                                                    | `undefined`  |
 | `collapsePriorityOffset` | `collapse-priority-offset` | Relative collapse priority offset for toolbar stepping. Higher numbers collapse earlier while keeping the button visible longer. | `number`                                                                                                 | `100`        |
 | `collapsible`            | `collapsible`              | Enables responsive collapse to icon-only when the toolbar applies `collapse="icon"`.                                             | `boolean`                                                                                                | `false`      |
 | `color`                  | `color`                    | Button color theme (uses theme semantic colors)                                                                                  | `"danger" \| "info" \| "primary" \| "secondary" \| "success" \| "transparent" \| "warning" \| undefined` | `undefined`  |
 | `disabled`               | `disabled`                 | Whether the button is disabled                                                                                                   | `boolean`                                                                                                | `false`      |
+| `filled`                 | `filled`                   | Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API).                                  | `boolean`                                                                                                | `false`      |
 | `fullWidth`              | `full-width`               | Whether the button takes full width of its container                                                                             | `boolean`                                                                                                | `false`      |
 | `groupShape`             | `group-shape`              | Shape of the button when rendered inside grouped containers.                                                                     | `"end" \| "middle" \| "single" \| "start"`                                                               | `'single'`   |
 | `href`                   | `href`                     | Optional href to make the button act as a link                                                                                   | `string \| undefined`                                                                                    | `undefined`  |
@@ -109,7 +112,7 @@ A flexible button component with multiple variants and states.
 | `tooltipPosition`        | `tooltip-position`         | Tooltip position around the button                                                                                               | `TooltipPlacement`                                                                                       | `'top'`      |
 | `type`                   | `type`                     | The button type attribute                                                                                                        | `"button" \| "reset" \| "submit"`                                                                        | `'button'`   |
 | `value`                  | `value`                    | The value associated with the button (useful when in a button group)                                                             | `string \| undefined`                                                                                    | `undefined`  |
-| `variant`                | `variant`                  | Button variant style                                                                                                             | `"clear" \| "outlined" \| "solid" \| "system"`                                                           | `'outlined'` |
+| `variant`                | `variant`                  | Button variant style                                                                                                             | `"clear" \| "filled" \| "outlined" \| "solid" \| "system"`                                               | `'outlined'` |
 | `visibility`             | `visibility`               | Visibility state used by responsive containers to animate show/hide transitions.                                                 | `"collapsed" \| "collapsing" \| "expanding" \| "visible"`                                                | `'visible'`  |
 
 
@@ -142,6 +145,16 @@ Type: `Promise<LeOption>`
 
 
 
+### `refreshActionState() => Promise<void>`
+
+Refreshes the action binding and current enabled/disabled state.
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 
 ## Slots
 
@@ -169,6 +182,8 @@ Type: `Promise<LeOption>`
 
  - [le-breadcrumbs](../le-breadcrumbs)
  - [le-component](../le-component)
+ - [le-empty](../le-empty)
+ - [le-list](../le-list)
  - [le-number-input](../le-number-input)
  - [le-overflow-menu](../le-overflow-menu)
  - [le-popup](../le-popup)
@@ -193,6 +208,8 @@ graph TD;
   le-button --> le-tooltip
   le-breadcrumbs --> le-button
   le-component --> le-button
+  le-empty --> le-button
+  le-list --> le-button
   le-number-input --> le-button
   le-overflow-menu --> le-button
   le-popup --> le-button

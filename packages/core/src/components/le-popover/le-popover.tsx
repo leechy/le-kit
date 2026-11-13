@@ -483,7 +483,7 @@ export class LePopover {
     if (actionable !== this.currentHoveredActionable) {
       if (this.currentHoveredActionable) {
         this.currentHoveredActionable.classList.remove('is-drag-hovered', 'is-focused');
-        this.currentHoveredActionable.closest('.nav-row')?.classList.remove('is-drag-hovered', 'is-focused');
+        this.currentHoveredActionable.closest('.nav-node')?.classList.remove('is-drag-hovered', 'is-focused');
         this.currentHoveredActionable.dispatchEvent(
           new MouseEvent('mouseleave', { bubbles: true, cancelable: true }),
         );
@@ -491,7 +491,7 @@ export class LePopover {
       this.currentHoveredActionable = actionable || undefined;
       if (actionable) {
         actionable.classList.add('is-drag-hovered', 'is-focused');
-        actionable.closest('.nav-row')?.classList.add('is-drag-hovered', 'is-focused');
+        actionable.closest('.nav-node')?.classList.add('is-drag-hovered', 'is-focused');
         actionable.dispatchEvent(
           new MouseEvent('mouseenter', { bubbles: true, cancelable: true }),
         );
@@ -569,7 +569,7 @@ export class LePopover {
     this.activeScrollContainer = null;
     if (this.currentHoveredActionable) {
       this.currentHoveredActionable.classList.remove('is-drag-hovered', 'is-focused');
-      this.currentHoveredActionable.closest('.nav-row')?.classList.remove('is-drag-hovered', 'is-focused');
+      this.currentHoveredActionable.closest('.nav-node')?.classList.remove('is-drag-hovered', 'is-focused');
       this.currentHoveredActionable.dispatchEvent(
         new MouseEvent('mouseleave', { bubbles: true, cancelable: true }),
       );

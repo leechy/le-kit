@@ -84,7 +84,7 @@ le-visibility {
   border-left: none;
   background: transparent;
   color: var(--le-color-primary);
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
   --le-button-border-radius: 0 var(--le-radius-md) var(--le-radius-md) 0;
   border-radius: var(--le-button-border-radius);
 }

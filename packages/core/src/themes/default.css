@@ -97,6 +97,9 @@
   --le-input-border-focus-offset: -1px;
   --le-control-focus-transition: var(--le-transition-normal) var(--le-transition-easing, ease-in-out);
   
+  /* selection */
+  --le-color-selection: color-mix(in srgb, var(--le-color-primary) 80%, transparent);
+  
   /* Border radius */
   --le-radius-none: 0;
   --le-radius-sm: 0.125rem;   /* 2px */

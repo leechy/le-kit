@@ -3,15 +3,73 @@
  */
 
 /**
- * Shadow-piercing elementFromPoint to find the innermost DOM element
+ * Finds the innermost child of an element at coordinates (x, y).
+ */
+function findInnermostChildAtPoint(parent: Element, x: number, y: number): Element {
+  let curr = parent;
+  let found = true;
+  while (found) {
+    found = false;
+    for (let i = curr.children.length - 1; i >= 0; i--) {
+      const child = curr.children[i];
+      if (typeof child.getBoundingClientRect === 'function') {
+        const rect = child.getBoundingClientRect();
+        if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+          curr = child;
+          found = true;
+          break;
+        }
+      }
+    }
+  }
+  return curr;
+}
+
+/**
+ * Shadow-piercing and slot-piercing elementFromPoint to find the innermost DOM element
  * under the client coordinates (x, y).
  */
 export function deepElementFromPoint(x: number, y: number): Element | null {
+  if (typeof document === 'undefined' || typeof document.elementFromPoint !== 'function') {
+    return null;
+  }
+
   let el = document.elementFromPoint(x, y);
-  while (el && el.shadowRoot) {
-    const inner = el.shadowRoot.elementFromPoint(x, y);
-    if (!inner || inner === el) break;
-    el = inner;
+  while (el) {
+    if (el.shadowRoot && typeof el.shadowRoot.elementFromPoint === 'function') {
+      const inner = el.shadowRoot.elementFromPoint(x, y);
+      if (!inner || inner === el) break;
+      el = inner;
+      continue;
+    }
+
+    if (el.tagName === 'SLOT') {
+      const slot = el as HTMLSlotElement;
+      if (typeof slot.assignedElements === 'function') {
+        const assigned = slot.assignedElements({ flatten: true });
+        let matched: Element | null = null;
+        for (let i = assigned.length - 1; i >= 0; i--) {
+          const item = assigned[i];
+          if (typeof item.getBoundingClientRect === 'function') {
+            const rect = item.getBoundingClientRect();
+            if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+              matched = item;
+              break;
+            }
+          }
+        }
+        if (matched && matched !== el) {
+          if (!matched.shadowRoot && matched.children.length > 0) {
+            el = findInnermostChildAtPoint(matched, x, y);
+          } else {
+            el = matched;
+          }
+          continue;
+        }
+      }
+    }
+
+    break;
   }
   return el;
 }

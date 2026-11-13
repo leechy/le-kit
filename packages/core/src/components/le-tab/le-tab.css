@@ -54,7 +54,7 @@
   font-weight: var(--le-tab-font-weight);
   line-height: var(--le-line-height-tight);
   text-decoration: none;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
   transition: 
     background-color var(--le-tab-transition) var(--le-transition-easing),
     border-color var(--le-tab-transition) var(--le-transition-easing),

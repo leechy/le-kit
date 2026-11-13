@@ -40,6 +40,8 @@
  - [le-button](../le-button)
  - [le-combobox](../le-combobox)
  - [le-dropdown-base](../le-dropdown-base)
+ - [le-empty](../le-empty)
+ - [le-list](../le-list)
  - [le-multiselect](../le-multiselect)
  - [le-navigation](../le-navigation)
  - [le-number-input](../le-number-input)
@@ -48,6 +50,7 @@
  - [le-select](../le-select)
  - [le-side-panel](../le-side-panel)
  - [le-string-input](../le-string-input)
+ - [le-swipe](../le-swipe)
  - [le-tag](../le-tag)
  - [le-toolbar](../le-toolbar)
 
@@ -59,6 +62,8 @@ graph TD;
   le-button --> le-icon
   le-combobox --> le-icon
   le-dropdown-base --> le-icon
+  le-empty --> le-icon
+  le-list --> le-icon
   le-multiselect --> le-icon
   le-navigation --> le-icon
   le-number-input --> le-icon
@@ -67,6 +72,7 @@ graph TD;
   le-select --> le-icon
   le-side-panel --> le-icon
   le-string-input --> le-icon
+  le-swipe --> le-icon
   le-tag --> le-icon
   le-toolbar --> le-icon
   style le-icon fill:#f9f,stroke:#333,stroke-width:4px

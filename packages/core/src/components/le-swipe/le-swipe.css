@@ -1,0 +1,103 @@
+:host {
+  --le-swipe-action-width: 72px;
+  --le-swipe-duration: var(--le-transition-fast, 150ms);
+  --le-swipe-easing: var(--le-easing-standard, ease-out);
+  --le-swipe-action-bg: var(--le-color-secondary);
+  --le-swipe-action-color: var(--le-color-secondary-contrast, #fff);
+
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+/* Vertical scrolling stays native; horizontal movement and overscroll belong to the swipe */
+:host(.has-actions) {
+  touch-action: pan-y;
+  overscroll-behavior-x: contain;
+}
+
+.le-swipe-content {
+  position: relative;
+  z-index: 1;
+  background: inherit;
+  border-radius: inherit;
+}
+
+:host(.is-moving) .le-swipe-content {
+  will-change: transform;
+}
+
+:host(.is-settling) .le-swipe-content,
+:host(.is-settling) .le-swipe-panel {
+  transition:
+    transform var(--le-swipe-duration) var(--le-swipe-easing),
+    width var(--le-swipe-duration) var(--le-swipe-easing);
+}
+
+.le-swipe-panel {
+  position: absolute;
+  inset-block: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.le-swipe-panel-start {
+  inset-inline-start: 0;
+}
+
+.le-swipe-panel-end {
+  inset-inline-end: 0;
+}
+
+.le-swipe-action {
+  all: unset;
+  box-sizing: border-box;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--le-spacing-1, 4px);
+  padding: 0 var(--le-spacing-2, 8px);
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--le-swipe-action-bg);
+  color: var(--le-swipe-action-color, #fff);
+  font-family: var(--le-font-family-base);
+  font-size: var(--le-font-size-xs);
+  font-weight: var(--le-font-weight-medium);
+  cursor: var(--le-controls-cursor, pointer);
+  transition: flex-grow var(--le-swipe-duration) var(--le-swipe-easing), opacity var(--le-swipe-duration);
+  --le-icon-color: currentColor;
+}
+
+/* Extra space while pulling goes to the outermost button */
+.le-swipe-action.is-outer {
+  flex-grow: 2;
+}
+
+/* Past the full-swipe threshold the outermost action takes the whole panel */
+.le-swipe-panel.is-full .le-swipe-action:not(.is-outer) {
+  flex-grow: 0;
+  flex-basis: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+.le-swipe-action:focus-visible {
+  outline: 2px solid var(--le-swipe-action-color, #fff);
+  outline-offset: -4px;
+}
+
+.le-swipe-action.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.le-swipe-action-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}

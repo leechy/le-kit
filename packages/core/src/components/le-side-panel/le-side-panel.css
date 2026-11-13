@@ -133,7 +133,7 @@
 
   background: transparent;
   color: inherit;
-  cursor: pointer;
+  cursor: var(--le-controls-cursor, pointer);
 }
 
 le-drag-handle {

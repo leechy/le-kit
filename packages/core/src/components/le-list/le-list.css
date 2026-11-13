@@ -1,0 +1,786 @@
+:host {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  container-type: inline-size;
+  container-name: le-list-container;
+  font-family: var(--le-font-family-base);
+  font-size: var(--le-font-size-sm);
+  color: var(--le-color-text-primary);
+  outline: none;
+
+  /* Sizing and indentation variables composed like le-navigation */
+  --le-list-item-padding-x: var(--le-spacing-4);
+  --le-list-item-padding-y: var(--le-spacing-3);
+  --le-list-toggle-size: var(--le-spacing-5);
+  --le-list-item-gap: var(--le-spacing-2);
+  --le-list-item-indent: calc(var(--le-list-toggle-size) + var(--le-list-item-gap));
+
+  /* Separator & Checker Custom Properties */
+  --le-list-row-zebra-bg: var(--le-color-background-secondary);
+  --le-list-col-zebra-bg: var(--le-color-background-secondary);
+  --le-list-checker-intersection-bg: var(--le-color-surface);
+
+  /* Hover & Header Focus Variables */
+  --le-list-hover-bg: color-mix(in srgb, var(--le-color-primary) 10%, var(--le-color-surface));
+  --le-list-header-unfocused-opacity: 0.5;
+
+  /* Selection & Focus Outline Variables (macOS Finder style: Neutral Gray when unfocused, Vibrant Focus Primary when focused) */
+  --le-list-selection-border-color: var(--le-color-border-dark, var(--le-color-gray-400, #9ca3af));
+  --le-list-selection-border-width: 2px;
+  --le-list-row-radius: var(--le-radius-md);
+
+  /* Reorder drop line */
+  --le-list-drop-line-width: 3px;
+
+  /* Card layout */
+  --le-list-card-gap: var(--le-spacing-2);
+  --le-list-card-padding-x: var(--le-spacing-4);
+  --le-list-card-padding-y: var(--le-spacing-3);
+  --le-list-card-radius: var(--le-radius-lg);
+  --le-list-card-bg: var(--le-color-surface);
+  --le-list-card-border: 1px solid var(--le-color-border);
+  --le-list-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --le-list-card-title-size: var(--le-font-size-lg);
+  --le-list-card-line-gap: var(--le-spacing-1);
+  --le-list-card-indent: var(--le-spacing-5);
+}
+
+
+:host(:focus),
+:host(:focus-within) {
+  --le-list-selection-border-color: var(--le-color-selection, var(--le-color-primary, #3b82f6));
+}
+
+:host(:focus),
+:host(:focus-visible),
+:host(:focus-within) {
+  outline: none;
+}
+
+:host.no-wrap .le-list-th,
+:host.no-wrap .le-list-cell-label,
+:host.no-wrap .le-list-cell-description {
+  white-space: nowrap;
+}
+
+.le-list-table-container {
+  width: 100%;
+  border: 1px solid var(--le-color-border);
+  border-radius: var(--le-radius-md);
+  overflow: hidden;
+  background-color: var(--le-color-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  outline: none;
+}
+
+.le-list-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.le-list-table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-family: var(--le-font-family-base);
+  font-size: var(--le-font-size-sm);
+  color: var(--le-color-text-primary);
+  outline: none;
+}
+
+/* Header styles */
+.le-list-thead {
+  background-color: var(--le-color-background-secondary);
+  border-bottom: 1px solid var(--le-color-border);
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.le-list-tr {
+  display: grid;
+  grid-template-columns: var(--le-list-grid-template);
+  width: 100%;
+  box-sizing: border-box;
+  transition: background-color var(--le-transition-fast) var(--le-transition-easing);
+}
+
+.le-list-th {
+  padding: var(--le-list-item-padding-y) var(--le-list-item-padding-x);
+  font-size: var(--le-font-size-xs);
+  font-weight: var(--le-font-weight-semibold);
+  color: var(--le-color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: 
+    opacity var(--le-transition-fast) var(--le-transition-easing),
+    background-color var(--le-transition-fast) var(--le-transition-easing);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  opacity: var(--le-list-header-unfocused-opacity);
+}
+
+:host(:focus) .le-list-th,
+:host(:focus-within) .le-list-th {
+  opacity: 1;
+}
+
+.le-list-th.sortable {
+  cursor: var(--le-controls-cursor, pointer);
+}
+
+.le-list-th.sortable:hover {
+  opacity: 1;
+  background-color: var(--le-color-background-tertiary);
+  color: var(--le-color-text-primary);
+}
+
+.le-list-th-content {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--le-spacing-1);
+  min-width: 0;
+}
+
+.le-list-sort-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.2;
+  transition: opacity var(--le-transition-fast) var(--le-transition-easing), transform var(--le-transition-fast) var(--le-transition-easing);
+  flex-shrink: 0;
+}
+
+.le-list-th.sortable:hover .le-list-sort-icon {
+  opacity: 0.7;
+}
+
+.le-list-th.sorted .le-list-sort-icon {
+  opacity: 1;
+  color: var(--le-color-primary);
+}
+
+/* Table body & rows */
+.le-list-tbody {
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.le-list-row-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.le-list-row-children {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================
+ * Row Separator Variants ('none' | 'borders' | 'zebra')
+ * ========================================== */
+
+/* Default Row Separator: zebra */
+.le-list-table.row-sep-zebra .le-list-row-main.row-odd {
+  background-color: var(--le-color-surface);
+}
+
+.le-list-table.row-sep-zebra .le-list-row-main.row-even {
+  background-color: var(--le-list-row-zebra-bg);
+}
+
+.le-list-table.row-sep-borders .le-list-tbody .le-list-row-item:not(:last-child) > .le-list-row-main,
+.le-list-table.row-sep-borders .le-list-row-children .le-list-row-main {
+  border-bottom: 1px solid var(--le-color-border-light);
+}
+
+.le-list-table.row-sep-zebra .le-list-row-main,
+.le-list-table.row-sep-none .le-list-row-main {
+  border-bottom: none;
+}
+
+.le-list-table.row-sep-none .le-list-row-main {
+  background-color: transparent;
+}
+
+.le-list-table.row-sep-borders .le-list-row-main {
+  background-color: var(--le-color-surface);
+}
+
+.le-list-row-main {
+  position: relative;
+}
+
+/* Row hover (when has-row-hover is active and not dragging) */
+.le-list-table.has-row-hover:not(.is-dragging) .le-list-row-main:hover {
+  background-color: var(--le-list-hover-bg);
+}
+
+/* Suppress text selection during drag selection */
+.le-list-table.is-selecting,
+.le-list-table.is-selecting * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* Selection & Focus Ring Outline Overlay (pure border, no background interference) */
+.le-list-row-main.is-selected::after,
+:host(:focus) .le-list-row-main.is-focused::after,
+:host(:focus-within) .le-list-row-main.is-focused::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  box-sizing: border-box;
+  transition: border-color var(--le-transition-fast) var(--le-transition-easing);
+}
+
+/* Single isolated selected row or standalone keyboard focused row */
+.le-list-row-main.is-selected.selected-single::after,
+.le-list-row-main.is-selected.is-selected-single::after,
+:host(:focus) .le-list-row-main.is-focused:not(.is-selected)::after,
+:host(:focus-within) .le-list-row-main.is-focused:not(.is-selected)::after {
+  border: var(--le-list-selection-border-width) solid var(--le-list-selection-border-color);
+  border-radius: var(--le-list-row-radius);
+}
+
+/* Contiguous group start (top row) */
+.le-list-row-main.is-selected.selected-start::after,
+.le-list-row-main.is-selected.is-selected-start::after {
+  border: var(--le-list-selection-border-width) solid var(--le-list-selection-border-color);
+  border-bottom: none;
+  border-top-left-radius: var(--le-list-row-radius);
+  border-top-right-radius: var(--le-list-row-radius);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Contiguous group middle rows (left & right borders only) */
+.le-list-row-main.is-selected.selected-middle::after,
+.le-list-row-main.is-selected.is-selected-middle::after {
+  border-left: var(--le-list-selection-border-width) solid var(--le-list-selection-border-color);
+  border-right: var(--le-list-selection-border-width) solid var(--le-list-selection-border-color);
+  border-top: none;
+  border-bottom: none;
+  border-radius: 0;
+}
+
+/* Contiguous group end (bottom row) */
+.le-list-row-main.is-selected.selected-end::after,
+.le-list-row-main.is-selected.is-selected-end::after {
+  border: var(--le-list-selection-border-width) solid var(--le-list-selection-border-color);
+  border-top: none;
+  border-bottom-left-radius: var(--le-list-row-radius);
+  border-bottom-right-radius: var(--le-list-row-radius);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* ==========================================
+ * Column Separator Variants ('none' | 'borders' | 'zebra')
+ * ========================================== */
+
+/* Column vertical borders */
+.le-list-table.col-sep-borders .le-list-th:not(:last-child),
+.le-list-table.col-sep-borders .le-list-td:not(:last-child) {
+  border-right: 1px solid var(--le-color-border-light);
+}
+
+/* Column zebra (when row is not zebra) */
+.le-list-table.col-sep-zebra:not(.is-gridiron) .le-list-th.col-odd,
+.le-list-table.col-sep-zebra:not(.is-gridiron) .le-list-td.col-odd {
+  background-color: var(--le-list-col-zebra-bg);
+}
+
+/* Ensure row hover overrides cell backgrounds in column zebra and gridiron (only when not dragging) */
+.le-list-table.has-row-hover:not(.is-dragging).col-sep-zebra .le-list-row-main:hover .le-list-td,
+.le-list-table.has-row-hover:not(.is-dragging).is-gridiron .le-list-row-main:hover .le-list-td {
+  background-color: var(--le-list-hover-bg);
+}
+
+/* ==========================================
+ * Gridiron / Checkered Pattern (both row & col zebra)
+ * ========================================== */
+.le-list-table.is-gridiron .le-list-row-main.row-odd .le-list-td.col-even {
+  background-color: var(--le-color-surface);
+}
+
+.le-list-table.is-gridiron .le-list-row-main.row-odd .le-list-td.col-odd {
+  background-color: var(--le-list-col-zebra-bg);
+}
+
+.le-list-table.is-gridiron .le-list-row-main.row-even .le-list-td.col-even {
+  background-color: var(--le-list-row-zebra-bg);
+}
+
+/* Intersections in checkered gridiron */
+.le-list-table.is-gridiron .le-list-row-main.row-even .le-list-td.col-odd {
+  background-color: var(--le-list-checker-intersection-bg);
+}
+
+.le-list-table.is-gridiron .le-list-thead .le-list-th.col-odd {
+  background-color: var(--le-color-background-tertiary);
+}
+
+/* Table cells */
+.le-list-td {
+  padding: var(--le-list-item-padding-y) var(--le-list-item-padding-x);
+  box-sizing: border-box;
+  color: var(--le-color-text-primary);
+  line-height: var(--le-line-height-normal);
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.le-list-td > * {
+  position: relative;
+  z-index: 2;
+}
+
+.le-list-td.is-first-cell {
+  padding-left: 0;
+}
+
+.le-list-cell-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--le-spacing-2);
+  min-width: 0;
+}
+
+.le-list-cell-text-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.le-list-cell-label {
+  font-weight: var(--le-font-weight-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.le-list-cell-description {
+  font-size: var(--le-font-size-xs);
+  color: var(--le-color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.le-list-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 20px;
+  --le-icon-size: 24px;
+}
+
+/* Row toggle chevron & spacer */
+.le-list-row-toggle,
+.le-list-toggle-spacer {
+  box-sizing: content-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  align-self: stretch;
+  width: var(--le-list-toggle-size);
+  min-width: var(--le-list-toggle-size);
+  padding-right: var(--le-list-item-gap);
+  padding-top: var(--le-list-item-padding-y);
+  padding-bottom: var(--le-list-item-padding-y);
+  margin-top: calc(-1 * var(--le-list-item-padding-y));
+  margin-bottom: calc(-1 * var(--le-list-item-padding-y));
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.le-list-row-toggle {
+  cursor: var(--le-controls-cursor, pointer);
+  opacity: 0.4;
+  transition: opacity var(--le-transition-fast) var(--le-transition-easing), color var(--le-transition-fast) var(--le-transition-easing);
+  color: inherit;
+  outline: none;
+}
+
+.le-list-row-toggle:focus,
+.le-list-row-toggle:focus-visible {
+  outline: none;
+}
+
+.le-list-table:not(.is-dragging) .le-list-row-toggle:hover {
+  opacity: 1;
+}
+
+.le-list-chevron {
+  display: inline-block;
+  color: currentColor;
+  width: var(--le-list-toggle-size);
+  --le-icon-size: var(--le-list-toggle-size);
+  transition: transform var(--le-transition-fast) var(--le-transition-easing, ease);
+  transform: rotate(-90deg);
+}
+
+.le-list-chevron.open {
+  transform: rotate(0deg);
+}
+
+/* Action column styling */
+.le-list-th.le-list-th-action {
+  padding: var(--le-list-item-padding-y) var(--le-list-item-padding-x);
+  box-sizing: border-box;
+  user-select: none;
+  pointer-events: none;
+}
+
+.le-list-td.le-list-td-action {
+  padding: var(--le-list-item-padding-y) var(--le-list-item-padding-x);
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.le-list-row-main.has-action {
+  cursor: var(--le-controls-cursor, pointer);
+}
+
+.le-list-row-action-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.35;
+  width: var(--le-list-toggle-size);
+  --le-icon-size: var(--le-list-toggle-size);
+  transition: opacity var(--le-transition-fast) var(--le-transition-easing), transform var(--le-transition-fast) var(--le-transition-easing);
+  flex-shrink: 0;
+}
+
+.le-list-table:not(.is-dragging) .le-list-row-main:hover .le-list-row-action-chevron {
+  opacity: 0.85;
+}
+
+/* Alignment utilities */
+.align-left {
+  justify-content: flex-start;
+  text-align: left;
+}
+.align-left .le-list-cell-inner,
+.align-left .le-list-th-content {
+  justify-content: flex-start;
+}
+
+.align-center {
+  justify-content: center;
+  text-align: center;
+}
+.align-center .le-list-cell-inner,
+.align-center .le-list-th-content {
+  justify-content: center;
+}
+
+.align-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+.align-right .le-list-cell-inner,
+.align-right .le-list-th-content {
+  justify-content: flex-end;
+}
+
+/* Empty state */
+.le-list-empty-cell {
+  padding: var(--le-spacing-4);
+  text-align: center;
+}
+
+/* ==========================================
+ * Manual Drag and Drop Reordering
+ * ========================================== */
+
+.le-list-table.is-reorderable .le-list-row-main {
+  touch-action: none;
+}
+
+.le-list-table.is-dragging .le-list-row-main {
+  cursor: grabbing !important;
+}
+
+.le-list-row-item {
+  position: relative;
+}
+
+/* Dragged item placeholder styling */
+.le-list-row-main.is-dragged-row,
+.le-list-row-main.is-dragged-item {
+  background-color: color-mix(in srgb, var(--le-color-primary, #3b82f6) 12%, transparent) !important;
+  border: 1px dashed color-mix(in srgb, var(--le-color-primary, #3b82f6) 45%, transparent) !important;
+  color: var(--le-color-primary, #3b82f6);
+}
+
+.le-list-row-main.reorder-target-inside {
+  background-color: color-mix(in srgb, var(--le-color-primary, #3b82f6) 18%, transparent) !important;
+  outline: 2px solid var(--le-color-primary, #3b82f6) !important;
+  outline-offset: -2px;
+  border-radius: var(--le-list-row-radius, var(--le-radius-md, 6px));
+}
+
+/* Disable transitions during drag to eliminate lag and flicker */
+.le-list-table.is-dragging,
+.le-list-table.is-dragging * {
+  transition: none !important;
+}
+
+/* Suppress selection/focus/hover outline overlays during drag */
+.le-list-row-main.is-dragged-row::after,
+.le-list-row-main.is-dragged-item::after,
+.le-list-row-main.reorder-target-inside::after,
+.le-list-table.is-dragging .le-list-row-main::after,
+.le-list-table.is-dragging .le-list-row-main.is-selected::after,
+.le-list-table.is-dragging .le-list-row-main.is-focused::after,
+.le-list-table.is-dragging .le-list-row-main:hover::after {
+  display: none !important;
+}
+
+.reorder-drop-line {
+  position: absolute;
+  z-index: 100;
+  right: var(--le-spacing-2, 8px);
+  height: var(--le-list-drop-line-width, 3px);
+  background-color: var(--le-color-primary, currentColor);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.reorder-drop-line::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--le-list-drop-line-width, 3px) / 2);
+  top: -6px;
+  width: var(--le-list-drop-line-width, 3px);
+  height: 14px;
+  border-radius: 2px;
+  background-color: var(--le-color-primary, currentColor);
+}
+
+.reorder-drop-line.line-before {
+  top: -1.5px;
+}
+
+.reorder-drop-line.line-after {
+  bottom: -1.5px;
+}
+
+.le-list-tr.reorder-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  pointer-events: none;
+  font-family: var(--le-font-family-base);
+  font-size: var(--le-font-size-sm);
+  color: var(--le-color-text-primary);
+  text-align: left;
+  background: color-mix(in srgb, var(--le-color-surface-alt, var(--le-color-surface, #ffffff)) 25%, transparent) !important;
+  border: 1px solid var(--le-color-border, #e5e7eb);
+  border-radius: var(--le-list-row-radius, var(--le-radius-md, 6px));
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.18), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  will-change: transform;
+  display: grid;
+}
+
+.le-list-reorder-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--le-color-text-secondary);
+  opacity: 0.5;
+  cursor: grab;
+  user-select: none;
+  font-size: var(--le-font-size-base, 16px);
+  transition: opacity var(--le-transition-fast) var(--le-transition-easing);
+}
+
+.le-list-table:not(.is-dragging) .le-list-row-main:hover .le-list-reorder-handle {
+  opacity: 0.9;
+}
+
+.le-list-td-reorder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--le-list-item-padding-y) var(--le-list-item-padding-x);
+}
+
+.le-list-th-reorder {
+  padding: var(--le-list-item-padding-y) var(--le-list-item-padding-x);
+}
+
+/* Actions Column Styles */
+.le-list-actions-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--le-spacing-1, 4px);
+  justify-content: flex-end;
+}
+
+.le-list-actions-cell le-button {
+  --le-button-padding-x: 4px;
+  --le-button-padding-y: 4px;
+}
+
+.le-list-actions-overflow {
+  display: inline-flex;
+}
+
+
+/* ==========================================
+ * Field values (table cells and cards)
+ * ========================================== */
+.le-list-field {
+  min-width: 0;
+}
+
+/* ==========================================
+ * Card layout
+ * ========================================== */
+.le-list-table-container.is-cards {
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.le-list-table-container.is-cards .le-list-table-scroll {
+  overflow: visible;
+}
+
+.le-list-table.is-cards .le-list-tbody {
+  gap: var(--le-list-card-gap);
+}
+
+.le-list-table.is-cards .le-list-row-children {
+  gap: var(--le-list-card-gap);
+  padding-top: var(--le-list-card-gap);
+  padding-inline-start: var(--le-list-card-indent);
+}
+
+.le-list-table.is-cards .le-list-row-main {
+  display: block;
+  border: var(--le-list-card-border);
+  border-radius: var(--le-list-card-radius);
+  background-color: var(--le-list-card-bg);
+  box-shadow: var(--le-list-card-shadow);
+}
+
+/* Every selected card is outlined on its own, there are no contiguous groups */
+.le-list-table.is-cards .le-list-row-main.is-selected::after,
+:host(:focus) .le-list-table.is-cards .le-list-row-main.is-focused::after,
+:host(:focus-within) .le-list-table.is-cards .le-list-row-main.is-focused::after {
+  inset: -1px;
+  border: var(--le-list-selection-border-width) solid var(--le-list-selection-border-color);
+  border-radius: var(--le-list-card-radius);
+}
+
+.le-list-card {
+  display: flex;
+  align-items: center;
+  gap: var(--le-list-item-gap);
+  padding: var(--le-list-card-padding-y) var(--le-list-card-padding-x);
+  min-width: 0;
+}
+
+.le-list-card .le-list-row-toggle,
+.le-list-card .le-list-toggle-spacer {
+  align-self: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.le-list-card-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--le-list-card-line-gap);
+  min-width: 0;
+}
+
+.le-list-card-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--le-spacing-3);
+  min-width: 0;
+  font-size: var(--le-font-size-xs);
+  line-height: var(--le-line-height-normal);
+  color: var(--le-color-text-secondary);
+}
+
+.le-list-card-line.is-title {
+  font-size: var(--le-list-card-title-size);
+  font-weight: var(--le-font-weight-semibold);
+  line-height: var(--le-line-height-tight);
+  color: var(--le-color-text-primary);
+}
+
+.le-list-card-start,
+.le-list-card-end {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.le-list-card-start {
+  flex: 1 1 auto;
+}
+
+.le-list-card-end {
+  flex: 0 1 auto;
+  justify-content: flex-end;
+}
+
+.le-list-card-start > .le-list-field,
+.le-list-card-end > .le-list-field {
+  flex: 0 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.le-list-card-separator {
+  flex: 0 0 auto;
+  white-space: pre;
+}
+
+.le-list-card-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+/* While values fly between the table and cards, nothing clips them on the way */
+.le-list-table-container.is-animating-layout,
+.le-list-table-container.is-animating-layout .le-list-table-scroll,
+.le-list-table-container.is-animating-layout .le-list-td,
+.le-list-table-container.is-animating-layout .le-list-card-start,
+.le-list-table-container.is-animating-layout .le-list-card-end {
+  overflow: visible;
+}
+
+/* Swipeable card: the content covers the action buttons with the card's own background */
+.le-list-card-swipe {
+  background-color: inherit;
+  border-radius: inherit;
+}

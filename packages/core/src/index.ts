@@ -54,4 +54,7 @@ export { atom } from 'nanostores';
 export { persistentAtom } from '@nanostores/persistent';
 
 // Type exports
+export type { LeColumn } from './types/list';
+export type { LeOption, LeOptionValue } from './types/options';
 export type * from './components.d.ts';
+

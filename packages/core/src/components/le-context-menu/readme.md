@@ -12,23 +12,26 @@ when the user right-clicks or long-presses on its children.
 
 ## Properties
 
-| Property             | Attribute              | Description                                                                                                                                                                       | Type                                                | Default        |
-| -------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------- |
-| `align`              | `align`                | Alignment of the menu relative to the trigger.                                                                                                                                    | `"center" \| "end" \| "start"`                      | `'start'`      |
-| `backdrop`           | `backdrop`             | Whether to show a backdrop behind the menu, lifting the active item.                                                                                                              | `boolean`                                           | `false`        |
-| `disabled`           | `disabled`             | Disables right-click and touch interactions.                                                                                                                                      | `boolean`                                           | `false`        |
-| `items`              | `items`                | List of menu items represented as options.                                                                                                                                        | `LeOption[] \| string`                              | `[]`           |
-| `open`               | `open`                 | Whether the context menu is open.                                                                                                                                                 | `boolean`                                           | `false`        |
-| `pageScrollBehavior` | `page-scroll-behavior` | Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll (default) - 'fixed-menu': menu scrolls with the page | `"blocked" \| "fixed-menu" \| "menu-close"`         | `'menu-close'` |
-| `position`           | `position`             | Position of the menu relative to the trigger. If 'mouse', positions next to mouse/touch coords.                                                                                   | `"bottom" \| "left" \| "mouse" \| "right" \| "top"` | `'mouse'`      |
+| Property             | Attribute              | Description                                                                                                                                                                                                                                                                        | Type                                                | Default        |
+| -------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------- |
+| `align`              | `align`                | Alignment of the menu relative to the trigger.                                                                                                                                                                                                                                     | `"center" \| "end" \| "start"`                      | `'start'`      |
+| `backdrop`           | `backdrop`             | Whether to show a backdrop behind the menu, lifting the active item.                                                                                                                                                                                                               | `boolean`                                           | `false`        |
+| `disabled`           | `disabled`             | Disables right-click and touch interactions.                                                                                                                                                                                                                                       | `boolean`                                           | `false`        |
+| `items`              | `items`                | List of menu items represented as options.                                                                                                                                                                                                                                         | `LeOption[] \| string`                              | `[]`           |
+| `open`               | `open`                 | Whether the context menu is open.                                                                                                                                                                                                                                                  | `boolean`                                           | `false`        |
+| `pageScrollBehavior` | `page-scroll-behavior` | Behavior of the menu on page scroll: - 'blocked': blocks page scroll - 'menu-close': closes the menu automatically on scroll (default) - 'fixed-menu': menu scrolls with the page                                                                                                  | `"blocked" \| "fixed-menu" \| "menu-close"`         | `'menu-close'` |
+| `position`           | `position`             | Position of the menu relative to the trigger. If 'mouse', positions next to mouse/touch coords.                                                                                                                                                                                    | `"bottom" \| "left" \| "mouse" \| "right" \| "top"` | `'mouse'`      |
+| `reorder`            | `reorder`              | Enables manual drag-and-drop reordering of menu items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels Note: Can also be passed as boolean (true -> 'nested', false -> 'none'). | `"nested" \| "none" \| "siblings" \| boolean`       | `'none'`       |
+| `showReorderHandle`  | `show-reorder-handle`  | Whether to show the drag handle icon at the end of reorderable menu items.                                                                                                                                                                                                         | `boolean`                                           | `false`        |
 
 
 ## Events
 
-| Event                 | Description                              | Type                                     |
-| --------------------- | ---------------------------------------- | ---------------------------------------- |
-| `leContextMenuClose`  | Emitted when the context menu is closed. | `CustomEvent<void>`                      |
-| `leContextMenuSelect` | Emitted when a menu item is selected.    | `CustomEvent<LeContextMenuSelectDetail>` |
+| Event                  | Description                                              | Type                                         |
+| ---------------------- | -------------------------------------------------------- | -------------------------------------------- |
+| `leContextMenuClose`   | Emitted when the context menu is closed.                 | `CustomEvent<void>`                          |
+| `leContextMenuReorder` | Emitted when menu items are reordered via drag and drop. | `CustomEvent<LeNavigationItemReorderDetail>` |
+| `leContextMenuSelect`  | Emitted when a menu item is selected.                    | `CustomEvent<LeContextMenuSelectDetail>`     |
 
 
 ## Methods
@@ -43,16 +46,17 @@ Type: `Promise<void>`
 
 
 
-### `show(x?: number, y?: number) => Promise<void>`
+### `show(x?: number, y?: number, triggerEvent?: MouseEvent | TouchEvent) => Promise<void>`
 
 
 
 #### Parameters
 
-| Name | Type                  | Description |
-| ---- | --------------------- | ----------- |
-| `x`  | `number \| undefined` |             |
-| `y`  | `number \| undefined` |             |
+| Name           | Type                                    | Description |
+| -------------- | --------------------------------------- | ----------- |
+| `x`            | `number \| undefined`                   |             |
+| `y`            | `number \| undefined`                   |             |
+| `triggerEvent` | `MouseEvent \| TouchEvent \| undefined` |             |
 
 #### Returns
 
@@ -87,6 +91,10 @@ Type: `Promise<void>`
 
 ## Dependencies
 
+### Used by
+
+ - [le-list](../le-list)
+
 ### Depends on
 
 - [le-popover](../le-popover)
@@ -113,6 +121,7 @@ graph TD;
   le-overflow-menu --> le-popover
   le-overflow-menu --> le-button
   le-overflow-menu --> le-icon
+  le-list --> le-context-menu
   style le-context-menu fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

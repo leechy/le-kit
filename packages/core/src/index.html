@@ -6,13 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
   <title>Le-Kit Component Library</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+
   <!-- Register composed icons in the global registry (must run before components) -->
   <script>
     window.__leKitConfig__ = {
       manifestFile: 'custom-elements.json',
       assetBasePath: '',
       icons: {
-        defaultRounded: false,
+        defaultRounded: true,
         defaultFilled: false,
         defaultThin: false,
         defaultBadgePosition: '-4.5, -4.5',
@@ -67,6 +73,7 @@
     }
 
     body {
+      --le-font-family: Inter, sans-serif;
       font-family: var(--le-font-family);
       background: var(--le-color-background);
       color: var(--le-color-text);
@@ -351,35 +358,946 @@
   <!-- Reserve space for fixed headers (place anywhere you need)
     <le-header-placeholder></le-header-placeholder> -->
 
+  <div class="demo-section">
+    <h2>Navigation Reordering</h2>
+    <p>Since navigation is used in sidebars and menus, and we often need to be able to reorder items in places like
+      this, for example,
+      folders in an email app, we're adding a new functionality to le-navigation to support this.</p>
+    <div style="display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap;">
+      <label>Reorder mode:</label>
+      <le-select id="demo-reorder-select" value="nested">
+        <le-item value="nested">nested</le-item>
+        <le-item value="siblings">siblings</le-item>
+        <le-item value="none">none (disabled)</le-item>
+      </le-select>
+      <label>Max depth:</label>
+      <le-select id="demo-reorder-depth-select" value="none">
+        <le-item value="none">No limit</le-item>
+        <le-item value="1">1 (root + 1 nested level)</le-item>
+        <le-item value="2">2 (root + 2 nested levels)</le-item>
+      </le-select>
+      <le-button id="btn-reorder-toggle-method">
+        Toggle via setReorder()
+      </le-button>
+    </div>
+    <div style="display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap;">
+      <label>Move item:</label>
+      <le-select id="demo-reorder-source-select">
+        <le-item value="work">Work</le-item>
+        <le-item value="sent">Sent</le-item>
+        <le-item value="drafts">Drafts</le-item>
+        <le-item value="flagged">Flagged</le-item>
+        <le-item value="trash">Trash</le-item>
+      </le-select>
+      <le-select id="demo-reorder-position-select">
+        <le-item value="after">after</le-item>
+        <le-item value="before">before</le-item>
+        <le-item value="inside">inside</le-item>
+      </le-select>
+      <le-select id="demo-reorder-target-select">
+        <le-item value="work">Work</le-item>
+        <le-item value="sent">Sent</le-item>
+        <le-item value="drafts">Drafts</le-item>
+        <le-item value="flagged">Flagged</le-item>
+        <le-item value="trash">Trash</le-item>
+      </le-select>
+      <le-button id="btn-reorder-move-method">
+        Move via moveItem()
+      </le-button>
+    </div>
+    <div style="display: flex; gap: var(--le-spacing-2)">
+      <div style="width: 320px; background-color: var(--le-color-surface-alt); border-radius: var(--le-radius-md);">
+        <le-navigation id="demo-reorder-nav-1" reorder="nested" orientation="vertical" show-reorder-handle>
+          <le-item label="All Inboxes" icon-start="trays" value="inboxes" open>
+            <le-item label="Work" icon-start="tray" count="3" value="work"></le-item>
+            <le-item label="Personal" icon-start="tray" value="personal"></le-item>
+            <le-item label="Finance" icon-start="tray" value="finance"></le-item>
+          </le-item>
+          <le-item label="Sent" icon-start="folder" value="sent"></le-item>
+          <le-item label="Drafts" icon-start="file" value="drafts"></le-item>
+          <le-item label="Flagged" icon-start="flag" value="flagged"></le-item>
+          <le-item label="Trash" icon-start="delete" value="trash"></le-item>
+        </le-navigation>
+      </div>
+      <div style="width: 320px; background-color: var(--le-color-surface-alt); border-radius: var(--le-radius-md);">
+        <le-navigation id="demo-reorder-nav-2" reorder="nested" orientation="vertical" toggle-position="end">
+          <le-item label="All Inboxes" icon-start="trays" value="inboxes" open>
+            <le-item label="Work" icon-start="tray" count="3" value="work"></le-item>
+            <le-item label="Personal" icon-start="tray" value="personal"></le-item>
+            <le-item label="Finance" icon-start="tray" value="finance"></le-item>
+          </le-item>
+          <le-item label="Sent" icon-start="folder" value="sent"></le-item>
+          <le-item label="Drafts" icon-start="file" value="drafts"></le-item>
+          <le-item label="Flagged" icon-start="flag" value="flagged"></le-item>
+          <le-item label="Trash" icon-start="delete" value="trash"></le-item>
+        </le-navigation>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const nav1 = document.getElementById('demo-reorder-nav-1');
+        const nav2 = document.getElementById('demo-reorder-nav-2');
+        const select = document.getElementById('demo-reorder-select');
+        const depthSelect = document.getElementById('demo-reorder-depth-select');
+        const toggleBtn = document.getElementById('btn-reorder-toggle-method');
+        const positionSelect = document.getElementById('demo-reorder-position-select');
+        const targetSelect = document.getElementById('demo-reorder-target-select');
+        const sourceSelect = document.getElementById('demo-reorder-source-select');
+        const moveBtn = document.getElementById('btn-reorder-move-method');
+
+        const navs = [nav1, nav2].filter(Boolean);
+
+        if (select) {
+          select.addEventListener('leChange', (e) => {
+            navs.forEach(nav => nav.setAttribute('reorder', e.target.value));
+          });
+        }
+        if (depthSelect) {
+          depthSelect.addEventListener('leChange', (e) => {
+            const val = e.target.value;
+            navs.forEach(nav => {
+              if (val === 'none') {
+                nav.removeAttribute('max-reorder-depth');
+              } else {
+                nav.setAttribute('max-reorder-depth', val);
+              }
+            });
+          });
+        }
+        if (toggleBtn && nav1) {
+          toggleBtn.addEventListener('click', async () => {
+            const currentMode = nav1.getAttribute('reorder') || 'nested';
+            const nextMode = currentMode === 'none' ? 'nested' : 'none';
+            await Promise.all(navs.map(nav => nav.setReorder(nextMode)));
+            if (select) select.value = nextMode;
+          });
+        }
+        if (moveBtn && nav1 && sourceSelect && targetSelect && positionSelect) {
+          moveBtn.addEventListener('click', () => {
+            nav1.moveItem(sourceSelect.value, targetSelect.value, positionSelect.value);
+          });
+        }
+        navs.forEach(nav => {
+          nav.addEventListener('leNavItemReorder', (e) => {
+            console.log('leNavItemReorder event fired:', e.detail);
+          });
+        });
+      });
+    </script>
+
+    <h2>List</h2>
+    <p>Desktop table list view featuring macOS Finder-style alternating zebra rows, sortable columns, and flexible data
+      sources.</p>
+
+    <h3>1. Declarative List with &lt;le-item&gt; Children</h3>
+    <le-list>
+      <le-item label="Project Alpha" description="Core API redesign & performance optimization" icon="folder"
+        value="p1"></le-item>
+      <le-item label="Design System v2" description="Updated color tokens & component specs" icon="folder-open"
+        value="p2"></le-item>
+      <le-item label="Customer Portal" description="Self-service portal for Enterprise clients" icon="file"
+        value="p3"></le-item>
+      <le-item label="Analytics Pipeline" description="Real-time data ingestion service" icon="gear-badge"
+        value="p4"></le-item>
+    </le-list>
+
+    <br />
+
+    <h3>2. Data-Driven List (Columns &amp; JS Data with Multiple Drag Selection &amp; Column Customization)</h3>
+    <le-list id="demo-data-list" column-visibility-toggle column-reorder selection="multiple"></le-list>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const listEl = document.getElementById('demo-data-list');
+        if (listEl) {
+          listEl.columns = [
+            { key: 'label', label: 'Member', sortable: true, toggleable: false },
+            { key: 'data.department', label: 'Department', type: 'badge', sortable: true },
+            { key: 'data.role', label: 'Role', sortable: true, sortIconPosition: 'none' },
+            { key: 'data.projectsCount', label: 'Projects', type: 'number', sortable: true, align: 'right', sortStart: 'desc', sortIconPosition: 'start' },
+            { key: 'data.joined', label: 'Joined', type: 'date', sortable: true, align: 'center', sortStart: 'desc' },
+            { key: 'data.active', label: 'Active', type: 'boolean', align: 'center', width: '70px' }
+          ];
+
+          listEl.data = [
+            {
+              id: '1',
+              label: 'Alex Rivera',
+              description: 'alex.rivera@example.com',
+              icon: '👤',
+              color: 'primary',
+              data: { department: 'Engineering', role: 'Staff Engineer', projectsCount: 14, joined: '2022-03-15', active: true }
+            },
+            {
+              id: '2',
+              label: 'Sophia Chen',
+              description: 'sophia.chen@example.com',
+              icon: '🎨',
+              color: 'success',
+              data: { department: 'Design', role: 'Lead Product Designer', projectsCount: 9, joined: '2021-08-01', active: true }
+            },
+            {
+              id: '3',
+              label: 'Marcus Vance',
+              description: 'marcus.vance@example.com',
+              icon: '💼',
+              color: 'warning',
+              data: { department: 'Product', role: 'Principal PM', projectsCount: 22, joined: '2020-01-10', active: false }
+            },
+            {
+              id: '4',
+              label: 'Elena Rostova',
+              description: 'elena.r@example.com',
+              icon: '⚡',
+              color: 'info',
+              data: { department: 'Engineering', role: 'DevOps Lead', projectsCount: 18, joined: '2023-05-20', active: true }
+            },
+            {
+              id: '5',
+              label: 'David Kim',
+              description: 'david.kim@example.com',
+              icon: '🚀',
+              color: 'danger',
+              data: { department: 'Marketing', role: 'Growth Strategist', projectsCount: 6, joined: '2024-02-01', active: true }
+            }
+          ];
+
+          // Listen for leSelectionChange event
+          listEl.addEventListener('leSelectionChange', (e) => {
+            console.log('🎯 [le-list leSelectionChange event]', e.detail);
+          });
+
+          // Listen for leSortChange event for server-side sorting integrations
+          listEl.addEventListener('leSortChange', (e) => {
+            console.log('[le-list leSortChange event]', e.detail);
+          });
+
+          // Listen for leColumnVisibilityChange event
+          listEl.addEventListener('leColumnVisibilityChange', (e) => {
+            console.log('[le-list leColumnVisibilityChange event]', e.detail);
+          });
+
+          // Listen for leColumnOrderChange event
+          listEl.addEventListener('leColumnOrderChange', (e) => {
+            console.log('[le-list leColumnOrderChange event]', e.detail);
+          });
+        }
+      });
+    </script>
+
+    <br />
+
+    <h3>3. Hierarchical Collapsible Rows (&lt;le-list&gt; with Nested Children, Actions &amp; &lt;le-collapse&gt;)</h3>
+    <p>Displays nested organizational data with chevron toggles, depth indentation, row actions with action chevrons,
+      and smooth sliding animations.</p>
+    <le-list id="demo-nested-list" column-visibility-toggle column-reorder selection="single"></le-list>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const nestedList = document.getElementById('demo-nested-list');
+        if (nestedList) {
+          nestedList.columns = [
+            { key: 'label', label: 'Organization / Name', width: '2fr' },
+            { key: 'data.role', label: 'Role / Type', type: 'badge' },
+            { key: 'data.projectsCount', label: 'Projects', type: 'number', sortable: true, align: 'right' },
+            { key: 'data.joined', label: 'Joined / Created', type: 'date', sortable: true, align: 'center' },
+            { key: 'data.active', label: 'Active', type: 'boolean', align: 'center', width: '70px' }
+          ];
+
+          nestedList.data = [
+            {
+              id: 'dept-eng',
+              label: 'Engineering Department',
+              description: 'Software and infrastructure teams',
+              color: 'primary',
+              action: 'view-dept-engineering',
+              open: true,
+              data: { role: 'Department', projectsCount: 41, joined: '2020-01-01', active: true },
+              children: [
+                {
+                  id: 'team-core',
+                  label: 'Core Infrastructure Team',
+                  description: 'Backend services & DevOps',
+                  color: 'info',
+                  action: 'view-team-core',
+                  open: true,
+                  data: { role: 'Team', projectsCount: 32, joined: '2021-03-01', active: true },
+                  children: [
+                    {
+                      id: 'eng-1',
+                      label: 'Alex Rivera',
+                      description: 'alex.rivera@example.com',
+                      color: 'primary',
+                      action: 'view-member-alex',
+                      data: { role: 'Staff Engineer', projectsCount: 14, joined: '2022-03-15', active: true }
+                    },
+                    {
+                      id: 'eng-2',
+                      label: 'Elena Rostova',
+                      description: 'elena.r@example.com',
+                      color: 'info',
+                      action: 'view-member-elena',
+                      data: { role: 'DevOps Lead', projectsCount: 18, joined: '2023-05-20', active: true }
+                    }
+                  ]
+                },
+                {
+                  id: 'team-frontend',
+                  label: 'Frontend Platform Team',
+                  description: 'Design system and client apps',
+                  color: 'success',
+                  action: 'view-team-frontend',
+                  open: false,
+                  data: { role: 'Team', projectsCount: 9, joined: '2021-08-01', active: true },
+                  children: [
+                    {
+                      id: 'eng-3',
+                      label: 'Sophia Chen',
+                      description: 'sophia.chen@example.com',
+                      color: 'success',
+                      action: 'view-member-sophia',
+                      data: { role: 'Lead Product Designer', projectsCount: 9, joined: '2021-08-01', active: true }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id: 'dept-growth',
+              label: 'Growth & Product Operations',
+              description: 'Cross-functional growth teams',
+              color: 'warning',
+              action: 'view-dept-growth',
+              open: true,
+              data: { role: 'Department', projectsCount: 28, joined: '2020-06-01', active: true },
+              children: [
+                {
+                  id: 'prod-1',
+                  label: 'Marcus Vance',
+                  description: 'marcus.vance@example.com',
+                  color: 'warning',
+                  action: 'view-member-marcus',
+                  data: { role: 'Principal PM', projectsCount: 22, joined: '2020-01-10', active: false }
+                },
+                {
+                  id: 'mkt-1',
+                  label: 'David Kim',
+                  description: 'david.kim@example.com',
+                  color: 'danger',
+                  action: 'view-member-david',
+                  data: { role: 'Growth Strategist', projectsCount: 6, joined: '2024-02-01', active: true }
+                }
+              ]
+            }
+          ];
+
+          nestedList.addEventListener('leAction', (e) => {
+            console.log('⚡ [le-list leAction event fired]:', {
+              action: e.detail.action,
+              id: e.detail.id,
+              item: e.detail.item,
+              originalEvent: e.detail.originalEvent
+            });
+          });
+
+          nestedList.addEventListener('leItemToggle', (e) => {
+            console.log('📁 [le-list leItemToggle event fired]:', e.detail);
+          });
+        }
+      });
+    </script>
+
+    <br />
+
+    <h3>4. Drag-and-Drop Reordering in &lt;le-list&gt; (with max-reorder-depth="2" and show-reorder-handle)</h3>
+    <p>Reorder list rows across hierarchy levels (nested), or within siblings, with configurable <code>max-reorder-depth</code> limit, live drop indicator lines, bullet pips, and auto-expanding on hover.</p>
+
+    <div style="display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap;">
+      <label>Reorder mode:</label>
+      <le-select id="demo-list-reorder-select" value="nested">
+        <le-item value="nested">nested</le-item>
+        <le-item value="siblings">siblings</le-item>
+        <le-item value="none">none (disabled)</le-item>
+      </le-select>
+
+      <label>Max depth:</label>
+      <le-select id="demo-list-depth-select" value="2">
+        <le-item value="none">No limit</le-item>
+        <le-item value="1">1 (max 1 nested level)</le-item>
+        <le-item value="2">2 (max 2 nested levels)</le-item>
+      </le-select>
+
+      <le-button id="btn-list-reorder-toggle">
+        Toggle via setReorder()
+      </le-button>
+    </div>
+
+    <le-list id="demo-reorder-list" reorder="nested" max-reorder-depth="2" show-reorder-handle column-visibility-toggle column-reorder selection="single"></le-list>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const reorderList = document.getElementById('demo-reorder-list');
+        const reorderSelect = document.getElementById('demo-list-reorder-select');
+        const depthSelect = document.getElementById('demo-list-depth-select');
+        const toggleBtn = document.getElementById('btn-list-reorder-toggle');
+
+        if (reorderList) {
+          reorderList.columns = [
+            { key: 'label', label: 'Project Task / Subtask', width: '2fr' },
+            { key: 'data.status', label: 'Status', type: 'badge' },
+            { key: 'data.assignee', label: 'Assignee', type: 'string' },
+            { key: 'data.estimate', label: 'Estimate (hrs)', type: 'number', sortable: true, align: 'right' },
+            { key: 'data.done', label: 'Done', type: 'boolean', align: 'center', width: '70px' }
+          ];
+
+          reorderList.data = [
+            {
+              id: 'task-epic-1',
+              label: 'Design System 2.0 Rollout',
+              description: 'Core components modernization',
+              color: 'primary',
+              open: true,
+              data: { status: 'In Progress', assignee: 'Alex R.', estimate: 80, done: false },
+              children: [
+                {
+                  id: 'task-1-1',
+                  label: 'Navigation Component Reordering',
+                  description: 'Drag & drop tree reorder with maxReorderDepth',
+                  color: 'success',
+                  open: true,
+                  data: { status: 'Completed', assignee: 'Elena R.', estimate: 24, done: true },
+                  children: [
+                    {
+                      id: 'task-1-1-1',
+                      label: 'Shared tree reordering utilities (tree.ts)',
+                      color: 'success',
+                      data: { status: 'Completed', assignee: 'Elena R.', estimate: 8, done: true }
+                    },
+                    {
+                      id: 'task-1-1-2',
+                      label: 'Drop line indicators and pip styling',
+                      color: 'success',
+                      data: { status: 'Completed', assignee: 'Alex R.', estimate: 6, done: true }
+                    }
+                  ]
+                },
+                {
+                  id: 'task-1-2',
+                  label: 'Table List Component Reordering',
+                  description: 'Parity with navigation reordering mechanics',
+                  color: 'primary',
+                  open: true,
+                  data: { status: 'In Progress', assignee: 'Alex R.', estimate: 28, done: false },
+                  children: [
+                    {
+                      id: 'task-1-2-1',
+                      label: 'Grid template & reorder handle column',
+                      color: 'info',
+                      data: { status: 'Completed', assignee: 'Sophia C.', estimate: 10, done: true }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id: 'task-epic-2',
+              label: 'Platform Infrastructure & CI',
+              description: 'Automated test suites & builds',
+              color: 'warning',
+              open: true,
+              data: { status: 'Planned', assignee: 'Marcus V.', estimate: 45, done: false },
+              children: [
+                {
+                  id: 'task-2-1',
+                  label: 'Unit test coverage for reordering',
+                  color: 'warning',
+                  data: { status: 'Planned', assignee: 'David K.', estimate: 15, done: false }
+                }
+              ]
+            }
+          ];
+
+          reorderList.addEventListener('leItemReorder', (e) => {
+            console.log('🔄 [le-list leItemReorder event]:', {
+              draggedId: e.detail.draggedId,
+              targetId: e.detail.targetId,
+              position: e.detail.position,
+              oldParentId: e.detail.oldParentId,
+              newParentId: e.detail.newParentId
+            });
+          });
+
+          if (reorderSelect) {
+            reorderSelect.addEventListener('leChange', (e) => {
+              reorderList.setAttribute('reorder', e.target.value);
+            });
+          }
+
+          if (depthSelect) {
+            depthSelect.addEventListener('leChange', (e) => {
+              const val = e.target.value;
+              if (val === 'none') {
+                reorderList.removeAttribute('max-reorder-depth');
+              } else {
+                reorderList.setAttribute('max-reorder-depth', val);
+              }
+            });
+          }
+
+          if (toggleBtn) {
+            toggleBtn.addEventListener('click', async () => {
+              const currentMode = reorderList.getAttribute('reorder') || 'nested';
+              const nextMode = currentMode === 'none' ? 'nested' : 'none';
+              await reorderList.setReorder(nextMode);
+              if (reorderSelect) reorderSelect.value = nextMode;
+            });
+          }
+        }
+      });
+    </script>
+
+    <br />
+
+    <h3>5. Row &amp; Column Separators (Borders, Zebra &amp; Gridiron Checkered)</h3>
+    <p>Using <code>row-separators="zebra" column-separators="borders"</code> (Zebra + Vertical Borders):</p>
+    <le-list id="demo-sep-zebra-borders" row-separators="borders" column-separators="zebra"
+      default-sort-direction="desc"></le-list>
+
+    <br />
+    <p>Using <code>row-separators="zebra" column-separators="zebra"</code> (Gridiron / Checkered Pattern):</p>
+    <le-list id="demo-sep-gridiron" row-separators="zebra" column-separators="zebra"
+      disable-keyboard-navigation></le-list>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const sampleCols = [
+          { key: 'label', label: 'Metric', width: '1.5fr' },
+          { key: 'data.q1', label: 'Q1', type: 'number', align: 'right', sortable: true },
+          { key: 'data.q2', label: 'Q2', type: 'number', align: 'right', sortable: true },
+          { key: 'data.q3', label: 'Q3', type: 'number', align: 'right', sortable: true },
+          { key: 'data.q4', label: 'Q4', type: 'number', align: 'right', sortable: true }
+        ];
+
+        const sampleData = [
+          { label: 'Revenue ($K)', data: { q1: 120, q2: 145, q3: 180, q4: 210 } },
+          { label: 'Operating Expenses ($K)', data: { q1: 85, q2: 90, q3: 95, q4: 105 } },
+          { label: 'Net Profit ($K)', data: { q1: 35, q2: 55, q3: 85, q4: 105 } },
+          { label: 'Active Users', data: { q1: 1200, q2: 1850, q3: 2400, q4: 3100 } }
+        ];
+
+        const listZebraBorders = document.getElementById('demo-sep-zebra-borders');
+        if (listZebraBorders) {
+          listZebraBorders.columns = sampleCols;
+          listZebraBorders.data = sampleData;
+        }
+
+        const listGridiron = document.getElementById('demo-sep-gridiron');
+        if (listGridiron) {
+          listGridiron.columns = sampleCols;
+          listGridiron.data = sampleData;
+        }
+      });
+    </script>
+
+    <br />
+
+    <h3>6. Actions System (Item Context Menus, Actions Column &amp; External Toolbar Auto-Binding)</h3>
+    <p>
+      Complete decoupled Actions System:
+      define actions with selection modes and i18n pluralization templates,
+      display them in <b>action columns</b> (with configurable <code>maxVisibleActions</code> and overflow menu),
+      right-click rows for an OS-style <b>item context menu</b>,
+      and auto-bind to an external <code>&lt;le-toolbar bind-list="..."&gt;</code> with dynamic labels and state synchronization.
+    </p>
+
+    <!-- Toolbar bound to the list -->
+    <div style="margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;">
+      <le-toolbar id="demo-actions-toolbar" bind-list="demo-actions-list">
+        <le-button action="item" icon-start="list-item::add-badge" color="primary" variant="solid">New Item</le-button>
+        <le-button action="sub-item" icon-start="list-sub-item::add-badge" color="primary" variant="solid">New Sub Item</le-button>
+        <le-button action="edit" icon-start="edit" variant="outlined">Edit</le-button>
+        <le-button action="duplicate" icon-start="duplicate" variant="outlined">Duplicate</le-button>
+        <le-button action="delete" icon-start="delete" color="danger" variant="outlined">Delete</le-button>
+        <le-button id="btn-toggle-toolbar-binding" variant="clear" style="margin-left: auto;">
+          Detach Toolbar
+        </le-button>
+      </le-toolbar>
+    </div>
+
+    <!-- The List with item-context-menu -->
+    <le-list id="demo-actions-list" item-context-menu selection="multiple" row-separators="borders"></le-list>
+
+    <!-- Real-time Action Event Log -->
+    <div style="margin-top: 12px; padding: 12px; background: var(--le-color-bg-secondary, #f4f4f5); border-radius: var(--le-radius-md, 6px); font-family: monospace; font-size: 13px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <strong>⚡ Live Action Event Log:</strong>
+        <span id="demo-action-status" style="color: var(--le-color-primary, #0066cc);">Ready (select items or right-click rows)</span>
+      </div>
+      <div id="demo-action-log" style="max-height: 80px; overflow-y: auto; color: var(--le-color-text-secondary, #666);">
+        <em>Waiting for actions to trigger...</em>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const actionsList = document.getElementById('demo-actions-list');
+        const actionsToolbar = document.getElementById('demo-actions-toolbar');
+        const toggleBindingBtn = document.getElementById('btn-toggle-toolbar-binding');
+        const logEl = document.getElementById('demo-action-log');
+        const statusEl = document.getElementById('demo-action-status');
+
+        function appendLog(text) {
+          if (!logEl) return;
+          const time = new Date().toLocaleTimeString();
+          const entry = document.createElement('div');
+          entry.textContent = `[${time}] ${text}`;
+          if (logEl.querySelector('em')) logEl.innerHTML = '';
+          logEl.prepend(entry);
+          if (statusEl) statusEl.textContent = text;
+        }
+
+        if (actionsList) {
+          // List-level (Global) Actions
+          actionsList.actions = [
+            {
+              id: 'item',
+              label: 'New Item',
+              icon: 'list-item::add-badge',
+              color: 'primary',
+              selectionMode: 'any',
+              handler: () => appendLog('➕ "New Item" action executed'),
+            },
+            {
+              id: 'sub-item',
+              label: 'New Sub Item',
+              icon: 'list-sub-item::add-badge',
+              color: 'primary',
+              selectionMode: 'single',
+              handler: () => appendLog('➕ "New Item" action executed'),
+            },
+            {
+              id: 'edit',
+              label: 'Edit',
+              icon: 'edit',
+              selectionMode: 'single',
+              handler: (item) => appendLog(`✏️ "Edit" action executed for: ${item.label}`),
+            },
+            {
+              id: 'duplicate',
+              label: 'Duplicate',
+              icon: 'duplicate',
+              selectionMode: 'single',
+              handler: (item) => appendLog(`📋 "Duplicate" action executed for: ${item.label}`),
+            },
+            {
+              id: 'delete',
+              label: 'Delete',
+              labelMultiple: 'Delete {count} items',
+              icon: 'delete',
+              color: 'danger',
+              selectionMode: 'both',
+              handler: (_item, ctx) => appendLog(`🗑️ "Delete" action executed for ${ctx.count} item(s)`),
+            },
+            {
+              id: 'export',
+              label: 'Export Data',
+              icon: 'download',
+              selectionMode: 'both',
+              handler: (_item, ctx) => appendLog(`📤 "Export" executed for ${ctx.count} item(s)`),
+            },
+          ];
+
+          // Columns including actions column and custom rendered column
+          actionsList.columns = [
+            { key: 'label', label: 'Item Name', width: '2fr' },
+            {
+              key: 'data.status',
+              label: 'Status',
+              render: (val, item) => {
+                const colors = {
+                  Published: '#10b981',
+                  Review: '#f59e0b',
+                  Draft: '#6b7280',
+                };
+                const bg = colors[val] || '#6b7280';
+                return `<span style="display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; color: #fff; background: ${bg};">${val}</span>`;
+              },
+            },
+            { key: 'data.owner', label: 'Owner' },
+            { key: 'data.updated', label: 'Last Modified', type: 'date' },
+            {
+              key: 'actions',
+              label: 'Actions',
+              type: 'actions',
+              maxVisibleActions: 2,
+              width: '140px',
+            },
+          ];
+
+          // Sample data with item-level custom actions
+          actionsList.data = [
+            {
+              id: 'item-1',
+              label: 'Production Deployment Service',
+              description: 'Kubernetes production cluster v1.28',
+              icon: 'cloud',
+              color: 'primary',
+              data: { status: 'Published', owner: 'DevOps Lead', updated: '2026-09-01' },
+              actions: [
+                {
+                  id: 'deploy',
+                  label: 'Deploy Now',
+                  icon: 'rocket',
+                  color: 'success',
+                  handler: (item) => appendLog(`🚀 Item-action "Deploy Now" triggered on ${item.label}`),
+                },
+                {
+                  id: 'restart',
+                  label: 'Restart Cluster',
+                  icon: 'reload',
+                  color: 'warning',
+                  handler: (item) => appendLog(`🔄 Item-action "Restart Cluster" triggered on ${item.label}`),
+                },
+              ],
+            },
+            {
+              id: 'item-2',
+              label: 'User Authentication API',
+              description: 'OAuth2 & OIDC microservice',
+              icon: 'lock',
+              color: 'info',
+              data: { status: 'Review', owner: 'Security Team', updated: '2026-09-03' },
+              actions: [
+                {
+                  id: 'audit',
+                  label: 'Run Security Audit',
+                  icon: 'protect',
+                  handler: (item) => appendLog(`🛡️ Item-action "Run Security Audit" triggered on ${item.label}`),
+                },
+              ],
+            },
+            {
+              id: 'item-3',
+              label: 'Billing & Payments Gateway',
+              description: 'Stripe integration backend',
+              icon: 'credit-card',
+              color: 'success',
+              data: { status: 'Published', owner: 'Finance Tech', updated: '2026-08-25' },
+            },
+            {
+              id: 'item-4',
+              label: 'Telemetry Pipeline v2',
+              description: 'OpenTelemetry collector and Jaeger tracing',
+              icon: 'analytics',
+              color: 'warning',
+              data: { status: 'Draft', owner: 'Infra Core', updated: '2026-08-30' },
+            },
+          ];
+
+          actionsList.addEventListener('leAction', (e) => {
+            appendLog(`CustomEvent [leAction]: "${e.detail.action}" on item "${e.detail.item?.label || e.detail.id}"`);
+          });
+
+          if (toggleBindingBtn && actionsToolbar) {
+            let isAttached = true;
+            toggleBindingBtn.addEventListener('click', async () => {
+              if (isAttached) {
+                await actionsToolbar.detachList('demo-actions-list');
+                toggleBindingBtn.textContent = 'Attach Toolbar';
+                appendLog('🔌 Toolbar detached from demo-actions-list (buttons disabled)');
+                isAttached = false;
+              } else {
+                await actionsToolbar.attachList('demo-actions-list');
+                toggleBindingBtn.textContent = 'Detach Toolbar';
+                appendLog('🔗 Toolbar re-attached to demo-actions-list (buttons synchronized)');
+                isAttached = true;
+              }
+            });
+          }
+        }
+      });
+    </script>
+
+    <br />
+
+    <h3>6b. Card Layout (&lt;le-list layout="auto | table | cards"&gt;)</h3>
+    <p>
+      CRM opportunities as cards. Card lines reference column keys, so values look the same as in the table. With
+      <code>layout-transition</code>, values move between their places when the layout changes.
+      The <code>primary</code> column becomes the card title.
+      In <b>auto</b> mode, drag the frame edge or use the width presets: below 600px the list switches to cards.
+      Cards swipe by touch or by horizontal scrolling on a trackpad: read/unread on one side, reject and delete on the other;
+      pulling further runs read/unread or delete.
+    </p>
+    <le-preview-frame
+      id="demo-cards-frame"
+      min-width="280"
+      padding="16"
+      breakpoints='[
+        {"label": "Desktop", "width": 900, "icon": "desktop"},
+        {"label": "Tablet", "width": 768, "icon": "tablet"},
+        {"label": "Phone", "width": 480, "icon": "phone"}
+      ]'
+    >
+      <div slot="controls" style="display: flex; gap: var(--le-spacing-1);">
+        <le-button size="small" variant="outlined" onclick="document.getElementById('demo-cards-list').layout = 'table'">Table</le-button>
+        <le-button size="small" variant="outlined" onclick="document.getElementById('demo-cards-list').layout = 'cards'">Cards</le-button>
+        <le-button size="small" variant="outlined" onclick="document.getElementById('demo-cards-list').layout = 'auto'">Auto</le-button>
+      </div>
+      <le-list id="demo-cards-list" layout="auto" layout-transition selection="multiple" item-context-menu></le-list>
+    </le-preview-frame>
+    <script>
+      customElements.whenDefined('le-list').then(() => {
+        const cardsList = document.getElementById('demo-cards-list');
+        if (!cardsList) return;
+        const statusColors = { New: '#0088ff', Approved: '#10b981', Pending: '#f59e0b', Lost: '#6b7280' };
+
+        cardsList.columns = [
+          { key: 'label', label: 'Client Company', primary: true, width: '2fr', sortable: true },
+          {
+            key: 'data.status',
+            label: 'Status',
+            render: (val) =>
+              `<span style="display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; color: #fff; background: ${statusColors[val] || '#6b7280'};">${val}</span>`,
+          },
+          { key: 'data.distributor', label: 'Distributor' },
+          { key: 'data.country', label: 'Country' },
+          { key: 'data.type', label: 'Type' },
+          { key: 'data.created', label: 'Created', type: 'date', sortable: true },
+          { key: 'actions', label: '', type: 'actions', maxVisibleActions: 0, width: '90px' },
+        ];
+        cardsList.card = {
+          rows: [
+            { start: 'data.distributor', end: 'data.created' },
+            { start: 'label', end: 'data.status' },
+            { start: ['data.country', 'data.type'] },
+          ],
+          actions: false,
+        };
+        // Swipes: read/unread toggle at the start (full swipe), reject + delete at the end (delete on full swipe)
+        const updateItem = (id, patch) => {
+          cardsList.data = cardsList.data.map(item => (item.id === id ? { ...item, data: { ...item.data, ...patch } } : item));
+        };
+        cardsList.actions = [
+          { id: 'open', label: 'Open', icon: 'chevron-right', selectionMode: 'single' },
+          {
+            id: 'mark-read', label: 'Mark as Read', icon: 'check::add-badge', color: 'primary', swipe: 'start', fullSwipe: true,
+            hidden: item => item.data?.read,
+            handler: (_item, ctx) => ctx.selectedItems.forEach(item => updateItem(item.id, { read: true })),
+          },
+          {
+            id: 'mark-unread', label: 'Mark as Unread', icon: 'check::remove-badge', color: 'info', swipe: 'start', fullSwipe: true,
+            hidden: item => !item.data?.read,
+            handler: (_item, ctx) => ctx.selectedItems.forEach(item => updateItem(item.id, { read: false })),
+          },
+          {
+            id: 'reject', label: 'Reject', icon: 'minus-circle', color: 'warning', swipe: 'end',
+            handler: (_item, ctx) => ctx.selectedItems.forEach(item => updateItem(item.id, { status: 'Lost' })),
+          },
+          {
+            id: 'delete', label: 'Delete', labelMultiple: 'Delete {count} items', icon: 'delete', color: 'danger',
+            selectionMode: 'both', swipe: 'end', fullSwipe: true,
+            handler: (_item, ctx) => {
+              const ids = new Set(ctx.selectedIds);
+              cardsList.data = cardsList.data.filter(item => !ids.has(item.id));
+            },
+          },
+        ];
+        cardsList.data = [
+          { id: 'opp-1', label: 'Nordic Scan Solutions', data: { read: false, status: 'New', distributor: 'Artec Europe', country: 'Norway', type: 'Reseller', created: '2026-09-02' } },
+          { id: 'opp-2', label: 'Precision Metrology GmbH', data: { read: true, status: 'Approved', distributor: 'DACH Partners', country: 'Germany', type: 'End user', created: '2026-08-21' } },
+          { id: 'opp-3', label: 'Pacific Dental Labs', data: { read: false, status: 'Pending', distributor: 'APAC Direct', country: 'Australia', type: 'Reseller', created: '2026-09-14' } },
+          { id: 'opp-4', label: 'Heritage 3D Museum Services', data: { read: true, status: 'Lost', distributor: 'Artec Europe', country: 'Italy', type: 'End user', created: '2026-07-30' } },
+        ];
+      });
+    </script>
+
+    <br />
+
+    <h3>7. Empty State with empty-* Attributes</h3>
+    <le-list empty-label="No Members Found"
+      empty-message="There are no team members matching your filter criteria. Try adjusting your search query."
+      empty-icon="folder"></le-list>
+
+    <br />
+
+    <h3>4. Empty State with Custom &lt;slot name="empty"&gt;</h3>
+    <le-list>
+      <le-empty slot="empty" icon="reload" label="Custom Empty View"
+        message="This empty view is rendered using the custom 'empty' slot with an action button."
+        action-label="Add Item" onLeAction="alert('Action button clicked!')"></le-empty>
+    </le-list>
+
+    <br />
+
+    <h3>5. Empty State with No Attributes & No Slot (Shows Nothing)</h3>
+    <le-list></le-list>
+  </div>
+
+  <br />
+
+  <div class="demo-section">
+    <h2>Content Unavailable / Empty State (&lt;le-empty&gt;)</h2>
+    <p>SwiftUI ContentUnavailableView inspired component for displaying empty states, missing content, or search
+      results.</p>
+
+    <div
+      style="display: flex; gap: 24px; flex-wrap: wrap; justify-content: space-around; border: 1px solid var(--le-color-border); padding: 24px; border-radius: var(--le-radius-lg);">
+      <le-empty label="No Results Found"
+        message="We couldn't find anything matching your search term. Please try another keyword."
+        action-label="Clear Search" onLeAction="alert('Clear search clicked')">
+        <le-icon slot="icon" name="search" layers="back-slash" size="48"></le-icon>
+      </le-empty>
+
+      <le-empty icon="folder-open" label="No Files Uploaded"
+        message="Upload your first document or drop files here to get started." action-label="Upload File"
+        action-icon="upload"></le-empty>
+    </div>
+  </div>
+
   <br />
 
   <div class="demo-section">
     <h2>Icons</h2>
+    <h3>New Icons</h3>
 
-    <h3>New Icons: record, stop and pause</h3>
+    <h4>&lt;le-icon name="list-sub-item"&gt;</h4>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="delete" size="32"></le-icon>
-      <le-icon name="delete" rounded size="32"></le-icon>
-      <le-icon name="delete" thin size="32"></le-icon>
-      <le-icon name="delete" rounded thin size="32"></le-icon>
+      <div style="font-size: 7px;">
+        sharp<br />
+        <le-icon name="list-sub-item" sharp size="32"></le-icon>
+      </div>
+      <div style="font-size: 7px;">
+        rounded<br />
+        <le-icon name="list-sub-item" rounded size="32"></le-icon>
+      </div>
+      <div style="font-size: 7px;">
+        thin<br />
+        <le-icon name="list-sub-item" sharp thin size="32"></le-icon>
+      </div>
+      <div style="font-size: 7px;">
+        rounded-thin<br />
+        <le-icon name="list-sub-item" rounded thin size="32"></le-icon>
+      </div>
     </div>
+    <div style="font-size: 7px;">filled</div>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="delete" filled size="32"></le-icon>
-      <le-icon name="delete" rounded filled size="32"></le-icon>
-      <le-icon name="delete" thin filled size="32"></le-icon>
-      <le-icon name="delete" rounded thin filled size="32"></le-icon>
+      <le-icon name="list-sub-item" sharp filled size="32"></le-icon>
+      <le-icon name="list-sub-item" rounded filled size="32"></le-icon>
+      <le-icon name="list-sub-item" sharp thin filled size="32"></le-icon>
+      <le-icon name="list-sub-item" rounded thin filled size="32"></le-icon>
     </div>
+    <div style="font-size: 7px;">masks</div>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="delete"></le-icon>
-      <le-icon name="delete" rounded></le-icon>
-      <le-icon name="delete" thin></le-icon>
-      <le-icon name="delete" rounded thin></le-icon>
+      <le-icon name="fill" layers="list-sub-item" sharp size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" rounded size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" sharp thin size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" rounded thin size="32"></le-icon>
     </div>
+    <div style="font-size: 7px;"><br /></div>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="fill" layers="delete" size="32"></le-icon>
-      <le-icon name="fill" layers="delete" rounded size="32"></le-icon>
-      <le-icon name="fill" layers="delete" thin size="32"></le-icon>
-      <le-icon name="fill" layers="delete" rounded thin size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" sharp filled size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" rounded filled size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" sharp thin filled size="32"></le-icon>
+      <le-icon name="fill" layers="list-sub-item" rounded thin filled size="32"></le-icon>
     </div>
 
     <h3>Folders</h3>
@@ -437,14 +1355,14 @@
       <le-icon name="folder-open" rounded thin size="48"></le-icon>
     </div>
     <div style="display: flex; align-items: center; gap: 16px;">
-      <le-icon name="notifications" size="48"></le-icon>
-      <le-icon name="notifications" rounded size="48" count="17"></le-icon>
-      <le-icon name="notifications" filled size="48"></le-icon>
-      <le-icon name="notifications" rounded filled size="48"></le-icon>
-      <le-icon name="notifications" thin size="48"></le-icon>
-      <le-icon name="notifications" thin rounded size="48"></le-icon>
-      <le-icon name="notifications" thin filled size="48"></le-icon>
-      <le-icon name="notifications" thin rounded filled size="48"></le-icon>
+      <le-icon name="reorder-horizontal" sharp size="48"></le-icon>
+      <le-icon name="reorder-horizontal" rounded size="48" count="17"></le-icon>
+      <le-icon name="reorder-horizontal" sharp filled size="48"></le-icon>
+      <le-icon name="reorder-horizontal" rounded filled size="48"></le-icon>
+      <le-icon name="reorder-horizontal" thin sharp size="48"></le-icon>
+      <le-icon name="reorder-horizontal" thin rounded size="48"></le-icon>
+      <le-icon name="reorder-horizontal" thin sharp filled size="48"></le-icon>
+      <le-icon name="reorder-horizontal" thin rounded filled size="48"></le-icon>
     </div>
     <div style="display: flex; align-items: center; gap: 16px;">
       <le-icon name="flag" size="48"></le-icon>
@@ -496,6 +1414,7 @@
       <span style="display: inline-block; width: 16px;"></span>
       <le-button icon-only="folder::add-badge" filled label="Add to folder"></le-button>
       <le-button icon-start="file-copy::download-badge">Download</le-button>
+      <le-icon name="file::check-badge" thin size="32"></le-icon>
     </div>
 
     <h3>Notification & Text Badges (count, max-count, badge-text, dot)</h3>
@@ -680,8 +1599,8 @@
     </div>
 
     <div style="display: flex; justify-content: center; gap: var(--le-space-sm);">
-      <le-actions-sequence loop direction="alternate" loop-delay="3000" start-on="manual" in-view-threshold="0.3"
-        debug="true" pause-on-hover="true" pause-on-interaction="true" steps='[
+      <le-actions-sequence start-on="manual" loop direction="alternate" loop-delay="3000" start-on="in-view"
+        in-view-threshold="0.3" debug="true" pause-on-hover="true" pause-on-interaction="true" steps='[
           { "target": "#demo-toolbar-frame", "action": "method", "name": "snapTo", "value": 320, "delay": 2000 },
           { "target": "#demo-toolbar", "action": "method", "name": "showOverflowMenu", "delay": 1000 },
           { "target": "#demo-toolbar", "action": "method", "name": "navigateOverflowMenu", "value": "ArrowDown", "delay": 500 },
@@ -730,7 +1649,7 @@
             <le-button variant="clear" label="Share" onclick="alert('Share')">Share</le-button>
             <le-button variant="clear" label="Duplicate" onclick="alert('Duplicate')">Duplicate</le-button>
             <le-button color="danger" collapsible priority="50">
-              <le-icon name="delete" slot="icon-start" size="20"></le-icon>
+              <le-icon name="delete" slot="icon-start"></le-icon>
               Delete
             </le-button>
 

@@ -12,16 +12,20 @@ import { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcr
 import { TooltipPlacement } from ".";
 import { LeCollapseMeta } from "./types/toolbar";
 import { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-group";
+import { LeNavigationItemReorderDetail, LeNavigationReorderMode } from "./components/le-navigation/le-navigation";
 import { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 import { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 import { LeActiveContext } from "./components/le-kit/le-kit";
-import { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
+import { LeActionContext, LeColumn, LeListAction, LeListActionStateDetail, LeListCardConfig, LeListItemReorderDetail, LeListLayout, LeListReorderMode } from "./types/list";
+import { Event } from "@stencil/core";
+import { LeNavigationItemReorderDetail as LeNavigationItemReorderDetail1, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode as LeNavigationReorderMode1 } from "./components/le-navigation/le-navigation";
 import { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 import { LeKitMode } from "./global/app";
 import { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 import { LePreviewFrameBreakpoint, LePreviewFrameResizeDetail } from "./components/le-preview-frame/le-preview-frame";
 import { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side-panel/le-side-panel";
 import { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./components/le-side-panel-toggle/le-side-panel-toggle";
+import { LeSwipeAction, LeSwipeActionDetail, LeSwipeSide } from "./components/le-swipe/le-swipe";
 import { LeToolbarOverflowChangeDetail } from "./components/le-toolbar/le-toolbar";
 import { TooltipPlacement as TooltipPlacement1 } from "./components/le-tooltip/le-tooltip";
 export { ActionStep } from "./components/le-actions-sequence/le-actions-sequence";
@@ -31,16 +35,20 @@ export { LeBreadcrumbSelectDetail } from "./components/le-breadcrumbs/le-breadcr
 export { TooltipPlacement } from ".";
 export { LeCollapseMeta } from "./types/toolbar";
 export { LeButtonGroupItemsMeta } from "./components/le-button-group/le-button-group";
+export { LeNavigationItemReorderDetail, LeNavigationReorderMode } from "./components/le-navigation/le-navigation";
 export { LeContextMenuSelectDetail } from "./components/le-context-menu/le-context-menu";
 export { LeDragHandleOrientation, LeDragHandlePlacement } from "./components/le-drag-handle/le-drag-handle";
 export { LeActiveContext } from "./components/le-kit/le-kit";
-export { LeNavigationItemSelectDetail, LeNavigationItemToggleDetail } from "./components/le-navigation/le-navigation";
+export { LeActionContext, LeColumn, LeListAction, LeListActionStateDetail, LeListCardConfig, LeListItemReorderDetail, LeListLayout, LeListReorderMode } from "./types/list";
+export { Event } from "@stencil/core";
+export { LeNavigationItemReorderDetail as LeNavigationItemReorderDetail1, LeNavigationItemSelectDetail, LeNavigationItemToggleDetail, LeNavigationReorderMode as LeNavigationReorderMode1 } from "./components/le-navigation/le-navigation";
 export { LeOverflowMenuItem, LeOverflowMenuItemSelectDetail } from "./components/le-overflow-menu/le-overflow-menu";
 export { LeKitMode } from "./global/app";
 export { PopupPosition, PopupResult, PopupType } from "./components/le-popup/le-popup";
 export { LePreviewFrameBreakpoint, LePreviewFrameResizeDetail } from "./components/le-preview-frame/le-preview-frame";
 export { LeSidePanelNarrowBehavior, LeSidePanelSide } from "./components/le-side-panel/le-side-panel";
 export { LeSidePanelRequestToggleDetail, LeSidePanelToggleAction } from "./components/le-side-panel-toggle/le-side-panel-toggle";
+export { LeSwipeAction, LeSwipeActionDetail, LeSwipeSide } from "./components/le-swipe/le-swipe";
 export { LeToolbarOverflowChangeDetail } from "./components/le-toolbar/le-toolbar";
 export { TooltipPlacement as TooltipPlacement1 } from "./components/le-tooltip/le-tooltip";
 export namespace Components {
@@ -398,11 +406,19 @@ export namespace Components {
      */
     interface LeButton {
         /**
+          * Action ID that this button triggers when bound to a list.
+         */
+        "action"?: string;
+        /**
           * Alignment of the button label without the end icon
           * @allowedValues start | center | space-between | end
           * @default 'center'
          */
         "align": 'start' | 'center' | 'space-between' | 'end';
+        /**
+          * Bound list ID(s) (comma-separated list of IDs). If omitted, inherits bind-list from the nearest parent <le-toolbar>.
+         */
+        "bindList"?: string;
         /**
           * Runtime collapse state controlled by responsive containers.
          */
@@ -433,6 +449,11 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API).
+          * @default false
+         */
+        "filled": boolean;
         /**
           * Whether the button takes full width of its container
           * @default false
@@ -495,6 +516,10 @@ export namespace Components {
          */
         "motionPreset"?: 'none' | 'soft' | 'fluid' | 'spring';
         /**
+          * Refreshes the action binding and current enabled/disabled state.
+         */
+        "refreshActionState": () => Promise<void>;
+        /**
           * Whether the button is in a selected/active state
           * @default false
          */
@@ -531,10 +556,10 @@ export namespace Components {
         "value"?: string;
         /**
           * Button variant style
-          * @allowedValues solid | outlined | clear
+          * @allowedValues solid | filled | outlined | clear | system
           * @default 'outlined'
          */
-        "variant": 'solid' | 'outlined' | 'clear' | 'system';
+        "variant": 'solid' | 'filled' | 'outlined' | 'clear' | 'system';
         /**
           * Visibility state used by responsive containers to animate show/hide transitions.
           * @allowedValues visible | collapsing | collapsed | expanding
@@ -932,7 +957,17 @@ export namespace Components {
           * @default 'mouse'
          */
         "position": 'top' | 'bottom' | 'left' | 'right' | 'mouse';
-        "show": (x?: number, y?: number) => Promise<void>;
+        /**
+          * Enables manual drag-and-drop reordering of menu items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+          * @default 'none'
+         */
+        "reorder": LeNavigationReorderMode | boolean;
+        "show": (x?: number, y?: number, triggerEvent?: MouseEvent | TouchEvent) => Promise<void>;
+        /**
+          * Whether to show the drag handle icon at the end of reorderable menu items.
+          * @default false
+         */
+        "showReorderHandle": boolean;
         "toggle": (x?: number, y?: number) => Promise<void>;
     }
     /**
@@ -1075,6 +1110,28 @@ export namespace Components {
           * Width of the dropdown. If not set, matches trigger width.
          */
         "width"?: string;
+    }
+    /**
+     * An empty state component inspired by SwiftUI ContentUnavailableView.
+     * Used for displaying empty lists, search results, or unavailable states.
+     */
+    interface LeEmpty {
+        /**
+          * Label for optional action button.
+         */
+        "actionLabel"?: string;
+        /**
+          * Optional icon name, URL, or emoji character.
+         */
+        "icon"?: string;
+        /**
+          * Main label text for the empty state.
+         */
+        "label"?: string;
+        /**
+          * Secondary descriptive message.
+         */
+        "message"?: string;
     }
     /**
      * A functional page header with scroll-aware behaviors.
@@ -1290,6 +1347,192 @@ export namespace Components {
          */
         "watchWindow": boolean;
     }
+    interface LeList {
+        /**
+          * Alias for showActionChevron.
+          * @default false
+         */
+        "actionChevron": boolean;
+        /**
+          * Actions available for the list items and external components. Can be an array of `LeListAction` objects or a JSON string.
+          * @default []
+         */
+        "actions": LeListAction[] | string;
+        /**
+          * Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true.
+          * @default true
+         */
+        "allowClearSort": boolean;
+        /**
+          * Alias for columnReorder.
+          * @default false
+         */
+        "allowColumnReorder": boolean;
+        /**
+          * Alias for columnVisibilityToggle.
+          * @default false
+         */
+        "allowColumnToggle": boolean;
+        /**
+          * Programmatically attach this list to an external toolbar by ID or element reference.
+         */
+        "attachToToolbar": (toolbarIdOrEl: string | HTMLElement) => Promise<void>;
+        /**
+          * Card layout configuration: lines of column keys, or a custom render function. Can be a `LeListCardConfig` object or a JSON string. Without it, a card shows the label as the title and the description below.
+         */
+        "card"?: LeListCardConfig | string;
+        /**
+          * Width in pixels below which the 'auto' layout shows cards.
+          * @default 600
+         */
+        "cardBreakpoint": number;
+        /**
+          * Whether to allow column reordering via right-click header context menu. Defaults to false.
+          * @default false
+         */
+        "columnReorder": boolean;
+        /**
+          * Column separation style: 'none' | 'borders' | 'zebra'. Defaults to 'none'.
+          * @default 'none'
+         */
+        "columnSeparators": 'none' | 'borders' | 'zebra';
+        /**
+          * Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false.
+          * @default false
+         */
+        "columnVisibilityToggle": boolean;
+        /**
+          * Column configuration for the list table view. Can be an array of `LeColumn` objects or a JSON string. If omitted, columns will be automatically generated from data item properties.
+          * @default []
+         */
+        "columns": LeColumn[] | string;
+        /**
+          * Data items to display in the list. Can be an array of `LeOption` objects or a JSON string. If omitted or empty, top-level `<le-item>` child elements will be parsed.
+          * @default []
+         */
+        "data": LeOption[] | string;
+        /**
+          * Default initial sort direction for sortable columns on first click ('asc' | 'desc'). Individual columns can override this via their `sortStart` property. Defaults to 'asc'.
+          * @default 'asc'
+         */
+        "defaultSortDirection": 'asc' | 'desc';
+        /**
+          * Default sort icon placement across columns ('start' | 'end' | 'none'). If omitted, right-aligned columns default to 'start' and left/center columns default to 'end'.
+         */
+        "defaultSortIconPosition"?: 'start' | 'end' | 'none';
+        /**
+          * Programmatically detach this list from an external toolbar by ID or element reference.
+         */
+        "detachFromToolbar": (toolbarIdOrEl: string | HTMLElement) => Promise<void>;
+        /**
+          * Whether to disable keyboard navigation. Defaults to false.
+          * @default false
+         */
+        "disableKeyboardNavigation": boolean;
+        /**
+          * Programmatically disable reordering.
+         */
+        "disableReorder": () => Promise<void>;
+        /**
+          * Whether to disable row highlighting on hover. Defaults to false (row hover highlighting is enabled by default).
+          * @default false
+         */
+        "disableRowHover": boolean;
+        /**
+          * Icon for default empty state (<le-empty>).
+         */
+        "emptyIcon"?: string;
+        /**
+          * Main label text for default empty state (<le-empty>).
+         */
+        "emptyLabel"?: string;
+        /**
+          * Secondary description text for default empty state (<le-empty>).
+         */
+        "emptyMessage"?: string;
+        /**
+          * Title text for default empty state (<le-empty>).
+         */
+        "emptyTitle"?: string;
+        /**
+          * Programmatically enable reordering.
+         */
+        "enableReorder": (mode?: LeListReorderMode) => Promise<void>;
+        /**
+          * Programmatically execute an action on target items or current selection.
+         */
+        "executeAction": (actionId: string, itemOrId?: string | LeOption | LeOption[], event?: Event) => Promise<boolean>;
+        /**
+          * Retrieve currently available actions, optionally filtered to target item or current selection.
+         */
+        "getAvailableActions": (target?: string | LeOption | boolean) => Promise<LeListAction[]>;
+        /**
+          * Whether to enable right-click context menu on item rows with their available actions. Defaults to false.
+          * @default false
+         */
+        "itemContextMenu": boolean;
+        /**
+          * Layout of the list: 'table' (default), 'cards', or 'auto' to switch to cards when the list is narrower than `cardBreakpoint`.
+          * @default 'table'
+         */
+        "layout": LeListLayout;
+        /**
+          * Animates switching between the table and cards: values marked with `data-le-field` move from their cell to their place in the card and back.
+          * @default false
+         */
+        "layoutTransition": boolean;
+        /**
+          * Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
+         */
+        "maxReorderDepth"?: number;
+        /**
+          * Programmatically move an item relative to another item in the list tree. Accepts item ID, value, or label for both dragged and target items.
+         */
+        "moveItem": (draggedQuery: string, targetQuery: string, position?: "before" | "inside" | "after") => Promise<{ success: boolean; detail?: LeListItemReorderDetail; }>;
+        /**
+          * Enables manual drag-and-drop reordering of list row items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+          * @default 'none'
+         */
+        "reorder": LeListReorderMode | boolean;
+        /**
+          * Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.
+          * @default 500
+         */
+        "reorderExpandDelay": number;
+        /**
+          * Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.35, middle: 0.3, bottom: 0.35 }.
+          * @default {     top: 0.35,     middle: 0.3,     bottom: 0.35,   }
+         */
+        "reorderRatios": { top: number; middle: number; bottom: number };
+        /**
+          * Row separation style: 'none' | 'borders' | 'zebra'. Defaults to 'zebra'.
+          * @default 'zebra'
+         */
+        "rowSeparators": 'none' | 'borders' | 'zebra';
+        /**
+          * Selection mode for rows: false / 'none' (disabled), true / 'single', or 'multiple'. Defaults to false.
+          * @default false
+         */
+        "selection": boolean | 'single' | 'multiple' | 'none';
+        /**
+          * Programmatically set the reorder mode ('none', 'siblings', 'nested', or boolean).
+         */
+        "setReorder": (mode: LeListReorderMode | boolean) => Promise<void>;
+        /**
+          * Programmatically set the currently selected row IDs.
+         */
+        "setSelectedRows": (ids: string[]) => Promise<void>;
+        /**
+          * Whether to display chevron-right icon at the end of rows that have actions or links. Defaults to false.
+          * @default false
+         */
+        "showActionChevron": boolean;
+        /**
+          * Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable rows. Default: false.
+          * @default false
+         */
+        "showReorderHandle": boolean;
+    }
     /**
      * A multiselect component for selecting multiple options.
      * Displays selected items as tags with optional search filtering.
@@ -1435,10 +1678,18 @@ export namespace Components {
          */
         "autoScroll": boolean;
         /**
+          * Programmatically disable reordering.
+         */
+        "disableReorder": () => Promise<void>;
+        /**
           * Text shown when no items match the filter.
           * @default 'No results found'
          */
         "emptyText": string;
+        /**
+          * Programmatically enable reordering.
+         */
+        "enableReorder": (mode?: LeNavigationReorderMode1) => Promise<void>;
         "focusActiveItem": () => Promise<void>;
         "focusFirstItem": () => Promise<void>;
         /**
@@ -1447,10 +1698,18 @@ export namespace Components {
          */
         "items": LeOption[] | string;
         /**
+          * Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
+         */
+        "maxReorderDepth"?: number;
+        /**
           * Minimum number of visible top-level items required to use the "More" overflow. If fewer would be visible, the navigation falls back to hamburger.
           * @default 2
          */
         "minVisibleItemsForMore": number;
+        /**
+          * Programmatically move an item relative to another item in the navigation tree. Accepts item ID, value, or label for both dragged and target items.
+         */
+        "moveItem": (draggedQuery: string, targetQuery: string, position?: "before" | "inside" | "after") => Promise<{ success: boolean; detail?: LeNavigationItemReorderDetail1; }>;
         /**
           * Layout orientation.
           * @default 'horizontal'
@@ -1462,6 +1721,21 @@ export namespace Components {
          */
         "overflowMode": 'more' | 'hamburger';
         /**
+          * Enables manual drag-and-drop reordering of navigation items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+          * @default 'none'
+         */
+        "reorder": LeNavigationReorderMode1 | boolean;
+        /**
+          * Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.
+          * @default 500
+         */
+        "reorderExpandDelay": number;
+        /**
+          * Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after).
+          * @default {     top: 0.35,     middle: 0.3,     bottom: 0.35,   }
+         */
+        "reorderRatios": { top: number; middle: number; bottom: number };
+        /**
           * Placeholder text for the search input.
           * @default 'Search...'
          */
@@ -1471,6 +1745,15 @@ export namespace Components {
           * @default false
          */
         "searchable": boolean;
+        /**
+          * Programmatically set the reorder mode ('none', 'siblings', 'nested', or boolean).
+         */
+        "setReorder": (mode: LeNavigationReorderMode1 | boolean) => Promise<void>;
+        /**
+          * Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable items. Default: false.
+          * @default false
+         */
+        "showReorderHandle": boolean;
         /**
           * Whether submenu popovers should include a filter input.
           * @default false
@@ -2457,6 +2740,41 @@ export namespace Components {
         "value"?: string;
     }
     /**
+     * Reveals action buttons behind its content when swiped horizontally — by touch or by
+     * horizontal scrolling on a trackpad / Magic Mouse. Mouse dragging is left to the content
+     * (e.g. selection).
+     * 'start' actions sit at the inline start (left in LTR) and are revealed by swiping towards
+     * the end; 'end' actions the other way. A side without actions does not swipe. Pulling past
+     * the buttons runs the side's `full` action.
+     * @cssprop --le-swipe-action-width - Width of one action button
+     * @cssprop --le-swipe-duration - Settle animation duration
+     */
+    interface LeSwipe {
+        /**
+          * Width of one action button in pixels
+          * @default 72
+         */
+        "actionWidth": number;
+        /**
+          * Closes the swipe
+         */
+        "close": () => Promise<void>;
+        /**
+          * Actions revealed at the inline end (right in LTR)
+          * @default []
+         */
+        "endActions": LeSwipeAction[];
+        /**
+          * Opens the swipe on the given side, showing its buttons
+         */
+        "open": (side: LeSwipeSide) => Promise<void>;
+        /**
+          * Actions revealed at the inline start (left in LTR)
+          * @default []
+         */
+        "startActions": LeSwipeAction[];
+    }
+    /**
      * A flexible tab component with multiple variants and states.
      * @cssprop --le-tab-bg - Tab background color
      * @cssprop --le-tab-color - Tab text color
@@ -2870,6 +3188,14 @@ export namespace Components {
          */
         "alignItems": 'start' | 'center' | 'end' | 'stretch';
         /**
+          * Programmatically attach a list to this toolbar by ID.
+         */
+        "attachList": (listId: string) => Promise<void>;
+        /**
+          * Bound list ID(s) (comma-separated list of IDs).
+         */
+        "bindList"?: string;
+        /**
           * Temporary debug mode: stop before measuring virtual widths so the virtual DOM can be inspected before collapse simulation mutates it.
           * @default false
          */
@@ -2879,6 +3205,10 @@ export namespace Components {
           * @default false
          */
         "debugVirtualToolbar": boolean;
+        /**
+          * Programmatically detach a list from this toolbar by ID.
+         */
+        "detachList": (listId: string) => Promise<void>;
         /**
           * Disable the built-in overflow popover. The toolbar will still compute overflow state and emit events, but won't render its own menu. Useful for custom overflow handling.
           * @default false
@@ -3087,9 +3417,17 @@ export interface LeDropdownBaseCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeDropdownBaseElement;
 }
+export interface LeEmptyCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeEmptyElement;
+}
 export interface LeHeaderCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeHeaderElement;
+}
+export interface LeListCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeListElement;
 }
 export interface LeMultiselectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3142,6 +3480,10 @@ export interface LeSlotCustomEvent<T> extends CustomEvent<T> {
 export interface LeStringInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLLeStringInputElement;
+}
+export interface LeSwipeCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLeSwipeElement;
 }
 export interface LeTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3530,6 +3872,7 @@ declare global {
     };
     interface HTMLLeContextMenuElementEventMap {
         "leContextMenuSelect": LeContextMenuSelectDetail;
+        "leContextMenuReorder": LeNavigationItemReorderDetail;
         "leContextMenuClose": void;
     }
     /**
@@ -3602,6 +3945,27 @@ declare global {
     var HTMLLeDropdownBaseElement: {
         prototype: HTMLLeDropdownBaseElement;
         new (): HTMLLeDropdownBaseElement;
+    };
+    interface HTMLLeEmptyElementEventMap {
+        "leAction": MouseEvent;
+    }
+    /**
+     * An empty state component inspired by SwiftUI ContentUnavailableView.
+     * Used for displaying empty lists, search results, or unavailable states.
+     */
+    interface HTMLLeEmptyElement extends Components.LeEmpty, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeEmptyElementEventMap>(type: K, listener: (this: HTMLLeEmptyElement, ev: LeEmptyCustomEvent<HTMLLeEmptyElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeEmptyElementEventMap>(type: K, listener: (this: HTMLLeEmptyElement, ev: LeEmptyCustomEvent<HTMLLeEmptyElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeEmptyElement: {
+        prototype: HTMLLeEmptyElement;
+        new (): HTMLLeEmptyElement;
     };
     interface HTMLLeHeaderElementEventMap {
         "leHeaderState": {
@@ -3697,6 +4061,35 @@ declare global {
         prototype: HTMLLeKitElement;
         new (): HTMLLeKitElement;
     };
+    interface HTMLLeListElementEventMap {
+        "leSelectionChange": {
+    selectedIds: string[];
+    selectedItems: LeOption[];
+    isMultiple: boolean;
+  };
+        "leAction": { action?: string; item: LeOption; id: string; originalEvent?: Event };
+        "leActionStateChange": LeListActionStateDetail;
+        "leSortChange": { key?: string; column?: LeColumn; direction?: 'asc' | 'desc' };
+        "leColumnVisibilityChange": { columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean };
+        "leColumnOrderChange": { columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn };
+        "leItemToggle": { item: LeOption; open: boolean; originalEvent?: MouseEvent };
+        "leItemReorder": LeListItemReorderDetail;
+        "leReorder": LeListItemReorderDetail;
+    }
+    interface HTMLLeListElement extends Components.LeList, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeListElementEventMap>(type: K, listener: (this: HTMLLeListElement, ev: LeListCustomEvent<HTMLLeListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeListElementEventMap>(type: K, listener: (this: HTMLLeListElement, ev: LeListCustomEvent<HTMLLeListElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeListElement: {
+        prototype: HTMLLeListElement;
+        new (): HTMLLeListElement;
+    };
     interface HTMLLeMultiselectElementEventMap {
         "leChange": LeMultiOptionSelectDetail;
         "leOpen": void;
@@ -3747,6 +4140,8 @@ declare global {
     interface HTMLLeNavigationElementEventMap {
         "leNavItemSelect": LeNavigationItemSelectDetail;
         "leNavItemToggle": LeNavigationItemToggleDetail;
+        "leNavItemReorder": LeNavigationItemReorderDetail1;
+        "leReorder": LeNavigationItemReorderDetail1;
     }
     /**
      * Navigation component with vertical (tree) and horizontal (menu) layouts.
@@ -4130,6 +4525,34 @@ declare global {
         prototype: HTMLLeStringInputElement;
         new (): HTMLLeStringInputElement;
     };
+    interface HTMLLeSwipeElementEventMap {
+        "leSwipeAction": LeSwipeActionDetail;
+        "leSwipeChange": { open?: LeSwipeSide };
+    }
+    /**
+     * Reveals action buttons behind its content when swiped horizontally — by touch or by
+     * horizontal scrolling on a trackpad / Magic Mouse. Mouse dragging is left to the content
+     * (e.g. selection).
+     * 'start' actions sit at the inline start (left in LTR) and are revealed by swiping towards
+     * the end; 'end' actions the other way. A side without actions does not swipe. Pulling past
+     * the buttons runs the side's `full` action.
+     * @cssprop --le-swipe-action-width - Width of one action button
+     * @cssprop --le-swipe-duration - Settle animation duration
+     */
+    interface HTMLLeSwipeElement extends Components.LeSwipe, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLLeSwipeElementEventMap>(type: K, listener: (this: HTMLLeSwipeElement, ev: LeSwipeCustomEvent<HTMLLeSwipeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLLeSwipeElementEventMap>(type: K, listener: (this: HTMLLeSwipeElement, ev: LeSwipeCustomEvent<HTMLLeSwipeElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLLeSwipeElement: {
+        prototype: HTMLLeSwipeElement;
+        new (): HTMLLeSwipeElement;
+    };
     interface HTMLLeTabElementEventMap {
         "click": PointerEvent;
     }
@@ -4411,11 +4834,13 @@ declare global {
         "le-current-heading": HTMLLeCurrentHeadingElement;
         "le-drag-handle": HTMLLeDragHandleElement;
         "le-dropdown-base": HTMLLeDropdownBaseElement;
+        "le-empty": HTMLLeEmptyElement;
         "le-header": HTMLLeHeaderElement;
         "le-header-placeholder": HTMLLeHeaderPlaceholderElement;
         "le-icon": HTMLLeIconElement;
         "le-item": HTMLLeItemElement;
         "le-kit": HTMLLeKitElement;
+        "le-list": HTMLLeListElement;
         "le-multiselect": HTMLLeMultiselectElement;
         "le-navigation": HTMLLeNavigationElement;
         "le-number-input": HTMLLeNumberInputElement;
@@ -4432,6 +4857,7 @@ declare global {
         "le-slot": HTMLLeSlotElement;
         "le-stack": HTMLLeStackElement;
         "le-string-input": HTMLLeStringInputElement;
+        "le-swipe": HTMLLeSwipeElement;
         "le-tab": HTMLLeTabElement;
         "le-tab-bar": HTMLLeTabBarElement;
         "le-tab-panel": HTMLLeTabPanelElement;
@@ -4802,11 +5228,19 @@ declare namespace LocalJSX {
      */
     interface LeButton {
         /**
+          * Action ID that this button triggers when bound to a list.
+         */
+        "action"?: string;
+        /**
           * Alignment of the button label without the end icon
           * @allowedValues start | center | space-between | end
           * @default 'center'
          */
         "align"?: 'start' | 'center' | 'space-between' | 'end';
+        /**
+          * Bound list ID(s) (comma-separated list of IDs). If omitted, inherits bind-list from the nearest parent <le-toolbar>.
+         */
+        "bindList"?: string;
         /**
           * Runtime collapse state controlled by responsive containers.
          */
@@ -4837,6 +5271,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API).
+          * @default false
+         */
+        "filled"?: boolean;
         /**
           * Whether the button takes full width of its container
           * @default false
@@ -4934,10 +5373,10 @@ declare namespace LocalJSX {
         "value"?: string;
         /**
           * Button variant style
-          * @allowedValues solid | outlined | clear
+          * @allowedValues solid | filled | outlined | clear | system
           * @default 'outlined'
          */
-        "variant"?: 'solid' | 'outlined' | 'clear' | 'system';
+        "variant"?: 'solid' | 'filled' | 'outlined' | 'clear' | 'system';
         /**
           * Visibility state used by responsive containers to animate show/hide transitions.
           * @allowedValues visible | collapsing | collapsed | expanding
@@ -5347,6 +5786,10 @@ declare namespace LocalJSX {
          */
         "onLeContextMenuClose"?: (event: LeContextMenuCustomEvent<void>) => void;
         /**
+          * Emitted when menu items are reordered via drag and drop.
+         */
+        "onLeContextMenuReorder"?: (event: LeContextMenuCustomEvent<LeNavigationItemReorderDetail>) => void;
+        /**
           * Emitted when a menu item is selected.
          */
         "onLeContextMenuSelect"?: (event: LeContextMenuCustomEvent<LeContextMenuSelectDetail>) => void;
@@ -5365,6 +5808,16 @@ declare namespace LocalJSX {
           * @default 'mouse'
          */
         "position"?: 'top' | 'bottom' | 'left' | 'right' | 'mouse';
+        /**
+          * Enables manual drag-and-drop reordering of menu items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+          * @default 'none'
+         */
+        "reorder"?: LeNavigationReorderMode | boolean;
+        /**
+          * Whether to show the drag handle icon at the end of reorderable menu items.
+          * @default false
+         */
+        "showReorderHandle"?: boolean;
     }
     /**
      * Shows a "smart" header title based on what has scrolled out of view.
@@ -5502,6 +5955,32 @@ declare namespace LocalJSX {
           * Width of the dropdown. If not set, matches trigger width.
          */
         "width"?: string;
+    }
+    /**
+     * An empty state component inspired by SwiftUI ContentUnavailableView.
+     * Used for displaying empty lists, search results, or unavailable states.
+     */
+    interface LeEmpty {
+        /**
+          * Label for optional action button.
+         */
+        "actionLabel"?: string;
+        /**
+          * Optional icon name, URL, or emoji character.
+         */
+        "icon"?: string;
+        /**
+          * Main label text for the empty state.
+         */
+        "label"?: string;
+        /**
+          * Secondary descriptive message.
+         */
+        "message"?: string;
+        /**
+          * Emitted when the action button is clicked.
+         */
+        "onLeAction"?: (event: LeEmptyCustomEvent<MouseEvent>) => void;
     }
     /**
      * A functional page header with scroll-aware behaviors.
@@ -5730,6 +6209,196 @@ declare namespace LocalJSX {
          */
         "watchWindow"?: boolean;
     }
+    interface LeList {
+        /**
+          * Alias for showActionChevron.
+          * @default false
+         */
+        "actionChevron"?: boolean;
+        /**
+          * Actions available for the list items and external components. Can be an array of `LeListAction` objects or a JSON string.
+          * @default []
+         */
+        "actions"?: LeListAction[] | string;
+        /**
+          * Whether clicking a sorted column header a 3rd time clears sorting back to unsorted. Defaults to true.
+          * @default true
+         */
+        "allowClearSort"?: boolean;
+        /**
+          * Alias for columnReorder.
+          * @default false
+         */
+        "allowColumnReorder"?: boolean;
+        /**
+          * Alias for columnVisibilityToggle.
+          * @default false
+         */
+        "allowColumnToggle"?: boolean;
+        /**
+          * Card layout configuration: lines of column keys, or a custom render function. Can be a `LeListCardConfig` object or a JSON string. Without it, a card shows the label as the title and the description below.
+         */
+        "card"?: LeListCardConfig | string;
+        /**
+          * Width in pixels below which the 'auto' layout shows cards.
+          * @default 600
+         */
+        "cardBreakpoint"?: number;
+        /**
+          * Whether to allow column reordering via right-click header context menu. Defaults to false.
+          * @default false
+         */
+        "columnReorder"?: boolean;
+        /**
+          * Column separation style: 'none' | 'borders' | 'zebra'. Defaults to 'none'.
+          * @default 'none'
+         */
+        "columnSeparators"?: 'none' | 'borders' | 'zebra';
+        /**
+          * Whether to enable right-click context menu on table header row to toggle column visibility. Defaults to false.
+          * @default false
+         */
+        "columnVisibilityToggle"?: boolean;
+        /**
+          * Column configuration for the list table view. Can be an array of `LeColumn` objects or a JSON string. If omitted, columns will be automatically generated from data item properties.
+          * @default []
+         */
+        "columns"?: LeColumn[] | string;
+        /**
+          * Data items to display in the list. Can be an array of `LeOption` objects or a JSON string. If omitted or empty, top-level `<le-item>` child elements will be parsed.
+          * @default []
+         */
+        "data"?: LeOption[] | string;
+        /**
+          * Default initial sort direction for sortable columns on first click ('asc' | 'desc'). Individual columns can override this via their `sortStart` property. Defaults to 'asc'.
+          * @default 'asc'
+         */
+        "defaultSortDirection"?: 'asc' | 'desc';
+        /**
+          * Default sort icon placement across columns ('start' | 'end' | 'none'). If omitted, right-aligned columns default to 'start' and left/center columns default to 'end'.
+         */
+        "defaultSortIconPosition"?: 'start' | 'end' | 'none';
+        /**
+          * Whether to disable keyboard navigation. Defaults to false.
+          * @default false
+         */
+        "disableKeyboardNavigation"?: boolean;
+        /**
+          * Whether to disable row highlighting on hover. Defaults to false (row hover highlighting is enabled by default).
+          * @default false
+         */
+        "disableRowHover"?: boolean;
+        /**
+          * Icon for default empty state (<le-empty>).
+         */
+        "emptyIcon"?: string;
+        /**
+          * Main label text for default empty state (<le-empty>).
+         */
+        "emptyLabel"?: string;
+        /**
+          * Secondary description text for default empty state (<le-empty>).
+         */
+        "emptyMessage"?: string;
+        /**
+          * Title text for default empty state (<le-empty>).
+         */
+        "emptyTitle"?: string;
+        /**
+          * Whether to enable right-click context menu on item rows with their available actions. Defaults to false.
+          * @default false
+         */
+        "itemContextMenu"?: boolean;
+        /**
+          * Layout of the list: 'table' (default), 'cards', or 'auto' to switch to cards when the list is narrower than `cardBreakpoint`.
+          * @default 'table'
+         */
+        "layout"?: LeListLayout;
+        /**
+          * Animates switching between the table and cards: values marked with `data-le-field` move from their cell to their place in the card and back.
+          * @default false
+         */
+        "layoutTransition"?: boolean;
+        /**
+          * Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
+         */
+        "maxReorderDepth"?: number;
+        /**
+          * Emitted when a row action or link is executed.
+         */
+        "onLeAction"?: (event: LeListCustomEvent<{ action?: string; item: LeOption; id: string; originalEvent?: Event }>) => void;
+        /**
+          * Emitted when available actions or selection state changes on the list.
+         */
+        "onLeActionStateChange"?: (event: LeListCustomEvent<LeListActionStateDetail>) => void;
+        /**
+          * Emitted when column order changes via the context menu.
+         */
+        "onLeColumnOrderChange"?: (event: LeListCustomEvent<{ columns: LeColumn[]; draggedColumn: LeColumn; targetColumn?: LeColumn }>) => void;
+        /**
+          * Emitted when column visibility changes via the context menu.
+         */
+        "onLeColumnVisibilityChange"?: (event: LeListCustomEvent<{ columns: LeColumn[]; toggledColumn: LeColumn; hidden: boolean }>) => void;
+        /**
+          * Fired when list row items are reordered via drag and drop.
+         */
+        "onLeItemReorder"?: (event: LeListCustomEvent<LeListItemReorderDetail>) => void;
+        /**
+          * Emitted when a hierarchical row item is expanded or collapsed.
+         */
+        "onLeItemToggle"?: (event: LeListCustomEvent<{ item: LeOption; open: boolean; originalEvent?: MouseEvent }>) => void;
+        /**
+          * Alias for `leItemReorder`.
+         */
+        "onLeReorder"?: (event: LeListCustomEvent<LeListItemReorderDetail>) => void;
+        /**
+          * Emitted when row selection changes.
+         */
+        "onLeSelectionChange"?: (event: LeListCustomEvent<{
+    selectedIds: string[];
+    selectedItems: LeOption[];
+    isMultiple: boolean;
+  }>) => void;
+        /**
+          * Emitted when column sorting changes.
+         */
+        "onLeSortChange"?: (event: LeListCustomEvent<{ key?: string; column?: LeColumn; direction?: 'asc' | 'desc' }>) => void;
+        /**
+          * Enables manual drag-and-drop reordering of list row items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+          * @default 'none'
+         */
+        "reorder"?: LeListReorderMode | boolean;
+        /**
+          * Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.
+          * @default 500
+         */
+        "reorderExpandDelay"?: number;
+        /**
+          * Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.35, middle: 0.3, bottom: 0.35 }.
+          * @default {     top: 0.35,     middle: 0.3,     bottom: 0.35,   }
+         */
+        "reorderRatios"?: { top: number; middle: number; bottom: number };
+        /**
+          * Row separation style: 'none' | 'borders' | 'zebra'. Defaults to 'zebra'.
+          * @default 'zebra'
+         */
+        "rowSeparators"?: 'none' | 'borders' | 'zebra';
+        /**
+          * Selection mode for rows: false / 'none' (disabled), true / 'single', or 'multiple'. Defaults to false.
+          * @default false
+         */
+        "selection"?: boolean | 'single' | 'multiple' | 'none';
+        /**
+          * Whether to display chevron-right icon at the end of rows that have actions or links. Defaults to false.
+          * @default false
+         */
+        "showActionChevron"?: boolean;
+        /**
+          * Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable rows. Default: false.
+          * @default false
+         */
+        "showReorderHandle"?: boolean;
+    }
     /**
      * A multiselect component for selecting multiple options.
      * Displays selected items as tags with optional search filtering.
@@ -5885,10 +6554,18 @@ declare namespace LocalJSX {
          */
         "items"?: LeOption[] | string;
         /**
+          * Maximum allowed nesting depth for drag-and-drop reordering. When hovering over items at or deeper than this depth, children cannot be added (items split 50/50).
+         */
+        "maxReorderDepth"?: number;
+        /**
           * Minimum number of visible top-level items required to use the "More" overflow. If fewer would be visible, the navigation falls back to hamburger.
           * @default 2
          */
         "minVisibleItemsForMore"?: number;
+        /**
+          * Fired when navigation items are reordered via drag and drop.
+         */
+        "onLeNavItemReorder"?: (event: LeNavigationCustomEvent<LeNavigationItemReorderDetail1>) => void;
         /**
           * Fired when a navigation item is activated.  This event is cancelable. Call `event.preventDefault()` to prevent default browser navigation and implement custom routing.
          */
@@ -5897,6 +6574,10 @@ declare namespace LocalJSX {
           * Fired when a tree branch is toggled.
          */
         "onLeNavItemToggle"?: (event: LeNavigationCustomEvent<LeNavigationItemToggleDetail>) => void;
+        /**
+          * Alias for `leNavItemReorder`.
+         */
+        "onLeReorder"?: (event: LeNavigationCustomEvent<LeNavigationItemReorderDetail1>) => void;
         /**
           * Layout orientation.
           * @default 'horizontal'
@@ -5908,6 +6589,21 @@ declare namespace LocalJSX {
          */
         "overflowMode"?: 'more' | 'hamburger';
         /**
+          * Enables manual drag-and-drop reordering of navigation items. - 'none': Disabled (default) - 'siblings': Can only reorder within current parent/root siblings - 'nested': Can reorder across hierarchical levels (inside/outside parents) Note: Can also be passed as boolean (true -> 'nested', false -> 'none').
+          * @default 'none'
+         */
+        "reorder"?: LeNavigationReorderMode1 | boolean;
+        /**
+          * Delay in ms before automatically expanding a hovered collapsed item during drag-and-drop.
+          * @default 500
+         */
+        "reorderExpandDelay"?: number;
+        /**
+          * Configurable position target ratios for top (before), middle (inside), and bottom (after) drop zones. Default: { top: 0.3, middle: 0.4, bottom: 0.3 } (30% before / 40% inside / 30% after).
+          * @default {     top: 0.35,     middle: 0.3,     bottom: 0.35,   }
+         */
+        "reorderRatios"?: { top: number; middle: number; bottom: number };
+        /**
           * Placeholder text for the search input.
           * @default 'Search...'
          */
@@ -5917,6 +6613,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "searchable"?: boolean;
+        /**
+          * Whether to show the drag handle icon (`reorder-horizontal`) at the end of reorderable items. Default: false.
+          * @default false
+         */
+        "showReorderHandle"?: boolean;
         /**
           * Whether submenu popovers should include a filter input.
           * @default false
@@ -6947,6 +7648,41 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * Reveals action buttons behind its content when swiped horizontally — by touch or by
+     * horizontal scrolling on a trackpad / Magic Mouse. Mouse dragging is left to the content
+     * (e.g. selection).
+     * 'start' actions sit at the inline start (left in LTR) and are revealed by swiping towards
+     * the end; 'end' actions the other way. A side without actions does not swipe. Pulling past
+     * the buttons runs the side's `full` action.
+     * @cssprop --le-swipe-action-width - Width of one action button
+     * @cssprop --le-swipe-duration - Settle animation duration
+     */
+    interface LeSwipe {
+        /**
+          * Width of one action button in pixels
+          * @default 72
+         */
+        "actionWidth"?: number;
+        /**
+          * Actions revealed at the inline end (right in LTR)
+          * @default []
+         */
+        "endActions"?: LeSwipeAction[];
+        /**
+          * Emitted when an action runs, by tapping its button or by a full swipe
+         */
+        "onLeSwipeAction"?: (event: LeSwipeCustomEvent<LeSwipeActionDetail>) => void;
+        /**
+          * Emitted when the swipe opens on one side or closes
+         */
+        "onLeSwipeChange"?: (event: LeSwipeCustomEvent<{ open?: LeSwipeSide }>) => void;
+        /**
+          * Actions revealed at the inline start (left in LTR)
+          * @default []
+         */
+        "startActions"?: LeSwipeAction[];
+    }
+    /**
      * A flexible tab component with multiple variants and states.
      * @cssprop --le-tab-bg - Tab background color
      * @cssprop --le-tab-color - Tab text color
@@ -7360,6 +8096,10 @@ declare namespace LocalJSX {
          */
         "alignItems"?: 'start' | 'center' | 'end' | 'stretch';
         /**
+          * Bound list ID(s) (comma-separated list of IDs).
+         */
+        "bindList"?: string;
+        /**
           * Temporary debug mode: stop before measuring virtual widths so the virtual DOM can be inspected before collapse simulation mutates it.
           * @default false
          */
@@ -7570,8 +8310,11 @@ declare namespace LocalJSX {
         "minVisibleItems": number;
     }
     interface LeButtonAttributes {
+        "action": string;
+        "bindList": string;
         "mode": 'default' | 'admin';
-        "variant": 'solid' | 'outlined' | 'clear' | 'system';
+        "variant": 'solid' | 'filled' | 'outlined' | 'clear' | 'system';
+        "filled": boolean;
         "color": | 'primary'
     | 'secondary'
     | 'success'
@@ -7670,6 +8413,8 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "items": LeOption[] | string;
         "backdrop": boolean;
+        "reorder": string;
+        "showReorderHandle": boolean;
         "pageScrollBehavior": 'blocked' | 'menu-close' | 'fixed-menu';
         "position": 'top' | 'bottom' | 'left' | 'right' | 'mouse';
         "align": 'start' | 'center' | 'end';
@@ -7697,6 +8442,12 @@ declare namespace LocalJSX {
         "matchTriggerWidth": boolean;
         "autoWidth": boolean;
         "closeOnClickOutside": boolean;
+    }
+    interface LeEmptyAttributes {
+        "icon": string;
+        "label": string;
+        "message": string;
+        "actionLabel": string;
     }
     interface LeHeaderAttributes {
         "isStatic": boolean;
@@ -7738,6 +8489,38 @@ declare namespace LocalJSX {
         "storageKey": string;
         "persist": string;
     }
+    interface LeListAttributes {
+        "data": LeOption[] | string;
+        "columns": LeColumn[] | string;
+        "allowClearSort": boolean;
+        "defaultSortIconPosition": 'start' | 'end' | 'none';
+        "defaultSortDirection": 'asc' | 'desc';
+        "columnVisibilityToggle": boolean;
+        "allowColumnToggle": boolean;
+        "columnReorder": boolean;
+        "allowColumnReorder": boolean;
+        "rowSeparators": 'none' | 'borders' | 'zebra';
+        "columnSeparators": 'none' | 'borders' | 'zebra';
+        "emptyLabel": string;
+        "emptyTitle": string;
+        "emptyMessage": string;
+        "emptyIcon": string;
+        "disableRowHover": boolean;
+        "disableKeyboardNavigation": boolean;
+        "selection": string;
+        "showActionChevron": boolean;
+        "actionChevron": boolean;
+        "actions": LeListAction[] | string;
+        "itemContextMenu": boolean;
+        "reorder": string;
+        "showReorderHandle": boolean;
+        "maxReorderDepth": number;
+        "reorderExpandDelay": number;
+        "layout": LeListLayout;
+        "cardBreakpoint": number;
+        "card": LeListCardConfig | string;
+        "layoutTransition": boolean;
+    }
     interface LeMultiselectAttributes {
         "options": LeOption[] | string;
         "placeholder": string;
@@ -7768,6 +8551,10 @@ declare namespace LocalJSX {
         "submenuSearchable": boolean;
         "activationMode": LeNavigationActivationMode;
         "autoScroll": boolean;
+        "reorder": string;
+        "showReorderHandle": boolean;
+        "maxReorderDepth": number;
+        "reorderExpandDelay": number;
         "togglePosition": 'start' | 'end';
     }
     interface LeNumberInputAttributes {
@@ -7966,6 +8753,9 @@ declare namespace LocalJSX {
         "readonly": boolean;
         "externalId": string;
     }
+    interface LeSwipeAttributes {
+        "actionWidth": number;
+    }
     interface LeTabAttributes {
         "mode": 'default' | 'admin';
         "label": string;
@@ -8044,6 +8834,7 @@ declare namespace LocalJSX {
         "maxLines": number;
     }
     interface LeToolbarAttributes {
+        "bindList": string;
         "alignItems": 'start' | 'center' | 'end' | 'stretch';
         "itemGap": string;
         "overflowIcon": string;
@@ -8096,11 +8887,13 @@ declare namespace LocalJSX {
         "le-current-heading": Omit<LeCurrentHeading, keyof LeCurrentHeadingAttributes> & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes]?: LeCurrentHeading[K] } & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes as `attr:${K}`]?: LeCurrentHeadingAttributes[K] } & { [K in keyof LeCurrentHeading & keyof LeCurrentHeadingAttributes as `prop:${K}`]?: LeCurrentHeading[K] };
         "le-drag-handle": Omit<LeDragHandle, keyof LeDragHandleAttributes> & { [K in keyof LeDragHandle & keyof LeDragHandleAttributes]?: LeDragHandle[K] } & { [K in keyof LeDragHandle & keyof LeDragHandleAttributes as `attr:${K}`]?: LeDragHandleAttributes[K] } & { [K in keyof LeDragHandle & keyof LeDragHandleAttributes as `prop:${K}`]?: LeDragHandle[K] };
         "le-dropdown-base": Omit<LeDropdownBase, keyof LeDropdownBaseAttributes> & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes]?: LeDropdownBase[K] } & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes as `attr:${K}`]?: LeDropdownBaseAttributes[K] } & { [K in keyof LeDropdownBase & keyof LeDropdownBaseAttributes as `prop:${K}`]?: LeDropdownBase[K] };
+        "le-empty": Omit<LeEmpty, keyof LeEmptyAttributes> & { [K in keyof LeEmpty & keyof LeEmptyAttributes]?: LeEmpty[K] } & { [K in keyof LeEmpty & keyof LeEmptyAttributes as `attr:${K}`]?: LeEmptyAttributes[K] } & { [K in keyof LeEmpty & keyof LeEmptyAttributes as `prop:${K}`]?: LeEmpty[K] };
         "le-header": Omit<LeHeader, keyof LeHeaderAttributes> & { [K in keyof LeHeader & keyof LeHeaderAttributes]?: LeHeader[K] } & { [K in keyof LeHeader & keyof LeHeaderAttributes as `attr:${K}`]?: LeHeaderAttributes[K] } & { [K in keyof LeHeader & keyof LeHeaderAttributes as `prop:${K}`]?: LeHeader[K] };
         "le-header-placeholder": LeHeaderPlaceholder;
         "le-icon": Omit<LeIcon, keyof LeIconAttributes> & { [K in keyof LeIcon & keyof LeIconAttributes]?: LeIcon[K] } & { [K in keyof LeIcon & keyof LeIconAttributes as `attr:${K}`]?: LeIconAttributes[K] } & { [K in keyof LeIcon & keyof LeIconAttributes as `prop:${K}`]?: LeIcon[K] };
         "le-item": LeItem;
         "le-kit": Omit<LeKit, keyof LeKitAttributes> & { [K in keyof LeKit & keyof LeKitAttributes]?: LeKit[K] } & { [K in keyof LeKit & keyof LeKitAttributes as `attr:${K}`]?: LeKitAttributes[K] } & { [K in keyof LeKit & keyof LeKitAttributes as `prop:${K}`]?: LeKit[K] };
+        "le-list": Omit<LeList, keyof LeListAttributes> & { [K in keyof LeList & keyof LeListAttributes]?: LeList[K] } & { [K in keyof LeList & keyof LeListAttributes as `attr:${K}`]?: LeListAttributes[K] } & { [K in keyof LeList & keyof LeListAttributes as `prop:${K}`]?: LeList[K] };
         "le-multiselect": Omit<LeMultiselect, keyof LeMultiselectAttributes> & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes]?: LeMultiselect[K] } & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes as `attr:${K}`]?: LeMultiselectAttributes[K] } & { [K in keyof LeMultiselect & keyof LeMultiselectAttributes as `prop:${K}`]?: LeMultiselect[K] };
         "le-navigation": Omit<LeNavigation, keyof LeNavigationAttributes> & { [K in keyof LeNavigation & keyof LeNavigationAttributes]?: LeNavigation[K] } & { [K in keyof LeNavigation & keyof LeNavigationAttributes as `attr:${K}`]?: LeNavigationAttributes[K] } & { [K in keyof LeNavigation & keyof LeNavigationAttributes as `prop:${K}`]?: LeNavigation[K] };
         "le-number-input": Omit<LeNumberInput, keyof LeNumberInputAttributes> & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes]?: LeNumberInput[K] } & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes as `attr:${K}`]?: LeNumberInputAttributes[K] } & { [K in keyof LeNumberInput & keyof LeNumberInputAttributes as `prop:${K}`]?: LeNumberInput[K] };
@@ -8117,6 +8910,7 @@ declare namespace LocalJSX {
         "le-slot": Omit<LeSlot, keyof LeSlotAttributes> & { [K in keyof LeSlot & keyof LeSlotAttributes]?: LeSlot[K] } & { [K in keyof LeSlot & keyof LeSlotAttributes as `attr:${K}`]?: LeSlotAttributes[K] } & { [K in keyof LeSlot & keyof LeSlotAttributes as `prop:${K}`]?: LeSlot[K] };
         "le-stack": Omit<LeStack, keyof LeStackAttributes> & { [K in keyof LeStack & keyof LeStackAttributes]?: LeStack[K] } & { [K in keyof LeStack & keyof LeStackAttributes as `attr:${K}`]?: LeStackAttributes[K] } & { [K in keyof LeStack & keyof LeStackAttributes as `prop:${K}`]?: LeStack[K] };
         "le-string-input": Omit<LeStringInput, keyof LeStringInputAttributes> & { [K in keyof LeStringInput & keyof LeStringInputAttributes]?: LeStringInput[K] } & { [K in keyof LeStringInput & keyof LeStringInputAttributes as `attr:${K}`]?: LeStringInputAttributes[K] } & { [K in keyof LeStringInput & keyof LeStringInputAttributes as `prop:${K}`]?: LeStringInput[K] };
+        "le-swipe": Omit<LeSwipe, keyof LeSwipeAttributes> & { [K in keyof LeSwipe & keyof LeSwipeAttributes]?: LeSwipe[K] } & { [K in keyof LeSwipe & keyof LeSwipeAttributes as `attr:${K}`]?: LeSwipeAttributes[K] } & { [K in keyof LeSwipe & keyof LeSwipeAttributes as `prop:${K}`]?: LeSwipe[K] };
         "le-tab": Omit<LeTab, keyof LeTabAttributes> & { [K in keyof LeTab & keyof LeTabAttributes]?: LeTab[K] } & { [K in keyof LeTab & keyof LeTabAttributes as `attr:${K}`]?: LeTabAttributes[K] } & { [K in keyof LeTab & keyof LeTabAttributes as `prop:${K}`]?: LeTab[K] };
         "le-tab-bar": Omit<LeTabBar, keyof LeTabBarAttributes> & { [K in keyof LeTabBar & keyof LeTabBarAttributes]?: LeTabBar[K] } & { [K in keyof LeTabBar & keyof LeTabBarAttributes as `attr:${K}`]?: LeTabBarAttributes[K] } & { [K in keyof LeTabBar & keyof LeTabBarAttributes as `prop:${K}`]?: LeTabBar[K] };
         "le-tab-panel": Omit<LeTabPanel, keyof LeTabPanelAttributes> & { [K in keyof LeTabPanel & keyof LeTabPanelAttributes]?: LeTabPanel[K] } & { [K in keyof LeTabPanel & keyof LeTabPanelAttributes as `attr:${K}`]?: LeTabPanelAttributes[K] } & { [K in keyof LeTabPanel & keyof LeTabPanelAttributes as `prop:${K}`]?: LeTabPanel[K] } & OneOf<"label", LeTabPanel["label"], LeTabPanelAttributes["label"]>;
@@ -8353,6 +9147,11 @@ declare module "@stencil/core" {
              */
             "le-dropdown-base": LocalJSX.IntrinsicElements["le-dropdown-base"] & JSXBase.HTMLAttributes<HTMLLeDropdownBaseElement>;
             /**
+             * An empty state component inspired by SwiftUI ContentUnavailableView.
+             * Used for displaying empty lists, search results, or unavailable states.
+             */
+            "le-empty": LocalJSX.IntrinsicElements["le-empty"] & JSXBase.HTMLAttributes<HTMLLeEmptyElement>;
+            /**
              * A functional page header with scroll-aware behaviors.
              * Features:
              * - Static (default), sticky, or fixed positioning
@@ -8403,6 +9202,7 @@ declare module "@stencil/core" {
              * @cmsCategory System
              */
             "le-kit": LocalJSX.IntrinsicElements["le-kit"] & JSXBase.HTMLAttributes<HTMLLeKitElement>;
+            "le-list": LocalJSX.IntrinsicElements["le-list"] & JSXBase.HTMLAttributes<HTMLLeListElement>;
             /**
              * A multiselect component for selecting multiple options.
              * Displays selected items as tags with optional search filtering.
@@ -8581,6 +9381,17 @@ declare module "@stencil/core" {
              * @cssprop --le-input-padding - Input padding
              */
             "le-string-input": LocalJSX.IntrinsicElements["le-string-input"] & JSXBase.HTMLAttributes<HTMLLeStringInputElement>;
+            /**
+             * Reveals action buttons behind its content when swiped horizontally — by touch or by
+             * horizontal scrolling on a trackpad / Magic Mouse. Mouse dragging is left to the content
+             * (e.g. selection).
+             * 'start' actions sit at the inline start (left in LTR) and are revealed by swiping towards
+             * the end; 'end' actions the other way. A side without actions does not swipe. Pulling past
+             * the buttons runs the side's `full` action.
+             * @cssprop --le-swipe-action-width - Width of one action button
+             * @cssprop --le-swipe-duration - Settle animation duration
+             */
+            "le-swipe": LocalJSX.IntrinsicElements["le-swipe"] & JSXBase.HTMLAttributes<HTMLLeSwipeElement>;
             /**
              * A flexible tab component with multiple variants and states.
              * @cssprop --le-tab-bg - Tab background color

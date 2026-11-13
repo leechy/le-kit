@@ -108,19 +108,34 @@ export class LeVisibility {
   private attachResizeObserver() {
     if (typeof ResizeObserver === 'undefined' || !this.target) return;
 
-    this.resizeObserver = new ResizeObserver(() => {
+    this.resizeObserver = new ResizeObserver(entries => {
       if (this.target && this.canMeasure(this.target)) {
-        this.cacheMeasuredSize(this.target);
+        const box = entries[entries.length - 1]?.borderBoxSize?.[0];
+        this.cacheMeasuredSize(this.target, box ? { width: box.inlineSize, height: box.blockSize } : undefined);
       }
     });
 
     this.resizeObserver.observe(this.target);
   }
 
-  private cacheMeasuredSize(target: HTMLElement) {
+  /**
+   * Layout size of the target, ignoring transforms. getBoundingClientRect() includes
+   * transforms of ancestors (e.g. a FLIP animation moving a list value), which would
+   * cache a wrong width; offsetWidth/Height are used instead when the two disagree.
+   */
+  private measureLayoutSize(target: HTMLElement): { width: number; height: number } {
+    const rect = target.getBoundingClientRect();
+    const { offsetWidth, offsetHeight } = target;
+    const isTransformed =
+      (offsetWidth > 0 && Math.abs(rect.width - offsetWidth) > 1) ||
+      (offsetHeight > 0 && Math.abs(rect.height - offsetHeight) > 1);
+    return isTransformed ? { width: offsetWidth, height: offsetHeight } : { width: rect.width, height: rect.height };
+  }
+
+  private cacheMeasuredSize(target: HTMLElement, size?: { width: number; height: number }) {
     if (!this.canMeasure(target)) return;
 
-    const rect = target.getBoundingClientRect();
+    const rect = size ?? this.measureLayoutSize(target);
 
     if (this.mode === 'width' || this.mode === 'both') {
       if (rect.width > 0.5) {

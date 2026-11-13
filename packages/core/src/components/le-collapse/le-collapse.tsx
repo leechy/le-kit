@@ -53,19 +53,48 @@ export class LeCollapse {
   }
 
   @State() private headerShrunk: boolean = false;
+  @State() private isExpanded: boolean = true;
 
-  componentDidLoad() {
-    this.applyOpenState();
+  componentWillLoad() {
+    this.isExpanded = this.shouldBeOpen();
   }
 
-  @Watch('open')
-  protected onOpenChange() {
+  componentDidLoad() {
+    if (this.shouldBeOpen()) {
+      this.isExpanded = true;
+    }
+  }
+
+  @Watch('closed')
+  protected onClosedChange(newValue?: boolean, oldValue?: boolean) {
+    if (oldValue === undefined || newValue === oldValue) {
+      if (this.shouldBeOpen()) {
+        this.isExpanded = true;
+      }
+      return;
+    }
     this.applyOpenState();
   }
 
   @Watch('headerShrunk')
-  protected onDrivenStateChange() {
+  protected onDrivenStateChange(newValue?: boolean, oldValue?: boolean) {
+    if (oldValue === undefined || newValue === oldValue) {
+      if (this.shouldBeOpen()) {
+        this.isExpanded = true;
+      }
+      return;
+    }
     this.applyOpenState();
+  }
+
+  @Listen('transitionend')
+  protected handleTransitionEnd(ev: TransitionEvent) {
+    if (ev.target !== this.el) return;
+    if (ev.propertyName === 'grid-template-rows' || ev.propertyName === 'opacity') {
+      if (this.shouldBeOpen()) {
+        this.isExpanded = true;
+      }
+    }
   }
 
   private shouldBeOpen() {
@@ -76,12 +105,38 @@ export class LeCollapse {
 
   private applyOpenState() {
     const nextOpen = this.shouldBeOpen();
-    this.el.toggleAttribute('data-open', nextOpen);
+    if (!nextOpen) {
+      this.isExpanded = false;
+      return;
+    }
+
+    this.isExpanded = false;
+
+    if (this.el && typeof window !== 'undefined') {
+      // Fallback if transition duration is 0s or prefers-reduced-motion is active
+      const style = window.getComputedStyle?.(this.el);
+      const durationStr = style?.transitionDuration || '';
+      const duration = durationStr ? parseFloat(durationStr) * (durationStr.endsWith('ms') ? 1 : 1000) : 0;
+      if (!duration || duration <= 0) {
+        this.isExpanded = true;
+      } else {
+        // Safety timeout in case transitionend event does not fire
+        setTimeout(() => {
+          if (this.shouldBeOpen()) {
+            this.isExpanded = true;
+          }
+        }, duration + 50);
+      }
+    }
   }
 
   render() {
+    const isOpen = this.shouldBeOpen();
     return (
-      <Host data-open={this.shouldBeOpen() ? 'true' : 'false'}>
+      <Host
+        data-open={isOpen ? 'true' : 'false'}
+        data-expanded={isOpen && this.isExpanded ? 'true' : 'false'}
+      >
         <div class={{ 'region': true, 'scroll-down': this.scrollDown }} part="region">
           <slot></slot>
         </div>

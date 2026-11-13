@@ -9,8 +9,16 @@ import {
   Host,
   State,
   Method,
+  Watch,
 } from '@stencil/core';
 import { classnames, observeNamedSlotPresence, slotHasContent } from '../../utils/utils';
+import {
+  dispatchTriggerAction,
+  getAllLatestActionStates,
+  getLatestActionState,
+  parseListIds,
+  subscribeActionState,
+} from '../../utils/action-bus';
 import type { LeOption } from '../../types/options';
 import type { LeCollapseMeta } from '../../types/toolbar';
 import { TooltipPlacement } from '../..';
@@ -48,8 +56,24 @@ export class LeButton {
   @State() private hasIconStartSlot: boolean = false;
   @State() private hasIconEndSlot: boolean = false;
   @State() private hasIconOnlySlot: boolean = false;
+  @State() private dynamicLabel?: string;
 
   private disconnectSlotObserver?: () => void;
+  private unsubscribeActionState?: () => void;
+
+  /** List whose action state the button currently reflects; triggers go only to it */
+  private activeListId?: string;
+
+  /**
+   * Action ID that this button triggers when bound to a list.
+   */
+  @Prop({ reflect: true }) action?: string;
+
+  /**
+   * Bound list ID(s) (comma-separated list of IDs).
+   * If omitted, inherits bind-list from the nearest parent <le-toolbar>.
+   */
+  @Prop({ attribute: 'bind-list', reflect: true }) bindList?: string;
 
   /**
    * Mode of the popover should be 'default' for internal use
@@ -58,9 +82,14 @@ export class LeButton {
 
   /**
    * Button variant style
-   * @allowedValues solid | outlined | clear
+   * @allowedValues solid | filled | outlined | clear | system
    */
-  @Prop() variant: 'solid' | 'outlined' | 'clear' | 'system' = 'outlined';
+  @Prop() variant: 'solid' | 'filled' | 'outlined' | 'clear' | 'system' = 'outlined';
+
+  /**
+   * Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API).
+   */
+  @Prop({ reflect: true }) filled: boolean = false;
 
   /**
    * Button color theme (uses theme semantic colors)
@@ -229,6 +258,21 @@ export class LeButton {
 
     // And emit our own click event from the host element
     this.leClick.emit(event);
+
+    if (this.action) {
+      const hasNativeClick = Boolean((this.el as any).onclick || this.el.hasAttribute('onclick'));
+      const hasHref = Boolean(this.href);
+
+      if (hasHref || hasNativeClick) {
+        console.warn('[le-button] Button has both "action" and "href"/"onclick". Executing only href/onclick.');
+        return;
+      }
+
+      dispatchTriggerAction(this.el, {
+        action: this.action,
+        listIds: this.activeListId ? [this.activeListId] : this.getEffectiveListIds(),
+      });
+    }
   };
 
   /**
@@ -279,6 +323,10 @@ export class LeButton {
     this.initSlotObserver();
   }
 
+  connectedCallback() {
+    this.setupActionStateSubscription();
+  }
+
   componentDidLoad() {
     // Fallback in case shadow DOM was not ready during componentWillLoad.
     this.initSlotObserver();
@@ -286,6 +334,84 @@ export class LeButton {
 
   disconnectedCallback() {
     this.disconnectSlotObserver?.();
+    this.unsubscribeActionState?.();
+  }
+
+  @Watch('action')
+  @Watch('bindList')
+  handleActionBindingChange() {
+    this.setupActionStateSubscription();
+  }
+
+  /**
+   * Refreshes the action binding and current enabled/disabled state.
+   */
+  @Method()
+  async refreshActionState(): Promise<void> {
+    this.setupActionStateSubscription();
+  }
+
+  private applyActionState(detail: import('../../types/list').LeListActionStateDetail) {
+    if (!this.action) return;
+    const effectiveListIds = this.getEffectiveListIds();
+    if (effectiveListIds.length > 0 && !effectiveListIds.includes(detail.listId)) {
+      return;
+    }
+
+    if (detail.unloaded) {
+      if (this.activeListId === detail.listId) {
+        this.activeListId = undefined;
+      }
+      this.disabled = true;
+      this.dynamicLabel = undefined;
+      return;
+    }
+
+    this.activeListId = detail.listId;
+
+    const state = detail.actions[this.action];
+    if (state) {
+      this.disabled = !state.enabled;
+      if (state.label && state.label !== state.action.label) {
+        this.dynamicLabel = state.label;
+      } else {
+        this.dynamicLabel = undefined;
+      }
+    } else {
+      this.disabled = true;
+      this.dynamicLabel = undefined;
+    }
+  }
+
+  private setupActionStateSubscription() {
+    this.unsubscribeActionState?.();
+    this.activeListId = undefined;
+    if (!this.action) return;
+
+    // Apply any current known state immediately
+    const effectiveListIds = this.getEffectiveListIds();
+    const states = effectiveListIds.length > 0
+      ? (effectiveListIds.map(id => getLatestActionState(id)).filter(Boolean) as import('../../types/list').LeListActionStateDetail[])
+      : getAllLatestActionStates();
+
+    for (const detail of states) {
+      this.applyActionState(detail);
+    }
+
+    this.unsubscribeActionState = subscribeActionState(this.el, detail => {
+      this.applyActionState(detail);
+    });
+  }
+
+  private getEffectiveListIds(): string[] {
+    if (this.bindList) {
+      return parseListIds(this.bindList);
+    }
+    const toolbar = this.el.closest('le-toolbar') as any;
+    if (toolbar?.bindList) {
+      return parseListIds(toolbar.bindList);
+    }
+    return [];
   }
 
   @Method()
@@ -368,6 +494,7 @@ export class LeButton {
       .trim();
 
     return (
+      this.dynamicLabel ||
       this.label ||
       textLabel ||
       this.el.getAttribute('label') ||
@@ -390,8 +517,12 @@ export class LeButton {
       !!this.tooltip || (!!compactTooltipText && (this.collapsible || hasIconOnly));
     const tooltipDisabled = !this.tooltip && !isCompactPresentation;
 
+    const isFilled = this.filled || this.variant === 'filled' || this.variant === 'solid';
+    const effectiveVariant = isFilled ? 'solid' : this.variant;
+
     const classes = classnames(
-      `variant-${this.variant}`,
+      `variant-${effectiveVariant}`,
+      isFilled ? 'variant-filled' : null,
       this.color ? `color-${this.color}` : null,
       `size-${this.size}`,
       {
@@ -457,7 +588,11 @@ export class LeButton {
                 class="le-button-label-visibility content"
                 state={isCollapsedToIcon ? 'collapsed' : 'visible'}
               >
-                <slot></slot>
+                {this.dynamicLabel ? (
+                  <span>{this.dynamicLabel}</span>
+                ) : (
+                  <slot></slot>
+                )}
               </le-visibility>
             </span>
             <span

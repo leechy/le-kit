@@ -56,6 +56,15 @@ export function parseOptionFromItemElement(item: HTMLElement): LeOption {
     .map(child => parseOptionFromItemElement(child as HTMLElement));
   const group = item.getAttribute('group') || '';
   const separator = item.getAttribute('separator') as 'before' | 'after' | undefined;
+  let actions: any = undefined;
+  if (item.hasAttribute('actions')) {
+    const rawActions = item.getAttribute('actions') || '';
+    try {
+      actions = JSON.parse(rawActions);
+    } catch {
+      actions = rawActions.split(',').map(s => s.trim()).filter(Boolean);
+    }
+  }
 
   const option = {
     id: id || undefined,
@@ -63,6 +72,7 @@ export function parseOptionFromItemElement(item: HTMLElement): LeOption {
     value,
     href,
     action,
+    actions,
     target,
     part,
     color,
@@ -133,14 +143,26 @@ export function observeNamedSlotPresence(
     });
   };
 
+  const checkLightDomPresence = (slotName: string): boolean => {
+    return Array.from(host.children).some(child => {
+      if (!slotName) {
+        return !child.hasAttribute('slot');
+      }
+      return child.getAttribute('slot') === slotName;
+    });
+  };
+
   const emitState = () => {
     const root = host.shadowRoot;
     const presence: SlotPresenceMap = {};
 
     for (const slotName of slotNames) {
+      const hasLightDom = checkLightDomPresence(slotName);
       const selector = slotName ? `slot[name="${slotName}"]` : 'slot:not([name])';
       const slot = root?.querySelector(selector) as HTMLSlotElement | null;
-      presence[slotName] = !!slot && hasAssignedContent(slot);
+      const hasShadowAssigned = !!slot && hasAssignedContent(slot);
+
+      presence[slotName] = hasLightDom || hasShadowAssigned;
     }
 
     onChange(presence);
@@ -174,6 +196,10 @@ export function observeNamedSlotPresence(
     bindSlotListeners();
   });
 
+  const lightDomObserver = new MutationObserver(() => {
+    emitState();
+  });
+
   if (host.shadowRoot) {
     shadowObserver.observe(host.shadowRoot, {
       childList: true,
@@ -181,8 +207,16 @@ export function observeNamedSlotPresence(
     });
   }
 
+  lightDomObserver.observe(host, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['slot'],
+  });
+
   return () => {
     shadowObserver.disconnect();
+    lightDomObserver.disconnect();
     for (const [slot, listener] of slotListeners) {
       slot.removeEventListener('slotchange', listener);
     }
@@ -410,7 +444,7 @@ export function classnames(...classes: any[]): string {
 export function parseOptionInput(
   input: LeOption[] | string,
   context: string,
-  inputName: 'items' | 'options' = 'options',
+  inputName: string = 'options',
 ): LeOption[] {
   if (typeof input === 'string') {
     try {
@@ -481,6 +515,9 @@ export function nextFrame(): Promise<void> {
  * Helper that returns a promise resolving on the next resize of the given element.
  */
 export function nextResize(element: HTMLElement): Promise<ResizeObserverEntry> {
+  if (typeof ResizeObserver === 'undefined') {
+    return Promise.resolve({} as ResizeObserverEntry);
+  }
   return new Promise(resolve => {
     const observer = new ResizeObserver(([entry]) => {
       observer.disconnect(); // Remove observer after the first resize to avoid multiple triggers.
@@ -488,4 +525,12 @@ export function nextResize(element: HTMLElement): Promise<ResizeObserverEntry> {
     });
     observer.observe(element);
   });
+}
+
+/**
+ * Checks if an event target is an interactive editable element (e.g. input, textarea, contenteditable).
+ */
+export function isEditableTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof globalThis.Element)) return false;
+  return !!target.closest('input, textarea, [contenteditable="true"]');
 }

@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "core-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "packages/core", "start"],
+      "port": 3333
+    },
+    {
+      "name": "docs-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "apps/docs", "run", "dev"],
+      "port": 4321
+    }
+  ]
+}

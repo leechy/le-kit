@@ -1,0 +1,125 @@
+---
+/**
+ * Generic component page: overview + Playground / API / Roadmap tabs.
+ * Content comes from `packages/core/src/components/<tag>/<tag>.page.md`.
+ */
+import { getEntry, render } from "astro:content";
+import ApiTable from "../ApiTable.astro";
+import Stage from "./Stage.astro";
+
+interface Props {
+  tag: string;
+}
+
+const { tag } = Astro.props;
+const entry = await getEntry("componentPages", tag);
+if (!entry) throw new Error(`No page content for ${tag} (expected ${tag}.page.md next to the component)`);
+
+const { tagline, hero, whenToUse, whenNotToUse, recipes } = entry.data;
+const { Content } = await render(entry);
+const recipe = recipes[0];
+
+/** Inline `code` in short list items; everything else is escaped. */
+const inline = (text: string) =>
+  text
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replace(/`([^`]+)`/g, "<code>$1</code>");
+---
+
+<header class="overview">
+  <h1>&lt;{tag}&gt;</h1>
+  <p class="tagline">{tagline}</p>
+
+  <div class="overview-grid">
+    <div class="hero" set:html={hero} />
+    <div class="when">
+      <h2 class="when-title">When to use</h2>
+      <ul>{whenToUse.map((item) => <li set:html={inline(item)} />)}</ul>
+      <h2 class="when-title">When not to</h2>
+      <ul>{whenNotToUse.map((item) => <li set:html={inline(item)} />)}</ul>
+    </div>
+  </div>
+</header>
+
+<le-tabs class="page-tabs" selected="playground" data-component-page-tabs>
+  <le-tab-panel label="Playground" value="playground">
+    <section class="playground">
+      <Stage html={recipe.html} />
+      <p class="recipe-note"><strong>{recipe.title}.</strong> {recipe.note}</p>
+    </section>
+  </le-tab-panel>
+
+  <le-tab-panel label="API" value="api">
+    <div class="notes"><Content /></div>
+    <ApiTable tag={tag} />
+  </le-tab-panel>
+
+  <le-tab-panel label="Roadmap" value="roadmap">
+    <p class="placeholder">Coming soon: what is wanted, in discussion, planned and rejected for this component.</p>
+  </le-tab-panel>
+</le-tabs>
+
+<script>
+  import { initComponentPageTabs } from "./tabs-client";
+
+  const tabs = document.querySelector<HTMLElement>("[data-component-page-tabs]");
+  if (tabs) initComponentPageTabs(tabs);
+</script>
+
+<style>
+  .tagline {
+    font-size: 1.125rem;
+    margin-top: 0;
+  }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: var(--le-spacing-4);
+    align-items: start;
+    margin: var(--le-spacing-4) 0;
+  }
+
+  @media (max-width: 720px) {
+    .overview-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .hero {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--le-spacing-2);
+    align-items: center;
+    justify-content: center;
+    padding: var(--le-spacing-6) var(--le-spacing-4);
+    border-radius: var(--le-border-radius-lg, 12px);
+    background: var(--le-color-surface-subtle, rgba(127, 127, 127, 0.08));
+  }
+
+  .when-title {
+    font-size: 1rem;
+    margin: 0 0 var(--le-spacing-1);
+  }
+
+  .when ul {
+    margin: 0 0 var(--le-spacing-3);
+    padding-left: 1.2em;
+  }
+
+  .page-tabs {
+    display: block;
+    margin-top: var(--le-spacing-4);
+  }
+
+  .playground {
+    padding-top: var(--le-spacing-3);
+  }
+
+  .recipe-note,
+  .placeholder {
+    opacity: 0.8;
+  }
+</style>

@@ -42,7 +42,7 @@ const cssParts = component.parts || [];
 					</thead>
 					<tbody>
 						{props.map((prop: any) => (
-							<tr>
+							<tr id={`@${prop.attr ?? prop.name}`}>
 								<td><code>{prop.name}</code> {prop.required && <span>*</span>}</td>
 								<td><code>{prop.type}</code></td>
 								<td>{prop.default ? <code>{prop.default}</code> : <em>-</em>}</td>

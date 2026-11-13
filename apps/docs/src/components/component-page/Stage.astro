@@ -1,0 +1,29 @@
+---
+/**
+ * The playground stage: a resizable preview frame with the recipe's markup.
+ */
+interface Props {
+  html: string;
+}
+
+const { html } = Astro.props;
+---
+
+<le-preview-frame class="stage" min-width="200" min-height="120" handles="left,right" show-frame="always">
+  <div class="stage-content" set:html={html} />
+</le-preview-frame>
+
+<style>
+  .stage {
+    display: block;
+  }
+
+  .stage-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--le-spacing-2);
+    align-items: center;
+    justify-content: center;
+    padding: var(--le-spacing-6) var(--le-spacing-4);
+  }
+</style>

@@ -1,20 +1,35 @@
 import { parseHash, hashForTab, hashForRecipe, type PageTab } from '../../lib/page-hash';
 
+const CODE_LINES_SHOWN = 3;
+
 /**
- * Recipe switching in the playground: the list of recipe buttons, the stage
- * and the note are swapped from server-rendered <template>s.
+ * Recipe switching in the playground. Recipes are items of a le-navigation in
+ * the recipes side panel; the stage, the note and the code are swapped from
+ * server-rendered <template>s.
  * Returns `select(id)`, which falls back to the first recipe for unknown ids.
  */
 export function initRecipes(playground: HTMLElement) {
-  const buttons = [...playground.querySelectorAll<HTMLElement>('[data-recipe]')];
+  const nav = playground.querySelector<HTMLElement & { activeUrl?: string }>('[data-recipe-nav]');
+  const panel = playground.querySelector<HTMLElement & { open?: boolean }>('[data-recipe-panel]');
+  const items = [...playground.querySelectorAll<HTMLElement>('le-item[data-recipe]')];
   const stage = playground.querySelector<HTMLElement>('[data-stage-content]');
   const note = playground.querySelector<HTMLElement>('[data-recipe-note]');
-  const firstId = buttons[0]?.dataset.recipe ?? '';
+  const code = playground.querySelector<HTMLElement>('[data-code]');
+  const codeTarget = playground.querySelector<HTMLElement>('[data-code-target]');
+  const codeToggle = playground.querySelector<HTMLElement>('[data-code-toggle]');
+  const firstId = items[0]?.dataset.recipe ?? '';
+
+  const find = (attr: string, id: string) =>
+    playground.querySelector<HTMLTemplateElement>(`template[${attr}="${CSS.escape(id)}"]`);
+
+  const setCodeExpanded = (expanded: boolean) => {
+    if (!code || !codeToggle) return;
+    code.toggleAttribute('data-clipped', !expanded && code.hasAttribute('data-has-more'));
+    codeToggle.textContent = expanded ? 'Show less' : 'Show all code';
+  };
 
   const select = (id: string, updateUrl = false) => {
-    const template =
-      playground.querySelector<HTMLTemplateElement>(`template[data-recipe-template="${CSS.escape(id)}"]`) ??
-      playground.querySelector<HTMLTemplateElement>(`template[data-recipe-template="${CSS.escape(firstId)}"]`);
+    const template = find('data-recipe-template', id) ?? find('data-recipe-template', firstId);
     if (!template || !stage) return;
     const selectedId = template.dataset.recipeTemplate!;
 
@@ -24,7 +39,16 @@ export function initRecipes(playground: HTMLElement) {
       title.textContent = `${template.dataset.title}.`;
       note.replaceChildren(title, ` ${template.dataset.note ?? ''}`);
     }
-    for (const button of buttons) button.toggleAttribute('selected', button.dataset.recipe === selectedId);
+
+    const codeTemplate = find('data-recipe-code', selectedId);
+    if (codeTemplate && codeTarget && code) {
+      codeTarget.replaceChildren(codeTemplate.content.cloneNode(true));
+      code.toggleAttribute('data-has-more', Number(codeTemplate.dataset.lines) > CODE_LINES_SHOWN);
+      setCodeExpanded(false);
+    }
+
+    // le-navigation marks the item whose href equals activeUrl.
+    if (nav) nav.activeUrl = `#recipe-${selectedId}`;
 
     if (updateUrl) {
       const hash = hashForRecipe(selectedId, selectedId === firstId);
@@ -32,10 +56,20 @@ export function initRecipes(playground: HTMLElement) {
     }
   };
 
-  for (const button of buttons) {
-    button.addEventListener('click', () => select(button.dataset.recipe!, true));
-  }
+  // Recipes are links (#recipe-…), but switching must not add history entries.
+  nav?.addEventListener('leNavItemSelect', (event) => {
+    const href = (event as CustomEvent<{ href?: string }>).detail?.href ?? '';
+    const target = parseHash(href);
+    if (target.kind !== 'recipe') return;
+    event.preventDefault();
+    select(target.id, true);
+    // On narrow screens the panel is an overlay — close it after picking.
+    if (panel?.open) panel.open = false;
+  });
 
+  codeToggle?.addEventListener('click', () => setCodeExpanded(code?.hasAttribute('data-clipped') ?? false));
+
+  select(firstId);
   return { select, firstId };
 }
 

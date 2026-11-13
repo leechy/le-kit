@@ -161,6 +161,20 @@
 - [ ] Verify in browser: all 13 recipes render; `#recipe-icon-only` on load; clicking updates URL; Back leaves the page; 375px no horizontal scroll.
 - [ ] Commit `Add recipes column to the component playground`.
 
+## Layer 2 review feedback (user, 2026-11-13) → Layer 2b
+
+1. Recipes switch with `le-navigation` inside a `le-side-panel` on the **end** side, not buttons: the page itself says not to use buttons for navigation; the side panel hides itself when there is no room and opens as an overlay on phones; no selected-button styling problem. Bonus: the icon-start / icon-end recipes can toggle the start and end panels.
+2. Show the code of the recipe — collapsed to ~3 lines, expandable. (Pulled forward from layer 3; layer 3 will make it follow the controls.)
+3. Stage background too dark for clear buttons: a light grid variant (toolbar-like colors) as a site class.
+
+### Task 6: Layer 2b
+
+- [ ] Global class `le-preview-frame.preview-light` in `apps/docs/src/styles/global.css` (light background, faint grid); the stage uses it.
+- [ ] Playground wraps in `<le-side-panel side="end" panel-id="recipes">`; recipes become `<le-navigation orientation="vertical">` with `<le-item href="#recipe-<id>">`; `leNavItemSelect` is cancelled and handled by `select()` (keeps `replaceState`, no history entries). A `le-side-panel-toggle` for the recipes panel shows when the panel is collapsed.
+- [ ] Code: each recipe's markup highlighted with `CodeBlock` in a `<template data-recipe-code>`; shown under the note, clipped to 3 lines with a "Show all" toggle when longer.
+- [ ] Recipes icon-start / icon-end use `le-side-panel-toggle` for `components-navigation` and `recipes`.
+- [ ] Verify desktop + 375px; commit `Recipes as navigation in a side panel, code under the stage`.
+
 ## Layers 3–7 — outline (detailed after the previous layer is approved)
 
 - **Layer 3 — Controls + code:** `controls: string[]` added to the content file schema; controls generated from `le-kit/dist/docs.json` (union → `le-select`, boolean → `le-checkbox`, number → `le-number-input`, string → `le-string-input`; icon props → text input); read-only highlighted code with a copy button, only non-default attributes.

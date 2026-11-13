@@ -6,6 +6,7 @@
 import { getEntry, render } from "astro:content";
 import ApiTable from "../ApiTable.astro";
 import Stage from "./Stage.astro";
+import CodeBlock from "../CodeBlock.astro";
 
 interface Props {
   tag: string;
@@ -46,27 +47,50 @@ const inline = (text: string) =>
 <le-tabs class="page-tabs" selected="playground" data-component-page-tabs>
   <le-tab-panel label="Playground" value="playground">
     <section class="playground" data-playground>
-      <nav class="recipes" aria-label="Recipes">
-        {
-          recipes.map((item, index) => (
-            <le-button
-              variant="clear"
-              full-width
-              align="start"
-              data-recipe={item.id}
-              {...(index === 0 ? { selected: true } : {})}
-            >
-              {item.title}
+      <le-side-panel
+        side="end"
+        panel-id="recipes"
+        panel-label="Recipes"
+        panel-width="220"
+        collapse-at="720"
+        narrow-behavior="overlay"
+        data-recipe-panel
+      >
+        <le-navigation
+          slot="panel"
+          orientation="vertical"
+          active-url={`#recipe-${recipe.id}`}
+          data-recipe-nav
+        >
+          {
+            recipes.map((item) => (
+              <le-item label={item.title} href={`#recipe-${item.id}`} data-recipe={item.id}></le-item>
+            ))
+          }
+        </le-navigation>
+
+        <div class="stage-area">
+          <div class="stage-bar">
+            <le-side-panel-toggle panel-id="recipes" variant="clear" size="small">
+              <le-icon slot="icon-start" name="side-panel-end"></le-icon>
+              Recipes
+            </le-side-panel-toggle>
+          </div>
+          <Stage html={recipe.html} />
+          <p class="recipe-note" data-recipe-note>
+            <strong>{recipe.title}.</strong> {recipe.note}
+          </p>
+          <div class="code" data-code>
+            <div class="code-clip" data-code-target>
+              <CodeBlock language="html" code={recipe.html} />
+            </div>
+            <le-button variant="clear" size="small" class="code-toggle" data-code-toggle>
+              Show all code
             </le-button>
-          ))
-        }
-      </nav>
-      <div class="stage-area">
-        <Stage html={recipe.html} />
-        <p class="recipe-note" data-recipe-note>
-          <strong>{recipe.title}.</strong> {recipe.note}
-        </p>
-      </div>
+          </div>
+        </div>
+      </le-side-panel>
+
       {
         recipes.map((item) => (
           <template
@@ -75,6 +99,13 @@ const inline = (text: string) =>
             data-note={item.note}
             set:html={item.html}
           ></template>
+        ))
+      }
+      {
+        recipes.map((item) => (
+          <template data-recipe-code={item.id} data-lines={item.html.trim().split("\n").length}>
+            <CodeBlock language="html" code={item.html} />
+          </template>
         ))
       }
     </section>
@@ -152,32 +183,40 @@ const inline = (text: string) =>
   }
 
   .playground {
-    display: grid;
-    grid-template-columns: 200px minmax(0, 1fr);
-    gap: var(--le-spacing-4);
-    align-items: start;
     padding-top: var(--le-spacing-3);
   }
 
-  .recipes {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+  .stage-area {
+    min-width: 0;
   }
 
-  @media (max-width: 720px) {
-    .playground {
-      grid-template-columns: minmax(0, 1fr);
-    }
+  .stage-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--le-spacing-2);
+  }
 
-    .recipes {
-      flex-direction: row;
-      flex-wrap: wrap;
-    }
+  /* Code: clipped to ~3 lines until expanded */
+  .code-clip {
+    position: relative;
+  }
 
-    .recipes le-button {
-      width: auto;
-    }
+  .code[data-clipped] .code-clip {
+    max-height: 5.6em;
+    overflow: hidden;
+  }
+
+  .code[data-clipped] .code-clip::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 2em;
+    background: linear-gradient(transparent, var(--le-color-background));
+    pointer-events: none;
+  }
+
+  .code:not([data-has-more]) .code-toggle {
+    display: none;
   }
 
   .recipe-note,

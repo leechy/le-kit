@@ -305,6 +305,12 @@ le-preview-frame::part(viewport) {
   background-size: var(--background-lines-grid-size) var(--background-lines-grid-size);
 }
 
+/* Light preview: for components that sit on an app surface (clear buttons etc.) */
+le-preview-frame.preview-light {
+  --le-preview-frame-bg: #f7fafd;
+  --background-lines-color: rgba(24, 97, 157, 0.07);
+}
+
 /* Bento Grids and tiles */
 le-bento-grid {
   --le-bento-tile-radius: 0;

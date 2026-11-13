@@ -9,7 +9,7 @@ interface Props {
 const { html } = Astro.props;
 ---
 
-<le-preview-frame class="stage" min-width="200" min-height="120" handles="left,right" show-frame="always">
+<le-preview-frame class="stage preview-light"min-width="200" min-height="120" handles="left,right" show-frame="always">
   <div class="stage-content" data-stage-content set:html={html} />
 </le-preview-frame>
 

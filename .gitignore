@@ -33,3 +33,6 @@ src-core/
 
 # Claude plugin correction logs (any depth)
 **/.claude/corrections.jsonl
+
+# Brainstorm mockups
+.superpowers/

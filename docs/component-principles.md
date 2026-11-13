@@ -89,7 +89,32 @@ If only appearance or internal arrangement changes, it is a variant, expressed t
   type only. That is why `string-input`, `number-input` and `code-input` are separate. Consistency
   between them comes from a shared base and shared tokens, not from one tag.
 
-## 5. Reuse
+## 5. Consistent API
+
+**The same prop name means the same thing everywhere.** A prop that exists on several components
+accepts the same values and leads to the same (or analogous) result on each of them.
+
+**And the other way round:** when we add a prop that does something a prop on another component
+already does, we reuse that prop's name and values instead of inventing new ones.
+
+Before adding a prop, look at what other components already have for the same job.
+
+- **Good example — `size`:** `small | medium | large` with `medium` by default on button, select,
+  combobox, multiselect, segmented-control, tab, side-panel-toggle, dropdown-base.
+- **Positions follow logical directions:** `start | end` rather than `left | right`, so components
+  work in RTL without extra props.
+
+**Known inconsistencies today** (to be fixed):
+
+- **`variant`** — button: `solid | filled | outlined | clear | system`; side-panel-toggle: the same
+  without `filled`; select: `default | outlined | solid | clear`; card: `default | outlined | elevated`.
+- **`position`** — popover, context-menu, overflow-menu use `left | right`; tab uses `start | end`.
+- **`mode`** — on most components it is `default | admin` (CMS editing); on `le-visibility` it means
+  which dimensions to measure (`width | height | both`). Same name, unrelated meaning.
+- **`iconStart` / `iconEnd`** — `string | Node` on button and side-panel-toggle, `string` only on
+  string-input, number-input, tab-panel.
+
+## 6. Reuse
 
 1. **Inside components, use our own components.** `le-list` uses `le-collapse` instead of
    `display: none / block`, so expanding looks the same everywhere and a fix in one place fixes all.
@@ -105,7 +130,7 @@ duplicates. `le-collapse` animates content of unknown size through the `display:
 `le-visibility` measures a known size where grid is impossible (button groups in a toolbar). Both
 show and hide — but they are different tools, and merging them would be a mistake.
 
-## 6. Build in layers
+## 7. Build in layers
 
 A component is built in layers; each layer is approved before the next one is stacked on it:
 
@@ -120,7 +145,7 @@ If a layer doesn't feel right, we don't move on until we have figured out why.
 built on top of it. Once nearly finished, it became hard to say what to change and too costly to
 throw away.
 
-## 7. Quality and verification
+## 8. Quality and verification
 
 The main quality gate is **manual checking**, in this order:
 

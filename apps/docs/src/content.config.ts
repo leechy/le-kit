@@ -27,6 +27,7 @@ const componentPages = defineCollection({
     tag: z.string(),
     tagline: z.string(),
     hero: z.string(),
+    heroDirection: z.enum(["row", "column"]).default("row"),
     whenToUse: z.array(z.string()),
     whenNotToUse: z.array(z.string()),
     recipes: z

@@ -15,7 +15,7 @@ const { tag } = Astro.props;
 const entry = await getEntry("componentPages", tag);
 if (!entry) throw new Error(`No page content for ${tag} (expected ${tag}.page.md next to the component)`);
 
-const { tagline, hero, whenToUse, whenNotToUse, recipes } = entry.data;
+const { tagline, hero, heroDirection, whenToUse, whenNotToUse, recipes } = entry.data;
 const { Content } = await render(entry);
 const recipe = recipes[0];
 
@@ -33,7 +33,7 @@ const inline = (text: string) =>
   <p class="tagline">{tagline}</p>
 
   <div class="overview-grid">
-    <div class="hero" set:html={hero} />
+    <div class:list={["hero", `hero-${heroDirection}`]} set:html={hero} />
     <div class="when">
       <h2 class="when-title">When to use</h2>
       <ul>{whenToUse.map((item) => <li set:html={inline(item)} />)}</ul>
@@ -97,6 +97,12 @@ const inline = (text: string) =>
     padding: var(--le-spacing-6) var(--le-spacing-4);
     border-radius: var(--le-border-radius-lg, 12px);
     background: var(--le-color-surface-subtle, rgba(127, 127, 127, 0.08));
+  }
+
+  @media (min-width: 721px) {
+    .hero-column {
+      flex-direction: column;
+    }
   }
 
   .when-title {

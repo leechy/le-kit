@@ -129,9 +129,40 @@
 
 ---
 
-## Layers 2–7 — outline (detailed after the previous layer is approved)
+## Layer 1 review feedback (user, 2026-11-13)
 
-- **Layer 2 — Recipes column:** recipe list on the left of the stage from `recipes`; clicking switches the stage and sets `#recipe-<id>`; `#recipe-<id>` on load selects it.
+- Hero buttons in a column, not a row, to balance the six "when to use" bullets.
+
+## Layer 2 — Recipes column
+
+### Task 4: Hero direction (layer 1 feedback)
+
+**Files:** `apps/docs/src/content.config.ts`, `ComponentPageBody.astro`, `le-button.page.md`
+
+- [ ] Add optional `heroDirection: 'row' | 'column'` (default `row`) to the schema; `le-button.page.md` sets `column`.
+- [ ] `.hero` uses it as `flex-direction`; under 720px (single-column overview) it is always a wrapping row.
+- [ ] Verify in browser: column on desktop, row at 375px. Commit `Stack le-button hero vertically`.
+
+### Task 5: Recipe list and switching
+
+**Files:**
+- Modify: `apps/docs/src/lib/page-hash.ts`, `page-hash.test.ts` — add `hashForRecipe`
+- Modify: `apps/docs/src/components/component-page/ComponentPageBody.astro`, `Stage.astro`, `tabs-client.ts`
+
+**Interfaces:**
+- Produces: `hashForRecipe(id: string, isFirst: boolean): string` — `''` for the first recipe (clean URL), else `#recipe-<id>`.
+- Recipe list: one `<le-button variant="clear" full-width align="start" data-recipe="<id>">` per recipe (dogfooding le-button on its own page), `selected` on the active one.
+- Every recipe's markup is server-rendered into `<template data-recipe-template="<id>">`; the stage content and the note are swapped from it on selection.
+
+- [ ] **Test first:** `hashForRecipe('default', true)` → `''`; `hashForRecipe('with-icon', false)` → `'#recipe-with-icon'`. Run → FAIL; implement; run → PASS.
+- [ ] Playground layout: recipes column (~200px) left, stage + note right; under 720px the list stacks above the stage and wraps.
+- [ ] Selecting a recipe: swaps stage content and note, moves `selected`, `replaceState` with `hashForRecipe` (no history entries).
+- [ ] `#recipe-<id>` on load / `hashchange` selects Playground and that recipe; unknown id → first recipe.
+- [ ] Verify in browser: all 13 recipes render; `#recipe-icon-only` on load; clicking updates URL; Back leaves the page; 375px no horizontal scroll.
+- [ ] Commit `Add recipes column to the component playground`.
+
+## Layers 3–7 — outline (detailed after the previous layer is approved)
+
 - **Layer 3 — Controls + code:** `controls: string[]` added to the content file schema; controls generated from `le-kit/dist/docs.json` (union → `le-select`, boolean → `le-checkbox`, number → `le-number-input`, string → `le-string-input`; icon props → text input); read-only highlighted code with a copy button, only non-default attributes.
 - **Layer 4 — Theme, appearance, width:** `[theme="…"]` and appearance (`default | ios | android`) switchers scoped to the stage, starting from the site's theme; width via `le-preview-frame`.
 - **Layer 5 — API tab:** generated tables with `#@prop` anchors on every property.

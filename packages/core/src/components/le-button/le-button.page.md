@@ -1,6 +1,7 @@
 ---
 tag: le-button
 tagline: A component you'd expect to see in any UI library. No surprises here.
+heroDirection: column
 hero: |
   <le-button variant="solid">Save</le-button>
   <le-button variant="outlined" icon-start="✎">Edit</le-button>

@@ -91,6 +91,30 @@ function resolveOffsetValue(value: number | string | undefined, cssVarName: stri
   return 0;
 }
 
+/**
+ * A side panel next to the main content: inline on wide containers, an overlay
+ * (or a push panel) when the container gets narrower than `collapse-at`.
+ * Toggled by `le-side-panel-toggle` with the same `panel-id`.
+ *
+ * Usage notes:
+ * - Show it in a container with a visible edge (a border, a background or a
+ *   shadow): the panel slides in from the container's side, and without a
+ *   visible edge it seems to come from nowhere.
+ * - `--le-side-panel-margin` (or the `margin` prop) is the gap between the
+ *   panel and the container's edges, and accepts any `margin` shorthand —
+ *   e.g. `0 12px 0 0` for a gap on the outer side only. It disappears together
+ *   with the panel; spacing of the main content belongs to the content itself
+ *   (its own padding), so it stays the same whether the panel is shown or not.
+ *
+ * @slot - Main content
+ * @slot panel - Panel content
+ * @slot close-icon - Icon of the close button shown in overlay mode
+ *
+ * @cssprop --le-side-panel-margin - Gap between the panel and the container's edges; any `margin` shorthand
+ * @cssprop --le-side-panel-border-radius - Panel corner radius
+ * @cssprop --le-side-panel-backdrop - Overlay backdrop color
+ * @cssprop --le-side-panel-transition - Show / hide transition
+ */
 @Component({
   tag: 'le-side-panel',
   styleUrl: 'le-side-panel.css',
@@ -129,7 +153,11 @@ export class LeSidePanel {
   /** Whether the sticky panel should stretch to full height. */
   @Prop({ mutable: true, reflect: true }) fullHeight: boolean = false;
 
-  /** Optional panel margin override. Accepts CSS length (e.g. `16px`, `1rem`, `var(--space-4)`). */
+  /**
+   * Gap between the panel and the container's edges (sets `--le-side-panel-margin`).
+   * A number is taken as px; a string is any CSS `margin` value, including shorthand
+   * (e.g. `16px`, `var(--le-spacing-2)`, `0 12px 0 0`).
+   */
   @Prop() margin?: string | number;
 
   /**

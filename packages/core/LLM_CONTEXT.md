@@ -1437,6 +1437,20 @@ A select dropdown component for single selection.
 
 ## <le-side-panel>
 
+A side panel next to the main content: inline on wide containers, an overlay
+(or a push panel) when the container gets narrower than `collapse-at`.
+Toggled by `le-side-panel-toggle` with the same `panel-id`.
+
+Usage notes:
+- Show it in a container with a visible edge (a border, a background or a
+  shadow): the panel slides in from the container's side, and without a
+  visible edge it seems to come from nowhere.
+- `--le-side-panel-margin` (or the `margin` prop) is the gap between the
+  panel and the container's edges, and accepts any `margin` shorthand —
+  e.g. `0 12px 0 0` for a gap on the outer side only. It disappears together
+  with the panel; spacing of the main content belongs to the content itself
+  (its own padding), so it stays the same whether the panel is shown or not.
+
 ### Properties
 
 | Name | Type | Default | Description |
@@ -1451,7 +1465,7 @@ A select dropdown component for single selection.
 | `top` | `number \| 'under-header'` | `0` | Top offset for the sticky panel. |
 | `bottom` | `number \| 'under-footer'` | `0` | Bottom offset for sticky full-height calculations. |
 | `fullHeight` | `boolean` | `false` | Whether the sticky panel should stretch to full height. |
-| `margin` | `string \| number \| undefined` |  | Optional panel margin override. Accepts CSS length (e.g. `16px`, `1rem`, `var(--space-4)`). |
+| `margin` | `string \| number \| undefined` |  | Gap between the panel and the container's edges (sets `--le-side-panel-margin`). A number is taken as px; a string is any CSS `margin` value, including shorthand (e.g. `16px`, `var(--le-spacing-2)`, `0 12px 0 0`). |
 | `open` | `boolean` | `false` | Panel open state for narrow mode. - overlay: controls modal drawer visibility - push: controls whether panel is shown (non-modal) |
 | `collapsed` | `boolean` | `false` | Panel collapsed state for wide mode (fully hidden). |
 | `panelWidth` | `number` | `280` | Default panel width in pixels. |
@@ -1471,6 +1485,23 @@ A select dropdown component for single selection.
 | `leSidePanelOpenChange` | `EventEmitter<{ open: boolean; panelId?: string }>` |  |
 | `leSidePanelCollapsedChange` | `EventEmitter<{ collapsed: boolean; panelId?: string }>` |  |
 | `leSidePanelWidthChange` | `EventEmitter<{ width: number; panelId?: string }>` |  |
+
+### Slots
+
+| Name | Description |
+|------|-------------|
+| Default | Main content |
+| `"panel"` | Panel content |
+| `"close-icon"` | Icon of the close button shown in overlay mode |
+
+### CSS Variables
+
+| Name | Description |
+|------|-------------|
+| `--le-side-panel-margin` | Gap between the panel and the container's edges; any `margin` shorthand |
+| `--le-side-panel-border-radius` | Panel corner radius |
+| `--le-side-panel-backdrop` | Overlay backdrop color |
+| `--le-side-panel-transition` | Show / hide transition |
 
 ---
 

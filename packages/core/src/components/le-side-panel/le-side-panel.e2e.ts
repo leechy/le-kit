@@ -168,4 +168,65 @@ describe('le-side-panel e2e', () => {
     const panel = await page.find('le-side-panel');
     expect(await panel.getProperty('open')).toBe(false);
   });
+
+  describe('margin shorthand', () => {
+    /** Panel rect relative to the host, in px. */
+    async function panelBox(page: Awaited<ReturnType<typeof newE2EPage>>, part: 'inline-panel' | 'overlay') {
+      return page.evaluate(p => {
+        const host = document.querySelector('le-side-panel')!;
+        const panel = host.shadowRoot!.querySelector(`[part="${p}"] [part="panel"]`)!;
+        const h = host.getBoundingClientRect();
+        const r = panel.getBoundingClientRect();
+        return {
+          top: Math.round(r.top - h.top),
+          right: Math.round(h.right - r.right),
+          height: Math.round(r.height),
+          width: Math.round(r.width),
+        };
+      }, part);
+    }
+
+    it('applies a one-side margin to the inline panel and keeps full height', async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 900, height: 400 });
+      await page.setContent(`
+        ${BASE_STYLES}
+        <le-side-panel side="end" panel-width="220" style="height: 300px; --le-side-panel-margin: 0 12px 0 0">
+          <div slot="panel">Recipes</div>
+          <div>Main content</div>
+        </le-side-panel>
+      `);
+      await page.waitForChanges();
+      await flushRaf(page);
+
+      const box = await panelBox(page, 'inline-panel');
+      expect(box.top).toBe(0);
+      expect(box.right).toBe(12);
+      expect(box.height).toBe(300);
+      expect(box.width).toBe(208);
+    });
+
+    it('applies a one-side margin to the overlay panel and keeps full height', async () => {
+      const page = await newE2EPage();
+      await page.setViewport({ width: 400, height: 400 });
+      await page.setContent(`
+        ${BASE_STYLES}
+        <le-side-panel side="end" panel-width="220" collapse-at="720" narrow-behavior="overlay"
+          style="height: 400px; --le-side-panel-margin: 0 12px 0 0">
+          <div slot="panel">Recipes</div>
+          <div>Main content</div>
+        </le-side-panel>
+      `);
+      await page.waitForChanges();
+      const panel = await page.find('le-side-panel');
+      panel.setProperty('open', true);
+      await page.waitForChanges();
+      await flushRaf(page);
+      await page.evaluate(() => new Promise(r => setTimeout(r, 400)));
+
+      const box = await panelBox(page, 'overlay');
+      expect(box.right).toBe(12);
+      expect(box.height).toBe(400);
+    });
+  });
 });

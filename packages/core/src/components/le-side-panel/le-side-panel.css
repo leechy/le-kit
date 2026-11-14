@@ -33,6 +33,9 @@
 }
 
 .inline-panel {
+  /* The panel stretches inside, so any --le-side-panel-margin shorthand is respected. */
+  display: flex;
+  flex-direction: column;
   flex: 0 0 auto;
   width: var(--le-side-panel-width, var(--le-default-side-panel-width));
   min-width: 0;
@@ -97,12 +100,17 @@
   min-height: 0;
 }
 
+/*
+ * The panel is sized by stretching inside its wrapper (a flex column inline,
+ * a flex row in the overlay), not by calc(100% - margin * 2): that keeps any
+ * margin shorthand valid, e.g. `0 12px 0 0` for a gap on one side only.
+ */
 .panel {
   position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
   margin: var(--le-side-panel-margin, var(--le-default-side-panel-margin));
-  height: calc(100% - (var(--le-side-panel-margin, var(--le-default-side-panel-margin)) * 2));
-  max-height: calc(100% - (var(--le-side-panel-margin, var(--le-default-side-panel-margin)) * 2));
-  width: calc(100% - (var(--le-side-panel-margin, var(--le-default-side-panel-margin)) * 2));
   border-radius: var(--le-side-panel-border-radius, var(--le-default-side-panel-border-radius));
 
   background: var(--le-color-surface, #fff);

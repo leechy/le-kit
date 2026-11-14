@@ -2378,6 +2378,24 @@ export namespace Components {
          */
         "variant": 'default' | 'outlined' | 'solid' | 'clear';
     }
+    /**
+     * A side panel next to the main content: inline on wide containers, an overlay
+     * (or a push panel) when the container gets narrower than `collapse-at`.
+     * Toggled by `le-side-panel-toggle` with the same `panel-id`.
+     * Usage notes:
+     * - Show it in a container with a visible edge (a border, a background or a
+     *   shadow): the panel slides in from the container's side, and without a
+     *   visible edge it seems to come from nowhere.
+     * - `--le-side-panel-margin` (or the `margin` prop) is the gap between the
+     *   panel and the container's edges, and accepts any `margin` shorthand —
+     *   e.g. `0 12px 0 0` for a gap on the outer side only. It disappears together
+     *   with the panel; spacing of the main content belongs to the content itself
+     *   (its own padding), so it stays the same whether the panel is shown or not.
+     * @cssprop --le-side-panel-margin - Gap between the panel and the container's edges; any `margin` shorthand
+     * @cssprop --le-side-panel-border-radius - Panel corner radius
+     * @cssprop --le-side-panel-backdrop - Overlay backdrop color
+     * @cssprop --le-side-panel-transition - Show / hide transition
+     */
     interface LeSidePanel {
         /**
           * When crossing to narrow mode, automatically hide the panel (open=false).
@@ -2409,7 +2427,7 @@ export namespace Components {
          */
         "fullHeight": boolean;
         /**
-          * Optional panel margin override. Accepts CSS length (e.g. `16px`, `1rem`, `var(--space-4)`).
+          * Gap between the panel and the container's edges (sets `--le-side-panel-margin`). A number is taken as px; a string is any CSS `margin` value, including shorthand (e.g. `16px`, `var(--le-spacing-2)`, `0 12px 0 0`).
          */
         "margin"?: string | number;
         /**
@@ -4418,6 +4436,24 @@ declare global {
         "leSidePanelCollapsedChange": { collapsed: boolean; panelId?: string };
         "leSidePanelWidthChange": { width: number; panelId?: string };
     }
+    /**
+     * A side panel next to the main content: inline on wide containers, an overlay
+     * (or a push panel) when the container gets narrower than `collapse-at`.
+     * Toggled by `le-side-panel-toggle` with the same `panel-id`.
+     * Usage notes:
+     * - Show it in a container with a visible edge (a border, a background or a
+     *   shadow): the panel slides in from the container's side, and without a
+     *   visible edge it seems to come from nowhere.
+     * - `--le-side-panel-margin` (or the `margin` prop) is the gap between the
+     *   panel and the container's edges, and accepts any `margin` shorthand —
+     *   e.g. `0 12px 0 0` for a gap on the outer side only. It disappears together
+     *   with the panel; spacing of the main content belongs to the content itself
+     *   (its own padding), so it stays the same whether the panel is shown or not.
+     * @cssprop --le-side-panel-margin - Gap between the panel and the container's edges; any `margin` shorthand
+     * @cssprop --le-side-panel-border-radius - Panel corner radius
+     * @cssprop --le-side-panel-backdrop - Overlay backdrop color
+     * @cssprop --le-side-panel-transition - Show / hide transition
+     */
     interface HTMLLeSidePanelElement extends Components.LeSidePanel, HTMLStencilElement {
         addEventListener<K extends keyof HTMLLeSidePanelElementEventMap>(type: K, listener: (this: HTMLLeSidePanelElement, ev: LeSidePanelCustomEvent<HTMLLeSidePanelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -7262,6 +7298,24 @@ declare namespace LocalJSX {
          */
         "variant"?: 'default' | 'outlined' | 'solid' | 'clear';
     }
+    /**
+     * A side panel next to the main content: inline on wide containers, an overlay
+     * (or a push panel) when the container gets narrower than `collapse-at`.
+     * Toggled by `le-side-panel-toggle` with the same `panel-id`.
+     * Usage notes:
+     * - Show it in a container with a visible edge (a border, a background or a
+     *   shadow): the panel slides in from the container's side, and without a
+     *   visible edge it seems to come from nowhere.
+     * - `--le-side-panel-margin` (or the `margin` prop) is the gap between the
+     *   panel and the container's edges, and accepts any `margin` shorthand —
+     *   e.g. `0 12px 0 0` for a gap on the outer side only. It disappears together
+     *   with the panel; spacing of the main content belongs to the content itself
+     *   (its own padding), so it stays the same whether the panel is shown or not.
+     * @cssprop --le-side-panel-margin - Gap between the panel and the container's edges; any `margin` shorthand
+     * @cssprop --le-side-panel-border-radius - Panel corner radius
+     * @cssprop --le-side-panel-backdrop - Overlay backdrop color
+     * @cssprop --le-side-panel-transition - Show / hide transition
+     */
     interface LeSidePanel {
         /**
           * When crossing to narrow mode, automatically hide the panel (open=false).
@@ -7293,7 +7347,7 @@ declare namespace LocalJSX {
          */
         "fullHeight"?: boolean;
         /**
-          * Optional panel margin override. Accepts CSS length (e.g. `16px`, `1rem`, `var(--space-4)`).
+          * Gap between the panel and the container's edges (sets `--le-side-panel-margin`). A number is taken as px; a string is any CSS `margin` value, including shorthand (e.g. `16px`, `var(--le-spacing-2)`, `0 12px 0 0`).
          */
         "margin"?: string | number;
         /**
@@ -9349,6 +9403,24 @@ declare module "@stencil/core" {
              * ```
              */
             "le-select": LocalJSX.IntrinsicElements["le-select"] & JSXBase.HTMLAttributes<HTMLLeSelectElement>;
+            /**
+             * A side panel next to the main content: inline on wide containers, an overlay
+             * (or a push panel) when the container gets narrower than `collapse-at`.
+             * Toggled by `le-side-panel-toggle` with the same `panel-id`.
+             * Usage notes:
+             * - Show it in a container with a visible edge (a border, a background or a
+             *   shadow): the panel slides in from the container's side, and without a
+             *   visible edge it seems to come from nowhere.
+             * - `--le-side-panel-margin` (or the `margin` prop) is the gap between the
+             *   panel and the container's edges, and accepts any `margin` shorthand —
+             *   e.g. `0 12px 0 0` for a gap on the outer side only. It disappears together
+             *   with the panel; spacing of the main content belongs to the content itself
+             *   (its own padding), so it stays the same whether the panel is shown or not.
+             * @cssprop --le-side-panel-margin - Gap between the panel and the container's edges; any `margin` shorthand
+             * @cssprop --le-side-panel-border-radius - Panel corner radius
+             * @cssprop --le-side-panel-backdrop - Overlay backdrop color
+             * @cssprop --le-side-panel-transition - Show / hide transition
+             */
             "le-side-panel": LocalJSX.IntrinsicElements["le-side-panel"] & JSXBase.HTMLAttributes<HTMLLeSidePanelElement>;
             "le-side-panel-toggle": LocalJSX.IntrinsicElements["le-side-panel-toggle"] & JSXBase.HTMLAttributes<HTMLLeSidePanelToggleElement>;
             /**

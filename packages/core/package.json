@@ -44,7 +44,7 @@
     "build": "npm run build:admin",
     "build:admin": "stencil build && npm run analyze",
     "build:core": "node scripts/prepare-core.mjs && stencil build --config stencil.core.config.ts",
-    "start": "npm run analyze && stencil build --dev --watch --serve",
+    "start": "npm run analyze && stencil build --dev --watch --serve --docs",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate",

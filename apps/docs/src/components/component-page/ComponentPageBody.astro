@@ -182,12 +182,18 @@ const inline = (text: string) =>
     margin-top: var(--le-spacing-4);
   }
 
+  /* A visible container, so the recipes panel slides in from its edge. */
   .playground {
-    padding-top: var(--le-spacing-3);
+    padding: var(--le-spacing-3) 0;
+    background: color-mix(in srgb, var(--le-color-surface-elevated), transparent 60%);
+    --le-side-panel-margin: 0 var(--le-spacing-3) 0 0;
+    box-shadow: var(--le-shadow-md);
   }
 
+  /* Content keeps its own spacing whether the recipes panel is shown or not. */
   .stage-area {
     min-width: 0;
+    padding: 0 var(--le-spacing-4);
   }
 
   .stage-bar {

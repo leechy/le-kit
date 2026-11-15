@@ -1,5 +1,5 @@
 :root {
-  --le-color-primary: #18619D;
+  --le-color-primary: #18619d;
   --le-color-primary-dark: #082742;
   --le-color-background: #c4e2ff;
   --le-color-blueprint: #88bef5;
@@ -57,7 +57,6 @@
     background-color: var(--le-color-info-light);
     color: var(--le-color-info-contrast);
   }
-
 }
 
 .header--start {
@@ -89,7 +88,8 @@ body {
   background-image:
     linear-gradient(var(--background-lines-color) 1px, transparent 1px),
     linear-gradient(90deg, var(--background-lines-color) 1px, transparent 1px);
-  background-size: var(--background-lines-grid-size) var(--background-lines-grid-size);
+  background-size: var(--background-lines-grid-size)
+    var(--background-lines-grid-size);
   background-position: top center;
 }
 
@@ -117,7 +117,7 @@ le-side-panel::part(panel) {
     border-bottom: none;
   }
 
-  +.code-block pre {
+  + .code-block pre {
     margin-top: 0;
   }
 
@@ -154,7 +154,6 @@ le-side-panel::part(panel) {
     }
   }
 }
-
 
 /* Global styles for the documentation site */
 
@@ -302,7 +301,8 @@ le-preview-frame::part(viewport) {
   background-image:
     linear-gradient(var(--background-lines-color) 1px, transparent 1px),
     linear-gradient(90deg, var(--background-lines-color) 1px, transparent 1px);
-  background-size: var(--background-lines-grid-size) var(--background-lines-grid-size);
+  background-size: var(--background-lines-grid-size)
+    var(--background-lines-grid-size);
 }
 
 /* Light preview: for components that sit on an app surface (clear buttons etc.) */
@@ -335,12 +335,20 @@ le-bento-tile {
   text-decoration: none;
   color: var(--le-color-text-primary);
 
-  background-color: color-mix(in srgb, var(--le-color-primary) 15%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--le-color-primary) 15%,
+    transparent
+  );
 }
 
 .bento-tile:any-link:hover,
 .tile-link-anchor:hover {
-  background-color: color-mix(in srgb, var(--le-color-surface) 30%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--le-color-surface) 30%,
+    transparent
+  );
 }
 
 .bento-tile-type {
@@ -386,7 +394,10 @@ le-bento-tile {
 
 .home-section {
   margin: var(--le-spacing-4) auto;
-  max-width: calc(var(--le-bento-max-columns, 6) * var(--le-bento-col-max, 200px) + (var(--le-bento-max-columns, 6) - 1) * var(--le-bento-gap, 16px) - 2px);
+  max-width: calc(
+    var(--le-bento-max-columns, 6) * var(--le-bento-col-max, 200px) +
+      (var(--le-bento-max-columns, 6) - 1) * var(--le-bento-gap, 16px) - 2px
+  );
 }
 
 .site-content {
@@ -394,7 +405,7 @@ le-bento-tile {
 }
 
 .site-footer {
-  margin-top: var(--le-spacing-10);
+  margin-top: var(--le-spacing-1);
   padding: var(--le-spacing-4) var(--le-spacing-4) var(--le-spacing-8);
   border-top: 2px solid var(--le-color-border);
   background: color-mix(in srgb, var(--le-color-surface) 70%, transparent);

@@ -844,9 +844,6 @@ export class LeSidePanel {
             part="close-button"
             aria-label="Close panel"
             icon-only="true"
-            style={{
-              '--le-button-icon-only-padding': 'var(--le-space-sm)',
-            }}
             onClick={() => (this.open = false)}
           >
             <slot name="close-icon" slot="icon-only">

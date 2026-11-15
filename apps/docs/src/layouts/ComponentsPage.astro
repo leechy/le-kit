@@ -49,12 +49,17 @@ const navigationMarkup = renderNavigationItems(componentsNavigationItems);
 ---
 
 <Layout title={documentTitle} sidePanelId="components-navigation">
+  {/*
+    collapse-at 1100: with this panel open the playground is ~360px narrower than
+    the window, and its recipes panel collapses below 720px of playground (window
+    ~1080). Collapsing the site navigation first frees that room for the recipes.
+  */}
   <le-side-panel
     panel-id="components-navigation"
     persist-key="components-panel"
     top="under-header"
     margin="var(--le-spacing-2)"
-    collapse-at="900"
+    collapse-at="1100"
     collapse-behavior="overlay"
     show-close-button={false}
     sticky

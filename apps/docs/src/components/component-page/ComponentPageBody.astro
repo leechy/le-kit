@@ -58,18 +58,21 @@ const inline = (text: string) =>
         narrow-behavior="overlay"
         data-recipe-panel
       >
-        <le-navigation
-          slot="panel"
-          orientation="vertical"
-          active-url={`#recipe-${recipe.id}`}
-          data-recipe-nav
-        >
-          {
-            recipes.map((item) => (
-              <le-item label={item.title} href={`#recipe-${item.id}`} data-recipe={item.id}></le-item>
-            ))
-          }
-        </le-navigation>
+        <div slot="panel" class="recipes-panel">
+          <h3 class="recipes-title" id="recipes-title">Recipes</h3>
+          <le-navigation
+            orientation="vertical"
+            active-url={`#recipe-${recipe.id}`}
+            aria-labelledby="recipes-title"
+            data-recipe-nav
+          >
+            {
+              recipes.map((item) => (
+                <le-item label={item.title} href={`#recipe-${item.id}`} data-recipe={item.id}></le-item>
+              ))
+            }
+          </le-navigation>
+        </div>
 
         <div class="stage-area">
           {/* Replaces the recipes panel whenever it is not shown next to the stage. */}
@@ -80,6 +83,7 @@ const inline = (text: string) =>
             closed-when-target="recipes"
           >
             <div class="stage-bar">
+              <span class="recipes-label">Recipes:</span>
               <div style={`min-width: calc(${longestRecipeTitle}ch + 4em)`}>
                 <le-select
                   variant="outlined"
@@ -215,7 +219,22 @@ const inline = (text: string) =>
   .stage-bar {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    gap: var(--le-spacing-2);
     margin-bottom: var(--le-spacing-2);
+  }
+
+  /* "Recipes" names the list wherever it is: the panel or the select. */
+  .recipes-title,
+  .recipes-label {
+    font-family: var(--le-font-family-base);
+    font-size: 0.875rem;
+    font-weight: 600;
+    opacity: 0.75;
+  }
+
+  .recipes-title {
+    margin: var(--le-spacing-2) var(--le-spacing-3) var(--le-spacing-1);
   }
 
   /* Code: clipped to ~3 lines until expanded */

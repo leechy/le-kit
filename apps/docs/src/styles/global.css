@@ -188,16 +188,17 @@ h3 {
 }
 
 @media (min-width: 900px) {
+  /* Article headings hang into the margin; headings inside a side panel (slot="panel") don't. */
   article:not(.bento-grid):not(.post-card) {
-    h1 {
+    h1:not([slot="panel"] *) {
       text-indent: calc(-1 * var(--le-spacing-8));
     }
 
-    h2 {
+    h2:not([slot="panel"] *) {
       text-indent: calc(-1 * var(--le-spacing-6));
     }
 
-    h3 {
+    h3:not([slot="panel"] *) {
       text-indent: calc(-1 * var(--le-spacing-4));
     }
   }

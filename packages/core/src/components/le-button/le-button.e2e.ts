@@ -157,3 +157,78 @@ describe('le-button e2e', () => {
     expect(await endIcon.getAttribute('count')).toBeNull();
   });
 });
+
+describe('le-button icon-only layout', () => {
+  /** Horizontal offset of the le-icon's center from the button's center, in px. */
+  async function iconOffset(html: string) {
+    const page = await newE2EPage();
+    await page.setContent(html);
+    await page.waitForChanges();
+    return page.evaluate(() => {
+      const host = document.querySelector('le-button')!;
+      const button = host.shadowRoot!.querySelector('button')!.getBoundingClientRect();
+      const icon = (host.querySelector('le-icon[slot="icon-only"]') ??
+        host.shadowRoot!.querySelector('span.icon-only le-icon'))!.getBoundingClientRect();
+      return icon.left + icon.width / 2 - (button.left + button.width / 2);
+    });
+  }
+
+  it('centers a slotted icon', async () => {
+    const offset = await iconOffset(
+      `<le-button variant="outlined"><le-icon slot="icon-only" name="hamburger"></le-icon>Label</le-button>`,
+    );
+    expect(Math.abs(offset)).toBeLessThanOrEqual(1);
+  });
+
+  it('centers an icon given as a property', async () => {
+    const offset = await iconOffset(`<le-button variant="outlined" icon-only="hamburger">Label</le-button>`);
+    expect(Math.abs(offset)).toBeLessThanOrEqual(1);
+  });
+});
+
+describe('le-button selected colors', () => {
+  for (const variant of ['outlined', 'clear']) {
+    it(`gives icons the label color when a ${variant} button is selected`, async () => {
+      const page = await newE2EPage();
+      await page.setContent(
+        `<le-button variant="${variant}" selected><le-icon slot="icon-start" name="hamburger"></le-icon>Label</le-button>`,
+      );
+      await page.waitForChanges();
+
+      const colors = await page.evaluate(() => {
+        const host = document.querySelector('le-button')!;
+        const container = host.shadowRoot!.querySelector('button')!;
+        const icon = host.querySelector('le-icon')!;
+        return { label: getComputedStyle(container).color, icon: getComputedStyle(icon).color };
+      });
+
+      expect(colors.icon).toBe(colors.label);
+    });
+  }
+});
+
+describe('le-button selected hover', () => {
+  for (const variant of ['outlined', 'clear']) {
+    it(`keeps a contrasting background when a selected ${variant} button is hovered`, async () => {
+      const page = await newE2EPage();
+      await page.setContent(`<le-button variant="${variant}" selected>Label</le-button>`);
+      await page.waitForChanges();
+
+      const read = () =>
+        page.evaluate(() => getComputedStyle(document.querySelector('le-button')!.shadowRoot!.querySelector('button')!).backgroundColor);
+      const before = await read();
+      const container = await page.find('le-button >>> button');
+      await container.hover();
+      await page.evaluate(() => new Promise(r => setTimeout(r, 400))); // background transition
+      const hovered = await read();
+
+      // Hover may darken the selected background, but must not drop to the
+      // light hover color of an unselected button (white label on light gray).
+      const lightness = (rgb: string) => {
+        const [r, g, b] = rgb.match(/\d+/g)!.map(Number);
+        return (Math.max(r, g, b) + Math.min(r, g, b)) / 2 / 255;
+      };
+      expect(lightness(hovered)).toBeLessThanOrEqual(lightness(before) + 0.05);
+    });
+  }
+});

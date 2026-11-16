@@ -282,6 +282,22 @@
 :host(.variant-clear.selected) .le-button-container {
   background: var(--_btn-bg);
   color: var(--_btn-color);
+
+  /* Icons get their color from --le-icon-color (set to --_btn-bg by these
+     variants), so they must switch together with the label. */
+  .icon-start,
+  .icon-only,
+  .icon-end {
+    --le-icon-color: var(--_btn-color);
+  }
+}
+
+/* Hovering a selected button darkens it like a solid one, instead of the
+   light hover background of an unselected clear button. */
+:host(.variant-outlined.selected) .le-button-container:hover:not(:disabled),
+:host(.variant-clear.selected) .le-button-container:hover:not(:disabled) {
+  background: var(--_btn-bg-hover);
+  border-color: var(--_btn-bg-hover);
 }
 
 /* Icon only */
@@ -356,7 +372,8 @@
 }
 
 span.icon-only.is-visible {
-  display: block;
+  /* flex (not block) keeps the base rule's centering for slotted icons */
+  display: flex;
   width: calc(
     var(--le-icon-size, 16px) +
     2 * var(--le-button-icon-only-padding, var(--le-spacing-1, 0.25rem)) +

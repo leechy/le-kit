@@ -194,7 +194,8 @@
   cursor: var(--le-controls-cursor, pointer);
 }
 
-.nav-vertical:not(.is-dragging) .nav-item:hover,
+/* Not on the selected item: its colors stay, or its light text would sit on the light hover background. */
+.nav-vertical:not(.is-dragging) .nav-node:not(.selected) > .nav-item:hover,
 .nav-vertical:not(.is-dragging) .nav-item.is-drag-hovered {
   background: var(--le-nav-hover-bg);
 }

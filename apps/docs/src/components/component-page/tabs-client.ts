@@ -17,6 +17,7 @@ export function initRecipes(playground: HTMLElement) {
   const code = playground.querySelector<HTMLElement>('[data-code]');
   const codeTarget = playground.querySelector<HTMLElement>('[data-code-target]');
   const codeToggle = playground.querySelector<HTMLElement>('[data-code-toggle]');
+  const recipeSelect = playground.querySelector<HTMLElement & { value?: unknown }>('[data-recipe-select]');
   const firstId = items[0]?.dataset.recipe ?? '';
 
   const find = (attr: string, id: string) =>
@@ -49,6 +50,8 @@ export function initRecipes(playground: HTMLElement) {
 
     // le-navigation marks the item whose href equals activeUrl.
     if (nav) nav.activeUrl = `#recipe-${selectedId}`;
+    // The select that replaces the panel when it is hidden shows the same recipe.
+    if (recipeSelect && recipeSelect.value !== selectedId) recipeSelect.value = selectedId;
 
     if (updateUrl) {
       const hash = hashForRecipe(selectedId, selectedId === firstId);
@@ -65,6 +68,11 @@ export function initRecipes(playground: HTMLElement) {
     select(target.id, true);
     // On narrow screens the panel is an overlay — close it after picking.
     if (panel?.open) panel.open = false;
+  });
+
+  recipeSelect?.addEventListener('leChange', (event) => {
+    const value = (event as CustomEvent<{ value?: unknown }>).detail?.value;
+    if (typeof value === 'string') select(value, true);
   });
 
   codeToggle?.addEventListener('click', () => setCodeExpanded(code?.hasAttribute('data-clipped') ?? false));

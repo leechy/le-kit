@@ -129,15 +129,29 @@ describe('le-collapse closed-when', () => {
     expect(page.root!.getAttribute('data-open')).toBe('false');
   });
 
-  it('stays closed while the closed prop is set, whatever the bound state says', async () => {
+  it('uses closed as the initial value until the bound state is known, then follows it', async () => {
     const page = await newSpecPage({
       components: [LeCollapse],
       html: `<le-collapse closed closed-when="${PANEL}.visible" closed-when-target="recipes"></le-collapse>`,
     });
+    expect(page.root!.getAttribute('data-open')).toBe('false');
 
     publish(page, PANEL, 'recipes', { visible: false });
     await page.waitForChanges();
 
-    expect(page.root!.getAttribute('data-open')).toBe('false');
+    expect(page.root!.getAttribute('data-open')).toBe('true');
+    expect(page.root!.hasAttribute('closed')).toBe(false);
+  });
+
+  it('reflects the bound state in the closed attribute', async () => {
+    const page = await newSpecPage({
+      components: [LeCollapse],
+      html: `<le-collapse closed-when="${PANEL}.visible" closed-when-target="recipes"></le-collapse>`,
+    });
+
+    publish(page, PANEL, 'recipes', { visible: true });
+    await page.waitForChanges();
+
+    expect(page.root!.hasAttribute('closed')).toBe(true);
   });
 });

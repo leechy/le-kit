@@ -765,7 +765,7 @@ export namespace Components {
          */
         "closed": boolean;
         /**
-          * Closes the collapse while a field of a state-bus state is truthy: `<event>.<field>`, e.g. `le-header:state.shrunk` or `le-side-panel:state.visible`.
+          * Closes the collapse while a field of a state-bus state is truthy: `<event>.<field>`, e.g. `le-header:state.shrunk` or `le-side-panel:state.visible`. The bound state is written to `closed`; until it is known, `closed` keeps its initial value — so `<le-collapse closed closed-when="…">` starts closed.
          */
         "closedWhen"?: string;
         /**
@@ -5654,7 +5654,7 @@ declare namespace LocalJSX {
          */
         "closed"?: boolean;
         /**
-          * Closes the collapse while a field of a state-bus state is truthy: `<event>.<field>`, e.g. `le-header:state.shrunk` or `le-side-panel:state.visible`.
+          * Closes the collapse while a field of a state-bus state is truthy: `<event>.<field>`, e.g. `le-header:state.shrunk` or `le-side-panel:state.visible`. The bound state is written to `closed`; until it is known, `closed` keeps its initial value — so `<le-collapse closed closed-when="…">` starts closed.
          */
         "closedWhen"?: string;
         /**

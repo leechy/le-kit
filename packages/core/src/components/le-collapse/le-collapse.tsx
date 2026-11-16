@@ -51,6 +51,8 @@ export class LeCollapse {
   /**
    * Closes the collapse while a field of a state-bus state is truthy:
    * `<event>.<field>`, e.g. `le-header:state.shrunk` or `le-side-panel:state.visible`.
+   * The bound state is written to `closed`; until it is known, `closed` keeps its
+   * initial value — so `<le-collapse closed closed-when="…">` starts closed.
    */
   @Prop({ attribute: 'closed-when', reflect: true }) closedWhen?: string;
 
@@ -60,8 +62,6 @@ export class LeCollapse {
    */
   @Prop({ attribute: 'closed-when-target', reflect: true }) closedWhenTarget?: string;
 
-  /** The bound state currently asks for the collapse to be closed. */
-  @State() private drivenClosed: boolean = false;
   @State() private isExpanded: boolean = true;
 
   private unsubscribeState?: () => void;
@@ -94,22 +94,20 @@ export class LeCollapse {
     this.unsubscribeState = undefined;
 
     const binding = this.parseClosedWhen();
-    if (!binding) {
-      this.drivenClosed = false;
-      return;
-    }
+    if (!binding) return;
 
     const target = this.closedWhenTarget?.trim();
     const read = (state: unknown) => !!(state as Record<string, unknown> | undefined)?.[binding.field];
 
+    // Until a state is known, `closed` keeps its initial (authored) value.
     const current = target
       ? getLatestState(binding.event, target)
       : getAllLatestStates(binding.event)[0];
-    this.drivenClosed = read(current);
+    if (current !== undefined) this.closed = read(current);
 
     this.unsubscribeState = subscribeState(this.el, binding.event, (state, key) => {
       if (target && key !== target) return;
-      this.drivenClosed = read(state);
+      this.closed = read(state);
     });
   }
 
@@ -134,17 +132,6 @@ export class LeCollapse {
     this.applyOpenState();
   }
 
-  @Watch('drivenClosed')
-  protected onDrivenStateChange(newValue?: boolean, oldValue?: boolean) {
-    if (oldValue === undefined || newValue === oldValue) {
-      if (this.shouldBeOpen()) {
-        this.isExpanded = true;
-      }
-      return;
-    }
-    this.applyOpenState();
-  }
-
   @Listen('transitionend')
   protected handleTransitionEnd(ev: TransitionEvent) {
     if (ev.target !== this.el) return;
@@ -157,7 +144,6 @@ export class LeCollapse {
 
   private shouldBeOpen() {
     if (this.closed) return false;
-    if (this.drivenClosed) return false;
     return true;
   }
 

@@ -75,3 +75,26 @@ describe('le-preview-frame resize origin', () => {
     expect(before - after).toBeLessThanOrEqual(115);
   });
 });
+
+describe('le-preview-frame auto width', () => {
+  it('follows a growing container without a lagging transition', async () => {
+    const page = await newE2EPage();
+    await page.setViewport({ width: 1000, height: 400 });
+    await page.setContent(
+      `<style>body { margin: 0 }</style><div id="box" style="width: 500px">${FRAME}</div>`,
+    );
+    await page.waitForChanges();
+
+    const widths = await page.evaluate(async () => {
+      const frame = document.querySelector('le-preview-frame')!.shadowRoot!.querySelector('.frame')!;
+      document.getElementById('box')!.style.width = '800px';
+      // ~6 frames (~100ms): enough for ResizeObserver + a Stencil render, well below the 250ms transition.
+      for (let i = 0; i < 6; i++) await new Promise(r => requestAnimationFrame(r));
+      return { frame: Math.round(frame.getBoundingClientRect().width) };
+    });
+
+    // The frame has a 1px border on each side.
+    expect(widths.frame).toBeGreaterThanOrEqual(800);
+    expect(widths.frame).toBeLessThanOrEqual(802);
+  });
+});

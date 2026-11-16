@@ -171,7 +171,7 @@ export class LePreviewFrame {
   private containerWidth: number = 0;
 
   /** Whether width should track parent container size automatically. */
-  private autoWidth: boolean = true;
+  @State() private autoWidth: boolean = true;
 
   /** Whether viewport height should track content size automatically. */
   private autoHeight: boolean = true;
@@ -671,6 +671,7 @@ export class LePreviewFrame {
         class={classnames({
           'is-dragging': this.isDragging,
           'is-resizable': this.resizable,
+          'is-auto-width': this.autoWidth,
         })}
       >
         <div class="frame" part="frame" style={frameStyle}>

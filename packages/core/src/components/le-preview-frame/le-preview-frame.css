@@ -46,6 +46,12 @@
   transition: none;
 }
 
+/* Following the container: the width is updated on every container resize,
+   and a transition restarted on each step would lag behind a growing container. */
+:host(.is-auto-width) .frame {
+  transition: none;
+}
+
 /* ── Controls bar ────────────────────────────────────────────── */
 
 .frame-controls {

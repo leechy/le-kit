@@ -425,11 +425,48 @@ export class LePreviewFrame {
       return this.origin;
     }
 
-    const leftGap = Math.max(0, frameRect.left - parentRect.left);
-    const rightGap = Math.max(0, parentRect.right - frameRect.right);
+    // Gaps are measured to the parent's content box: its padding and border are
+    // not free space, and symmetric padding must not read as "centered".
+    const parent = this.getLayoutParent();
+    const parentStyle = parent ? getComputedStyle(parent) : null;
+    const insetLeft = parentStyle
+      ? (parseFloat(parentStyle.paddingLeft) || 0) + (parseFloat(parentStyle.borderLeftWidth) || 0)
+      : 0;
+    const insetRight = parentStyle
+      ? (parseFloat(parentStyle.paddingRight) || 0) + (parseFloat(parentStyle.borderRightWidth) || 0)
+      : 0;
+
+    const leftGap = Math.max(0, frameRect.left - (parentRect.left + insetLeft));
+    const rightGap = Math.max(0, parentRect.right - insetRight - frameRect.right);
     const centerTolerancePx = 2;
 
+    // When the frame fills its parent both gaps are 0, which says nothing about
+    // where it goes once it gets narrower. The frame itself sits at the start of
+    // the host, so it can only end up centered if the parent centers the host.
+    if (leftGap <= centerTolerancePx && rightGap <= centerTolerancePx) {
+      return this.isCenteredByParent() ? 'center' : 'edge';
+    }
+
     return Math.abs(leftGap - rightGap) <= centerTolerancePx ? 'center' : 'edge';
+  }
+
+  /** The layout parent centers the host horizontally (flex/grid centering or auto margins). */
+  private isCenteredByParent(): boolean {
+    const parent = this.getLayoutParent();
+    if (!parent) return false;
+
+    const parentStyle = getComputedStyle(parent);
+    const display = parentStyle.display;
+    if (display.includes('flex')) {
+      return parentStyle.flexDirection.startsWith('row') && parentStyle.justifyContent.includes('center');
+    }
+    if (display.includes('grid')) {
+      return [parentStyle.justifyItems, parentStyle.justifyContent].some(v => v.includes('center'));
+    }
+
+    // Block layout: auto margins on both sides center the host.
+    const hostStyle = this.el.style;
+    return hostStyle.marginLeft === 'auto' && hostStyle.marginRight === 'auto';
   }
 
   private computeDragWidth(clientX: number, dragState: LePreviewFrameDragState): number {

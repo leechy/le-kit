@@ -16,7 +16,7 @@ import { publishState, publishStateIfChanged } from '../../utils/state-bus';
 export type LeHeaderPosition = 'static' | 'sticky' | 'fixed';
 
 /** State bus event: published whenever the header shrinks / expands or hides / shows. */
-export const LE_HEADER_STATE_EVENT = 'le-header:state';
+const LE_HEADER_STATE_EVENT = 'le-header:state';
 
 export type LeHeaderBusState = {
   /** The header is in its condensed (shrunk) form. */

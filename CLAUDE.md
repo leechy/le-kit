@@ -20,6 +20,14 @@ I want a partner with its own opinion, not an executor.
 - **When I dislike something but can't say what** — don't ask "what should I change?". Break the
   result into parts, offer alternatives for each, and narrow it down together.
 
+## Checking core changes
+
+- A file with `@Component()` may export only the component class (and types). Other exports
+  (constants, functions) break the Stencil build — but Jest spec/e2e tests still pass. Shared
+  values go to `src/utils` or `src/types`.
+- Before calling a core change done, run `npx stencil build --dev --docs` in `packages/core`, not
+  only the tests: a running `npm start` watcher silently stops updating on a build error.
+
 ## Conventions
 
 - Documents in the repo are written in English; conversation may be in Russian.

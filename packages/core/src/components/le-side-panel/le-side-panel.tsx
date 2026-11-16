@@ -15,7 +15,7 @@ import { publishState, publishStateIfChanged } from '../../utils/state-bus';
 export type LeSidePanelSide = 'start' | 'end';
 
 /** State bus event: published whenever the panel's visibility state changes. */
-export const LE_SIDE_PANEL_STATE_EVENT = 'le-side-panel:state';
+const LE_SIDE_PANEL_STATE_EVENT = 'le-side-panel:state';
 
 export type LeSidePanelState = {
   /** The panel is shown inline next to the content (not hidden, not only in an overlay). */

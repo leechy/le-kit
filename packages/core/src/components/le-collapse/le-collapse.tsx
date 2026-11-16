@@ -1,4 +1,5 @@
 import { Component, Element, h, Host, Listen, Prop, State, Watch } from '@stencil/core';
+import { getAllLatestStates, getLatestState, subscribeState } from '../../utils/state-bus';
 
 export type LeCollapseAnimation = 'fade' | 'collapse' | 'fade-collapse';
 
@@ -6,7 +7,16 @@ export type LeCollapseAnimation = 'fade' | 'collapse' | 'fade-collapse';
  * Animated show/hide wrapper.
  *
  * Supports height collapse (auto->0) and/or fading.
- * Can optionally listen to the nearest `le-header` shrink events.
+ *
+ * It can follow the state another component publishes on the state bus with
+ * `closed-when="<event>.<field>"`: it is closed while that field is truthy.
+ * - `closed-when="le-header:state.shrunk"` — closed while the header is shrunk;
+ * - `closed-when="le-side-panel:state.visible" closed-when-target="recipes"` —
+ *   closed while the side panel with id `recipes` is visible, i.e. shows its
+ *   content as a replacement when the panel is hidden.
+ *
+ * The current state is read right away, so it works even when the collapse
+ * loads after the source published its state.
  *
  * @slot - Content to animate
  *
@@ -38,22 +48,70 @@ export class LeCollapse {
   /** Stop fading the content when collapsing/expanding. */
   @Prop({ attribute: 'no-fading', reflect: true }) noFading: boolean = false;
 
-  /** If true, collapse/expand based on the nearest header shrink event. */
-  @Prop({ attribute: 'collapse-on-header-shrink', reflect: true }) collapseOnHeaderShrink: boolean =
-    false;
+  /**
+   * Closes the collapse while a field of a state-bus state is truthy:
+   * `<event>.<field>`, e.g. `le-header:state.shrunk` or `le-side-panel:state.visible`.
+   */
+  @Prop({ attribute: 'closed-when', reflect: true }) closedWhen?: string;
 
   /**
-   * Handles `leHeaderShrinkChange` events from the `le-header`.
-   * In case multiple headers are present, only the nearest one in the DOM tree is used.
+   * Only follow the state published under this key (the source element's id).
+   * Without it, any source of the event is followed.
    */
-  @Listen('leHeaderShrinkChange', { target: 'window' })
-  handleHeaderShrink(ev: Event) {
-    const e = ev as CustomEvent<{ shrunk: boolean }>;
-    this.headerShrunk = !!e.detail?.shrunk;
+  @Prop({ attribute: 'closed-when-target', reflect: true }) closedWhenTarget?: string;
+
+  /** The bound state currently asks for the collapse to be closed. */
+  @State() private drivenClosed: boolean = false;
+  @State() private isExpanded: boolean = true;
+
+  private unsubscribeState?: () => void;
+
+  connectedCallback() {
+    this.bindState();
   }
 
-  @State() private headerShrunk: boolean = false;
-  @State() private isExpanded: boolean = true;
+  disconnectedCallback() {
+    this.unsubscribeState?.();
+    this.unsubscribeState = undefined;
+  }
+
+  @Watch('closedWhen')
+  @Watch('closedWhenTarget')
+  protected onBindingChange() {
+    this.bindState();
+  }
+
+  /** Splits `<event>.<field>` at the last dot; event names may contain `:` and `-`. */
+  private parseClosedWhen(): { event: string; field: string } | undefined {
+    const value = this.closedWhen?.trim();
+    const dot = value ? value.lastIndexOf('.') : -1;
+    if (!value || dot <= 0 || dot === value.length - 1) return undefined;
+    return { event: value.slice(0, dot), field: value.slice(dot + 1) };
+  }
+
+  private bindState() {
+    this.unsubscribeState?.();
+    this.unsubscribeState = undefined;
+
+    const binding = this.parseClosedWhen();
+    if (!binding) {
+      this.drivenClosed = false;
+      return;
+    }
+
+    const target = this.closedWhenTarget?.trim();
+    const read = (state: unknown) => !!(state as Record<string, unknown> | undefined)?.[binding.field];
+
+    const current = target
+      ? getLatestState(binding.event, target)
+      : getAllLatestStates(binding.event)[0];
+    this.drivenClosed = read(current);
+
+    this.unsubscribeState = subscribeState(this.el, binding.event, (state, key) => {
+      if (target && key !== target) return;
+      this.drivenClosed = read(state);
+    });
+  }
 
   componentWillLoad() {
     this.isExpanded = this.shouldBeOpen();
@@ -76,7 +134,7 @@ export class LeCollapse {
     this.applyOpenState();
   }
 
-  @Watch('headerShrunk')
+  @Watch('drivenClosed')
   protected onDrivenStateChange(newValue?: boolean, oldValue?: boolean) {
     if (oldValue === undefined || newValue === oldValue) {
       if (this.shouldBeOpen()) {
@@ -99,7 +157,7 @@ export class LeCollapse {
 
   private shouldBeOpen() {
     if (this.closed) return false;
-    if (this.collapseOnHeaderShrink && this.headerShrunk) return false;
+    if (this.drivenClosed) return false;
     return true;
   }
 

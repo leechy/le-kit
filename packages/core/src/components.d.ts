@@ -744,7 +744,14 @@ export namespace Components {
     /**
      * Animated show/hide wrapper.
      * Supports height collapse (auto->0) and/or fading.
-     * Can optionally listen to the nearest `le-header` shrink events.
+     * It can follow the state another component publishes on the state bus with
+     * `closed-when="<event>.<field>"`: it is closed while that field is truthy.
+     * - `closed-when="le-header:state.shrunk"` — closed while the header is shrunk;
+     * - `closed-when="le-side-panel:state.visible" closed-when-target="recipes"` —
+     *   closed while the side panel with id `recipes` is visible, i.e. shows its
+     *   content as a replacement when the panel is hidden.
+     * The current state is read right away, so it works even when the collapse
+     * loads after the source published its state.
      * @cssprop --le-collapse-duration - Transition duration
      * @csspart region - Collapsible region
      * @csspart content - Inner content
@@ -758,10 +765,13 @@ export namespace Components {
          */
         "closed": boolean;
         /**
-          * If true, collapse/expand based on the nearest header shrink event.
-          * @default false
+          * Closes the collapse while a field of a state-bus state is truthy: `<event>.<field>`, e.g. `le-header:state.shrunk` or `le-side-panel:state.visible`.
          */
-        "collapseOnHeaderShrink": boolean;
+        "closedWhen"?: string;
+        /**
+          * Only follow the state published under this key (the source element's id). Without it, any source of the event is followed.
+         */
+        "closedWhenTarget"?: string;
         /**
           * Stop fading the content when collapsing/expanding.
           * @default false
@@ -3806,7 +3816,14 @@ declare global {
     /**
      * Animated show/hide wrapper.
      * Supports height collapse (auto->0) and/or fading.
-     * Can optionally listen to the nearest `le-header` shrink events.
+     * It can follow the state another component publishes on the state bus with
+     * `closed-when="<event>.<field>"`: it is closed while that field is truthy.
+     * - `closed-when="le-header:state.shrunk"` — closed while the header is shrunk;
+     * - `closed-when="le-side-panel:state.visible" closed-when-target="recipes"` —
+     *   closed while the side panel with id `recipes` is visible, i.e. shows its
+     *   content as a replacement when the panel is hidden.
+     * The current state is read right away, so it works even when the collapse
+     * loads after the source published its state.
      * @cssprop --le-collapse-duration - Transition duration
      * @csspart region - Collapsible region
      * @csspart content - Inner content
@@ -5616,7 +5633,14 @@ declare namespace LocalJSX {
     /**
      * Animated show/hide wrapper.
      * Supports height collapse (auto->0) and/or fading.
-     * Can optionally listen to the nearest `le-header` shrink events.
+     * It can follow the state another component publishes on the state bus with
+     * `closed-when="<event>.<field>"`: it is closed while that field is truthy.
+     * - `closed-when="le-header:state.shrunk"` — closed while the header is shrunk;
+     * - `closed-when="le-side-panel:state.visible" closed-when-target="recipes"` —
+     *   closed while the side panel with id `recipes` is visible, i.e. shows its
+     *   content as a replacement when the panel is hidden.
+     * The current state is read right away, so it works even when the collapse
+     * loads after the source published its state.
      * @cssprop --le-collapse-duration - Transition duration
      * @csspart region - Collapsible region
      * @csspart content - Inner content
@@ -5630,10 +5654,13 @@ declare namespace LocalJSX {
          */
         "closed"?: boolean;
         /**
-          * If true, collapse/expand based on the nearest header shrink event.
-          * @default false
+          * Closes the collapse while a field of a state-bus state is truthy: `<event>.<field>`, e.g. `le-header:state.shrunk` or `le-side-panel:state.visible`.
          */
-        "collapseOnHeaderShrink"?: boolean;
+        "closedWhen"?: string;
+        /**
+          * Only follow the state published under this key (the source element's id). Without it, any source of the event is followed.
+         */
+        "closedWhenTarget"?: string;
         /**
           * Stop fading the content when collapsing/expanding.
           * @default false
@@ -8439,7 +8466,8 @@ declare namespace LocalJSX {
         "closed": boolean;
         "scrollDown": boolean;
         "noFading": boolean;
-        "collapseOnHeaderShrink": boolean;
+        "closedWhen": string;
+        "closedWhenTarget": string;
     }
     interface LeComboboxAttributes {
         "options": LeOption[] | string;
@@ -9117,7 +9145,14 @@ declare module "@stencil/core" {
             /**
              * Animated show/hide wrapper.
              * Supports height collapse (auto->0) and/or fading.
-             * Can optionally listen to the nearest `le-header` shrink events.
+             * It can follow the state another component publishes on the state bus with
+             * `closed-when="<event>.<field>"`: it is closed while that field is truthy.
+             * - `closed-when="le-header:state.shrunk"` — closed while the header is shrunk;
+             * - `closed-when="le-side-panel:state.visible" closed-when-target="recipes"` —
+             *   closed while the side panel with id `recipes` is visible, i.e. shows its
+             *   content as a replacement when the panel is hidden.
+             * The current state is read right away, so it works even when the collapse
+             * loads after the source published its state.
              * @cssprop --le-collapse-duration - Transition duration
              * @csspart region - Collapsible region
              * @csspart content - Inner content

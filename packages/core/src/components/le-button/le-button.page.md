@@ -91,13 +91,13 @@ recipes:
       </le-side-panel-toggle>
   - id: icon-end
     title: Icon at the end
-    note: Same as icon-start, at the end of the label.
+    note: Same as icon-start, at the end of the label. The second one toggles the recipes panel on the right.
     html: |
       <le-button variant="clear" icon-end="🫆">Log In</le-button>
-      <le-button variant="outlined">
-        More options
-        <le-icon slot="icon-end" name="chevron-down"></le-icon>
-      </le-button>
+      <le-side-panel-toggle panel-id="recipes" action="toggle" variant="outlined">
+        Toggle the Side Panel
+        <le-icon slot="icon-end" name="side-panel-end"></le-icon>
+      </le-side-panel-toggle>
   - id: icon-only
     title: Icon only
     note: With icon-only the label is not shown.

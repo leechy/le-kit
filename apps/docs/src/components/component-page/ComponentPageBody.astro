@@ -47,17 +47,47 @@ const inline = (text: string) =>
 <le-tabs class="page-tabs" selected="playground" data-component-page-tabs>
   <le-tab-panel label="Playground" value="playground">
     <section class="playground" data-playground>
-      <div class="stage-area">
-          <div class="stage-bar">
-            <le-select
-              variant="outlined"
-              size="small"
-              auto-width
-              options={JSON.stringify(recipes.map((item) => ({ label: item.title, value: item.id })))}
-              value={recipe.id}
-              data-recipe-select
-            ></le-select>
-          </div>
+      <le-side-panel
+        side="end"
+        panel-id="recipes"
+        panel-label="Recipes"
+        panel-width="220"
+        collapse-at="720"
+        narrow-behavior="overlay"
+        data-recipe-panel
+      >
+        <le-navigation
+          slot="panel"
+          orientation="vertical"
+          active-url={`#recipe-${recipe.id}`}
+          data-recipe-nav
+        >
+          {
+            recipes.map((item) => (
+              <le-item label={item.title} href={`#recipe-${item.id}`} data-recipe={item.id}></le-item>
+            ))
+          }
+        </le-navigation>
+
+        <div class="stage-area">
+          {/* Replaces the recipes panel whenever it is not shown next to the stage. */}
+          <le-collapse
+            class="recipe-switcher"
+            closed
+            closed-when="le-side-panel:state.visible"
+            closed-when-target="recipes"
+          >
+            <div class="stage-bar">
+              <le-select
+                variant="outlined"
+                size="small"
+                auto-width
+                options={JSON.stringify(recipes.map((item) => ({ label: item.title, value: item.id })))}
+                value={recipe.id}
+                data-recipe-select
+              ></le-select>
+            </div>
+          </le-collapse>
           <Stage html={recipe.html} />
           <p class="recipe-note" data-recipe-note>
             <strong>{recipe.title}.</strong> {recipe.note}
@@ -70,7 +100,8 @@ const inline = (text: string) =>
               Show all code
             </le-button>
           </div>
-      </div>
+        </div>
+      </le-side-panel>
 
       {
         recipes.map((item) => (
@@ -163,11 +194,16 @@ const inline = (text: string) =>
     margin-top: var(--le-spacing-4);
   }
 
+  /* A visible container, so the recipes panel slides in from its edge. */
   .playground {
     background: color-mix(in srgb, var(--le-color-surface-elevated), transparent 60%);
     box-shadow: var(--le-shadow-md);
+    /* Gap to the container edges (inline) or the screen edges (overlay); none on the
+       content side — the stage area's own padding separates them. */
+    --le-side-panel-margin: var(--le-spacing-3) var(--le-spacing-3) var(--le-spacing-3) 0;
   }
 
+  /* Content keeps its own spacing whether the recipes panel is shown or not. */
   .stage-area {
     min-width: 0;
     padding: var(--le-spacing-3) var(--le-spacing-4);

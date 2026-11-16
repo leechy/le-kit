@@ -60,6 +60,26 @@ export function publishState<T>(source: HTMLElement, event: string, key: string,
 }
 
 /**
+ * Like `publishState`, but skips the publish when `state` has the same flat
+ * fields as the remembered one — for components that publish after every render.
+ */
+export function publishStateIfChanged<T extends Record<string, unknown>>(
+  source: HTMLElement,
+  event: string,
+  key: string,
+  state: T,
+): void {
+  const previous = getLatestState<T>(event, key);
+  if (previous && sameFlatFields(previous, state)) return;
+  publishState(source, event, key, state);
+}
+
+function sameFlatFields(a: Record<string, unknown>, b: Record<string, unknown>): boolean {
+  const keys = Object.keys(a);
+  return keys.length === Object.keys(b).length && keys.every(k => Object.is(a[k], b[k]));
+}
+
+/**
  * Subscribes to state changes of `event` in the scope of `el`.
  * The listener gets the state and its key. Returns an unsubscribe function.
  */

@@ -11,8 +11,19 @@ import {
   Watch,
 } from '@stencil/core';
 import { classnames } from '../../utils/utils';
+import { publishState, publishStateIfChanged } from '../../utils/state-bus';
 
 export type LeHeaderPosition = 'static' | 'sticky' | 'fixed';
+
+/** State bus event: published whenever the header shrinks / expands or hides / shows. */
+export const LE_HEADER_STATE_EVENT = 'le-header:state';
+
+export type LeHeaderBusState = {
+  /** The header is in its condensed (shrunk) form. */
+  shrunk: boolean;
+  /** The header is shown (not hidden by reveal-on-scroll). */
+  visible: boolean;
+};
 
 /**
  * A functional page header with scroll-aware behaviors.
@@ -146,7 +157,15 @@ export class LeHeader {
     this.scheduleUpdate(true);
   }
 
+  componentDidRender() {
+    publishStateIfChanged<LeHeaderBusState>(this.el, LE_HEADER_STATE_EVENT, this.el.id, {
+      shrunk: this.shrunk,
+      visible: this.revealed,
+    });
+  }
+
   disconnectedCallback() {
+    publishState(this.el, LE_HEADER_STATE_EVENT, this.el.id, undefined);
     this.disconnectModeObserver?.();
     if (this.rafId != null) {
       cancelAnimationFrame(this.rafId);

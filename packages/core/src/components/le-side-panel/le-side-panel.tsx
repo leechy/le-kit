@@ -10,8 +10,23 @@ import {
   State,
   Watch,
 } from '@stencil/core';
+import { publishState, publishStateIfChanged } from '../../utils/state-bus';
 
 export type LeSidePanelSide = 'start' | 'end';
+
+/** State bus event: published whenever the panel's visibility state changes. */
+export const LE_SIDE_PANEL_STATE_EVENT = 'le-side-panel:state';
+
+export type LeSidePanelState = {
+  /** The panel is shown inline next to the content (not hidden, not only in an overlay). */
+  visible: boolean;
+  /** The container is narrower than `collapse-at`. */
+  narrow: boolean;
+  /** The narrow-mode panel (overlay / push) is open. */
+  open: boolean;
+  /** The wide-mode panel was collapsed by the user. */
+  collapsed: boolean;
+};
 export type LeSidePanelNarrowBehavior = 'overlay' | 'push';
 export type LeSidePanelToggleAction = 'toggle' | 'open' | 'close';
 
@@ -270,7 +285,28 @@ export class LeSidePanel {
     this.scheduleStickyMetricsUpdate();
   }
 
+  componentDidRender() {
+    // The mode is unknown until the first measurement; don't publish a guess.
+    if (!this.responsiveReady) return;
+
+    // setAttribute/removeAttribute rather than toggleAttribute: Stencil's mock DOM lacks the latter.
+    if (this.isNarrow) this.el.setAttribute('narrow', '');
+    else this.el.removeAttribute('narrow');
+    publishStateIfChanged<LeSidePanelState>(this.el, LE_SIDE_PANEL_STATE_EVENT, this.stateKey, {
+      visible: !this.isNarrow ? !this.collapsed : this.narrowBehavior === 'push' && this.open,
+      narrow: this.isNarrow,
+      open: this.open,
+      collapsed: this.collapsed,
+    });
+  }
+
+  /** State bus key: the element id, falling back to `panel-id`. */
+  private get stateKey(): string {
+    return this.el.id || this.panelId || '';
+  }
+
   disconnectedCallback() {
+    publishState(this.el, LE_SIDE_PANEL_STATE_EVENT, this.stateKey, undefined);
     this.resizeObserver?.disconnect();
     this.teardownDragListeners();
     this.clearStickyMetricsFrame();

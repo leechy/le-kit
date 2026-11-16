@@ -3,6 +3,7 @@ import {
   getBusTarget,
   getLatestState,
   publishState,
+  publishStateIfChanged,
   subscribeState,
 } from './state-bus';
 
@@ -88,6 +89,22 @@ describe('state bus', () => {
     publishState(document.getElementById('source')!, EVENT, 'k', { visible: true });
 
     expect(received).toEqual([]);
+  });
+
+  it('publishes only real changes with publishStateIfChanged', () => {
+    mount('<div id="source"></div>');
+    const source = document.getElementById('source')!;
+    const received: unknown[] = [];
+    subscribeState(source, 'test:dedupe', detail => received.push(detail));
+
+    publishStateIfChanged(source, 'test:dedupe', 'k', { visible: true, narrow: false });
+    publishStateIfChanged(source, 'test:dedupe', 'k', { visible: true, narrow: false });
+    publishStateIfChanged(source, 'test:dedupe', 'k', { visible: false, narrow: false });
+
+    expect(received).toEqual([
+      { visible: true, narrow: false },
+      { visible: false, narrow: false },
+    ]);
   });
 
   it('delivers from inside a le-kit to a document-level subscriber', () => {

@@ -169,6 +169,90 @@ describe('le-side-panel e2e', () => {
     expect(await panel.getProperty('open')).toBe(false);
   });
 
+  describe('published state', () => {
+    /** Records every le-side-panel:state event from the very start of the page. */
+    async function recordStates(page: Awaited<ReturnType<typeof newE2EPage>>) {
+      await page.evaluateOnNewDocument(() => {
+        (window as any).__states = [];
+        document.addEventListener('le-side-panel:state', (e: Event) => {
+          (window as any).__states.push((e as CustomEvent).detail);
+        });
+      });
+    }
+
+    const lastState = (page: Awaited<ReturnType<typeof newE2EPage>>) =>
+      page.evaluate(() => {
+        const states = (window as any).__states as { key: string; state: unknown }[];
+        return states[states.length - 1];
+      });
+
+    it('publishes its initial state once measured, keyed by id', async () => {
+      const page = await newE2EPage();
+      await recordStates(page);
+      await page.setViewport({ width: 900, height: 400 });
+      await page.setContent(`
+        ${BASE_STYLES}
+        <le-side-panel id="recipes" panel-id="recipes-panel" collapse-at="720" style="height: 300px">
+          <div slot="panel">Recipes</div>
+          <div>Main content</div>
+        </le-side-panel>
+      `);
+      await page.waitForChanges();
+      await flushRaf(page);
+
+      expect(await lastState(page)).toEqual({
+        key: 'recipes',
+        state: { visible: true, narrow: false, open: false, collapsed: false },
+      });
+    });
+
+    it('reflects narrow mode as an attribute and publishes it', async () => {
+      const page = await newE2EPage();
+      await recordStates(page);
+      await page.setViewport({ width: 400, height: 400 });
+      await page.setContent(`
+        ${BASE_STYLES}
+        <le-side-panel panel-id="recipes" collapse-at="720" style="height: 300px">
+          <div slot="panel">Recipes</div>
+          <div>Main content</div>
+        </le-side-panel>
+      `);
+      await page.waitForChanges();
+      await flushRaf(page);
+
+      const host = await page.find('le-side-panel');
+      expect(host).toHaveAttribute('narrow');
+      expect(await lastState(page)).toEqual({
+        key: 'recipes',
+        state: { visible: false, narrow: true, open: false, collapsed: false },
+      });
+    });
+
+    it('publishes visible: false when collapsed', async () => {
+      const page = await newE2EPage();
+      await recordStates(page);
+      await page.setViewport({ width: 900, height: 400 });
+      await page.setContent(`
+        ${BASE_STYLES}
+        <le-side-panel id="recipes" style="height: 300px">
+          <div slot="panel">Recipes</div>
+          <div>Main content</div>
+        </le-side-panel>
+      `);
+      await page.waitForChanges();
+      const host = await page.find('le-side-panel');
+      host.setProperty('collapsed', true);
+      await page.waitForChanges();
+      await flushRaf(page);
+
+      expect(host).not.toHaveAttribute('narrow');
+      expect(await lastState(page)).toEqual({
+        key: 'recipes',
+        state: { visible: false, narrow: false, open: false, collapsed: true },
+      });
+    });
+  });
+
   describe('margin shorthand', () => {
     /** Panel rect relative to the host, in px. */
     async function panelBox(page: Awaited<ReturnType<typeof newE2EPage>>, part: 'inline-panel' | 'overlay') {

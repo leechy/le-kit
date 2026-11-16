@@ -19,6 +19,8 @@ if (!entry) throw new Error(`No page content for ${tag} (expected ${tag}.page.md
 const { tagline, hero, heroDirection, whenToUse, whenNotToUse, recipes } = entry.data;
 const { Content } = await render(entry);
 const recipe = recipes[0];
+/** The recipe select is at least as wide as its longest option. */
+const longestRecipeTitle = Math.max(...recipes.map((item) => item.title.length));
 
 /** Inline `code` in short list items; everything else is escaped. */
 const inline = (text: string) =>
@@ -78,14 +80,15 @@ const inline = (text: string) =>
             closed-when-target="recipes"
           >
             <div class="stage-bar">
-              <le-select
-                variant="outlined"
-                size="small"
-                auto-width
-                options={JSON.stringify(recipes.map((item) => ({ label: item.title, value: item.id })))}
-                value={recipe.id}
-                data-recipe-select
-              ></le-select>
+              <div style={`min-width: calc(${longestRecipeTitle}ch + 4em)`}>
+                <le-select
+                  variant="outlined"
+                  full-width
+                  options={JSON.stringify(recipes.map((item) => ({ label: item.title, value: item.id })))}
+                  value={recipe.id}
+                  data-recipe-select
+                ></le-select>
+              </div>
             </div>
           </le-collapse>
           <Stage html={recipe.html} />

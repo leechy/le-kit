@@ -3,22 +3,20 @@ import { parseHash, hashForTab, hashForRecipe, type PageTab } from '../../lib/pa
 const CODE_LINES_SHOWN = 3;
 
 /**
- * Recipe switching in the playground. Recipes are items of a le-navigation in
- * the recipes side panel; the stage, the note and the code are swapped from
- * server-rendered <template>s.
+ * Recipe switching in the playground. Recipes are picked with a le-select above
+ * the stage; the stage, the note and the code are swapped from server-rendered
+ * <template>s.
  * Returns `select(id)`, which falls back to the first recipe for unknown ids.
  */
 export function initRecipes(playground: HTMLElement) {
-  const nav = playground.querySelector<HTMLElement & { activeUrl?: string }>('[data-recipe-nav]');
-  const panel = playground.querySelector<HTMLElement & { open?: boolean }>('[data-recipe-panel]');
-  const items = [...playground.querySelectorAll<HTMLElement>('le-item[data-recipe]')];
   const stage = playground.querySelector<HTMLElement>('[data-stage-content]');
   const note = playground.querySelector<HTMLElement>('[data-recipe-note]');
   const code = playground.querySelector<HTMLElement>('[data-code]');
   const codeTarget = playground.querySelector<HTMLElement>('[data-code-target]');
   const codeToggle = playground.querySelector<HTMLElement>('[data-code-toggle]');
   const recipeSelect = playground.querySelector<HTMLElement & { value?: unknown }>('[data-recipe-select]');
-  const firstId = items[0]?.dataset.recipe ?? '';
+  const firstId =
+    playground.querySelector<HTMLTemplateElement>('template[data-recipe-template]')?.dataset.recipeTemplate ?? '';
 
   const find = (attr: string, id: string) =>
     playground.querySelector<HTMLTemplateElement>(`template[${attr}="${CSS.escape(id)}"]`);
@@ -48,9 +46,6 @@ export function initRecipes(playground: HTMLElement) {
       setCodeExpanded(false);
     }
 
-    // le-navigation marks the item whose href equals activeUrl.
-    if (nav) nav.activeUrl = `#recipe-${selectedId}`;
-    // The select that replaces the panel when it is hidden shows the same recipe.
     if (recipeSelect && recipeSelect.value !== selectedId) recipeSelect.value = selectedId;
 
     if (updateUrl) {
@@ -59,17 +54,7 @@ export function initRecipes(playground: HTMLElement) {
     }
   };
 
-  // Recipes are links (#recipe-…), but switching must not add history entries.
-  nav?.addEventListener('leNavItemSelect', (event) => {
-    const href = (event as CustomEvent<{ href?: string }>).detail?.href ?? '';
-    const target = parseHash(href);
-    if (target.kind !== 'recipe') return;
-    event.preventDefault();
-    select(target.id, true);
-    // On narrow screens the panel is an overlay — close it after picking.
-    if (panel?.open) panel.open = false;
-  });
-
+  // Switching updates the URL without adding history entries.
   recipeSelect?.addEventListener('leChange', (event) => {
     const value = (event as CustomEvent<{ value?: unknown }>).detail?.value;
     if (typeof value === 'string') select(value, true);

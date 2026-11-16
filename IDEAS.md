@@ -33,6 +33,17 @@ A backlog of ideas, feature explorations, and UX enhancements to investigate and
 
 ---
 
+## `<le-select>`
+
+### 1. Accessible label (`aria-label` / `aria-labelledby`)
+
+- **Concept**: The select has no way to get an accessible name: no `label` prop, and `aria-label` / `aria-labelledby` on the host are not forwarded to the trigger button inside the shadow DOM, so screen readers announce it without a name.
+- **Considerations**:
+  - Forward `aria-label` and `aria-labelledby` from the host to the trigger (and the listbox), or add a `label` prop — or both, consistent with the other inputs.
+  - Found on the docs playground, where a visible "Recipes:" text sits next to the select but is not connected to it.
+
+---
+
 ## Layout
 
 ### 1. Drill-down navigation for hierarchical data

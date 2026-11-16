@@ -310,6 +310,9 @@ le-preview-frame::part(viewport) {
 le-preview-frame.preview-light {
   --le-preview-frame-bg: #f7fafd;
   --background-lines-color: rgba(24, 97, 157, 0.07);
+  /* The site's border color is white — invisible on a light frame; the resize
+     handles need a color of their own (full primary on hover). */
+  --le-preview-frame-handle-color: color-mix(in srgb, var(--le-color-primary) 50%, transparent);
 }
 
 /* Bento Grids and tiles */

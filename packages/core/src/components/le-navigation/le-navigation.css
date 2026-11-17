@@ -306,13 +306,22 @@
   line-height: var(--le-line-height-tight);
 }
 
+/*
+ * Icons are sized, not scaled (same as le-button): transform: scale()
+ * magnified the offset emoji glyphs have inside their line box. The wrapper
+ * takes no height in the layout, so a bigger icon never makes the row taller.
+ */
 .nav-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transform: scale(var(--le-controls-icon-scale));
   min-width: var(--le-nav-toggle-size);
+  block-size: 0;
+  overflow: visible;
+  line-height: 1;
+  font-size: calc(1em * var(--le-controls-icon-scale));
+  --le-icon-size: calc(var(--le-nav-icon-size, 16px) * var(--le-controls-icon-scale));
 }
 
 .nav-icon-inner {

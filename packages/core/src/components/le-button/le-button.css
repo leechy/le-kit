@@ -357,13 +357,25 @@
 /* ===========================================
  * ICON WRAPPERS & SLOTS
  * =========================================== */
+/*
+ * Icons are sized, not scaled: transform: scale() magnified the offset that
+ * emoji glyphs have inside their line box, pushing them off-center.
+ * - named icons (le-icon): --le-icon-size = base × scale;
+ * - emoji / letters: font-size = 1em × scale, centered by flex.
+ * The wrappers take no height in the layout and the icon overflows them
+ * symmetrically, so a bigger icon never makes the button taller.
+ */
 .icon-start,
 .icon-only,
 .icon-end {
   display: none;
   align-items: center;
   justify-content: center;
-  transform: scale(var(--le-controls-icon-scale));
+  block-size: 0;
+  overflow: visible;
+  line-height: 1;
+  font-size: calc(1em * var(--le-controls-icon-scale));
+  --le-icon-size: calc(var(--le-button-icon-size, 16px) * var(--le-controls-icon-scale));
 }
 
 .icon-start.is-visible,
@@ -375,11 +387,10 @@ span.icon-only.is-visible {
   /* flex (not block) keeps the base rule's centering for slotted icons */
   display: flex;
   width: calc(
-    var(--le-icon-size, 16px) +
+    var(--le-button-icon-size, 16px) +
     2 * var(--le-button-icon-only-padding, var(--le-spacing-1, 0.25rem)) +
     2 * var(--le-button-border-width, 1px)
   );
-  line-height: 0.5em;
 }
 
 ::slotted([slot="icon-start"]),

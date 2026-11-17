@@ -232,3 +232,60 @@ describe('le-button selected hover', () => {
     });
   }
 });
+
+describe('le-button icon sizing', () => {
+  for (const size of ['small', 'medium', 'large']) {
+    it(`keeps the ${size} button height with icons and emoji`, async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <le-button size="${size}" id="text">Label</le-button>
+        <le-button size="${size}" id="icon" icon-start="hamburger">Label</le-button>
+        <le-button size="${size}" id="emoji" icon-start="&#x1F3E0;">Label</le-button>
+      `);
+      await page.waitForChanges();
+
+      const heights = await page.evaluate(() =>
+        ['text', 'icon', 'emoji'].map(id =>
+          Math.round(document.getElementById(id)!.shadowRoot!.querySelector('button')!.getBoundingClientRect().height),
+        ),
+      );
+
+      expect(heights[1]).toBe(heights[0]);
+      expect(heights[2]).toBe(heights[0]);
+    });
+  }
+
+  it('centers the emoji box in an icon-only button (glyph ink is checked visually)', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<le-button variant="outlined" icon-only="&#x1F3E0;">Home</le-button>`);
+    await page.waitForChanges();
+
+    const offset = await page.evaluate(() => {
+      const host = document.querySelector('le-button')!;
+      const button = host.shadowRoot!.querySelector('button')!.getBoundingClientRect();
+      const span = host.shadowRoot!.querySelector('span.icon-only')!;
+      const range = document.createRange();
+      range.selectNodeContents(span);
+      const glyph = range.getBoundingClientRect();
+      return {
+        x: glyph.left + glyph.width / 2 - (button.left + button.width / 2),
+        y: glyph.top + glyph.height / 2 - (button.top + button.height / 2),
+        glyphH: glyph.height,
+      };
+    });
+
+    expect(Math.abs(offset.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(offset.y)).toBeLessThanOrEqual(1);
+  });
+
+  it('draws a named icon 1.5× its base size', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<le-button icon-start="hamburger">Label</le-button>`);
+    await page.waitForChanges();
+
+    const w = await page.evaluate(
+      () => document.querySelector('le-button')!.shadowRoot!.querySelector('.icon-start le-icon')!.getBoundingClientRect().width,
+    );
+    expect(Math.round(w)).toBe(24);
+  });
+});

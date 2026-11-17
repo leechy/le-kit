@@ -155,12 +155,20 @@ const inline = (text: string) =>
     margin-top: 0;
   }
 
+  /* Source order is hero → text (what narrow screens show, text below);
+     wide screens put the text first. */
   .overview-grid {
     display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
     gap: var(--le-spacing-4);
     align-items: start;
     margin: var(--le-spacing-4) 0;
+  }
+
+  @media (min-width: 721px) {
+    .when {
+      order: -1;
+    }
   }
 
   @media (max-width: 720px) {

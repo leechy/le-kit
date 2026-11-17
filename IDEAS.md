@@ -33,6 +33,18 @@ A backlog of ideas, feature explorations, and UX enhancements to investigate and
 
 ---
 
+## `<le-button>`
+
+### 1. Vertical centering of emoji icons
+
+- **Concept**: Emoji used as icons (`icon-start="🏠"`, `icon-only="⚙️"`) still sit slightly off the vertical center — less than a pixel at medium size, more noticeable at some sizes. Named icons (`le-icon`) and letters are centered.
+- **Considerations**:
+  - The cause is the emoji font's metrics: the glyph is not centered in its line box. `transform: scale()` used to magnify it; sizing via `font-size` (since `9c840e8`) made it much smaller but not zero.
+  - Options to try: `text-box: trim-both cap alphabetic` / `ex` on the emoji wrapper, a small per-platform offset token, or rendering emoji through `le-icon` (an SVG `<text>` with `dominant-baseline: central`).
+  - DOM measurements can't see glyph ink — verify visually (e.g. a 4× `zoom` on a row of buttons).
+
+---
+
 ## `<le-select>`
 
 ### 1. Accessible label (`aria-label` / `aria-labelledby`)

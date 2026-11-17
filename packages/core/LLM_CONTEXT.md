@@ -344,7 +344,10 @@ A flexible button component with multiple variants and states.
 | `--le-button-bg` | Button background color |
 | `--le-button-color` | Button text color |
 | `--le-button-border-radius` | Button border radius |
-| `--le-button-padding-x` | Button horizontal padding |
+| `--le-button-padding-text` | Distance from the button edge to the text (default: --le-control-padding-x) |
+| `--le-button-padding-icon` | Distance from the button edge to an icon on that side (default: text padding minus --le-control-icon-inset) |
+| `--le-button-icon-gap` | Gap between an icon and the text (default: --le-control-icon-gap) |
+| `--le-button-padding` | Overrides the whole padding box (all sides), e.g. for compact triggers |
 | `--le-button-padding-y` | Button vertical padding |
 
 ---
@@ -537,7 +540,7 @@ loads after the source published its state.
 | `closed` | `boolean` | `false` | Since Stencil boolean props default to `false` when the attribute is missing. instead of `open` defaulting to `true`, using a `closed` prop. |
 | `scrollDown` | `boolean` | `false` | Whether the content should scroll down from the top when open. |
 | `noFading` | `boolean` | `false` | Stop fading the content when collapsing/expanding. |
-| `closedWhen` | `string \| undefined` |  | Closes the collapse while a field of a state-bus state is truthy: `<event>.<field>`, e.g. `le-header:state.shrunk` or `le-side-panel:state.visible`. |
+| `closedWhen` | `string \| undefined` |  | Closes the collapse while a field of a state-bus state is truthy: `<event>.<field>`, e.g. `le-header:state.shrunk` or `le-side-panel:state.visible`. The bound state is written to `closed`; until it is known, `closed` keeps its initial value — so `<le-collapse closed closed-when="…">` starts closed. |
 | `closedWhenTarget` | `string \| undefined` |  | Only follow the state published under this key (the source element's id). Without it, any source of the event is followed. |
 
 ### Slots

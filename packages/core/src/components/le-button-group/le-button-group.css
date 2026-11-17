@@ -78,7 +78,7 @@ le-visibility {
   align-items: center;
   justify-content: center;
   min-height: 100%;
-  padding: var(--le-button-padding-y, var(--le-spacing-1)) var(--le-button-padding-x, var(--le-spacing-3));
+  padding: var(--le-button-padding-y, var(--le-spacing-1)) var(--le-button-padding-text, var(--le-spacing-3));
   border: var(--le-button-border-width, 1px) solid
     color-mix(in srgb, var(--le-color-primary) 33%, transparent);
   border-left: none;

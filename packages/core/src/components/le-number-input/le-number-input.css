@@ -128,7 +128,8 @@ input:has(+ .icon-end:not(.is-visible)) {
 
 .le-input-control-btn {
   --le-button-border-radius: 0;
-  --le-button-padding-x: 0;
+  --le-button-padding-text: 0;
+  --le-button-padding-icon: 0;
   --le-button-padding-y: 0;
   --le-button-small-font-size: 9.5px;
   --le-button-small-padding: 0 0.2rem;

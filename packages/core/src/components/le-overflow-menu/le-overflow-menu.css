@@ -12,7 +12,8 @@
 }
 
 .trigger-button {
-  --le-button-padding-x: 0;
+  --le-button-padding-text: 0;
+  --le-button-padding-icon: 0;
   --le-button-icon-only-padding: var(--le-spacing-1) 0;
   --le-button-icon-aspect-ratio: auto;
 }

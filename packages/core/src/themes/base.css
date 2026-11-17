@@ -95,6 +95,14 @@
   /* Icons scale for the controls like buttons, menu items, etc. */
   --le-controls-icon-scale: 1.5;
 
+  /* Spacing inside controls (buttons, inputs, select triggers).
+     padding-x is the distance from the edge to text; an icon at the edge sits
+     icon-inset closer, because icons carry their own whitespace. */
+  --le-control-padding-x: var(--le-spacing-3);
+  --le-control-padding-y: var(--le-spacing-2);
+  --le-control-icon-inset: var(--le-spacing-1);
+  --le-control-icon-gap: var(--le-spacing-1);
+
   /* ============================================
    * TRANSITIONS
    * ============================================ */

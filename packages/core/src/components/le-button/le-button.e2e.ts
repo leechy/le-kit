@@ -289,3 +289,52 @@ describe('le-button icon sizing', () => {
     expect(Math.round(w)).toBe(24);
   });
 });
+
+describe('le-button spacing', () => {
+  /** Computed paddings of the inner button and the gap between label parts. */
+  async function spacing(html: string) {
+    const page = await newE2EPage();
+    await page.setContent(html);
+    await page.waitForChanges();
+    return page.evaluate(() => {
+      const root = document.querySelector('le-button')!.shadowRoot!;
+      const container = getComputedStyle(root.querySelector('button')!);
+      const label = root.querySelector('.le-button-label');
+      return {
+        left: container.paddingLeft,
+        right: container.paddingRight,
+        gap: label ? getComputedStyle(label).columnGap : null,
+      };
+    });
+  }
+
+  it('uses the text padding on both sides of a text-only button', async () => {
+    const s = await spacing(`<le-button>Label</le-button>`);
+    expect([s.left, s.right]).toEqual(['12px', '12px']);
+  });
+
+  it('uses the smaller icon padding on the icon side', async () => {
+    const end = await spacing(`<le-button icon-end="hamburger">Label</le-button>`);
+    expect([end.left, end.right, end.gap]).toEqual(['12px', '8px', '4px']);
+
+    const start = await spacing(`<le-button icon-start="hamburger">Label</le-button>`);
+    expect([start.left, start.right, start.gap]).toEqual(['8px', '12px', '4px']);
+  });
+
+  it('takes all three spacings from CSS variables', async () => {
+    const s = await spacing(
+      `<le-button icon-end="hamburger" style="--le-button-padding-text: 20px; --le-button-padding-icon: 6px; --le-button-icon-gap: 10px">Label</le-button>`,
+    );
+    expect([s.left, s.right, s.gap]).toEqual(['20px', '6px', '10px']);
+  });
+
+  it('derives the icon padding from the text padding by default', async () => {
+    const s = await spacing(`<le-button icon-end="hamburger" style="--le-button-padding-text: 20px">Label</le-button>`);
+    expect([s.left, s.right]).toEqual(['20px', '16px']);
+  });
+
+  it('lets --le-button-padding override the whole box', async () => {
+    const s = await spacing(`<le-button icon-end="hamburger" style="--le-button-padding: 1px 2px 3px 4px">Label</le-button>`);
+    expect([s.left, s.right]).toEqual(['4px', '2px']);
+  });
+});

@@ -64,7 +64,7 @@
 
 .select-trigger.size-small {
   --le-button-padding: 0 0 0 var(--le-spacing-1);
-  --le-button-icons-gap: 0;
+  --le-button-icon-gap: 0;
   --le-dropdown-option-gap: 0;
 }
 

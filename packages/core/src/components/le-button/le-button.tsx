@@ -34,7 +34,10 @@ import { TooltipPlacement } from '../..';
  * @cssprop --le-button-bg - Button background color
  * @cssprop --le-button-color - Button text color
  * @cssprop --le-button-border-radius - Button border radius
- * @cssprop --le-button-padding-x - Button horizontal padding
+ * @cssprop --le-button-padding-text - Distance from the button edge to the text (default: --le-control-padding-x)
+ * @cssprop --le-button-padding-icon - Distance from the button edge to an icon on that side (default: text padding minus --le-control-icon-inset)
+ * @cssprop --le-button-icon-gap - Gap between an icon and the text (default: --le-control-icon-gap)
+ * @cssprop --le-button-padding - Overrides the whole padding box (all sides), e.g. for compact triggers
  * @cssprop --le-button-padding-y - Button vertical padding
  *
  * @csspart button - The native button element
@@ -530,6 +533,9 @@ export class LeButton {
         'full-width': this.fullWidth,
         'icon-only': hasIconOnly,
         'is-collapsed-icon': isCollapsedToIcon,
+        // The side with an icon gets the (smaller) icon padding.
+        'has-icon-start': hasIconStart && !hasIconOnly && !isCollapsedToIcon,
+        'has-icon-end': hasIconEnd && !hasIconOnly && !isCollapsedToIcon,
         'disabled': this.disabled,
       },
     );

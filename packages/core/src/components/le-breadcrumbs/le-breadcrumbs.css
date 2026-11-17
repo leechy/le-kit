@@ -32,7 +32,8 @@
 }
 
 .item {
-  --le-button-padding-x: var(--le-spacing-2);
+  --le-button-padding-text: var(--le-spacing-2);
+  --le-button-padding-icon: var(--le-spacing-2);
   --le-button-padding-y: var(--le-spacing-1);
 }
 

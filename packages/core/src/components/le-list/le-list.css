@@ -635,7 +635,8 @@
 }
 
 .le-list-actions-cell le-button {
-  --le-button-padding-x: 4px;
+  --le-button-padding-text: 4px;
+  --le-button-padding-icon: 4px;
   --le-button-padding-y: 4px;
 }
 

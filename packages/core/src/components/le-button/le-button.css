@@ -91,7 +91,6 @@
     border-color var(--le-button-transition),
     box-shadow var(--le-button-transition),
     transform var(--le-button-transition),
-    padding var(--le-button-transition),
     outline var(--le-control-focus-transition),
     outline-offset var(--le-control-focus-transition);
 
@@ -322,6 +321,20 @@
 :host(.icon-only) .le-button-container {
   padding: var(--le-button-icon-only-padding, var(--le-spacing-1));
   aspect-ratio: var(--le-button-icon-aspect-ratio, 1);
+}
+
+/* Padding animates only for collapsible buttons (collapsing to an icon in a
+   toolbar). Elsewhere a padding change — e.g. an icon detected through a nested
+   slot right after the first render — must not slide. */
+:host([collapsible]) .le-button-container {
+  transition:
+    background-color var(--le-button-transition),
+    border-color var(--le-button-transition),
+    box-shadow var(--le-button-transition),
+    transform var(--le-button-transition),
+    padding var(--le-button-transition),
+    outline var(--le-control-focus-transition),
+    outline-offset var(--le-control-focus-transition);
 }
 
 :host(.is-collapsed-icon) .le-button-container {

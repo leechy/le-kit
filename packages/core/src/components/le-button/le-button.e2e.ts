@@ -338,3 +338,48 @@ describe('le-button spacing', () => {
     expect([s.left, s.right]).toEqual(['4px', '2px']);
   });
 });
+
+describe('le-button padding on insert', () => {
+  it('does not animate the icon-side padding of a nested button (le-side-panel-toggle)', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<div id="box"></div>`);
+    await page.waitForChanges();
+
+    const samples = await page.evaluate(async () => {
+      document.getElementById('box')!.innerHTML =
+        '<le-side-panel-toggle variant="outlined"><le-icon slot="icon-start" name="hamburger"></le-icon>Toggle</le-side-panel-toggle>';
+      const out: string[] = [];
+      for (let i = 0; i < 25; i++) {
+        await new Promise(r => setTimeout(r, 16));
+        const button = document
+          .querySelector('le-side-panel-toggle')!
+          .shadowRoot?.querySelector('le-button')
+          ?.shadowRoot?.querySelector('button');
+        if (button) out.push(getComputedStyle(button).paddingLeft);
+      }
+      return out;
+    });
+
+    // Once the icon is detected the padding jumps straight to its final value;
+    // there must be no in-between values of a running transition.
+    const final = samples[samples.length - 1];
+    const inBetween = samples.filter(v => v !== final && v !== '12px');
+    expect(final).toBe('8px');
+    expect(inBetween).toEqual([]);
+  });
+});
+
+describe('le-button padding transition', () => {
+  it('animates padding only for collapsible buttons', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`<le-button id="a">A</le-button><le-button id="b" collapsible icon-start="hamburger">B</le-button>`);
+    await page.waitForChanges();
+    const props = await page.evaluate(() =>
+      ['a', 'b'].map(id =>
+        getComputedStyle(document.getElementById(id)!.shadowRoot!.querySelector('button')!).transitionProperty,
+      ),
+    );
+    expect(props[0]).not.toContain('padding');
+    expect(props[1]).toContain('padding');
+  });
+});

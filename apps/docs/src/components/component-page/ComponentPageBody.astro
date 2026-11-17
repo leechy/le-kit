@@ -16,7 +16,7 @@ const { tag } = Astro.props;
 const entry = await getEntry("componentPages", tag);
 if (!entry) throw new Error(`No page content for ${tag} (expected ${tag}.page.md next to the component)`);
 
-const { tagline, hero, heroDirection, whenToUse, whenNotToUse, recipes } = entry.data;
+const { tagline, hero, heroDirection, heroWidth, whenToUse, whenNotToUse, recipes } = entry.data;
 const { Content } = await render(entry);
 const recipe = recipes[0];
 /** The recipe select is at least as wide as its longest option. */
@@ -35,7 +35,7 @@ const inline = (text: string) =>
   <h1>&lt;{tag}&gt;</h1>
   <p class="tagline">{tagline}</p>
 
-  <div class="overview-grid">
+  <div class="overview-grid" data-hero-width={heroWidth}>
     <div class:list={["hero", `hero-${heroDirection}`]} set:html={hero} />
     <div class="when">
       <h2 class="when-title">When to use</h2>
@@ -155,32 +155,39 @@ const inline = (text: string) =>
     margin-top: 0;
   }
 
-  /* Source order is hero → text (what narrow screens show, text below);
-     wide screens put the text first. */
+  /* Source order is hero → text (what narrow screens and `full` show, text below);
+     wide screens put the text first. The hero's share comes from `heroWidth`
+     in the page.md: narrow | half (default) | wide | full. */
   .overview-grid {
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--le-spacing-4);
     align-items: start;
     margin: var(--le-spacing-4) 0;
   }
 
   @media (min-width: 721px) {
-    .when {
-      order: -1;
+    .overview-grid[data-hero-width="narrow"] {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     }
-  }
 
-  @media (max-width: 720px) {
-    .overview-grid {
-      grid-template-columns: minmax(0, 1fr);
+    .overview-grid[data-hero-width="half"] {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .overview-grid[data-hero-width="wide"] {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    }
+
+    .overview-grid:not([data-hero-width="full"]) .when {
+      order: -1;
     }
   }
 
   .hero {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--le-spacing-2);
+    gap: var(--le-spacing-4);
     align-items: center;
     justify-content: center;
     padding: var(--le-spacing-6) var(--le-spacing-4);

@@ -28,6 +28,8 @@ const componentPages = defineCollection({
     tagline: z.string(),
     hero: z.string(),
     heroDirection: z.enum(["row", "column"]).default("row"),
+    /** Hero share of the overview: narrow ~1/3, half, wide ~2/3, full = own row above the text. */
+    heroWidth: z.enum(["narrow", "half", "wide", "full"]).default("half"),
     whenToUse: z.array(z.string()),
     whenNotToUse: z.array(z.string()),
     recipes: z

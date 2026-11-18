@@ -1,7 +1,5 @@
 import { parseHash, hashForTab, hashForRecipe, type PageTab } from '../../lib/page-hash';
 
-const CODE_LINES_SHOWN = 3;
-
 /**
  * Recipe switching in the playground. Recipes are items of a le-navigation in
  * the recipes side panel; the stage, the note and the code are swapped from
@@ -14,20 +12,12 @@ export function initRecipes(playground: HTMLElement) {
   const items = [...playground.querySelectorAll<HTMLElement>('le-item[data-recipe]')];
   const stage = playground.querySelector<HTMLElement>('[data-stage-content]');
   const note = playground.querySelector<HTMLElement>('[data-recipe-note]');
-  const code = playground.querySelector<HTMLElement>('[data-code]');
   const codeTarget = playground.querySelector<HTMLElement>('[data-code-target]');
-  const codeToggle = playground.querySelector<HTMLElement>('[data-code-toggle]');
   const recipeSelect = playground.querySelector<HTMLElement & { value?: unknown }>('[data-recipe-select]');
   const firstId = items[0]?.dataset.recipe ?? '';
 
   const find = (attr: string, id: string) =>
     playground.querySelector<HTMLTemplateElement>(`template[${attr}="${CSS.escape(id)}"]`);
-
-  const setCodeExpanded = (expanded: boolean) => {
-    if (!code || !codeToggle) return;
-    code.toggleAttribute('data-clipped', !expanded && code.hasAttribute('data-has-more'));
-    codeToggle.textContent = expanded ? 'Show less' : 'Show all code';
-  };
 
   const select = (id: string, updateUrl = false) => {
     const template = find('data-recipe-template', id) ?? find('data-recipe-template', firstId);
@@ -42,11 +32,8 @@ export function initRecipes(playground: HTMLElement) {
     }
 
     const codeTemplate = find('data-recipe-code', selectedId);
-    if (codeTemplate && codeTarget && code) {
-      codeTarget.replaceChildren(codeTemplate.content.cloneNode(true));
-      code.toggleAttribute('data-has-more', Number(codeTemplate.dataset.lines) > CODE_LINES_SHOWN);
-      setCodeExpanded(false);
-    }
+    // A fresh CodeBlock: collapsed again; its toolbar works through delegation.
+    if (codeTemplate && codeTarget) codeTarget.replaceChildren(codeTemplate.content.cloneNode(true));
 
     // le-navigation marks the item whose href equals activeUrl.
     if (nav) nav.activeUrl = `#recipe-${selectedId}`;
@@ -74,8 +61,6 @@ export function initRecipes(playground: HTMLElement) {
     const value = (event as CustomEvent<{ value?: unknown }>).detail?.value;
     if (typeof value === 'string') select(value, true);
   });
-
-  codeToggle?.addEventListener('click', () => setCodeExpanded(code?.hasAttribute('data-clipped') ?? false));
 
   select(firstId);
   return { select, firstId };

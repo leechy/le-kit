@@ -1,143 +1,108 @@
 ---
+/**
+ * Highlighted code with a small toolbar: copy, and — when the code is longer
+ * than `lines` — show all / show less. Collapsing is `le-collapse collapsed-size`;
+ * the toolbar sticks to the bottom of the screen while an open block runs past it.
+ */
 import { codeToHtml } from "shiki";
 
 interface Props {
   code: string;
   language?: string;
   title?: string;
+  /** Lines shown while collapsed; longer code gets a "Show all" toggle. */
+  lines?: number;
 }
 
-const { code, language = "html", title } = Astro.props;
+const { code, language = "html", title, lines = 12 } = Astro.props;
 
 function trimSurroundingBlankLines(value: string): string {
-  const lines = value.split("\n");
-
-  while (lines.length > 0 && lines[0].trim() === "") {
-    lines.shift();
-  }
-
-  while (lines.length > 0 && lines[lines.length - 1].trim() === "") {
-    lines.pop();
-  }
-
-  return lines.join("\n");
+  const all = value.split("\n");
+  while (all.length > 0 && all[0].trim() === "") all.shift();
+  while (all.length > 0 && all[all.length - 1].trim() === "") all.pop();
+  return all.join("\n");
 }
 
 const normalizedCode = trimSurroundingBlankLines(code);
+const totalLines = normalizedCode.split("\n").length;
+const collapsible = totalLines > lines;
+const collapseAttrs = collapsible
+  ? { closed: "", "collapsed-size": `calc(${lines}lh + var(--code-block-pad) + var(--code-block-bar))` }
+  : {};
 
-const html = await codeToHtml(normalizedCode, {
-  lang: language,
-  theme: "plastic",
-});
-
-const encodedCode = encodeURIComponent(normalizedCode);
+const html = await codeToHtml(normalizedCode, { lang: language, theme: "plastic" });
 ---
 
-<script>
-  function initCodeBlocks() {
-    const codeBlocks = document.querySelectorAll('.code-block');
-
-    codeBlocks.forEach((block) => {
-      // Avoid double initialization
-      if (block.classList.contains('js-initialized')) return;
-      block.classList.add('js-initialized');
-
-      const inner = block.querySelector('.code-block__inner') as HTMLElement;
-      const content = block.querySelector('.code-block__content') as HTMLElement;
-      const expandBtn = block.querySelector('.code-block__expand') as HTMLElement;
-      const copyBtn = block.querySelector('.code-block__copy') as HTMLElement;
-
-      if (!inner || !content) return;
-
-      // Setup ResizeObserver to detect real rendered height vs max collapsed height (24rem = 384px)
-      // This is highly robust and triggers even when lazy styles load dynamically.
-      const observer = new ResizeObserver(() => {
-        const isOverflowing = inner.offsetHeight > 384;
-        if (isOverflowing) {
-          block.classList.add('code-block--has-overflow');
-        } else {
-          block.classList.remove('code-block--has-overflow');
-        }
-      });
-      observer.observe(inner);
-
-      if (expandBtn) {
-        expandBtn.addEventListener('click', () => {
-          const isExpanded = block.classList.toggle('code-block--expanded');
-
-          const label = expandBtn.querySelector('.btn-label');
-          if (label) {
-            label.textContent = isExpanded ? 'Show less' : 'Show more';
-          }
-          const icon = expandBtn.querySelector('le-icon');
-          if (icon) {
-            icon.setAttribute('name', isExpanded ? 'chevron-up' : 'chevron-down');
-          }
-        });
-      }
-
-      if (copyBtn) {
-        copyBtn.addEventListener('click', async () => {
-          const encodedCode = block.getAttribute('data-code') || '';
-          const codeText = decodeURIComponent(encodedCode);
-
-          try {
-            await navigator.clipboard.writeText(codeText);
-
-            const label = copyBtn.querySelector('.btn-label');
-            const icon = copyBtn.querySelector('le-icon');
-            const originalText = label ? label.textContent : 'Copy';
-
-            if (label) label.textContent = 'Copied!';
-            if (icon) icon.setAttribute('name', 'check');
-
-            setTimeout(() => {
-              if (label) label.textContent = originalText;
-              if (icon) icon.setAttribute('name', 'copy');
-            }, 2000);
-          } catch (err) {
-            console.error('Failed to copy code: ', err);
-          }
-        });
-      }
-    });
-  }
-
-  // Initialize on page load
-  initCodeBlocks();
-
-  // Re-run on dynamic page navigations (Astro view transitions)
-  document.addEventListener('astro:page-load', initCodeBlocks);
-</script>
-
-<div class="code-block" data-code={encodedCode}>
+<div class="code-block" data-code={encodeURIComponent(normalizedCode)} data-lines={totalLines}>
   {title && <div class="code-block__title">{title}</div>}
-  <div class="code-block__content">
-    <div class="code-block__inner">
-      <div set:html={html} />
-    </div>
-  </div>
-  <div class="code-block__fade-overlay"></div>
-  <div class="code-block__actions">
-    <le-button class="code-block__copy" variant="filled" color="secondary">
-      <le-icon slot="icon-start" name="copy"></le-icon>
-      <span class="btn-label">Copy</span>
-    </le-button>
-    <le-button class="code-block__expand" variant="filled" color="secondary">
-      <le-icon slot="icon-start" name="chevron-down"></le-icon>
-      <span class="btn-label">Show more</span>
-    </le-button>
+  <le-collapse class="code-block__body" {...collapseAttrs} set:html={html}></le-collapse>
+  <div class="code-block__toolbar">
+    <le-button size="small" variant="filled" color="secondary" icon-start="copy" data-code-copy>Copy</le-button>
+    {
+      collapsible && (
+        <le-button size="small" variant="filled" color="secondary" icon-start="chevron-down" data-code-toggle>
+          Show all {totalLines} lines
+        </le-button>
+      )
+    }
   </div>
 </div>
 
+<script>
+  // Delegated, so blocks inserted later (e.g. the playground's recipe switch) work too.
+  type Collapse = HTMLElement & { closed: boolean };
+
+  document.addEventListener("click", async (event) => {
+    const target = event.target as HTMLElement;
+
+    const toggle = target.closest<HTMLElement>("[data-code-toggle]");
+    if (toggle) {
+      const block = toggle.closest<HTMLElement>(".code-block");
+      const collapse = block?.querySelector<Collapse>("le-collapse");
+      if (!block || !collapse) return;
+
+      const closing = !collapse.closed;
+      collapse.closed = closing;
+      toggle.setAttribute("icon-start", closing ? "chevron-down" : "chevron-up");
+      toggle.textContent = closing ? `Show all ${block.dataset.lines} lines` : "Show less";
+
+      // Collapsing a block whose top is off-screen would leave the reader far below it.
+      if (closing && block.getBoundingClientRect().top < 0) {
+        block.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      return;
+    }
+
+    const copy = target.closest<HTMLElement>("[data-code-copy]");
+    if (copy) {
+      const block = copy.closest<HTMLElement>(".code-block");
+      try {
+        await navigator.clipboard.writeText(decodeURIComponent(block?.dataset.code ?? ""));
+        copy.setAttribute("icon-start", "check");
+        copy.textContent = "Copied";
+        setTimeout(() => {
+          copy.setAttribute("icon-start", "copy");
+          copy.textContent = "Copy";
+        }, 2000);
+      } catch (err) {
+        console.error("Failed to copy code: ", err);
+      }
+    }
+  });
+</script>
+
 <style>
   .code-block {
+    /* Padding around the code, and room for the toolbar under the last line. */
+    --code-block-pad: var(--le-spacing-3);
+    --code-block-bar: 2.75rem;
+
     position: relative;
     margin: var(--le-spacing-4) 0;
     border: 2px solid var(--le-color-border);
     background-color: #213553;
     border-radius: var(--le-radius-md, 8px);
-    overflow: hidden;
+    scroll-margin-top: calc(var(--le-header-height, 0px) + var(--le-spacing-4));
   }
 
   .code-block__title {
@@ -150,81 +115,35 @@ const encodedCode = encodeURIComponent(normalizedCode);
     font-weight: 600;
   }
 
-  .code-block__content {
-    max-height: 24rem;
-    overflow: auto;
-    transition: max-height 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-    position: relative;
+  /* `lh` in collapsed-size is measured with these. */
+  .code-block__body {
+    --le-collapse-fade-size: var(--code-block-bar);
+    font-size: var(--le-font-size-md);
+    line-height: 1.4;
   }
 
-  /* When expanded, transition to a large max-height limit to display the full height naturally */
-  .code-block--expanded .code-block__content {
-    max-height: 6000px;
-  }
-
-  /* Custom scrollbar */
-  .code-block__content::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  .code-block__content::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .code-block__content::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
-  }
-  .code-block__content::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-
-  /* Ensure pre styles inside CodeBlock override global styles cleanly */
-  .code-block__content :global(pre) {
+  .code-block__body :global(pre) {
     margin: 0 !important;
+    padding: var(--code-block-pad);
+    padding-bottom: calc(var(--code-block-pad) + var(--code-block-bar));
     border: none !important;
     background-color: transparent !important;
+    font-size: inherit;
+    line-height: inherit;
   }
 
-  /* Fade overlay - only show when block has overflow and is NOT expanded */
-  .code-block__fade-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 48px;
-    background: linear-gradient(to bottom, transparent, #213553);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 5;
-  }
-
-  .code-block--has-overflow:not(.code-block--expanded) .code-block__fade-overlay {
-    opacity: 1;
-  }
-
-  .code-block__actions {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
+  .code-block__toolbar {
+    position: sticky;
+    bottom: var(--le-spacing-2);
     display: flex;
-    gap: 8px;
-    z-index: 10;
-    opacity: 0.85;
-    transition: opacity 0.2s ease;
+    justify-content: flex-end;
+    gap: var(--le-spacing-2);
+    margin-top: calc(-1 * var(--code-block-bar));
+    padding: 0 var(--le-spacing-2) var(--le-spacing-2);
+    pointer-events: none;
   }
 
-  .code-block:hover .code-block__actions {
-    opacity: 1;
-  }
-
-  /* Default state: Hide expand button. Only show it if there is overflow */
-  .code-block__expand {
-    display: none;
-  }
-
-  .code-block--has-overflow .code-block__expand {
-    display: inline-flex;
+  .code-block__toolbar > * {
+    pointer-events: auto;
   }
 </style>
-

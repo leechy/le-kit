@@ -755,7 +755,12 @@ export namespace Components {
      *   content as a replacement when the panel is hidden.
      * The current state is read right away, so it works even when the collapse
      * loads after the source published its state.
+     * With `collapsed-size` it closes only partially: down to that height (any CSS length,
+     * e.g. `3lh` for three lines), with the cut edge faded out. Set it only when the
+     * content is taller: the size also applies while open, so shorter content would be
+     * stretched to it.
      * @cssprop --le-collapse-duration - Transition duration
+     * @cssprop --le-collapse-fade-size - Height of the fade at the cut edge while partially closed (default: 1lh)
      * @csspart region - Collapsible region
      * @csspart content - Inner content
      * @cmsEditable true
@@ -775,6 +780,10 @@ export namespace Components {
           * Only follow the state published under this key (the source element's id). Without it, any source of the event is followed.
          */
         "closedWhenTarget"?: string;
+        /**
+          * Closes partially, down to this height instead of zero: any CSS length, e.g. `3lh`. The content stays visible (no fading) and its cut edge fades out.
+         */
+        "collapsedSize"?: string;
         /**
           * Stop fading the content when collapsing/expanding.
           * @default false
@@ -3830,7 +3839,12 @@ declare global {
      *   content as a replacement when the panel is hidden.
      * The current state is read right away, so it works even when the collapse
      * loads after the source published its state.
+     * With `collapsed-size` it closes only partially: down to that height (any CSS length,
+     * e.g. `3lh` for three lines), with the cut edge faded out. Set it only when the
+     * content is taller: the size also applies while open, so shorter content would be
+     * stretched to it.
      * @cssprop --le-collapse-duration - Transition duration
+     * @cssprop --le-collapse-fade-size - Height of the fade at the cut edge while partially closed (default: 1lh)
      * @csspart region - Collapsible region
      * @csspart content - Inner content
      * @cmsEditable true
@@ -5650,7 +5664,12 @@ declare namespace LocalJSX {
      *   content as a replacement when the panel is hidden.
      * The current state is read right away, so it works even when the collapse
      * loads after the source published its state.
+     * With `collapsed-size` it closes only partially: down to that height (any CSS length,
+     * e.g. `3lh` for three lines), with the cut edge faded out. Set it only when the
+     * content is taller: the size also applies while open, so shorter content would be
+     * stretched to it.
      * @cssprop --le-collapse-duration - Transition duration
+     * @cssprop --le-collapse-fade-size - Height of the fade at the cut edge while partially closed (default: 1lh)
      * @csspart region - Collapsible region
      * @csspart content - Inner content
      * @cmsEditable true
@@ -5670,6 +5689,10 @@ declare namespace LocalJSX {
           * Only follow the state published under this key (the source element's id). Without it, any source of the event is followed.
          */
         "closedWhenTarget"?: string;
+        /**
+          * Closes partially, down to this height instead of zero: any CSS length, e.g. `3lh`. The content stays visible (no fading) and its cut edge fades out.
+         */
+        "collapsedSize"?: string;
         /**
           * Stop fading the content when collapsing/expanding.
           * @default false
@@ -8473,6 +8496,7 @@ declare namespace LocalJSX {
     }
     interface LeCollapseAttributes {
         "closed": boolean;
+        "collapsedSize": string;
         "scrollDown": boolean;
         "noFading": boolean;
         "closedWhen": string;
@@ -9165,7 +9189,12 @@ declare module "@stencil/core" {
              *   content as a replacement when the panel is hidden.
              * The current state is read right away, so it works even when the collapse
              * loads after the source published its state.
+             * With `collapsed-size` it closes only partially: down to that height (any CSS length,
+             * e.g. `3lh` for three lines), with the cut edge faded out. Set it only when the
+             * content is taller: the size also applies while open, so shorter content would be
+             * stretched to it.
              * @cssprop --le-collapse-duration - Transition duration
+             * @cssprop --le-collapse-fade-size - Height of the fade at the cut edge while partially closed (default: 1lh)
              * @csspart region - Collapsible region
              * @csspart content - Inner content
              * @cmsEditable true

@@ -18,9 +18,15 @@ export type LeCollapseAnimation = 'fade' | 'collapse' | 'fade-collapse';
  * The current state is read right away, so it works even when the collapse
  * loads after the source published its state.
  *
+ * With `collapsed-size` it closes only partially: down to that height (any CSS length,
+ * e.g. `3lh` for three lines), with the cut edge faded out. Set it only when the
+ * content is taller: the size also applies while open, so shorter content would be
+ * stretched to it.
+ *
  * @slot - Content to animate
  *
  * @cssprop --le-collapse-duration - Transition duration
+ * @cssprop --le-collapse-fade-size - Height of the fade at the cut edge while partially closed (default: 1lh)
  *
  * @csspart region - Collapsible region
  * @csspart content - Inner content
@@ -41,6 +47,12 @@ export class LeCollapse {
    * instead of `open` defaulting to `true`, using a `closed` prop.
    */
   @Prop({ mutable: true, reflect: true }) closed: boolean = false;
+
+  /**
+   * Closes partially, down to this height instead of zero: any CSS length, e.g. `3lh`.
+   * The content stays visible (no fading) and its cut edge fades out.
+   */
+  @Prop({ attribute: 'collapsed-size', reflect: true }) collapsedSize?: string;
 
   /** Whether the content should scroll down from the top when open. */
   @Prop({ attribute: 'scroll-down', reflect: true }) scrollDown: boolean = false;
@@ -178,6 +190,7 @@ export class LeCollapse {
     const isOpen = this.shouldBeOpen();
     return (
       <Host
+        style={this.collapsedSize ? { '--le-collapse-collapsed-size': this.collapsedSize } : undefined}
         data-open={isOpen ? 'true' : 'false'}
         data-expanded={isOpen && this.isExpanded ? 'true' : 'false'}
       >

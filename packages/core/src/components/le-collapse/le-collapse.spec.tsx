@@ -13,6 +13,25 @@ describe('le-collapse', () => {
     expect(page.root!.getAttribute('data-expanded')).toBe('true');
   });
 
+  it('passes collapsed-size to the region as a custom property', async () => {
+    const page = await newSpecPage({
+      components: [LeCollapse],
+      html: `<le-collapse closed collapsed-size="3lh"><div>Content</div></le-collapse>`,
+    });
+
+    expect(page.root!.style.getPropertyValue('--le-collapse-collapsed-size')).toBe('3lh');
+    expect(page.root!.getAttribute('data-open')).toBe('false');
+  });
+
+  it('sets no collapsed size without the attribute', async () => {
+    const page = await newSpecPage({
+      components: [LeCollapse],
+      html: `<le-collapse closed><div>Content</div></le-collapse>`,
+    });
+
+    expect(page.root!.style.getPropertyValue('--le-collapse-collapsed-size')).toBe('');
+  });
+
   it('should test le-collapse with closed=false prop', async () => {
     const page = await newSpecPage({
       components: [LeCollapse],

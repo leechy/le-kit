@@ -45,6 +45,18 @@ A backlog of ideas, feature explorations, and UX enhancements to investigate and
 
 ---
 
+## `<le-collapse>`
+
+### 1. Inline "Show more" for text
+
+- **Concept**: Show the first 2–3 lines of a text and put the "Show more" / "Show less" control right in the text flow — at the end of the last visible line (often after an ellipsis) — so the whole text unfolds from there.
+- **Considerations**:
+  - Not needed often, but hard to get right every time it is: the control has to sit inside the last visible line, not under the block, and stay there across widths and font sizes.
+  - `collapsed-size` (partial collapse to a fixed height, e.g. `3lh`) is the base; the open question is placing the control inline — `line-clamp` with a floated control, a shape-outside trick, or measuring where the last visible line ends.
+  - Expanded state: the "Show less" control goes after the last line of the full text.
+
+---
+
 ## `<le-select>`
 
 ### 1. Accessible label (`aria-label` / `aria-labelledby`)

@@ -39,3 +39,23 @@
 .region.scroll-down {
   justify-content: flex-start;
 }
+
+/* Partial collapse: the grid row can't shrink below the region's min-height,
+   so `0fr` stops at the collapsed size. The content stays visible — no fading —
+   and the cut edge fades out until the content is fully expanded. */
+:host([collapsed-size]) {
+  --le-collapse-fade-size: 1lh;
+}
+
+:host([collapsed-size][data-open="false"]),
+:host([collapsed-size][closed]) {
+  opacity: 1;
+}
+
+:host([collapsed-size]) .region {
+  min-height: var(--le-collapse-collapsed-size);
+}
+
+:host([collapsed-size]:not([data-expanded="true"])) .region {
+  mask-image: linear-gradient(black calc(100% - var(--le-collapse-fade-size)), transparent);
+}

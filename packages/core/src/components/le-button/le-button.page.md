@@ -27,6 +27,33 @@ recipes:
     title: With onclick
     note: Handle the click with the onclick attribute, no JavaScript setup needed.
     html: <le-button onclick="alert('Clicked!')">Click me</le-button>
+  - id: views
+    title: Views
+    note: >-
+      Mark children with a view attribute and set view on the button — only the current view is shown.
+      The button is as wide as its largest view, so it doesn't move when the view changes.
+      motion-preset picks how views switch: fade (default), slide, scale, blur, spring or none.
+    html: |
+      <le-button view="idle" onclick="this.view = 'done'; setTimeout(() => this.view = 'idle', 1500)">
+        <le-icon slot="icon-start" name="copy" view="idle"></le-icon>
+        <le-icon slot="icon-start" name="check" view="done"></le-icon>
+        <span view="idle">Copy</span>
+        <span view="done">Copied</span>
+      </le-button>
+
+      <le-button view="closed" motion-preset="slide"
+        onclick="this.view = this.view === 'open' ? 'closed' : 'open'">
+        <span view="closed">Show all 12 lines</span>
+        <span view="open">Show less</span>
+      </le-button>
+
+      <le-button view="paused" variant="solid" motion-preset="scale"
+        onclick="this.view = this.view === 'playing' ? 'paused' : 'playing'">
+        <le-icon slot="icon-start" name="play" view="paused"></le-icon>
+        <le-icon slot="icon-start" name="pause" view="playing"></le-icon>
+        <span view="paused">Play</span>
+        <span view="playing">Pause</span>
+      </le-button>
   - id: variants
     title: Variants
     note: The visual style of the button.

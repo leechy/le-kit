@@ -433,6 +433,57 @@ span.icon-only.is-visible {
 }
 
 /* ===========================================
+ * VIEWS
+ * All children of one slot that are marked with `view` share one grid cell, so
+ * the button is as large as its largest view and nothing moves on a switch.
+ * The label wrapper is a block grid: inline-grid would not grow with wrapped text.
+ * =========================================== */
+:host([view]) .le-button-label-visibility {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+/* Icons: the wrapper keeps no height (see ICON WRAPPERS), the track is 0 tall
+   and the icon overflows it symmetrically, as with flex. */
+:host([view]) .icon-start.is-visible,
+:host([view]) .icon-end.is-visible {
+  display: grid;
+  grid-template-rows: 0;
+  place-items: center;
+}
+
+::slotted([view]) {
+  grid-area: 1 / 1;
+  transition:
+    opacity var(--le-motion-view-duration) var(--le-motion-view-easing),
+    transform var(--le-motion-view-duration) var(--le-motion-view-easing),
+    filter var(--le-motion-view-duration) var(--le-motion-view-easing),
+    visibility 0s;
+}
+
+::slotted([view][data-view-off]) {
+  opacity: 0;
+  transform: var(--le-motion-view-exit);
+  filter: blur(var(--le-motion-view-blur));
+  /* !important: Stencil's document-level `.hydrated { visibility: inherit }` on
+     slotted components (le-icon) would otherwise beat ::slotted. */
+  visibility: hidden !important;
+  transition:
+    opacity var(--le-motion-view-duration) var(--le-motion-view-easing),
+    transform var(--le-motion-view-duration) var(--le-motion-view-easing),
+    filter var(--le-motion-view-duration) var(--le-motion-view-easing),
+    visibility 0s var(--le-motion-view-duration);
+}
+
+/* The start point of an entering view; applied for one frame, without transition. */
+::slotted([view][data-view-enter]) {
+  transform: var(--le-motion-view-enter);
+  filter: blur(var(--le-motion-view-blur));
+  transition: none;
+}
+
+/* ===========================================
  * ALIGNMENT MODIFIERS
  * =========================================== */
 .le-button-align-start {

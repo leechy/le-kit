@@ -31,6 +31,11 @@ import { TooltipPlacement } from '../..';
  * @slot icon-start - Icon placed in the beginning of the button
  * @slot icon-end - Icon placed in the end of the button
  *
+ * Views: mark children of any slot with `view="name"` (or `view="a b"`) and set
+ * `view` on the button — only the children of the current view are shown.
+ * All views share one place, so the button is as large as its largest view and
+ * does not move when the view changes; children without `view` are always shown.
+ *
  * @cssprop --le-button-bg - Button background color
  * @cssprop --le-button-color - Button text color
  * @cssprop --le-button-border-radius - Button border radius
@@ -39,6 +44,7 @@ import { TooltipPlacement } from '../..';
  * @cssprop --le-button-icon-gap - Gap between an icon and the text (default: --le-control-icon-gap)
  * @cssprop --le-button-padding - Overrides the whole padding box (all sides), e.g. for compact triggers
  * @cssprop --le-button-padding-y - Button vertical padding
+ * @cssprop --le-motion-view-duration - Duration of the switch between views
  *
  * @csspart button - The native button element
  * @csspart content - The button content wrapper
@@ -159,10 +165,19 @@ export class LeButton {
   @Prop({ reflect: true }) groupShape: 'start' | 'middle' | 'end' | 'single' = 'single';
 
   /**
-   * Optional per-instance motion preset override.
-   * @allowedValues none | soft | fluid | spring
+   * Optional per-instance motion preset override. `soft | fluid | spring` also set how
+   * the label collapses in a toolbar; `fade | slide | scale | blur` only how views switch.
+   * @allowedValues none | soft | fluid | spring | fade | slide | scale | blur
    */
-  @Prop({ reflect: true }) motionPreset?: 'none' | 'soft' | 'fluid' | 'spring';
+  @Prop({ reflect: true }) motionPreset?:
+    | 'none'
+    | 'soft'
+    | 'fluid'
+    | 'spring'
+    | 'fade'
+    | 'slide'
+    | 'scale'
+    | 'blur';
 
   /**
    * Icon only button image or emoji
@@ -246,6 +261,48 @@ export class LeButton {
   @Prop() align: 'start' | 'center' | 'space-between' | 'end' = 'center';
 
   /**
+   * Current view: shows the children marked with this `view` and hides the other
+   * marked ones. Without it, the first marked child's view is shown.
+   */
+  @Prop({ reflect: true }) view?: string;
+
+  private viewObserver?: MutationObserver;
+
+  @Watch('view')
+  protected onViewChange() {
+    this.applyView(true);
+  }
+
+  /** Shows the marked children of the current view, hides the rest. */
+  private applyView(animate: boolean) {
+    const marked = Array.from(this.el.children).filter(child => child.hasAttribute('view'));
+    if (!marked.length) return;
+
+    const current = (this.view ?? marked[0].getAttribute('view') ?? '').split(/\s+/).filter(Boolean);
+    for (const child of marked) {
+      const on = child.getAttribute('view')!.split(/\s+/).some(name => current.includes(name));
+      if (!on) {
+        child.setAttribute('data-view-off', '');
+      } else if (child.hasAttribute('data-view-off')) {
+        if (animate) {
+          // Enter from the enter point, not from where the view left.
+          child.setAttribute('data-view-enter', '');
+          void (child as HTMLElement).offsetWidth;
+          child.removeAttribute('data-view-enter');
+        }
+        child.removeAttribute('data-view-off');
+      }
+    }
+  }
+
+  /** Children added or re-marked later get the right visibility too. */
+  private observeViews() {
+    if (this.viewObserver || typeof MutationObserver === 'undefined') return;
+    this.viewObserver = new MutationObserver(() => this.applyView(false));
+    this.viewObserver.observe(this.el, { childList: true, attributes: true, attributeFilter: ['view'], subtree: true });
+  }
+
+  /**
    * Emitted when the button is clicked.
    * This is a custom event that wraps the native click but ensures the target is the le-button.
    */
@@ -324,10 +381,14 @@ export class LeButton {
     this.hasIconOnlySlot = slotHasContent(this.el, 'icon-only');
 
     this.initSlotObserver();
+    this.applyView(false);
+    this.observeViews();
   }
 
   connectedCallback() {
     this.setupActionStateSubscription();
+    // Re-attached after a disconnect: observe the views again.
+    this.observeViews();
   }
 
   componentDidLoad() {
@@ -338,6 +399,8 @@ export class LeButton {
   disconnectedCallback() {
     this.disconnectSlotObserver?.();
     this.unsubscribeActionState?.();
+    this.viewObserver?.disconnect();
+    this.viewObserver = undefined;
   }
 
   @Watch('action')

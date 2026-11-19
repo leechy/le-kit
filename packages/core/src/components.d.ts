@@ -400,6 +400,7 @@ export namespace Components {
      * @cssprop --le-button-icon-gap - Gap between an icon and the text (default: --le-control-icon-gap)
      * @cssprop --le-button-padding - Overrides the whole padding box (all sides), e.g. for compact triggers
      * @cssprop --le-button-padding-y - Button vertical padding
+     * @cssprop --le-motion-view-duration - Duration of the switch between views
      * @csspart button - The native button element
      * @csspart content - The button content wrapper
      * @csspart icon-start - The start icon slot
@@ -514,10 +515,17 @@ export namespace Components {
          */
         "mode"?: 'default' | 'admin';
         /**
-          * Optional per-instance motion preset override.
-          * @allowedValues none | soft | fluid | spring
+          * Optional per-instance motion preset override. `soft | fluid | spring` also set how the label collapses in a toolbar; `fade | slide | scale | blur` only how views switch.
+          * @allowedValues none | soft | fluid | spring | fade | slide | scale | blur
          */
-        "motionPreset"?: 'none' | 'soft' | 'fluid' | 'spring';
+        "motionPreset"?: | 'none'
+    | 'soft'
+    | 'fluid'
+    | 'spring'
+    | 'fade'
+    | 'slide'
+    | 'scale'
+    | 'blur';
         /**
           * Refreshes the action binding and current enabled/disabled state.
          */
@@ -563,6 +571,10 @@ export namespace Components {
           * @default 'outlined'
          */
         "variant": 'solid' | 'filled' | 'outlined' | 'clear' | 'system';
+        /**
+          * Current view: shows the children marked with this `view` and hides the other marked ones. Without it, the first marked child's view is shown.
+         */
+        "view"?: string;
         /**
           * Visibility state used by responsive containers to animate show/hide transitions.
           * @allowedValues visible | collapsing | collapsed | expanding
@@ -3699,6 +3711,7 @@ declare global {
      * @cssprop --le-button-icon-gap - Gap between an icon and the text (default: --le-control-icon-gap)
      * @cssprop --le-button-padding - Overrides the whole padding box (all sides), e.g. for compact triggers
      * @cssprop --le-button-padding-y - Button vertical padding
+     * @cssprop --le-motion-view-duration - Duration of the switch between views
      * @csspart button - The native button element
      * @csspart content - The button content wrapper
      * @csspart icon-start - The start icon slot
@@ -5295,6 +5308,7 @@ declare namespace LocalJSX {
      * @cssprop --le-button-icon-gap - Gap between an icon and the text (default: --le-control-icon-gap)
      * @cssprop --le-button-padding - Overrides the whole padding box (all sides), e.g. for compact triggers
      * @cssprop --le-button-padding-y - Button vertical padding
+     * @cssprop --le-motion-view-duration - Duration of the switch between views
      * @csspart button - The native button element
      * @csspart content - The button content wrapper
      * @csspart icon-start - The start icon slot
@@ -5404,10 +5418,17 @@ declare namespace LocalJSX {
          */
         "mode"?: 'default' | 'admin';
         /**
-          * Optional per-instance motion preset override.
-          * @allowedValues none | soft | fluid | spring
+          * Optional per-instance motion preset override. `soft | fluid | spring` also set how the label collapses in a toolbar; `fade | slide | scale | blur` only how views switch.
+          * @allowedValues none | soft | fluid | spring | fade | slide | scale | blur
          */
-        "motionPreset"?: 'none' | 'soft' | 'fluid' | 'spring';
+        "motionPreset"?: | 'none'
+    | 'soft'
+    | 'fluid'
+    | 'spring'
+    | 'fade'
+    | 'slide'
+    | 'scale'
+    | 'blur';
         /**
           * Emitted when the button is clicked. This is a custom event that wraps the native click but ensures the target is the le-button.
          */
@@ -5453,6 +5474,10 @@ declare namespace LocalJSX {
           * @default 'outlined'
          */
         "variant"?: 'solid' | 'filled' | 'outlined' | 'clear' | 'system';
+        /**
+          * Current view: shows the children marked with this `view` and hides the other marked ones. Without it, the first marked child's view is shown.
+         */
+        "view"?: string;
         /**
           * Visibility state used by responsive containers to animate show/hide transitions.
           * @allowedValues visible | collapsing | collapsed | expanding
@@ -8444,7 +8469,14 @@ declare namespace LocalJSX {
         "fullWidth": boolean;
         "visibility": 'visible' | 'collapsing' | 'collapsed' | 'expanding';
         "groupShape": 'start' | 'middle' | 'end' | 'single';
-        "motionPreset": 'none' | 'soft' | 'fluid' | 'spring';
+        "motionPreset": | 'none'
+    | 'soft'
+    | 'fluid'
+    | 'spring'
+    | 'fade'
+    | 'slide'
+    | 'scale'
+    | 'blur';
         "iconOnly": string | Node;
         "iconStart": string | Node;
         "iconCount": number;
@@ -8460,6 +8492,7 @@ declare namespace LocalJSX {
         "href": string;
         "target": string;
         "align": 'start' | 'center' | 'space-between' | 'end';
+        "view": string;
     }
     interface LeButtonGroupAttributes {
         "label": string;
@@ -9124,6 +9157,7 @@ declare module "@stencil/core" {
              * @cssprop --le-button-icon-gap - Gap between an icon and the text (default: --le-control-icon-gap)
              * @cssprop --le-button-padding - Overrides the whole padding box (all sides), e.g. for compact triggers
              * @cssprop --le-button-padding-y - Button vertical padding
+             * @cssprop --le-motion-view-duration - Duration of the switch between views
              * @csspart button - The native button element
              * @csspart content - The button content wrapper
              * @csspart icon-start - The start icon slot

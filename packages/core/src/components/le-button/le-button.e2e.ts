@@ -383,3 +383,87 @@ describe('le-button padding transition', () => {
     expect(props[1]).toContain('padding');
   });
 });
+
+describe('le-button views', () => {
+  const html = `
+    <div style="width: 600px">
+      <le-button view="idle" style="--le-motion-view-duration: 0ms">
+        <le-icon slot="icon-start" name="copy" view="idle">A</le-icon>
+        <le-icon slot="icon-start" name="check" view="done">B</le-icon>
+        <span view="idle">Copy</span>
+        <span view="done">Copied to clipboard</span>
+      </le-button>
+    </div>`;
+
+  const state = (page: import('@stencil/core/testing').E2EPage) =>
+    page.evaluate(() => {
+      const button = document.querySelector('le-button')!;
+      const shown = (el: Element) => getComputedStyle(el).visibility !== 'hidden';
+      return {
+        width: Math.round(button.getBoundingClientRect().width),
+        shown: Array.from(button.querySelectorAll('[view]'))
+          .filter(shown)
+          .map(el => el.textContent),
+      };
+    });
+
+  it('shows only the children of the current view', async () => {
+    const page = await newE2EPage();
+    await page.setContent(html);
+    expect((await state(page)).shown).toEqual(['A', 'Copy']);
+
+    await page.$eval('le-button', (el: any) => (el.view = 'done'));
+    await page.waitForChanges();
+    expect((await state(page)).shown).toEqual(['B', 'Copied to clipboard']);
+  });
+
+  it('keeps the size of the largest view when switching', async () => {
+    const page = await newE2EPage();
+    await page.setContent(html);
+    const before = (await state(page)).width;
+
+    await page.$eval('le-button', (el: any) => (el.view = 'done'));
+    await page.waitForChanges();
+    const after = (await state(page)).width;
+
+    // As wide as "Copied to clipboard" from the start, so nothing moves.
+    expect(after).toBe(before);
+    // The views share one place: their centers match.
+    const centers = await page.$$eval('le-button span:not([slot])', els =>
+      els.map(el => {
+        const r = el.getBoundingClientRect();
+        return [Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2)];
+      }),
+    );
+    expect(centers[0]).toEqual(centers[1]);
+    const single = await page.evaluate(() => {
+      const b = document.createElement('le-button');
+      b.textContent = 'Copied to clipboard';
+      document.querySelector('div')!.append(b);
+      return new Promise<number>(r => requestAnimationFrame(() => requestAnimationFrame(() => r(Math.round(b.getBoundingClientRect().width)))));
+    });
+    expect(before).toBeGreaterThanOrEqual(single);
+  });
+
+  it('wraps every view the same way when space is short', async () => {
+    const page = await newE2EPage();
+    await page.setContent(html.replace('width: 600px', 'width: 90px'));
+    const before = await page.$eval('le-button', el => Math.round(el.getBoundingClientRect().height));
+
+    await page.$eval('le-button', (el: any) => (el.view = 'done'));
+    await page.waitForChanges();
+    const after = await page.$eval('le-button', el => Math.round(el.getBoundingClientRect().height));
+
+    expect(after).toBe(before);
+    // The longest label wraps, so the button grows instead of overflowing.
+    const label = await page.$eval('le-button span:not([slot])[view="done"]', el => Math.round(el.getBoundingClientRect().height));
+    expect(before).toBeGreaterThanOrEqual(label);
+  });
+
+  it('leaves buttons without views alone', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<le-button><span>Plain</span></le-button>');
+    const off = await page.$eval('le-button span', el => el.hasAttribute('data-view-off'));
+    expect(off).toBe(false);
+  });
+});

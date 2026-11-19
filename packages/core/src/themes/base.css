@@ -131,6 +131,14 @@
   --le-motion-visibility-blur-from: 6px;
   --le-motion-visibility-translate-y-from: 0.4rem;
   --le-motion-visibility-collapse-size: 0px;
+
+  /* Switching between views (`view` on a component): enter is the transform a
+     view comes from, exit the one it leaves to. Default: fade, no movement. */
+  --le-motion-view-duration: var(--le-transition-fast);
+  --le-motion-view-easing: var(--le-easing-standard);
+  --le-motion-view-enter: none;
+  --le-motion-view-exit: none;
+  --le-motion-view-blur: 0px;
 }
 
 
@@ -166,6 +174,48 @@
   --le-motion-visibility-opacity-from: 0;
   --le-motion-visibility-blur-from: 10px;
   --le-motion-visibility-translate-y-from: 0.7rem;
+  --le-motion-view-duration: 420ms;
+  --le-motion-view-easing: var(--le-easing-fluid-spring);
+  --le-motion-view-enter: translateY(0.8em) scale(0.8);
+  --le-motion-view-exit: translateY(-0.6em) scale(0.9);
+  --le-motion-view-blur: 0px;
+}
+
+/* View-only presets (they don't change the visibility tokens). */
+[motion-preset='fade'],
+.le-motion-fade {
+  --le-motion-view-duration: var(--le-transition-fast);
+  --le-motion-view-easing: var(--le-easing-standard);
+  --le-motion-view-enter: none;
+  --le-motion-view-exit: none;
+  --le-motion-view-blur: 0px;
+}
+
+[motion-preset='slide'],
+.le-motion-slide {
+  --le-motion-view-duration: 220ms;
+  --le-motion-view-easing: var(--le-easing-standard);
+  --le-motion-view-enter: translateY(0.7em);
+  --le-motion-view-exit: translateY(-0.7em);
+  --le-motion-view-blur: 0px;
+}
+
+[motion-preset='scale'],
+.le-motion-scale {
+  --le-motion-view-duration: 200ms;
+  --le-motion-view-easing: var(--le-easing-standard);
+  --le-motion-view-enter: scale(0.6);
+  --le-motion-view-exit: scale(1.3);
+  --le-motion-view-blur: 0px;
+}
+
+[motion-preset='blur'],
+.le-motion-blur {
+  --le-motion-view-duration: 260ms;
+  --le-motion-view-easing: ease;
+  --le-motion-view-enter: scale(0.97);
+  --le-motion-view-exit: scale(1.03);
+  --le-motion-view-blur: 6px;
 }
 
 [motion-preset='none'],
@@ -177,6 +227,7 @@
   --le-motion-visibility-opacity-from: 1;
   --le-motion-visibility-blur-from: 0px;
   --le-motion-visibility-translate-y-from: 0px;
+  --le-motion-view-duration: 0ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -186,6 +237,9 @@
     --le-motion-visibility-opacity-from: 1;
     --le-motion-visibility-blur-from: 0px;
     --le-motion-visibility-translate-y-from: 0px;
+    --le-motion-view-enter: none;
+    --le-motion-view-exit: none;
+    --le-motion-view-blur: 0px;
   }
 }
 

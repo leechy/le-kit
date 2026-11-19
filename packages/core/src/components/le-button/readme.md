@@ -79,6 +79,11 @@ A flexible button component with multiple variants, colors, sizes, and states.
 
 A flexible button component with multiple variants and states.
 
+Views: mark children of any slot with `view="name"` (or `view="a b"`) and set
+`view` on the button — only the children of the current view are shown.
+All views share one place, so the button is as large as its largest view and
+does not move when the view changes; children without `view` are always shown.
+
 ## Properties
 
 | Property                 | Attribute                  | Description                                                                                                                                                                                          | Type                                                                                                     | Default      |
@@ -160,12 +165,12 @@ Type: `Promise<void>`
 
 ## Slots
 
-| Slot           | Description                                                                                                                                                                                                                                                                                                                                             |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|                | Button text content                                                                                                                                                                                                                                                                                                                                     |
-| `"icon-end"`   | Icon placed in the end of the button  Views: mark children of any slot with `view="name"` (or `view="a b"`) and set `view` on the button — only the children of the current view are shown. All views share one place, so the button is as large as its largest view and does not move when the view changes; children without `view` are always shown. |
-| `"icon-only"`  | Icon for icon-only buttons                                                                                                                                                                                                                                                                                                                              |
-| `"icon-start"` | Icon placed in the beginning of the button                                                                                                                                                                                                                                                                                                              |
+| Slot           | Description                                |
+| -------------- | ------------------------------------------ |
+|                | Button text content                        |
+| `"icon-end"`   | Icon placed in the end of the button       |
+| `"icon-only"`  | Icon for icon-only buttons                 |
+| `"icon-start"` | Icon placed in the beginning of the button |
 
 
 ## Shadow Parts

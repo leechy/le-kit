@@ -26,15 +26,15 @@ import { TooltipPlacement } from '../..';
 /**
  * A flexible button component with multiple variants and states.
  *
- * @slot - Button text content
- * @slot icon-only - Icon for icon-only buttons
- * @slot icon-start - Icon placed in the beginning of the button
- * @slot icon-end - Icon placed in the end of the button
- *
  * Views: mark children of any slot with `view="name"` (or `view="a b"`) and set
  * `view` on the button — only the children of the current view are shown.
  * All views share one place, so the button is as large as its largest view and
  * does not move when the view changes; children without `view` are always shown.
+ *
+ * @slot - Button text content
+ * @slot icon-only - Icon for icon-only buttons
+ * @slot icon-start - Icon placed in the beginning of the button
+ * @slot icon-end - Icon placed in the end of the button
  *
  * @cssprop --le-button-bg - Button background color
  * @cssprop --le-button-color - Button text color

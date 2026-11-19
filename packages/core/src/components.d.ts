@@ -392,6 +392,10 @@ export namespace Components {
     }
     /**
      * A flexible button component with multiple variants and states.
+     * Views: mark children of any slot with `view="name"` (or `view="a b"`) and set
+     * `view` on the button — only the children of the current view are shown.
+     * All views share one place, so the button is as large as its largest view and
+     * does not move when the view changes; children without `view` are always shown.
      * @cssprop --le-button-bg - Button background color
      * @cssprop --le-button-color - Button text color
      * @cssprop --le-button-border-radius - Button border radius
@@ -3742,6 +3746,10 @@ declare global {
     }
     /**
      * A flexible button component with multiple variants and states.
+     * Views: mark children of any slot with `view="name"` (or `view="a b"`) and set
+     * `view` on the button — only the children of the current view are shown.
+     * All views share one place, so the button is as large as its largest view and
+     * does not move when the view changes; children without `view` are always shown.
      * @cssprop --le-button-bg - Button background color
      * @cssprop --le-button-color - Button text color
      * @cssprop --le-button-border-radius - Button border radius
@@ -5339,6 +5347,10 @@ declare namespace LocalJSX {
     }
     /**
      * A flexible button component with multiple variants and states.
+     * Views: mark children of any slot with `view="name"` (or `view="a b"`) and set
+     * `view` on the button — only the children of the current view are shown.
+     * All views share one place, so the button is as large as its largest view and
+     * does not move when the view changes; children without `view` are always shown.
      * @cssprop --le-button-bg - Button background color
      * @cssprop --le-button-color - Button text color
      * @cssprop --le-button-border-radius - Button border radius
@@ -9228,6 +9240,10 @@ declare module "@stencil/core" {
             "le-breadcrumbs": LocalJSX.IntrinsicElements["le-breadcrumbs"] & JSXBase.HTMLAttributes<HTMLLeBreadcrumbsElement>;
             /**
              * A flexible button component with multiple variants and states.
+             * Views: mark children of any slot with `view="name"` (or `view="a b"`) and set
+             * `view` on the button — only the children of the current view are shown.
+             * All views share one place, so the button is as large as its largest view and
+             * does not move when the view changes; children without `view` are always shown.
              * @cssprop --le-button-bg - Button background color
              * @cssprop --le-button-color - Button text color
              * @cssprop --le-button-border-radius - Button border radius

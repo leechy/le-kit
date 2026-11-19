@@ -487,6 +487,21 @@ span.icon-only.is-visible {
   transition: none;
 }
 
+/* view-size="current": hidden label views leave the flow, so the label is as
+   wide as the current view; while the width animates, the wrapper clips. */
+:host([view-size='current']) .le-button-label-visibility {
+  position: relative;
+}
+
+:host([view-size='current']) ::slotted([view][data-view-off]:not([slot])) {
+  position: absolute;
+}
+
+.le-button-label-visibility[data-morphing] {
+  overflow: clip;
+  transition: width var(--le-motion-view-duration) var(--le-motion-view-easing);
+}
+
 /* ===========================================
  * ALIGNMENT MODIFIERS
  * =========================================== */

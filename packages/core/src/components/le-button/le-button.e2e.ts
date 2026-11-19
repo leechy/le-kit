@@ -491,3 +491,49 @@ describe('le-button views', () => {
     expect(off).toBe(false);
   });
 });
+
+describe('le-button view-size="current"', () => {
+  const html = (duration: string) => `
+    <le-button view="closed" view-size="current" style="--le-motion-view-duration: ${duration}">
+      <span view="closed">Show all 12 lines</span>
+      <span view="open">Show less</span>
+    </le-button>
+    <le-button>Show all 12 lines</le-button>
+    <le-button>Show less</le-button>`;
+
+  const widths = (page: import('@stencil/core/testing').E2EPage) =>
+    page.$$eval('le-button', els => els.map(el => Math.round(el.getBoundingClientRect().width)));
+
+  it('is as wide as the current view', async () => {
+    const page = await newE2EPage();
+    await page.setContent(html('0ms'));
+    const [before, long, short] = await widths(page);
+    expect(before).toBe(long);
+
+    await page.$eval('le-button', (el: any) => (el.view = 'open'));
+    await page.waitForChanges();
+    const [after] = await widths(page);
+    expect(after).toBe(short);
+  });
+
+  it('animates the width without re-wrapping the text', async () => {
+    const page = await newE2EPage();
+    await page.setContent(html('400ms'));
+    const [, long, short] = await widths(page);
+    const lineHeight = await page.$eval('le-button span[view="closed"]', el => el.getBoundingClientRect().height);
+
+    await page.$eval('le-button', (el: any) => (el.view = 'open'));
+    await new Promise(resolve => setTimeout(resolve, 200));
+    const [midway] = await widths(page);
+    const leavingHeight = await page.$eval('le-button span[view="closed"]', el => el.getBoundingClientRect().height);
+
+    expect(midway).toBeLessThan(long);
+    expect(midway).toBeGreaterThan(short);
+    // The leaving label keeps its line instead of wrapping in the narrowing button.
+    expect(leavingHeight).toBe(lineHeight);
+
+    await new Promise(resolve => setTimeout(resolve, 400));
+    const [end] = await widths(page);
+    expect(end).toBe(short);
+  });
+});

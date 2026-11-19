@@ -576,6 +576,12 @@ export namespace Components {
          */
         "view"?: string;
         /**
+          * Size of a button with views in the label: `largest` (default) keeps the size of the largest view, so nothing moves; `current` follows the current view and animates the width when the view changes.
+          * @allowedValues largest | current
+          * @default 'largest'
+         */
+        "viewSize": 'largest' | 'current';
+        /**
           * Visibility state used by responsive containers to animate show/hide transitions.
           * @allowedValues visible | collapsing | collapsed | expanding
           * @default 'visible'
@@ -5479,6 +5485,12 @@ declare namespace LocalJSX {
          */
         "view"?: string;
         /**
+          * Size of a button with views in the label: `largest` (default) keeps the size of the largest view, so nothing moves; `current` follows the current view and animates the width when the view changes.
+          * @allowedValues largest | current
+          * @default 'largest'
+         */
+        "viewSize"?: 'largest' | 'current';
+        /**
           * Visibility state used by responsive containers to animate show/hide transitions.
           * @allowedValues visible | collapsing | collapsed | expanding
           * @default 'visible'
@@ -8493,6 +8505,7 @@ declare namespace LocalJSX {
         "target": string;
         "align": 'start' | 'center' | 'space-between' | 'end';
         "view": string;
+        "viewSize": 'largest' | 'current';
     }
     interface LeButtonGroupAttributes {
         "label": string;

@@ -83,9 +83,11 @@ The same icon in two views (a chevron) is not swapped: it stays one element and 
   separate axis — space, not content: a "Copied" button can also be collapsed to an icon. It stays
   separate; the two share motion tokens, not the attribute.
 - **Skeletons** are not a button feature: a skeleton is the content of a `loading` view of a block.
-- **Morphing width** (the button takes the size of the current view and animates to it) is a later
-  option. It needs `le-visibility` reworked so text is laid out once at its final width while an
-  outer layer clips (option A in the discussion), not `max-width` on the text itself.
+- **Morphing width** is `view-size="current"` on `le-button` (default `largest`). The button measures
+  the label before and after the switch and animates the width; both views keep their resting width
+  during the animation and the wrapper clips them, so text never re-wraps mid-animation.
+  **Known issue:** when one view wraps to two lines and the other doesn't (a narrow container), the
+  height changes in one step — only the width is animated.
 
 ## Consumers
 

@@ -37,11 +37,18 @@ const html = await codeToHtml(normalizedCode, { lang: language, theme: "plastic"
   {title && <div class="code-block__title">{title}</div>}
   <le-collapse class="code-block__body" {...collapseAttrs} set:html={html}></le-collapse>
   <div class="code-block__toolbar">
-    <le-button size="small" variant="filled" color="secondary" icon-start="copy" data-code-copy>Copy</le-button>
+    <le-button size="small" variant="filled" color="secondary" view="idle" data-code-copy>
+      <le-icon slot="icon-start" name="copy" view="idle"></le-icon>
+      <le-icon slot="icon-start" name="check" view="done"></le-icon>
+      <span view="idle">Copy</span>
+      <span view="done">Copied</span>
+    </le-button>
     {
       collapsible && (
-        <le-button size="small" variant="filled" color="secondary" icon-start="chevron-down" data-code-toggle>
-          Show all {totalLines} lines
+        <le-button size="small" variant="filled" color="secondary" view="closed" data-code-toggle>
+          <le-icon slot="icon-start" name="chevron-down" class="code-block__chevron"></le-icon>
+          <span view="closed">Show all {totalLines} lines</span>
+          <span view="open">Show less</span>
         </le-button>
       )
     }
@@ -51,11 +58,12 @@ const html = await codeToHtml(normalizedCode, { lang: language, theme: "plastic"
 <script>
   // Delegated, so blocks inserted later (e.g. the playground's recipe switch) work too.
   type Collapse = HTMLElement & { closed: boolean };
+  type WithView = HTMLElement & { view?: string };
 
   document.addEventListener("click", async (event) => {
     const target = event.target as HTMLElement;
 
-    const toggle = target.closest<HTMLElement>("[data-code-toggle]");
+    const toggle = target.closest<WithView>("[data-code-toggle]");
     if (toggle) {
       const block = toggle.closest<HTMLElement>(".code-block");
       const collapse = block?.querySelector<Collapse>("le-collapse");
@@ -63,8 +71,7 @@ const html = await codeToHtml(normalizedCode, { lang: language, theme: "plastic"
 
       const closing = !collapse.closed;
       collapse.closed = closing;
-      toggle.setAttribute("icon-start", closing ? "chevron-down" : "chevron-up");
-      toggle.textContent = closing ? `Show all ${block.dataset.lines} lines` : "Show less";
+      toggle.view = closing ? "closed" : "open";
 
       // Collapsing a block whose top is off-screen would leave the reader far below it.
       if (closing && block.getBoundingClientRect().top < 0) {
@@ -73,17 +80,13 @@ const html = await codeToHtml(normalizedCode, { lang: language, theme: "plastic"
       return;
     }
 
-    const copy = target.closest<HTMLElement>("[data-code-copy]");
+    const copy = target.closest<WithView>("[data-code-copy]");
     if (copy) {
       const block = copy.closest<HTMLElement>(".code-block");
       try {
         await navigator.clipboard.writeText(decodeURIComponent(block?.dataset.code ?? ""));
-        copy.setAttribute("icon-start", "check");
-        copy.textContent = "Copied";
-        setTimeout(() => {
-          copy.setAttribute("icon-start", "copy");
-          copy.textContent = "Copy";
-        }, 2000);
+        copy.view = "done";
+        setTimeout(() => (copy.view = "idle"), 2000);
       } catch (err) {
         console.error("Failed to copy code: ", err);
       }
@@ -145,5 +148,14 @@ const html = await codeToHtml(normalizedCode, { lang: language, theme: "plastic"
 
   .code-block__toolbar > * {
     pointer-events: auto;
+  }
+
+  /* One chevron for both views: it turns instead of being swapped. */
+  .code-block__chevron {
+    transition: rotate var(--le-motion-view-duration) var(--le-motion-view-easing);
+  }
+
+  [view="open"] > .code-block__chevron {
+    rotate: 180deg;
   }
 </style>

@@ -268,11 +268,72 @@ export class LeButton {
    */
   @Prop({ reflect: true }) view?: string;
 
+  /**
+   * Size of a button with views in the label: `largest` (default) keeps the size of
+   * the largest view, so nothing moves; `current` follows the current view and
+   * animates the width when the view changes.
+   * @allowedValues largest | current
+   */
+  @Prop({ attribute: 'view-size', reflect: true }) viewSize: 'largest' | 'current' = 'largest';
+
+  private endMorph?: () => void;
+
   private viewObserver?: MutationObserver;
 
   @Watch('view')
   protected onViewChange() {
-    this.applyView(true);
+    if (this.viewSize === 'current') this.morphLabel(() => this.applyView(true));
+    else this.applyView(true);
+  }
+
+  /**
+   * view-size="current": animates the label width from the old view to the new one.
+   * Both views keep the width they have at rest during the animation (the leaving
+   * one its old width, the entering one its new width), and the wrapper clips them,
+   * so the text never re-wraps mid-animation.
+   */
+  private morphLabel(update: () => void) {
+    const wrapper = this.el.shadowRoot?.querySelector<HTMLElement>('.le-button-label-visibility');
+    const labelViews = () =>
+      Array.from(this.el.children).filter(c => c.hasAttribute('view') && !c.hasAttribute('slot')) as HTMLElement[];
+    const value = getComputedStyle(this.el).getPropertyValue('--le-motion-view-duration').trim();
+    const duration = parseFloat(value) * (value.endsWith('ms') ? 1 : 1000) || 0;
+
+    this.endMorph?.();
+    if (!wrapper || duration <= 0 || !labelViews().length) {
+      update();
+      return;
+    }
+
+    const from = wrapper.getBoundingClientRect().width;
+    const leaving = labelViews().filter(c => !c.hasAttribute('data-view-off'));
+    const leavingWidths = leaving.map(c => c.getBoundingClientRect().width);
+
+    update();
+
+    leaving.forEach((c, i) => {
+      if (c.hasAttribute('data-view-off')) c.style.width = `${leavingWidths[i]}px`;
+    });
+    const entering = labelViews().filter(c => !c.hasAttribute('data-view-off'));
+    const to = wrapper.getBoundingClientRect().width;
+    entering.forEach(c => (c.style.minWidth = `${c.getBoundingClientRect().width}px`));
+
+    wrapper.setAttribute('data-morphing', '');
+    wrapper.style.width = `${from}px`;
+    void wrapper.offsetWidth;
+    wrapper.style.width = `${to}px`;
+
+    const timer = window.setTimeout(() => this.endMorph?.(), duration + 20);
+    this.endMorph = () => {
+      window.clearTimeout(timer);
+      wrapper.removeAttribute('data-morphing');
+      wrapper.style.width = '';
+      [...leaving, ...entering].forEach(c => {
+        c.style.width = '';
+        c.style.minWidth = '';
+      });
+      this.endMorph = undefined;
+    };
   }
 
   /** Shows the marked children of the current view, hides the rest. */
@@ -406,6 +467,7 @@ export class LeButton {
     this.unsubscribeActionState?.();
     this.viewObserver?.disconnect();
     this.viewObserver = undefined;
+    this.endMorph?.();
   }
 
   @Watch('action')

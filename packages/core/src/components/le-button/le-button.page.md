@@ -31,7 +31,8 @@ recipes:
     title: Views
     note: >-
       Mark children with a view attribute and set view on the button — only the current view is shown.
-      The button is as wide as its largest view, so it doesn't move when the view changes.
+      The button is as wide as its largest view, so it doesn't move when the view changes;
+      with view-size="current" it follows the current view and animates its width.
       motion-preset picks how views switch: fade (default), slide, scale, blur, spring or none.
     html: |
       <le-button view="idle" onclick="this.view = 'done'; setTimeout(() => this.view = 'idle', 1500)">
@@ -42,6 +43,12 @@ recipes:
       </le-button>
 
       <le-button view="closed" motion-preset="slide"
+        onclick="this.view = this.view === 'open' ? 'closed' : 'open'">
+        <span view="closed">Show all 12 lines</span>
+        <span view="open">Show less</span>
+      </le-button>
+
+      <le-button view="closed" view-size="current"
         onclick="this.view = this.view === 'open' ? 'closed' : 'open'">
         <span view="closed">Show all 12 lines</span>
         <span view="open">Show less</span>

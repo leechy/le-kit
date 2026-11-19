@@ -122,10 +122,26 @@ Generated from the Stencil docs metadata the site already uses (`le-kit/dist/doc
 Read-only, highlighted, with a copy button; reflects current control values (only non-default
 attributes) and slot content. Editable code is a later layer.
 
-## API tab
+## API tabs (decided 2026-11-19)
 
-Generated: properties (name/attribute, type, default, description), events, slots, CSS custom
-properties, CSS parts. Each property has the `#@prop` anchor. Builds on `ApiTable.astro`.
+The API is split into tabs: **Properties · Events · Slots · Styles** (parts go to Styles). A tab is
+shown only when it has entries or a note. `#properties`, `#events`, `#slots`, `#styles` select a tab;
+`#api` still opens Properties; an anchor (`#@variant`) opens the tab that contains it.
+
+- **Notes** for a tab live next to the component: `<tag>.properties.md`, `.events.md`, `.slots.md`,
+  `.styles.md` (collection `componentNotes`). No file — no note.
+- **Properties** are cards grouped by `@category` in the prop's JSDoc (order fixed in
+  `ApiTable.astro`; `Set by containers` last and closed). Attribute name first, the JS name small;
+  values as chips with the default highlighted; booleans are flags. Cards vs. compact rows may be
+  revisited.
+- **Styles**: cards, not a table. The default of a CSS custom property is read from the component's
+  CSS (the `:host` block, or the fallback where it is used), not written by hand — shown as declared
+  (theme tokens as chips) and as computed now on a live sample in the current theme.
+- **Parts and slots — live anatomy**: a live sample of the component on the tab; hovering a part or
+  slot card highlights that element in the sample; "show all" draws labels with leader lines, from
+  the real DOM (`getBoundingClientRect` of shadow parts), so it never goes out of date.
+- **Slot examples** are their own small examples (in `<tag>.slots.md` or next to it), not recipes.
+  The Slots tab also explains views, with examples.
 
 ## Roadmap tab
 

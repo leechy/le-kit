@@ -436,9 +436,10 @@ span.icon-only.is-visible {
  * VIEWS
  * All children of one slot that are marked with `view` share one grid cell, so
  * the button is as large as its largest view and nothing moves on a switch.
+ * Only slots that have views become a grid (views-* classes).
  * The label wrapper is a block grid: inline-grid would not grow with wrapped text.
  * =========================================== */
-:host([view]) .le-button-label-visibility {
+:host(.views-label) .le-button-label-visibility {
   display: grid;
   justify-items: center;
   align-items: center;
@@ -446,8 +447,8 @@ span.icon-only.is-visible {
 
 /* Icons: the wrapper keeps no height (see ICON WRAPPERS), the track is 0 tall
    and the icon overflows it symmetrically, as with flex. */
-:host([view]) .icon-start.is-visible,
-:host([view]) .icon-end.is-visible {
+:host(.views-icon-start) .icon-start.is-visible,
+:host(.views-icon-end) .icon-end.is-visible {
   display: grid;
   grid-template-rows: 0;
   place-items: center;
@@ -455,6 +456,9 @@ span.icon-only.is-visible {
 
 ::slotted([view]) {
   grid-area: 1 / 1;
+  /* text-box trim doesn't reach through a grid container — each view trims its
+     own text, like the label wrapper does, so the button keeps its height. */
+  text-box: trim-both cap alphabetic;
   transition:
     opacity var(--le-motion-view-duration) var(--le-motion-view-easing),
     transform var(--le-motion-view-duration) var(--le-motion-view-easing),

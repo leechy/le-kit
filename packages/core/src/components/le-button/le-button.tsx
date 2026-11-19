@@ -66,6 +66,8 @@ export class LeButton {
   @State() private hasIconEndSlot: boolean = false;
   @State() private hasIconOnlySlot: boolean = false;
   @State() private dynamicLabel?: string;
+  /** Slots ('' = default) that have children marked with `view`. */
+  @State() private viewSlots: string[] = [];
 
   private disconnectSlotObserver?: () => void;
   private unsubscribeActionState?: () => void;
@@ -276,6 +278,8 @@ export class LeButton {
   /** Shows the marked children of the current view, hides the rest. */
   private applyView(animate: boolean) {
     const marked = Array.from(this.el.children).filter(child => child.hasAttribute('view'));
+    const slots = Array.from(new Set(marked.map(child => child.getAttribute('slot') ?? ''))).sort();
+    if (slots.join() !== this.viewSlots.join()) this.viewSlots = slots;
     if (!marked.length) return;
 
     const current = (this.view ?? marked[0].getAttribute('view') ?? '').split(/\s+/).filter(Boolean);
@@ -600,6 +604,10 @@ export class LeButton {
         'has-icon-start': hasIconStart && !hasIconOnly && !isCollapsedToIcon,
         'has-icon-end': hasIconEnd && !hasIconOnly && !isCollapsedToIcon,
         'disabled': this.disabled,
+        // Only slots with views become a grid of stacked views.
+        'views-label': this.viewSlots.includes(''),
+        'views-icon-start': this.viewSlots.includes('icon-start'),
+        'views-icon-end': this.viewSlots.includes('icon-end'),
       },
     );
 

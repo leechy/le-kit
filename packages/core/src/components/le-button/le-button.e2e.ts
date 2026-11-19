@@ -460,6 +460,20 @@ describe('le-button views', () => {
     expect(before).toBeGreaterThanOrEqual(label);
   });
 
+  it('is as tall as a button without views', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <le-button>Label</le-button>
+      <le-button view="a"><span view="a">Label</span></le-button>
+      <le-button view="a"><le-icon slot="icon-start" name="copy" view="a"></le-icon>Label</le-button>
+      <le-button size="large">Label</le-button>
+      <le-button size="large" view="a"><span view="a">Label</span></le-button>`);
+    const heights = await page.$$eval('le-button', els => els.map(el => el.getBoundingClientRect().height));
+    expect(heights[1]).toBe(heights[0]);
+    expect(heights[2]).toBe(heights[0]);
+    expect(heights[4]).toBe(heights[3]);
+  });
+
   it('leaves buttons without views alone', async () => {
     const page = await newE2EPage();
     await page.setContent('<le-button><span>Plain</span></le-button>');

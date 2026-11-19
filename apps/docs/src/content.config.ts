@@ -45,7 +45,25 @@ const componentPages = defineCollection({
   }),
 });
 
+/**
+ * Notes for the API tabs of a component page, one file per tab next to the
+ * component: `<tag>.properties.md`, `<tag>.events.md`, `<tag>.slots.md`,
+ * `<tag>.styles.md`. No file — no note. The entry id is `<tag>/<tab>`.
+ */
+const componentNotes = defineCollection({
+  loader: glob({
+    pattern: "*/*.{properties,events,slots,styles}.md",
+    base: "../../packages/core/src/components",
+    generateId: ({ entry }) => {
+      const [dir, file] = entry.split("/");
+      return `${dir}/${file.split(".").at(-2)}`;
+    },
+  }),
+  schema: z.object({}),
+});
+
 export const collections = {
   blog,
   componentPages,
+  componentNotes,
 };

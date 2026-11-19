@@ -1,9 +1,11 @@
 ---
 /**
  * Generic component page: overview + Playground / API / Roadmap tabs.
- * Content comes from `packages/core/src/components/<tag>/<tag>.page.md`.
+ * Content comes from `packages/core/src/components/<tag>/<tag>.page.md`; notes for the
+ * API tabs from `<tag>.properties.md`, `.events.md`, `.slots.md`, `.styles.md` next to it.
  */
 import { getEntry, render } from "astro:content";
+import docs from "le-kit/dist/docs.json";
 import ApiTable from "../ApiTable.astro";
 import Stage from "./Stage.astro";
 import CodeBlock from "../CodeBlock.astro";
@@ -17,7 +19,25 @@ const entry = await getEntry("componentPages", tag);
 if (!entry) throw new Error(`No page content for ${tag} (expected ${tag}.page.md next to the component)`);
 
 const { tagline, hero, heroDirection, heroWidth, whenToUse, whenNotToUse, recipes } = entry.data;
-const { Content } = await render(entry);
+
+/** API tabs: a tab is shown only when it has entries or a note (`<tag>.<tab>.md`). */
+const apiDocs: any = docs.components.find((c: any) => c.tag === tag) ?? {};
+const apiTabs = await Promise.all(
+  [
+    { value: "properties", label: "Properties", count: apiDocs.props?.length ?? 0 },
+    { value: "events", label: "Events", count: apiDocs.events?.length ?? 0 },
+    { value: "slots", label: "Slots", count: apiDocs.slots?.length ?? 0 },
+    {
+      value: "styles",
+      label: "Styles",
+      count:
+        (apiDocs.docsTags ?? []).filter((t: any) => t.name === "cssprop").length + (apiDocs.parts?.length ?? 0),
+    },
+  ].map(async (tab) => {
+    const note = await getEntry("componentNotes", `${tag}/${tab.value}`);
+    return { ...tab, Note: note ? (await render(note)).Content : undefined };
+  }),
+).then((tabs) => tabs.filter((tab) => tab.count > 0 || tab.Note));
 const recipe = recipes[0];
 /** The recipe select is at least as wide as its longest option. */
 const longestRecipeTitle = Math.max(...recipes.map((item) => item.title.length));
@@ -125,10 +145,18 @@ const inline = (text: string) =>
     </section>
   </le-tab-panel>
 
-  <le-tab-panel label="API" value="api">
-    <div class="notes"><Content /></div>
-    <ApiTable tag={tag} />
-  </le-tab-panel>
+  {
+    apiTabs.map(({ value, label, Note }) => (
+      <le-tab-panel label={label} value={value}>
+        {Note && (
+          <div class="notes">
+            <Note />
+          </div>
+        )}
+        <ApiTable tag={tag} section={value as "properties" | "events" | "slots" | "styles"} />
+      </le-tab-panel>
+    ))
+  }
 
   <le-tab-panel label="Roadmap" value="roadmap">
     <p class="placeholder">Coming soon: what is wanted, in discussion, planned and rejected for this component.</p>

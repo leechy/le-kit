@@ -77,34 +77,40 @@ export class LeButton {
 
   /**
    * Action ID that this button triggers when bound to a list.
+   * @category Actions
    */
   @Prop({ reflect: true }) action?: string;
 
   /**
    * Bound list ID(s) (comma-separated list of IDs).
    * If omitted, inherits bind-list from the nearest parent <le-toolbar>.
+   * @category Actions
    */
   @Prop({ attribute: 'bind-list', reflect: true }) bindList?: string;
 
   /**
-   * Mode of the popover should be 'default' for internal use
+   * `admin` turns on CMS editing of the button; `default` is normal use
+   * @category CMS
    */
   @Prop({ mutable: true, reflect: true }) mode?: 'default' | 'admin';
 
   /**
    * Button variant style
    * @allowedValues solid | filled | outlined | clear | system
+   * @category Appearance
    */
   @Prop() variant: 'solid' | 'filled' | 'outlined' | 'clear' | 'system' = 'outlined';
 
   /**
    * Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API).
+   * @category Appearance
    */
   @Prop({ reflect: true }) filled: boolean = false;
 
   /**
    * Button color theme (uses theme semantic colors)
    * @allowedValues primary | secondary | success | warning | danger | info
+   * @category Appearance
    */
   @Prop() color?:
     | 'primary'
@@ -118,44 +124,52 @@ export class LeButton {
   /**
    * Button size
    * @allowedValues small | medium | large
+   * @category Appearance
    */
   @Prop() size: 'small' | 'medium' | 'large' = 'medium';
 
   /**
    * Whether the button is in a selected/active state
+   * @category State
    */
   @Prop({ reflect: true, mutable: true }) selected: boolean = false;
 
   /**
    * The value associated with the button (useful when in a button group)
+   * @category Link & form
    */
   @Prop({ reflect: true }) value?: string;
 
   /**
    * Optional label for the button,
    * used for accessibility and tooltips when the button is icon-only.
+   * @category Content
    */
   @Prop() label?: string;
 
   /**
    * Tooltip text to show on hover
+   * @category Content
    */
   @Prop() tooltip?: string;
 
   /**
    * Tooltip position around the button
    * @allowedValues auto | top | bottom | left | right
+   * @category Content
    */
   @Prop() tooltipPosition: TooltipPlacement = 'top';
 
   /**
    * Whether the button takes full width of its container
+   * @category Appearance
    */
   @Prop({ reflect: true }) fullWidth: boolean = false;
 
   /**
    * Visibility state used by responsive containers to animate show/hide transitions.
    * @allowedValues visible | collapsing | collapsed | expanding
+   * @category Set by containers
    */
   @Prop({ reflect: true }) visibility: 'visible' | 'collapsing' | 'collapsed' | 'expanding' =
     'visible';
@@ -163,6 +177,7 @@ export class LeButton {
   /**
    * Shape of the button when rendered inside grouped containers.
    * @allowedValues start | middle | end | single
+   * @category Set by containers
    */
   @Prop({ reflect: true }) groupShape: 'start' | 'middle' | 'end' | 'single' = 'single';
 
@@ -170,6 +185,7 @@ export class LeButton {
    * Optional per-instance motion preset override. `soft | fluid | spring` also set how
    * the label collapses in a toolbar; `fade | slide | scale | blur` only how views switch.
    * @allowedValues none | soft | fluid | spring | fade | slide | scale | blur
+   * @category Motion
    */
   @Prop({ reflect: true }) motionPreset?:
     | 'none'
@@ -184,87 +200,103 @@ export class LeButton {
   /**
    * Icon only button image or emoji
    * if this prop is set, the button will render only the icon slot
+   * @category Content
    */
   @Prop() iconOnly?: string | Node;
 
   /**
    * Start icon image or emoji
+   * @category Content
    */
   @Prop() iconStart?: string | Node;
 
   /**
    * Notification count for shorthand icons.
    * Applies to start icon, or icon-only if set.
+   * @category Content
    */
   @Prop() iconCount?: number;
 
   /**
    * Count specifically for iconStart.
+   * @category Content
    */
   @Prop() iconStartCount?: number;
 
   /**
    * Enables responsive collapse to icon-only when the toolbar applies
    * `collapse="icon"`.
+   * @category Toolbar
    */
   @Prop({ reflect: true }) collapsible: boolean = false;
 
   /**
    * Runtime collapse state controlled by responsive containers.
+   * @category Set by containers
    */
   @Prop({ reflect: true }) collapse?: string;
 
   /**
    * Relative collapse priority offset for toolbar stepping.
    * Higher numbers collapse earlier while keeping the button visible longer.
+   * @category Toolbar
    */
   @Prop() collapsePriorityOffset: number = 100;
 
   /**
    * End icon image or emoji
+   * @category Content
    */
   @Prop() iconEnd?: string | Node;
 
   /**
    * Count specifically for iconEnd.
+   * @category Content
    */
   @Prop() iconEndCount?: number;
 
   /**
    * Count specifically for iconOnly.
+   * @category Content
    */
   @Prop() iconOnlyCount?: number;
 
   /**
    * Whether the button is disabled
+   * @category State
    */
   @Prop({ mutable: true, reflect: true }) disabled: boolean = false;
 
   /**
    * The button type attribute
    * @allowedValues button | submit | reset
+   * @category Link & form
    */
   @Prop() type: 'button' | 'submit' | 'reset' = 'button';
 
   /**
    * Optional href to make the button act as a link
+   * @category Link & form
    */
   @Prop() href?: string;
 
   /**
    * Link target when href is set
+   * @category Link & form
    */
   @Prop() target?: string;
 
   /**
    * Alignment of the button label without the end icon
    * @allowedValues start | center | space-between | end
+   * @category Appearance
    */
   @Prop() align: 'start' | 'center' | 'space-between' | 'end' = 'center';
 
   /**
    * Current view: shows the children marked with this `view` and hides the other
    * marked ones. Without it, the first marked child's view is shown.
+   * @category State
    */
   @Prop({ reflect: true }) view?: string;
 
@@ -273,6 +305,7 @@ export class LeButton {
    * the largest view, so nothing moves; `current` follows the current view and
    * animates the width when the view changes.
    * @allowedValues largest | current
+   * @category State
    */
   @Prop({ attribute: 'view-size', reflect: true }) viewSize: 'largest' | 'current' = 'largest';
 

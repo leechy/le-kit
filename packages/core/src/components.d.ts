@@ -411,35 +411,42 @@ export namespace Components {
     interface LeButton {
         /**
           * Action ID that this button triggers when bound to a list.
+          * @category Actions
          */
         "action"?: string;
         /**
           * Alignment of the button label without the end icon
           * @allowedValues start | center | space-between | end
+          * @category Appearance
           * @default 'center'
          */
         "align": 'start' | 'center' | 'space-between' | 'end';
         /**
           * Bound list ID(s) (comma-separated list of IDs). If omitted, inherits bind-list from the nearest parent <le-toolbar>.
+          * @category Actions
          */
         "bindList"?: string;
         /**
           * Runtime collapse state controlled by responsive containers.
+          * @category Set by containers
          */
         "collapse"?: string;
         /**
           * Relative collapse priority offset for toolbar stepping. Higher numbers collapse earlier while keeping the button visible longer.
+          * @category Toolbar
           * @default 100
          */
         "collapsePriorityOffset": number;
         /**
           * Enables responsive collapse to icon-only when the toolbar applies `collapse="icon"`.
+          * @category Toolbar
           * @default false
          */
         "collapsible": boolean;
         /**
           * Button color theme (uses theme semantic colors)
           * @allowedValues primary | secondary | success | warning | danger | info
+          * @category Appearance
          */
         "color"?: | 'primary'
     | 'secondary'
@@ -450,16 +457,19 @@ export namespace Components {
     | 'transparent';
         /**
           * Whether the button is disabled
+          * @category State
           * @default false
          */
         "disabled": boolean;
         /**
           * Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API).
+          * @category Appearance
           * @default false
          */
         "filled": boolean;
         /**
           * Whether the button takes full width of its container
+          * @category Appearance
           * @default false
          */
         "fullWidth": boolean;
@@ -471,52 +481,64 @@ export namespace Components {
         /**
           * Shape of the button when rendered inside grouped containers.
           * @allowedValues start | middle | end | single
+          * @category Set by containers
           * @default 'single'
          */
         "groupShape": 'start' | 'middle' | 'end' | 'single';
         /**
           * Optional href to make the button act as a link
+          * @category Link & form
          */
         "href"?: string;
         /**
           * Notification count for shorthand icons. Applies to start icon, or icon-only if set.
+          * @category Content
          */
         "iconCount"?: number;
         /**
           * End icon image or emoji
+          * @category Content
          */
         "iconEnd"?: string | Node;
         /**
           * Count specifically for iconEnd.
+          * @category Content
          */
         "iconEndCount"?: number;
         /**
           * Icon only button image or emoji if this prop is set, the button will render only the icon slot
+          * @category Content
          */
         "iconOnly"?: string | Node;
         /**
           * Count specifically for iconOnly.
+          * @category Content
          */
         "iconOnlyCount"?: number;
         /**
           * Start icon image or emoji
+          * @category Content
          */
         "iconStart"?: string | Node;
         /**
           * Count specifically for iconStart.
+          * @category Content
          */
         "iconStartCount"?: number;
         /**
           * Optional label for the button, used for accessibility and tooltips when the button is icon-only.
+          * @category Content
          */
         "label"?: string;
         /**
-          * Mode of the popover should be 'default' for internal use
+          * `admin` turns on CMS editing of the button; `default` is normal use
+          * @category CMS
          */
         "mode"?: 'default' | 'admin';
         /**
           * Optional per-instance motion preset override. `soft | fluid | spring` also set how the label collapses in a toolbar; `fade | slide | scale | blur` only how views switch.
           * @allowedValues none | soft | fluid | spring | fade | slide | scale | blur
+          * @category Motion
          */
         "motionPreset"?: | 'none'
     | 'soft'
@@ -532,58 +554,69 @@ export namespace Components {
         "refreshActionState": () => Promise<void>;
         /**
           * Whether the button is in a selected/active state
+          * @category State
           * @default false
          */
         "selected": boolean;
         /**
           * Button size
           * @allowedValues small | medium | large
+          * @category Appearance
           * @default 'medium'
          */
         "size": 'small' | 'medium' | 'large';
         /**
           * Link target when href is set
+          * @category Link & form
          */
         "target"?: string;
         /**
           * Tooltip text to show on hover
+          * @category Content
          */
         "tooltip"?: string;
         /**
           * Tooltip position around the button
           * @allowedValues auto | top | bottom | left | right
+          * @category Content
           * @default 'top'
          */
         "tooltipPosition": TooltipPlacement;
         /**
           * The button type attribute
           * @allowedValues button | submit | reset
+          * @category Link & form
           * @default 'button'
          */
         "type": 'button' | 'submit' | 'reset';
         /**
           * The value associated with the button (useful when in a button group)
+          * @category Link & form
          */
         "value"?: string;
         /**
           * Button variant style
           * @allowedValues solid | filled | outlined | clear | system
+          * @category Appearance
           * @default 'outlined'
          */
         "variant": 'solid' | 'filled' | 'outlined' | 'clear' | 'system';
         /**
           * Current view: shows the children marked with this `view` and hides the other marked ones. Without it, the first marked child's view is shown.
+          * @category State
          */
         "view"?: string;
         /**
           * Size of a button with views in the label: `largest` (default) keeps the size of the largest view, so nothing moves; `current` follows the current view and animates the width when the view changes.
           * @allowedValues largest | current
+          * @category State
           * @default 'largest'
          */
         "viewSize": 'largest' | 'current';
         /**
           * Visibility state used by responsive containers to animate show/hide transitions.
           * @allowedValues visible | collapsing | collapsed | expanding
+          * @category Set by containers
           * @default 'visible'
          */
         "visibility": 'visible' | 'collapsing' | 'collapsed' | 'expanding';
@@ -5325,35 +5358,42 @@ declare namespace LocalJSX {
     interface LeButton {
         /**
           * Action ID that this button triggers when bound to a list.
+          * @category Actions
          */
         "action"?: string;
         /**
           * Alignment of the button label without the end icon
           * @allowedValues start | center | space-between | end
+          * @category Appearance
           * @default 'center'
          */
         "align"?: 'start' | 'center' | 'space-between' | 'end';
         /**
           * Bound list ID(s) (comma-separated list of IDs). If omitted, inherits bind-list from the nearest parent <le-toolbar>.
+          * @category Actions
          */
         "bindList"?: string;
         /**
           * Runtime collapse state controlled by responsive containers.
+          * @category Set by containers
          */
         "collapse"?: string;
         /**
           * Relative collapse priority offset for toolbar stepping. Higher numbers collapse earlier while keeping the button visible longer.
+          * @category Toolbar
           * @default 100
          */
         "collapsePriorityOffset"?: number;
         /**
           * Enables responsive collapse to icon-only when the toolbar applies `collapse="icon"`.
+          * @category Toolbar
           * @default false
          */
         "collapsible"?: boolean;
         /**
           * Button color theme (uses theme semantic colors)
           * @allowedValues primary | secondary | success | warning | danger | info
+          * @category Appearance
          */
         "color"?: | 'primary'
     | 'secondary'
@@ -5364,68 +5404,83 @@ declare namespace LocalJSX {
     | 'transparent';
         /**
           * Whether the button is disabled
+          * @category State
           * @default false
          */
         "disabled"?: boolean;
         /**
           * Shorthand boolean to render button with solid/filled background (matches <le-icon filled> API).
+          * @category Appearance
           * @default false
          */
         "filled"?: boolean;
         /**
           * Whether the button takes full width of its container
+          * @category Appearance
           * @default false
          */
         "fullWidth"?: boolean;
         /**
           * Shape of the button when rendered inside grouped containers.
           * @allowedValues start | middle | end | single
+          * @category Set by containers
           * @default 'single'
          */
         "groupShape"?: 'start' | 'middle' | 'end' | 'single';
         /**
           * Optional href to make the button act as a link
+          * @category Link & form
          */
         "href"?: string;
         /**
           * Notification count for shorthand icons. Applies to start icon, or icon-only if set.
+          * @category Content
          */
         "iconCount"?: number;
         /**
           * End icon image or emoji
+          * @category Content
          */
         "iconEnd"?: string | Node;
         /**
           * Count specifically for iconEnd.
+          * @category Content
          */
         "iconEndCount"?: number;
         /**
           * Icon only button image or emoji if this prop is set, the button will render only the icon slot
+          * @category Content
          */
         "iconOnly"?: string | Node;
         /**
           * Count specifically for iconOnly.
+          * @category Content
          */
         "iconOnlyCount"?: number;
         /**
           * Start icon image or emoji
+          * @category Content
          */
         "iconStart"?: string | Node;
         /**
           * Count specifically for iconStart.
+          * @category Content
          */
         "iconStartCount"?: number;
         /**
           * Optional label for the button, used for accessibility and tooltips when the button is icon-only.
+          * @category Content
          */
         "label"?: string;
         /**
-          * Mode of the popover should be 'default' for internal use
+          * `admin` turns on CMS editing of the button; `default` is normal use
+          * @category CMS
          */
         "mode"?: 'default' | 'admin';
         /**
           * Optional per-instance motion preset override. `soft | fluid | spring` also set how the label collapses in a toolbar; `fade | slide | scale | blur` only how views switch.
           * @allowedValues none | soft | fluid | spring | fade | slide | scale | blur
+          * @category Motion
          */
         "motionPreset"?: | 'none'
     | 'soft'
@@ -5441,58 +5496,69 @@ declare namespace LocalJSX {
         "onClick"?: (event: LeButtonCustomEvent<MouseEvent>) => void;
         /**
           * Whether the button is in a selected/active state
+          * @category State
           * @default false
          */
         "selected"?: boolean;
         /**
           * Button size
           * @allowedValues small | medium | large
+          * @category Appearance
           * @default 'medium'
          */
         "size"?: 'small' | 'medium' | 'large';
         /**
           * Link target when href is set
+          * @category Link & form
          */
         "target"?: string;
         /**
           * Tooltip text to show on hover
+          * @category Content
          */
         "tooltip"?: string;
         /**
           * Tooltip position around the button
           * @allowedValues auto | top | bottom | left | right
+          * @category Content
           * @default 'top'
          */
         "tooltipPosition"?: TooltipPlacement;
         /**
           * The button type attribute
           * @allowedValues button | submit | reset
+          * @category Link & form
           * @default 'button'
          */
         "type"?: 'button' | 'submit' | 'reset';
         /**
           * The value associated with the button (useful when in a button group)
+          * @category Link & form
          */
         "value"?: string;
         /**
           * Button variant style
           * @allowedValues solid | filled | outlined | clear | system
+          * @category Appearance
           * @default 'outlined'
          */
         "variant"?: 'solid' | 'filled' | 'outlined' | 'clear' | 'system';
         /**
           * Current view: shows the children marked with this `view` and hides the other marked ones. Without it, the first marked child's view is shown.
+          * @category State
          */
         "view"?: string;
         /**
           * Size of a button with views in the label: `largest` (default) keeps the size of the largest view, so nothing moves; `current` follows the current view and animates the width when the view changes.
           * @allowedValues largest | current
+          * @category State
           * @default 'largest'
          */
         "viewSize"?: 'largest' | 'current';
         /**
           * Visibility state used by responsive containers to animate show/hide transitions.
           * @allowedValues visible | collapsing | collapsed | expanding
+          * @category Set by containers
           * @default 'visible'
          */
         "visibility"?: 'visible' | 'collapsing' | 'collapsed' | 'expanding';

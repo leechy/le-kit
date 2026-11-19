@@ -80,7 +80,9 @@ export function initComponentPageTabs(
   tabs: StencilElement,
   recipes?: { select: (id: string) => void; firstId: string },
 ) {
-  const select = (tab: PageTab) => {
+  const select = (wanted: PageTab) => {
+    // Tabs without content are not rendered (e.g. #events on a component without events).
+    const tab = tabs.querySelector(`le-tab-panel[value="${wanted}"]`) ? wanted : 'playground';
     if (tabs.getAttribute('selected') !== tab) tabs.setAttribute('selected', tab);
   };
 

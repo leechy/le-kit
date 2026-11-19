@@ -1,12 +1,13 @@
 /**
  * URL hash handling for component pages.
  *
- * `#api`, `#roadmap`, `#playground` select a tab; `#recipe-<id>` selects a
+ * `#playground`, `#properties`, `#events`, `#slots`, `#styles`, `#roadmap` select a
+ * tab (`#api`, the old single API tab, opens `#properties`); `#recipe-<id>` selects a
  * playground recipe; anything else is an anchor id (e.g. `#@variant`), and the
  * page opens whichever tab contains that element.
  */
 
-export type PageTab = 'playground' | 'api' | 'roadmap';
+export type PageTab = 'playground' | 'properties' | 'events' | 'slots' | 'styles' | 'roadmap';
 
 export type HashTarget =
   | { kind: 'tab'; tab: PageTab }
@@ -14,7 +15,9 @@ export type HashTarget =
   | { kind: 'anchor'; id: string }
   | { kind: 'none' };
 
-const TABS: readonly PageTab[] = ['playground', 'api', 'roadmap'];
+const TABS: readonly PageTab[] = ['playground', 'properties', 'events', 'slots', 'styles', 'roadmap'];
+/** Old tab names, kept so existing links still work. */
+const TAB_ALIASES: Record<string, PageTab> = { api: 'properties' };
 const RECIPE_PREFIX = 'recipe-';
 
 export function parseHash(hash: string): HashTarget {
@@ -27,6 +30,7 @@ export function parseHash(hash: string): HashTarget {
 
   if (!value) return { kind: 'none' };
   if ((TABS as readonly string[]).includes(value)) return { kind: 'tab', tab: value as PageTab };
+  if (Object.hasOwn(TAB_ALIASES, value)) return { kind: 'tab', tab: TAB_ALIASES[value] };
   if (value.startsWith(RECIPE_PREFIX)) {
     const id = value.slice(RECIPE_PREFIX.length);
     return id ? { kind: 'recipe', id } : { kind: 'none' };

@@ -13,9 +13,16 @@ test('empty hash is none', () => {
 });
 
 test('tab names select tabs', () => {
-  assert.deepEqual(parseHash('#api'), { kind: 'tab', tab: 'api' });
+  assert.deepEqual(parseHash('#properties'), { kind: 'tab', tab: 'properties' });
+  assert.deepEqual(parseHash('#events'), { kind: 'tab', tab: 'events' });
+  assert.deepEqual(parseHash('#slots'), { kind: 'tab', tab: 'slots' });
+  assert.deepEqual(parseHash('#styles'), { kind: 'tab', tab: 'styles' });
   assert.deepEqual(parseHash('#roadmap'), { kind: 'tab', tab: 'roadmap' });
   assert.deepEqual(parseHash('#playground'), { kind: 'tab', tab: 'playground' });
+});
+
+test('#api is an old name of the properties tab', () => {
+  assert.deepEqual(parseHash('#api'), { kind: 'tab', tab: 'properties' });
 });
 
 test('recipe hash selects a recipe', () => {
@@ -27,6 +34,7 @@ test('other hashes are anchors, decoded', () => {
   assert.deepEqual(parseHash('#@variant'), { kind: 'anchor', id: '@variant' });
   assert.deepEqual(parseHash('#%40variant'), { kind: 'anchor', id: '@variant' });
   assert.deepEqual(parseHash('#usage'), { kind: 'anchor', id: 'usage' });
+  assert.deepEqual(parseHash('#toString'), { kind: 'anchor', id: 'toString' });
 });
 
 test('malformed encoding is none', () => {
@@ -35,6 +43,7 @@ test('malformed encoding is none', () => {
 
 test('hashForTab', () => {
   assert.equal(hashForTab('playground'), '');
-  assert.equal(hashForTab('api'), '#api');
+  assert.equal(hashForTab('properties'), '#properties');
+  assert.equal(hashForTab('styles'), '#styles');
   assert.equal(hashForTab('roadmap'), '#roadmap');
 });

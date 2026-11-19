@@ -3,9 +3,11 @@ import docs from 'le-kit/dist/docs.json';
 
 interface Props {
 	tag: string;
+	/** Which part of the API to show — one per component page tab. */
+	section: 'properties' | 'events' | 'slots' | 'styles';
 }
 
-const { tag } = Astro.props;
+const { tag, section } = Astro.props;
 
 const component = docs.components.find((c: any) => c.tag === tag);
 
@@ -24,40 +26,102 @@ const cssProps = (component.docsTags || [])
     return { name: parts[0], docs: parts.slice(1).join(' - ') };
   });
 const cssParts = component.parts || [];
+
+/** Groups come from `@category` in the prop's JSDoc; this is their order. */
+const CATEGORY_ORDER = ['Appearance', 'Content', 'State', 'Link & form', 'Motion', 'Toolbar', 'Actions', 'CMS'];
+/** Props a container sets — shown last, closed. */
+const CONTAINER_CATEGORY = 'Set by containers';
+
+const docTag = (prop: any, name: string) => prop.docsTags?.find((t: any) => t.name === name)?.text;
+
+/** Values as chips: enum values, or a kind for free values; booleans are flags. */
+function describe(prop: any) {
+  const def = prop.default ? String(prop.default).replace(/^'|'$/g, '') : undefined;
+  const literals = (prop.values ?? []).filter((v: any) => v.value !== undefined).map((v: any) => v.value);
+  const kinds = (prop.values ?? [])
+    .filter((v: any) => v.value === undefined && v.type !== 'undefined')
+    .map((v: any) => v.type);
+  const flag = kinds.length === 1 && kinds[0] === 'boolean';
+  return { def, literals, kinds: flag ? [] : kinds, flag };
+}
+
+/** JSDoc text as one paragraph with inline `code`. */
+const docText = (text: string) =>
+  (text ?? '')
+    .replace(/\s*\n\s*/g, ' ')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
+
+const grouped = new Map<string, any[]>();
+for (const prop of props) {
+  const category = docTag(prop, 'category') ?? 'Other';
+  grouped.set(category, [...(grouped.get(category) ?? []), { prop, ...describe(prop) }]);
+}
+const rank = (c: string) => (c === CONTAINER_CATEGORY ? 99 : CATEGORY_ORDER.includes(c) ? CATEGORY_ORDER.indexOf(c) : 50);
+const propGroups = [...grouped.entries()]
+  .sort(([a], [b]) => rank(a) - rank(b) || a.localeCompare(b))
+  .map(([title, items]) => ({ title, items, closed: title === CONTAINER_CATEGORY }));
+const hasCategories = props.some((p: any) => docTag(p, 'category'));
 ---
 
 <div class="api-tables">
-	{props.length > 0 && (
+	{section === 'properties' && props.length > 0 && (
 		<section>
-			<le-text typography="h3">Properties</le-text>
-			<div class="table-wrapper">
-				<table>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Type</th>
-							<th>Default</th>
-							<th>Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						{props.map((prop: any) => (
-							<tr id={`@${prop.attr ?? prop.name}`}>
-								<td><code>{prop.name}</code> {prop.required && <span>*</span>}</td>
-								<td><code>{prop.type}</code></td>
-								<td>{prop.default ? <code>{prop.default}</code> : <em>-</em>}</td>
-								<td>{prop.docs}</td>
-							</tr>
+			{propGroups.map((group) => {
+				const cardsList = (
+					<div class="prop-cards">
+						{group.items.map(({ prop, def, literals, kinds, flag }) => (
+							<article class="prop-card" id={`@${prop.attr ?? prop.name}`}>
+								<header>
+									<code class="prop-attr">{prop.attr ?? prop.name}</code>
+									{flag ? (
+										<span class="prop-default">flag</span>
+									) : (
+										def && (
+											<span class="prop-default">
+												default <code>{def}</code>
+											</span>
+										)
+									)}
+								</header>
+								<p class="prop-docs" set:html={docText(prop.docs)} />
+								{(literals.length > 0 || kinds.length > 0) && (
+									<div class="prop-values">
+										{literals.map((v: string) => (
+											<span class:list={['chip', { 'chip-default': v === def }]}>{v}</span>
+										))}
+										{kinds.map((k: string) => (
+											<span class="chip chip-kind">{k}</span>
+										))}
+									</div>
+								)}
+								{prop.attr && prop.attr !== prop.name && (
+									<footer>
+										JS: <code>{prop.name}</code>
+									</footer>
+								)}
+							</article>
 						))}
-					</tbody>
-				</table>
-			</div>
+					</div>
+				);
+				return group.closed ? (
+					<details class="prop-group">
+						<summary class="prop-group-title">{group.title}</summary>
+						{cardsList}
+					</details>
+				) : (
+					<div class="prop-group">
+						{hasCategories && <h4 class="prop-group-title">{group.title}</h4>}
+						{cardsList}
+					</div>
+				);
+			})}
 		</section>
 	)}
 
-	{events.length > 0 && (
+	{section === 'events' && events.length > 0 && (
 		<section>
-			<le-text typography="h3">Events</le-text>
 			<div class="table-wrapper">
 				<table>
 					<thead>
@@ -81,9 +145,8 @@ const cssParts = component.parts || [];
 		</section>
 	)}
 
-	{slots.length > 0 && (
+	{section === 'slots' && slots.length > 0 && (
 		<section>
-			<le-text typography="h3">Slots</le-text>
 			<div class="table-wrapper">
 				<table>
 					<thead>
@@ -105,9 +168,9 @@ const cssParts = component.parts || [];
 		</section>
 	)}
 
-	{cssProps.length > 0 && (
+	{section === 'styles' && cssProps.length > 0 && (
 		<section>
-			<le-text typography="h3">CSS Custom Properties</le-text>
+			<h3 class="api-heading">CSS custom properties</h3>
 			<div class="table-wrapper">
 				<table>
 					<thead>
@@ -129,9 +192,9 @@ const cssParts = component.parts || [];
 		</section>
 	)}
   
-  {cssParts.length > 0 && (
+	{section === 'styles' && cssParts.length > 0 && (
 		<section>
-			<le-text typography="h3">CSS Shadow Parts</le-text>
+			<h3 class="api-heading">Parts</h3>
 			<div class="table-wrapper">
 				<table>
 					<thead>
@@ -181,6 +244,97 @@ const cssParts = component.parts || [];
 		font-weight: 600;
 	}
 	
+	/* Properties: cards grouped by @category */
+	.prop-group {
+		margin-top: var(--le-spacing-4);
+	}
+
+	.prop-group-title {
+		margin: 0 0 var(--le-spacing-2);
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		opacity: 0.6;
+	}
+
+	summary.prop-group-title {
+		cursor: pointer;
+	}
+
+	.prop-cards {
+		display: grid;
+		gap: var(--le-spacing-2);
+	}
+
+	.prop-card {
+		padding: var(--le-spacing-3) var(--le-spacing-4);
+		border-radius: var(--le-radius-lg);
+		background: color-mix(in srgb, var(--le-color-surface-elevated, #fff), transparent 40%);
+		box-shadow: var(--le-shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.08));
+		scroll-margin-top: calc(var(--le-header-height, 0px) + var(--le-spacing-4));
+	}
+
+	.prop-card header {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: var(--le-spacing-4);
+	}
+
+	.prop-attr {
+		font-weight: 600;
+		font-size: 0.95rem;
+	}
+
+	.prop-default {
+		font-size: 0.8rem;
+		opacity: 0.7;
+	}
+
+	.prop-docs {
+		margin: var(--le-spacing-1) 0;
+		font-size: 0.9rem;
+	}
+
+	.prop-values {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--le-spacing-1);
+	}
+
+	.chip {
+		display: inline-block;
+		padding: 0.05rem 0.45rem;
+		border-radius: 999px;
+		border: 1px solid var(--le-color-border);
+		font-family: var(--le-font-family-mono);
+		font-size: 0.78rem;
+		line-height: 1.5;
+	}
+
+	.chip-default {
+		background: var(--le-color-primary);
+		border-color: var(--le-color-primary);
+		color: var(--le-color-on-primary, #fff);
+	}
+
+	.chip-kind {
+		border-style: dashed;
+		opacity: 0.8;
+	}
+
+	.prop-card footer {
+		margin-top: var(--le-spacing-1);
+		font-size: 0.75rem;
+		opacity: 0.55;
+	}
+
+	.prop-card :is(.prop-attr, .prop-default code, footer code, .prop-docs code) {
+		padding: 0;
+		background: none;
+	}
+
 	code {
 		font-family: monospace;
 		padding: 2px 4px;

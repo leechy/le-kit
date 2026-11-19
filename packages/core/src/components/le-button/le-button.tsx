@@ -279,7 +279,8 @@ export class LeButton {
   private applyView(animate: boolean) {
     const marked = Array.from(this.el.children).filter(child => child.hasAttribute('view'));
     const slots = Array.from(new Set(marked.map(child => child.getAttribute('slot') ?? ''))).sort();
-    if (slots.join() !== this.viewSlots.join()) this.viewSlots = slots;
+    // JSON, not join(): [''] (views only in the label) must differ from [].
+    if (JSON.stringify(slots) !== JSON.stringify(this.viewSlots)) this.viewSlots = slots;
     if (!marked.length) return;
 
     const current = (this.view ?? marked[0].getAttribute('view') ?? '').split(/\s+/).filter(Boolean);

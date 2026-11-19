@@ -460,6 +460,16 @@ describe('le-button views', () => {
     expect(before).toBeGreaterThanOrEqual(label);
   });
 
+  it('stacks views that are only in the label', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <le-button view="closed"><span view="closed">Show all 12 lines</span><span view="open">Show less</span></le-button>
+      <le-button>Show all 12 lines</le-button>`);
+    const [views, single] = await page.$$eval('le-button', els => els.map(el => Math.round(el.getBoundingClientRect().width)));
+    // As wide as the longest view, not both labels side by side.
+    expect(views).toBe(single);
+  });
+
   it('is as tall as a button without views', async () => {
     const page = await newE2EPage();
     await page.setContent(`

@@ -1,0 +1,445 @@
+---
+/**
+ * Prototype of `view` (see docs/superpowers/specs/2026-11-19-view-design.md): a container shows the children whose `view`
+ * matches its own. Kept as a reference, not part of the docs. No core changes — a small script below
+ * plays the part the components would play, and the `.views` wrappers stand in
+ * for what le-button would do inside its shadow DOM.
+ */
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Lab: views">
+  <main class="lab">
+    <h1>view — prototype</h1>
+    <p class="lead">
+      A container has <code>view="…"</code>; children with <code>view="a b"</code> are shown in views <code>a</code> and
+      <code>b</code>; children without it are always shown. The container decides <em>how</em> to switch:
+      a button cross-fades (and is as large as its largest view), a block collapses (height animates, no measuring).
+    </p>
+
+    <div class="presets" data-presets>
+      <span>Motion preset (on <code>&lt;html&gt;</code>, whole page):</span>
+      {["none", "fade", "slide", "scale", "blur", "spring"].map((p) => (
+        <le-button size="small" variant="outlined" selected={p === "fade"} data-preset={p}>{p}</le-button>
+      ))}
+    </div>
+
+    <h2>1. Buttons — cross-fade, size of the largest view</h2>
+
+    <div class="row">
+      <le-button variant="outlined" view="idle" data-views data-copy>
+        <span slot="icon-start" class="views">
+          <le-icon name="copy" view="idle"></le-icon>
+          <le-icon name="check" view="done"></le-icon>
+        </span>
+        <span class="views">
+          <span view="idle">Copy</span>
+          <span view="done" aria-live="polite">Copied</span>
+        </span>
+      </le-button>
+
+      <le-button variant="solid" view="idle" data-views data-save>
+        <span slot="icon-start" class="views">
+          <le-icon name="save" view="idle"></le-icon>
+          <span class="spinner" view="saving"></span>
+          <le-icon name="check" view="saved"></le-icon>
+        </span>
+        <span class="views">
+          <span view="idle">Save</span>
+          <span view="saving">Saving…</span>
+          <span view="saved" aria-live="polite">Saved</span>
+        </span>
+      </le-button>
+
+      <le-button variant="filled" color="secondary" view="closed" data-views data-toggle>
+        <le-icon slot="icon-start" name="chevron-down" class="chevron"></le-icon>
+        <span class="views">
+          <span view="closed">Show all 12 lines</span>
+          <span view="open">Show less</span>
+        </span>
+      </le-button>
+
+      <le-button variant="outlined" view="paused" data-views data-play>
+        <span slot="icon-start" class="views">
+          <le-icon name="play" view="paused"></le-icon>
+          <le-icon name="pause" view="playing"></le-icon>
+        </span>
+        <span class="views">
+          <span view="paused">Play</span>
+          <span view="playing">Pause</span>
+        </span>
+      </le-button>
+    </div>
+
+    <p class="note">Same buttons in a narrow column — the text wraps the same way in every view, nothing jumps:</p>
+    <div class="narrow" id="narrow"></div>
+
+    <pre class="code">{`<le-button view="idle">
+  <le-icon slot="icon-start" name="save" view="idle"></le-icon>
+  <le-spinner slot="icon-start" view="saving"></le-spinner>
+  <le-icon slot="icon-start" name="check" view="saved"></le-icon>
+  <span view="idle">Save</span>
+  <span view="saving">Saving…</span>
+  <span view="saved" announce>Saved</span>
+</le-button>
+
+button.view = 'saving';`}</pre>
+
+    <h2>2. A block — collapse, height animates</h2>
+    <p class="note">Loading / empty / error / content. The leaving view collapses while the next one opens.</p>
+
+    <div class="switch">
+      {["loading", "empty", "error", "content"].map((v) => <le-button size="small" variant="clear" data-set-view={v}>{v}</le-button>)}
+    </div>
+
+    <div class="card" view="loading" data-views data-block>
+      <h3>Recent orders</h3>
+      <le-collapse view="loading">
+        <div class="skeleton"><i></i><i></i><i></i></div>
+      </le-collapse>
+      <le-collapse view="empty" closed>
+        <p class="muted">No orders yet.</p>
+      </le-collapse>
+      <le-collapse view="error" closed>
+        <p class="error">Couldn't load orders. <a href="#">Try again</a></p>
+      </le-collapse>
+      <le-collapse view="content" closed>
+        <ul>
+          <li>#1042 — Desk lamp — €39</li>
+          <li>#1041 — Notebook — €12</li>
+          <li>#1040 — Fountain pen — €64</li>
+          <li>#1039 — Ink, blue — €9</li>
+        </ul>
+      </le-collapse>
+    </div>
+
+    <h2>3. le-collapse as the same system — "Read more"</h2>
+    <p class="note">
+      The first paragraph has no <code>view</code> — always shown. The rest is <code>view="full"</code>. "Closed" is
+      just the view where that part is absent; the toggle is the morphing button from section 1.
+    </p>
+
+    <div class="text" view="short" data-views data-readmore>
+      <p>
+        Le-kit components are built in layers: anatomy, styling, states, behavior, and only then motion. Each layer is
+        approved before the next one is stacked on top of it.
+      </p>
+      <le-collapse view="full" closed>
+        <p>
+          The reason is simple: once actions and animations sit on a composition that doesn't feel right, it becomes
+          hard to say what to change, and too costly to throw it away. So we stop after each layer, look at it, and
+          only then move on.
+        </p>
+        <p>That is also why the docs site is the sandbox: every layer is visible on a real page.</p>
+      </le-collapse>
+      <le-button size="small" variant="clear" view="short" data-views data-readmore-toggle>
+        <le-icon slot="icon-start" name="chevron-down" class="chevron"></le-icon>
+        <span class="views">
+          <span view="short">Read more</span>
+          <span view="full">Show less</span>
+        </span>
+      </le-button>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  type Collapse = HTMLElement & { closed: boolean };
+
+  /** The mechanic: show children whose `view` list contains the container's view. */
+  function applyView(container: HTMLElement) {
+    const current = (container.getAttribute("view") ?? "").split(/\s+/);
+    container.querySelectorAll<HTMLElement>("[view]").forEach((child) => {
+      // Only this container's own children, not those of a nested container.
+      if (child.parentElement?.closest("[data-views]") !== container) return;
+      const on = child.getAttribute("view")!.split(/\s+/).some((v) => current.includes(v));
+      if (child.tagName === "LE-COLLAPSE") {
+        (child as Collapse).closed = !on;
+      } else if (on && child.hasAttribute("data-off")) {
+        // Entering starts from the enter point, not from where it left.
+        child.setAttribute("data-enter", "");
+        void child.offsetWidth;
+        child.removeAttribute("data-off");
+        child.removeAttribute("data-enter");
+      } else if (!on) {
+        child.setAttribute("data-off", "");
+      }
+    });
+  }
+
+  function setView(container: HTMLElement, view: string) {
+    container.setAttribute("view", view);
+    applyView(container);
+  }
+
+  // The narrow column gets copies of the four buttons.
+  const narrow = document.getElementById("narrow")!;
+  document.querySelectorAll<HTMLElement>(".row > le-button").forEach((b) => narrow.append(b.cloneNode(true)));
+
+  document.querySelectorAll<HTMLElement>("[data-views]").forEach(applyView);
+
+  // The preset lives on <html>, so it applies to everything on the page.
+  const setPreset = (preset: string) => {
+    document.documentElement.setAttribute("motion-preset", preset);
+    document.querySelectorAll<HTMLElement>("[data-preset]").forEach((b) => {
+      if (b.dataset.preset === preset) b.setAttribute("selected", "");
+      else b.removeAttribute("selected");
+    });
+  };
+  setPreset("fade");
+  document.querySelector("[data-presets]")?.addEventListener("click", (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>("[data-preset]");
+    if (b) setPreset(b.dataset.preset!);
+  });
+
+  const later = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  document.addEventListener("click", async (event) => {
+    const el = (event.target as HTMLElement).closest<HTMLElement>(
+      "[data-copy], [data-save], [data-toggle], [data-play], [data-set-view], [data-readmore-toggle]",
+    );
+    if (!el) return;
+
+    if (el.matches("[data-copy]")) {
+      setView(el, "done");
+      await later(1600);
+      setView(el, "idle");
+    } else if (el.matches("[data-save]")) {
+      if (el.getAttribute("view") !== "idle") return;
+      setView(el, "saving");
+      el.setAttribute("disabled", "");
+      await later(1400);
+      el.removeAttribute("disabled");
+      setView(el, "saved");
+      await later(1600);
+      setView(el, "idle");
+    } else if (el.matches("[data-toggle]")) {
+      setView(el, el.getAttribute("view") === "open" ? "closed" : "open");
+    } else if (el.matches("[data-play]")) {
+      setView(el, el.getAttribute("view") === "playing" ? "paused" : "playing");
+    } else if (el.matches("[data-set-view]")) {
+      setView(document.querySelector<HTMLElement>("[data-block]")!, el.dataset.setView!);
+    } else if (el.matches("[data-readmore-toggle]")) {
+      const next = el.getAttribute("view") === "full" ? "short" : "full";
+      setView(el, next);
+      setView(el.closest<HTMLElement>("[data-readmore]")!, next);
+    }
+  });
+</script>
+
+<style>
+  .lab {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .lead,
+  .note {
+    opacity: 0.8;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--le-spacing-3);
+    align-items: center;
+  }
+
+  .narrow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--le-spacing-2);
+    width: 6.5rem;
+    padding: var(--le-spacing-2);
+    border: 1px dashed var(--le-color-border);
+  }
+
+  /* The cross-fade: every view in one grid cell, so the cell is as large as the
+     largest view; inactive ones fade out and keep their place. */
+  .views {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+  }
+
+  /* In the icon slot the wrapper stays inline (the slot is sized by the icon). */
+  .views[slot] {
+    display: inline-grid;
+  }
+
+  /* View motion tokens — a prototype of what would go to themes/base.css.
+     Separate enter (where a view comes from) and exit (where it goes to). */
+  :global(:root),
+  :global([motion-preset="fade"]) {
+    --le-motion-view-duration: 180ms;
+    --le-motion-view-easing: ease;
+    --le-motion-view-enter: none;
+    --le-motion-view-exit: none;
+    --le-motion-view-blur: 0px;
+  }
+  :global([motion-preset="none"]) {
+    --le-motion-view-duration: 0ms;
+    --le-collapse-duration: 0ms;
+  }
+  :global([motion-preset="slide"]) {
+    --le-motion-view-duration: 220ms;
+    --le-motion-view-easing: cubic-bezier(0.2, 0, 0, 1);
+    --le-motion-view-enter: translateY(0.7em);
+    --le-motion-view-exit: translateY(-0.7em);
+    --le-motion-view-blur: 0px;
+  }
+  :global([motion-preset="scale"]) {
+    --le-motion-view-duration: 200ms;
+    --le-motion-view-easing: cubic-bezier(0.2, 0, 0, 1);
+    --le-motion-view-enter: scale(0.6);
+    --le-motion-view-exit: scale(1.3);
+    --le-motion-view-blur: 0px;
+  }
+  :global([motion-preset="blur"]) {
+    --le-motion-view-duration: 260ms;
+    --le-motion-view-easing: ease;
+    --le-motion-view-enter: scale(0.97);
+    --le-motion-view-exit: scale(1.03);
+    --le-motion-view-blur: 6px;
+  }
+  :global([motion-preset="spring"]) {
+    --le-motion-view-duration: 420ms;
+    --le-motion-view-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --le-motion-view-enter: translateY(0.8em) scale(0.8);
+    --le-motion-view-exit: translateY(-0.6em) scale(0.9);
+    --le-motion-view-blur: 0px;
+  }
+
+  .views > [view] {
+    grid-area: 1 / 1;
+    --d: var(--le-motion-view-duration);
+    --e: var(--le-motion-view-easing);
+    transition:
+      opacity var(--d) var(--e),
+      transform var(--d) var(--e),
+      filter var(--d) var(--e),
+      visibility 0s;
+  }
+
+  .views > [data-off] {
+    opacity: 0;
+    transform: var(--le-motion-view-exit);
+    filter: blur(var(--le-motion-view-blur));
+    visibility: hidden;
+    transition:
+      opacity var(--d) var(--e),
+      transform var(--d) var(--e),
+      filter var(--d) var(--e),
+      visibility 0s var(--d);
+  }
+
+  .views > [data-enter] {
+    transform: var(--le-motion-view-enter);
+    filter: blur(var(--le-motion-view-blur));
+    transition: none;
+  }
+
+  /* One icon in both views: not swapped but turned. */
+  .chevron {
+    transition: rotate var(--le-motion-view-duration) var(--le-motion-view-easing);
+  }
+
+  [view="open"] > .chevron,
+  [view="full"] > .chevron {
+    rotate: 180deg;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 0.9em;
+    height: 0.9em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 700ms linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  .code {
+    font-size: 0.85rem;
+  }
+
+  .presets {
+    position: sticky;
+    top: calc(var(--le-header-height, 0px) + var(--le-spacing-2));
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--le-spacing-1);
+    padding: var(--le-spacing-2);
+    border-radius: var(--le-radius-lg);
+    background: var(--le-color-surface, #fff);
+    box-shadow: var(--le-shadow-md);
+  }
+
+  .switch {
+    display: flex;
+    gap: var(--le-spacing-1);
+    margin-bottom: var(--le-spacing-2);
+  }
+
+  .card {
+    max-width: 24rem;
+    padding: var(--le-spacing-3) var(--le-spacing-4);
+    border-radius: var(--le-radius-lg);
+    background: var(--le-color-surface, #fff);
+    box-shadow: var(--le-shadow-md);
+  }
+
+  .card h3 {
+    margin: 0 0 var(--le-spacing-2);
+    font-size: 1rem;
+  }
+
+  .card ul {
+    margin: 0;
+    padding-left: 1.2em;
+  }
+
+  .skeleton {
+    display: grid;
+    gap: var(--le-spacing-2);
+    padding: var(--le-spacing-1) 0;
+  }
+
+  .skeleton i {
+    height: 0.9em;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--le-color-text, #000) 10%, transparent);
+  }
+
+  .skeleton i:nth-child(2) {
+    width: 80%;
+  }
+
+  .skeleton i:nth-child(3) {
+    width: 60%;
+  }
+
+  .muted {
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  .error {
+    color: var(--le-color-danger, #c0392b);
+    margin: 0;
+  }
+
+  .text {
+    max-width: 34rem;
+  }
+</style>

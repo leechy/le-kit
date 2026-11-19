@@ -176,6 +176,18 @@ export class LeVisibility {
     if (desired === 'visible') {
       if (current === 'visible' || current === 'expanding') return;
 
+      // A target that started collapsed was never measured. Measure its natural
+      // size now: show it without transitions, measure, collapse it back, all in
+      // one frame (nothing is painted in between). Mid-collapse reversals keep the
+      // size measured before collapsing.
+      if (current === 'collapsed') {
+        this.setPhase(target, 'stable');
+        this.setVisualState(target, 'visible');
+        this.cacheMeasuredSize(target);
+        this.setVisualState(target, 'collapsed');
+        void target.offsetWidth; // let the browser register the collapsed start point
+      }
+
       this.setPhase(target, 'transitioning');
       this.setVisualState(target, 'expanding');
 

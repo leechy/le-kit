@@ -36,12 +36,13 @@ import { TooltipPlacement } from '../..';
  * @slot icon-start - Icon placed in the beginning of the button
  * @slot icon-end - Icon placed in the end of the button
  *
- * @cssprop --le-button-bg - Button background color
+ * @cssprop --le-button-bg - Fill of solid and filled buttons (and of selected outlined / clear ones); outlined and clear stay transparent
+ * @cssprop --le-button-bg-hover - Fill on hover (default: --le-button-bg when it is set, the theme hover color otherwise)
  * @cssprop --le-button-color - Button text color
  * @cssprop --le-button-border-radius - Button border radius
- * @cssprop --le-button-padding-text - Distance from the button edge to the text (default: --le-control-padding-x)
- * @cssprop --le-button-padding-icon - Distance from the button edge to an icon on that side (default: text padding minus --le-control-icon-inset)
- * @cssprop --le-button-icon-gap - Gap between an icon and the text (default: --le-control-icon-gap)
+ * @cssprop --le-button-padding-text - Distance from the button edge to the text
+ * @cssprop --le-button-padding-icon - Distance from the button edge to an icon on that side
+ * @cssprop --le-button-icon-gap - Gap between an icon and the text
  * @cssprop --le-button-padding - Overrides the whole padding box (all sides), e.g. for compact triggers
  * @cssprop --le-button-padding-y - Button vertical padding
  * @cssprop --le-motion-view-duration - Duration of the switch between views

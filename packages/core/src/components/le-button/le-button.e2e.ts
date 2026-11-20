@@ -537,3 +537,22 @@ describe('le-button view-size="current"', () => {
     expect(end).toBe(short);
   });
 });
+
+describe('le-button --le-button-bg', () => {
+  const bg = (page: import('@stencil/core/testing').E2EPage, selector: string) =>
+    page.$eval(selector, el => getComputedStyle(el.shadowRoot!.querySelector('.le-button-container')!).backgroundColor);
+
+  it('sets the fill of solid buttons and of selected outlined ones, not unselected outlined ones', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <le-button id="solid" variant="solid" style="--le-button-bg: rgb(10, 20, 30)">A</le-button>
+      <le-button id="outlined" variant="outlined" style="--le-button-bg: rgb(10, 20, 30)">B</le-button>
+      <le-button id="selected" variant="outlined" selected style="--le-button-bg: rgb(10, 20, 30)">C</le-button>
+      <le-button id="plain" variant="solid">D</le-button>`);
+
+    expect(await bg(page, '#solid')).toBe('rgb(10, 20, 30)');
+    expect(await bg(page, '#outlined')).toBe('rgba(0, 0, 0, 0)');
+    expect(await bg(page, '#selected')).toBe('rgb(10, 20, 30)');
+    expect(await bg(page, '#plain')).not.toBe('rgb(10, 20, 30)');
+  });
+});

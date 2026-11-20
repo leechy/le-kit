@@ -78,7 +78,8 @@
   );
   border: var(--le-button-border-width, 1px) solid var(--_btn-border-color);
   border-radius: var(--le-button-border-radius);
-  background: var(--_btn-bg);
+  /* --le-button-bg replaces the fill (not the accent color of outlined/clear). */
+  background: var(--le-button-bg, var(--_btn-bg));
   color: var(--_btn-color);
   font-family: var(--le-font-family-base);
   font-size: var(--le-button-font-size);
@@ -102,8 +103,9 @@
 }
 
 .le-button-container:hover:not(:disabled) {
-  background: var(--_btn-bg-hover);
-  border-color: var(--_btn-bg-hover);
+  /* A custom fill keeps its color on hover unless --le-button-bg-hover is set. */
+  background: var(--le-button-bg-hover, var(--le-button-bg, var(--_btn-bg-hover)));
+  border-color: var(--le-button-bg-hover, var(--le-button-bg, var(--_btn-bg-hover)));
 }
 
 .le-button-container:active:not(:disabled) {
@@ -297,7 +299,7 @@
 
 :host(.variant-outlined.selected) .le-button-container,
 :host(.variant-clear.selected) .le-button-container {
-  background: var(--_btn-bg);
+  background: var(--le-button-bg, var(--_btn-bg));
   color: var(--_btn-color);
 
   /* Icons get their color from --le-icon-color (set to --_btn-bg by these
@@ -313,8 +315,8 @@
    light hover background of an unselected clear button. */
 :host(.variant-outlined.selected) .le-button-container:hover:not(:disabled),
 :host(.variant-clear.selected) .le-button-container:hover:not(:disabled) {
-  background: var(--_btn-bg-hover);
-  border-color: var(--_btn-bg-hover);
+  background: var(--le-button-bg-hover, var(--le-button-bg, var(--_btn-bg-hover)));
+  border-color: var(--le-button-bg-hover, var(--le-button-bg, var(--_btn-bg-hover)));
 }
 
 /* Icon only */

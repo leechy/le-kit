@@ -396,12 +396,13 @@ export namespace Components {
      * `view` on the button — only the children of the current view are shown.
      * All views share one place, so the button is as large as its largest view and
      * does not move when the view changes; children without `view` are always shown.
-     * @cssprop --le-button-bg - Button background color
+     * @cssprop --le-button-bg - Fill of solid and filled buttons (and of selected outlined / clear ones); outlined and clear stay transparent
+     * @cssprop --le-button-bg-hover - Fill on hover (default: --le-button-bg when it is set, the theme hover color otherwise)
      * @cssprop --le-button-color - Button text color
      * @cssprop --le-button-border-radius - Button border radius
-     * @cssprop --le-button-padding-text - Distance from the button edge to the text (default: --le-control-padding-x)
-     * @cssprop --le-button-padding-icon - Distance from the button edge to an icon on that side (default: text padding minus --le-control-icon-inset)
-     * @cssprop --le-button-icon-gap - Gap between an icon and the text (default: --le-control-icon-gap)
+     * @cssprop --le-button-padding-text - Distance from the button edge to the text
+     * @cssprop --le-button-padding-icon - Distance from the button edge to an icon on that side
+     * @cssprop --le-button-icon-gap - Gap between an icon and the text
      * @cssprop --le-button-padding - Overrides the whole padding box (all sides), e.g. for compact triggers
      * @cssprop --le-button-padding-y - Button vertical padding
      * @cssprop --le-motion-view-duration - Duration of the switch between views
@@ -3750,12 +3751,13 @@ declare global {
      * `view` on the button — only the children of the current view are shown.
      * All views share one place, so the button is as large as its largest view and
      * does not move when the view changes; children without `view` are always shown.
-     * @cssprop --le-button-bg - Button background color
+     * @cssprop --le-button-bg - Fill of solid and filled buttons (and of selected outlined / clear ones); outlined and clear stay transparent
+     * @cssprop --le-button-bg-hover - Fill on hover (default: --le-button-bg when it is set, the theme hover color otherwise)
      * @cssprop --le-button-color - Button text color
      * @cssprop --le-button-border-radius - Button border radius
-     * @cssprop --le-button-padding-text - Distance from the button edge to the text (default: --le-control-padding-x)
-     * @cssprop --le-button-padding-icon - Distance from the button edge to an icon on that side (default: text padding minus --le-control-icon-inset)
-     * @cssprop --le-button-icon-gap - Gap between an icon and the text (default: --le-control-icon-gap)
+     * @cssprop --le-button-padding-text - Distance from the button edge to the text
+     * @cssprop --le-button-padding-icon - Distance from the button edge to an icon on that side
+     * @cssprop --le-button-icon-gap - Gap between an icon and the text
      * @cssprop --le-button-padding - Overrides the whole padding box (all sides), e.g. for compact triggers
      * @cssprop --le-button-padding-y - Button vertical padding
      * @cssprop --le-motion-view-duration - Duration of the switch between views
@@ -5351,12 +5353,13 @@ declare namespace LocalJSX {
      * `view` on the button — only the children of the current view are shown.
      * All views share one place, so the button is as large as its largest view and
      * does not move when the view changes; children without `view` are always shown.
-     * @cssprop --le-button-bg - Button background color
+     * @cssprop --le-button-bg - Fill of solid and filled buttons (and of selected outlined / clear ones); outlined and clear stay transparent
+     * @cssprop --le-button-bg-hover - Fill on hover (default: --le-button-bg when it is set, the theme hover color otherwise)
      * @cssprop --le-button-color - Button text color
      * @cssprop --le-button-border-radius - Button border radius
-     * @cssprop --le-button-padding-text - Distance from the button edge to the text (default: --le-control-padding-x)
-     * @cssprop --le-button-padding-icon - Distance from the button edge to an icon on that side (default: text padding minus --le-control-icon-inset)
-     * @cssprop --le-button-icon-gap - Gap between an icon and the text (default: --le-control-icon-gap)
+     * @cssprop --le-button-padding-text - Distance from the button edge to the text
+     * @cssprop --le-button-padding-icon - Distance from the button edge to an icon on that side
+     * @cssprop --le-button-icon-gap - Gap between an icon and the text
      * @cssprop --le-button-padding - Overrides the whole padding box (all sides), e.g. for compact triggers
      * @cssprop --le-button-padding-y - Button vertical padding
      * @cssprop --le-motion-view-duration - Duration of the switch between views
@@ -9244,12 +9247,13 @@ declare module "@stencil/core" {
              * `view` on the button — only the children of the current view are shown.
              * All views share one place, so the button is as large as its largest view and
              * does not move when the view changes; children without `view` are always shown.
-             * @cssprop --le-button-bg - Button background color
+             * @cssprop --le-button-bg - Fill of solid and filled buttons (and of selected outlined / clear ones); outlined and clear stay transparent
+             * @cssprop --le-button-bg-hover - Fill on hover (default: --le-button-bg when it is set, the theme hover color otherwise)
              * @cssprop --le-button-color - Button text color
              * @cssprop --le-button-border-radius - Button border radius
-             * @cssprop --le-button-padding-text - Distance from the button edge to the text (default: --le-control-padding-x)
-             * @cssprop --le-button-padding-icon - Distance from the button edge to an icon on that side (default: text padding minus --le-control-icon-inset)
-             * @cssprop --le-button-icon-gap - Gap between an icon and the text (default: --le-control-icon-gap)
+             * @cssprop --le-button-padding-text - Distance from the button edge to the text
+             * @cssprop --le-button-padding-icon - Distance from the button edge to an icon on that side
+             * @cssprop --le-button-icon-gap - Gap between an icon and the text
              * @cssprop --le-button-padding - Overrides the whole padding box (all sides), e.g. for compact triggers
              * @cssprop --le-button-padding-y - Button vertical padding
              * @cssprop --le-motion-view-duration - Duration of the switch between views

@@ -3,6 +3,9 @@
 
   display: grid;
   grid-template-rows: 1fr;
+  /* The column can shrink below its content's width (a long code line scrolls
+     inside instead of stretching the collapse). */
+  grid-template-columns: minmax(0, 1fr);
   opacity: 1;
   transition:
     grid-template-rows var(--le-collapse-duration),

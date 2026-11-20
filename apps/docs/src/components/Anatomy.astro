@@ -2,8 +2,12 @@
 /**
  * Live anatomy: a real sample of the component, and cards for its parts or
  * slots. Hovering (or focusing) a card outlines that part in the sample —
- * computed from the rendered DOM, so it never goes out of date.
+ * computed from the rendered DOM, so it never goes out of date. For slots, the
+ * sample's code is shown too, and the lines that go into the slot light up.
  */
+import CodeBlock from './CodeBlock.astro';
+import { slotLines } from '../lib/slot-lines';
+
 interface Item {
   kind: 'part' | 'slot';
   /** '' is the default slot. */
@@ -18,7 +22,12 @@ interface Props {
   items: Item[];
 }
 
-const { tag, sample = `<${tag}>Sample</${tag}>`, items } = Astro.props;
+const { tag, sample: rawSample = `<${tag}>Sample</${tag}>`, items } = Astro.props;
+
+/** Without surrounding blank lines, as CodeBlock shows it, so line numbers match. */
+const sample = rawSample.replace(/^(\s*\n)+/, '').replace(/(\n\s*)+$/, '');
+const hasSlots = items.some((item) => item.kind === 'slot');
+const lines = hasSlots ? slotLines(sample, tag) : {};
 
 /** JSDoc text as one paragraph with inline `code`. */
 const docText = (text = '') =>
@@ -29,11 +38,18 @@ const docText = (text = '') =>
     .replace(/`([^`]+)`/g, '<code>$1</code>');
 ---
 
-<div class="anatomy" data-anatomy data-tag={tag}>
+<div class="anatomy" data-anatomy data-tag={tag} data-slot-lines={JSON.stringify(lines)}>
   <div class="anatomy-stage" data-anatomy-stage>
     <div class="anatomy-sample" set:html={sample}></div>
     <div class="anatomy-overlay" data-anatomy-overlay aria-hidden="true"></div>
   </div>
+  {
+    hasSlots && (
+      <div class="anatomy-code" data-anatomy-code>
+        <CodeBlock language="html" code={sample} lines={100} />
+      </div>
+    )
+  }
   <p class="anatomy-hint">Point at a card to see it in the sample.</p>
   <div class="anatomy-cards">
     {
@@ -121,10 +137,22 @@ const docText = (text = '') =>
     const overlay = anatomy.querySelector<HTMLElement>('[data-anatomy-overlay]')!;
     overlay.replaceChildren();
     anatomy.querySelectorAll('.anatomy-card.is-active').forEach((c) => c.classList.remove('is-active'));
+    const code = anatomy.querySelector<HTMLElement>('[data-anatomy-code]');
+    code?.classList.remove('is-focused');
+    code?.querySelectorAll('.line.is-hit').forEach((line) => line.classList.remove('is-hit'));
     if (!card) return;
     card.classList.add('is-active');
 
     const [kind, name] = card.dataset.anatomyTarget!.split(':');
+
+    // The lines of the sample's code that go into this slot.
+    if (kind === 'slot' && code) {
+      const map = JSON.parse(anatomy.dataset.slotLines ?? '{}') as Record<string, number[]>;
+      const codeLines = code.querySelectorAll('.line');
+      code.classList.add('is-focused');
+      (map[name] ?? []).forEach((index) => codeLines[index]?.classList.add('is-hit'));
+    }
+
     const origin = overlay.getBoundingClientRect();
     const boxes = targetsOf(anatomy, kind, name)
       .map(boxOf)
@@ -201,6 +229,24 @@ const docText = (text = '') =>
     font-size: 0.72rem;
     line-height: 1.5;
     white-space: nowrap;
+  }
+
+  .anatomy-code :global(.code-block) {
+    margin: var(--le-spacing-2) 0 0;
+  }
+
+  /* While a slot is pointed at, the other lines step back. */
+  .anatomy-code :global(.line) {
+    transition: opacity 150ms ease;
+  }
+
+  .anatomy-code.is-focused :global(.line:not(.is-hit)) {
+    opacity: 0.3;
+  }
+
+  .anatomy-code :global(.line.is-hit) {
+    background: color-mix(in srgb, #e8590c 30%, transparent);
+    box-shadow: -0.5rem 0 0 color-mix(in srgb, #e8590c 30%, transparent);
   }
 
   .anatomy-hint {

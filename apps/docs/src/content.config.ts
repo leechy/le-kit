@@ -61,7 +61,18 @@ const componentNotes = defineCollection({
       return `${dir}/${file.split(".").at(-2)}`;
     },
   }),
-  schema: z.object({}),
+  schema: z.object({
+    /** Small live examples, shown under the card of their slot (or part). */
+    examples: z
+      .array(
+        z.object({
+          slot: z.string(),
+          title: z.string(),
+          html: z.string(),
+        }),
+      )
+      .default([]),
+  }),
 });
 
 export const collections = {

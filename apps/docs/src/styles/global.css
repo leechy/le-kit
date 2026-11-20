@@ -195,11 +195,11 @@ h3 {
     }
 
     h2:not([slot="panel"] *) {
-      text-indent: calc(-1 * var(--le-spacing-6));
+      text-indent: calc(-1 * var(--le-spacing-4));
     }
 
     h3:not([slot="panel"] *) {
-      text-indent: calc(-1 * var(--le-spacing-4));
+      text-indent: calc(-1 * var(--le-spacing-2));
     }
   }
 
@@ -208,11 +208,11 @@ h3 {
   }
 
   h2.indent {
-    text-indent: calc(-1 * var(--le-spacing-6));
+    text-indent: calc(-1 * var(--le-spacing-4));
   }
 
   h3.indent {
-    text-indent: calc(-1 * var(--le-spacing-4));
+    text-indent: calc(-1 * var(--le-spacing-2));
   }
 }
 

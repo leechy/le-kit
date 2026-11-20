@@ -11,9 +11,11 @@ interface Props {
 	section: 'properties' | 'events' | 'slots' | 'styles';
 	/** Sample for the live anatomy (page.md `anatomy`). */
 	anatomy?: string;
+	/** Examples from the tab's note, by slot. */
+	examples?: { slot: string; title: string; html: string }[];
 }
 
-const { tag, section, anatomy } = Astro.props;
+const { tag, section, anatomy, examples = [] } = Astro.props;
 
 const component = docs.components.find((c: any) => c.tag === tag);
 
@@ -168,7 +170,12 @@ const hasCategories = props.some((p: any) => docTag(p, 'category'));
 			<Anatomy
 				tag={tag}
 				sample={anatomy}
-				items={slots.map((slot: any) => ({ kind: 'slot', name: slot.name, docs: slot.docs }))}
+				items={slots.map((slot: any) => ({
+					kind: 'slot',
+					name: slot.name,
+					docs: slot.docs,
+					examples: examples.filter((example) => example.slot === slot.name),
+				}))}
 			/>
 		</section>
 	)}

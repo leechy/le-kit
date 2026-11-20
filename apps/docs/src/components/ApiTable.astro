@@ -1,5 +1,8 @@
 ---
 import docs from 'le-kit/dist/docs.json';
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { cssDefault, tokensIn, type CssDefault } from '../lib/css-defaults';
 
 interface Props {
 	tag: string;
@@ -26,6 +29,18 @@ const cssProps = (component.docsTags || [])
     return { name: parts[0], docs: parts.slice(1).join(' - ') };
   });
 const cssParts = component.parts || [];
+
+/** Defaults come from the component's own CSS (see lib/css-defaults). */
+const cssFile = resolve(process.cwd(), '../../packages/core/src/components', tag, `${tag}.css`);
+const componentCss = existsSync(cssFile) ? readFileSync(cssFile, 'utf8') : '';
+/** What the current value is computed from, on a live sample. */
+const nowExpression = (name: string, def: CssDefault) =>
+  def.kind === 'fallback' ? `var(${name}, ${def.value})` : `var(${name})`;
+const styleItems = cssProps.map((prop: any) => {
+  const def = componentCss ? cssDefault(componentCss, prop.name) : ({ kind: 'inherited' } as CssDefault);
+  const declared = def.kind === 'declared' || def.kind === 'fallback' ? def.value : undefined;
+  return { ...prop, def, declared, tokens: declared ? tokensIn(declared) : [], now: nowExpression(prop.name, def) };
+});
 
 /** Groups come from `@category` in the prop's JSDoc; this is their order. */
 const CATEGORY_ORDER = ['Appearance', 'Content', 'State', 'Link & form', 'Motion', 'Toolbar', 'Actions', 'CMS'];
@@ -169,29 +184,41 @@ const hasCategories = props.some((p: any) => docTag(p, 'category'));
 	)}
 
 	{section === 'styles' && cssProps.length > 0 && (
-		<section>
+		<section class="styles" data-css-section>
 			<h3 class="api-heading">CSS custom properties</h3>
-			<div class="table-wrapper">
-				<table>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						{cssProps.map((prop: any) => (
-							<tr>
-								<td><code>{prop.name}</code></td>
-								<td>{prop.docs}</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
+			{/* A hidden sample: the current values are computed on it, in the current theme. */}
+			<div class="styles-sample" aria-hidden="true" set:html={`<${tag} data-styles-sample>Sample</${tag}>`} />
+			<div class="prop-cards">
+				{styleItems.map((item: any) => (
+					<article class="prop-card" id={item.name}>
+						<header>
+							<code class="prop-attr">{item.name}</code>
+							<span class="prop-default">
+								now <code data-css-now={item.now}>…</code>
+								<span class="swatch" data-css-swatch hidden></span>
+							</span>
+						</header>
+						<p class="prop-docs" set:html={docText(item.docs)} />
+						<div class="css-default">
+							{item.def.kind === 'declared' && <span class="css-default-label">default</span>}
+							{item.def.kind === 'fallback' && <span class="css-default-label">not set — falls back to</span>}
+							{item.def.kind === 'inherited' && <span class="css-default-label">from the theme or an ancestor</span>}
+							{item.def.kind === 'unused' && <span class="css-default-label css-unused">not used by the component</span>}
+							{item.declared && <code class="css-declared">{item.declared}</code>}
+						</div>
+						{item.tokens.length > 0 && (
+							<div class="prop-values">
+								{item.tokens.map((token: string) => (
+									<span class="chip chip-kind">{token}</span>
+								))}
+							</div>
+						)}
+					</article>
+				))}
 			</div>
 		</section>
 	)}
-  
+
 	{section === 'styles' && cssParts.length > 0 && (
 		<section>
 			<h3 class="api-heading">Parts</h3>
@@ -216,6 +243,36 @@ const hasCategories = props.some((p: any) => docTag(p, 'category'));
 		</section>
 	)}
 </div>
+
+<script>
+	/** Current values of the CSS custom properties, computed on the hidden sample. */
+	function fillStyles(section: HTMLElement) {
+		const sample = section.querySelector<HTMLElement>('[data-styles-sample]');
+		if (!sample) return;
+		section.querySelectorAll<HTMLElement>('[data-css-now]').forEach((code) => {
+			sample.style.setProperty('--docs-probe', code.dataset.cssNow!);
+			const value = getComputedStyle(sample).getPropertyValue('--docs-probe').trim();
+			code.textContent = value || '—';
+			const swatch = code.parentElement?.querySelector<HTMLElement>('[data-css-swatch]');
+			if (swatch && value && CSS.supports('color', value)) {
+				swatch.style.background = value;
+				swatch.hidden = false;
+			}
+		});
+		sample.style.removeProperty('--docs-probe');
+	}
+
+	document.querySelectorAll<HTMLElement>('[data-css-section]').forEach(async (section) => {
+		const sample = section.querySelector<HTMLElement & { componentOnReady?: () => Promise<unknown> }>(
+			'[data-styles-sample]',
+		);
+		if (!sample) return;
+		// Its :host styles exist only once it has rendered, not as soon as it is defined.
+		await customElements.whenDefined(sample.localName);
+		await sample.componentOnReady?.();
+		fillStyles(section);
+	});
+</script>
 
 <style>
 	.api-tables section {
@@ -331,6 +388,52 @@ const hasCategories = props.some((p: any) => docTag(p, 'category'));
 	}
 
 	.prop-card :is(.prop-attr, .prop-default code, footer code, .prop-docs code) {
+		padding: 0;
+		background: none;
+	}
+
+	/* Styles */
+	.styles-sample {
+		position: absolute;
+		visibility: hidden;
+		pointer-events: none;
+	}
+
+	.css-default {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: var(--le-spacing-1) var(--le-spacing-2);
+		margin: var(--le-spacing-1) 0;
+		font-size: 0.85rem;
+	}
+
+	.css-default-label {
+		opacity: 0.6;
+	}
+
+	.css-unused {
+		color: var(--le-color-danger, #c0392b);
+		opacity: 1;
+	}
+
+	.css-declared {
+		padding: 0;
+		background: none;
+		overflow-wrap: anywhere;
+	}
+
+	.swatch {
+		display: inline-block;
+		width: 0.8em;
+		height: 0.8em;
+		margin-left: 0.25em;
+		vertical-align: -0.05em;
+		border-radius: 3px;
+		border: 1px solid var(--le-color-border);
+	}
+
+	.prop-default code[data-css-now] {
 		padding: 0;
 		background: none;
 	}

@@ -165,24 +165,11 @@ const hasCategories = props.some((p: any) => docTag(p, 'category'));
 
 	{section === 'slots' && slots.length > 0 && (
 		<section>
-			<div class="table-wrapper">
-				<table>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						{slots.map((slot: any) => (
-							<tr>
-								<td>{slot.name ? <code>{slot.name}</code> : <em>default</em>}</td>
-								<td>{slot.docs}</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			</div>
+			<Anatomy
+				tag={tag}
+				sample={anatomy}
+				items={slots.map((slot: any) => ({ kind: 'slot', name: slot.name, docs: slot.docs }))}
+			/>
 		</section>
 	)}
 

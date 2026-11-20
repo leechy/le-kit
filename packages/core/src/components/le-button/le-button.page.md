@@ -4,8 +4,14 @@ tagline: A component you'd expect to see in any UI library. No surprises here.
 heroDirection: column
 heroWidth: narrow
 anatomy: |
-  <le-button variant="solid" icon-start="save" icon-end="chevron-down">Save as</le-button>
-  <le-button variant="outlined" icon-only="copy" label="Copy"></le-button>
+  <le-button variant="solid">
+    <le-icon slot="icon-start" name="save"></le-icon>
+    Save as
+    <le-icon slot="icon-end" name="chevron-down"></le-icon>
+  </le-button>
+  <le-button variant="outlined" label="Copy">
+    <le-icon slot="icon-only" name="copy"></le-icon>
+  </le-button>
 hero: |
   <le-button variant="solid">Save</le-button>
   <le-button variant="outlined" icon-start="✎">Edit</le-button>

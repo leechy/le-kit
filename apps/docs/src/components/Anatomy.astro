@@ -34,7 +34,7 @@ const docText = (text = '') =>
     <div class="anatomy-sample" set:html={sample}></div>
     <div class="anatomy-overlay" data-anatomy-overlay aria-hidden="true"></div>
   </div>
-  <p class="anatomy-hint">Point at a card to see the part in the sample.</p>
+  <p class="anatomy-hint">Point at a card to see it in the sample.</p>
   <div class="anatomy-cards">
     {
       items.map((item) => (
@@ -70,7 +70,15 @@ const docText = (text = '') =>
    * content overflow (le-button's icon wrappers are 0 tall) — then the box is
    * the union of what is inside, following slots to what they show.
    */
-  function boxOf(el: Element): Box | undefined {
+  function boxOf(node: Node): Box | undefined {
+    if (node instanceof Text) {
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      const r = range.getBoundingClientRect();
+      return r.width > 0 && r.height > 0 ? r : undefined;
+    }
+    if (!(node instanceof Element)) return undefined;
+    const el = node;
     const rect = el.getBoundingClientRect();
     if (rect.width > 0 && rect.height > 0) return rect;
     if (getComputedStyle(el).display === 'none') return undefined;
@@ -94,12 +102,19 @@ const docText = (text = '') =>
     return undefined;
   }
 
-  function targetsOf(anatomy: HTMLElement, kind: string, name: string): Element[] {
+  function targetsOf(anatomy: HTMLElement, kind: string, name: string): Node[] {
     const hosts = [...anatomy.querySelectorAll(anatomy.dataset.tag!)];
     if (kind === 'part') {
       return hosts.flatMap((host) => [...(host.shadowRoot?.querySelectorAll(`[part~="${CSS.escape(name)}"]`) ?? [])]);
     }
-    return hosts.flatMap((host) => [...host.children].filter((child) => (child.getAttribute('slot') ?? '') === name));
+    // Slotted content: elements with that slot; the default slot also gets text.
+    return hosts.flatMap((host) =>
+      [...host.childNodes].filter((child) =>
+        child instanceof Element
+          ? (child.getAttribute('slot') ?? '') === name
+          : name === '' && child instanceof Text && !!child.textContent?.trim(),
+      ),
+    );
   }
 
   function highlight(anatomy: HTMLElement, card: HTMLElement | null) {

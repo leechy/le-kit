@@ -35,11 +35,7 @@ const apiTabs = await Promise.all(
     },
   ].map(async (tab) => {
     const note = await getEntry("componentNotes", `${tag}/${tab.value}`);
-    return {
-      ...tab,
-      Note: note ? (await render(note)).Content : undefined,
-      examples: note?.data.examples ?? [],
-    };
+    return { ...tab, Note: note ? (await render(note)).Content : undefined };
   }),
 ).then((tabs) => tabs.filter((tab) => tab.count > 0 || tab.Note));
 const recipe = recipes[0];
@@ -150,7 +146,7 @@ const inline = (text: string) =>
   </le-tab-panel>
 
   {
-    apiTabs.map(({ value, label, Note, examples }) => (
+    apiTabs.map(({ value, label, Note }) => (
       <le-tab-panel label={label} value={value}>
         {Note && (
           <div class="notes">
@@ -161,7 +157,6 @@ const inline = (text: string) =>
           tag={tag}
           section={value as "properties" | "events" | "slots" | "styles"}
           anatomy={entry.data.anatomy}
-          examples={examples}
         />
       </le-tab-panel>
     ))

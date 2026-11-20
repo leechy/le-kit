@@ -4,15 +4,11 @@
  * slots. Hovering (or focusing) a card outlines that part in the sample —
  * computed from the rendered DOM, so it never goes out of date.
  */
-import CodeBlock from './CodeBlock.astro';
-
 interface Item {
   kind: 'part' | 'slot';
   /** '' is the default slot. */
   name: string;
   docs?: string;
-  /** Small live examples, shown in the card. */
-  examples?: { title: string; html: string }[];
 }
 
 interface Props {
@@ -43,24 +39,13 @@ const docText = (text = '') =>
     {
       items.map((item) => (
         <article
-          class:list={['anatomy-card', { 'has-examples': item.examples?.length }]}
+          class="anatomy-card"
           tabindex="0"
           id={`${item.kind}-${item.name || 'default'}`}
           data-anatomy-target={`${item.kind}:${item.name}`}
         >
           <code class="anatomy-name">{item.name || '(default)'}</code>
           {item.docs && <p set:html={docText(item.docs)} />}
-          {item.examples?.length ? (
-            <div class="anatomy-examples">
-              {item.examples.map((example) => (
-                <figure class="anatomy-example">
-                  <figcaption>{example.title}</figcaption>
-                  <div class="anatomy-example-stage" set:html={example.html} />
-                  <CodeBlock language="html" code={example.html} lines={3} />
-                </figure>
-              ))}
-            </div>
-          ) : null}
         </article>
       ))
     }
@@ -118,9 +103,7 @@ const docText = (text = '') =>
   }
 
   function targetsOf(anatomy: HTMLElement, kind: string, name: string): Node[] {
-    // Only the sample — the examples in the cards have their own instances.
-    const sample = anatomy.querySelector('.anatomy-sample')!;
-    const hosts = [...sample.querySelectorAll(anatomy.dataset.tag!)];
+    const hosts = [...anatomy.querySelectorAll(anatomy.dataset.tag!)];
     if (kind === 'part') {
       return hosts.flatMap((host) => [...(host.shadowRoot?.querySelectorAll(`[part~="${CSS.escape(name)}"]`) ?? [])]);
     }
@@ -253,44 +236,5 @@ const docText = (text = '') =>
   .anatomy-card p {
     margin: var(--le-spacing-1) 0 0;
     font-size: 0.9rem;
-  }
-
-  /* A card with examples takes the whole row. */
-  .anatomy-card.has-examples {
-    grid-column: 1 / -1;
-  }
-
-  .anatomy-examples {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
-    gap: var(--le-spacing-3);
-    margin-top: var(--le-spacing-3);
-  }
-
-  .anatomy-example {
-    margin: 0;
-    min-width: 0;
-  }
-
-  .anatomy-example figcaption {
-    margin-bottom: var(--le-spacing-1);
-    font-size: 0.85rem;
-    font-weight: 600;
-  }
-
-  .anatomy-example-stage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: var(--le-spacing-4);
-    border-radius: var(--le-radius-md) var(--le-radius-md) 0 0;
-    background: #f7fafd;
-  }
-
-  /* The code sits right under its stage. */
-  .anatomy-example :global(.code-block) {
-    margin-top: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
   }
 </style>

@@ -153,7 +153,11 @@ const inline = (text: string) =>
             <Note />
           </div>
         )}
-        <ApiTable tag={tag} section={value as "properties" | "events" | "slots" | "styles"} />
+        <ApiTable
+          tag={tag}
+          section={value as "properties" | "events" | "slots" | "styles"}
+          anatomy={entry.data.anatomy}
+        />
       </le-tab-panel>
     ))
   }

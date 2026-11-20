@@ -175,12 +175,12 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part           | Description |
-| -------------- | ----------- |
-| `"button"`     |             |
-| `"icon-end"`   |             |
-| `"icon-only"`  |             |
-| `"icon-start"` |             |
+| Part           | Description                                                                                  |
+| -------------- | -------------------------------------------------------------------------------------------- |
+| `"button"`     | The native `<button>` (or `<a>` when `href` is set): background, border, padding, focus ring |
+| `"icon-end"`   | Wrapper of the end icon                                                                      |
+| `"icon-only"`  | Wrapper of the icon of an icon-only button                                                   |
+| `"icon-start"` | Wrapper of the start icon                                                                    |
 
 
 ## Dependencies

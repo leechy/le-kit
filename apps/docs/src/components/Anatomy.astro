@@ -1,0 +1,225 @@
+---
+/**
+ * Live anatomy: a real sample of the component, and cards for its parts or
+ * slots. Hovering (or focusing) a card outlines that part in the sample —
+ * computed from the rendered DOM, so it never goes out of date.
+ */
+interface Item {
+  kind: 'part' | 'slot';
+  /** '' is the default slot. */
+  name: string;
+  docs?: string;
+}
+
+interface Props {
+  tag: string;
+  /** Sample markup that shows every part; defaults to `<tag>Sample</tag>`. */
+  sample?: string;
+  items: Item[];
+}
+
+const { tag, sample = `<${tag}>Sample</${tag}>`, items } = Astro.props;
+
+/** JSDoc text as one paragraph with inline `code`. */
+const docText = (text = '') =>
+  text
+    .replace(/\s*\n\s*/g, ' ')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
+---
+
+<div class="anatomy" data-anatomy data-tag={tag}>
+  <div class="anatomy-stage" data-anatomy-stage>
+    <div class="anatomy-sample" set:html={sample}></div>
+    <div class="anatomy-overlay" data-anatomy-overlay aria-hidden="true"></div>
+  </div>
+  <p class="anatomy-hint">Point at a card to see the part in the sample.</p>
+  <div class="anatomy-cards">
+    {
+      items.map((item) => (
+        <article
+          class="anatomy-card"
+          tabindex="0"
+          id={`${item.kind}-${item.name || 'default'}`}
+          data-anatomy-target={`${item.kind}:${item.name}`}
+        >
+          <code class="anatomy-name">{item.name || '(default)'}</code>
+          {item.docs && <p set:html={docText(item.docs)} />}
+        </article>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  type Box = { left: number; top: number; right: number; bottom: number };
+
+  const union = (boxes: Box[]): Box | undefined =>
+    boxes.length
+      ? {
+          left: Math.min(...boxes.map((b) => b.left)),
+          top: Math.min(...boxes.map((b) => b.top)),
+          right: Math.max(...boxes.map((b) => b.right)),
+          bottom: Math.max(...boxes.map((b) => b.bottom)),
+        }
+      : undefined;
+
+  /**
+   * The visible box of an element. Some wrappers take no space and let their
+   * content overflow (le-button's icon wrappers are 0 tall) — then the box is
+   * the union of what is inside, following slots to what they show.
+   */
+  function boxOf(el: Element): Box | undefined {
+    const rect = el.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) return rect;
+    if (getComputedStyle(el).display === 'none') return undefined;
+
+    let inner: Element[] = [];
+    if (el instanceof HTMLSlotElement) {
+      const assigned = el.assignedElements({ flatten: true });
+      inner = assigned.length ? assigned : [...el.children];
+    } else {
+      inner = [...el.children, ...(el.shadowRoot ? [...el.shadowRoot.children] : [])];
+    }
+    const boxes = inner.map(boxOf).filter((b): b is Box => !!b);
+    if (boxes.length) return union(boxes);
+
+    if (el.textContent?.trim()) {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const r = range.getBoundingClientRect();
+      if (r.width > 0 && r.height > 0) return r;
+    }
+    return undefined;
+  }
+
+  function targetsOf(anatomy: HTMLElement, kind: string, name: string): Element[] {
+    const hosts = [...anatomy.querySelectorAll(anatomy.dataset.tag!)];
+    if (kind === 'part') {
+      return hosts.flatMap((host) => [...(host.shadowRoot?.querySelectorAll(`[part~="${CSS.escape(name)}"]`) ?? [])]);
+    }
+    return hosts.flatMap((host) => [...host.children].filter((child) => (child.getAttribute('slot') ?? '') === name));
+  }
+
+  function highlight(anatomy: HTMLElement, card: HTMLElement | null) {
+    const overlay = anatomy.querySelector<HTMLElement>('[data-anatomy-overlay]')!;
+    overlay.replaceChildren();
+    anatomy.querySelectorAll('.anatomy-card.is-active').forEach((c) => c.classList.remove('is-active'));
+    if (!card) return;
+    card.classList.add('is-active');
+
+    const [kind, name] = card.dataset.anatomyTarget!.split(':');
+    const origin = overlay.getBoundingClientRect();
+    const boxes = targetsOf(anatomy, kind, name)
+      .map(boxOf)
+      .filter((b): b is Box => !!b);
+
+    boxes.forEach((box, i) => {
+      const frame = document.createElement('div');
+      frame.className = 'anatomy-frame';
+      frame.style.left = `${box.left - origin.left}px`;
+      frame.style.top = `${box.top - origin.top}px`;
+      frame.style.width = `${box.right - box.left}px`;
+      frame.style.height = `${box.bottom - box.top}px`;
+      if (i === 0) {
+        const label = document.createElement('span');
+        label.className = 'anatomy-label';
+        label.textContent = name || '(default)';
+        frame.append(label);
+      }
+      overlay.append(frame);
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-anatomy]').forEach((anatomy) => {
+    anatomy.querySelectorAll<HTMLElement>('[data-anatomy-target]').forEach((card) => {
+      card.addEventListener('pointerenter', () => highlight(anatomy, card));
+      card.addEventListener('focus', () => highlight(anatomy, card));
+      card.addEventListener('pointerleave', () => highlight(anatomy, null));
+      card.addEventListener('blur', () => highlight(anatomy, null));
+    });
+  });
+</script>
+
+<style>
+  .anatomy-stage {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: var(--le-spacing-8) var(--le-spacing-4);
+    border-radius: var(--le-radius-lg);
+    background: #f7fafd;
+  }
+
+  .anatomy-sample {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--le-spacing-4);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .anatomy-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .anatomy-overlay :global(.anatomy-frame) {
+    position: absolute;
+    outline: 2px solid #e8590c;
+    outline-offset: 1px;
+    border-radius: 3px;
+    background: color-mix(in srgb, #e8590c 10%, transparent);
+  }
+
+  .anatomy-overlay :global(.anatomy-label) {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: -3px;
+    padding: 0 0.35rem;
+    border-radius: 4px;
+    background: #e8590c;
+    color: #fff;
+    font-family: var(--le-font-family-mono);
+    font-size: 0.72rem;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .anatomy-hint {
+    margin: var(--le-spacing-1) 0 var(--le-spacing-2);
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+
+  .anatomy-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+    gap: var(--le-spacing-2);
+  }
+
+  .anatomy-card {
+    padding: var(--le-spacing-3) var(--le-spacing-4);
+    border-radius: var(--le-radius-lg);
+    background: color-mix(in srgb, var(--le-color-surface-elevated, #fff), transparent 40%);
+    box-shadow: var(--le-shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.08));
+    outline: 2px solid transparent;
+    cursor: default;
+    transition: outline-color 150ms ease;
+  }
+
+  .anatomy-card.is-active {
+    outline-color: #e8590c;
+  }
+
+  .anatomy-name {
+    font-weight: 600;
+  }
+
+  .anatomy-card p {
+    margin: var(--le-spacing-1) 0 0;
+    font-size: 0.9rem;
+  }
+</style>

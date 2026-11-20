@@ -36,6 +36,11 @@ import { TooltipPlacement } from '../..';
  * @slot icon-start - Icon placed in the beginning of the button
  * @slot icon-end - Icon placed in the end of the button
  *
+ * @part button - The native `<button>` (or `<a>` when `href` is set): background, border, padding, focus ring
+ * @part icon-start - Wrapper of the start icon
+ * @part icon-end - Wrapper of the end icon
+ * @part icon-only - Wrapper of the icon of an icon-only button
+ *
  * @cssprop --le-button-bg - Fill of solid and filled buttons (and of selected outlined / clear ones); outlined and clear stay transparent
  * @cssprop --le-button-bg-hover - Fill on hover (default: --le-button-bg when it is set, the theme hover color otherwise)
  * @cssprop --le-button-color - Button text color

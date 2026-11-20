@@ -3,6 +3,9 @@ tag: le-button
 tagline: A component you'd expect to see in any UI library. No surprises here.
 heroDirection: column
 heroWidth: narrow
+anatomy: |
+  <le-button variant="solid" icon-start="save" icon-end="chevron-down">Save as</le-button>
+  <le-button variant="outlined" icon-only="copy" label="Copy"></le-button>
 hero: |
   <le-button variant="solid">Save</le-button>
   <le-button variant="outlined" icon-start="✎">Edit</le-button>

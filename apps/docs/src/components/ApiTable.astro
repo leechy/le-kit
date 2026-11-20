@@ -1,5 +1,6 @@
 ---
 import docs from 'le-kit/dist/docs.json';
+import Anatomy from './Anatomy.astro';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { cssDefault, tokensIn, type CssDefault } from '../lib/css-defaults';
@@ -8,9 +9,11 @@ interface Props {
 	tag: string;
 	/** Which part of the API to show — one per component page tab. */
 	section: 'properties' | 'events' | 'slots' | 'styles';
+	/** Sample for the live anatomy (page.md `anatomy`). */
+	anatomy?: string;
 }
 
-const { tag, section } = Astro.props;
+const { tag, section, anatomy } = Astro.props;
 
 const component = docs.components.find((c: any) => c.tag === tag);
 
@@ -222,24 +225,11 @@ const hasCategories = props.some((p: any) => docTag(p, 'category'));
 	{section === 'styles' && cssParts.length > 0 && (
 		<section>
 			<h3 class="api-heading">Parts</h3>
-			<div class="table-wrapper">
-				<table>
-					<thead>
-						<tr>
-							<th>Part</th>
-							<th>Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						{cssParts.map((part: any) => (
-							<tr>
-								<td><code>{part.name}</code></td>
-								<td>{part.docs}</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			</div>
+			<Anatomy
+				tag={tag}
+				sample={anatomy}
+				items={cssParts.map((part: any) => ({ kind: 'part', name: part.name, docs: part.docs }))}
+			/>
 		</section>
 	)}
 </div>
